@@ -1,8 +1,7 @@
-
 OWSLib
 ======
 
-An etree-based module for making OGC W*S requests and handling responses.
+An etree-based module for consuming OGC W*S web services.
 
 Installation
 ------------
