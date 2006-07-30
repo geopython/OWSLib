@@ -1,0 +1,6 @@
+#!/bin/sh
+# PYTHONPATH=/home/sean/egg-dev
+echo "running coverage tests ..."
+python coverage.py -e
+python coverage.py -x runalltests.py
+python coverage.py -rm ../owslib/wms.py ../owslib/wfs.py ../owslib/wmc.py

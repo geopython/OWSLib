@@ -1,7 +1,7 @@
 # $Id: testWFSReader.py 503 2006-02-01 17:09:12Z dokai $
 
 # =============================================================================
-# Cartographic Objects for Zope. Copyright (C) 2004 Sean C. Gillies
+# OWSLib. Copyright (C) 2005 Sean C. Gillies
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
@@ -25,8 +25,13 @@
 
 import unittest
 
-from framework import ogclib
-from ogclib.wfs import WFSCapabilitiesReader, nspath, OGC_NAMESPACE
+try:
+    import pkg_resources
+    pkg_resources.require('OWSLib')
+except ImportError:
+    pass
+    
+from owslib.wfs import WFSCapabilitiesReader, nspath, OGC_NAMESPACE
 
 class Reader111Test(unittest.TestCase):
 
@@ -70,7 +75,6 @@ class Reader111Test(unittest.TestCase):
 
 # ============================================================================
 if __name__ == '__main__':
-    framework(descriptions=1, verbosity=1)
-    
+    unittest.main()
 
     
