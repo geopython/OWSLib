@@ -1,7 +1,5 @@
-# $Id: framework.py,v 1.4 2005/02/13 16:26:34 sgillies Exp $
-
 # =============================================================================
-# Python Cartographic Library. Copyright (C) 2004 Sean C. Gillies
+# OWSLib. Copyright (C) 2005 Sean C. Gillies
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
@@ -20,9 +18,4 @@
 # Contact email: sgillies@frii.com
 # =============================================================================
 
-import os
-import sys
-
-sys.path.insert(0, '../..')
-import ogclib
-
+#from environment import *

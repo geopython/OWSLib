@@ -1,7 +1,7 @@
 # $Id: runalltests.py,v 1.1.1.1 2004/12/06 03:28:23 sgillies Exp $
 
 # =============================================================================
-# Cartographic Objects for Zope. Copyright (C) 2004 Sean C. Gillies
+# OWSLib. Copyright (C) 2005 Sean C. Gillies
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
@@ -22,26 +22,34 @@
 
 import unittest
 
-from framework import ogclib
-from ogclib.wms import WMSCapabilitiesReader
+try:
+    import pkg_resources
+    pkg_resources.require('OWSLib')
+except ImportError:
+    pass
+
+from owslib.wms import WMSCapabilitiesReader
 
 class Reader111Test(unittest.TestCase):
 
     def test_reader(self):
         reader = WMSCapabilitiesReader('1.1.1')
         cap = reader.read('http://wms.jpl.nasa.gov/wms.cgi')
-        self.assert_(cap.getroot().tag == 'WMT_MS_Capabilities', cap.getroot())
-        self.assert_(cap.servicename() == 'OGC:WMS', cap.servicename())
-        self.assert_(cap.servicetitle() == 'JPL World Map Service', cap.servicetitle())
-        self.assert_(cap.getmapformats() == ('image/jpeg', 'image/png', 'image/geotiff', 'image/tiff'), cap.getmapformats())
-        self.assert_(cap.layersrs() == ('EPSG:4326', 'AUTO:42003'), cap.layersrs())
-        self.assert_(cap.layernames() == ('global_mosaic', 'global_mosaic_base', 'us_landsat_wgs84', 'srtm_mag', 'us_overlays', 'us90_overlays', 'daily_terra', 'daily_aqua', 'BMNG', 'modis', 'huemapped_srtm', 'srtmplus', 'worldwind_dem', 'us_ned', 'us_elevation', 'us_colordem'), cap.layernames())
-        self.assert_(cap.layertitles() == ('WMS Global Mosaic, pan sharpened', 'WMS Global Mosaic, not pan sharpened', 'CONUS mosaic of 1990 MRLC dataset', 'SRTM reflectance magnitude, 30m', 'Progressive US overlay map, white background', 'MRLC US mosaic with progressive overlay map', 'Daily composite of MODIS-TERRA images ', 'Daily composite of MODIS-AQUA images ', 'Blue Marble Next Generation, Global MODIS derived image', 'Blue Marble, Global MODIS derived image', 'SRTM derived global elevation, 3 arc-second, hue mapped', 'Global 1km elevation, seamless SRTM land elevation and ocean depth', 'SRTM derived global elevation, 3 arc-second', 'United States elevation, 30m', 'Digital Elevation Map of the United States, DTED dataset, 3 second resolution, grayscale', 'Digital Elevation Map of the United States, DTED dataset, 3 second resolution, hue mapped'), cap.layertitles())
-
+        self.assertEqual(cap.getroot().tag, 'WMT_MS_Capabilities')
+        self.assertEqual(cap.servicename(), 'OGC:WMS')
+        self.assertEqual(cap.servicetitle(), 'JPL World Map Service')
+        self.assertEqual(cap.getmapformats(), 
+            ('image/jpeg', 'image/png', 'image/geotiff', 'image/tiff')
+            )
+        self.assertEqual(cap.layersrs(), ('EPSG:4326', 'AUTO:42003'))
+        self.assertEqual(cap.layernames(), (
+            'global_mosaic', 'global_mosaic_base', 'us_landsat_wgs84', 'srtm_mag', 'daily_terra_721', 'daily_aqua_721', 'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_terra', 'daily_aqua', 'BMNG', 'modis', 'huemapped_srtm', 'srtmplus', 'worldwind_dem', 'us_ned', 'us_elevation', 'us_colordem')
+            )
+        self.assert_('WMS Global Mosaic, pan sharpened' in cap.layertitles(),
+            cap.layertitles()
+            )
     
 # ============================================================================
 if __name__ == '__main__':
-    framework(descriptions=1, verbosity=1)
-    
-
-    
+    unittest.main()
+        

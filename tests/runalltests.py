@@ -1,7 +1,7 @@
 # $Id: runalltests.py,v 1.1.1.1 2004/12/06 03:28:23 sgillies Exp $
 
 # =============================================================================
-# Cartographic Objects for Zope. Copyright (C) 2004 Sean C. Gillies
+# OWSLib. Copyright (C) 2004 Sean C. Gillies
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
