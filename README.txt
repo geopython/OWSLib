@@ -1,5 +1,5 @@
 
-OGCLib
+OWSLib
 ======
 
 An etree-based module for making OGC W*S requests and handling responses.
