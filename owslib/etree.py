@@ -1,5 +1,5 @@
 # =============================================================================
-# Cartographic Objects for Zope. Copyright (C) 2005 Sean C. Gillies
+# OWSLib. Copyright (C) 2005 Sean C. Gillies
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
