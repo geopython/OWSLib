@@ -94,12 +94,29 @@ class ServiceMetadata(object):
         # properties
         self.service = self._root.find('Service/Name').text
         self.title = self._root.find('Service/Title').text
+        
         # operations []
-        # contents []
+        
+        # contents: our assumption is that services use a top-level layer
+        # as a metadata organizer, nothing more.
         self.contents = []
+        top = self._root.find('Capability/Layer')
         for elem in self._root.findall('Capability/Layer/Layer'):
-            self.contents.append(ContentMetadata(elem))
+            self.contents.append(ContentMetadata(elem, top))
          
+    def getContentByName(self, name):
+        """Return a named content item."""
+        for item in self.contents:
+            if item.name == name:
+                return item
+        raise KeyError, "No content named %s" % name
+
+    def getOperationByName(self, name):
+        """Return a named content item."""
+        for item in self.operations:
+            if item.name == name:
+                return item
+        raise KeyError, "No operation named %s" % name
 
     #def toXML(self):
     #    """x
@@ -115,12 +132,42 @@ class ContentMetadata:
     Implements IMetadata.
     """
 
-    def __init__(self, element):
+    def __init__(self, elem, parent):
         """."""
-        self.name = element.find('Name').text
-        self.title = element.find('Title').text
+        self.name = elem.find('Name').text
+        self.title = elem.find('Title').text
+        # bboxes
+        self.boundingBox = None
+        b = elem.find('BoundingBox')
+        if b is not None:
+            self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
+                    float(b.attrib['maxx']), float(b.attrib['maxy']),
+                    b.attrib['SRS'])
+        else:
+            b = parent.find('BoundingBox')
+            if b is not None:
+                self.boundingBox = (
+                        float(b.attrib['minx']), float(b.attrib['miny']),
+                        float(b.attrib['maxx']), float(b.attrib['maxy']),
+                        b.attrib['SRS'])
+        self.boundingBoxWGS84 = None
+        b = elem.find('LatLonBoundingBox')
+        if b is not None:
+            self.boundingBoxWGS84 = (
+                    float(b.attrib['minx']),float(b.attrib['miny']),
+                    float(b.attrib['maxx']), float(b.attrib['maxy']),
+                    )
+        else:
+            b = parent.find('LatLonBoundingBox')
+            if b is not None:
+                self.boundingBoxWGS84 = (
+                        float(b.attrib['minx']), float(b.attrib['miny']),
+                        float(b.attrib['maxx']), float(b.attrib['maxy']),
+                        )
+        # crs options
+        self.crsOptions = [srs.text for srs in parent.findall('SRS')]
         
-
+        
 class WMSCapabilitiesInfoset:
     """High-level container for WMS Capabilities based on lxml.etree
     """

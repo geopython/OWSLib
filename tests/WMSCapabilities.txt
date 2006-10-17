@@ -35,11 +35,27 @@ Test capabilities
     >>> wms.capabilities.title
     'JPL Global Imagery Service'
     
-Test available layers
+Test available content layers
 
     >>> [layer.name for layer in wms.capabilities.contents]
     ['global_mosaic', 'global_mosaic_base', 'us_landsat_wgs84', 'srtm_mag', 'daily_terra_721', 'daily_aqua_721', 'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_terra', 'daily_aqua', 'BMNG', 'modis', 'huemapped_srtm', 'srtmplus', 'worldwind_dem', 'us_ned', 'us_elevation', 'us_colordem']
     >>> [layer.title for layer in wms.capabilities.contents]
     ['WMS Global Mosaic, pan sharpened', 'WMS Global Mosaic, not pan sharpened', 'CONUS mosaic of 1990 MRLC dataset', 'SRTM reflectance magnitude, 30m', 'Daily composite of MODIS-TERRA 721 pseudocolor', 'Daily composite of MODIS-AQUA 721 pseudocolor', 'Daily composite of MODIS-TERRA images, NDVI processing', 'Daily composite of MODIS-AQUA images, NDVI processing', 'Daily composite of MODIS-TERRA images', 'Daily composite of MODIS-AQUA images', 'Blue Marble Next Generation, Global MODIS derived image', 'Blue Marble, Global MODIS derived image', 'SRTM derived global elevation, 3 arc-second, hue mapped', 'Global 1km elevation, seamless SRTM land elevation and ocean depth', 'SRTM derived global elevation, 3 arc-second', 'United States elevation, 30m', 'Digital Elevation Map of the United States, DTED dataset, 3 second resolution, grayscale', 'Digital Elevation Map of the United States, DTED dataset, 3 second resolution, hue mapped']
     
-    
+Test single item accessor
+
+    >>> wms.capabilities.getContentByName('global_mosaic').title
+    'WMS Global Mosaic, pan sharpened'
+    >>> wms.capabilities.getContentByName('global_mosaic').boundingBox
+    >>> wms.capabilities.getContentByName('global_mosaic').boundingBoxWGS84
+    (-180.0, -60.0, 180.0, 84.0)
+    >>> wms.capabilities.getContentByName('global_mosaic').crsOptions
+    ['EPSG:4326', 'AUTO:42003']
+
+Expect a KeyError for invalid names
+
+    >>> wms.capabilities.getContentByName('utterly bogus').title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
