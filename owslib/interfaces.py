@@ -9,8 +9,8 @@ class IWebMapService:
         Online resource URL.
     version : string
         WMS protocol version.
-    metadata : object
-        Describes the metadata (formerly called capabilities) of the WMS.
+    capabilities : object
+        Describes the capabilities metadata of the WMS.
     """
 
     def getcapabilities():
@@ -64,7 +64,7 @@ class IServiceOperationsMetadata:
         List of operation descriptors.
     """
     
-class IOperationsMetadata:
+class IOperationMetadata:
     """OO-interface to WMS metadata.
 
     Properties
@@ -86,7 +86,7 @@ class IMethodMetadata:
     TODO: constraint
     """
 
-class IContentsMetadata:
+class IServiceContentsMetadata:
     """OO-interface to WMS metadata.
 
     Properties
@@ -112,5 +112,10 @@ class IContentMetadata:
         List of available formats, each a string.
     crsOptions : list
         List of available coordinate/spatial reference systems.
+    """
+
+class IServiceMetadata(IServiceIdentificationMetadata, IServiceProvideMetadata,
+                       IServiceOperationsMetadata, IServiceContentsMetadata):
+    """OWS Metadata.
     """
 

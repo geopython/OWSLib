@@ -24,8 +24,10 @@
 # =============================================================================
 
 import cgi
+import sys
 import urllib
-from etree import etree
+
+from owslib.etree import etree
 
 class WMSError(Exception):
     """Base class for WMS module errors
@@ -52,15 +54,72 @@ class CapabilitiesError(Exception):
     pass
 
 
-class WebMapService:
-    """x
+class WebMapService(object):
+    """Abstraction for OGC Web Map Service (WMS).
+
+    Implements IWebMapService.
     """
-    def capabilities_xml(self):
-        """x
-        """
-        top = etree.Element('a')
-        top.text = self.getName()
-        return etree.tostring(top)
+    
+    def __init__(self, url, version='1.1.1', xml=None):
+        """Initialize."""
+        self.url = url
+        self.version = version
+        self._capabilities = None
+        if xml:
+            reader = WMSCapabilitiesReader(self.version)
+            self._capabilities = ServiceMetadata(reader.readString(xml))
+        
+    def _getcapproperty(self):
+        if not self._capabilities:
+            reader = WMSCapabilitiesReader(self.version)
+            self._capabilities = ServiceMetadata(reader.read(self.url))
+        return self._capabilities
+    capabilities = property(_getcapproperty, None)
+            
+    def getcapabilities(self):
+        """Request and return capabilities document from the WMS."""
+        raise NotImplementedError
+        
+
+class ServiceMetadata(object):
+    """Abstraction for WMS metadata.
+    
+    Implements IServiceMetadata.
+    """
+
+    def __init__(self, infoset):
+        """Initialize from an element tree."""
+        self._root = infoset.getroot()
+        #print >> sys.stderr, self._root
+        # properties
+        self.service = self._root.find('Service/Name').text
+        self.title = self._root.find('Service/Title').text
+        # operations []
+        # contents []
+        self.contents = []
+        for elem in self._root.findall('Capability/Layer/Layer'):
+            self.contents.append(ContentMetadata(elem))
+         
+
+    #def toXML(self):
+    #    """x
+    #    """
+    #    top = etree.Element('a')
+    #    top.text = self.getName()
+    #    return etree.tostring(top)
+
+
+class ContentMetadata:
+    """Abstraction for WMS metadata.
+    
+    Implements IMetadata.
+    """
+
+    def __init__(self, element):
+        """."""
+        self.name = element.find('Name').text
+        self.title = element.find('Title').text
+        
 
 class WMSCapabilitiesInfoset:
     """High-level container for WMS Capabilities based on lxml.etree
