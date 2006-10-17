@@ -37,7 +37,7 @@ class Reader111Test(unittest.TestCase):
         cap = reader.read('http://wms.jpl.nasa.gov/wms.cgi')
         self.assertEqual(cap.getroot().tag, 'WMT_MS_Capabilities')
         self.assertEqual(cap.servicename(), 'OGC:WMS')
-        self.assertEqual(cap.servicetitle(), 'JPL World Map Service')
+        self.assertEqual(cap.servicetitle(), 'JPL Global Imagery Service')
         self.assertEqual(cap.getmapformats(), 
             ('image/jpeg', 'image/png', 'image/geotiff', 'image/tiff')
             )

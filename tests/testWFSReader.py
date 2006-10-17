@@ -43,17 +43,15 @@ class Reader111Test(unittest.TestCase):
         self.assertEquals(nspath('Service'), cap.getServiceNode().tag)
         self.assertEquals(nspath('Capability'), cap.getCapabilitiesNode().tag)
         self.assertEquals(nspath('FeatureTypeList'), cap.getFeatureTypeNode().tag)
-        self.assertEquals(nspath('Filter_Capabilities', OGC_NAMESPACE),
-                          cap.getFilterNode().tag)
+        #self.assertEquals(nspath('Filter_Capabilities', OGC_NAMESPACE),
+        #                  cap.getFilterNode().tag)
 
         # Service info
         serviceinfo = cap.getServiceInfo()
-        self.assertEquals('sitemembers', serviceinfo.get('name'))
-        self.assertEquals('MapServer Site Member Locations',
+        self.assertEquals('Cheapo WFS', serviceinfo.get('name'))
+        self.assertEquals('Really Cheap WFS',
                           serviceinfo.get('title'))
-        self.assertEquals('Cheapo WFS based on Twisted and ElementTree',
-                          serviceinfo.get('abstract'))
-        self.assertEquals('http://zcologia.com:9001/mapserver/members',
+        self.assertEquals('http://zcologia.com:9001',
                           serviceinfo.get('onlineresource'))
 
         # Capability info
@@ -68,9 +66,9 @@ class Reader111Test(unittest.TestCase):
         # Feature type info
         featinfo = cap.getFeatureTypeInfo()
         self.assertEquals(1, len(featinfo))
-        self.assertEquals('users', featinfo[0].get('name'))
+        self.assertEquals('points', featinfo[0].get('name'))
         self.assertEquals('EPSG:4326', featinfo[0].get('srs'))
-        self.assertEquals(['-180,-90,180,90'], featinfo[0].get('latlongboundingbox'))
+        self.assertEquals(['-120,30,-100,50'], featinfo[0].get('latlongboundingbox'))
         
 
 # ============================================================================

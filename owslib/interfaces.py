@@ -14,10 +14,12 @@ class IWebMapService:
     """
 
     def getcapabilities():
-        """Make a request to the WMS, returns an XML document."""
+        """Make a request to the WMS, returns an XML document wrapped in a 
+        Python file object."""
 
     def getmap(**kw):
-        """Make a request to the WMS, returns an image."""
+        """Make a request to the WMS, returns an image wrapped in a Python
+        file object."""
 
     def getfeatureinfo(**kw):
         """Make a request to the WMS, returns data."""
