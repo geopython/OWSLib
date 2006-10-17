@@ -96,6 +96,13 @@ class ServiceMetadata(object):
         self.title = self._root.find('Service/Title').text
         
         # operations []
+        self.operations = []
+        for elem in self._root.findall('Capability/Request/*'):
+            self.operations.append(OperationMetadata(elem))
+
+        # exceptions
+        self.exceptions = [f.text for f \
+                in self._root.findall('Capability/Exception/Format')]
         
         # contents: our assumption is that services use a top-level layer
         # as a metadata organizer, nothing more.
@@ -166,7 +173,25 @@ class ContentMetadata:
                         )
         # crs options
         self.crsOptions = [srs.text for srs in parent.findall('SRS')]
-        
+
+        # styles
+        self.styles = dict([(s.find('Name').text, {'title': s.find('Title').text}) for s in elem.findall('Style')])
+
+class OperationMetadata:
+    """Abstraction for WMS metadata.
+    
+    Implements IMetadata.
+    """
+    def __init__(self, elem):
+        """."""
+        self.name = elem.tag
+        # formatOptions
+        self.formatOptions = [f.text for f in elem.findall('Format')]
+        methods = []
+        for verb in elem.findall('DCPType/HTTP/*'):
+            url = verb.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+            methods.append((verb.tag, {'url': url}))
+        self.methods = dict(methods)
         
 class WMSCapabilitiesInfoset:
     """High-level container for WMS Capabilities based on lxml.etree
