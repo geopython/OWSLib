@@ -62,6 +62,8 @@ class IServiceOperationsMetadata:
     ----------
     operations : list
         List of operation descriptors.
+    exceptions : list
+        List of exception formats.
     """
     
 class IOperationMetadata:
@@ -71,6 +73,8 @@ class IOperationMetadata:
     ----------
     name : string
         "GetCapabilities", for example.
+    formatOptions : list
+        List of content types.
     methods : dict
         Array of method descriptors, keyed to HTTP verbs.
     """
@@ -110,6 +114,8 @@ class IContentMetadata:
         Four bounding values in WGS coordinates.
     crsOptions : list
         List of available coordinate/spatial reference systems.
+    styles : list
+        List of style dicts.
     """
 
 class IServiceMetadata(IServiceIdentificationMetadata, IServiceProvideMetadata,
