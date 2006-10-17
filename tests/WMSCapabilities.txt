@@ -1,0 +1,44 @@
+# =============================================================================
+# Python Cartographic Library (C) 2006 Sean C. Gillies
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the Free
+# Software Foundation; either version 2 of the License, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# Contact email: sgillies@frii.com
+# ===========================================================================
+
+Imports
+
+    >>> from owslib.wms import WebMapService
+    
+Connect to a WMS Server
+
+    >>> wms = WebMapService('http://wms.jpl.nasa.gov/wms.cgi', version='1.1.1')
+    
+Get capabilities
+
+    >>> wms.capabilities.name
+    'OGC:WMS'
+    >>> wms.capabilities.title
+    'JPL World Map Service'
+    >>> wms.capabilities.formats
+    ['image/jpeg', 'image/png', 'image/geotiff', 'image/tiff']
+    
+Check the layers
+
+    >>> [layer.name for layer in wms.capabilities.layers]
+    ['global_mosaic', 'global_mosaic_base', 'us_landsat_wgs84', 'srtm_mag', 'daily_terra_721', 'daily_aqua_721', 'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_terra', 'daily_aqua', 'BMNG', 'modis', 'huemapped_srtm', 'srtmplus', 'worldwind_dem', 'us_ned', 'us_elevation', 'us_colordem']
+    >>> [layer.title for layer in wms.capabilities.layers]
+    []
+    
