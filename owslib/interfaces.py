@@ -108,8 +108,6 @@ class IContentMetadata:
         Four bounding values and a coordinate reference system identifier.
     boundingBoxWGS84 : 4-tuple
         Four bounding values in WGS coordinates.
-    formatOptions : list
-        List of available formats, each a string.
     crsOptions : list
         List of available coordinate/spatial reference systems.
     """
