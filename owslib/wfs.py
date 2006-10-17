@@ -84,7 +84,7 @@ class WFSCapabilitiesInfoset(object):
         """
         Returns the <Filter_Capabilities> node of the capabilities document.
         """
-        return self.getRoot().find(nspath('Filter_Capabilities', OGC_NAMESPACE))
+        return self.getRoot().find(nspath('Filter_Capabilities'))
 
     #
     # Info accessors

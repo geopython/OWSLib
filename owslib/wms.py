@@ -78,7 +78,8 @@ class WebMapService(object):
             
     def getcapabilities(self):
         """Request and return capabilities document from the WMS."""
-        raise NotImplementedError
+        reader = WMSCapabilitiesReader(self.version)
+        return urllib.urlopen(reader.capabilities_url(self.url))
         
 
 class ServiceMetadata(object):
