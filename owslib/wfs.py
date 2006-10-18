@@ -62,7 +62,7 @@ class WebFeatureService(object):
     Implements IWebFeatureService.
     """
     
-    def __init__(self, url, version='1.0', xml=None):
+    def __init__(self, url, version='1.0.0', xml=None):
         """Initialize."""
         self.url = url
         self.version = version
@@ -79,18 +79,42 @@ class WebFeatureService(object):
     capabilities = property(_getcapproperty, None)
             
     def getcapabilities(self):
-        """Request and return capabilities document from the WMS."""
+        """Request and return capabilities document from the WFS."""
         reader = WFSCapabilitiesReader(self.version)
-        u = urlopen(reader.capabilities_url(self.url))
-        # check for service exceptions, and return
-        if u.info().gettype() == 'application/vnd.ogc.se_xml':
-            se_xml = u.read()
-            se_tree = etree.fromstring(se_xml)
-            raise ServiceException, \
-                str(se_tree.find('ServiceException').text).strip()
+        return urlopen(reader.capabilities_url(self.url))
+    
+    def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
+                   featureversion=None, propertyname=['*'], maxfeatures=None,
+                   method='{http://www.opengis.net/wfs}Get'):
+        """Request and return feature data."""
+        md = self.capabilities
+        base_url = md.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
+        request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
+        
+        # check featureid
+        if featureid:
+            request['featureid'] = ','.join(featureid)
+        elif bbox and typename:
+            request['bbox'] = ','.join([str(x) for x in bbox])
+        elif filter and typename:
+            request['filter'] = str(filter)
+        assert len(typename) > 0
+        request['typename'] = ','.join(typename)
+        
+        request['propertyname'] = ','.join(propertyname)
+        if featureversion: request['featureversion'] = str(featureversion)
+        if maxfeatures: request['maxfeatures'] = str(maxfeatures)
+        
+        data = urlencode(request)
+        if method == 'Post':
+            u = urlopen(base_url, data=data)
+        else:
+            u = urlopen(base_url + data)
+
+        # check for service exceptions, rewrap, and return
         return u
 
-
+        
 class ServiceMetadata(object):
     """Abstraction for WFS metadata.
     
