@@ -28,7 +28,7 @@ import unittest
 try:
     import pkg_resources
     pkg_resources.require('OWSLib')
-except ImportError:
+except (ImportError, pkg_resources.DistributionNotFound):
     pass
     
 from owslib.wfs import WFSCapabilitiesReader, nspath, OGC_NAMESPACE

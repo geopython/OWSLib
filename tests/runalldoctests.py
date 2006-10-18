@@ -2,7 +2,10 @@ import doctest
 import glob
 import pkg_resources
 
-pkg_resources.require('OWSLib')
+try:
+    pkg_resources.require('OWSLib')
+except (ImportError, pkg_resources.DistributionNotFound):
+    pass
 
 testfiles = glob.glob('*WFS*.txt')
 
