@@ -39,10 +39,149 @@ def nspath(path, ns=WFS_NAMESPACE):
     ns : string
         The XML namespace. Defaults to WFS namespace.
     """
-    return "/".join(['{%s}%s' % (ns, component)
-                     for component
-                     in path.split("/")])
+    components = []
+    for component in path.split("/"):
+        if component != '*':
+            component = "{%s}%s" % (ns, component)
+        components.append(component)
+    return "/".join(components)
 
+    #return "/".join(['{%s}%s' % (ns, component)
+    #                 for component
+    #                 in path.split("/")])
+
+
+class ServiceException(Exception):
+    pass
+
+
+class WebFeatureService(object):
+    """Abstraction for OGC Web Feature Service (WFS).
+
+    Implements IWebFeatureService.
+    """
+    
+    def __init__(self, url, version='1.0', xml=None):
+        """Initialize."""
+        self.url = url
+        self.version = version
+        self._capabilities = None
+        if xml:
+            reader = WFSCapabilitiesReader(self.version)
+            self._capabilities = ServiceMetadata(reader.readString(xml))
+        
+    def _getcapproperty(self):
+        if not self._capabilities:
+            reader = WFSCapabilitiesReader(self.version)
+            self._capabilities = ServiceMetadata(reader.read(self.url))
+        return self._capabilities
+    capabilities = property(_getcapproperty, None)
+            
+    def getcapabilities(self):
+        """Request and return capabilities document from the WMS."""
+        reader = WFSCapabilitiesReader(self.version)
+        u = urlopen(reader.capabilities_url(self.url))
+        # check for service exceptions, and return
+        if u.info().gettype() == 'application/vnd.ogc.se_xml':
+            se_xml = u.read()
+            se_tree = etree.fromstring(se_xml)
+            raise ServiceException, \
+                str(se_tree.find('ServiceException').text).strip()
+        return u
+
+
+class ServiceMetadata(object):
+    """Abstraction for WFS metadata.
+    
+    Implements IServiceMetadata.
+    """
+
+    def __init__(self, infoset):
+        """Initialize from an element tree."""
+        self._root = infoset.getRoot()
+        #print >> sys.stderr, self._root
+        # properties
+        self.service = self._root.find(nspath('Service/Name')).text
+        self.title = self._root.find(nspath('Service/Title')).text
+        
+        # operations []
+        self.operations = []
+        for elem in self._root.findall(nspath('Capability/Request/*')):
+            self.operations.append(OperationMetadata(elem))
+
+        # contents: our assumption is that services use a top-level layer
+        # as a metadata organizer, nothing more.
+        self.contents = []
+        top = self._root.find(nspath('FeatureTypeList'))
+        for elem in self._root.findall(nspath('FeatureTypeList/FeatureType')):
+            self.contents.append(ContentMetadata(elem, top))
+         
+    def getContentByName(self, name):
+        """Return a named content item."""
+        for item in self.contents:
+            if item.name == name:
+                return item
+        raise KeyError, "No content named %s" % name
+
+    def getOperationByName(self, name):
+        """Return a named content item."""
+        for item in self.operations:
+            if item.name == name:
+                return item
+        raise KeyError, "No operation named %s" % name
+
+    #def toXML(self):
+    #    """x
+    #    """
+    #    top = etree.Element('a')
+    #    top.text = self.getName()
+    #    return etree.tostring(top)
+
+
+class ContentMetadata:
+    """Abstraction for WMS metadata.
+    
+    Implements IMetadata.
+    """
+
+    def __init__(self, elem, parent):
+        """."""
+        self.name = elem.find(nspath('Name')).text
+        self.title = elem.find(nspath('Title')).text
+        # bboxes
+        self.boundingBox = None
+        b = elem.find(nspath('BoundingBox'))
+        if b is not None:
+            self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
+                    float(b.attrib['maxx']), float(b.attrib['maxy']),
+                    b.attrib['SRS'])
+        self.boundingBoxWGS84 = None
+        b = elem.find(nspath('LatLongBoundingBox'))
+        if b is not None:
+            self.boundingBoxWGS84 = (
+                    float(b.attrib['minx']),float(b.attrib['miny']),
+                    float(b.attrib['maxx']), float(b.attrib['maxy']),
+                    )
+        # crs options
+        self.crsOptions = [srs.text for srs in elem.findall(nspath('SRS'))]
+
+
+class OperationMetadata:
+    """Abstraction for WMS metadata.
+    
+    Implements IMetadata.
+    """
+    def __init__(self, elem):
+        """."""
+        self.name = elem.tag
+        # formatOptions
+        self.formatOptions = [f.tag for f in elem.findall(nspath('ResultFormat/*'))]
+        methods = []
+        for verb in elem.findall(nspath('DCPType/HTTP/*')):
+            url = verb.attrib['onlineResource']
+            methods.append((verb.tag, {'url': url}))
+        self.methods = dict(methods)
+        
 
 class WFSCapabilitiesInfoset(object):
     """High-level container for WFS Capabilities based on lxml.etree
@@ -153,7 +292,7 @@ class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0'):
+    def __init__(self, version='1.0'):
         """Initialize"""
         self.version = version
         self._infoset = None

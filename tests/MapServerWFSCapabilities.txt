@@ -1,0 +1,52 @@
+
+Imports
+
+    >>> from owslib.wfs import WebFeatureService
+    
+Fake a request to a WFS Server using saved doc from.
+
+    >>> xml = open('mapserver-wfs-cap.xml', 'r').read() 
+    >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
+    
+Test capabilities
+
+    >>> wfs.capabilities.service
+    'MapServer WFS'
+    >>> wfs.capabilities.title
+    'Bird Studies Canada WMS/WFS Server'
+    
+Test available content layers
+
+    >>> [layer.name for layer in wfs.capabilities.contents]
+    ['IBA', 'CBC_PT', 'CBC_PY', 'MMP', 'CLLS', 'OBBA_SQUARE', 'OBBA_REGION', 'OBBA_BLOCK', 'OWLS', 'BBS_PT']
+    >>> [layer.title for layer in wfs.capabilities.contents]
+    ['Canadian Important Bird Areas', 'Canadian Christmas Bird Count Locations', 'Canadian Christmas Bird Count Locations', 'Marsh Monitoring Program Route Locations', 'Canadian Lakes Loon Survey Locations', 'Ontario Breeding Bird Atlas 10 km Squares', 'Ontario Breeding Bird Atlas Administrative Regions', 'Ontario Breeding Bird Atlas 100 km Blocks', 'Nocturnal Owl Survey Locations', 'Breeding Bird Survey Route Start Points']
+    
+Test single item accessor
+
+    >>> wfs.capabilities.getContentByName('IBA').title
+    'Canadian Important Bird Areas'
+    >>> wfs.capabilities.getContentByName('IBA').boundingBox
+    >>> wfs.capabilities.getContentByName('IBA').boundingBoxWGS84
+    (-141.238, 41.671799999999998, -52.667000000000002, 78.105900000000005)
+    >>> wfs.capabilities.getContentByName('IBA').crsOptions
+    ['EPSG:4326']
+    
+Expect a KeyError for invalid names
+
+    >>> wfs.capabilities.getContentByName('utterly bogus').title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wfs.capabilities.operations]
+    ['{http://www.opengis.net/wfs}GetCapabilities', '{http://www.opengis.net/wfs}DescribeFeatureType', '{http://www.opengis.net/wfs}GetFeature']
+    >>> wfs.capabilities.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods
+    {'{http://www.opengis.net/wfs}Get': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}, '{http://www.opengis.net/wfs}Post': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}}
+    >>> wfs.capabilities.getOperationByName('{http://www.opengis.net/wfs}GetFeature').formatOptions
+    ['{http://www.opengis.net/wfs}GML2', '{http://www.opengis.net/wfs}GML3']
+
+Lastly, test the getcapabilities method
+
