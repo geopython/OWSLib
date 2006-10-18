@@ -25,6 +25,31 @@ class IWebMapService:
         """Make a request to the WMS, returns data."""
 
 
+class IWebFeatureService:
+    """Abstraction for an OGC Web Feature Service (WFS).
+
+    Properties
+    ----------
+    url : string
+        Online resource URL.
+    version : string
+        WFS protocol version.
+    capabilities : object
+        Describes the capabilities metadata of the WFS.
+    """
+
+    def getcapabilities():
+        """Make a request to the WFS, returns an XML document wrapped in a 
+        Python file object."""
+
+    def getfeature(**kw):
+        """Make a request to the WFS, returns an image wrapped in a Python
+        file object."""
+
+    def describefeaturetype(**kw):
+        """Make a request to the WFS, returns data."""
+
+
 class IServiceIdentificationMetadata:
     """OO-interface to WMS metadata.
 
