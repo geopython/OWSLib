@@ -83,8 +83,15 @@ class WebMapService(object):
     def getcapabilities(self):
         """Request and return capabilities document from the WMS."""
         reader = WMSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url))
-       
+        u = urlopen(reader.capabilities_url(self.url))
+        # check for service exceptions, and return
+        if u.info().gettype() == 'application/vnd.ogc.se_xml':
+            se_xml = u.read()
+            se_tree = etree.fromstring(se_xml)
+            raise ServiceException, \
+                str(se_tree.find('ServiceException').text).strip()
+        return u
+
     def getmap(self, layers=None, styles=None, srs=None, bbox=None,
                format=None, size=None, transparent=False, bgcolor='#FFFFFF',
                exceptions='application/vnd.ogc.se_xml',
