@@ -1,0 +1,12 @@
+
+Imports
+
+    >>> from owslib.wfs import WebFeatureService
+    
+Test the getfeature method
+
+    >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0.0')
+    >>> xml = wfs.getfeature(typename=['IBA'], maxfeatures=5).read()
+    >>> xml.find('<wfs:FeatureCollection') > 0
+    True
+
