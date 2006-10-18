@@ -22,7 +22,6 @@
 
 import cgi
 from cStringIO import StringIO
-import sys
 from urllib import urlencode
 from urllib2 import urlopen
 
@@ -49,10 +48,6 @@ def nspath(path, ns=WFS_NAMESPACE):
             component = "{%s}%s" % (ns, component)
         components.append(component)
     return "/".join(components)
-
-    #return "/".join(['{%s}%s' % (ns, component)
-    #                 for component
-    #                 in path.split("/")])
 
 
 class ServiceException(Exception):
@@ -82,14 +77,41 @@ class WebFeatureService(object):
     capabilities = property(_getcapproperty, None)
             
     def getcapabilities(self):
-        """Request and return capabilities document from the WFS."""
+        """Request and return capabilities document from the WFS as a 
+        file-like object."""
         reader = WFSCapabilitiesReader(self.version)
         return urlopen(reader.capabilities_url(self.url))
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
                    method='{http://www.opengis.net/wfs}Get'):
-        """Request and return feature data."""
+        """Request and return feature data as a file-like object.
+        
+        Parameters
+        ----------
+        typename : list
+            List of typenames (string)
+        filter : string 
+            XML-encoded OGC filter expression.
+        bbox : tuple
+            (left, bottom, right, top) in the feature type's coordinates.
+        featureid : list
+            List of unique feature ids (string)
+        featureversion : string
+            Default is most recent feature version.
+        propertyname : list
+            List of feature property names. '*' matches all.
+        maxfeatures : int
+            Maximum number of features to be returned.
+        method : string
+            Qualified name of the HTTP DCP method to use.
+
+        There are 3 different modes of use
+
+        1) typename and bbox (simple spatial query)
+        2) typename and filter (more expressive)
+        3) featureid (direct access to known features)
+        """
         md = self.capabilities
         base_url = md.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
@@ -138,7 +160,6 @@ class ServiceMetadata(object):
     def __init__(self, infoset):
         """Initialize from an element tree."""
         self._root = infoset.getRoot()
-        #print >> sys.stderr, self._root
         # properties
         self.service = self._root.find(nspath('Service/Name')).text
         self.title = self._root.find(nspath('Service/Title')).text
@@ -168,13 +189,6 @@ class ServiceMetadata(object):
             if item.name == name:
                 return item
         raise KeyError, "No operation named %s" % name
-
-    #def toXML(self):
-    #    """x
-    #    """
-    #    top = etree.Element('a')
-    #    top.text = self.getName()
-    #    return etree.tostring(top)
 
 
 class ContentMetadata:
