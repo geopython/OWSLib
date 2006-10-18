@@ -29,6 +29,6 @@ try:
         "http://purl.org/dc/elements/1.1/":             "dc", 
         "http://purl.org/rss/1.0/modules/syndication/": "syn", 
         "http://www.w3.org/2003/01/geo/wgs84_pos#":     "geo"})
-except:
+except ImportError:
     from lxml import etree
 
