@@ -1,0 +1,27 @@
+
+Imports
+
+    >>> from owslib.wms import WebMapService
+    
+Connect to WMS
+
+    >>> wms = WebMapService('http://wms.jpl.nasa.gov/wms.cgi', version='1.1.1')
+   
+Get map image
+
+    >>> img = wms.getmap(layers=['global_mosaic'], srs='EPSG:4326', bbox=(-112,36,-106,41), format='image/jpeg', size=(300,250), transparent=True, bgcolor='#000000', method='Get')
+    >>> img.info().gettype()
+    'image/jpeg'
+    
+    >>> data = img.read()
+    >>> out = open('jplmap.jpg', 'wb')
+    >>> out.write(data)
+    >>> out.close()
+    
+Expect an exception in the case of a bad request
+
+    >>> img = wms.getmap(layers=['totally bogus'], srs='EPSG:4326', bbox=(-112,36,-106,41), format='image/jpeg', size=(300,250), transparent=True, bgcolor='#000000', method='Get')
+    Traceback (most recent call last):
+    ...
+    ServiceException: The layer "totally bogus" is unknown.
+

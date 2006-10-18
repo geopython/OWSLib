@@ -25,7 +25,7 @@
 
 import cgi
 import sys
-import urllib
+from urllib import urlencode, urlopen
 
 from owslib.etree import etree
 
@@ -48,6 +48,10 @@ class WMSError(Exception):
         exception_elem.text = self.message
         report_elem.append(exception_elem)
         return preamble + etree.tostring(report_elem)
+
+
+class ServiceException(Exception):
+    pass
 
 
 class CapabilitiesError(Exception):
@@ -79,9 +83,52 @@ class WebMapService(object):
     def getcapabilities(self):
         """Request and return capabilities document from the WMS."""
         reader = WMSCapabilitiesReader(self.version)
-        return urllib.urlopen(reader.capabilities_url(self.url))
+        return urlopen(reader.capabilities_url(self.url))
+       
+    def getmap(self, layers=None, styles=None, srs=None, bbox=None,
+               format=None, size=None, transparent=False, bgcolor='#FFFFFF',
+               exceptions='application/vnd.ogc.se_xml',
+               method='Get'):
+        """Request and return an image from the WMS."""
+        md = self.capabilities
+        base_url = md.getOperationByName('GetMap').methods[method]['url']
+        request = {'version': self.version, 'request': 'GetMap'}
         
+        # check layers and styles
+        assert len(layers) > 0
+        request['layers'] = ','.join(layers)
+        if styles:
+            assert len(styles) == len(layers)
+            request['styles'] = ','.join(styles)
+        else:
+            request['styles'] = ''
 
+        # size
+        request['width'] = str(size[0])
+        request['height'] = str(size[1])
+        
+        request['srs'] = str(srs)
+        request['bbox'] = ','.join([str(x) for x in bbox])
+        request['format'] = str(format)
+        request['transparent'] = str(transparent).upper()
+        request['bgcolor'] = '0x' + bgcolor[1:7]
+        request['exceptions'] = str(exceptions)
+        
+        data = urlencode(request)
+        if method == 'Post':
+            u = urlopen(base_url, data=data)
+        else:
+            u = urlopen(base_url + data)
+
+        # check for service exceptions, and return
+        if u.info().gettype() == 'application/vnd.ogc.se_xml':
+            se_xml = u.read()
+            se_tree = etree.fromstring(se_xml)
+            raise ServiceException, \
+                str(se_tree.find('ServiceException').text).strip()
+        return u
+
+        
 class ServiceMetadata(object):
     """Abstraction for WMS metadata.
     
@@ -312,7 +359,7 @@ class WMSCapabilitiesReader:
         if 'version' not in params:
             qs.append(('version', self.version))
 
-        urlqs = urllib.urlencode(tuple(qs))
+        urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
 
     def read(self, service_url):
@@ -323,7 +370,7 @@ class WMSCapabilitiesReader:
         version, and request parameters
         """
         request = self.capabilities_url(service_url)
-        u = urllib.urlopen(request)
+        u = urlopen(request)
         return WMSCapabilitiesInfoset(etree.fromstring(u.read()))
 
     def readString(self, st):
