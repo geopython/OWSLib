@@ -21,7 +21,10 @@
 # =============================================================================
 
 import cgi
-from urllib import urlencode, urlopen
+from cStringIO import StringIO
+import sys
+from urllib import urlencode
+from urllib2 import urlopen
 
 from etree import etree
 
@@ -110,11 +113,22 @@ class WebFeatureService(object):
             u = urlopen(base_url, data=data)
         else:
             u = urlopen(base_url + data)
-
-        # check for service exceptions, rewrap, and return
-        return u
-
         
+        # check for service exceptions, rewrap, and return
+        # We're going to assume that anything with a content-length > 32k
+        # is data. We'll check anything smaller.
+        if int(u.info()['Content-Length']) < 32000:
+            data = u.read()
+            tree = etree.fromstring(data)
+            if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
+                se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
+                raise ServiceException, str(se.text).strip()
+            else:
+                return StringIO(data)
+        else:
+            return u
+
+
 class ServiceMetadata(object):
     """Abstraction for WFS metadata.
     
