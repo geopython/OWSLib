@@ -7,7 +7,7 @@ try:
 except (ImportError, pkg_resources.DistributionNotFound):
     pass
 
-testfiles = glob.glob('*WFS*.txt')
+testfiles = glob.glob('*.txt')
 
 for file in testfiles: 
     doctest.testfile(file)
