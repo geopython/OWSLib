@@ -21,7 +21,8 @@
 # =============================================================================
 
 import cgi
-import urllib
+from urllib import urlencode, urlopen
+
 from etree import etree
 
 WFS_NAMESPACE = 'http://www.opengis.net/wfs'
@@ -165,6 +166,13 @@ class ContentMetadata:
         # crs options
         self.crsOptions = [srs.text for srs in elem.findall(nspath('SRS'))]
 
+        # verbs
+        self.verbOptions = [op.tag for op \
+            in parent.findall(nspath('Operations/*'))]
+        self.verbOptions + [op.tag for op \
+            in elem.findall(nspath('Operations/*')) \
+            if op.tag not in self.verbOptions]
+        
 
 class OperationMetadata:
     """Abstraction for WMS metadata.
@@ -313,7 +321,7 @@ class WFSCapabilitiesReader(object):
         if 'version' not in params:
             qs.append(('version', self.version))
 
-        urlqs = urllib.urlencode(tuple(qs))
+        urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
 
     def read(self, url):
@@ -326,7 +334,7 @@ class WFSCapabilitiesReader(object):
             The URL to the WFS capabilities document.
         """
         request = self.capabilities_url(url)
-        u = urllib.urlopen(request)
+        u = urlopen(request)
         return WFSCapabilitiesInfoset(etree.fromstring(u.read()))
 
     def readString(self, st):

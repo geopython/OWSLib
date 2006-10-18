@@ -31,6 +31,8 @@ Test single item accessor
     (-141.238, 41.671799999999998, -52.667000000000002, 78.105900000000005)
     >>> wfs.capabilities.getContentByName('IBA').crsOptions
     ['EPSG:4326']
+    >>> wfs.capabilities.getContentByName('IBA').verbOptions
+    ['{http://www.opengis.net/wfs}Query']
     
 Expect a KeyError for invalid names
 
@@ -49,4 +51,9 @@ Test operations
     ['{http://www.opengis.net/wfs}GML2', '{http://www.opengis.net/wfs}GML3']
 
 Lastly, test the getcapabilities method
+
+    >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0')
+    >>> xml = wfs.getcapabilities().read()
+    >>> xml.find('<WFS_Capabilities') > 0
+    True
 
