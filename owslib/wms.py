@@ -1,6 +1,6 @@
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
-# Copyright (c) 2004 Sean C. Gillies
+# Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2005 Nuxeo SARL <http://nuxeo.com>
 #
 # Authors : Sean Gillies <sgillies@frii.com>
@@ -23,31 +23,17 @@
 # Contact email: sgillies@frii.com
 # =============================================================================
 
+"""
+API for Web Map Service (WMS) methods and metadata.
+
+Currently supports only version 1.1.1 of the WMS protocol.
+"""
+
 import cgi
-import sys
-from urllib import urlencode, urlopen
+from urllib import urlencode
+from urllib2 import urlopen
 
-from owslib.etree import etree
-
-class WMSError(Exception):
-    """Base class for WMS module errors
-    """
-
-    def __init__(self, message):
-        """Initialize a WMS Error"""
-        self.message = message
-
-    def toxml(self):
-        """Serialize into a WMS Service Exception XML
-        """
-        preamble = '<?xml version="1.0" ?>'
-        report_elem = etree.Element('ServiceExceptionReport')
-        report_elem.attrib['version'] = '1.1.1'
-        # Service Exception
-        exception_elem = etree.Element('ServiceException')
-        exception_elem.text = self.message
-        report_elem.append(exception_elem)
-        return preamble + etree.tostring(report_elem)
+from etree import etree
 
 
 class ServiceException(Exception):
@@ -69,6 +55,7 @@ class WebMapService(object):
         self.url = url
         self.version = version
         self._capabilities = None
+        # initialize from saved capability document
         if xml:
             reader = WMSCapabilitiesReader(self.version)
             self._capabilities = ServiceMetadata(reader.readString(xml))
@@ -81,7 +68,8 @@ class WebMapService(object):
     capabilities = property(_getcapproperty, None)
             
     def getcapabilities(self):
-        """Request and return capabilities document from the WMS."""
+        """Request and return capabilities document from the WMS as a 
+        file-like object."""
         reader = WMSCapabilitiesReader(self.version)
         u = urlopen(reader.capabilities_url(self.url))
         # check for service exceptions, and return
@@ -96,7 +84,45 @@ class WebMapService(object):
                format=None, size=None, transparent=False, bgcolor='#FFFFFF',
                exceptions='application/vnd.ogc.se_xml',
                method='Get'):
-        """Request and return an image from the WMS."""
+        """Request and return an image from the WMS as a file-like object.
+        
+        Parameters
+        ----------
+        layers : list
+            List of content layer names.
+        styles : list
+            Optional list of named styles, must be the same length as the
+            layers list.
+        srs : string
+            A spatial reference system identifier.
+        bbox : tuple
+            (left, bottom, right, top) in srs units.
+        format : string
+            Output image format such as 'image/jpeg'.
+        size : tuple
+            (width, height) in pixels.
+        transparent : bool
+            Optional. Transparent background if True.
+        bgcolor : string
+            Optional. Image background color.
+        method : string
+            Optional. HTTP DCP method name: Get or Post.
+        
+        Example
+        -------
+            >>> img = wms.getmap(layers=['global_mosaic'],
+            ...                  styles=['visual'],
+            ...                  srs='EPSG:4326', 
+            ...                  bbox=(-112,36,-106,41),
+            ...                  format='image/jpeg',
+            ...                  size=(300,250),
+            ...                  transparent=True,
+            ...                  )
+            >>> out = open('example.jpg', 'wb')
+            >>> out.write(img.read())
+            >>> out.close()
+
+        """
         md = self.capabilities
         base_url = md.getOperationByName('GetMap').methods[method]['url']
         request = {'version': self.version, 'request': 'GetMap'}
@@ -128,13 +154,16 @@ class WebMapService(object):
             u = urlopen(base_url + data)
 
         # check for service exceptions, and return
-        if u.info().gettype() == 'application/vnd.ogc.se_xml':
+        if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             raise ServiceException, \
                 str(se_tree.find('ServiceException').text).strip()
         return u
 
+    def getfeatureinfo(self):
+        raise NotImplementedError
+        
         
 class ServiceMetadata(object):
     """Abstraction for WMS metadata.
@@ -145,7 +174,6 @@ class ServiceMetadata(object):
     def __init__(self, infoset):
         """Initialize from an element tree."""
         self._root = infoset.getroot()
-        #print >> sys.stderr, self._root
         # properties
         self.service = self._root.find('Service/Name').text
         self.title = self._root.find('Service/Title').text
@@ -195,7 +223,7 @@ class ContentMetadata:
     """
 
     def __init__(self, elem, parent):
-        """."""
+        """Initialize."""
         self.name = elem.find('Name').text
         self.title = elem.find('Title').text
         # bboxes
@@ -230,7 +258,11 @@ class ContentMetadata:
         self.crsOptions = [srs.text for srs in parent.findall('SRS')]
 
         # styles
-        self.styles = dict([(s.find('Name').text, {'title': s.find('Title').text}) for s in elem.findall('Style')])
+        self.styles = dict([(s.find('Name').text, 
+                             {'title': s.find('Title').text}) \
+                             for s in elem.findall('Style')]
+                             )
+
 
 class OperationMetadata:
     """Abstraction for WMS metadata.
@@ -247,7 +279,11 @@ class OperationMetadata:
             url = verb.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
             methods.append((verb.tag, {'url': url}))
         self.methods = dict(methods)
-        
+       
+
+# Deprecated classes follow
+# TODO: remove
+
 class WMSCapabilitiesInfoset:
     """High-level container for WMS Capabilities based on lxml.etree
     """
@@ -389,4 +425,27 @@ class WMSCapabilitiesReader:
         if not isinstance(st, str):
             raise ValueError("String must be of type string, not %s" % type(st))
         return WMSCapabilitiesInfoset(etree.fromstring(st))
-    
+
+
+class WMSError(Exception):
+    """Base class for WMS module errors
+    """
+
+    def __init__(self, message):
+        """Initialize a WMS Error"""
+        self.message = message
+
+    def toxml(self):
+        """Serialize into a WMS Service Exception XML
+        """
+        preamble = '<?xml version="1.0" ?>'
+        report_elem = etree.Element('ServiceExceptionReport')
+        report_elem.attrib['version'] = '1.1.1'
+        # Service Exception
+        exception_elem = etree.Element('ServiceException')
+        exception_elem.text = self.message
+        report_elem.append(exception_elem)
+        return preamble + etree.tostring(report_elem)
+
+
+
