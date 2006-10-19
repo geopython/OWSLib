@@ -1,0 +1,9 @@
+Changes
+=======
+
+OWSLib 0.1: 19 October 2006
+---------------------------
+- New and improved metadata API.
+- Wrappers for GetCapabilities, WMS GetMap, and WFS GetFeature requests.
+- Doctests.
+
