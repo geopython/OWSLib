@@ -20,6 +20,8 @@
 # Contact email: sgillies@frii.com
 # =============================================================================
 
+import doctest
+import glob
 import os, sys
 import unittest
 
@@ -42,6 +44,10 @@ for test in tests:
     m = __import__(test)
     suite.addTest(load(m))
 
+# Add doctests
+for file in glob.glob('*.txt'):
+    suite.addTest(doctest.DocFileSuite(file))
+    
 # =============================================================================
 # Run
 if __name__ == '__main__':
