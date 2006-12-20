@@ -13,8 +13,20 @@ Test capabilities
 
     >>> wms.capabilities.service
     'OGC:WMS'
+    >>> wms.capabilities.versions
+    ['1.1.1']
     >>> wms.capabilities.title
     'JPL Global Imagery Service'
+    >>> wms.capabilities.abstract
+    ''
+    >>> wms.capabilities.link
+    'http://'
+    >>> wms.capabilities.keywords
+    []
+    >>> wms.capabilities.access
+    {'fees': '', 'constraints': ''}
+    >>> wms.capabilities.provider
+    {'name': 'x', 'link': '', 'email': ''}
     
 Test available content layers
 

@@ -12,8 +12,20 @@ Test capabilities
 
     >>> wfs.capabilities.service
     'MapServer WFS'
+    >>> wfs.capabilities.versions
+    ['1.1.1']
     >>> wfs.capabilities.title
     'Bird Studies Canada WMS/WFS Server'
+    >>> wfs.capabilities.abstract
+    ''
+    >>> wfs.capabilities.link
+    'http://'
+    >>> wfs.capabilities.keywords
+    []
+    >>> wfs.capabilities.access
+    {'fees': '', 'constraints': ''}
+    >>> wfs.capabilities.provider
+    {'name': 'x', 'link': '', 'email': ''}
     
 Test available content layers
 

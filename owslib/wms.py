@@ -193,7 +193,13 @@ class ServiceMetadata(object):
         top = self._root.find('Capability/Layer')
         for elem in self._root.findall('Capability/Layer/Layer'):
             self.contents.append(ContentMetadata(elem, top))
-         
+
+        # keywords
+        self.keywords = [f.text for f in self._root.findall('Service/KeywordList/Keyword')]
+        
+        # contact person
+        self.contact = ContactMetadata(self._root.find('Service/ContactInformation'))
+        
     def getContentByName(self, name):
         """Return a named content item."""
         for item in self.contents:
@@ -279,7 +285,26 @@ class OperationMetadata:
             url = verb.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
             methods.append((verb.tag, {'url': url}))
         self.methods = dict(methods)
-       
+
+
+class ContactMetadata:
+    """Abstraction for contact details advertised in GetCapabilities.
+    """
+
+    def __init__(self, elem):
+        self.name = elem.find('ContactPersonPrimary/ContactPerson').text
+        self.organization = elem.find('ContactPersonPrimary/ContactOrganization').text
+        address = elem.find('ContactAddress')
+        if address is not None:
+            try:    
+                self.address = address.find('Address').text
+                self.city = address.find('City').text
+                self.region = address.find('StateOrProvince').text
+                self.postcode = address.find('Postcode').text
+                self.country = address.find('Country').text
+            except: pass
+        self.email = elem.find('ContactElectronicMailAddress').text 
+
 
 # Deprecated classes follow
 # TODO: remove
