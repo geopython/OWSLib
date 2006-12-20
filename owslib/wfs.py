@@ -175,7 +175,13 @@ class ServiceMetadata(object):
         top = self._root.find(nspath('FeatureTypeList'))
         for elem in self._root.findall(nspath('FeatureTypeList/FeatureType')):
             self.contents.append(ContentMetadata(elem, top))
-         
+        
+        # keywords
+        self.keywords = []
+
+        self.provider = None
+
+
     def getContentByName(self, name):
         """Return a named content item."""
         for item in self.contents:

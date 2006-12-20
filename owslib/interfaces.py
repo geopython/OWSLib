@@ -106,6 +106,21 @@ class IOperationMetadata:
         Array of method descriptors, keyed to HTTP verbs.
     """
 
+class IContactMetadata:
+    """OO-interface to OWS metadata.
+
+    Properties
+    ----------
+    name : string
+    organization : string
+    address : string
+    city : string
+    region : string
+    postcode : string
+    country : string
+    email : string
+    """
+
 class IMethodMetadata:
     """OO-interface to WMS metadata.
 
@@ -149,4 +164,5 @@ class IServiceMetadata(IServiceIdentificationMetadata, IServiceProvideMetadata,
                        IServiceOperationsMetadata, IServiceContentsMetadata):
     """OWS Metadata.
     """
+
 
