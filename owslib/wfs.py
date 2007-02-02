@@ -149,6 +149,8 @@ class ServiceMetadata(object):
         # properties
         self.service = self._root.find(nspath('Service/Name')).text
         self.title = self._root.find(nspath('Service/Title')).text
+        self.abstract = self._root.find(nspath('Service/Abstract')).text
+        self.link = self._root.find(nspath('Service/OnlineResource')).text
         
         # operations []
         self.operations = []
@@ -165,8 +167,7 @@ class ServiceMetadata(object):
         # keywords
         self.keywords = []
 
-        self.provider = None
-
+        self.provider = ContactMetadata(self._root.find('Service/ContactInformation'))
 
     def getContentByName(self, name):
         """Return a named content item."""
@@ -233,7 +234,31 @@ class OperationMetadata:
             url = verb.attrib['onlineResource']
             methods.append((verb.tag, {'url': url}))
         self.methods = dict(methods)
-        
+
+
+class ContactMetadata:
+    """Abstraction for contact details advertised in GetCapabilities.
+    """
+    # TODO: refactor with class from wms
+
+    def __init__(self, elem):
+        self.name = None
+        self.email = None
+
+        if elem:
+            self.name = elem.find('ContactPersonPrimary/ContactPerson').text
+            self.organization = elem.find('ContactPersonPrimary/ContactOrganization').text
+            address = elem.find('ContactAddress')
+            if address is not None:
+                try:    
+                    self.address = address.find('Address').text
+                    self.city = address.find('City').text
+                    self.region = address.find('StateOrProvince').text
+                    self.postcode = address.find('Postcode').text
+                    self.country = address.find('Country').text
+                except: pass
+            self.email = elem.find('ContactElectronicMailAddress').text 
+
 
 class WFSCapabilitiesInfoset(object):
     """High-level container for WFS Capabilities based on lxml.etree
