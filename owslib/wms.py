@@ -163,6 +163,8 @@ class ServiceMetadata(object):
         # properties
         self.service = self._root.find('Service/Name').text
         self.title = self._root.find('Service/Title').text
+        self.abstract = self._root.find('Service/Abstract').text
+        self.link = self._root.find('Service/OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
         
         # operations []
         self.operations = []
@@ -184,7 +186,7 @@ class ServiceMetadata(object):
         self.keywords = [f.text for f in self._root.findall('Service/KeywordList/Keyword')]
         
         # contact person
-        self.contact = ContactMetadata(self._root.find('Service/ContactInformation'))
+        self.provider = ContactMetadata(self._root.find('Service/ContactInformation'))
         
     def getContentByName(self, name):
         """Return a named content item."""

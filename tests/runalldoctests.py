@@ -3,9 +3,8 @@ import getopt
 import glob
 import sys
 
-import pkg_resources
-
 try:
+    import pkg_resources
     pkg_resources.require('OWSLib')
 except (ImportError, pkg_resources.DistributionNotFound):
     pass
