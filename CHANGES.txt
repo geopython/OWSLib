@@ -1,13 +1,8 @@
 Changes
 =======
 
-OWSLib 0.2: January 2007
-------------------------
+OWSLib 0.2.0: 1 February 2007
+-----------------------------
 - Change license to BSD.
-
-OWSLib 0.1: 19 October 2006
----------------------------
-- New and improved metadata API.
-- Wrappers for GetCapabilities, WMS GetMap, and WFS GetFeature requests.
-- Doctests.
+- Added service contact metadata.
 
