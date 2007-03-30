@@ -125,14 +125,23 @@ class WebFeatureService(object):
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
         # is data. We'll check anything smaller.
-        if int(u.info()['Content-Length']) < 32000:
+        try:
+            length = int(u.info()['Content-Length'])
+            have_read = False
+        except KeyError:
             data = u.read()
+            have_read = True
+            length = len(data)
+            
+        if length < 32000:
+            if not have_read:
+                data = u.read()
             tree = etree.fromstring(data)
             if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                 se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
                 raise ServiceException, str(se.text).strip()
-            else:
-                return StringIO(data)
+
+            return StringIO(data)
         else:
             return u
 
