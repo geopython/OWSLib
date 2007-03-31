@@ -194,7 +194,7 @@ class ServiceMetadata(object):
 
 
 class ContentMetadata:
-    """Abstraction for WMS metadata.
+    """Abstraction for WFS metadata.
     
     Implements IMetadata.
     """
@@ -229,7 +229,7 @@ class ContentMetadata:
         
 
 class OperationMetadata:
-    """Abstraction for WMS metadata.
+    """Abstraction for WFS metadata.
     
     Implements IMetadata.
     """
@@ -248,7 +248,7 @@ class OperationMetadata:
 class ContactMetadata:
     """Abstraction for contact details advertised in GetCapabilities.
     """
-    # TODO: refactor with class from wms
+    # TODO: refactor with class from wfs
 
     def __init__(self, elem):
         self.name = None
