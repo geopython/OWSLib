@@ -115,8 +115,9 @@ class WebFeatureService(object):
         request['propertyname'] = ','.join(propertyname)
         if featureversion: request['featureversion'] = str(featureversion)
         if maxfeatures: request['maxfeatures'] = str(maxfeatures)
-        
+
         data = urlencode(request)
+
         if method == 'Post':
             u = urlopen(base_url, data=data)
         else:
@@ -132,7 +133,7 @@ class WebFeatureService(object):
             data = u.read()
             have_read = True
             length = len(data)
-            
+     
         if length < 32000:
             if not have_read:
                 data = u.read()
@@ -143,6 +144,8 @@ class WebFeatureService(object):
 
             return StringIO(data)
         else:
+            if have_read:
+                return StringIO(data)
             return u
 
 
