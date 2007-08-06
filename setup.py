@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(name          = 'OWSLib',
-      version       = '0.2.0',
+      version       = '0.2.1',
       description   = 'OGC Web Service utility library',
       license       = 'BSD',
       keywords      = 'gis ogc ows wfs wms capabilities metadata',
