@@ -1,8 +1,13 @@
 Changes
 =======
 
+0.2.1 (unreleased)
+------------------
+ - Added support for Python 2.5
+
+
 OWSLib 0.2.0: 1 February 2007
 -----------------------------
-- Change license to BSD.
-- Added service contact metadata.
+ - Change license to BSD.
+ - Added service contact metadata.
 
