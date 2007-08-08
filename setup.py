@@ -12,6 +12,7 @@ setup(name          = 'OWSLib',
       maintainer_email  = 'sgillies@frii.com',
       url           = 'http://trac.gispython.org/projects/PCL/wiki/OwsLib',
       packages      = ['owslib'],
+      tests_require = ['zope.testing'],
       classifiers   = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
