@@ -6,7 +6,7 @@ Imports
 Fake a request to a WMS Server using saved doc from 
 http://wms.jpl.nasa.gov/wms.cgi.
 
-    >>> xml = open('JPLCapabilities.xml', 'r').read() 
+    >>> xml = open_file('JPLCapabilities.xml', 'r').read() 
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
     
 Test capabilities
