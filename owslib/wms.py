@@ -191,7 +191,9 @@ class ServiceMetadata(object):
         
         # contact person
 	contact = self._root.find('Service/ContactInformation')
-	if contact is not None:
+	## sometimes there is a contact block that is empty, so make
+	## sure there are children to parse
+	if contact is not None and contact.getchildren():
             self.provider = ContactMetadata(contact)
         else:
             self.provider = None
@@ -319,25 +321,40 @@ class OperationMetadata:
             methods.append((verb.tag, {'url': url}))
         self.methods = dict(methods)
 
-
 class ContactMetadata:
-    """Abstraction for contact details advertised in GetCapabilities.
-    """
+	"""Abstraction for contact details advertised in GetCapabilities.
+	"""
+	def __init__(self, elem):
+		self.name = elem.find('ContactPersonPrimary/ContactPerson').text
+		self.email = elem.find('ContactElectronicMailAddress').text 
 
-    def __init__(self, elem):
-        self.name = elem.find('ContactPersonPrimary/ContactPerson').text
-        self.organization = elem.find('ContactPersonPrimary/ContactOrganization').text
-        address = elem.find('ContactAddress')
-        if address is not None:
-            try:    
-                self.address = address.find('Address').text
-                self.city = address.find('City').text
-                self.region = address.find('StateOrProvince').text
-                self.postcode = address.find('Postcode').text
-                self.country = address.find('Country').text
-            except: pass
-        self.email = elem.find('ContactElectronicMailAddress').text 
+		self.address = self.city = self.region = None
+		self.postcode = self.country = None
 
+		address = elem.find('ContactAddress')
+		if address is not None:
+			street = address.find('Address')
+			if street is not None: self.address = street.text
+
+			city = address.find('City')
+			if city is not None: self.city = city.text
+
+			region = address.find('StateOrProvince')
+			if region is not None: self.region = region.text
+
+			postcode = address.find('PostCode')
+			if postcode is not None: self.postcode = postcode.text
+
+			country = address.find('Country')
+			if country is not None: self.country = country.text
+
+		organization = elem.find('ContactPersonPrimary/ContactOrganization')
+		if organization is not None: self.organization = organization.text
+		else:self.organization = None
+
+		position = elem.find('ContactPosition')
+		if position is not None: self.position = position.text
+		else: self.position = None
 
 # Deprecated classes follow
 # TODO: remove
