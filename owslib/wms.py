@@ -163,7 +163,11 @@ class ServiceMetadata(object):
         # properties
         self.service = self._root.find('Service/Name').text
         self.title = self._root.find('Service/Title').text
-        self.abstract = self._root.find('Service/Abstract').text
+	abstract = self._root.find('Service/Abstract')
+	if abstract is not None:
+	        self.abstract = self._root.find('Service/Abstract').text
+	else:
+		self.abstract = None
         self.link = self._root.find('Service/OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
         
         # operations []
@@ -177,17 +181,31 @@ class ServiceMetadata(object):
         
         # contents: our assumption is that services use a top-level layer
         # as a metadata organizer, nothing more.
-        self.contents = []
-        top = self._root.find('Capability/Layer')
-        for elem in self._root.findall('Capability/Layer/Layer'):
-            self.contents.append(ContentMetadata(elem, top))
+	caps = self._root.find('Capability')
+	self.layers = []
+	for elem in caps.findall('Layer'):
+		self.layers.append(ContentMetadata(elem))
 
         # keywords
         self.keywords = [f.text for f in self._root.findall('Service/KeywordList/Keyword')]
         
         # contact person
-        self.provider = ContactMetadata(self._root.find('Service/ContactInformation'))
-        
+	contact = self._root.find('Service/ContactInformation')
+	if contact is not None:
+            self.provider = ContactMetadata(contact)
+        else:
+            self.provider = None
+
+    @property
+    def contents(self):
+	"""backwards compatible flat list of contents"""
+        return list(self._rcontents(self))
+    def _rcontents(self, layer):
+        for l in layer.layers:
+            yield l
+            for l in self._rcontents(l):
+                yield l
+            
     def getContentByName(self, name):
         """Return a named content item."""
         for item in self.contents:
@@ -211,52 +229,79 @@ class ServiceMetadata(object):
 
 
 class ContentMetadata:
-    """Abstraction for WMS metadata.
-    
-    Implements IMetadata.
-    """
+	"""
+	Abstraction for WMS metadata.
 
-    def __init__(self, elem, parent):
-        """Initialize."""
-        self.name = elem.find('Name').text
-        self.title = elem.find('Title').text
-        # bboxes
-        self.boundingBox = None
-        b = elem.find('BoundingBox')
-        if b is not None:
-            self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
-                    float(b.attrib['maxx']), float(b.attrib['maxy']),
-                    b.attrib['SRS'])
-        else:
-            b = parent.find('BoundingBox')
-            if b is not None:
-                self.boundingBox = (
-                        float(b.attrib['minx']), float(b.attrib['miny']),
-                        float(b.attrib['maxx']), float(b.attrib['maxy']),
-                        b.attrib['SRS'])
-        self.boundingBoxWGS84 = None
-        b = elem.find('LatLonBoundingBox')
-        if b is not None:
-            self.boundingBoxWGS84 = (
-                    float(b.attrib['minx']),float(b.attrib['miny']),
-                    float(b.attrib['maxx']), float(b.attrib['maxy']),
-                    )
-        else:
-            b = parent.find('LatLonBoundingBox')
-            if b is not None:
-                self.boundingBoxWGS84 = (
-                        float(b.attrib['minx']), float(b.attrib['miny']),
-                        float(b.attrib['maxx']), float(b.attrib['maxy']),
-                        )
-        # crs options
-        self.crsOptions = [srs.text for srs in parent.findall('SRS')]
+	Implements IMetadata.
+	"""
+	def __init__(self, elem, parent=None):
+		self.parent = parent
+		if elem.tag != 'Layer':
+			raise ValueError('%s should be a Layer' % (elem,))
+		for key in ('Name', 'Title', 'Attribution'):
+			val = elem.find(key)
+			if val is not None:
+				setattr(self, key.lower(), val.text.strip())
+			else:
+				setattr(self, key.lower(), None)
 
-        # styles
-        self.styles = dict([(s.find('Name').text, 
-                             {'title': s.find('Title').text}) \
-                             for s in elem.findall('Style')]
-                             )
+		# bboxes
+		b = elem.find('BoundingBox')
+		if b is not None:
+			self.boundingBox = (
+				float(b.attrib['minx']),
+				float(b.attrib['miny']),
+				float(b.attrib['maxx']),
+				float(b.attrib['maxy']),
+				b.attrib['SRS'],
+			)
+		elif self.parent:
+			self.boundingBox = self.parent.boundingBox
+		else:
+			self.boundingBox = None
 
+		b = elem.find('LatLonBoundingBox')
+		if b is not None:
+			self.boundingBoxWGS84 = (
+				float(b.attrib['minx']),
+				float(b.attrib['miny']),
+				float(b.attrib['maxx']),
+				float(b.attrib['maxy']),
+			)
+		elif self.parent:
+			self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
+		else:
+			self.boundingBoxWGS84 = None
+
+		# crs options
+		self.crsOptions = []
+		if elem.find('SRS') is not None:
+			## some servers found in the wild use a single SRS
+			## tag containing a whitespace separated list of SRIDs
+			## instead of several SRS tags. hence the inner loop
+			for srslist in map(lambda x: x.text, elem.findall('SRS')):
+				for srs in srslist.split():
+					self.crsOptions.append(srs)
+		elif self.parent:
+			self.crsOptions = self.parent.crsOptions
+		else:
+			raise ValueError('%s no SRS available!?' % (elem,))
+
+		# styles
+		self.styles = {}
+		for s in elem.findall('Style'):
+			name = s.find('Name')
+			title = s.find('Title')
+			if name is None or title is None:
+				raise ValueError('%s missing name or title' % (s,))
+			self.styles[name.text] = { 'title' : title.text }
+
+		self.layers = []
+		for child in elem.findall('Layer'):
+			self.layers.append(ContentMetadata(child, self))
+
+	def __str__(self):
+		return 'Layer Name: %s Title: %s' % (self.name, self.title)
 
 class OperationMetadata:
     """Abstraction for WMS metadata.
