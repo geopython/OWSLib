@@ -296,7 +296,12 @@ class ContentMetadata:
 			title = s.find('Title')
 			if name is None or title is None:
 				raise ValueError('%s missing name or title' % (s,))
-			self.styles[name.text] = { 'title' : title.text }
+			style = { 'title' : title.text }
+			# legend url
+			legend = s.find('LegendURL/OnlineResource')
+			if legend is not None:
+				style['legend'] = legend.attrib['{http://www.w3.org/1999/xlink}href']
+			self.styles[name.text] = style
 
 		# keywords
 		self.keywords = [f.text for f in elem.findall('KeywordList/Keyword')]
