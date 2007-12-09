@@ -298,6 +298,9 @@ class ContentMetadata:
 				raise ValueError('%s missing name or title' % (s,))
 			self.styles[name.text] = { 'title' : title.text }
 
+		# keywords
+		self.keywords = [f.text for f in elem.findall('KeywordList/Keyword')]
+
 		self.layers = []
 		for child in elem.findall('Layer'):
 			self.layers.append(ContentMetadata(child, self))
