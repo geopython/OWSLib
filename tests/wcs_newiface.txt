@@ -1,0 +1,33 @@
+Web Coverage Service
+====================
+
+    >>> from owslib.wcs import WebCoverageService
+    >>> wcs=WebCoverageService('http://ndgbeta.badc.rl.ac.uk/wcs/badc.nerc.ac.uk__NDG-A0__AWQX8gTc', version='1.0.0')
+    >>> wcs.serviceprovider.provider
+    'British Atmospheric Data Centre'
+    >>> wcs.serviceprovider.url
+    "URL for provider's web site (string)."
+    >>> wcs.serviceprovider.contact
+    'How to contact the service provider (string).'
+    >>> type(wcs.items())
+    <type 'list'>
+    >>> cvg=wcs['ZI4al0r8']
+    >>> cvg.label
+    'Vapour pressure'
+    >>> cvg.title
+    'Vapour pressure'
+    >>> cvg.keywords
+    ['NONE']
+    >>> wcs.serviceidentification.accessConstraints
+    'NONE'
+    >>> wcs.serviceidentification.fees
+    'NONE'
+    >>> cvg.wgs84bbox
+    (1.875, -88.767123287700002, 358.125, 88.767123287700002)
+    >>> cvg.timeLimits
+    ['2024-01-15', '2054-12-15']
+    >>> cvg.supportedFormats
+    ['cf-netcdf']
+    
+wcs.getData(directory='myoutput', identifier='DHYcfjtk',timeSequence=['2024-01-15T00:00:00.0'],bbox=(-160,-75,160,75), format='cf-netcdf')
+
