@@ -9,6 +9,7 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
+##########NOTE: Does not conform to new interfaces yet #################
 
 from wcsBase import WCSBase, WCSCapabilitiesReader, CoverageInfo, ServiceInfo, RereadableURL
 from urllib import urlencode

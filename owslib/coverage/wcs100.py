@@ -45,11 +45,6 @@ class WebCoverageService_1_0_0(WCSBase):
             self._capabilities = reader.readString(xml)
         else:
             self._capabilities = reader.read(self.url)
-        
-        #get service type
-        #self.service = self._capabilities.find(ns('Service/') + ns('name')).text
-        #self.version='1.0.0'
-        #self.url = url        
 
         #serviceIdentification metadata
         self.serviceidentification =None
@@ -68,11 +63,14 @@ class WebCoverageService_1_0_0(WCSBase):
           
         #serviceContents metadata
         self.servicecontents={}
-        for elem in self._capabilities.findall(ns('ContentMetadata/')+ns('CoverageOfferingBrief')):
+        for elem in self._capabilities.findall(ns('ContentMetadata/')+ns('CoverageOfferingBrief')): 
             cm=ContentMetadata(elem)
+            #make the describeCoverage requests to populate the supported formats/crs attributes
+            cm.supportedFormats=self._getSupportedFormats(cm.id)
+            cm.supportedCRS=self._getSupportedCRS(cm.id)
             self.servicecontents[cm.id]=cm
         
-                # exceptions - ***********TO DO *************
+        #exceptions
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
     
@@ -96,17 +94,14 @@ class WebCoverageService_1_0_0(WCSBase):
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
         example:
-        cvg=wcs.getCoverageRequest(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='application/netcdf')
+        cvg=wcs.getCoverage(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='cf-netcdf')
 
         is equivalent to:
-        http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIMESEQUENCE=[bb&FORMAT=application/netcdf
+        http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIMESEQUENCE=['2792-06-01T00:00:00.0']&FORMAT=cf-netcdf
            
-
         """
-        #use fully qualified namespace
-        md = self.capabilities
-        base_url = md.getOperationByName('GetCoverage').methods[method]['url']
-
+        
+        base_url = self._getOperationByName('GetCoverage').methods[method]['url']
 
         #process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service':'WCS'}
@@ -126,16 +121,12 @@ class WebCoverageService_1_0_0(WCSBase):
         #encode and request
         data = urlencode(request)
         u = urlopen(base_url, data=data)
-        
-                        
-        
-                        
-        # check for service exceptions, and return
+
+        # check for service exceptions, and return #TODO - test this bit properly.
         if u.info()['Content-Type'] == 'text/xml':          
             #going to have to read the xml to see if it's an exception report.
             #wrap the url stram in a extended StringIO object so it's re-readable
             u=RereadableURL(u)      
-            
             se_xml= u.read()
             se_tree = etree.fromstring(se_xml)
             serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
@@ -144,7 +135,27 @@ class WebCoverageService_1_0_0(WCSBase):
                 str(serviceException.text).strip()
             u.seek(0)
         return u
-           
+        
+    def _getSupportedCRS(self,identifier):
+        # gets supported crs info
+        crss=[]
+        for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('responseCRSs')):
+            crss.append(elem.text)
+        return crss
+
+    def _getSupportedFormats(self,identifier):
+        # gets supported formats info
+        frmts =[]
+        for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageOffering/')+ns('supportedFormats/')+ns('formats')):
+            frmts.append(elem.text)
+        return frmts
+        
+    def _getOperationByName(self, name):
+        """Return a named operation item."""
+        for item in self.serviceoperations:
+            if item.name == name:
+                return item
+        raise KeyError, "No operation named %s" % name
     
 class OperationMetadata(object):
     """Abstraction for WCS metadata.   
@@ -152,9 +163,7 @@ class OperationMetadata(object):
     """
     def __init__(self, elem):
         """."""
-        self.name = elem.tag.split('}')[1]
-        # formatOptions
-             
+        self.name = elem.tag.split('}')[1]          
         
         #self.formatOptions = [f.text for f in elem.findall('{http://www.opengis.net/wcs/1.1/ows}Parameter/{http://www.opengis.net/wcs/1.1/ows}AllowedValues/{http://www.opengis.net/wcs/1.1/ows}Value')]
         methods = []
@@ -190,8 +199,9 @@ class ServiceProvider(object):
             self.provider=elem.find(ns('organisationName')).text
         except AttributeError: 
             self.provider=''
-        self.url ="URL for provider's web site (string)."
-        self.contact = "How to contact the service provider (string)."
+        self.url ="URL for provider's web site (string)." #TODO
+        self.contact = "How to contact the service provider (string)."  #TO DECIDE - simple attributes?
+        
 
 #may not keep these contact info classes
 class Address(object):
@@ -252,15 +262,12 @@ class ContentMetadata(object):
         
         #self._parent=parent
         self.id=elem.find(ns('name')).text
-        self.label =elem.find(ns('label')).text
-        self.title=self.label #alias to align with 1.1.0          
-        
-        #keywords.       
+        self.title =elem.find(ns('label')).text       
         self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]
                     
         
         self.boundingBoxWGS84 = None
-        self.timepositions=None
+        self.timelimits=None
         b = elem.find(ns('lonLatEnvelope'))
         if b is not None:
             gmlpositions=b.findall('{http://www.opengis.net/gml}pos')
@@ -273,8 +280,7 @@ class ContentMetadata(object):
                     )
             if timepositions:
                 self.timelimits=[timepositions[0].text,timepositions[1].text]
-            else:
-                self.timelimits=None
+
         ## bboxes - other CRS TODO
         #self.boundingBoxes = []
         #for bbox in elem.findall('{http://www.opengis.net/ows}BoundingBox'):
@@ -288,7 +294,6 @@ class ContentMetadata(object):
                 #self.boundingBoxes.append(boundingBox)
         
         #SupportedCRS, SupportedFormats
-        self.supportedCRS=[f.text for f in elem.findall(ns('SupportedCRS'))]
-        self.supportedFormats=[f.text for f in elem.findall(ns('SupportedFormat'))]
-            
-               
+        #these require a seperate describeCoverage request...      for now set to None
+        self.supportedCRS=None
+        self.supportedFormats=None
