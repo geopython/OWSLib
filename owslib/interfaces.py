@@ -9,8 +9,8 @@ class IService:
     # XXX: here or in capabilities?
     version = property("""Protocol version (string)""")
     capabilities = property("""Implementation of IServiceMetadata (object)""")
-
-
+    #remove capabilities?
+    
 class IWebMapService(IService):
     """Abstraction for an OGC Web Map Service (WMS).
     """
@@ -60,7 +60,8 @@ class IServiceIdentificationMetadata:
     title = property("""Human-targeted title of service (string).""")
     abstract = property("""Text describing the service (string).""")
     keywords = property("""Keyword list (list).""")
-    rights = property("""Explanation of rights associated with service (string).""")
+    accessconstraints = property("""Explanation of access constraints associated with service (string).""")
+    fees = property("""Explanation of fees associated with service (string).""")
     
 
 class IServiceProviderMetadata:

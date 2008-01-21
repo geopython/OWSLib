@@ -9,7 +9,7 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from wcsBase import WCSBase, WCSCapabilitiesReader, CoverageInfo, ServiceInfo, RereadableURL
+from wcsBase import WCSBase, WCSCapabilitiesReader, RereadableURL
 from urllib import urlencode
 from urllib2 import urlopen
 from owslib.etree import etree
@@ -33,12 +33,11 @@ class WebCoverageService_1_0_0(WCSBase):
             if name in self.__getattribute__('servicecontents').keys():
                 return self.__getattribute__('servicecontents')[name]
         #otherwise behave normally:
-        return self.__getattribute__(self,name)
+        return self.__getattribute__(name)
     
     def __init__(self,url,xml):
         self.version='1.0.0'
         self.url = url   
-        self._capabilities = None
         # initialize from saved capability document or access the server
         reader = WCSCapabilitiesReader(self.version)
         if xml:
@@ -47,12 +46,10 @@ class WebCoverageService_1_0_0(WCSBase):
             self._capabilities = reader.read(self.url)
 
         #serviceIdentification metadata
-        self.serviceidentification =None
         subelem=self._capabilities.find(ns('Service/'))
         self.serviceidentification=ServiceIdenfication(subelem)                               
                    
         #serviceProvider metadata
-        self.serviceprovider =None
         subelem=self._capabilities.find(ns('Service/')+ns('responsibleParty'))
         self.serviceprovider=ServiceProvider(subelem)   
         
