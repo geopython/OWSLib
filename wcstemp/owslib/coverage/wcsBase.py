@@ -31,57 +31,7 @@ class WCSBase(object):
     
     def __init__(self):
         pass    
-    
-    def _getGenCovListProperty(self):
-        '''genericCoverages attribute is used to hold a list of CoverageInfo objects which are generic and independent of the WCS version. As a result of this they may be lossy compared to interrogating the version specific capabilities document, but they serve the purpose of providing a uniform view of different WCS versions '''
-        if not hasattr(self, '_genericCoverages'):
-            self._genericCoverages=self._buildGenericCoverages()
-        return self._genericCoverages
-    genericCoverages=property(_getGenCovListProperty, None)
-    
-    
-    def _getGenServiceProperty(self):
-        '''genericService attribute is used to hold a list of non-version specific info about the service '''
-        if not hasattr(self, '_genericService'):
-            self._genericService=self._buildGenericServiceInfo()
-        return self._genericService
-    serviceInfo=property(_getGenServiceProperty, None)
-    
-    def _buildGenericCoverages(self):
-        ''' must be overridden to provide enable generic interface'''        
-        return []
-    
-    def _buildGenericProviderInfo(self):
-        ''' must be overridden to provide enable generic interface'''
-        return ProviderInfo()
-    
-    
-    def _buildGenericServiceInfo(self):
-        ''' must be overridden to provide enable generic interface'''
-        return ServiceInfo()
-     
-    
-    #def listCoverages(self):
-        #''' returns a dictionary contining the {id, name} values for each coverageSummary'''
-        #coverages={}
-        #for item in self.genericCoverages:
-            #coverages[item.identifier]=item.labelordescription
-        #return coverages
-
-    def getCvgByIdentifier(self,identifier):
-        ''' returns a version independent coverage object '''
-        for item in self.genericCoverages:
-            if item.identifier == identifier:
-                return item
-        raise KeyError, "No coverage summary with identifier %s" %identifier
-    
-    def getCvgByLabel(self,label):
-        ''' returns a version independent coverage object '''
-        for item in self.genericCoverages:
-            if item.labelordescription == label:
-                return item
-        raise KeyError, "No coverage summary with label %s" %label
-        
+           
     def getDescribeCoverage(self,identifier):
          reader = DescribeCoverageReader(self.version, identifier)
          #Note: should implement some sort of cache so the same request isn't repeated
@@ -202,54 +152,7 @@ class DescribeCoverageReader(object):
         request = self.descCov_url(service_url)
         u = urlopen(request)
         return etree.fromstring(u.read())
-          
     
-    
-class CoverageInfo(object):
-    '''' Information about a coverage, not tied to any particular WCS version '''
-    def __init__(self, identifier= None, labelordescription=None, wgs84bbox=None, otherbbox=None, _timeLimits=None):
-        self.identifier=identifier
-        self.labelordescription=labelordescription
-        self.wgs84bbox=wgs84bbox
-        self.otherbbox=otherbbox
-        self._timeLimits=_timeLimits
-        self._supCRS=lambda(i):None
-        self._supFormats=lambda(i):None
-        
-    def getSupportedCRS(self):
-         '''the supCRS method should be altered by the calling object so that the correct value is returned. This will probably require a DescribeCoverage request, which is version specific '''
-         return self._supCRS(self.identifier)
-     
-    def getSupportedFormats(self):
-         '''the supFormats method should be altered by the calling object so that the correct value is returned. This will probably require a DescribeCoverage request, which is version specific '''
-         return self._supFormats(self.identifier)
-    
-    def getTimeLimits(self):
-        if not self._timeLimits:
-            try:
-                return self._times(self.identifier) #some versions (eg 1.1.0) may require a describe coverage request to get time limits
-            except:
-                return None
-        else:
-            return self._timeLimits#others (eg 1.0.0) may have retrieved it from the original getcapabilites requests
-     
-    supportedCRS=property(getSupportedCRS, None)
-    supportedFormats=property(getSupportedFormats, None)
-    timeLimits=property(getTimeLimits, None)
-
-        
-class ServiceInfo(object):
-    '''' Information about the service available and the provider, not tied to any particular WCS version '''
-    def __init__(self, fees=None, accessConstraints=None, providerName=None,contactName=None,contactPosition=None,addressString=None,phone=None,fax=None,email=None):
-        self.fees=fees
-        self.accessConstraints=accessConstraints
-        self.providerName=providerName
-        self.contactName=contactName
-        self.contactPosition=contactPosition
-        self.addressString=addressString
-        self.phone=phone
-        self.fax=fax
-        self.email=email
        
 class RereadableURL(StringIO, object):
     """ Class that acts like a combination of StringIO and url - has seek method and url headers etc """

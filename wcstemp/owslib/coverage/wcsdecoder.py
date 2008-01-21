@@ -11,14 +11,12 @@
 #from owslib import wcsdecoder
 #u=wcs.getcoverage(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='application/netcdf', store='true')
 #decoder=wcsdecoder.WCSDecoder(u)
-#print  decoder.getCoveragePaths()
+#decoder.getCoverages()
 
 import os
 from owslib.etree import etree
 import email
 import errno
-
-
 
 class WCSDecoder(object):
     def __init__(self, u):
@@ -38,20 +36,20 @@ class WCSDecoder(object):
             self.urlType='Multipart'
         
       
-    def getCoverages(self):
+    def getCoverages(self, unpackdir='./unpacked'):
         if self.urlType=='XML': 
             paths=[]              
             u_xml = self.u.read()
             u_tree = etree.fromstring(u_xml)
             for ref in u_tree.findall('{http://www.opengis.net/wcs/1.1}Coverage/{http://www.opengis.net/wcs/1.1}Reference'):
                 path = ref.attrib['{http://www.w3.org/1999/xlink}href']
-                paths.append(path)     
-            return paths    
+                paths.append(path)         
         elif self.urlType=='Multipart':
             #Decode multipart mime and return fileobjects
             u_mpart=self.u.read()
-            return MpartMime(u_mpart)
-        
+            mpart =MpartMime(u_mpart)
+            paths= mpart.unpackToDir(unpackdir)
+        return paths
 
 class MpartMime(object):
     def __init__ (self,mpartmime):

@@ -11,7 +11,7 @@
 
 ##########NOTE: Does not conform to new interfaces yet #################
 
-from wcsBase import WCSBase, WCSCapabilitiesReader, CoverageInfo, ServiceInfo, RereadableURL
+from wcsBase import WCSBase, WCSCapabilitiesReader, RereadableURL
 from urllib import urlencode
 from urllib2 import urlopen
 from owslib.etree import etree
@@ -28,38 +28,76 @@ class WebCoverageService_1_1_0(WCSBase):
     """Abstraction for OGC Web Coverage Service (WCS), version 1.1.0
     Implements IWebCoverageService.
     """
-    def __init__(self, url, xml):
-        self.version='1.1.0'
-        self.url = url        
-        self._capabilities = None
-        # initialize from saved capability document
-        if xml:
-            reader = WCSCapabilitiesReader(self.version)
-            self._capabilities = Capabilities(reader.readString(xml))
-          
-     
-    def _getcapproperty(self):
-        if not self._capabilities:            
-            reader = WCSCapabilitiesReader(self.version)
-            self._capabilities = Capabilities(reader.read(self.url))
-        return self._capabilities
-    capabilities = property(_getcapproperty, None)
     
-
-    def getcapabilities(self):
-        """Request and return capabilities document from the WMS as a 
-        file-like object."""
+    def __getitem__(self, name):
+        ''' check contents dictionary to allow dict like access to service layers'''
+        if 'servicecontents' in self.__dict__.keys():
+            if name in self.__getattribute__('servicecontents').keys():
+                return self.__getattribute__('servicecontents')[name]
+        #otherwise behave normally:
+        return self.__getattribute__(name)
+    
+    def __init__(self,url,xml):
+        self.version='1.1.0'
+        self.url = url   
+        # initialize from saved capability document or access the server
         reader = WCSCapabilitiesReader(self.version)
-        u = urlopen(reader.capabilities_url(self.url))
-        # check for service exceptions, and return
-        if u.info().gettype() == 'application/vnd.ogc.se_xml':
-            se_xml = u.read()
-            se_tree = etree.fromstring(se_xml)
-            raise ServiceException, \
-                str(se_tree.find('ServiceException').text).strip()
-        return u
+        if xml:
+            self._capabilities = reader.readString(xml)
+        else:
+            self._capabilities = reader.read(self.url)
+            
+        #build metadata objects:
+        
+        #serviceIdentification metadata
+        elem=self._capabilities.find('{http://www.opengis.net/wcs/1.1/ows}ServiceIdentification')
+        self.serviceidentification=ServiceIdentification(elem)
+        
+        #serviceProvider
+        elem=self._capabilities.find('{http://www.opengis.net/ows}ServiceProvider')
+        self.serviceprovider=ServiceProvider(elem)
+                
+        #serviceOperations
+        self.serviceoperations = []
+        for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1/ows}OperationsMetadata/{http://www.opengis.net/wcs/1.1/ows}Operation/'):
+            self.serviceoperations.append(Operation(elem))
+        
+        # exceptions - ***********TO DO *************
+            self.exceptions = [f.text for f \
+                in self._capabilities.findall('Capability/Exception/Format')]
+              
+        # serviceContents: our assumption is that services use a top-level layer
+        # as a metadata organizer, nothing more.
+        self.servicecontents = {}
+        top = self._capabilities.find('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary')
+        for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary/{http://www.opengis.net/wcs/1.1}CoverageSummary'):                    
+            cm=ContentMetadata(elem, top)
+            #make the describeCoverage requests to populate the supported formats/crs attributes
+            cm.supportedFormats=self._getSupportedFormats(cm.id)
+            cm.supportedCRS=self._getSupportedCRS(cm.id)
+            cm.timelimits=self._getTimes(cm.id)
+            self.servicecontents[cm.id]=cm
+            
+        if self.servicecontents=={}:
+            #non-hierarchical.
+            top=None
+            for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary'):     
+                cm=ContentMetadata(elem, top)
+                #make the describeCoverage requests to populate the supported formats/crs attributes
+                cm.supportedFormats=self._getSupportedFormats(cm.id)
+                cm.supportedCRS=self._getSupportedCRS(cm.id)
+                cm.timelimits=self._getTimes(cm.id)
+                self.servicecontents[cm.id]=cm
 
-    def _getSupportedCRS110(self,identifier):
+    def items(self):
+        '''supports dict-like items() access'''
+        items=[]
+        for item in self.servicecontents:
+            items.append((item,self.servicecontents[item]))
+        return items
+        
+    
+    def _getSupportedCRS(self,identifier):
                 # version specific method
         crss=[]
         for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageDescription/')+ns('SupportedCRS')):
@@ -67,7 +105,7 @@ class WebCoverageService_1_1_0(WCSBase):
         return crss
       
     
-    def _getSupportedFormats110(self,identifier): #maybe can get this from the capabilites doc?
+    def _getSupportedFormats(self,identifier): #maybe can get this from the capabilites doc?
             # version specific method
         frmts=[]
         for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageDescription/')+ns('SupportedFormat')):
@@ -81,67 +119,47 @@ class WebCoverageService_1_1_0(WCSBase):
              timelimits=[subelems[0].text,subelems[1].text]
          return timelimits
          
-    def _buildGenericCoverages(self):
-        genericCoverageList=[]
-        for item in self.capabilities.contents:
-            ci = CoverageInfo(identifier=item.identifier, labelordescription=item.title, wgs84bbox=item.WGS84BoundingBox)
-            ci._supCRS=self._getSupportedCRS110 # version specific method
-            ci._supFormats=self._getSupportedFormats110
-            ci._times=self._getTimes
-            genericCoverageList.append(ci)
-        return genericCoverageList
-     
-    def _buildGenericProviderInfo(self):
-        pn=self.capabilities.serviceProvider.providerName
-        cn=self.capabilities.serviceProvider.contactName
-        #cp=
-        #ad=
-        #ph=
-        #fx=
-        #em=
+    #def _getaddressString(self):
+        ##todo
+        #address=self.capabilities.serviceProvider.serviceContact.contactInfo.address.deliveryPoint
+        #return address
         
-        return ProviderInfo(providerName=pn, contactName=cn)
+    #def _buildGenericServiceInfo(self):
+        #''' enables generic interface'''
+        #_fees=self.capabilities.serviceIdentification.fees
+        #_accessConstraints=self.capabilities.serviceIdentification.accessConstraints
+        #_providerName=self.capabilities.serviceProvider.providerName               
+        #_contactName=self.capabilities.serviceProvider.serviceContact.individualName
+        #_contactPosition=self.capabilities.serviceProvider.serviceContact.positionName
+        #_addressString=self._getaddressString()
+        #_phone=self.capabilities.serviceProvider.serviceContact.contactInfo.phone.voice
+        #_fax=self.capabilities.serviceProvider.serviceContact.contactInfo.phone.facsimile
+        #_email=self.capabilities.serviceProvider.serviceContact.contactInfo.address.email
+        #return ServiceInfo(fees=_fees, accessConstraints=_accessConstraints ,providerName=_providerName, contactName=_contactName,contactPosition=_contactPosition, addressString=_addressString, phone=_phone, fax=_fax, email=_email)
     
-    def _getaddressString(self):
-        #todo
-        address=self.capabilities.serviceProvider.serviceContact.contactInfo.address.deliveryPoint
-        return address
-        
-    def _buildGenericServiceInfo(self):
-        ''' enables generic interface'''
-        _fees=self.capabilities.serviceIdentification.fees
-        _accessConstraints=self.capabilities.serviceIdentification.accessConstraints
-        _providerName=self.capabilities.serviceProvider.providerName               
-        _contactName=self.capabilities.serviceProvider.serviceContact.individualName
-        _contactPosition=self.capabilities.serviceProvider.serviceContact.positionName
-        _addressString=self._getaddressString()
-        _phone=self.capabilities.serviceProvider.serviceContact.contactInfo.phone.voice
-        _fax=self.capabilities.serviceProvider.serviceContact.contactInfo.phone.facsimile
-        _email=self.capabilities.serviceProvider.serviceContact.contactInfo.address.email
-        return ServiceInfo(fees=_fees, accessConstraints=_accessConstraints ,providerName=_providerName, contactName=_contactName,contactPosition=_contactPosition, addressString=_addressString, phone=_phone, fax=_fax, email=_email)
-    
-    def getData(self, directory='outputdir', outputfile='coverage.nc',  **kwargs):
-        u=self.getCoverageRequest(**kwargs)
-        #create the directory if it doesn't exist:
-        try:
-            os.mkdir(directory)
-        except OSError, e:
-            # Ignore directory exists error
-            if e.errno <> errno.EEXIST:
-                raise          
-        #elif wcs.version=='1.1.0':
-        #Could be multipart mime or XML Coverages document, need to use the decoder...
-        decoder=wcsdecoder.WCSDecoder(u)
-        x=decoder.getCoverages()
-        if type(x) is wcsdecoder.MpartMime:
-            filenames=x.unpackToDir(directory)
-            #print 'Files from 1.1.0 service written to %s directory'%(directory)
-        else:
-            filenames=x
-        return filenames
+    #repackage?
+    #def getData(self, directory='outputdir', outputfile='coverage.nc',  **kwargs):
+        #u=self.getCoverageRequest(**kwargs)
+        ##create the directory if it doesn't exist:
+        #try:
+            #os.mkdir(directory)
+        #except OSError, e:
+            ## Ignore directory exists error
+            #if e.errno <> errno.EEXIST:
+                #raise          
+        ##elif wcs.version=='1.1.0':
+        ##Could be multipart mime or XML Coverages document, need to use the decoder...
+        #decoder=wcsdecoder.WCSDecoder(u)
+        #x=decoder.getCoverages()
+        #if type(x) is wcsdecoder.MpartMime:
+            #filenames=x.unpackToDir(directory)
+            ##print 'Files from 1.1.0 service written to %s directory'%(directory)
+        #else:
+            #filenames=x
+        #return filenames
     
     
-    def getCoverageRequest(self, identifier=None, bbox=None, timeSequence=None, format = None, store=None, method='Get',**kwargs):
+    def getCoverage(self, identifier=None, bbox=None, timeSequence=None, format = None, store=None, method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -153,14 +171,11 @@ class WebCoverageService_1_1_0(WCSBase):
         
         if store = true, returns a coverages XML file
         if store = false, returns a multipart mime
-        
-
         """
-        #use fully qualified namespace
+
         if method == 'Get':
             method='{http://www.opengis.net/wcs/1.1/ows}Get'
-        md = self.capabilities
-        base_url = md.getOperationByName('GetCoverage').methods[method]['url']
+        base_url = self.__getOperationByName('GetCoverage').methods[method]['url']
 
 
         #process kwargs
@@ -192,7 +207,15 @@ class WebCoverageService_1_1_0(WCSBase):
             u.seek(0)
         return u
         
-class OperationMetadata(object):
+        
+    def __getOperationByName(self, name):
+        """Return a named operation item."""
+        for item in self.serviceoperations:
+            if item.name == name:
+                return item
+        raise KeyError, "No operation named %s" % name
+        
+class Operation(object):
     """Abstraction for operation metadata    
     Implements IOperationMetadata.
     """
@@ -205,7 +228,7 @@ class OperationMetadata(object):
             methods.append((verb.tag, {'url': url}))
         self.methods = dict(methods)
 
-class ServiceIdentificationMetadata(object):
+class ServiceIdentification(object):
     """ Abstraction for ServiceIdentification Metadata 
     implements IServiceIdentificationMetadata"""
     def __init__(self,elem):        
@@ -214,7 +237,6 @@ class ServiceIdentificationMetadata(object):
         self.title = elem.find('{http://www.opengis.net/ows}Title').text
         self.abstract = elem.find('{http://www.opengis.net/ows}Abstract').text
         self.keywords = [f.text for f in elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword')]
-        self.rights='' #TODO
         #self.link = elem.find('{http://www.opengis.net/wcs/1.1}Service/{http://www.opengis.net/wcs/1.1}OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
                
         #NOTE: do these belong here?
@@ -222,13 +244,14 @@ class ServiceIdentificationMetadata(object):
         self.accessConstraints=elem.find('{http://www.opengis.net/wcs/1.1/ows}AccessConstraints').text
        
        
-class ServiceProviderMetadata(object):
+class ServiceProvider(object):
     """ Abstraction for ServiceProvider metadata 
     implements IServiceProviderMetadata """
     def __init__(self,elem):
         self.provider=elem.find('{http://www.opengis.net/ows}ProviderName').text
         self.contact=ServiceContact(elem.find('{http://www.opengis.net/ows}ServiceContact'))
-        self.url='' #URL for provider's web site (string)
+        self.contact='How to contact the service provider (string).'
+        self.url="URL for provider's web site (string)."
 
 class Address(object):
     def __init__(self,elem):
@@ -265,7 +288,7 @@ class ServiceContact(object):
             self.contactInfo = None
         
   
-class CoverageSummary(object):
+class ContentMetadata(object):
     """Abstraction for WCS CoverageSummary
     """
     def __init__(self, elem, parent):
@@ -274,7 +297,7 @@ class CoverageSummary(object):
         
         self._elem=elem
         self._parent=parent
-        self.identifier=self._checkChildAndParent('{http://www.opengis.net/wcs/1.1}Identifier')
+        self.id=self._checkChildAndParent('{http://www.opengis.net/wcs/1.1}Identifier')
         self.description =self._checkChildAndParent('{http://www.opengis.net/wcs/1.1}Description')           
         self.title =self._checkChildAndParent('{http://www.opengis.net/ows}Title')
         self.abstract =self._checkChildAndParent('{http://www.opengis.net/ows}Abstract')
@@ -292,12 +315,12 @@ class CoverageSummary(object):
                     self.keywords.append(kw.text)
             
         
-        self.WGS84BoundingBox = None
+        self.boundingBoxWGS84 = None
         b = elem.find('{http://www.opengis.net/ows}WGS84BoundingBox')
         if b is not None:
             lc=b.find('{http://www.opengis.net/ows}LowerCorner').text
             uc=b.find('{http://www.opengis.net/ows}UpperCorner').text
-            self.WGS84BoundingBox = (
+            self.boundingBoxWGS84 = (
                     float(lc.split()[0]),float(lc.split()[1]),
                     float(uc.split()[0]), float(uc.split()[1]),
                     )
@@ -334,56 +357,6 @@ class CoverageSummary(object):
             except:
                 value = None
         return value  
-            
-
-class Capabilities(object):
-    """Abstraction for WCS metadata.
-    
-    Implements ICapabilities.
-    """
-    def __init__(self, infoset):
-        """Initialize from an element tree root element."""
-        self._root = infoset
-        #need to handle exception report
-        #print infoset.tag
-        #print infoset.text
-        #serviceIdentification
-        elem=self._root.find('{http://www.opengis.net/wcs/1.1/ows}ServiceIdentification')
-        self.serviceIdentification=ServiceIdentification(elem)
-        
-        #serviceProvider
-        elem=self._root.find('{http://www.opengis.net/ows}ServiceProvider')
-        self.serviceProvider=ServiceProvider(elem)
-        
-        
-        # operations []
-        self.operations = []
-        for elem in self._root.findall('{http://www.opengis.net/wcs/1.1/ows}OperationsMetadata/{http://www.opengis.net/wcs/1.1/ows}Operation/'):
-            self.operations.append(OperationMetadata(elem))
-        
-        # exceptions - ***********TO DO *************
-        self.exceptions = [f.text for f \
-                in self._root.findall('Capability/Exception/Format')]
-        
-        # contents: our assumption is that services use a top-level layer
-        # as a metadata organizer, nothing more.
-        self.contents = []
-        top = self._root.find('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary')
-        for elem in self._root.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary/{http://www.opengis.net/wcs/1.1}CoverageSummary'):                    
-            self.contents.append(CoverageSummary(elem, top))
-        if self.contents==[]:
-            #non-hierarchical.
-            top=None
-            for elem in self._root.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary'):     
-                self.contents.append(CoverageSummary(elem, top))                             
-                
-        # contact person TODO
-        #self.provider = ContactMetadata(self._root.find('Service/ContactInformation'))
 
     
-    def getOperationByName(self, name):
-        """Return a named operation item."""
-        for item in self.operations:
-            if item.name == name:
-                return item
-        raise KeyError, "No operation named %s" % name
+
