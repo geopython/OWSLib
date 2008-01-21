@@ -99,7 +99,7 @@ class WebCoverageService_1_0_0(WCSBase):
         """
         
         base_url = self._getOperationByName('GetCoverage').methods[method]['url']
-
+        
         #process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service':'WCS'}
         assert len(identifier) > 0
@@ -117,7 +117,8 @@ class WebCoverageService_1_0_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
-        u = urlopen(base_url, data=data)
+        fullurl=base_url + '?' + data
+        u=urlopen(fullurl)
 
         # check for service exceptions, and return #TODO - test this bit properly.
         if u.info()['Content-Type'] == 'text/xml':          
@@ -191,7 +192,6 @@ class ServiceProvider(object):
     """ Abstraction for WCS ResponsibleParty 
     Implements IServiceProvider"""
     def __init__(self,elem):
-        self.provider=elem.find(ns('organisationName')).text
         try:
             self.provider=elem.find(ns('organisationName')).text
         except AttributeError: 
