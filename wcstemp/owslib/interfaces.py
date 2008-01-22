@@ -7,9 +7,10 @@ class IService:
 
     url = property("""Online resource URL (string)""")
     # XXX: here or in capabilities?
+    # Or in serviceIdentifiacation where version already exists? (Comment by DL)
     version = property("""Protocol version (string)""")
     capabilities = property("""Implementation of IServiceMetadata (object)""")
-    #remove capabilities?
+    #TO DECIDE: remove capabilities? (Comment by DL)
     
 class IWebMapService(IService):
     """Abstraction for an OGC Web Map Service (WMS).
@@ -60,6 +61,7 @@ class IServiceIdentificationMetadata:
     title = property("""Human-targeted title of service (string).""")
     abstract = property("""Text describing the service (string).""")
     keywords = property("""Keyword list (list).""")
+    #have replaced rights with accessconstraints and fees.(Comment by DL)
     accessconstraints = property("""Explanation of access constraints associated with service (string).""")
     fees = property("""Explanation of fees associated with service (string).""")
     

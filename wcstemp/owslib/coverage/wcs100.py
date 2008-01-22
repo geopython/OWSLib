@@ -177,6 +177,7 @@ class ServiceIdenfication(object):
     """ Abstraction for ServiceIdentification metadata """
     def __init__(self,elem):
         # properties              
+        self.version='1.0.0'
         self.service = elem.find(ns('name')).text
         try:
             self.abstract = elem.find(ns('description')).text
@@ -200,7 +201,7 @@ class ServiceProvider(object):
         self.contact = "How to contact the service provider (string)."  #TO DECIDE - simple attributes?
         
 
-#may not keep these contact info classes
+#TO DECIDE: may not keep these contact info classes
 class Address(object):
     def __init__(self,elem):
         try:
@@ -249,6 +250,8 @@ class ContactInfo(object):
         self.address=Address(elem.find(ns('address')))
 
 
+#TO DO:  Times can be supplied as begin & end time or series of times (or both... )
+#reflect this in the api.
 class ContentMetadata(object):
     """
     Implements IContentMetadata

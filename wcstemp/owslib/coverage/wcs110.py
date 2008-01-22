@@ -119,25 +119,12 @@ class WebCoverageService_1_1_0(WCSBase):
              timelimits=[subelems[0].text,subelems[1].text]
          return timelimits
          
+    #TO DECIDE: May need something like this
     #def _getaddressString(self):
-        ##todo
         #address=self.capabilities.serviceProvider.serviceContact.contactInfo.address.deliveryPoint
         #return address
-        
-    #def _buildGenericServiceInfo(self):
-        #''' enables generic interface'''
-        #_fees=self.capabilities.serviceIdentification.fees
-        #_accessConstraints=self.capabilities.serviceIdentification.accessConstraints
-        #_providerName=self.capabilities.serviceProvider.providerName               
-        #_contactName=self.capabilities.serviceProvider.serviceContact.individualName
-        #_contactPosition=self.capabilities.serviceProvider.serviceContact.positionName
-        #_addressString=self._getaddressString()
-        #_phone=self.capabilities.serviceProvider.serviceContact.contactInfo.phone.voice
-        #_fax=self.capabilities.serviceProvider.serviceContact.contactInfo.phone.facsimile
-        #_email=self.capabilities.serviceProvider.serviceContact.contactInfo.address.email
-        #return ServiceInfo(fees=_fees, accessConstraints=_accessConstraints ,providerName=_providerName, contactName=_contactName,contactPosition=_contactPosition, addressString=_addressString, phone=_phone, fax=_fax, email=_email)
-    
-    #repackage?
+          
+    #TO DECIDE: Offer repackaging of coverageXML/Multipart MIME output?
     #def getData(self, directory='outputdir', outputfile='coverage.nc',  **kwargs):
         #u=self.getCoverageRequest(**kwargs)
         ##create the directory if it doesn't exist:
@@ -158,7 +145,7 @@ class WebCoverageService_1_1_0(WCSBase):
             #filenames=x
         #return filenames
     
-    
+    #TO DO: Handle rest of the  WCS 1.1.0 keyword parameters e.g. GridCRS etc. 
     def getCoverage(self, identifier=None, bbox=None, timeSequence=None, format = None, store=None, method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
@@ -191,7 +178,9 @@ class WebCoverageService_1_1_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
-        u = urlopen(base_url, data=data)
+        data = urlencode(request)
+        fullurl=base_url + '?' + data
+        u=urlopen(fullurl)
                 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'text/xml':          
@@ -253,6 +242,8 @@ class ServiceProvider(object):
         self.contact='How to contact the service provider (string).'
         self.url="URL for provider's web site (string)."
 
+
+#TO DECIDE: How to model the contact detials - explicitly or truncated?
 class Address(object):
     def __init__(self,elem):
         self.deliveryPoint=elem.find('{http://www.opengis.net/ows}DeliveryPoint').text
@@ -357,6 +348,3 @@ class ContentMetadata(object):
             except:
                 value = None
         return value  
-
-    
-

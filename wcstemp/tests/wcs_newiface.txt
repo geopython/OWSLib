@@ -11,11 +11,11 @@ Version 1.0.0
     >>> wcs.version
     '1.0.0'
     >>> wcs.serviceidentification.service
-    'WCS'
+    'tba'
     >>> wcs.serviceidentification.version
     '1.0.0'
     >>> wcs.serviceidentification.title
-    'BADC OGC WCS Server'
+    'tba'
     >>> wcs.serviceidentification.abstract
     '\n      Web Map Server maintained by BADC\n      Contact: webmaster@badc.nerc.ac.uk '
     >>> wcs.serviceidentification.keywords
