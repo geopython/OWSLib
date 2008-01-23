@@ -71,11 +71,7 @@ class WebCoverageService_1_1_0(WCSBase):
         self.servicecontents = {}
         top = self._capabilities.find('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary')
         for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary/{http://www.opengis.net/wcs/1.1}CoverageSummary'):                    
-            cm=ContentMetadata(elem, top)
-            #make the describeCoverage requests to populate the supported formats/crs attributes
-            cm.supportedFormats=self._getSupportedFormats(cm.id)
-            cm.supportedCRS=self._getSupportedCRS(cm.id)
-            cm.timelimits=self._getTimes(cm.id)
+            cm=ContentMetadata(elem, top, self)
             self.servicecontents[cm.id]=cm
             
         if self.servicecontents=={}:
@@ -84,8 +80,6 @@ class WebCoverageService_1_1_0(WCSBase):
             for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary'):     
                 cm=ContentMetadata(elem, top)
                 #make the describeCoverage requests to populate the supported formats/crs attributes
-                cm.supportedFormats=self._getSupportedFormats(cm.id)
-                cm.supportedCRS=self._getSupportedCRS(cm.id)
                 cm.timelimits=self._getTimes(cm.id)
                 self.servicecontents[cm.id]=cm
 
@@ -112,12 +106,7 @@ class WebCoverageService_1_1_0(WCSBase):
             frmts.append(elem.text)
         return frmts 
              
-    def _getTimes(self, identifier):
-         timelimits=[]
-         for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageDescription/')+ns('Domain/')+ns('TemporalDomain/')+ns('TimePeriod/')):
-             subelems=elem.getchildren()
-             timelimits=[subelems[0].text,subelems[1].text]
-         return timelimits
+
          
     #TO DECIDE: May need something like this
     #def _getaddressString(self):
@@ -282,10 +271,11 @@ class ServiceContact(object):
 class ContentMetadata(object):
     """Abstraction for WCS CoverageSummary
     """
-    def __init__(self, elem, parent):
+    def __init__(self, elem, parent, service):
         """Initialize."""
         #TODO - examine the parent for bounding box info.
         
+        self._service=service
         self._elem=elem
         self._parent=parent
         self.id=self._checkChildAndParent('{http://www.opengis.net/wcs/1.1}Identifier')
@@ -338,6 +328,16 @@ class ContentMetadata(object):
         for format in elem.findall('{http://www.opengis.net/wcs/1.1}SupportedFormat'):
             self.supportedFormats.append(format.text)
             
+            
+    #time limits requires a describeCoverage request therefore only resolve when requested
+    def _getTimes(self):
+         timelimits=[]
+         for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageDescription/')+ns('Domain/')+ns('TemporalDomain/')+ns('TimePeriod/')):
+             subelems=elem.getchildren()
+             timelimits=[subelems[0].text,subelems[1].text]
+         return timelimits
+    timelimits=property(_getTimes, None)
+    
     def _checkChildAndParent(self, path):
         ''' checks child coverage  summary, and if item not found checks higher level coverage summary'''
         try:
