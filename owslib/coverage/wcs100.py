@@ -61,10 +61,7 @@ class WebCoverageService_1_0_0(WCSBase):
         #serviceContents metadata
         self.servicecontents={}
         for elem in self._capabilities.findall(ns('ContentMetadata/')+ns('CoverageOfferingBrief')): 
-            cm=ContentMetadata(elem)
-            #make the describeCoverage requests to populate the supported formats/crs attributes
-            cm.supportedFormats=self._getSupportedFormats(cm.id)
-            cm.supportedCRS=self._getSupportedCRS(cm.id)
+            cm=ContentMetadata(elem, self)
             self.servicecontents[cm.id]=cm
         
         #exceptions
@@ -133,21 +130,7 @@ class WebCoverageService_1_0_0(WCSBase):
                 str(serviceException.text).strip()
             u.seek(0)
         return u
-        
-    def _getSupportedCRS(self,identifier):
-        # gets supported crs info
-        crss=[]
-        for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('responseCRSs')):
-            crss.append(elem.text)
-        return crss
-
-    def _getSupportedFormats(self,identifier):
-        # gets supported formats info
-        frmts =[]
-        for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageOffering/')+ns('supportedFormats/')+ns('formats')):
-            frmts.append(elem.text)
-        return frmts
-        
+               
     def _getOperationByName(self, name):
         """Return a named operation item."""
         for item in self.serviceoperations:
@@ -256,11 +239,12 @@ class ContentMetadata(object):
     """
     Implements IContentMetadata
     """
-    def __init__(self, elem):
-        """Initialize."""
+    def __init__(self, elem, service):
+        """Initialize. service is required so that describeCoverage requests may be made"""
         #TODO - examine the parent for bounding box info.
         
         #self._parent=parent
+        self._service=service
         self.id=elem.find(ns('name')).text
         self.title =elem.find(ns('label')).text       
         self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]
@@ -294,6 +278,23 @@ class ContentMetadata(object):
                 #self.boundingBoxes.append(boundingBox)
         
         #SupportedCRS, SupportedFormats
-        #these require a seperate describeCoverage request...      for now set to None
-        self.supportedCRS=None
-        self.supportedFormats=None
+        #these require a seperate describeCoverage request...      only resolve when requested
+    
+    def _getSupportedCRSProperty(self):
+        # gets supported crs info
+        crss=[]
+        for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('responseCRSs')):
+            crss.append(elem.text)
+        return crss
+    supportedCRS=property(_getSupportedCRSProperty, None)
+       
+       
+    def _getSupportedFormatsProperty(self):
+        # gets supported formats info
+        frmts =[]
+        for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedFormats/')+ns('formats')):
+            frmts.append(elem.text)
+        return frmts
+    supportedFormats=property(_getSupportedFormatsProperty, None)
+        
+        

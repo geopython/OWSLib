@@ -98,9 +98,9 @@ Version 1.1.0
     >>> cvg.timelimits
     ['2024-01-15', '2054-12-15']
     >>> cvg.supportedFormats
-    ['cf-netcdf']
+    ['application/cf-netcdf']
     >>> cvg.supportedCRS
-    ['srstba']
+    ['WGS84']
 
 GetCoverage returning Multipart Mime:
     >>> output=wcs.getCoverage(identifier='ZI4al0r8',timeSequence=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf', store='false')
