@@ -343,6 +343,8 @@ class ContentMetadata(object):
          return timelimits
     timelimits=property(_getTimeLimits, None)
     
+    #TODO timepositions property
+    
     def _checkChildAndParent(self, path):
         ''' checks child coverage  summary, and if item not found checks higher level coverage summary'''
         try:

@@ -270,7 +270,7 @@ class ContentMetadata(object):
                     
         
         self.boundingBoxWGS84 = None
-        b = elem.find(ns('lonLatEnvelope'))
+        b = elem.find(ns('lonLatEnvelope')) 
         if b is not None:
             gmlpositions=b.findall('{http://www.opengis.net/gml}pos')
             lc=gmlpositions[0].text
@@ -280,15 +280,17 @@ class ContentMetadata(object):
                     float(uc.split()[0]), float(uc.split()[1]),
                     )
             
+            
+     #timelimits are the start/end times, timepositions are all timepoints. WCS servers can declare one or both or neither of these.
     def _getTimeLimits(self):
-        timelimits=[]
+        timepoints, timelimits=[],[]
         b=self._elem.find(ns('lonLatEnvelope'))
         if b is not None:
             timepoints=b.findall('{http://www.opengis.net/gml}timePosition')
         else:
             #have to make a describeCoverage request...
             descCov=self._service.getDescribeCoverage(self.id)
-            for pos in self._elem.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
+            for pos in descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
                 timepoints.append(pos)
         if timepoints:
                 timelimits=[timepoints[0].text,timepoints[1].text]
@@ -296,8 +298,11 @@ class ContentMetadata(object):
     timelimits=property(_getTimeLimits, None)   
     
     def _getTimePositions(self):
-        #TODO
-        return []
+        timepositions=[]
+        descCov=self._service.getDescribeCoverage(self.id)
+        for pos in descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
+                timepositions.append(pos.text)
+        return timepositions
     timepositions=property(_getTimePositions, None)
            
         ## bboxes - other CRS TODO
