@@ -11,25 +11,25 @@ Version 1.0.0
     'http://ndgbeta.badc.rl.ac.uk/wcs/badc.nerc.ac.uk__NDG-A0__AWQX8gTc'
     >>> wcs.version
     '1.0.0'
-    >>> wcs.serviceidentification.service
+    >>> wcs.identification.service
     'tba'
-    >>> wcs.serviceidentification.version
+    >>> wcs.identification.version
     '1.0.0'
-    >>> wcs.serviceidentification.title
+    >>> wcs.identification.title
     'tba'
-    >>> wcs.serviceidentification.abstract
+    >>> wcs.identification.abstract
     '\n      Web Map Server maintained by BADC\n      Contact: webmaster@badc.nerc.ac.uk '
-    >>> wcs.serviceidentification.keywords
+    >>> wcs.identification.keywords
     ['atmospheric', 'climate']
-    >>> wcs.serviceidentification.fees
+    >>> wcs.identification.fees
     'NONE'
-    >>> wcs.serviceidentification.accessConstraints
+    >>> wcs.identification.accessConstraints
     'NONE'
-    >>> wcs.serviceprovider.provider
+    >>> wcs.provider.name
     'British Atmospheric Data Centre'
-    >>> wcs.serviceprovider.url
+    >>> wcs.provider.url
     "URL for provider's web site (string)."
-    >>> wcs.serviceprovider.contact
+    >>> wcs.provider.contact
     'How to contact the service provider (string).'
     >>> type(wcs.items())
     <type 'list'>
@@ -38,9 +38,9 @@ Version 1.0.0
     'Vapour pressure'
     >>> cvg.keywords
     ['NONE']
-    >>> wcs.serviceidentification.accessConstraints
+    >>> wcs.identification.accessConstraints
     'NONE'
-    >>> wcs.serviceidentification.fees
+    >>> wcs.identification.fees
     'NONE'
     >>> cvg.boundingBoxWGS84
     (1.875, -88.767123287700002, 358.125, 88.767123287700002)
@@ -63,25 +63,25 @@ Version 1.1.0
     'http://ndgbeta.badc.rl.ac.uk/wcs/badc.nerc.ac.uk__NDG-A0__AWQX8gTc'
     >>> wcs.version
     '1.1.0'
-    >>> wcs.serviceidentification.service
+    >>> wcs.identification.service
     'WCS'
-    >>> wcs.serviceidentification.version
+    >>> wcs.identification.version
     '1.1.0'
-    >>> wcs.serviceidentification.title
+    >>> wcs.identification.title
     'BADC OGC WCS Server'
-    >>> wcs.serviceidentification.abstract
+    >>> wcs.identification.abstract
     '\n      Web Map Server maintained by BADC\n      Contact: webmaster@badc.nerc.ac.uk '
-    >>> wcs.serviceidentification.keywords
+    >>> wcs.identification.keywords
     ['atmospheric', 'climate']
-    >>> wcs.serviceidentification.fees
+    >>> wcs.identification.fees
     'NONE'
-    >>> wcs.serviceidentification.accessConstraints
+    >>> wcs.identification.accessConstraints
     'NONE'
-    >>> wcs.serviceprovider.provider
+    >>> wcs.provider.name
     'British Atmospheric Data Centre'
-    >>> wcs.serviceprovider.url
+    >>> wcs.provider.url
     "URL for provider's web site (string)."
-    >>> wcs.serviceprovider.contact
+    >>> wcs.provider.contact
     'How to contact the service provider (string).'
     >>> type(wcs.items())
     <type 'list'>
@@ -90,9 +90,9 @@ Version 1.1.0
     'Vapour pressure'
     >>> cvg.keywords
     ['NONE', 'NONE']
-    >>> wcs.serviceidentification.accessConstraints
+    >>> wcs.identification.accessConstraints
     'NONE'
-    >>> wcs.serviceidentification.fees
+    >>> wcs.identification.fees
     'NONE'
     >>> cvg.boundingBoxWGS84
     (1.875, -88.767123287700002, 358.125, 88.767123287700002)

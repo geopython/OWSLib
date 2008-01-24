@@ -51,11 +51,11 @@ class WebCoverageService_1_1_0(WCSBase):
         
         #serviceIdentification metadata
         elem=self._capabilities.find('{http://www.opengis.net/wcs/1.1/ows}ServiceIdentification')
-        self.serviceidentification=ServiceIdentification(elem)
+        self.identification=ServiceIdentification(elem)
         
         #serviceProvider
         elem=self._capabilities.find('{http://www.opengis.net/ows}ServiceProvider')
-        self.serviceprovider=ServiceProvider(elem)
+        self.provider=ServiceProvider(elem)
                 
         #serviceOperations
         self.serviceoperations = []
@@ -231,9 +231,9 @@ class ServiceProvider(object):
     """ Abstraction for ServiceProvider metadata 
     implements IServiceProviderMetadata """
     def __init__(self,elem):
-        self.provider=elem.find('{http://www.opengis.net/ows}ProviderName').text
-        self.contact=ServiceContact(elem.find('{http://www.opengis.net/ows}ServiceContact'))
-        self.contact='How to contact the service provider (string).'
+        self.name=elem.find('{http://www.opengis.net/ows}ProviderName').text
+        #self.contact=ServiceContact(elem.find('{http://www.opengis.net/ows}ServiceContact'))
+        self.contact = "How to contact the service provider (string)."  #TO DECIDE - simple attributes?
         self.url="URL for provider's web site (string)."
 
 
