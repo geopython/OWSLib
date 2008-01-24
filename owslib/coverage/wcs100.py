@@ -75,7 +75,8 @@ class WebCoverageService_1_0_0(WCSBase):
         for item in self.servicecontents:
             items.append((item,self.servicecontents[item]))
         return items
-        
+    
+    #TODECIDE: How to model contact info?
     #def _getaddressString(self):
         ##todo   
         #addobj=self.capabilities.service.responsibleParty.serviceContact.address
@@ -94,7 +95,6 @@ class WebCoverageService_1_0_0(WCSBase):
         http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIMESEQUENCE=['2792-06-01T00:00:00.0']&FORMAT=cf-netcdf
            
         """
-        #TODO: handle kwargs - they can be used for 'PARAMETER' type key value pairs.
         
         base_url = self._getOperationByName('GetCoverage').methods[method]['url']
         
@@ -251,8 +251,6 @@ class ContactInfo(object):
         self.address=Address(elem.find(ns('address')))
 
 
-#TO DO:  Times can be supplied as begin & end time or series of times (or both... )
-#reflect this in the api.
 class ContentMetadata(object):
     """
     Implements IContentMetadata
@@ -279,8 +277,7 @@ class ContentMetadata(object):
                     float(lc.split()[0]),float(lc.split()[1]),
                     float(uc.split()[0]), float(uc.split()[1]),
                     )
-            
-            
+                 
      #timelimits are the start/end times, timepositions are all timepoints. WCS servers can declare one or both or neither of these.
     def _getTimeLimits(self):
         timepoints, timelimits=[],[]
@@ -289,8 +286,9 @@ class ContentMetadata(object):
             timepoints=b.findall('{http://www.opengis.net/gml}timePosition')
         else:
             #have to make a describeCoverage request...
-            descCov=self._service.getDescribeCoverage(self.id)
-            for pos in descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
+            if not hasattr(self, 'descCov'):
+                self.descCov=self._service.getDescribeCoverage(self.id)
+            for pos in self.descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
                 timepoints.append(pos)
         if timepoints:
                 timelimits=[timepoints[0].text,timepoints[1].text]
@@ -299,26 +297,23 @@ class ContentMetadata(object):
     
     def _getTimePositions(self):
         timepositions=[]
-        descCov=self._service.getDescribeCoverage(self.id)
-        for pos in descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
+        if not hasattr(self, 'descCov'):
+            self.descCov=self._service.getDescribeCoverage(self.id)
+        for pos in self.descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
                 timepositions.append(pos.text)
         return timepositions
     timepositions=property(_getTimePositions, None)
            
-        ## bboxes - other CRS TODO
-        #self.boundingBoxes = []
-        #for bbox in elem.findall('{http://www.opengis.net/ows}BoundingBox'):
-            #if bbox is not None:
-                #lc=b.find('{http://www.opengis.net/ows}LowerCorner').text
-                #uc=b.find('{http://www.opengis.net/ows}UpperCorner').text
-                #boundingBox =  (
-                        #float(lc.split()[0]),float(lc.split()[1]),
-                        #float(uc.split()[0]), float(uc.split()[1]),
-                        #b.attrib['crs'])
-                #self.boundingBoxes.append(boundingBox)
-        
-        #SupportedCRS, SupportedFormats
-        #these require a seperate describeCoverage request...      only resolve when requested
+            
+    def _getOtherBoundingBoxes(self):
+        ''' incomplete, should return other bounding boxes not in WGS84
+            #TODO: find any other bounding boxes. Need to check for CoverageOffering/domainSet/spatialDomain/gml:Envelope & gml:EnvelopeWithTimePeriod.'''
+        bboxes=[]
+        if not hasattr(self, 'descCov'):
+            self.descCov=self._service.getDescribeCoverage(self.id)
+        return bboxes        
+    boundingboxes=property(_getOtherBoundingBoxes,None)
+
     
     def _getSupportedCRSProperty(self):
         # gets supported crs info
