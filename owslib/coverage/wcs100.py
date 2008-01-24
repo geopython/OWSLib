@@ -47,11 +47,11 @@ class WebCoverageService_1_0_0(WCSBase):
 
         #serviceIdentification metadata
         subelem=self._capabilities.find(ns('Service/'))
-        self.serviceidentification=ServiceIdenfication(subelem)                               
+        self.identification=ServiceIdenfication(subelem)                               
                    
         #serviceProvider metadata
         subelem=self._capabilities.find(ns('Service/')+ns('responsibleParty'))
-        self.serviceprovider=ServiceProvider(subelem)   
+        self.provider=ServiceProvider(subelem)   
         
         #serviceOperations metadata
         self.serviceoperations=[]
@@ -195,9 +195,9 @@ class ServiceProvider(object):
     Implements IServiceProvider"""
     def __init__(self,elem):
         try:
-            self.provider=elem.find(ns('organisationName')).text
+            self.name=elem.find(ns('organisationName')).text
         except AttributeError: 
-            self.provider=''
+            self.name=''
         self.url ="URL for provider's web site (string)." #TODO
         self.contact = "How to contact the service provider (string)."  #TO DECIDE - simple attributes?
         
