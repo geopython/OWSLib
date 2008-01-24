@@ -174,7 +174,7 @@ class WebCoverageService_1_1_0(WCSBase):
         try:
             u = urlopen(base_url, data=data)
         except:
-            u = urlopen(base_url+dat
+            u = urlopen(base_url+dat)
         u=urlopen(fullurl)
                 
         # check for service exceptions, and return
