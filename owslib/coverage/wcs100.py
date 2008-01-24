@@ -83,7 +83,7 @@ class WebCoverageService_1_0_0(WCSBase):
         #return address
         
   
-    def getCoverage(self, identifier=None, bbox=None, timeSequence=None, format = None,  method='Get',**kwargs):
+    def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -94,6 +94,7 @@ class WebCoverageService_1_0_0(WCSBase):
         http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIMESEQUENCE=['2792-06-01T00:00:00.0']&FORMAT=cf-netcdf
            
         """
+        #TODO: handle kwargs - they can be used for 'PARAMETER' type key value pairs.
         
         base_url = self._getOperationByName('GetCoverage').methods[method]['url']
         
@@ -106,11 +107,26 @@ class WebCoverageService_1_0_0(WCSBase):
             request['BBox']=','.join([str(x) for x in bbox])
         else:
             request['BBox']=None
-        if timeSequence:
-            request['timesequence']=','.join(timeSequence)
+        if time:
+            request['time']=','.join(time)
         else:
-            request['timesequence']=None
+            request['time']=None
         request['format']=format
+        if width:
+            request['width']=width
+        if height:
+            request['height']=height
+        if resx:
+            request['resx']=resx
+        if resy:
+            request['resy']=resy
+        if resz:
+            request['resz']=resz
+        
+        #anything else e.g. vendor specific parameters must go through kwargs
+        if kwargs:
+            for kw in kwargs:
+                request[kw]=kwargs[kw]
         
         #encode and request
         data = urlencode(request)
@@ -244,6 +260,7 @@ class ContentMetadata(object):
         #TODO - examine the parent for bounding box info.
         
         #self._parent=parent
+        self._elem=elem
         self._service=service
         self.id=elem.find(ns('name')).text
         self.title =elem.find(ns('label')).text       
@@ -251,20 +268,36 @@ class ContentMetadata(object):
                     
         
         self.boundingBoxWGS84 = None
-        self.timelimits=None
         b = elem.find(ns('lonLatEnvelope'))
         if b is not None:
             gmlpositions=b.findall('{http://www.opengis.net/gml}pos')
-            timepositions=b.findall('{http://www.opengis.net/gml}timePosition')
             lc=gmlpositions[0].text
             uc=gmlpositions[1].text
             self.boundingBoxWGS84 = (
                     float(lc.split()[0]),float(lc.split()[1]),
                     float(uc.split()[0]), float(uc.split()[1]),
                     )
-            if timepositions:
-                self.timelimits=[timepositions[0].text,timepositions[1].text]
-
+            
+    def _getTimeLimits(self):
+        timelimits=[]
+        b=self._elem.find(ns('lonLatEnvelope'))
+        if b is not None:
+            timepoints=b.findall('{http://www.opengis.net/gml}timePosition')
+        else:
+            #have to make a describeCoverage request...
+            descCov=self._service.getDescribeCoverage(self.id)
+            for pos in self._elem.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
+                timepoints.append(pos)
+        if timepoints:
+                timelimits=[timepoints[0].text,timepoints[1].text]
+        return timelimits
+    timelimits=property(_getTimeLimits, None)   
+    
+    def _getTimePositions(self):
+        #TODO
+        return []
+    timepositions=property(_getTimePositions, None)
+           
         ## bboxes - other CRS TODO
         #self.boundingBoxes = []
         #for bbox in elem.findall('{http://www.opengis.net/ows}BoundingBox'):
@@ -284,7 +317,14 @@ class ContentMetadata(object):
         # gets supported crs info
         crss=[]
         for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('responseCRSs')):
-            crss.append(elem.text)
+            for crs in elem.text.split(' '):
+                crss.append(crs)
+        for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('requestResponseCRSs')):
+            for crs in elem.text.split(' '):
+                crss.append(crs)
+        for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('nativeCRSs')):
+            for crs in elem.text.split(' '):
+                crss.append(crs)
         return crss
     supportedCRS=property(_getSupportedCRSProperty, None)
        

@@ -80,7 +80,6 @@ class WebCoverageService_1_1_0(WCSBase):
             for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary'):     
                 cm=ContentMetadata(elem, top)
                 #make the describeCoverage requests to populate the supported formats/crs attributes
-                cm.timelimits=self._getTimes(cm.id)
                 self.servicecontents[cm.id]=cm
 
     def items(self):
@@ -90,24 +89,7 @@ class WebCoverageService_1_1_0(WCSBase):
             items.append((item,self.servicecontents[item]))
         return items
         
-    
-    def _getSupportedCRS(self,identifier):
-                # version specific method
-        crss=[]
-        for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageDescription/')+ns('SupportedCRS')):
-            crss.append(elem.text)
-        return crss
-      
-    
-    def _getSupportedFormats(self,identifier): #maybe can get this from the capabilites doc?
-            # version specific method
-        frmts=[]
-        for elem in self.getDescribeCoverage(identifier).findall(ns('CoverageDescription/')+ns('SupportedFormat')):
-            frmts.append(elem.text)
-        return frmts 
-             
-
-         
+        
     #TO DECIDE: May need something like this
     #def _getaddressString(self):
         #address=self.capabilities.serviceProvider.serviceContact.contactInfo.address.deliveryPoint
@@ -135,7 +117,7 @@ class WebCoverageService_1_1_0(WCSBase):
         #return filenames
     
     #TO DO: Handle rest of the  WCS 1.1.0 keyword parameters e.g. GridCRS etc. 
-    def getCoverage(self, identifier=None, bbox=None, timeSequence=None, format = None, store=None, method='Get',**kwargs):
+    def getCoverage(self, identifier=None, bbox=None, time=None, format = None, store=False, rangesubset=None, gridbaseCRS=None, gridtype=None, gridCS=None, gridorigin=None, gridoffsets=None, method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -159,11 +141,33 @@ class WebCoverageService_1_1_0(WCSBase):
         assert len(identifier) > 0
         request['identifier']=identifier
         #request['identifier'] = ','.join(identifier)
-        request['boundingbox']=','.join([str(x) for x in bbox])
-        request['timesequence']=','.join(timeSequence)
+        if bbox:
+            request['boundingbox']=','.join([str(x) for x in bbox])
+        if time:
+            request['timesequence']=','.join(time)
         request['format']=format
-        if store is None: store=False
         request['store']=store
+        
+        #rangesubset: untested - require a server implementation
+        if rangesubset:
+            request['RangeSubset']=rangesubset
+        
+        #GridCRS structure: untested - require a server implementation
+        if gridbaseCRS:
+            request['gridbaseCRS']=gridbaseCRS
+        if gridtype:
+            request['gridtype']=gridtype
+        if gridCS:
+            request['gridCS']=gridCS
+        if gridorigin:
+            request['gridorigin']=gridorigin
+        if gridoffsets:
+            request['gridoffsets']=gridoffsets
+       
+       #anything else e.g. vendor specific parameters must go through kwargs
+        if kwargs:
+            for kw in kwargs:
+                request[kw]=kwargs[kw]
         
         #encode and request
         data = urlencode(request)
@@ -329,14 +333,14 @@ class ContentMetadata(object):
             self.supportedFormats.append(format.text)
             
             
-    #time limits requires a describeCoverage request therefore only resolve when requested
-    def _getTimes(self):
+    #time limits/postions require a describeCoverage request therefore only resolve when requested
+    def _getTimeLimits(self):
          timelimits=[]
          for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageDescription/')+ns('Domain/')+ns('TemporalDomain/')+ns('TimePeriod/')):
              subelems=elem.getchildren()
              timelimits=[subelems[0].text,subelems[1].text]
          return timelimits
-    timelimits=property(_getTimes, None)
+    timelimits=property(_getTimeLimits, None)
     
     def _checkChildAndParent(self, path):
         ''' checks child coverage  summary, and if item not found checks higher level coverage summary'''

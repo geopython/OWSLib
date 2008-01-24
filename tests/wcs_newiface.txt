@@ -4,6 +4,7 @@ Web Coverage Service
 Version 1.0.0
 ========
 
+
     >>> from owslib.wcs import WebCoverageService
     >>> wcs=WebCoverageService('http://ndgbeta.badc.rl.ac.uk/wcs/badc.nerc.ac.uk__NDG-A0__AWQX8gTc', version='1.0.0')
     >>> wcs.url
@@ -49,7 +50,7 @@ Version 1.0.0
     ['cf-netcdf']
     >>> cvg.supportedCRS
     ['srstba']
-    >>> output=wcs.getCoverage(identifier='ZI4al0r8',timeSequence=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf')
+    >>> output=wcs.getCoverage(identifier='ZI4al0r8',time=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf')
     >>> f=open('test.nc', 'wb')
     >>> f.write(output.read())
     >>> f.close()
@@ -103,7 +104,7 @@ Version 1.1.0
     ['WGS84']
 
 GetCoverage returning Multipart Mime:
-    >>> output=wcs.getCoverage(identifier='ZI4al0r8',timeSequence=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf', store='false')
+    >>> output=wcs.getCoverage(identifier='ZI4al0r8',time=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf', store='false')
     
 Need to use the decoder class to handle 1.1.0 type outputs 
 (coverages xml docs or multipart mime)
@@ -113,7 +114,7 @@ Need to use the decoder class to handle 1.1.0 type outputs
     ['mydir/coverage.xml', 'mydir/coverage.nc']
 
 GetCoverage returning Coverages.xml:
-    >>> output=wcs.getCoverage(identifier='ZI4al0r8',timeSequence=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf', store='true')
+    >>> output=wcs.getCoverage(identifier='ZI4al0r8',time=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf', store='true')
 
 Use the decoder class to extract the url from the coverages doc.
 --------------------------------------------------------------------------------------------
