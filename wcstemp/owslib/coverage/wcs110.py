@@ -171,8 +171,10 @@ class WebCoverageService_1_1_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
-        data = urlencode(request)
-        fullurl=base_url + '?' + data
+        try:
+            u = urlopen(base_url, data=data)
+        except:
+            u = urlopen(base_url+dat
         u=urlopen(fullurl)
                 
         # check for service exceptions, and return

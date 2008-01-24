@@ -83,7 +83,7 @@ class WebCoverageService_1_0_0(WCSBase):
         #return address
         
   
-    def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
+    def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  crs=None, width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -109,8 +109,8 @@ class WebCoverageService_1_0_0(WCSBase):
             request['BBox']=None
         if time:
             request['time']=','.join(time)
-        else:
-            request['time']=None
+        if crs:
+            request['crs']=crs
         request['format']=format
         if width:
             request['width']=width
@@ -130,8 +130,10 @@ class WebCoverageService_1_0_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
-        fullurl=base_url + '?' + data
-        u=urlopen(fullurl)
+        try:
+            u = urlopen(base_url, data=data)
+        except:
+            u = urlopen(base_url+data)
 
         # check for service exceptions, and return #TODO - test this bit properly.
         if u.info()['Content-Type'] == 'text/xml':          
