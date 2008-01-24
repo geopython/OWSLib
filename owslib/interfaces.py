@@ -52,7 +52,7 @@ class IServiceMetadata(IServiceOperations, IServiceContents):
 
 # A Service has an online resource URL as well as metadata collections
 
-class IService(IServiceMetaData):
+class IService(IServiceMetadata):
     """The OGC Web Service interface.
     """
 
