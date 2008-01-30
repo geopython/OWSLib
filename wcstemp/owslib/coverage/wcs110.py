@@ -88,12 +88,6 @@ class WebCoverageService_1_1_0(WCSBase):
         for item in self.servicecontents:
             items.append((item,self.servicecontents[item]))
         return items
-        
-        
-    #TO DECIDE: May need something like this
-    #def _getaddressString(self):
-        #address=self.capabilities.serviceProvider.serviceContact.contactInfo.address.deliveryPoint
-        #return address
           
     #TO DECIDE: Offer repackaging of coverageXML/Multipart MIME output?
     #def getData(self, directory='outputdir', outputfile='coverage.nc',  **kwargs):
@@ -233,46 +227,10 @@ class ServiceProvider(object):
     def __init__(self,elem):
         self.name=elem.find('{http://www.opengis.net/ows}ProviderName').text
         #self.contact=ServiceContact(elem.find('{http://www.opengis.net/ows}ServiceContact'))
-        self.contact = "How to contact the service provider (string)."  #TO DECIDE - simple attributes?
-        self.url="URL for provider's web site (string)."
+        self.contact = elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}ElectronicMailAddress').text # use email address for simple contact info
+        self.url=elem.find('{http://www.opengis.net/ows}ProviderName').text # no obvious definitive place for url in wcs, repeat provider name.
 
 
-#TO DECIDE: How to model the contact detials - explicitly or truncated?
-class Address(object):
-    def __init__(self,elem):
-        self.deliveryPoint=elem.find('{http://www.opengis.net/ows}DeliveryPoint').text
-        self.city=elem.find('{http://www.opengis.net/ows}City').text
-        self.administrativeArea=elem.find('{http://www.opengis.net/ows}AdministrativeArea').text
-        self.postalCode=elem.find('{http://www.opengis.net/ows}PostalCode').text
-        self.country=elem.find('{http://www.opengis.net/ows}Country').text
-        self.electronicMailAddress=elem.find('{http://www.opengis.net/ows}ElectronicMailAddress').text
-        self.email=self.electronicMailAddress #shorthand alias
-        
-
-class Phone(object):
-    def __init__(self,elem):
-        self.voice=elem.find('{http://www.opengis.net/ows}Voice').text
-        self.facsimile=elem.find('{http://www.opengis.net/ows}Facsimile').text
-        self.fax=self.facsimile #shorthand alias
-
-class ContactInfo(object):
-    def __init__(self,elem):
-        #self.address=elem.find
-        self.phone=Phone(elem.find('{http://www.opengis.net/ows}Phone'))
-        self.address=Address(elem.find('{http://www.opengis.net/ows}Address'))
-        
-    
-class ServiceContact(object):
-    def __init__(self,elem):
-        self.individualName=elem.find('{http://www.opengis.net/ows}IndividualName').text
-        self.positionName=elem.find('{http://www.opengis.net/ows}PositionName').text
-        contact=elem.find('{http://www.opengis.net/ows}ContactInfo')
-        if contact is not None:
-            self.contactInfo=ContactInfo(contact)
-        else:
-            self.contactInfo = None
-        
-  
 class ContentMetadata(object):
     """Abstraction for WCS CoverageSummary
     """
