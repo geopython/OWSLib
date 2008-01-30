@@ -28,9 +28,9 @@ Version 1.0.0
     >>> wcs.provider.name
     'British Atmospheric Data Centre'
     >>> wcs.provider.url
-    "URL for provider's web site (string)."
+    'British Atmospheric Data Centre'
     >>> wcs.provider.contact
-    'How to contact the service provider (string).'
+    'tba@badc.rl.ac.uk'
     >>> type(wcs.items())
     <type 'list'>
     >>> cvg=wcs['ZI4al0r8']
@@ -80,9 +80,9 @@ Version 1.1.0
     >>> wcs.provider.name
     'British Atmospheric Data Centre'
     >>> wcs.provider.url
-    "URL for provider's web site (string)."
+    'British Atmospheric Data Centre'
     >>> wcs.provider.contact
-    'How to contact the service provider (string).'
+    'tba@badc.rl.ac.uk'
     >>> type(wcs.items())
     <type 'list'>
     >>> cvg=wcs['ZI4al0r8']

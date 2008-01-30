@@ -198,59 +198,12 @@ class ServiceProvider(object):
             self.name=elem.find(ns('organisationName')).text
         except AttributeError: 
             self.name=''
-        self.url ="URL for provider's web site (string)." #TODO
-        self.contact = "How to contact the service provider (string)."  #TO DECIDE - simple attributes?
-        
-
-#TO DECIDE: may not keep these contact info classes
-class Address(object):
-    def __init__(self,elem):
+        self.url=self.name #there is no definitive place for url  WCS, repeat organisationName
         try:
-            self.deliveryPoint=elem.find(ns('deliveryPoint')).text
-        except AttributeError:
-            self.deliveryPoint=''
-        try:
-            self.city=elem.find(ns('city')).text
-        except AttributeError:
-            self. city=''       
-        try:
-            self.administrativeArea=elem.find(ns('administrativeArea')).text
-        except AttributeError:
-            self.administrativeArea=''
-        try:
-            self.postalCode=elem.find(ns('postalCode')).text
-        except AttributeError:
-            self.postalCode=''
-        try:
-            self.country=elem.find(ns('country')).text
-        except AttributeError:
-            self.country=''
-        try:
-            self.electronicMailAddress=elem.find(ns('electronicMailAddress')).text
-        except AttributeError:
-            self.electronicMailAddress=''
-        self.email=self.electronicMailAddress #shorthand alias
-
-class Phone(object):
-    def __init__(self,elem):
-        try:
-            self.voice=elem.find(ns('voice')).text
+            self.contact = elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('electronicMailAddress')).text #use email address for contact
         except:
-            self.voice=''
-        try:    
-            self.facsimile=elem.find(ns('facsimile')).text
-            self.fax=self.facsimile #shorthand alias
-        except:
-            self.facsimile=''
-            self.fax=''
-
-class ContactInfo(object):
-    def __init__(self,elem):
-        #self.address=elem.find
-        self.phone=Phone(elem.find(ns('phone')))
-        self.address=Address(elem.find(ns('address')))
-
-
+            self.contact=''
+            
 class ContentMetadata(object):
     """
     Implements IContentMetadata
