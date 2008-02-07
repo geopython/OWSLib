@@ -31,11 +31,10 @@ class WebCoverageService_1_1_0(WCSBase):
     
     def __getitem__(self, name):
         ''' check contents dictionary to allow dict like access to service layers'''
-        if 'servicecontents' in self.__dict__.keys():
-            if name in self.__getattribute__('servicecontents').keys():
-                return self.__getattribute__('servicecontents')[name]
-        #otherwise behave normally:
-        return self.__getattribute__(name)
+        if name in self.__getattribute__('contents').keys():
+            return self.__getattribute__('contents')[name]
+        else:
+            raise KeyError, "No content named %s" % name
     
     def __init__(self,url,xml):
         self.version='1.1.0'
@@ -58,9 +57,9 @@ class WebCoverageService_1_1_0(WCSBase):
         self.provider=ServiceProvider(elem)
                 
         #serviceOperations
-        self.serviceoperations = []
+        self.operations = []
         for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1/ows}OperationsMetadata/{http://www.opengis.net/wcs/1.1/ows}Operation/'):
-            self.serviceoperations.append(Operation(elem))
+            self.operations.append(Operation(elem))
         
         # exceptions - ***********TO DO *************
             self.exceptions = [f.text for f \
@@ -68,25 +67,25 @@ class WebCoverageService_1_1_0(WCSBase):
               
         # serviceContents: our assumption is that services use a top-level layer
         # as a metadata organizer, nothing more.
-        self.servicecontents = {}
+        self.contents = {}
         top = self._capabilities.find('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary')
         for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary/{http://www.opengis.net/wcs/1.1}CoverageSummary'):                    
             cm=ContentMetadata(elem, top, self)
-            self.servicecontents[cm.id]=cm
+            self.contents[cm.id]=cm
             
-        if self.servicecontents=={}:
+        if self.contents=={}:
             #non-hierarchical.
             top=None
             for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary'):     
                 cm=ContentMetadata(elem, top)
                 #make the describeCoverage requests to populate the supported formats/crs attributes
-                self.servicecontents[cm.id]=cm
+                self.contents[cm.id]=cm
 
     def items(self):
         '''supports dict-like items() access'''
         items=[]
-        for item in self.servicecontents:
-            items.append((item,self.servicecontents[item]))
+        for item in self.contents:
+            items.append((item,self.contents[item]))
         return items
           
     #TO DECIDE: Offer repackaging of coverageXML/Multipart MIME output?
@@ -127,7 +126,7 @@ class WebCoverageService_1_1_0(WCSBase):
 
         if method == 'Get':
             method='{http://www.opengis.net/wcs/1.1/ows}Get'
-        base_url = self.__getOperationByName('GetCoverage').methods[method]['url']
+        base_url = self.getOperationByName('GetCoverage').methods[method]['url']
 
 
         #process kwargs
@@ -185,9 +184,9 @@ class WebCoverageService_1_1_0(WCSBase):
         return u
         
         
-    def __getOperationByName(self, name):
+    def getOperationByName(self, name):
         """Return a named operation item."""
-        for item in self.serviceoperations:
+        for item in self.operations:
             if item.name == name:
                 return item
         raise KeyError, "No operation named %s" % name
@@ -232,7 +231,8 @@ class ServiceProvider(object):
 
 
 class ContentMetadata(object):
-    """Abstraction for WCS CoverageSummary
+    """Abstraction for WCS ContentMetadata
+    Implements IContentMetadata
     """
     def __init__(self, elem, parent, service):
         """Initialize."""
