@@ -29,11 +29,10 @@ class WebCoverageService_1_0_0(WCSBase):
     """
     def __getitem__(self,name):
         ''' check contents dictionary to allow dict like access to service layers'''
-        if 'servicecontents' in self.__dict__.keys():
-            if name in self.__getattribute__('servicecontents').keys():
-                return self.__getattribute__('servicecontents')[name]
-        #otherwise behave normally:
-        return self.__getattribute__(name)
+        if name in self.__getattribute__('contents').keys():
+            return self.__getattribute__('contents')[name]
+        else:
+            raise KeyError, "No content named %s" % name
     
     def __init__(self,url,xml):
         self.version='1.0.0'
@@ -54,15 +53,15 @@ class WebCoverageService_1_0_0(WCSBase):
         self.provider=ServiceProvider(subelem)   
         
         #serviceOperations metadata
-        self.serviceoperations=[]
+        self.operations=[]
         for elem in self._capabilities.find(ns('Capability/')+ns('Request')).getchildren():
-            self.serviceoperations.append(OperationMetadata(elem))
+            self.operations.append(OperationMetadata(elem))
           
         #serviceContents metadata
-        self.servicecontents={}
+        self.contents={}
         for elem in self._capabilities.findall(ns('ContentMetadata/')+ns('CoverageOfferingBrief')): 
             cm=ContentMetadata(elem, self)
-            self.servicecontents[cm.id]=cm
+            self.contents[cm.id]=cm
         
         #exceptions
         self.exceptions = [f.text for f \
@@ -72,8 +71,8 @@ class WebCoverageService_1_0_0(WCSBase):
     def items(self):
         '''supports dict-like items() access'''
         items=[]
-        for item in self.servicecontents:
-            items.append((item,self.servicecontents[item]))
+        for item in self.contents:
+            items.append((item,self.contents[item]))
         return items
     
     #TODECIDE: How to model contact info?
@@ -96,7 +95,7 @@ class WebCoverageService_1_0_0(WCSBase):
            
         """
         
-        base_url = self._getOperationByName('GetCoverage').methods[method]['url']
+        base_url = self.getOperationByName('GetCoverage').methods[method]['url']
         
         #process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service':'WCS'}
@@ -149,9 +148,9 @@ class WebCoverageService_1_0_0(WCSBase):
             u.seek(0)
         return u
                
-    def _getOperationByName(self, name):
+    def getOperationByName(self, name):
         """Return a named operation item."""
-        for item in self.serviceoperations:
+        for item in self.operations:
             if item.name == name:
                 return item
         raise KeyError, "No operation named %s" % name
