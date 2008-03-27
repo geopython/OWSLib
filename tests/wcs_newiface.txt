@@ -29,8 +29,22 @@ Version 1.0.0
     'British Atmospheric Data Centre'
     >>> wcs.provider.url
     'British Atmospheric Data Centre'
-    >>> wcs.provider.contact
+    >>> wcs.provider.contact.email
     'tba@badc.rl.ac.uk'
+    >>> wcs.provider.contact.name
+    'TBA'
+    >>> wcs.provider.contact.organization
+    'British Atmospheric Data Centre'
+    >>> wcs.provider.contact.address
+    'STFC'
+    >>> wcs.provider.contact.city
+    'Didcot'
+    >>> wcs.provider.contact.region
+    'OXON'
+    >>> wcs.provider.contact.postcode
+    'OX11 0QX'
+    >>> wcs.provider.contact.country
+    'UK'
     >>> type(wcs.items())
     <type 'list'>
     >>> cvg=wcs['ZI4al0r8']
@@ -81,8 +95,22 @@ Version 1.1.0
     'British Atmospheric Data Centre'
     >>> wcs.provider.url
     'British Atmospheric Data Centre'
-    >>> wcs.provider.contact
+    >>> wcs.provider.contact.email
     'tba@badc.rl.ac.uk'
+    >>> wcs.provider.contact.name
+    'TBA'
+    >>> wcs.provider.contact.organization
+    'British Atmospheric Data Centre'
+    >>> wcs.provider.contact.address
+    'STFC'
+    >>> wcs.provider.contact.city
+    'Didcot'
+    >>> wcs.provider.contact.region
+    'OXON'
+    >>> wcs.provider.contact.postcode
+    'OX11 0QX'
+    >>> wcs.provider.contact.country
+    'UK'
     >>> type(wcs.items())
     <type 'list'>
     >>> cvg=wcs['ZI4al0r8']

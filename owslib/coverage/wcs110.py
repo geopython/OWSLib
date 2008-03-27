@@ -226,9 +226,50 @@ class ServiceProvider(object):
     def __init__(self,elem):
         self.name=elem.find('{http://www.opengis.net/ows}ProviderName').text
         #self.contact=ServiceContact(elem.find('{http://www.opengis.net/ows}ServiceContact'))
-        self.contact = elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}ElectronicMailAddress').text # use email address for simple contact info
+        self.contact =ContactMetadata(elem)
         self.url=elem.find('{http://www.opengis.net/ows}ProviderName').text # no obvious definitive place for url in wcs, repeat provider name.
 
+class ContactMetadata(object):
+    ''' implements IContactMetadata'''
+    def __init__(self, elem):
+        try:
+            self.name = elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}IndividualName').text
+        except AttributeError:
+            self.name = None
+        
+        try:
+            self.organization=elem.find('{http://www.opengis.net/ows}ProviderName').text 
+        except AttributeError:
+            self.organization = None
+        
+        try:
+            self.address = elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}DeliveryPoint').text
+        except AttributeError:
+            self.address = None
+        try:
+            self.city=  elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}City').text
+        except AttributeError:
+            self.city = None
+        
+        try:
+            self.region= elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}AdministrativeArea').text
+        except AttributeError:
+            self.region = None
+        
+        try:
+            self.postcode= elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}PostalCode').text
+        except AttributeError:
+            self.postcode = None
+        
+        try:
+            self.country= elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}Country').text
+        except AttributeError:
+            self.country = None
+        
+        try:
+            self.email =            elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}ElectronicMailAddress').text
+        except AttributeError:
+            self.email = None
 
 class ContentMetadata(object):
     """Abstraction for WCS ContentMetadata
