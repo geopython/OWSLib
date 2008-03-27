@@ -75,13 +75,7 @@ class WebCoverageService_1_0_0(WCSBase):
             items.append((item,self.contents[item]))
         return items
     
-    #TODECIDE: How to model contact info?
-    #def _getaddressString(self):
-        ##todo   
-        #addobj=self.capabilities.service.responsibleParty.serviceContact.address
-        #address=addobj.deliveryPoint + ',' + addobj.city +  ',' + addobj.administrativeArea +  ',' + addobj.postalCode +  ',' +  addobj.country
-        #return address
-        
+      
   
     def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  crs=None, width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
@@ -196,13 +190,46 @@ class ServiceProvider(object):
         try:
             self.name=elem.find(ns('organisationName')).text
         except AttributeError: 
-            self.name=''
+            self.name=None
         self.url=self.name #there is no definitive place for url  WCS, repeat organisationName
+        self.contact=ContactMetadata(elem)
+
+class ContactMetadata(object):
+    ''' implements IContactMetadata'''
+    def __init__(self, elem):
         try:
-            self.contact = elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('electronicMailAddress')).text #use email address for contact
-        except:
-            self.contact=''
-            
+            self.name = elem.find(ns('individualName')).text
+        except AttributeError:
+            self.name = None
+        try:
+            self.organization=elem.find(ns('organisationName')).text 
+        except AttributeError:
+            self.organization = None
+        try:
+            self.address = elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('deliveryPoint')).text
+        except AttributeError:
+            self.address = None
+        try:
+            self.city= elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('city')).text
+        except AttributeError:
+            self.city = None
+        try:
+            self.region=elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('administrativeArea')).text
+        except AttributeError:
+            self.region = None
+        try:
+            self.postcode=elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('postalCode')).text
+        except AttributeError:
+            self.postcode=None
+        try:
+            self.country=elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('country')).text
+        except AttributeError:
+            self.country = None
+        try:
+            self.email=elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('electronicMailAddress')).text
+        except AttributeError:
+            self.email = None
+
 class ContentMetadata(object):
     """
     Implements IContentMetadata
