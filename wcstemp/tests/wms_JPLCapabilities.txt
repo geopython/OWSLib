@@ -30,8 +30,20 @@ Test capabilities
     'JPL'
     >>> wms.provider.url
     'http://OnEarth.jpl.nasa.gov/index.html'
-    >>> wms.provider.contact
+
+Check contact info (some of it is missing)
+    >>> wms.provider.contact.name
+    'Lucian Plesea'
+    >>> wms.provider.contact.email
     'lucian.plesea@jpl.nasa.gov'
+    >>> wms.provider.contact.address
+    >>> wms.provider.contact.city
+    >>> wms.provider.contact.country
+    >>> wms.provider.contact.region
+    >>> wms.provider.contact.postcode
+    >>> wms.provider.contact.organization
+    'JPL'
+    >>> wms.provider.contact.position
 
     
 Test available content layers
