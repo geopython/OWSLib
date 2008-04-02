@@ -62,7 +62,7 @@ class WebMapService(object):
         
         #serviceIdentification metadata
         serviceelem=self._capabilities.find('Service/')
-        self.identification=ServiceIdenfication(serviceelem, self.version)   
+        self.identification=ServiceIdentification(serviceelem, self.version)   
         
         #serviceProvider metadata
         self.provider=ServiceProvider(serviceelem)   
@@ -199,7 +199,7 @@ class WebMapService(object):
                 return item
         raise KeyError, "No operation named %s" % name
     
-class ServiceIdenfication(object):
+class ServiceIdentification(object):
     ''' Implements IServiceIdentificationMetadata '''
     
     def __init__(self, infoset, version):
