@@ -208,8 +208,12 @@ class ServiceIdenfication(object):
 	else:
 		self.abstract = None
         self.keywords = [f.text for f in self._root.findall('KeywordList/Keyword')]
-        self.accessconstraints = self._root.find('AccessConstraints').text
-        self.fees = self._root.find('Fees').text
+        accessconstraints=self._root.find('AccessConstraints')
+        if accessconstraints is not None:
+            self.accessconstraints = accessconstraints.text
+        fees = self._root.find('Fees')
+        if fees is not None:
+            self.fees = fees.text
              
 class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
@@ -217,8 +221,15 @@ class ServiceProvider(object):
         self._root=infoset
         self.name=self._root.find('ContactInformation/ContactPersonPrimary/ContactOrganization').text
         self.url=self._root.find('OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
-        self.contact=self._root.find('ContactInformation/ContactElectronicMailAddress').text
-        
+        #contact metadata
+	contact = self._root.find('ContactInformation')
+	## sometimes there is a contact block that is empty, so make
+	## sure there are children to parse
+	if contact is not None and contact.getchildren():
+            self.contact = ContactMetadata(contact)
+        else:
+            self.contact = None
+            
 class ContentMetadata:
 	"""
 	Abstraction for WMS layer metadata.
