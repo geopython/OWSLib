@@ -55,7 +55,11 @@ class WebMapService(object):
             self._capabilities = reader.readString(xml)
         else:
             self._capabilities = reader.read(self.url)
-                
+        self._buildMetadata()
+        
+    def _buildMetadata(self):         
+        ''' set up capabilities metadata objects '''
+        
         #serviceIdentification metadata
         serviceelem=self._capabilities.find('Service/')
         self.identification=ServiceIdenfication(serviceelem, self.version)   
@@ -93,7 +97,8 @@ class WebMapService(object):
     
     def getcapabilities(self):
         """Request and return capabilities document from the WMS as a 
-        file-like object."""
+        file-like object.
+        NOTE: this is effectively redundant now"""
         reader = WMSCapabilitiesReader(self.version)
         u = urlopen(reader.capabilities_url(self.url))
         # check for service exceptions, and return
