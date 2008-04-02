@@ -209,7 +209,7 @@ class ServiceIdentification(object):
         self.title = self._root.find('Title').text
         abstract = self._root.find('Abstract')
 	if abstract is not None:
-	        self.abstract = self._root.find('Abstract').text
+	        self.abstract = abstract.text
 	else:
 		self.abstract = None
         self.keywords = [f.text for f in self._root.findall('KeywordList/Keyword')]
