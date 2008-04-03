@@ -224,7 +224,11 @@ class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
     def __init__(self, infoset):
         self._root=infoset
-        self.name=self._root.find('ContactInformation/ContactPersonPrimary/ContactOrganization').text
+        name=self._root.find('ContactInformation/ContactPersonPrimary/ContactOrganization')
+        if name is not None:
+            self.name=name.text
+        else:
+            self.name=None
         self.url=self._root.find('OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
         #contact metadata
 	contact = self._root.find('ContactInformation')
@@ -337,9 +341,16 @@ class ContactMetadata:
 	"""Abstraction for contact details advertised in GetCapabilities.
 	"""
 	def __init__(self, elem):
-		self.name = elem.find('ContactPersonPrimary/ContactPerson').text
-		self.email = elem.find('ContactElectronicMailAddress').text 
-
+		name = elem.find('ContactPersonPrimary/ContactPerson')
+		if name is not None:
+                    self.name=name.text
+                else:
+                    self.name=None
+                email = elem.find('ContactElectronicMailAddress')
+                if email is not None:
+                    self.email=email.text
+                else:
+                    self.email=None
 		self.address = self.city = self.region = None
 		self.postcode = self.country = None
 

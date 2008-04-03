@@ -187,9 +187,10 @@ class ServiceProvider(object):
     """ Abstraction for WCS ResponsibleParty 
     Implements IServiceProvider"""
     def __init__(self,elem):
-        try:
-            self.name=elem.find(ns('organisationName')).text
-        except AttributeError: 
+        name=elem.find(ns('organisationName'))
+        if name is not None:
+            self.name=name.text
+        else:
             self.name=None
         self.url=self.name #there is no definitive place for url  WCS, repeat organisationName
         self.contact=ContactMetadata(elem)
