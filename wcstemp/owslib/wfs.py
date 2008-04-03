@@ -244,8 +244,16 @@ class ContactMetadata:
     Not fully tested due to lack of Contact info in test capabilities doc.
     """
     def __init__(self, elem):
-        self.name = elem.find(nspath('ContactPersonPrimary/ContactPerson')).text
-        self.email = elem.find(nspath('ContactElectronicMailAddress')).text 
+        name = elem.find(nspath('ContactPersonPrimary/ContactPerson'))
+        if name is not None:
+            self.name=name.text
+        else:
+            self.name=None
+        email = elem.find(nspath('ContactElectronicMailAddress'))
+        if email is not None:
+            self.email=email.text
+        else:
+            self.email=None
 
         self.address = self.city = self.region = None
         self.postcode = self.country = None

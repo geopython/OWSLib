@@ -224,10 +224,14 @@ class ServiceProvider(object):
     """ Abstraction for ServiceProvider metadata 
     implements IServiceProviderMetadata """
     def __init__(self,elem):
-        self.name=elem.find('{http://www.opengis.net/ows}ProviderName').text
+        name=elem.find('{http://www.opengis.net/ows}ProviderName')
+        if name is not None:
+            self.name=name.text
+        else:
+            self.name=None
         #self.contact=ServiceContact(elem.find('{http://www.opengis.net/ows}ServiceContact'))
         self.contact =ContactMetadata(elem)
-        self.url=elem.find('{http://www.opengis.net/ows}ProviderName').text # no obvious definitive place for url in wcs, repeat provider name.
+        self.url=self.name # no obvious definitive place for url in wcs, repeat provider name?
 
 class ContactMetadata(object):
     ''' implements IContactMetadata'''
