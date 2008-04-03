@@ -234,7 +234,7 @@ class ServiceProvider(object):
 	contact = self._root.find('ContactInformation')
 	## sometimes there is a contact block that is empty, so make
 	## sure there are children to parse
-	if contact is not None and contact.getchildren():
+	if contact is not None and contact.getchildren() is not None:
             self.contact = ContactMetadata(contact)
         else:
             self.contact = None
