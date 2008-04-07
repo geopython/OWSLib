@@ -49,8 +49,10 @@ class WebCoverageService_1_0_0(WCSBase):
         self.identification=ServiceIdenfication(subelem)                               
                    
         #serviceProvider metadata
+        self.provider=None
         subelem=self._capabilities.find(ns('Service/')+ns('responsibleParty'))
-        self.provider=ServiceProvider(subelem)   
+        if subelem is not None:
+            self.provider=ServiceProvider(subelem)   
         
         #serviceOperations metadata
         self.operations=[]
@@ -244,9 +246,7 @@ class ContentMetadata(object):
         self._service=service
         self.id=elem.find(ns('name')).text
         self.title =elem.find(ns('label')).text       
-        self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]
-                    
-        
+        self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]        
         self.boundingBoxWGS84 = None
         b = elem.find(ns('lonLatEnvelope')) 
         if b is not None:
@@ -257,7 +257,20 @@ class ContentMetadata(object):
                     float(lc.split()[0]),float(lc.split()[1]),
                     float(uc.split()[0]), float(uc.split()[1]),
                     )
-                 
+        
+    #grid is either a gml:Grid or a gml:RectifiedGrid if supplied as part of the DescribeCoverage response.
+    def _getGrid(self):
+        if not hasattr(self, 'descCov'):
+                self.descCov=self._service.getDescribeCoverage(self.id)
+        gridelem= self.descCov.find(ns('CoverageOffering/')+ns('domainSet/')+ns('spatialDomain/')+'{http://www.opengis.net/gml}RectifiedGrid')
+        if gridelem is not None:
+            grid=RectifiedGrid(gridelem)
+        else:
+            gridelem=self.descCov.find(ns('CoverageOffering/')+ns('domainSet/')+ns('spatialDomain/')+'{http://www.opengis.net/gml}Grid')
+            grid=Grid(gridelem)
+        return grid
+    grid=property(_getGrid, None)
+        
      #timelimits are the start/end times, timepositions are all timepoints. WCS servers can declare one or both or neither of these.
     def _getTimeLimits(self):
         timepoints, timelimits=[],[]
@@ -319,4 +332,31 @@ class ContentMetadata(object):
         return frmts
     supportedFormats=property(_getSupportedFormatsProperty, None)
         
+          
+#Adding classes to represent gml:grid and gml:rectifiedgrid. One of these is used for the cvg.grid property
+#(where cvg is a member of the contents dictionary)     
+#There is no simple way to convert the offset values in a rectifiedgrid grid to real values without CRS understanding, therefore this is beyond the current scope of owslib, so the representation here is purely to provide access to the information in the GML.
+   
+class Grid(object):
+    ''' Simple grid class to provide axis and value information for a gml grid '''
+    def __init__(self, grid):
+        self.axislabels = []
+        self.dimension=None
+        self.axes={}   
+        if grid is not None:
+            self.dimension=int(grid.get('dimension'))
+            self.lowlimits= grid.find('{http://www.opengis.net/gml}limits/{http://www.opengis.net/gml}GridEnvelope/{http://www.opengis.net/gml}low').text.split(' ')
+            self.highlimits = grid.find('{http://www.opengis.net/gml}limits/{http://www.opengis.net/gml}GridEnvelope/{http://www.opengis.net/gml}high').text.split(' ')
+            for axis in grid.findall('{http://www.opengis.net/gml}axisName'):
+                self.axislabels.append(axis.text)
+      
+
+class RectifiedGrid(Grid):
+    ''' RectifiedGrid class, extends Grid with additional offset vector information '''
+    def __init__(self, rectifiedgrid):
+        super(RectifiedGrid,self).__init__(rectifiedgrid)
+        self.origin=rectifiedgrid.find('{http://www.opengis.net/gml}origin/{http://www.opengis.net/gml}pos').text.split()
+        self.offsetvectors=[]
+        for offset in rectifiedgrid.findall('{http://www.opengis.net/gml}offsetVector'):
+            self.offsetvectors.append(offset.text.split())
         
