@@ -342,7 +342,8 @@ class Grid(object):
     def __init__(self, grid):
         self.axislabels = []
         self.dimension=None
-        self.axes={}   
+        self.lowlimits=[]
+        self.highlimits=[]
         if grid is not None:
             self.dimension=int(grid.get('dimension'))
             self.lowlimits= grid.find('{http://www.opengis.net/gml}limits/{http://www.opengis.net/gml}GridEnvelope/{http://www.opengis.net/gml}low').text.split(' ')
