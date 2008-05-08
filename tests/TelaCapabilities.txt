@@ -35,10 +35,10 @@ Test capabilities
 Test available content layers
 
     >>> [layer.name for layer in wms.capabilities.contents]
-    ['world.topo.bathy.200409', 'USGS_1ft_San_Diego']
+    ['ngBM', 'world.topo.bathy.200409', 'USGS_1ft_San_Diego']
     
     >>> [layer.title for layer in wms.capabilities.contents]
-    ['world.topo.bathy.200409', 'USGS 1ft San Diego']
+    ['BM', 'world.topo.bathy.200409', 'USGS 1ft San Diego']
     
 Test single item accessor
 
@@ -52,7 +52,7 @@ Test single item accessor
     (-180.0, -90.0, 180.0, 90.0)
     
     >>> wms.capabilities.getContentByName('world.topo.bathy.200409').crsOptions
-    ['EPSG:4326']
+    ['init=epsg:4326']
     
     >>> wms.capabilities.getContentByName('world.topo.bathy.200409').styles
     {}
