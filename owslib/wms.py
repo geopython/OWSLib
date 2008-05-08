@@ -18,6 +18,10 @@ Currently supports only version 1.1.1 of the WMS protocol.
 import cgi
 from urllib import urlencode
 from urllib2 import urlopen
+from urllib2 import HTTPPasswordMgrWithDefaultRealm
+from urllib2 import HTTPBasicAuthHandler
+from urllib2 import build_opener
+from urllib2 import install_opener
 
 from etree import etree
 
@@ -36,19 +40,39 @@ class WebMapService(object):
     Implements IWebMapService.
     """
     
-    def __init__(self, url, version='1.1.1', xml=None):
+    def __init__(self, url, version='1.1.1', xml=None, 
+                 username=None, password=None
+                 ):
         """Initialize."""
         self.url = url
+        self.username = username
+        self.password = password
         self.version = version
         self._capabilities = None
+        self._open = urlopen
+
+        if self.username and self.password:
+            # Provide login information in order to use the WMS server
+            # Create an OpenerDirector with support for Basic HTTP 
+            # Authentication...
+            passman = HTTPPasswordMgrWithDefaultRealm()
+            passman.add_password(None, self.url, self.username, self.password)
+            auth_handler = HTTPBasicAuthHandler(passman)
+            opener = build_opener(auth_handler)
+            self._open = opener.open
+
         # initialize from saved capability document
-        if xml:
-            reader = WMSCapabilitiesReader(self.version)
+        elif xml:
+            reader = WMSCapabilitiesReader(
+                self.version, url=self.url, un=self.username, pw=self.password
+                )
             self._capabilities = ServiceMetadata(reader.readString(xml))
-        
+
     def _getcapproperty(self):
         if not self._capabilities:
-            reader = WMSCapabilitiesReader(self.version)
+            reader = WMSCapabilitiesReader(
+                self.version, url=self.url, un=self.username, pw=self.password
+                )
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
     capabilities = property(_getcapproperty, None)
@@ -56,8 +80,11 @@ class WebMapService(object):
     def getcapabilities(self):
         """Request and return capabilities document from the WMS as a 
         file-like object."""
-        reader = WMSCapabilitiesReader(self.version)
-        u = urlopen(reader.capabilities_url(self.url))
+        
+        reader = WMSCapabilitiesReader(
+            self.version, url=self.url, un=self.username, pw=self.password
+            )
+        u = self._open(reader.capabilities_url(self.url))
         # check for service exceptions, and return
         if u.info().gettype() == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
@@ -67,9 +94,11 @@ class WebMapService(object):
         return u
 
     def getmap(self, layers=None, styles=None, srs=None, bbox=None,
-               format=None, size=None, transparent=False, bgcolor='#FFFFFF',
+               format=None, size=None, time=None, transparent=False,
+               bgcolor='#FFFFFF',
                exceptions='application/vnd.ogc.se_xml',
-               method='Get'):
+               method='Get'
+               ):
         """Request and return an image from the WMS as a file-like object.
         
         Parameters
@@ -108,7 +137,7 @@ class WebMapService(object):
             >>> out.write(img.read())
             >>> out.close()
 
-        """
+        """        
         md = self.capabilities
         base_url = md.getOperationByName('GetMap').methods[method]['url']
         request = {'version': self.version, 'request': 'GetMap'}
@@ -133,11 +162,14 @@ class WebMapService(object):
         request['bgcolor'] = '0x' + bgcolor[1:7]
         request['exceptions'] = str(exceptions)
         
+        if time is not None:
+            request['time'] = str(time)
+        
         data = urlencode(request)
         if method == 'Post':
-            u = urlopen(base_url, data=data)
+            u = self._open(base_url, data=data)
         else:
-            u = urlopen(base_url + data)
+            u = self._open(base_url + data)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -221,13 +253,6 @@ class ServiceMetadata(object):
             if item.name == name:
                 return item
         raise KeyError, "No operation named %s" % name
-
-    #def toXML(self):
-    #    """x
-    #    """
-    #    top = etree.Element('a')
-    #    top.text = self.getName()
-    #    return etree.tostring(top)
 
 
 class ContentMetadata:
@@ -313,6 +338,7 @@ class ContentMetadata:
 	def __str__(self):
 		return 'Layer Name: %s Title: %s' % (self.name, self.title)
 
+
 class OperationMetadata:
     """Abstraction for WMS metadata.
     
@@ -364,8 +390,6 @@ class ContactMetadata:
 		if position is not None: self.position = position.text
 		else: self.position = None
 
-# Deprecated classes follow
-# TODO: remove
 
 class WMSCapabilitiesInfoset:
     """High-level container for WMS Capabilities based on lxml.etree
@@ -464,10 +488,24 @@ class WMSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.1.1'):
+    def __init__(self, version='1.1.1', url=None, un=None, pw=None):
         """Initialize"""
         self.version = version
         self._infoset = None
+        self.url = url
+        self.username = un
+        self.password = pw
+        self._open = urlopen
+
+        if self.username and self.password:
+            # Provide login information in order to use the WMS server
+            # Create an OpenerDirector with support for Basic HTTP 
+            # Authentication...
+            passman = HTTPPasswordMgrWithDefaultRealm()
+            passman.add_password(None, self.url, self.username, self.password)
+            auth_handler = HTTPBasicAuthHandler(passman)
+            opener = build_opener(auth_handler)
+            self._open = opener.open
 
     def capabilities_url(self, service_url):
         """Return a capabilities url
@@ -496,7 +534,7 @@ class WMSCapabilitiesReader:
         version, and request parameters
         """
         request = self.capabilities_url(service_url)
-        u = urlopen(request)
+        u = self._open(request)
         return WMSCapabilitiesInfoset(etree.fromstring(u.read()))
 
     def readString(self, st):
