@@ -1,4 +1,3 @@
-
 OWSLib
 ======
 Package for working with OGC web map and feature services.
@@ -93,5 +92,3 @@ http://trac.gispython.org/projects/PCL/wiki
 Updated project information can be found at
 
 http://trac.gispython.org/projects/PCL/wiki/OwsLib
-
-
