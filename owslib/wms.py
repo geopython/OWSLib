@@ -40,9 +40,17 @@ class WebMapService(object):
     Implements IWebMapService.
     """
     
+    def __getitem__(self,name):
+        ''' check contents dictionary to allow dict like access to service layers'''
+        if name in self.__getattribute__('contents').keys():
+            return self.__getattribute__('contents')[name]
+        else:
+            raise KeyError, "No content named %s" % name
+
+    
     def __init__(self, url, version='1.1.1', xml=None, 
-                 username=None, password=None
-                 ):
+                username=None, password=None
+                ):
         """Initialize."""
         self.url = url
         self.username = username
@@ -50,7 +58,7 @@ class WebMapService(object):
         self.version = version
         self._capabilities = None
         self._open = urlopen
-
+        
         if self.username and self.password:
             # Provide login information in order to use the WMS server
             # Create an OpenerDirector with support for Basic HTTP 
@@ -60,13 +68,22 @@ class WebMapService(object):
             auth_handler = HTTPBasicAuthHandler(passman)
             opener = build_opener(auth_handler)
             self._open = opener.open
-
-        # initialize from saved capability document
-        elif xml:
             reader = WMSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
                 )
-            self._capabilities = ServiceMetadata(reader.readString(xml))
+            self._capabilities = reader.readString(self.url)
+        else:
+            reader = WMSCapabilitiesReader(self.version)
+            if xml:
+                #read from stored xml
+                self._capabilities = reader.readString(xml)
+            else:
+                #read from non-password protected server
+                self._capabilities = reader.read(self.url)
+                
+       
+        #build metadata objects
+        self._buildMetadata()
 
     def _getcapproperty(self):
         if not self._capabilities:
@@ -76,10 +93,49 @@ class WebMapService(object):
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
     capabilities = property(_getcapproperty, None)
+
+    def _buildMetadata(self):         
+        ''' set up capabilities metadata objects '''
+        
+        #serviceIdentification metadata
+        serviceelem=self._capabilities.find('Service/')
+        self.identification=ServiceIdentification(serviceelem, self.version)   
+        
+        #serviceProvider metadata
+        self.provider=ServiceProvider(serviceelem)   
             
+        #serviceOperations metadata 
+        self.operations=[]
+        for elem in self._capabilities.find('Capability/Request').getchildren():
+            self.operations.append(OperationMetadata(elem))
+          
+        #serviceContents metadata: our assumption is that services use a top-level 
+        #layer as a metadata organizer, nothing more.
+        self.contents={}
+        caps = self._capabilities.find('Capability')
+        for elem in caps.findall('Layer'):
+            cm=ContentMetadata(elem)
+            self.contents[cm.id]=cm       
+            for subelem in elem.findall('Layer'):
+                subcm=ContentMetadata(subelem, cm)
+                self.contents[subcm.id]=subcm 
+        
+        #exceptions
+        self.exceptions = [f.text for f \
+                in self._capabilities.findall('Capability/Exception/Format')]
+            
+            
+    def items(self):
+        '''supports dict-like items() access'''
+        items=[]
+        for item in self.contents:
+            items.append((item,self.contents[item]))
+        return items
+    
     def getcapabilities(self):
         """Request and return capabilities document from the WMS as a 
-        file-like object."""
+        file-like object.
+        NOTE: this is effectively redundant now"""
         
         reader = WMSCapabilitiesReader(
             self.version, url=self.url, un=self.username, pw=self.password
@@ -138,8 +194,7 @@ class WebMapService(object):
             >>> out.close()
 
         """        
-        md = self.capabilities
-        base_url = md.getOperationByName('GetMap').methods[method]['url']
+        base_url = self.getOperationByName('GetMap').methods[method]['url']
         request = {'version': self.version, 'request': 'GetMap'}
         
         # check layers and styles
@@ -181,64 +236,53 @@ class WebMapService(object):
 
     def getfeatureinfo(self):
         raise NotImplementedError
-        
-        
-class ServiceMetadata(object):
-    """Abstraction for WMS metadata.
     
-    Implements IServiceMetadata.
-    """
-
-    def __init__(self, infoset):
-        """Initialize from an element tree."""
-        self._root = infoset.getroot()
-        # properties
-        self.service = self._root.find('Service/Name').text
-        self.title = self._root.find('Service/Title').text
-	abstract = self._root.find('Service/Abstract')
+    def getOperationByName(self, name): 
+        """Return a named content item."""
+        for item in self.operations:
+            if item.name == name:
+                return item
+        raise KeyError, "No operation named %s" % name
+    
+class ServiceIdentification(object):
+    ''' Implements IServiceIdentificationMetadata '''
+    
+    def __init__(self, infoset, version):
+        self._root=infoset
+        self.type = self._root.find('Name').text
+        self.version = version
+        self.title = self._root.find('Title').text
+        abstract = self._root.find('Abstract')
 	if abstract is not None:
-	        self.abstract = self._root.find('Service/Abstract').text
+	        self.abstract = abstract.text
 	else:
 		self.abstract = None
-        self.link = self._root.find('Service/OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
-        
-        # operations []
-        self.operations = []
-        for elem in self._root.findall('Capability/Request/*'):
-            self.operations.append(OperationMetadata(elem))
-
-        # exceptions
-        self.exceptions = [f.text for f \
-                in self._root.findall('Capability/Exception/Format')]
-        
-        # contents: our assumption is that services use a top-level layer
-        # as a metadata organizer, nothing more.
-	caps = self._root.find('Capability')
-	self.layers = []
-	for elem in caps.findall('Layer'):
-		self.layers.append(ContentMetadata(elem))
-
-        # keywords
-        self.keywords = [f.text for f in self._root.findall('Service/KeywordList/Keyword')]
-        
-        # contact person
-	contact = self._root.find('Service/ContactInformation')
+        self.keywords = [f.text for f in self._root.findall('KeywordList/Keyword')]
+        accessconstraints=self._root.find('AccessConstraints')
+        if accessconstraints is not None:
+            self.accessconstraints = accessconstraints.text
+        fees = self._root.find('Fees')
+        if fees is not None:
+            self.fees = fees.text
+             
+class ServiceProvider(object):
+    ''' Implements IServiceProviderMetatdata '''
+    def __init__(self, infoset):
+        self._root=infoset
+        name=self._root.find('ContactInformation/ContactPersonPrimary/ContactOrganization')
+        if name is not None:
+            self.name=name.text
+        else:
+            self.name=None
+        self.url=self._root.find('OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
+        #contact metadata
+	contact = self._root.find('ContactInformation')
 	## sometimes there is a contact block that is empty, so make
 	## sure there are children to parse
-	if contact is not None and contact.getchildren():
-            self.provider = ContactMetadata(contact)
+	if contact is not None and contact.getchildren() != []:
+            self.contact = ContactMetadata(contact)
         else:
-            self.provider = None
-
-    @property
-    def contents(self):
-	"""backwards compatible flat list of contents"""
-        return list(self._rcontents(self))
-    def _rcontents(self, layer):
-        for l in layer.layers:
-            yield l
-            for l in self._rcontents(l):
-                yield l
+            self.contact = None
             
     def getContentByName(self, name):
         """Return a named content item."""
@@ -254,12 +298,11 @@ class ServiceMetadata(object):
                 return item
         raise KeyError, "No operation named %s" % name
 
-
 class ContentMetadata:
 	"""
-	Abstraction for WMS metadata.
+	Abstraction for WMS layer metadata.
 
-	Implements IMetadata.
+	Implements IContentMetadata.
 	"""
 	def __init__(self, elem, parent=None):
 		self.parent = parent
@@ -271,10 +314,11 @@ class ContentMetadata:
 				setattr(self, key.lower(), val.text.strip())
 			else:
 				setattr(self, key.lower(), None)
-
+                self.id=self.name #conform to new interface
 		# bboxes
 		b = elem.find('BoundingBox')
-		if b is not None:
+		self.boundingBox = None
+                if b is not None:
 			self.boundingBox = (
 				float(b.attrib['minx']),
 				float(b.attrib['miny']),
@@ -283,10 +327,9 @@ class ContentMetadata:
 				b.attrib['SRS'],
 			)
 		elif self.parent:
+                    if hasattr(self.parent, 'boundingBox'):
 			self.boundingBox = self.parent.boundingBox
-		else:
-			self.boundingBox = None
-
+                    
 		b = elem.find('LatLonBoundingBox')
 		if b is not None:
 			self.boundingBoxWGS84 = (
@@ -299,7 +342,6 @@ class ContentMetadata:
 			self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
 		else:
 			self.boundingBoxWGS84 = None
-
 		# crs options
 		self.crsOptions = []
 		if elem.find('SRS') is not None:
@@ -310,7 +352,7 @@ class ContentMetadata:
 				for srs in srslist.split():
 					self.crsOptions.append(srs)
 		elif self.parent:
-			self.crsOptions = self.parent.crsOptions
+                        self.crsOptions = self.parent.crsOptions
 		else:
 			raise ValueError('%s no SRS available!?' % (elem,))
 
@@ -340,9 +382,9 @@ class ContentMetadata:
 
 
 class OperationMetadata:
-    """Abstraction for WMS metadata.
+    """Abstraction for WMS OperationMetadata.
     
-    Implements IMetadata.
+    Implements IOperationMetadata.
     """
     def __init__(self, elem):
         """."""
@@ -359,9 +401,16 @@ class ContactMetadata:
 	"""Abstraction for contact details advertised in GetCapabilities.
 	"""
 	def __init__(self, elem):
-		self.name = elem.find('ContactPersonPrimary/ContactPerson').text
-		self.email = elem.find('ContactElectronicMailAddress').text 
-
+		name = elem.find('ContactPersonPrimary/ContactPerson')
+		if name is not None:
+                    self.name=name.text
+                else:
+                    self.name=None
+                email = elem.find('ContactElectronicMailAddress')
+                if email is not None:
+                    self.email=email.text
+                else:
+                    self.email=None
 		self.address = self.city = self.region = None
 		self.postcode = self.country = None
 
@@ -391,98 +440,6 @@ class ContactMetadata:
 		else: self.position = None
 
 
-class WMSCapabilitiesInfoset:
-    """High-level container for WMS Capabilities based on lxml.etree
-    """
-
-    def __init__(self, infoset):
-        """Initialize"""
-        self._infoset = infoset
-
-    def getroot(self):
-        return self._infoset
-
-    def getservice(self):
-        return self._infoset.find('Service')
-
-    def servicename(self):
-        e_service = self.getservice()
-        return e_service.find('Name').text
-
-    def servicetitle(self):
-        e_service = self.getservice()
-        return e_service.find('Title').text
-
-    def getmapformats(self):
-        e_getmap = self._infoset.find('Capability/Request/GetMap')
-        formats = ()
-        for f in e_getmap.getiterator('Format'):
-            formats = formats + (f.text,)
-        return formats
-
-    def layersrs(self):
-        e_layer = self._infoset.find('Capability/Layer')
-        srs = ()
-        for s in e_layer.getiterator('SRS'):
-            srs = srs + (s.text,)
-        return srs
-
-    def layernames(self):
-        names = ()
-        for n in self._infoset.findall('Capability/Layer/Layer/Name'):
-            names = names + (n.text,)
-        return names
-
-    def layertitles(self):
-        titles = ()
-        for n in self._infoset.findall('Capability/Layer/Layer/Title'):
-            titles = titles + (n.text,)
-        return titles
-
-    def getLayerInfo(self):
-        info = {}
-        for layer in self._infoset.findall('Capability/Layer/Layer'):
-            if layer.findall('Title'):
-                info[layer.findall('Title')[0].text] = layer.findall('Style')
-        return info
-
-    def bounds(self, name):
-        """Returns the bounds of the specified layer as a tuple.
-
-        Like (minx, miny, maxx, maxy, epsg)
-        """
-        top_layer = self._infoset.find('Capability/Layer')
-        for layer in top_layer.findall('Layer'):
-            n = layer.find('Name')
-            if n.text == name:
-                # First check for a BoundingBox
-                b = layer.find('BoundingBox')
-                if b is not None:
-                    return (float(b.attrib['minx']), float(b.attrib['miny']),
-                            float(b.attrib['maxx']), float(b.attrib['maxy']),
-                            b.attrib['SRS'])
-                else:
-                    b = layer.find('LatLonBoundingBox')
-                    #import pdb; pdb.set_trace()
-                    if b is not None:
-                        return (float(b.attrib['minx']),float(b.attrib['miny']),
-                                float(b.attrib['maxx']),float(b.attrib['maxy']),
-                                'EPSG:4326')
-                # Look at the top level layer
-                b = top_layer.find('BoundingBox')
-                if b is not None:
-                    return (float(b.attrib['minx']), float(b.attrib['miny']),
-                            float(b.attrib['maxx']), float(b.attrib['maxy']),
-                            b.attrib['SRS'])
-                else:
-                    b = top_layer.find('LatLonBoundingBox')
-                    if b is not None:
-                        return (float(b.attrib['minx']),float(b.attrib['miny']),
-                                float(b.attrib['maxx']),float(b.attrib['maxy']),
-                                'EPSG:4326')
-        # If we haven't returned a bbox, raise an exception
-        raise CapabilitiesError, "No bounding box specified for layer %s" % name
-                
         
 class WMSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
@@ -528,24 +485,23 @@ class WMSCapabilitiesReader:
 
     def read(self, service_url):
         """Get and parse a WMS capabilities document, returning an
-        instance of WMSCapabilitiesInfoset
+        elementtree instance
 
         service_url is the base url, to which is appended the service,
         version, and request parameters
         """
         request = self.capabilities_url(service_url)
         u = self._open(request)
-        return WMSCapabilitiesInfoset(etree.fromstring(u.read()))
+        return etree.fromstring(u.read())
 
     def readString(self, st):
-        """Parse a WMS capabilities document, returning an
-        instance of WMSCapabilitiesInfoset
+        """Parse a WMS capabilities document, returning an elementtree instance
 
         string should be an XML capabilities document
         """
         if not isinstance(st, str):
             raise ValueError("String must be of type string, not %s" % type(st))
-        return WMSCapabilitiesInfoset(etree.fromstring(st))
+        return etree.fromstring(st)
 
 
 class WMSError(Exception):

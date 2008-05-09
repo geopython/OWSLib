@@ -46,27 +46,68 @@ class WebFeatureService(object):
     Implements IWebFeatureService.
     """
     
+    def __getitem__(self,name):
+        ''' check contents dictionary to allow dict like access to service layers'''
+        if name in self.__getattribute__('contents').keys():
+            return self.__getattribute__('contents')[name]
+        else:
+            raise KeyError, "No content named %s" % name
+    
+    
     def __init__(self, url, version='1.0.0', xml=None):
         """Initialize."""
         self.url = url
         self.version = version
         self._capabilities = None
+        reader = WFSCapabilitiesReader(self.version)
         if xml:
-            reader = WFSCapabilitiesReader(self.version)
-            self._capabilities = ServiceMetadata(reader.readString(xml))
+            self._capabilities = reader.readString(xml)
+        else:
+            self._capabilities = reader.read(self.url)
+        self._buildMetadata()
+    
+    def _buildMetadata(self):
+        '''set up capabilities metadata objects: '''
         
-    def _getcapproperty(self):
-        if not self._capabilities:
-            reader = WFSCapabilitiesReader(self.version)
-            self._capabilities = ServiceMetadata(reader.read(self.url))
-        return self._capabilities
-    capabilities = property(_getcapproperty, None)
-            
+        #serviceIdentification metadata
+        serviceelem=self._capabilities.find(nspath('Service'))
+        self.identification=ServiceIdentification(serviceelem, self.version)  
+    
+        #serviceProvider metadata
+        self.provider=ServiceProvider(serviceelem)   
+        
+        #serviceOperations metadata 
+        self.operations=[]
+        for elem in self._capabilities.find(nspath('Capability/Request')).getchildren():
+            self.operations.append(OperationMetadata(elem))
+                   
+        #serviceContents metadata: our assumption is that services use a top-level 
+        #layer as a metadata organizer, nothing more. 
+        
+        self.contents={} 
+        featuretypelist=self._capabilities.find(nspath('FeatureTypeList'))
+        features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType'))
+        for feature in features:
+            cm=ContentMetadata(feature, featuretypelist)
+            self.contents[cm.id]=cm       
+        
+        #exceptions
+        self.exceptions = [f.text for f \
+                in self._capabilities.findall('Capability/Exception/Format')]
+      
     def getcapabilities(self):
         """Request and return capabilities document from the WFS as a 
-        file-like object."""
+        file-like object.
+        NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
         return urlopen(reader.capabilities_url(self.url))
+    
+    def items(self):
+        '''supports dict-like items() access'''
+        items=[]
+        for item in self.contents:
+            items.append((item,self.contents[item]))
+        return items
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
@@ -98,8 +139,7 @@ class WebFeatureService(object):
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
-        md = self.capabilities
-        base_url = md.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
+        base_url = self.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
         
         # check featureid
@@ -148,52 +188,100 @@ class WebFeatureService(object):
                 return StringIO(data)
             return u
 
-
-class ServiceMetadata(object):
-    """Abstraction for WFS metadata.
-    
-    Implements IServiceMetadata.
-    """
-
-    def __init__(self, infoset):
-        """Initialize from an element tree."""
-        self._root = infoset.getRoot()
-        # properties
-        self.service = self._root.find(nspath('Service/Name')).text
-        self.title = self._root.find(nspath('Service/Title')).text
-        self.abstract = self._root.find(nspath('Service/Abstract')).text
-        self.link = self._root.find(nspath('Service/OnlineResource')).text
-        
-        # operations []
-        self.operations = []
-        for elem in self._root.findall(nspath('Capability/Request/*')):
-            self.operations.append(OperationMetadata(elem))
-
-        # contents: our assumption is that services use a top-level layer
-        # as a metadata organizer, nothing more.
-        self.contents = []
-        top = self._root.find(nspath('FeatureTypeList'))
-        for elem in self._root.findall(nspath('FeatureTypeList/FeatureType')):
-            self.contents.append(ContentMetadata(elem, top))
-        
-        # keywords
-        self.keywords = []
-
-        self.provider = ContactMetadata(self._root.find('Service/ContactInformation'))
-
-    def getContentByName(self, name):
-        """Return a named content item."""
-        for item in self.contents:
-            if item.name == name:
-                return item
-        raise KeyError, "No content named %s" % name
-
     def getOperationByName(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
                 return item
         raise KeyError, "No operation named %s" % name
+
+class ServiceIdentification(object):
+    ''' Implements IServiceIdentificationMetadata '''
+    
+    def __init__(self, infoset, version):
+        self._root=infoset
+        self.type = self._root.find(nspath('Name')).text
+        self.version = version
+        self.title = self._root.find(nspath('Title')).text
+        abstract = self._root.find(nspath('Abstract'))
+	if abstract is not None:
+	    self.abstract = abstract.text
+	else:
+            self.abstract = None
+        self.keywords = [f.text for f in self._root.findall(nspath('Keywords'))]
+        accessconstraints=self._root.find(nspath('AccessConstraints'))
+        if accessconstraints is not None:
+            self.accessconstraints = accessconstraints.text
+        else:
+            accessconstraints=None
+        fees = self._root.find(nspath('Fees'))
+        if fees is not None:
+            self.fees = fees.text
+             
+class ServiceProvider(object):
+    ''' Implements IServiceProviderMetatdata '''
+    def __init__(self, infoset):
+        self._root=infoset
+        name=self._root.find(nspath('ContactInformation/ContactPersonPrimary/ContactOrganization'))
+        if name is not None:
+            self.name=name.text
+        else:
+            self.name=None
+        self.url=self._root.find(nspath('OnlineResource')).attrib.get('{http://www.w3.org/1999/xlink}href', '')
+        if self.url == '':
+            self.url=self._root.find(nspath('OnlineResource')).text
+        #contact metadata
+	contact = self._root.find('ContactInformation')
+	## sometimes there is a contact block that is empty, so make
+	## sure there are children to parse
+	if contact is not None and contact.getchildren():
+            self.contact = ContactMetadata(contact)
+        else:
+            self.contact = None
+
+class ContactMetadata:
+    """Abstraction for contact details advertised in GetCapabilities.
+    Not fully tested due to lack of Contact info in test capabilities doc.
+    """
+    def __init__(self, elem):
+        name = elem.find(nspath('ContactPersonPrimary/ContactPerson'))
+        if name is not None:
+            self.name=name.text
+        else:
+            self.name=None
+        email = elem.find(nspath('ContactElectronicMailAddress'))
+        if email is not None:
+            self.email=email.text
+        else:
+            self.email=None
+
+        self.address = self.city = self.region = None
+        self.postcode = self.country = None
+
+        address = elem.find(nspath('ContactAddress'))
+        if address is not None:
+            street = address.find(nspath('Address'))
+            if street is not None: self.address = street.text
+
+            city = address.find(nspath('City'))
+            if city is not None: self.city = city.text
+
+            region = address.find(nspath('StateOrProvince'))
+            if region is not None: self.region = region.text
+
+            postcode = address.find(nspath('PostCode'))
+            if postcode is not None: self.postcode = postcode.text
+
+            country = address.find(nspath('Country'))
+            if country is not None: self.country = country.text
+
+        organization = elem.find(nspath('ContactPersonPrimary/ContactOrganization'))
+        if organization is not None: self.organization = organization.text
+        else:self.organization = None
+
+        position = elem.find(nspath('ContactPosition'))
+        if position is not None: self.position = position.text
+        else: self.position = None
 
 
 class ContentMetadata:
@@ -204,7 +292,7 @@ class ContentMetadata:
 
     def __init__(self, elem, parent):
         """."""
-        self.name = elem.find(nspath('Name')).text
+        self.id = elem.find(nspath('Name')).text
         self.title = elem.find(nspath('Title')).text
         # bboxes
         self.boundingBox = None
@@ -248,135 +336,6 @@ class OperationMetadata:
         self.methods = dict(methods)
 
 
-class ContactMetadata:
-    """Abstraction for contact details advertised in GetCapabilities.
-    """
-    # TODO: refactor with class from wfs
-
-    def __init__(self, elem):
-        self.name = None
-        self.email = None
-
-        if elem:
-            self.name = elem.find('ContactPersonPrimary/ContactPerson').text
-            self.organization = elem.find('ContactPersonPrimary/ContactOrganization').text
-            address = elem.find('ContactAddress')
-            if address is not None:
-                try:    
-                    self.address = address.find('Address').text
-                    self.city = address.find('City').text
-                    self.region = address.find('StateOrProvince').text
-                    self.postcode = address.find('Postcode').text
-                    self.country = address.find('Country').text
-                except: pass
-            self.email = elem.find('ContactElectronicMailAddress').text 
-
-
-class WFSCapabilitiesInfoset(object):
-    """High-level container for WFS Capabilities based on lxml.etree
-    """
-
-    def __init__(self, infoset):
-        """Initialize"""
-        self._infoset = infoset
-
-    #
-    # XML Node accessors
-    # 
-    
-    def getRoot(self):
-        """
-        Returns the root node of the capabilities document.
-        """
-        return self._infoset
-
-    def getServiceNode(self):
-        """
-        Returns the <Service> node of the capabilities document.
-        """
-        return self.getRoot().find(nspath('Service'))
-
-    def getCapabilitiesNode(self):
-        """
-        Returns the <Capability> node of the capabilities document.
-        """
-        return self.getRoot().find(nspath('Capability'))
-
-    def getFeatureTypeNode(self):
-        """
-        Returns the <FeatureTypeList> node of the capabilities document.
-        """
-        return self.getRoot().find(nspath('FeatureTypeList'))
-
-    def getFilterNode(self):
-        """
-        Returns the <Filter_Capabilities> node of the capabilities document.
-        """
-        return self.getRoot().find(nspath('Filter_Capabilities'))
-
-    #
-    # Info accessors
-    #
-
-    def getServiceInfo(self):
-        """
-        Returns the WFS Service information packed in a dictionary.
-        """
-        service = self.getServiceNode()
-        info = {}
-        for tag in ('Name', 'Title', 'Abstract', 'Keyword', 'OnlineResource',
-                    'Fees', 'AccessConstraints'):
-            info[tag.lower()] = service.findtext(nspath(tag))
-        return info
-
-    def getCapabilityInfo(self):
-        """
-        Returns the WFS Capability information packed in a dictionary.
-        """
-        # Simplify the resource URLs, favoring GET over POST.
-        # Assume GML2.
-        capabilities = self.getCapabilitiesNode()
-        info = {}
-        
-        for key, path_id in [('capabilities', 'GetCapabilities'),
-                             ('description', 'DescribeFeatureType'),
-                             ('features', 'GetFeature')]:
-            get_path = nspath('Request/%s/DCPType/HTTP/Get' % path_id)
-            post_path = nspath('Request/%s/DCPType/HTTP/Post' % path_id)
-            
-            node = capabilities.find(get_path) or capabilities.find(post_path)
-            info[key] = node.get('onlineResource', None)
-        return info
-
-    def getFeatureTypeInfo(self):
-        """
-        Returns the WFS Feature type information as a list of dictionaries.
-        """
-        # Assume XMLSchema is used as the schema description language.
-        info = []
-        for featuretype in self.getFeatureTypeNode().getiterator(nspath('FeatureType')):
-            entry = {}
-            # Loop over simple text nodes
-            for tag in ('Name', 'Title', 'Abstract', 'SRS'):
-                entry[tag.lower()] = featuretype.findtext(nspath(tag))
-
-            # LatLongBoundingBox
-            entry['latlongboundingbox'] = []
-            for latlong in featuretype.findall(nspath('LatLongBoundingBox')):
-                entry['latlongboundingbox'].append('%s,%s,%s,%s' % (latlong.get('minx'),
-                                                                    latlong.get('miny'),
-                                                                    latlong.get('maxx'),
-                                                                    latlong.get('maxy')))
-            
-            # MetadataURL
-            entry['metadataurl'] = []
-            for metadataurl in featuretype.findall(nspath('MetadataURL')):
-                entry['metadataurl'].append(metadataurl.text)
-
-            info.append(entry)
-        return info
-
-
 class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
@@ -416,7 +375,7 @@ class WFSCapabilitiesReader(object):
         """
         request = self.capabilities_url(url)
         u = urlopen(request)
-        return WFSCapabilitiesInfoset(etree.fromstring(u.read()))
+        return etree.fromstring(u.read())
 
     def readString(self, st):
         """Parse a WFS capabilities document, returning an
@@ -426,5 +385,5 @@ class WFSCapabilitiesReader(object):
         """
         if not isinstance(st, str):
             raise ValueError("String must be of type string, not %s" % type(st))
-        return WFSCapabilitiesInfoset(etree.fromstring(st))
+        return etree.fromstring(st)
     
