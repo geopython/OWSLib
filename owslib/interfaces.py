@@ -1,15 +1,65 @@
-# Do not import zope.interfaces
+
+# Follows the 4 aspects of service metadata
+
+class IServiceIdentificationMetadata:
+    """OO-interface to service identification metadata.
+    """
+
+    type = property("""Service name (string): "WMS", "WFS", or "WCS".""")
+    version = property("""Version of service protocol (string).""")
+    title = property("""Human-targeted title of service (string).""")
+    abstract = property("""Text describing the service (string).""")
+    keywords = property("""Keyword list (list).""")
+    accessconstraints = property("""Explanation of access constraints associated with service (string).""")
+    fees = property("""Explanation of fees associated with service (string).""")
+    
+
+class IServiceProviderMetadata:
+    """OO-interface to service provider metadata.
+    """
+
+    name = property("""Provider's name (string).""")
+    url = property("""URL for provider's web site (string).""")
+    contact = property("""How to contact the service provider (string).""")
 
 
-class IService:
+class IServiceOperations:
+    """OO-interface to service operations metadata.
+    """
+
+    operations = property("""List of operation descriptors (list). These must implement IOperationMetadata (below).""")
+    exceptions = property("""List of exception formats (list).""")
+
+
+class IServiceContents:
+    """OO-interface to service contents metadata.
+    """
+
+    contents = property("""List of content descriptors (list). These must implement IServiceContent (below).""")
+
+
+# IServiceMetadata aggregates the 4 aspects above
+
+class IServiceMetadata(IServiceOperations, IServiceContents):
+    """OWS Metadata.
+
+    operations and contents properties are inherited.
+    """
+
+    identification = property("""Object that implements IServiceIdentificationMetadata.""")
+    provider = property("""Object that implements IServiceProviderMetadata.""")
+
+
+# A Service has an online resource URL as well as metadata collections
+
+class IService(IServiceMetadata):
     """The OGC Web Service interface.
     """
 
     url = property("""Online resource URL (string)""")
-    # XXX: here or in capabilities?
-    version = property("""Protocol version (string)""")
-    capabilities = property("""Implementation of IServiceMetadata (object)""")
 
+
+# 3 specific service types are described below: WMS, WFS, and WCS
 
 class IWebMapService(IService):
     """Abstraction for an OGC Web Map Service (WMS).
@@ -47,54 +97,6 @@ class IWebCoverageService(IService):
     # TODO
     pass
 
-
-# Follows the 4 aspects of service metadata
-
-class IServiceIdentificationMetadata:
-    """OO-interface to service identification metadata.
-    """
-
-    service = property("""Service name (string): "WMS", "WFS", or "WCS".""")
-    # XXX: here or in service root?
-    version = property("""Version of service protocol (string).""")
-    title = property("""Human-targeted title of service (string).""")
-    abstract = property("""Text describing the service (string).""")
-    keywords = property("""Keyword list (list).""")
-    rights = property("""Explanation of rights associated with service (string).""")
-    
-
-class IServiceProviderMetadata:
-    """OO-interface to service provider metadata.
-    """
-
-    provider = property("""Provider's name (string).""")
-    url = property("""URL for provider's web site (string).""")
-    contact = property("""How to contact the service provider (string).""")
-
-
-class IServiceOperationsMetadata:
-    """OO-interface to service operations metadata.
-    """
-
-    operations = property("""List of operation descriptors (list). These must implement IOperationMetadata (below).""")
-    exceptions = property("""List of exception formats (list).""")
-
-
-class IServiceContentsMetadata:
-    """OO-interface to service contents metadata.
-    """
-
-    contents = property("""List of content descriptors (list). These must implement IServiceContent (below).""")
-
-
-# IServiceMetadata aggregates the 4 aspects above
-
-class IServiceMetadata(
-    IServiceIdentificationMetadata, IServiceProviderMetadata,
-    IServiceOperationsMetadata, IServiceContentsMetadata
-    ):
-    """OWS Metadata.
-    """
 
 
 # Second level metadata interfaces
@@ -144,6 +146,3 @@ class IContactMetadata:
     country : string
     email : string
     """
-
-
-
