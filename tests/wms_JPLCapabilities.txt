@@ -69,7 +69,9 @@ Test single item accessor
     'WMS Global Mosaic, pan sharpened'
 
     >>> wms['global_mosaic'].keywords
-    ['GlobalMosaic', 'Imagery', 'BaseMaps', 'EarthCover', 'JPL', 'Jet Propulsion Laboratory', 'Landsat', 'WMS', 'SLD', 'Global']
+    []
+    
+['GlobalMosaic', 'Imagery', 'BaseMaps', 'EarthCover', 'JPL', 'Jet Propulsion Laboratory', 'Landsat', 'WMS', 'SLD', 'Global']
 
     >>> wms['global_mosaic'].boundingBox
 
