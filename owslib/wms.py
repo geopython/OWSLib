@@ -354,8 +354,10 @@ class ContentMetadata:
 		elif self.parent:
                         self.crsOptions = self.parent.crsOptions
 		else:
-			raise ValueError('%s no SRS available!?' % (elem,))
-
+			#raise ValueError('%s no SRS available!?' % (elem,))
+                        #Comment by D Lowe.
+                        #Do not raise ValueError as it is possible that a layer is purely a parent layer and does not have SRS specified. Instead set crsOptions to None
+                        self.crsOptions=None
 		# styles
 		self.styles = {}
 		for s in elem.findall('Style'):
