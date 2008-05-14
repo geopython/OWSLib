@@ -32,8 +32,12 @@ Find out what a WMS has to offer. Service metadata::
 Available layers::
 
     >>> list(wms.contents)
-    ['us_landsat_wgs84', 'modis', 'global_mosaic_base', 'huemapped_srtm', 'srtm_mag', 'daily_terra', 'us_ned', 'us_elevation', 'global_mosaic', 'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_aqua_721', 'daily_planet', 'BMNG', 'srtmplus', 'us_colordem', None, 'daily_aqua', 'worldwind_dem', 'daily_terra_721']
-    
+    ['us_landsat_wgs84', 'modis', 'global_mosaic_base', 'huemapped_srtm',
+    'srtm_mag', 'daily_terra', 'us_ned', 'us_elevation', 'global_mosaic',
+    'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_aqua_721', 'daily_planet',
+    'BMNG', 'srtmplus', 'us_colordem', None, 'daily_aqua', 'worldwind_dem',
+    'daily_terra_721']
+
 Details of a layer::
 
     >>> wms['global_mosaic'].title
@@ -43,7 +47,15 @@ Details of a layer::
     >>> wms['global_mosaic'].crsOptions
     ['EPSG:4326', 'AUTO:42003']
     >>> wms['global_mosaic'].styles
-    {'pseudo_bright': {'title': 'Pseudo-color image (Uses IR and Visual bands, 542 mapping), gamma 1.5'}, 'pseudo': {'title': '(default) Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping), gamma 1.5'}, 'visual': {'title': 'Real-color image, pan sharpened (Uses the visual bands, 321 mapping), gamma 1.5'}, 'pseudo_low': {'title': 'Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping)'}, 'visual_low': {'title': 'Real-color image, pan sharpened (Uses the visual bands, 321 mapping)'}, 'visual_bright': {'title': 'Real-color image (Uses the visual bands, 321 mapping), gamma 1.5'}}
+    {'pseudo_bright': {'title': 'Pseudo-color image (Uses IR and Visual bands,
+    542 mapping), gamma 1.5'}, 'pseudo': {'title': '(default) Pseudo-color
+    image, pan sharpened (Uses IR and Visual bands, 542 mapping), gamma 1.5'},
+    'visual': {'title': 'Real-color image, pan sharpened (Uses the visual
+    bands, 321 mapping), gamma 1.5'}, 'pseudo_low': {'title': 'Pseudo-color
+    image, pan sharpened (Uses IR and Visual bands, 542 mapping)'},
+    'visual_low': {'title': 'Real-color image, pan sharpened (Uses the visual
+    bands, 321 mapping)'}, 'visual_bright': {'title': 'Real-color image (Uses
+    the visual bands, 321 mapping), gamma 1.5'}}
 
 Available methods, their URLs, and available formats::
 
