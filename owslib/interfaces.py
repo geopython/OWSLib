@@ -128,7 +128,7 @@ class IContentMetadata:
     boundingBoxWGS84 = property("""Four bounding values in WGS coordinates.""")
     crsOptions = property("""List of available coordinate/spatial reference systems (list).""")
     styles = property("""List of style dicts (list).""")
-
+    timepositions=property("""List of times for which data is available""")
 
 # XXX: needed?
 
