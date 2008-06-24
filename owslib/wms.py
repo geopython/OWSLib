@@ -98,7 +98,7 @@ class WebMapService(object):
         ''' set up capabilities metadata objects '''
         
         #serviceIdentification metadata
-        serviceelem=self._capabilities.find('Service/')
+        serviceelem=self._capabilities.find('Service')
         self.identification=ServiceIdentification(serviceelem, self.version)   
         
         #serviceProvider metadata
@@ -319,13 +319,17 @@ class ContentMetadata:
 		b = elem.find('BoundingBox')
 		self.boundingBox = None
                 if b is not None:
-			self.boundingBox = (
-				float(b.attrib['minx']),
-				float(b.attrib['miny']),
-				float(b.attrib['maxx']),
-				float(b.attrib['maxy']),
-				b.attrib['SRS'],
-			)
+                    try: #sometimes the SRS attribute is (wrongly) not provided
+                        srs=b.attrib['SRS']
+                    except KeyError:
+                        srs=None
+                    self.boundingBox = (
+                            float(b.attrib['minx']),
+                            float(b.attrib['miny']),
+                            float(b.attrib['maxx']),
+                            float(b.attrib['maxy']),
+                            srs,
+                    )
 		elif self.parent:
                     if hasattr(self.parent, 'boundingBox'):
 			self.boundingBox = self.parent.boundingBox
@@ -349,6 +353,7 @@ class ContentMetadata:
 			## tag containing a whitespace separated list of SRIDs
 			## instead of several SRS tags. hence the inner loop
 			for srslist in map(lambda x: x.text, elem.findall('SRS')):
+                            if srslist:
 				for srs in srslist.split():
 					self.crsOptions.append(srs)
 		elif self.parent:
@@ -375,6 +380,13 @@ class ContentMetadata:
 		# keywords
 		self.keywords = [f.text for f in elem.findall('KeywordList/Keyword')]
 
+                # timepositions - times for which data is available.
+                self.timepositions=None
+                for extent in elem.findall('Extent'):
+                    if extent.attrib.get("name").lower() =='time':
+                        self.timepositions=extent.text.split(',')
+                        break
+                
 		self.layers = []
 		for child in elem.findall('Layer'):
 			self.layers.append(ContentMetadata(child, self))

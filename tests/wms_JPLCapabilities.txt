@@ -107,7 +107,7 @@ Test exceptions
     >>> wms.exceptions
     ['application/vnd.ogc.se_xml']
 
-Lastly, test the getcapabilities method
+Lastly, test the getcapabilities and getmap methods
 
     >>> wms = WebMapService('http://wms.jpl.nasa.gov/wms.cgi', version='1.1.1')
     >>> xml = wms.getcapabilities().read()
