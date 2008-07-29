@@ -77,7 +77,7 @@ class WebCoverageService_1_1_0(WCSBase):
             #non-hierarchical.
             top=None
             for elem in self._capabilities.findall('{http://www.opengis.net/wcs/1.1}Contents/{http://www.opengis.net/wcs/1.1}CoverageSummary'):     
-                cm=ContentMetadata(elem, top)
+                cm=ContentMetadata(elem, top, self)
                 #make the describeCoverage requests to populate the supported formats/crs attributes
                 self.contents[cm.id]=cm
 
@@ -336,7 +336,24 @@ class ContentMetadata(object):
         for format in elem.findall('{http://www.opengis.net/wcs/1.1}SupportedFormat'):
             self.supportedFormats.append(format.text)
             
-            
+        
+    #grid is either a gml:Grid or a gml:RectifiedGrid if supplied as part of the DescribeCoverage response.
+    def _getGrid(self):
+        grid=None
+        #TODO- convert this to 1.1 from 1.0
+        #if not hasattr(self, 'descCov'):
+                #self.descCov=self._service.getDescribeCoverage(self.id)
+        #gridelem= self.descCov.find(ns('CoverageOffering/')+ns('domainSet/')+ns('spatialDomain/')+'{http://www.opengis.net/gml}RectifiedGrid')
+        #if gridelem is not None:
+            #grid=RectifiedGrid(gridelem)
+        #else:
+            #gridelem=self.descCov.find(ns('CoverageOffering/')+ns('domainSet/')+ns('spatialDomain/')+'{http://www.opengis.net/gml}Grid')
+            #grid=Grid(gridelem)
+        return grid
+    grid=property(_getGrid, None)
+        
+        
+        
     #time limits/postions require a describeCoverage request therefore only resolve when requested
     def _getTimeLimits(self):
          timelimits=[]
