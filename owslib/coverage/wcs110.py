@@ -170,17 +170,18 @@ class WebCoverageService_1_1_0(WCSBase):
             u = urlopen(base_url+data)
                 
         # check for service exceptions, and return
-        if u.info()['Content-Type'] == 'text/xml':          
-            #going to have to read the xml to see if it's an exception report.
-            #wrap the url stram in a extended StringIO object so it's re-readable
-            u=RereadableURL(u)      
-            se_xml= u.read()
-            se_tree = etree.fromstring(se_xml)
-            serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
-            if serviceException is not None:
-                raise ServiceException, \
-                str(serviceException.text).strip()
-            u.seek(0)
+        if 'content-type' in u.info().keys():      
+            if u.info()['content-type'] == 'text/xml':          
+                #going to have to read the xml to see if it's an exception report.
+                #wrap the url stram in a extended StringIO object so it's re-readable
+                u=RereadableURL(u)      
+                se_xml= u.read()
+                se_tree = etree.fromstring(se_xml)
+                serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
+                if serviceException is not None:
+                    raise ServiceException, \
+                    str(serviceException.text).strip()
+                u.seek(0)
         return u
         
         
@@ -211,13 +212,22 @@ class ServiceIdentification(object):
         self.service="WCS"
         self.version="1.1.0"
         self.title = elem.find('{http://www.opengis.net/ows}Title').text
-        self.abstract = elem.find('{http://www.opengis.net/ows}Abstract').text
+        if elem.find('{http://www.opengis.net/ows}Abstract'):
+            self.abstract=elem.find('{http://www.opengis.net/ows}Abstract').text
+        else:
+            self.abstract = None
         self.keywords = [f.text for f in elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword')]
         #self.link = elem.find('{http://www.opengis.net/wcs/1.1}Service/{http://www.opengis.net/wcs/1.1}OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
                
-        #NOTE: do these belong here?
-        self.fees=elem.find('{http://www.opengis.net/wcs/1.1/ows}Fees').text
-        self.accessConstraints=elem.find('{http://www.opengis.net/wcs/1.1/ows}AccessConstraints').text
+        if elem.find('{http://www.opengis.net/wcs/1.1/ows}Fees'):            
+            self.fees=elem.find('{http://www.opengis.net/wcs/1.1/ows}Fees').text
+        else:
+            self.fees=None
+        
+        if   elem.find('{http://www.opengis.net/wcs/1.1/ows}AccessConstraints'):
+            self.accessConstraints=elem.find('{http://www.opengis.net/wcs/1.1/ows}AccessConstraints').text
+        else:
+            self.accessConstraints=None
        
        
 class ServiceProvider(object):
@@ -315,17 +325,20 @@ class ContentMetadata(object):
                     )
                 
         # bboxes - other CRS 
-        self.boundingBoxes = []
+        self.boundingboxes = []
         for bbox in elem.findall('{http://www.opengis.net/ows}BoundingBox'):
             if bbox is not None:
-                lc=b.find('{http://www.opengis.net/ows}LowerCorner').text
-                uc=b.find('{http://www.opengis.net/ows}UpperCorner').text
-                boundingBox =  (
-                        float(lc.split()[0]),float(lc.split()[1]),
-                        float(uc.split()[0]), float(uc.split()[1]),
-                        b.attrib['crs'])
-                self.boundingBoxes.append(boundingBox)
-        
+                try:
+                    lc=b.find('{http://www.opengis.net/ows}LowerCorner').text
+                    uc=b.find('{http://www.opengis.net/ows}UpperCorner').text
+                    boundingBox =  (
+                            float(lc.split()[0]),float(lc.split()[1]),
+                            float(uc.split()[0]), float(uc.split()[1]),
+                            b.attrib['crs'])
+                    self.boundingboxes.append(boundingBox)
+                except:
+                     pass
+                
         #SupportedCRS
         self.supportedCRS=[]
         for crs in elem.findall('{http://www.opengis.net/wcs/1.1}SupportedCRS'):
@@ -364,6 +377,9 @@ class ContentMetadata(object):
     timelimits=property(_getTimeLimits, None)
     
     #TODO timepositions property
+    def _getTimePositions(self):
+        return []
+    timepositions=property(_getTimePositions, None)
     
     def _checkChildAndParent(self, path):
         ''' checks child coverage  summary, and if item not found checks higher level coverage summary'''
