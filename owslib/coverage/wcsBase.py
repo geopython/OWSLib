@@ -128,13 +128,16 @@ class DescribeCoverageReader(object):
             qs.append(('request', 'DescribeCoverage'))
         if 'version' not in params:
             qs.append(('version', self.version))
-        
         if self.version == '1.0.0':
             if 'coverage' not in params:
                 qs.append(('coverage', self.identifier))
         elif self.version == '1.1.0':
+            #NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
+            #or identifiers (see tables 9, 10 of specification)  
             if 'identifiers' not in params:
                 qs.append(('identifiers', self.identifier))
+            if 'identifier' not in params:
+                qs.append(('identifier', self.identifier))
                 qs.append(('format', 'text/xml'))
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
