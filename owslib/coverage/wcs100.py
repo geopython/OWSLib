@@ -126,10 +126,9 @@ class WebCoverageService_1_0_0(WCSBase):
         #encode and request
         data = urlencode(request)
         try:
-            u = urlopen(base_url, data=data)
-        except:
-            u = urlopen(base_url+data)
-
+	    u = urlopen(base_url+data)
+        except:   
+	    u = urlopen(base_url, data=data)    
         # check for service exceptions, and return #TODO - test this bit properly.
         if u.info()['Content-Type'] == 'text/xml':          
             #going to have to read the xml to see if it's an exception report.
