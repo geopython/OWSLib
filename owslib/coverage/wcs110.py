@@ -164,10 +164,10 @@ class WebCoverageService_1_1_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
-        try:
-            u = urlopen(base_url, data=data)
-        except:
-            u = urlopen(base_url+data)
+	try:
+	    u = urlopen(base_url+data)
+	except:   
+	    u = urlopen(base_url, data=data) 
                 
         # check for service exceptions, and return
         if 'content-type' in u.info().keys():      

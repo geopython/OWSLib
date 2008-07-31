@@ -44,6 +44,9 @@ class WCSDecoder(object):
             for ref in u_tree.findall('{http://www.opengis.net/wcs/1.1}Coverage/{http://www.opengis.net/wcs/1.1}Reference'):
                 path = ref.attrib['{http://www.w3.org/1999/xlink}href']
                 paths.append(path)         
+            for ref in u_tree.findall('{http://www.opengis.net/wcs/1.1.0/owcs}Coverage/{{http://www.opengis.net/wcs/1.1.0/owcs}Reference'):
+                path = ref.attrib['{http://www.w3.org/1999/xlink}href']
+                paths.append(path)         
         elif self.urlType=='Multipart':
             #Decode multipart mime and return fileobjects
             u_mpart=self.u.read()
