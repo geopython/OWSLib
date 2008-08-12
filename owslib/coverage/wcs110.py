@@ -123,7 +123,9 @@ class WebCoverageService_1_1_0(WCSBase):
         if store = true, returns a coverages XML file
         if store = false, returns a multipart mime
         """
-
+        self.log.debug('WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s,        rangesubset=%s, gridbaseCRS=%s, gridtype=%s, gridCS=%s, gridorigin=%s, gridoffsets=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, rangesubset, gridbaseCRS, gridtype, gridCS, gridorigin, gridoffsets, method, str(kwargs)))
+        
+        
         if method == 'Get':
             method='{http://www.opengis.net/wcs/1.1/ows}Get'
         base_url = self.getOperationByName('GetCoverage').methods[method]['url']
@@ -164,10 +166,19 @@ class WebCoverageService_1_1_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
-	try:
-	    u = urlopen(base_url+data)
-	except:   
-	    u = urlopen(base_url, data=data) 
+        #u = urlopen(base_url+data)
+        self.log.debug('WCS 1.1.0 DEBUG: base url of server: %s'%base_url)
+        self.log.debug('WCS 1.1.0 DEBUG: second part of URL: %s'%data)      
+        try:
+            u = urlopen(base_url + data) 
+            self.log.debug('WCS 1.1.0 DEBUG: called urlopen(base_url+data)')            
+        except:   
+            u = urlopen(base_url,data)
+            self.log.debug('WCS 1.1.0 DEBUG: called urlopen(base_url, data)')
+            
+        
+        self.log.debug('WCS 1.1.0 DEBUG: GetCoverage request made: %s'%u.url)
+        self.log.debug('WCS 1.1.0 DEBUG: Headers returned: %s'%str(u.headers))
                 
         # check for service exceptions, and return
         if 'content-type' in u.info().keys():      
