@@ -91,7 +91,11 @@ class WebCoverageService_1_0_0(WCSBase):
            
         """
         
+        self.log.debug('WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
+                
         base_url = self.getOperationByName('GetCoverage').methods[method]['url']
+        
+        self.log.debug('WCS 1.0.0 DEBUG: base url of server: %s'%base_url)
         
         #process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service':'WCS'}
@@ -125,10 +129,16 @@ class WebCoverageService_1_0_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
+        self.log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
         try:
-	    u = urlopen(base_url+data)
-        except:   
-	    u = urlopen(base_url, data=data)    
+            u = urlopen(base_url+data)
+            self.log.debug('WCS 1.0.0 DEBUG: called urlopen(base_url+data)')
+        except:  
+            u = urlopen(base_url, data=data)    
+            self.log.debug('WCS 1.0.0 DEBUG: called urlopen(base_url, data=data)')
+        
+        self.log.debug('WCS 1.0.0 DEBUG: GetCoverage request made: %s'%u.url)
+        self.log.debug('WCS 1.0.0 DEBUG: Headers returned: %s'%str(u.headers))
         # check for service exceptions, and return #TODO - test this bit properly.
         if u.info()['Content-Type'] == 'text/xml':          
             #going to have to read the xml to see if it's an exception report.

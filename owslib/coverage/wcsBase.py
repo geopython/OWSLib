@@ -14,6 +14,11 @@ from urllib2 import urlopen
 from owslib.etree import etree
 import cgi
 from StringIO import StringIO
+
+#!/usr/bin/env python
+
+import logging
+
 class WCSBase(object):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
     def __new__(self,url, xml):
@@ -27,6 +32,9 @@ class WCSBase(object):
         """
         obj=object.__new__(self, url, xml)
         obj.__init__(url, xml)
+        self.log = logging.getLogger()
+        consoleh  = logging.StreamHandler()
+        self.log.addHandler(consoleh)	
         return obj
     
     def __init__(self):
@@ -36,7 +44,20 @@ class WCSBase(object):
          reader = DescribeCoverageReader(self.version, identifier)
          #Note: should implement some sort of cache so the same request isn't repeated
          return reader.read(self.url)
-    
+         
+    def setLogLevel(self, level='CRITICAL'):
+        #accepts level = DEBUG, INFO, WARNING, ERROR, CRITICAL
+        if level=='DEBUG':
+            self.log.setLevel(logging.DEBUG)
+        elif level=='INFO':
+            self.log.setLevel(logging.INFO)     
+        elif level=='WARNING':
+            self.log.setLevel(logging.WARNING)
+        elif level=='ERROR':
+            self.log.setLevel(logging.ERROR)
+        elif level=='CRITICAL':
+            self.log.setLevel(logging.CRITICAL)
+        
 class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
