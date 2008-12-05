@@ -223,19 +223,20 @@ class ServiceIdentification(object):
         self.service="WCS"
         self.version="1.1.0"
         self.title = elem.find('{http://www.opengis.net/ows}Title').text
-        if elem.find('{http://www.opengis.net/ows}Abstract'):
+        self.abstract=elem.find('{http://www.opengis.net/ows}Abstract').text
+        if elem.find('{http://www.opengis.net/ows}Abstract') is not None:
             self.abstract=elem.find('{http://www.opengis.net/ows}Abstract').text
         else:
             self.abstract = None
         self.keywords = [f.text for f in elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword')]
         #self.link = elem.find('{http://www.opengis.net/wcs/1.1}Service/{http://www.opengis.net/wcs/1.1}OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
                
-        if elem.find('{http://www.opengis.net/wcs/1.1/ows}Fees'):            
+        if elem.find('{http://www.opengis.net/wcs/1.1/ows}Fees') is not None:            
             self.fees=elem.find('{http://www.opengis.net/wcs/1.1/ows}Fees').text
         else:
             self.fees=None
         
-        if   elem.find('{http://www.opengis.net/wcs/1.1/ows}AccessConstraints'):
+        if  elem.find('{http://www.opengis.net/wcs/1.1/ows}AccessConstraints') is not None:
             self.accessConstraints=elem.find('{http://www.opengis.net/wcs/1.1/ows}AccessConstraints').text
         else:
             self.accessConstraints=None
