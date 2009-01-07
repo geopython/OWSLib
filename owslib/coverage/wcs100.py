@@ -11,7 +11,7 @@
 
 from wcsBase import WCSBase, WCSCapabilitiesReader, RereadableURL
 from urllib import urlencode
-from urllib2 import urlopen
+from urllib2 import urlopen, HTTPError
 from owslib.etree import etree
 import os, errno
 
@@ -130,18 +130,19 @@ class WebCoverageService_1_0_0(WCSBase):
         #encode and request
         data = urlencode(request)
         self.log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
+        
         try:
-            u = urlopen(base_url+data)
-            self.log.debug('WCS 1.0.0 DEBUG: called urlopen(base_url+data)')
-        except:  
-            u = urlopen(base_url, data=data)    
-            self.log.debug('WCS 1.0.0 DEBUG: called urlopen(base_url, data=data)')
+            u = urlopen(base_url + data)
+        except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception.
+            if e.code == 400:
+                raise ServiceException, e.read()+data
+  
         
         self.log.debug('WCS 1.0.0 DEBUG: GetCoverage request made: %s'%u.url)
         self.log.debug('WCS 1.0.0 DEBUG: Headers returned: %s'%str(u.headers))
         # check for service exceptions, and return #TODO - test this bit properly.
         if u.info()['Content-Type'] == 'text/xml':          
-            #going to have to read the xml to see if it's an exception report.
+            #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
             #wrap the url stram in a extended StringIO object so it's re-readable
             u=RereadableURL(u)      
             se_xml= u.read()
