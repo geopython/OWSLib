@@ -135,7 +135,7 @@ class WebCoverageService_1_0_0(WCSBase):
             u = urlopen(base_url + data)
         except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception.
             if e.code == 400:
-                raise ServiceException, e.read()+data
+                raise ServiceException, e.read()
   
         
         self.log.debug('WCS 1.0.0 DEBUG: GetCoverage request made: %s'%u.url)
