@@ -341,6 +341,15 @@ class ContentMetadata(object):
             frmts.append(elem.text)
         return frmts
     supportedFormats=property(_getSupportedFormatsProperty, None)
+    
+    def _getAxisDescriptionsProperty(self):
+        #gets any axis descriptions contained in the rangeset (requires a DescribeCoverage call to server).
+        axisDescs =[]
+        for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('rangeSet/')+ns('RangeSet/')+ns('axisDescription/')+ns('AxisDescription')):
+            axisDescs.append(AxisDescription(elem)) #create a 'AxisDescription' object.
+        return axisDescs
+    axisDescriptions=property(_getAxisDescriptionsProperty, None)
+        
         
           
 #Adding classes to represent gml:grid and gml:rectifiedgrid. One of these is used for the cvg.grid property
@@ -371,3 +380,17 @@ class RectifiedGrid(Grid):
         for offset in rectifiedgrid.findall('{http://www.opengis.net/gml}offsetVector'):
             self.offsetvectors.append(offset.text.split())
         
+class AxisDescription(object):
+    ''' Class to represent the AxisDescription element optionally found as part of the RangeSet and used to 
+    define ordinates of additional dimensions such as wavelength bands or pressure levels'''
+    def __init__(self, axisdescElem):
+        self.name=self.label=None
+        self.values=[]
+        for elem in axisdescElem.getchildren():
+            if elem.tag == ns('name'):
+                self.name = elem.text
+            elif elem.tag == ns('label'):
+                self.label = elem.text
+            elif elem.tag == ns('values'):
+                for child in elem.getchildren():
+                    self.values.append(child.text)     
