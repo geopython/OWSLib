@@ -45,7 +45,7 @@ class WebCoverageService_1_0_0(WCSBase):
             self._capabilities = reader.read(self.url)
 
         #serviceIdentification metadata
-        subelem=self._capabilities.find(ns('Service/'))
+        subelem=self._capabilities.find(ns('Service'))
         self.identification=ServiceIdenfication(subelem)                               
                    
         #serviceProvider metadata
