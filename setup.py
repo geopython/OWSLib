@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 readme = open('README.txt', 'rb').read()
 
@@ -13,7 +13,7 @@ setup(name          = 'OWSLib',
       maintainer        = 'Sean Gillies',
       maintainer_email  = 'sgillies@frii.com',
       url           = 'http://trac.gispython.org/projects/PCL/wiki/OwsLib',
-      packages      = ['owslib'],
+      packages      = find_packages(),
       test_suite    = 'tests.test_suite',
       classifiers   = [
         'Development Status :: 3 - Alpha',
