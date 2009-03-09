@@ -1,0 +1,75 @@
+Web Coverage Service: #This is an example that shows how to the OWSLib wcs client to make requests from the Unidata WCS.
+====================
+
+Version 1.0.0
+========
+
+
+    >>> from owslib.wcs import WebCoverageService
+    >>> wcs=WebCoverageService('http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd', version='1.0.0')
+    >>> wcs.url
+    'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd'
+    >>> wcs.version
+    '1.0.0'
+    >>> wcs.identification.service
+    'NCEP-NAM-CONUS_40km-conduit_best.ncd'
+    >>> wcs.identification.version
+    '1.0.0'
+    >>> wcs.identification.title
+    'NCEP-NAM-CONUS_40km-conduit_best.ncd'
+    >>> wcs.identification.abstract
+    'Experimental THREDDS/WCS server for CDM gridded datasets'
+    >>> wcs.identification.keywords
+    [None]
+    >>> wcs.identification.fees
+    'NONE'
+    >>> wcs.identification.accessConstraints
+    'NONE'
+
+#There is no 'ResponsibleParty' information in the NCEP/NAM capabilities document, so wcs.provider is empty.
+#but if there was you could do:
+#wcs.provider.url
+#and..
+#wcs.provider.contact.organization
+#wcs.provider.contact.email
+#wcs.provider.contact.address
+#etc... for region, city, postcode, country
+
+Print the ids of all layers:
+	>>> wcs.contents.keys()
+	['Total_Column-Integrated_Cloud_Ice', 'Categorical_Snow', 'Exchange_Coefficient', 'Vertical_velocity_pressure_hybrid', 'Temperature_tropopause', 'MSLP_Eta_Reduction', 'Pressure_tropopause', 'Frictional_Velocity', 'Cloud_Ice', 'Vertical_speed_sheer', 'Moisture_Availability', 'Maximum_temperature', 'Cloud_Ice_hybrid', 'Total_precipitation', 'Rime_Factor', 'Convective_available_potential_energy_surface', 'Total_cloud_cover', 'Soil_Porosity', 'Medium_cloud_cover', 'Pressure_reduced_to_MSL', 'Total_Condensate', 'Momentum_flux_v_component', 'Snow_melt', 'Horizontal_Moisture_Divergence_pressure_difference_layer', 'Canopy_Conductance', 'Specific_humidity_pressure_difference_layer', 'Stream_function', 'Specific_humidity', 'Ground_Heat_Flux', 'Water_temperature', 'Temperature_pressure_difference_layer', 'Soil_type_as_in_Zobler', 'Vertical_velocity_pressure_pressure_difference_layer', 'Total_Column-Integrated_Cloud_Water', 'Parcel_lifted_index_to_500_hPa', 'Pressure_shallow_convective_cloud_bottom', 'Soil_moisture_content', 'Low_cloud_cover', 'Probablity_of_1_tenth_inch_Precipipation_POP', 'Snow_depth', 'Vegetation_Type', 'Relative_humidity', 'Pressure_hybrid', 'U-component_of_wind_tropopause', 'Categorical_Rain', 'Downward_Short-Wave_Rad_Flux', 'U-component_of_wind_height_above_ground', 'Soil_moisture_parameter_in_canopy_conductance', 'Temperature_height_above_ground', 'Categorical_Freezing_Rain', 'Convective_cloud_cover', 'V-component_of_wind', 'Wind_speed', 'Pressure_convective_cloud_top', 'Geopotential_height_zeroDegC_isotherm', 'Downward_Long-Wave_Rad_Flux', 'Dew_point_temperature_pressure_difference_layer', 'Turbulent_kinetic_energy_hybrid', 'Vertical_velocity_pressure', 'Latent_heat_net_flux', 'Potential_temperature_pressure_difference_layer', 'Upward_Long-Wave_Rad_Flux_surface', 'Direct_Evaporation_Cease_soil_moisture', 'Precipitable_water_pressure_difference_layer', 'Snow_Phase_Change_Heat_Flux', 'Humidity_parameter_in_canopy_conductance', 'Convective_Cloud_Efficiency', 'Number_of_Soil_Layers_in_Root_Zone', 'V-component_of_wind_hybrid', 'V-component_of_wind_pressure_difference_layer', 'Visibility', 'Relative_humidity_hybrid', 'Precipitation_rate', 'Convective_available_potential_energy', 'Specific_humidity_surface', 'Relative_humidity_sigma_layer', 'Upward_Short-Wave_Rad_Flux', 'Temperature_hybrid', 'Pressure_grid_scale_cloud_top', 'Horizontal_Moisture_Divergence', 'Probablity_of_freezing_precipipation', 'Wind_speed_gust', 'Convective_Precipitation_Rate', 'Soil_temperature', 'Solar_parameter_in_canopy_conductance', 'Pressure_maximum_wind', 'Minimal_Stomatal_Resistance', 'Upward_Short-Wave_Rad_Flux_surface', 'Geopotential_height_maximum_wind', 'Snow_Cover', 'Geopotential_height', 'Categorical_Ice_Pellets', 'Wind_direction_from_which_blowing', 'Momentum_flux_u_component', 'Albedo', 'Temperature_parameter_in_canopy_conductance', 'Temperature', 'Large_scale_precipitation_non-convective', 'Surface_roughness', 'Storm_Surface_Runoff', 'Geopotential_height_hybrid', 'Relative_humidity_pressure_difference_layer', 'U-component_of_wind_pressure_difference_layer', 'Surface_Slope_Type', 'Vegetation', 'Potential_temperature', 'Dew_point_temperature', 'Best_Lifted_Index', 'Pressure', 'Total_Column_Integrated_Snow', 'Cloud_mixing_ratio_hybrid', 'Wilting_Point', 'Geopotential_height_highest_tropospheric_freezing', 'Blackadars_Mixing_Length_Scale', 'Surface_Lifted_Index', 'Planetary_Boundary_Layer_Height', 'Liquid_Volumetric_Soil_Moisture_non_frozen', 'V-component_of_wind_tropopause', 'Precipitable_water', 'Pressure_surface', 'Total_Column_Integrated_Rain', 'Probablity_of_frozen_precipipation', 'Sensible_heat_net_flux', 'Water_equivalent_of_accumulated_snow_depth', 'Pressure_adiabatic_condensation_lifted', 'Drag_Coefficient', 'Specific_humidity_height_above_ground', 'Total_Column-Integrated_Condensate', 'Pressure_cloud_tops', 'Upward_Long-Wave_Rad_Flux', 'Geopotential_height_surface', 'V-component_of_wind_maximum_wind', 'Dew_point_temperature_height_above_ground', 'Storm_relative_helicity', 'U-component_of_wind', 'Temperature_cloud_tops', 'Pressure_deep_convective_cloud_bottom', 'Pressure_shallow_convective_cloud_top', 'Convective_precipitation', 'Specific_humidity_hybrid', 'V-component_of_wind_height_above_ground', 'Snow-Free_Albedo', 'Turbulent_kinetic_energy', 'Land_cover_1land_2sea', 'Potential_Evaporation', 'Geopotential_height_adiabatic_condensation_lifted', 'Absolute_vorticity', 'Snow_mixing_ratio', 'Plant_Canopy_Surface_Water', 'Minimum_temperature', 'Geopotential_height_lowest_level_of_the_wet_bulb_zero', 'Pressure_convective_cloud_bottom', 'Pressure_deep_convective_cloud_top', 'Rain_mixing_ratio', 'V-Component_Storm_Motion', 'Baseflow-Groundwater_Runoff', 'U-component_of_wind_maximum_wind', 'Relative_humidity_zeroDegC_isotherm', 'Relative_humidity_height_above_ground', 'U-Component_Storm_Motion', 'Convective_inhibition', 'Transpiration_Stress-onset_soil_moisture', 'Maximum_Snow_Albedo', 'Ice_cover_Proportion', 'Temperature_surface', 'U-component_of_wind_hybrid', 'Convective_inhibition_surface', 'High_cloud_cover', 'Snow_mixing_ratio_hybrid', 'Pressure_of_level_from_which_parcel_was_lifted', 'Cloud_mixing_ratio', 'Pressure_cloud_base', 'Evaporation', 'Thunderstorm_probability', 'Volumetric_Soil_Moisture_Content', 'Soil_temperature_depth_below_surface', 'Pressure_grid_scale_cloud_bottom']
+	
+#To further interrogate a single "coverage" get the coverageMetadata object
+#You can either do:
+	>>> cvg= wcs.contents['Temperature'] #to get it from the dictonary
+	
+#or even simpler you can do:
+	>>> cvg=wcs['Temperature'] 
+
+	>>> cvg.boundingBoxWGS84
+	(-153.21272373696925, 11.968943490602328, -49.029734977681301, 57.381662765023037)
+    
+	>>> cvg.timepositions[:3]
+	['2009-01-08T06:00:00Z', '2009-01-08T09:00:00Z', '2009-01-08T12:00:00Z']
+
+	>>> cvg.supportedCRS
+	['EPSG:4326']
+
+	>>> cvg.supportedFormats
+	['GeoTIFF', 'GeoTIFFfloat', 'NetCDF3']
+	
+#Now we have enough information to build a getCoverage request: 	
+	>>> covID='Temperature'
+	>>> timeRange=['2009-01-08T06:00:00',  '2009-01-08T12:00:00']  #Okay, you should be able to select a range of times, but the server doesn't seem to like it. 
+	>>> timeRange=['2009-01-08T09:00:00Z'] #So for now I'll just  choose one timestep (from cvg.timepositions)
+	>>> bb=(-140, -15, 30, 55) # chosen from cvg.boundingBoxWGS84
+	>>> formatType='NetCDF3' # chosen from cvg.supportedFormats
+	
+#Make the actual getCoverage request.
+	>>> output=wcs.getCoverage(identifier=covID,time=timeRange,bbox=bb, format=formatType)
+
+#Then write this to a netcdf file.
+	>>> filename = 'threddstest.nc'
+	>>> f=open(filename, 'wb')
+	>>> f.write(output.read())
+	>>> f.close() 	
