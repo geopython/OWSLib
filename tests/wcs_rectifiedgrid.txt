@@ -1,0 +1,41 @@
+NOAA WCS 1.0.0  - testing rectifiedgrid representation
+==========
+    >>> from owslib.wcs import WebCoverageService
+    >>> wcs=WebCoverageService('http://nextgen.fsl.noaa.gov/thredds/wcs/madis/rsas/MADIS-RSAS-Agg', version='1.0.0')
+    >>> wcs.url
+    'http://nextgen.fsl.noaa.gov/thredds/wcs/madis/rsas/MADIS-RSAS-Agg'
+    >>> wcs.version
+    '1.0.0'
+    >>> wcs.identification.service
+    'madis/rsas/MADIS-RSAS-Agg'
+    >>> wcs.identification.version
+    '1.0.0'
+    >>> wcs.identification.title
+    'madis/rsas/MADIS-RSAS-Agg'
+    >>> wcs.identification.abstract
+    'Experimental THREDDS/WCS server for CDM gridded datasets'
+    >>> wcs.identification.keywords
+    [None]
+    >>> wcs.identification.fees
+    'NONE'
+    >>> wcs.identification.accessConstraints
+    'NONE'
+    >>> type(wcs.items())
+    <type 'list'>
+    >>> cvg=wcs['t']
+    >>> cvg.title
+    'temperature'
+    >>> cvg.grid.axislabels
+    ['x', 'y', 'z']
+    >>> cvg.grid.dimension
+    3
+    >>> cvg.grid.lowlimits
+    ['0', '0', '0']
+    >>> cvg.grid.highlimits
+    ['579', '547', '0']
+    >>> cvg.grid.origin
+    ['-3528.5327497687117', '-8312.702226429212', '0.0']
+    >>> cvg.grid.offsetvectors
+    [['13.572500228881836', '0.0', '0.0'], ['0.0', '13.572500228881836', '0.0'], ['0.0', '0.0', '0.0']]
+    >>> cvg.boundingBoxWGS84
+    (-128.02278762269611, 7.8395641472628892, -26.492900777325232, 52.592311522338143)

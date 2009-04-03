@@ -1,0 +1,23 @@
+HISTORY
+=======
+
+OWSLib 0.1: 19 October 2006
+---------------------------
+- New and improved metadata API.
+- Wrappers for GetCapabilities, WMS GetMap, and WFS GetFeature requests.
+- Doctests.
+
+OWSLib 0.0: 30 July 2006
+------------------------
+- Brought OWSLib up out of the PCL trunk into its own space.
+- Updated the testing frameworm.
+- Initial test coverage:
+
+Name    Stmts   Exec  Cover   Missing
+-------------------------------------
+wms       105     68    64%   36, 41-48, 61-63, 114-118, 125-155, 172, 203-205
+wfs        74     69    93%   146, 166, 199-201
+wmc       111      0     0%   33-220
+-------------------------------------
+TOTAL     290    137    47%
+

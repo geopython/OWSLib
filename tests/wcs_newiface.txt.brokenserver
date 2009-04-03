@@ -1,0 +1,158 @@
+Web Coverage Service
+====================
+
+Version 1.0.0
+========
+
+
+    >>> from owslib.wcs import WebCoverageService
+    >>> wcs=WebCoverageService('http://ndgbeta.badc.rl.ac.uk/wcs/badc.nerc.ac.uk__NDG-A0__AWQX8gTc', version='1.0.0')
+    >>> wcs.url
+    'http://ndgbeta.badc.rl.ac.uk/wcs/badc.nerc.ac.uk__NDG-A0__AWQX8gTc'
+    >>> wcs.version
+    '1.0.0'
+    >>> wcs.identification.service
+    'tba'
+    >>> wcs.identification.version
+    '1.0.0'
+    >>> wcs.identification.title
+    'tba'
+    >>> wcs.identification.abstract
+    '\n      Web Map Server maintained by BADC\n      Contact: webmaster@badc.nerc.ac.uk '
+    >>> wcs.identification.keywords
+    ['atmospheric', 'climate']
+    >>> wcs.identification.fees
+    'NONE'
+    >>> wcs.identification.accessConstraints
+    'NONE'
+    >>> wcs.provider.name
+    'British Atmospheric Data Centre'
+    >>> wcs.provider.url
+    'British Atmospheric Data Centre'
+    >>> wcs.provider.contact.email
+    'tba@badc.rl.ac.uk'
+    >>> wcs.provider.contact.name
+    'TBA'
+    >>> wcs.provider.contact.organization
+    'British Atmospheric Data Centre'
+    >>> wcs.provider.contact.address
+    'STFC'
+    >>> wcs.provider.contact.city
+    'Didcot'
+    >>> wcs.provider.contact.region
+    'OXON'
+    >>> wcs.provider.contact.postcode
+    'OX11 0QX'
+    >>> wcs.provider.contact.country
+    'UK'
+    >>> type(wcs.items())
+    <type 'list'>
+    >>> cvg=wcs['ZI4al0r8']
+    >>> cvg.title
+    'Vapour pressure'
+    >>> cvg.keywords
+    ['NONE']
+    >>> wcs.identification.accessConstraints
+    'NONE'
+    >>> wcs.identification.fees
+    'NONE'
+    >>> cvg.boundingBoxWGS84
+    (1.875, -88.767123287700002, 358.125, 88.767123287700002)
+    >>> cvg.timelimits
+    ['2024-01-15T00:00:00.0', '2054-12-15T00:00:00.0']
+    >>> cvg.supportedFormats
+    ['cf-netcdf']
+    >>> cvg.supportedCRS
+    ['srstba']
+    >>> output=wcs.getCoverage(identifier='ZI4al0r8',time=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf')
+    >>> f=open('test.nc', 'wb')
+    >>> f.write(output.read())
+    >>> f.close()
+
+Version 1.1.0
+========
+    >>> from owslib.coverage import wcsdecoder
+    >>> wcs=WebCoverageService('http://ndgbeta.badc.rl.ac.uk/wcs/badc.nerc.ac.uk__NDG-A0__AWQX8gTc', version='1.1.0')
+    >>> wcs.url
+    'http://ndgbeta.badc.rl.ac.uk/wcs/badc.nerc.ac.uk__NDG-A0__AWQX8gTc'
+    >>> wcs.version
+    '1.1.0'
+    >>> wcs.identification.service
+    'WCS'
+    >>> wcs.identification.version
+    '1.1.0'
+    >>> wcs.identification.title
+    'BADC OGC WCS Server'
+    >>> wcs.identification.abstract
+    '\n      Web Map Server maintained by BADC\n      Contact: webmaster@badc.nerc.ac.uk '
+    >>> wcs.identification.keywords
+    ['atmospheric', 'climate']
+    >>> wcs.identification.fees
+    'NONE'
+    >>> wcs.identification.accessConstraints
+    'NONE'
+    >>> wcs.provider.name
+    'British Atmospheric Data Centre'
+    >>> wcs.provider.url
+    'British Atmospheric Data Centre'
+    >>> wcs.provider.contact.email
+    'tba@badc.rl.ac.uk'
+    >>> wcs.provider.contact.name
+    'TBA'
+    >>> wcs.provider.contact.organization
+    'British Atmospheric Data Centre'
+    >>> wcs.provider.contact.address
+    'STFC'
+    >>> wcs.provider.contact.city
+    'Didcot'
+    >>> wcs.provider.contact.region
+    'OXON'
+    >>> wcs.provider.contact.postcode
+    'OX11 0QX'
+    >>> wcs.provider.contact.country
+    'UK'
+    >>> type(wcs.items())
+    <type 'list'>
+    >>> cvg=wcs['ZI4al0r8']
+    >>> cvg.title
+    'Vapour pressure'
+    >>> cvg.keywords
+    ['NONE', 'NONE']
+    >>> wcs.identification.accessConstraints
+    'NONE'
+    >>> wcs.identification.fees
+    'NONE'
+    >>> cvg.boundingBoxWGS84
+    (1.875, -88.767123287700002, 358.125, 88.767123287700002)
+    >>> cvg.timelimits
+    ['2024-01-15T00:00:00.0', '2054-12-15T00:00:00.0']
+    >>> cvg.supportedFormats
+    ['application/cf-netcdf']
+    >>> cvg.supportedCRS
+    ['WGS84']
+
+GetCoverage returning Multipart Mime:
+    >>> output=wcs.getCoverage(identifier='ZI4al0r8',time=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf', store='false')
+    
+Need to use the decoder class to handle 1.1.0 type outputs 
+(coverages xml docs or multipart mime)
+--------------------------------------------------------------------------------------------
+    >>> decoder=wcsdecoder.WCSDecoder(output)
+    >>> decoder.getCoverages(unpackdir='mydir')     
+    ['mydir/coverage.xml', 'mydir/coverage.nc']
+
+GetCoverage returning Coverages.xml:
+    >>> output=wcs.getCoverage(identifier='ZI4al0r8',time=['2024-01-15T00:00:00.0'],bbox=(-80,30,50,60), format='cf-netcdf', store='true')
+
+Use the decoder class to extract the url from the coverages doc.
+--------------------------------------------------------------------------------------------
+
+    >>> decoder2=wcsdecoder.WCSDecoder(output)
+    >>> outputurl= decoder2.getCoverages()
+    >>> outputurl[0][:7]
+    'http://'
+    
+
+
+
+
