@@ -131,15 +131,17 @@ class WebCoverageService_1_0_0(WCSBase):
         data = urlencode(request)
         self.log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
         
-        try:
-            u = urlopen(base_url + data)
-        except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception.
-            if e.code == 400:
-                raise ServiceException, e.read()
-  
         
-        self.log.debug('WCS 1.0.0 DEBUG: GetCoverage request made: %s'%u.url)
-        self.log.debug('WCS 1.0.0 DEBUG: Headers returned: %s'%str(u.headers))
+        try:
+            u = urlopen(base_url + data) 
+            self.log.debug('WCS 1.0.0 DEBUG: called urlopen(base_url+data)')            
+        except:   
+            u = urlopen(base_url,data)
+            self.log.debug('WCS 1.0.0 DEBUG: called urlopen(base_url, data)')
+        
+        
+        #self.log.debug('WCS 1.0.0 DEBUG: GetCoverage request made: %s'%u.url)
+        #self.log.debug('WCS 1.0.0 DEBUG: Headers returned: %s'%str(u.headers))
         # check for service exceptions, and return #TODO - test this bit properly.
         if u.info()['Content-Type'] == 'text/xml':          
             #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
