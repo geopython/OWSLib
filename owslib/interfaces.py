@@ -5,7 +5,7 @@ class IServiceIdentificationMetadata:
     """OO-interface to service identification metadata.
     """
 
-    type = property("""Service name (string): "WMS", "WFS", or "WCS".""")
+    type = property("""Service name (string): "WMS", "WFS", "WCS", or "SOS".""")
     version = property("""Version of service protocol (string).""")
     title = property("""Human-targeted title of service (string).""")
     abstract = property("""Text describing the service (string).""")
@@ -86,8 +86,8 @@ class IWebFeatureService(IService):
         Python file object."""
 
     def getfeature(**kw):
-        """Make a request to the WFS, returns an image wrapped in a Python
-        file object."""
+        """Make a request to the WFS, returns an XML document wrapped in a
+        Python file object."""
 
     def describefeaturetype(**kw):
         """Make a request to the WFS, returns data."""
@@ -97,7 +97,25 @@ class IWebCoverageService(IService):
     # TODO
     pass
 
+class ISensorObservationService(IService):
+    """Abstraction for an OGC Sensor Observation Service (SOS).
+    """
 
+    def getcapabilities():
+        """Make a request to the SOS, returns an XML document wrapped in a 
+        Python file object."""
+
+    def describesensor():
+        """Make a request to the SOS, returns an XML document wrapped in a 
+        Python file object."""
+
+    def getobservation():
+        """Make a request to the SOS, returns an XML document wrapped in a 
+        Python file object."""
+
+class iSensorObservationServiceContentMetadata(IContentMetadata):
+    """Extension class for SOS specifics"""
+    pass
 
 # Second level metadata interfaces
 
@@ -145,4 +163,6 @@ class IContactMetadata:
     postcode : string
     country : string
     email : string
+    hoursofservice: string
+    role: string
     """
