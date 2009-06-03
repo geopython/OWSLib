@@ -96,8 +96,8 @@ OWSLib shares a wiki and email list with the Python Cartographic Library:
 
 http://lists.gispython.org/mailman/listinfo/community
 
-http://trac.gispython.org/projects/PCL/wiki
+http://trac.gispython.org/lab/wiki
 
 Updated project information can be found at
 
-http://trac.gispython.org/projects/PCL/wiki/OwsLib
+http://trac.gispython.org/lab/wiki/OwsLib
