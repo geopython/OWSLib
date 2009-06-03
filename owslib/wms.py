@@ -516,27 +516,3 @@ class WMSCapabilitiesReader:
         if not isinstance(st, str):
             raise ValueError("String must be of type string, not %s" % type(st))
         return etree.fromstring(st)
-
-
-class WMSError(Exception):
-    """Base class for WMS module errors
-    """
-
-    def __init__(self, message):
-        """Initialize a WMS Error"""
-        self.message = message
-
-    def toxml(self):
-        """Serialize into a WMS Service Exception XML
-        """
-        preamble = '<?xml version="1.0" ?>'
-        report_elem = etree.Element('ServiceExceptionReport')
-        report_elem.attrib['version'] = '1.1.1'
-        # Service Exception
-        exception_elem = etree.Element('ServiceException')
-        exception_elem.text = self.message
-        report_elem.append(exception_elem)
-        return preamble + etree.tostring(report_elem)
-
-
-
