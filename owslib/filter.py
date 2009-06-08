@@ -16,7 +16,7 @@ Filter Encoding: http://www.opengeospatial.org/standards/filter
 Currently supports version 1.1.0 (04-095).
 """
 
-from lxml import etree
+from owslib.etree import etree
 from owslib import util
 
 # default variables
@@ -33,7 +33,7 @@ namespaces = {
 
 schema_location = '%s %s' % (namespaces['ogc'], schema)
 
-class request:
+class FilterRequest(object):
     """ filter class """
     def __init__(self, version='1.1.0'):
         """
@@ -50,15 +50,15 @@ class request:
 
         self.version = version
 
-    def Filter(self, parent=None):
+    def setfilter(self, parent=None):
         if parent is None:
-            tmp = etree.Element(util.nspath('Filter', namespaces['ogc']), nsmap=namespaces)
+            tmp = etree.Element(util.nspath('Filter', namespaces['ogc']))
             tmp.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
             return tmp
         else:
             etree.SubElement(parent, util.nspath('Filter', namespaces['ogc']))
 
-    def PropertyIsEqualTo(self, parent, propertyname, literal):
+    def setpropertyisequalto(self, parent, propertyname, literal):
         """
 
         construct a PropertyIsEqualTo
@@ -76,7 +76,7 @@ class request:
         etree.SubElement(tmp, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
         etree.SubElement(tmp, util.nspath('Literal', namespaces['ogc'])).text = literal
     
-    def BBOX(self, parent, bbox):
+    def setbbox(self, parent, bbox):
         """
 
         construct a BBOX search predicate
@@ -95,7 +95,7 @@ class request:
         etree.SubElement(tmp2, util.nspath('lowerCorner', namespaces['gml'])).text = '%s %s' % (bbox[0], bbox[1])
         etree.SubElement(tmp2, util.nspath('upperCorner', namespaces['gml'])).text = '%s %s' % (bbox[2], bbox[3])
 
-    def PropertyIsLike(self, parent, propertyname, literal, wildcard='%', singlechar='_', escapechar='\\'):  
+    def setpropertyislike(self, parent, propertyname, literal, wildcard='%', singlechar='_', escapechar='\\'):  
         """
 
         construct a PropertyIsLike
@@ -119,7 +119,7 @@ class request:
         etree.SubElement(tmp, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
         etree.SubElement(tmp, util.nspath('Literal', namespaces['ogc'])).text = literal
 
-    def SortBy(self, parent, propertyname, order='ASC'):
+    def setsortby(self, parent, propertyname, order='ASC'):
         """
 
         constructs a SortBy element
@@ -138,13 +138,9 @@ class request:
         etree.SubElement(tmp2, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
         etree.SubElement(tmp2, util.nspath('SortOrder', namespaces['ogc'])).text = order
 
-class response:
+class FilterCapabilities(object):
     """ Abstraction for Filter_Capabilities """
     def __init__(self, elem):
-        pass
-    def Filter_Capabilities(self, elem):
-        """Initialize a Filter_Capabilities construct"""
-
         # Spatial_Capabilities
         self.spatial_operands = [f.text for f in elem.findall(util.nspath('Spatial_Capabilities/GeometryOperands/GeometryOperand', namespaces['ogc']))]
         self.spatial_operators = []
