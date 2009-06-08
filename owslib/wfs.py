@@ -111,7 +111,7 @@ class WebFeatureService(object):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
-                   method='{http://www.opengis.net/wfs}Get'):
+                   srsname=None, method='{http://www.opengis.net/wfs}Get'):
         """Request and return feature data as a file-like object.
         
         Parameters
@@ -149,6 +149,10 @@ class WebFeatureService(object):
             request['bbox'] = ','.join([str(x) for x in bbox])
         elif filter and typename:
             request['filter'] = str(filter)
+        
+        if srsname:
+            request['srsname'] = str(srsname)
+            
         assert len(typename) > 0
         request['typename'] = ','.join(typename)
         
