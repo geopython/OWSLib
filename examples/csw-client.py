@@ -11,7 +11,7 @@
 import sys
 import getopt
 
-from owslib import csw, util
+from owslib.csw import CatalogueServiceWeb
 
 def usage():
     print """
@@ -47,7 +47,7 @@ GetRecords
     --bbox=[BBOX] the bounding box to spatially query in the form of "minx miny maxx maxy"
     --esn=[brief|full|summary] verbosity of results
     --qtype=[dataset|service] query for data or services
-    --schema=[iso] the outputSchema
+    --schema=[iso] the outputSchema (defualt is csw)
 
 GetRecordById
     --id=[ID] the ID of the record
@@ -124,19 +124,22 @@ if request is None or url is None:
     usage()
     sys.exit(3)
 
+if schema == 'iso':
+  outputschema = 'http://www.isotc211.org/2005/gmd'
+
 # init
-c = csw.request(url, lang, version)
+c = CatalogueServiceWeb(url, lang, version)
 
 if request == 'GetCapabilities':
-    c.GetCapabilities()
+    pass
 elif request == 'DescribeRecord':
-    c.DescribeRecord(typename)
+    c.describerecord(typename)
 elif request == 'GetRecordById':
-    c.GetRecordById('2u2u2u2u2u2u2u2u2u')
+    c.getrecordbyid(id)
 elif request == 'GetDomain':
-    c.GetDomain(dname, dtype)
+    c.getdomain(dname, dtype)
 elif request == 'GetRecords':
-    c.GetRecords(qtype, keyword, bbox, esn, sortby, schema)
+    c.getrecords(qtype, keyword, bbox, esn, sortby, schema)
 
 if print_request is True: # print the request
     print c.request
@@ -147,9 +150,6 @@ if validate is True: # do XML validation
         print 'request is valid XML'
     else:
         print 'request is NOT valid XML'
-
-# invoke request
-c.fetch()
 
 # print response
 print c.response

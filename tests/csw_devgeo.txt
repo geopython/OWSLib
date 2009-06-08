@@ -1,0 +1,99 @@
+    >>> from owslib.csw import CatalogueServiceWeb
+    >>> csw = CatalogueServiceWeb('http://localhost/geonetwork/srv/en/csw')
+    >>> csw.url
+    'http://localhost/geonetwork/srv/en/csw'
+    >>> csw.version
+    '2.0.2'
+    >>> csw.lang
+    'en-US'
+    >>> csw.service
+    'CSW'
+    >>> csw.owscommon.version
+    '1.0.0'
+    >>> csw.owscommon.namespace
+    'http://www.opengis.net/ows'
+    >>> csw.identification.title
+    'Geospatial Data Dissemination Demo'
+    >>> csw.identification.abstract
+    'Geospatial Data Dissemination Demo'
+    >>> csw.identification.keywords
+    ['Global Regions > North America', 'Global Regions > Northern Hemisphere', 'Global Regions > Western Hemisphere', 'Countries > Canada', 'Global Regions > Mid-latitude', 'Canada > Ontario', 'Canada > Newfoundland And Labrador', 'Canada > Northwest Territories', 'Canada > New Brunswick', 'Canada > Nova Scotia']
+    >>> csw.identification.accessconstraints
+    'None'
+    >>> csw.identification.fees
+    'None'
+    >>> csw.identification.type
+    'CSW'
+    >>> csw.identification.version
+    '2.0.2'
+    >>> csw.provider.name
+    'GeoNetwork opensource'
+    >>> csw.provider.contact.name
+    'Tom Kralidis'
+    >>> csw.provider.contact.position
+    'Editor'
+    >>> csw.provider.contact.phone
+    '$VOICE'
+    >>> csw.provider.contact.fax
+    '$FACSIMILE'
+    >>> csw.provider.contact.address
+    '4905 Dufferin Street'
+    >>> csw.provider.contact.city
+    '4905 Dufferin Street'
+    >>> csw.provider.contact.region
+    'ON'
+    >>> csw.provider.contact.postcode
+    'M3H 5T4'
+    >>> csw.provider.contact.country
+    'ca'
+    >>> csw.provider.contact.email
+    'tom.kralidis@ec.gc.ca'
+    >>> csw.provider.contact.instructions
+    'Environment Canada'
+    >>> csw.provider.contact.role
+    'gov'
+    >>> [op.name for op in csw.operations]
+    ['GetCapabilities', 'DescribeRecord', 'GetDomain', 'GetRecords', 'GetRecordById', 'Transaction']
+    >>> csw.describerecord()
+    >>> print csw.request
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:DescribeRecord outputFormat="application/xml" schemaLanguage="http://www.w3.org/XML/Schema" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:TypeName>csw:Record</csw:TypeName></csw:DescribeRecord>
+    >>> csw.getdomain('GetRecords.outputSchema')
+    >>> print csw.request
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:GetDomain service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:ParameterName>GetRecords.outputSchema</csw:ParameterName></csw:GetDomain>
+    >>> csw.results['values']
+    ['http://www.opengis.net/cat/csw/2.0.2', 'http://www.isotc211.org/2005/gmd']
+    >>> csw.getrecords('dataset','birds')
+    >>> print csw.request
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:GetRecords maxRecords="10" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:And><ogc:PropertyIsEqualTo><ogc:PropertyName>dc:type</ogc:PropertyName><ogc:Literal>dataset</ogc:Literal></ogc:PropertyIsEqualTo><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%birds%</ogc:Literal></ogc:PropertyIsLike></ogc:And></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
+    >>> csw.results['matches']
+    19
+    >>> csw.results['returned']
+    10
+    >>> csw.results['nextrecord']
+    11
+    >>> csw.results['records'][0].identifier
+    '643ec912-ae24-4c10-aa38-5b420ee46aff'
+    >>> csw.results['records'][0].title
+    'Marsh Monitoring Program Route Locations'
+    >>> csw.results['records'][0].abstract
+    'A Spring survey of birds and amphibians carried out primarily within the Great Lakes region of North America.'
+    >>> csw.results['records'][0].type
+    'dataset'
+    >>> csw.results['records'][0].uri
+    'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
+    >>> csw.results['records'][0].subjects
+    ['birds', 'waterbirds', 'amphibians', 'marsh', 'wetland', 'survey', 'populations', 'volunteers', 'canada', 'united states', 'great lakes', 'AOC']
+    >>> csw.getrecordbyid('643ec912-ae24-4c10-aa38-5b420ee46aff')
+    >>> csw.results['records'][0].title
+    'Marsh Monitoring Program Route Locations'
+    >>> csw.results['records'][0].uri
+    'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
+    >>> csw.results['records'][0].type
+    'dataset'
+    >>> csw.getdomain('foo.param')
+    >>> csw.exceptionreport.exceptions
+    [{'locator': 'foo', 'ExceptionText': None, 'exceptionCode': 'OperationNotSupported'}]
+    >>> 

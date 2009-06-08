@@ -8,7 +8,7 @@
 # Contact email: tomkralidis@hotmail.com
 # =============================================================================
 
-from lxml import etree
+from owslib.etree import etree
 import urlparse, httplib, StringIO
 
 """
