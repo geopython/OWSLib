@@ -12,8 +12,24 @@ def patch_well_known_namespaces(etree_module):
             "http://purl.org/rss/1.0/modules/taxonomy/":    "taxo", 
             "http://purl.org/dc/elements/1.1/":             "dc", 
             "http://purl.org/rss/1.0/modules/syndication/": "syn", 
-            "http://www.w3.org/2003/01/geo/wgs84_pos#":     "geo"})
-    
+            "http://www.w3.org/2003/01/geo/wgs84_pos#":     "geo",
+            "http://www.opengis.net/cat/csw/2.0.2":         "csw",
+            "http://purl.org/dc/terms/":                    "dct",
+            "http://www.isotc211.org/2005/gco":             "gco",
+            "http://www.isotc211.org/2005/gmd":             "gmd",
+            "http://www.opengis.net/gml":                   "gml",
+            "http://www.opengis.net/ogc":                   "ogc",
+            "http://www.opengis.net/ows":                   "ows",
+            "http://www.opengis.net/ows/1.1":               "ows",
+            "http://www.opengis.net/wms":                   "wms",
+            "http://www.opengis.net/context":               "wmc",
+            "http://www.opengis.net/wfs":                   "wfs",
+            "http://www.opengis.net/sos/1.0":               "sos",
+            "urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0":  "rim",
+            "http://www.w3.org/2001/XMLSchema":             "xs",
+            "http://www.w3.org/XML/Schema":                 "xs2",
+            "http://www.w3.org/2001/XMLSchema-instance":    "xsi",
+            "http://www.w3.org/1999/xlink":                 "xlink"})
 
 # try to find elementtree or lxml
 try:
