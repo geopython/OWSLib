@@ -137,20 +137,26 @@ class OperationsMetadata(object):
 class BoundingBox(object):
     """Initialize an OWS BoundingBox construct"""
     def __init__(self, elem, namespace): 
+        self.minx = None
+        self.miny = None
+        self.maxx = None
+        self.maxy = None
+
         val = elem.attrib.get('crs')
         self.crs = util.testXMLValue(val, True)
+
         val = elem.find(util.nspath('LowerCorner', namespace))
         if val is not None:
             tmp = util.testXMLValue(val)
-            self.minx, self.miny = tmp.split()
-        else:
-            self.minx, self.miny = None
+            xy = tmp.split()
+            if len(xy) > 1:
+                self.minx, self.miny = xy[0], xy[1] 
         val = elem.find(util.nspath('UpperCorner', namespace))
         if val is not None:
             tmp = util.testXMLValue(val)
-            self.maxx, self.maxy = tmp.split()
-        else:
-            self.maxx, self.maxy = None
+            xy = tmp.split()
+            if len(xy) > 1:
+                self.maxx, self.maxy = xy[0], xy[1]
 
 class ExceptionReport(object):
     """Initialize an OWS ExceptionReport construct"""
