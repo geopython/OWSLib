@@ -70,20 +70,6 @@ class CatalogueServiceWeb:
         etree.SubElement(tmp2, util.nspath('OutputFormat', namespaces['ows'])).text = outputformat
         self.request = util.xml2string(etree.tostring(node0))
 
-        """
-
-        self.request = <?xml version="1.0" encoding="ISO-8859-1"?>
-<GetCapabilities xmlns="http://www.opengis.net/cat/csw/2.0.2" xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" service="CSW">
-   <ows:AcceptVersions>
-      <ows:Version>2.0.2</ows:Version>
-   </ows:AcceptVersions>
-   <ows:AcceptFormats>
-      <ows:OutputFormat>application/xml</ows:OutputFormat>
-   </ows:AcceptFormats>
-</GetCapabilities>
-
-        """
-
         # invoke
         self.response = util.http_post(self.url, self.request, self.lang)
 
@@ -186,7 +172,7 @@ class CatalogueServiceWeb:
             for f in self._values.findall(util.nspath('DomainValues/ListOfValues/Value', namespaces['csw'])):
                 self.results['values'].append(util.testXMLValue(f))
 
-    def getrecords(self, qtype=None, keyword='*', typenames='csw:Record', propertyname='AnyText', bbox=None, esn='full', sortby=None, schema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None, esn='full', sortby=None, schema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10):
         """
 
         Construct and process a  GetRecords request
@@ -195,7 +181,7 @@ class CatalogueServiceWeb:
         ----------
 
         - qtype: type of resource to query (i.e. service, dataset)
-        - keyword: freetext keyword
+        - keywords: list of keywords
         - typenames: the typeNames to query against (default is csw:Record)
         - propertyname: the PropertyName to Filter against 
         - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
@@ -224,7 +210,7 @@ class CatalogueServiceWeb:
         pcount = 0
         if qtype is not None:
             pcount += 1
-        if keyword is not None:
+        if keywords:
             pcount += 1
         if bbox is not None:
             pcount += 1
@@ -235,7 +221,7 @@ class CatalogueServiceWeb:
         etree.SubElement(node1, util.nspath('ElementSetName', namespaces['csw'])).text = esn
 
         # decipher if the query is for real
-        if keyword is not None or bbox is not None or qtype is not None:    
+        if keywords or bbox is not None or qtype is not None:    
             node2 = etree.SubElement(node1, util.nspath('Constraint', namespaces['csw']))
             node2.set('version', '1.1.0')
             node3 = etree.SubElement(node2, util.nspath('Filter', namespaces['ogc']))
@@ -263,11 +249,21 @@ class CatalogueServiceWeb:
                     flt.setbbox(node3, bbox)
 
             # set a keyword query if passed
-            if keyword is not None:
-                if node4 is not None:
-                    flt.setpropertyislike(node4, propertyname, '%%%s%%' % keyword)
-                else:
-                    flt.setpropertyislike(node3, propertyname, '%%%s%%' % keyword)
+            if keywords is not None:
+                if len(keywords) > 1: # loop multiple keywords into an Or
+                    if node4 is not None:
+                        node5 = etree.SubElement(node4, util.nspath('Or', namespaces['ogc']))
+                    else:
+                        node5 = etree.SubElement(node3, util.nspath('Or', namespaces['ogc']))
+
+                    for i in keywords:
+                        flt.setpropertyislike(node5, propertyname, '%%%s%%' % i)
+
+                else: # one keyword
+                    if node4 is not None:
+                        flt.setpropertyislike(node4, propertyname, '%%%s%%' % keywords[0])
+                    else:
+                        flt.setpropertyislike(node3, propertyname, '%%%s%%' % keywords[0])
 
         # set a sort if passed
         if sortby is not None:

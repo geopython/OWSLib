@@ -1,7 +1,7 @@
     >>> from owslib.csw import CatalogueServiceWeb
-    >>> csw = CatalogueServiceWeb('http://localhost/geonetwork/srv/en/csw')
+    >>> csw = CatalogueServiceWeb('http://devgeo.cciw.ca/geonetwork/srv/en/csw')
     >>> csw.url
-    'http://localhost/geonetwork/srv/en/csw'
+    'http://devgeo.cciw.ca/geonetwork/srv/en/csw'
     >>> csw.version
     '2.0.2'
     >>> csw.lang
@@ -64,7 +64,7 @@
     <csw:GetDomain service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:ParameterName>GetRecords.outputSchema</csw:ParameterName></csw:GetDomain>
     >>> csw.results['values']
     ['http://www.opengis.net/cat/csw/2.0.2', 'http://www.isotc211.org/2005/gmd']
-    >>> csw.getrecords('dataset','birds')
+    >>> csw.getrecords('dataset',['birds'])
     >>> print csw.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     <csw:GetRecords maxRecords="10" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:And><ogc:PropertyIsEqualTo><ogc:PropertyName>dc:type</ogc:PropertyName><ogc:Literal>dataset</ogc:Literal></ogc:PropertyIsEqualTo><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%birds%</ogc:Literal></ogc:PropertyIsLike></ogc:And></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
@@ -91,9 +91,15 @@
     'Marsh Monitoring Program Route Locations'
     >>> csw.results['records'][0].uri
     'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
-    >>> csw.results['records'][0].type
-    'dataset'
     >>> csw.getdomain('foo.param')
     >>> csw.exceptionreport.exceptions
     [{'locator': 'foo', 'ExceptionText': None, 'exceptionCode': 'OperationNotSupported'}]
     >>> 
+    >>> csw.getrecords(qtype='dataset',keywords=['bird','frog'],maxrecords=100)
+    >>> print csw.request
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:GetRecords maxRecords="100" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:And><ogc:PropertyIsEqualTo><ogc:PropertyName>dc:type</ogc:PropertyName><ogc:Literal>dataset</ogc:Literal></ogc:PropertyIsEqualTo><ogc:Or><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%bird%</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%frog%</ogc:Literal></ogc:PropertyIsLike></ogc:Or></ogc:And></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
+    >>> csw.results['matches']
+    21
+    >>> 
+    

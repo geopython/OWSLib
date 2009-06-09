@@ -47,7 +47,7 @@ GetRecords
     --bbox=[BBOX] the bounding box to spatially query in the form of "minx miny maxx maxy"
     --esn=[brief|full|summary] verbosity of results
     --qtype=[dataset|service] query for data or services
-    --schema=[iso] the outputSchema (defualt is csw)
+    --schema=[iso] the outputSchema (default is csw)
 
 GetRecordById
     --id=[ID] the ID of the record
@@ -139,7 +139,7 @@ elif request == 'GetRecordById':
 elif request == 'GetDomain':
     c.getdomain(dname, dtype)
 elif request == 'GetRecords':
-    c.getrecords(qtype, keyword, bbox, esn, sortby, schema)
+    c.getrecords(qtype, [keyword], bbox, esn, sortby, schema)
 
 if print_request is True: # print the request
     print c.request
