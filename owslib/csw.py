@@ -8,11 +8,14 @@
 # Contact email: tomkralidis@hotmail.com
 # =============================================================================
 
+""" CSW request and response processor """
+
 import StringIO
 from owslib.etree import etree
 from owslib.filter import *
 from owslib import util
 from owslib.ows import *
+from owslib.iso import *
 
 # default variables
 
@@ -293,9 +296,13 @@ class CatalogueServiceWeb:
     
             # process list of matching records
             self.results['records'] = []
-    
-            for f in self._records.findall(util.nspath('SearchResults/' + self._setesnel(esn), namespaces['csw'])):
-                self.results['records'].append(CswRecord(f))
+
+            if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
+                for f in self._records.findall(util.nspath('SearchResults', namespaces['csw']) + '/' + util.nspath('MD_Metadata', namespaces['gmd'])):
+                    self.results['records'].append(MD_Metadata(f))
+            else: # process default
+                for f in self._records.findall(util.nspath('SearchResults/' + self._setesnel(esn), namespaces['csw'])):
+                    self.results['records'].append(CswRecord(f))
 
     def getrecordbyid(self, id, esn='full', schema=namespaces['csw'], format=outputformat):
         """
@@ -338,8 +345,12 @@ class CatalogueServiceWeb:
             self.results['records'] = []
 
             # process matching record
-            val = self._records.find(util.nspath(self._setesnel(esn), namespaces['csw']))
-            self.results['records'].append(CswRecord(val))
+            if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
+                val = self._records.find(util.nspath('MD_Metadata', namespaces['gmd']))
+                self.results['records'].append(MD_Metadata(val))
+            else: # process default 
+                val = self._records.find(util.nspath(self._setesnel(esn), namespaces['csw']))
+                self.results['records'].append(CswRecord(val))
 
     def _setesnel(self, esn):
         """ Set the element name to parse depending on the ElementSetName requested """
@@ -383,9 +394,6 @@ class CswRecord(object):
 
         val = record.find(util.nspath('publisher', namespaces['dc']))
         self.publisher = util.testXMLValue(val)
-
-        val = record.find(util.nspath('contributor', namespaces['dc']))
-        self.contributor = util.testXMLValue(val)
 
         val = record.find(util.nspath('contributor', namespaces['dc']))
         self.contributor = util.testXMLValue(val)
