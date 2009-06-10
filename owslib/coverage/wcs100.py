@@ -9,9 +9,9 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from wcsBase import WCSBase, WCSCapabilitiesReader, RereadableURL
+from wcsBase import WCSBase, WCSCapabilitiesReader
 from urllib import urlencode
-from urllib2 import urlopen, HTTPError
+from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
 import os, errno
 
@@ -56,7 +56,7 @@ class WebCoverageService_1_0_0(WCSBase):
         
         #serviceOperations metadata
         self.operations=[]
-        for elem in self._capabilities.find(ns('Capability/')+ns('Request')).getchildren():
+        for elem in self._capabilities.find(ns('Capability/')+ns('Request'))[:]:
             self.operations.append(OperationMetadata(elem))
           
         #serviceContents metadata
@@ -64,6 +64,12 @@ class WebCoverageService_1_0_0(WCSBase):
         for elem in self._capabilities.findall(ns('ContentMetadata/')+ns('CoverageOfferingBrief')): 
             cm=ContentMetadata(elem, self)
             self.contents[cm.id]=cm
+        
+        #Some WCS servers (wrongly) advertise 'Content' OfferingBrief instead.
+        if self.contents=={}:
+            for elem in self._capabilities.findall(ns('ContentMetadata/')+ns('ContentOfferingBrief')): 
+                cm=ContentMetadata(elem, self)
+                self.contents[cm.id]=cm
         
         #exceptions
         self.exceptions = [f.text for f \
@@ -132,28 +138,8 @@ class WebCoverageService_1_0_0(WCSBase):
         self.log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
         
         
-        try:
-            u = urlopen(base_url + data) 
-            self.log.debug('WCS 1.0.0 DEBUG: called urlopen(base_url+data)')            
-        except:   
-            u = urlopen(base_url,data)
-            self.log.debug('WCS 1.0.0 DEBUG: called urlopen(base_url, data)')
-        
-        
-        #self.log.debug('WCS 1.0.0 DEBUG: GetCoverage request made: %s'%u.url)
-        #self.log.debug('WCS 1.0.0 DEBUG: Headers returned: %s'%str(u.headers))
-        # check for service exceptions, and return #TODO - test this bit properly.
-        if u.info()['Content-Type'] == 'text/xml':          
-            #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
-            #wrap the url stram in a extended StringIO object so it's re-readable
-            u=RereadableURL(u)      
-            se_xml= u.read()
-            se_tree = etree.fromstring(se_xml)
-            serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
-            if serviceException is not None:
-                raise ServiceException, \
-                str(serviceException.text).strip()
-            u.seek(0)
+        u=openURL(base_url, data, method)
+
         return u
                
     def getOperationByName(self, name):
@@ -186,12 +172,9 @@ class ServiceIdenfication(object):
     def __init__(self,elem):
         # properties              
         self.version='1.0.0'
-        self.service = elem.find(ns('name')).text
-        try:
-            self.abstract = elem.find(ns('description')).text
-        except:
-            self.abstract=None
-        self.title = elem.find(ns('name')).text     
+        self.service = testXMLValue(elem.find(ns('name')))
+        self.abstract = testXMLValue(elem.find(ns('description')))
+        self.title = testXMLValue(elem.find(ns('name')))     
         self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]
         #note: differs from 'rights' in interface
         self.fees=elem.find(ns('fees')).text

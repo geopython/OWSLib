@@ -78,7 +78,7 @@ class WebFeatureService(object):
         
         #serviceOperations metadata 
         self.operations=[]
-        for elem in self._capabilities.find(nspath('Capability/Request')).getchildren():
+        for elem in self._capabilities.find(nspath('Capability/Request'))[:]:
             self.operations.append(OperationMetadata(elem))
                    
         #serviceContents metadata: our assumption is that services use a top-level 
