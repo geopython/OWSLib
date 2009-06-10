@@ -58,7 +58,7 @@ class FilterRequest(object):
         else:
             etree.SubElement(parent, util.nspath('Filter', namespaces['ogc']))
 
-    def setpropertyisequalto(self, parent, propertyname, literal):
+    def setpropertyisequalto(self, parent, propertyname, literal, matchcase=True):
         """
 
         construct a PropertyIsEqualTo
@@ -69,10 +69,13 @@ class FilterRequest(object):
         - parent: parent etree.Element object
         - propertyname: the PropertyName
         - literal: the Literal value
+        - matchcase: whether to perform a case insensitve query (default is True)
 
         """
 
         tmp = etree.SubElement(parent, util.nspath('PropertyIsEqualTo', namespaces['ogc']))
+        if matchcase is False:
+            tmp.set('matchCase', 'false')
         etree.SubElement(tmp, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
         etree.SubElement(tmp, util.nspath('Literal', namespaces['ogc'])).text = literal
     

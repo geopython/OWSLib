@@ -312,7 +312,7 @@ class CatalogueServiceWeb:
         Parameters
         ----------
 
-        - id: the Id
+        - id: the list of Ids
         - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'full')
         - schema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
         - format: the outputFormat (default is 'application/xml')
