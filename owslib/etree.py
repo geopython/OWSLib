@@ -17,6 +17,8 @@ def patch_well_known_namespaces(etree_module):
             "http://purl.org/dc/terms/":                    "dct",
             "http://www.isotc211.org/2005/gco":             "gco",
             "http://www.isotc211.org/2005/gmd":             "gmd",
+            "http://www.isotc211.org/2005/gts":             "gts",
+            "http://www.isotc211.org/2005/srv":             "srv",
             "http://www.opengis.net/gml":                   "gml",
             "http://www.opengis.net/ogc":                   "ogc",
             "http://www.opengis.net/ows":                   "ows",
