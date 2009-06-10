@@ -135,7 +135,7 @@ if request == 'GetCapabilities':
 elif request == 'DescribeRecord':
     c.describerecord(typename)
 elif request == 'GetRecordById':
-    c.getrecordbyid(id)
+    c.getrecordbyid([id])
 elif request == 'GetDomain':
     c.getdomain(dname, dtype)
 elif request == 'GetRecords':
