@@ -9,11 +9,62 @@
 # =============================================================================
 
 from owslib.etree import etree
-import urlparse, urllib2, StringIO
+import urlparse, urllib2
+from urllib2 import urlopen, HTTPError
+from StringIO import StringIO
 
 """
-Utility functions
+Utility functions and classes
 """
+
+class RereadableURL(StringIO,object):
+    """ Class that acts like a combination of StringIO and url - has seek method and url headers etc """
+    def __init__(self, u):
+        #get url headers etc from url
+        self.headers = u.headers                
+        #get file like seek, read methods from StringIO
+        content=u.read()
+        super(RereadableURL, self).__init__(content)
+
+
+class ServiceException(Exception):
+    #TODO: this should go in ows common module when refactored.  
+    pass
+
+
+def openURL(url_base, data, method='Get'):
+    ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting'''
+    url_base.strip() 
+    lastchar = url_base[-1]
+    if lastchar not in ['?', '&']:
+        if url_base.find('?') == -1:
+            url_base = url_base + '?'
+        else:
+            url_base = url_base + '&'
+    try:
+        if method == 'Post':
+            u=urlopen(url_base,  data)
+        else:
+            u=urlopen(url_base + data)
+    except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception.
+        if e.code == 400:
+            raise ServiceException, e.read()
+
+    # check for service exceptions without the http header set
+    if u.info()['Content-Type'] in ['text/xml', 'application/xml']:          
+        #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
+        #wrap the url stram in a extended StringIO object so it's re-readable
+        u=RereadableURL(u)      
+        se_xml= u.read()
+        se_tree = etree.fromstring(se_xml)
+        serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
+        if serviceException is None:
+            serviceException=se_tree.find('ServiceException')
+        if serviceException is not None:
+            raise ServiceException, \
+            str(serviceException.text).strip()
+        u.seek(0) #return cursor to start of u      
+    return u
 
 def nspath(path, ns=None):
     """
@@ -87,7 +138,8 @@ def http_post(url=None, request=None, lang='en-US'):
         response = up.read()
         up.close()
         return response
-
+       
+        
 def xml2string(xml):
     """
 

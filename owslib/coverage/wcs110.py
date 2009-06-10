@@ -11,7 +11,8 @@
 
 ##########NOTE: Does not conform to new interfaces yet #################
 
-from wcsBase import WCSBase, WCSCapabilitiesReader, RereadableURL
+from wcsBase import WCSBase, WCSCapabilitiesReader
+from owslib.util import RereadableURL, testXMLValue
 from urllib import urlencode
 from urllib2 import urlopen
 from owslib.etree import etree
@@ -184,7 +185,7 @@ class WebCoverageService_1_1_0(WCSBase):
         if 'content-type' in u.info().keys():      
             if u.info()['content-type'] == 'text/xml':          
                 #going to have to read the xml to see if it's an exception report.
-                #wrap the url stram in a extended StringIO object so it's re-readable
+                #wrap the url stream in a extended StringIO object so it's re-readable
                 u=RereadableURL(u)      
                 se_xml= u.read()
                 se_tree = etree.fromstring(se_xml)

@@ -178,11 +178,3 @@ class DescribeCoverageReader(object):
         return etree.fromstring(u.read())
     
        
-class RereadableURL(StringIO, object):
-    """ Class that acts like a combination of StringIO and url - has seek method and url headers etc """
-    def __init__(self, u):
-        #get url headers etc from url
-        self.headers = u.headers                
-        #get file like seek, read methods from StringIO
-        content=u.read()
-        super(RereadableURL, self).__init__(content)
