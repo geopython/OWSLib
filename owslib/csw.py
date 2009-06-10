@@ -304,7 +304,7 @@ class CatalogueServiceWeb:
                 for f in self._records.findall(util.nspath('SearchResults/' + self._setesnel(esn), namespaces['csw'])):
                     self.results['records'].append(CswRecord(f))
 
-    def getrecordbyid(self, id, esn='full', schema=namespaces['csw'], format=outputformat):
+    def getrecordbyid(self, id=[], esn='full', schema=namespaces['csw'], format=outputformat):
         """
 
         Construct and process a GetRecordById request
@@ -326,7 +326,8 @@ class CatalogueServiceWeb:
         node0.set('version', self.version)
         node0.set('service', self.service)
         node0.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
-        etree.SubElement(node0, util.nspath('Id', namespaces['csw'])).text = id
+        for i in id:
+            etree.SubElement(node0, util.nspath('Id', namespaces['csw'])).text = i
         etree.SubElement(node0, util.nspath('ElementSetName', namespaces['csw'])).text = esn
         self.request = util.xml2string(etree.tostring(node0))
 
@@ -346,11 +347,11 @@ class CatalogueServiceWeb:
 
             # process matching record
             if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
-                val = self._records.find(util.nspath('MD_Metadata', namespaces['gmd']))
-                self.results['records'].append(MD_Metadata(val))
+                for i in self._records.findall(util.nspath('MD_Metadata', namespaces['gmd'])):
+                    self.results['records'].append(MD_Metadata(i))
             else: # process default 
-                val = self._records.find(util.nspath(self._setesnel(esn), namespaces['csw']))
-                self.results['records'].append(CswRecord(val))
+                for i in self._records.findall(util.nspath(self._setesnel(esn), namespaces['csw'])):
+                    self.results['records'].append(CswRecord(i))
 
     def _setesnel(self, esn):
         """ Set the element name to parse depending on the ElementSetName requested """

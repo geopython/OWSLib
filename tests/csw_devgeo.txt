@@ -86,7 +86,7 @@
     'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
     >>> csw.results['records'][0].subjects
     ['birds', 'waterbirds', 'amphibians', 'marsh', 'wetland', 'survey', 'populations', 'volunteers', 'canada', 'united states', 'great lakes', 'AOC']
-    >>> csw.getrecordbyid('643ec912-ae24-4c10-aa38-5b420ee46aff')
+    >>> csw.getrecordbyid(['643ec912-ae24-4c10-aa38-5b420ee46aff'])
     >>> csw.results['records'][0].title
     'Marsh Monitoring Program Route Locations'
     >>> csw.results['records'][0].uri
