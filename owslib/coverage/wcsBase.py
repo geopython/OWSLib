@@ -35,16 +35,20 @@ class WCSBase(object):
         self.log = logging.getLogger()
         consoleh  = logging.StreamHandler()
         self.log.addHandler(consoleh)	
+        self._describeCoverage = {} #cache for DescribeCoverage responses
         return obj
     
     def __init__(self):
         pass    
-           
-    def getDescribeCoverage(self,identifier):
-         reader = DescribeCoverageReader(self.version, identifier)
-         #Note: should implement some sort of cache so the same request isn't repeated
-         return reader.read(self.url)
-         
+
+    def getDescribeCoverage(self, identifier):
+        ''' returns a describe coverage document - checks the internal cache to see if it has been fetched before '''
+        if identifier not in self._describeCoverage.keys():
+            reader = DescribeCoverageReader(self.version, identifier)
+            self._describeCoverage[identifier] = reader.read(self.url)
+        return self._describeCoverage[identifier]
+        
+                         
     def setLogLevel(self, level='CRITICAL'):
         #accepts level = DEBUG, INFO, WARNING, ERROR, CRITICAL
         if level=='DEBUG':
