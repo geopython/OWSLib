@@ -9,7 +9,7 @@
 # =============================================================================
 
 from owslib.etree import etree
-import urlparse, httplib, StringIO
+import urlparse, urllib2, StringIO
 
 """
 Utility functions
@@ -75,20 +75,18 @@ def http_post(url=None, request=None, lang='en-US'):
 
     if url is not None:
         u = urlparse.urlsplit(url)
-        h = httplib.HTTP(u.netloc)
-        h.putrequest('POST', u.path)
-        h.putheader('User-Agent', 'OWSLib (http://trac.gispython.org/lab/wiki/OwsLib)')
-        h.putheader('Content-type', 'text/xml')
-        h.putheader('Content-length', '%d' % len(request))
-        h.putheader('Accept', 'text/xml')
-        h.putheader('Accept-Language', lang)
-        h.putheader('Accept-Encoding', 'gzip,deflate')
-        h.putheader('Host', u.netloc)
-        h.endheaders()
-        h.send(request)
-        reply, msg, hdrs = h.getreply()
-
-        return h.getfile().read()
+        r = urllib2.Request(url, request)
+        r.add_header('User-Agent', 'OWSLib (http://trac.gispython.org/lab/wiki/OwsLib)')
+        r.add_header('Content-type', 'text/xml')
+        r.add_header('Content-length', '%d' % len(request))
+        r.add_header('Accept', 'text/xml')
+        r.add_header('Accept-Language', lang)
+        r.add_header('Accept-Encoding', 'gzip,deflate')
+        r.add_header('Host', u.netloc)
+        up = urllib2.urlopen(r)
+        response = up.read()
+        up.close()
+        return response
 
 def xml2string(xml):
     """
