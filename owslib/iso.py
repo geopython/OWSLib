@@ -55,6 +55,12 @@ class MD_Metadata(object):
         val = md.find(util.nspath('metadataStandardVersion', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.stdver = util.testXMLValue(val)
 
+        val = md.find(util.nspath('referenceSystemInfo/MD_ReferenceSystem', namespaces['gmd']))
+        if val:
+            self.referencesystem = MD_ReferenceSystem(val)
+        else:
+            self.referencesystem = None
+
         val = md.find(util.nspath('identificationInfo/MD_DataIdentification', namespaces['gmd']))
         val2 = md.find(util.nspath('identificationInfo', namespaces['gmd']) + '/' + util.nspath('SV_ServiceIdentification', namespaces['srv']))
 
@@ -129,6 +135,9 @@ class MD_DataIdentification(object):
 
         val = md.find(util.nspath('abstract', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.abstract = util.testXMLValue(val)
+
+        val = md.find(util.nspath('purpose', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.purpose = util.testXMLValue(val, True)
 
         val = md.find(util.nspath('status/MD_ProgressCode', namespaces['gmd'])).attrib.get('codeListValue')
         self.status = util.testXMLValue(val, True)
@@ -257,3 +266,27 @@ class EX_Extent(object):
         self.miny = util.testXMLValue(val)
         val = md.find(util.nspath('geographicElement/EX_GeographicBoundingBox/northBoundLatitude', namespaces['gmd']) + '/' + util.nspath('Decimal', namespaces['gco']))
         self.maxy = util.testXMLValue(val)
+
+class MD_ReferenceSystem(object):
+    """ process MD_ReferenceSystem """
+    def __init__(self, md):
+        val = md.find(util.nspath('referenceSystemIdentifier/RS_Identifier/code', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.code = util.testXMLValue(val)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

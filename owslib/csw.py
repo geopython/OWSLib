@@ -252,7 +252,7 @@ class CatalogueServiceWeb:
                     flt.setbbox(node3, bbox)
 
             # set a keyword query if passed
-            if keywords is not None:
+            if len(keywords) > 0:
                 if len(keywords) > 1: # loop multiple keywords into an Or
                     if node4 is not None:
                         node5 = etree.SubElement(node4, util.nspath('Or', namespaces['ogc']))
