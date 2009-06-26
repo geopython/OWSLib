@@ -66,7 +66,7 @@ class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version):
+    def __init__(self, version=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -91,7 +91,7 @@ class WCSCapabilitiesReader(object):
             qs.append(('service', 'WCS'))
         if 'request' not in params:
             qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
+        if ('version' not in params) and (self.version is not None):
             qs.append(('version', self.version))
 
         urlqs = urlencode(tuple(qs))

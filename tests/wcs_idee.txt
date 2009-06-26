@@ -6,17 +6,15 @@ WCS Version 1.0.0
 
 
     >>> from owslib.wcs import WebCoverageService
-    >>> wcs=WebCoverageService('http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet', version='1.0.0')
-    >>> wcs.url
-    'http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet'
+    >>> wcs=WebCoverageService('http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet')
     >>> wcs.version
     '1.0.0'
+    >>> wcs.url
+    'http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet'
     >>> wcs.identification.service
     'IDEE-WCS-UTM30N'
     >>> wcs.provider.name
-    'IAAA Laboratory, University of Zaragoza'
-    >>> wcs.provider.contact.organization
-    'IAAA Laboratory, University of Zaragoza'
+    u'Instituto Geogr\xe1fico Nacional'
     >>> wcs.contents.keys()
     ['MDT25_peninsula_pendientes', 'MDT_peninsula_baleares_aspecto', 'MDT1000_peninsula_baleares', 'MDT500_peninsula_baleares', 'MDT_peninsula_baleares', 'MDT500_peninsula_baleares_pendientes', 'MDT1000_peninsula_baleares_pendientes', 'MDT_peninsula_baleares_pendientes', 'MDT25_peninsula_ZIP', 'MDT25_peninsula_aspecto', 'MDT500_peninsula_baleares_aspecto', 'MDT1000_peninsula_baleares_aspecto']
     >>> cvg=wcs['MDT25_peninsula_pendientes']
