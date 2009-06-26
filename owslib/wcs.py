@@ -13,9 +13,23 @@
 Web Coverage Server (WCS) methods and metadata. Factory function.
 """
 
-from coverage import wcs100, wcs110 
-def WebCoverageService(url, version='1.1.0', xml=None):
+
+import urllib2
+import etree
+from coverage import wcs100, wcs110, wcsBase
+
+def WebCoverageService(url, version=None, xml=None):
     ''' wcs factory function, returns a version specific WebCoverageService object '''
+    if xml is None:
+        reader = wcsBase.WCSCapabilitiesReader()
+        request = reader.capabilities_url(url)
+        xml = urllib2.urlopen(request).read()
+
+    if version is None:
+        capabilities = etree.etree.fromstring(xml)
+        version = capabilities.get('version')
+        del capabilities
+    
     if version == '1.0.0':
         return wcs100.WebCoverageService_1_0_0.__new__(wcs100.WebCoverageService_1_0_0, url, xml)
     elif version == '1.1.0':
