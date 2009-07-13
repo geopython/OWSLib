@@ -2,7 +2,7 @@
     >>> c = CatalogueServiceWeb('http://geomatics.nlr.nl/excat/csw')
     >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-    <csw:GetCapabilities service="CSW" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><ows:AcceptVersions xmlns:ows="http://www.opengis.net/ows"><ows:Version>2.0.2</ows:Version></ows:AcceptVersions><ows:AcceptFormats xmlns:ows="http://www.opengis.net/ows"><ows:OutputFormat>application/xml</ows:OutputFormat></ows:AcceptFormats></csw:GetCapabilities>
+    <csw:GetCapabilities xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="CSW" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:AcceptVersions><ows:Version>2.0.2</ows:Version></ows:AcceptVersions><ows:AcceptFormats><ows:OutputFormat>application/xml</ows:OutputFormat></ows:AcceptFormats></csw:GetCapabilities>
     >>> c.identification.title
     'NLR CSW'
     >>> c.identification.abstract
@@ -24,9 +24,7 @@
       File "<stdin>", line 1, in <module>
     AttributeError: 'ServiceProvider' object has no attribute 'site'
     >>> c.provider.url 
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    AttributeError: 'ServiceProvider' object has no attribute 'url'
+    'http://geomatics.nlr.nl/excat'
     >>> c.provider.uri
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
@@ -40,17 +38,17 @@
     >>> c.describerecord()
     >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-    <csw:DescribeRecord outputFormat="application/xml" schemaLanguage="http://www.w3.org/XML/Schema" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:TypeName>csw:Record</csw:TypeName></csw:DescribeRecord>
+    <csw:DescribeRecord xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" outputFormat="application/xml" schemaLanguage="http://www.w3.org/XML/Schema" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:TypeName>csw:Record</csw:TypeName></csw:DescribeRecord>
     >>> c.getdomain('GetRecords.outputSchema')
     >>> print c.request 
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-    <csw:GetDomain service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:ParameterName>GetRecords.outputSchema</csw:ParameterName></csw:GetDomain>
+    <csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:ParameterName>GetRecords.outputSchema</csw:ParameterName></csw:GetDomain>
     >>> c.exceptionreport.exceptions
     [{'locator': 'request', 'ExceptionText': 'Operation not supported: GetDomain', 'exceptionCode': 'OperationNotSupported'}]
     >>> c.getrecords(keywords=['space'])
     >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-    <csw:GetRecords maxRecords="10" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%space%</ogc:Literal></ogc:PropertyIsLike></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
+    <csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%space%</ogc:Literal></ogc:PropertyIsLike></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
     >>> c.results['matches']
     80
     >>> c.results['returned']
@@ -68,7 +66,7 @@
     >>> c.getrecordbyid([c.results['records'][8].identifier])
     >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-    <csw:GetRecordById outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Id>DGFKRYMCWUZSCDRBWRXMIETZE</csw:Id><csw:ElementSetName>full</csw:ElementSetName></csw:GetRecordById>
+    <csw:GetRecordById xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:Id>DGFKRYMCWUZSCDRBWRXMIETZE</csw:Id><csw:ElementSetName>full</csw:ElementSetName></csw:GetRecordById>
     >>> c.results['records'][0].title
     'CERISE: Computationally Efficient Radar Image Simulation Environment'
     >>> 
