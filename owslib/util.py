@@ -66,7 +66,10 @@ def openURL(url_base, data, method='Get'):
         u.seek(0) #return cursor to start of u      
     return u
 
-def nspath(path, ns=None):
+#default namespace for nspath is OWS common
+OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
+def nspath(path, ns=OWS_NAMESPACE):
+
     """
 
     Prefix the given path with the given namespace identifier.

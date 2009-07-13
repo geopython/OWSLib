@@ -48,7 +48,7 @@ Print the ids of all layers (actually just the first 3):
 	(-153.21272373696925, 11.968943490602328, -49.029734977681301, 57.381662765023037)
     
 	>>> cvg.timepositions[:3]
-	['2009-04-26T06:00:00Z', '2009-04-26T09:00:00Z', '2009-04-26T12:00:00Z']
+	['2009-05-29T06:00:00Z', '2009-05-29T09:00:00Z', '2009-05-29T12:00:00Z']
 
 	>>> cvg.supportedCRS
 	['EPSG:9802[Lambert_Conformal_Conic_2SP]']
