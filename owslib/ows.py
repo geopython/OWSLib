@@ -23,6 +23,8 @@ OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
 XSI_NAMESPACE       = 'http://www.w3.org/2001/XMLSchema-instance'
 XLINK_NAMESPACE     = 'http://www.w3.org/1999/xlink'
 
+DEFAULT_OWS_NAMESPACE=OWS_NAMESPACE_1_1_0     #Use this as default for OWSCommon objects
+
 class OwsCommon(object):
     """Initialize OWS Common object"""
     def __init__(self,version):
@@ -34,7 +36,7 @@ class OwsCommon(object):
     
 class ServiceIdentification(object):
     """Initialize an OWS Common ServiceIdentification construct"""
-    def __init__(self,infoset,namespace): 
+    def __init__(self,infoset,namespace=DEFAULT_OWS_NAMESPACE): 
         self._root = infoset
 
         val = self._root.find(util.nspath('Title', namespace))
@@ -53,26 +55,34 @@ class ServiceIdentification(object):
 
         val = self._root.find(util.nspath('ServiceType', namespace))
         self.type = util.testXMLValue(val)
+        self.service=self.type #alternative? keep both?discuss
 
         val = self._root.find(util.nspath('ServiceTypeVersion', namespace))
         self.version = util.testXMLValue(val)
 
 class ServiceProvider(object):
     """Initialize an OWS Common ServiceProvider construct"""
-    def __init__(self, infoset,namespace):
+    def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
         self._root = infoset
-
         val = self._root.find(util.nspath('ProviderName', namespace))
         self.name = util.testXMLValue(val)
         self.contact = ServiceContact(infoset, namespace)
+        val = self._root.find(util.nspath('ProviderSite', namespace))
+        if val is not None:
+            urlattrib=val.attrib[util.nspath('href', XLINK_NAMESPACE)]
+            self.url = util.testXMLValue(urlattrib, True)
+        else:
+            self.url =None
 
 class ServiceContact(object):
     """Initialize an OWS Common ServiceContact construct"""
-    def __init__(self, infoset,namespace):
+    def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
         self._root = infoset
         val = self._root.find(util.nspath('ProviderName', namespace))
         self.name = util.testXMLValue(val)
-
+        
+        self.organization=util.testXMLValue(self._root.find(util.nspath('ContactPersonPrimary/ContactOrganization', namespace)))
+        
         val = self._root.find(util.nspath('ProviderSite', namespace))
         if val is not None:
             self.site = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
@@ -126,17 +136,19 @@ class ServiceContact(object):
    
 class OperationsMetadata(object):
     """Initialize an OWS OperationMetadata construct"""
-    def __init__(self,elem,namespace):
+    def __init__(self,elem,namespace=DEFAULT_OWS_NAMESPACE):
         self.name = elem.attrib['name']
         self.formatOptions = ['text/xml']
         methods = []
-        for verb in elem.find(util.nspath('DCP/HTTP', namespace)):
-            methods.append((self.name, {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
+        for verb in elem.findall(util.nspath('DCP/HTTP/*', namespace)):
+            methods.append((verb.tag, {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
         self.methods = dict(methods)
+
+
 
 class BoundingBox(object):
     """Initialize an OWS BoundingBox construct"""
-    def __init__(self, elem, namespace): 
+    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE): 
         self.minx = None
         self.miny = None
         self.maxx = None
@@ -160,7 +172,7 @@ class BoundingBox(object):
 
 class ExceptionReport(object):
     """Initialize an OWS ExceptionReport construct"""
-    def __init__(self, elem, namespace):
+    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
         self.exceptions = []
         for i in elem.findall(util.nspath('Exception', namespace)):
             tmp = {}
