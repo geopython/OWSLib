@@ -1,170 +1,170 @@
     >>> from owslib.csw import CatalogueServiceWeb
     >>> csw = CatalogueServiceWeb('http://devgeo.cciw.ca/geonetwork/srv/en/csw')
-    >>> csw.url
+    >>> c.url
     'http://devgeo.cciw.ca/geonetwork/srv/en/csw'
-    >>> csw.version
+    >>> c.version
     '2.0.2'
-    >>> csw.lang
+    >>> c.lang
     'en-US'
-    >>> csw.service
+    >>> c.service
     'CSW'
-    >>> csw.owscommon.version
+    >>> c.owscommon.version
     '1.0.0'
-    >>> csw.owscommon.namespace
+    >>> c.owscommon.namespace
     'http://www.opengis.net/ows'
-    >>> csw.identification.title
+    >>> c.identification.title
     'Geospatial Data Dissemination Demo'
-    >>> csw.identification.abstract
+    >>> c.identification.abstract
     'Geospatial Data Dissemination Demo'
-    >>> csw.identification.keywords
+    >>> c.identification.keywords
     ['Global Regions > North America', 'Global Regions > Northern Hemisphere', 'Global Regions > Western Hemisphere', 'Countries > Canada', 'Global Regions > Mid-latitude', 'Canada > Ontario', 'Canada > Newfoundland And Labrador', 'Canada > Northwest Territories', 'Canada > New Brunswick', 'Canada > Nova Scotia']
-    >>> csw.identification.accessconstraints
+    >>> c.identification.accessconstraints
     'None'
-    >>> csw.identification.fees
+    >>> c.identification.fees
     'None'
-    >>> csw.identification.type
+    >>> c.identification.type
     'CSW'
-    >>> csw.identification.version
+    >>> c.identification.version
     '2.0.2'
-    >>> csw.provider.name
+    >>> c.provider.name
     'GeoNetwork opensource'
-    >>> csw.provider.contact.name
+    >>> c.provider.contact.name
     'Tom Kralidis'
-    >>> csw.provider.contact.position
+    >>> c.provider.contact.position
     'Editor'
-    >>> csw.provider.contact.phone
+    >>> c.provider.contact.phone
     '$VOICE'
-    >>> csw.provider.contact.fax
+    >>> c.provider.contact.fax
     '$FACSIMILE'
-    >>> csw.provider.contact.address
+    >>> c.provider.contact.address
     '4905 Dufferin Street'
-    >>> csw.provider.contact.city
+    >>> c.provider.contact.city
     '4905 Dufferin Street'
-    >>> csw.provider.contact.region
+    >>> c.provider.contact.region
     'ON'
-    >>> csw.provider.contact.postcode
+    >>> c.provider.contact.postcode
     'M3H 5T4'
-    >>> csw.provider.contact.country
+    >>> c.provider.contact.country
     'ca'
-    >>> csw.provider.contact.email
+    >>> c.provider.contact.email
     'tom.kralidis@ec.gc.ca'
-    >>> csw.provider.contact.instructions
+    >>> c.provider.contact.instructions
     'Environment Canada'
-    >>> csw.provider.contact.role
+    >>> c.provider.contact.role
     'gov'
-    >>> [op.name for op in csw.operations]
+    >>> [op.name for op in c.operations]
     ['GetCapabilities', 'DescribeRecord', 'GetDomain', 'GetRecords', 'GetRecordById', 'Transaction']
-    >>> csw.describerecord()
-    >>> print csw.request
+    >>> c.describerecord()
+    >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     <csw:DescribeRecord outputFormat="application/xml" schemaLanguage="http://www.w3.org/XML/Schema" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:TypeName>csw:Record</csw:TypeName></csw:DescribeRecord>
-    >>> csw.getdomain('GetRecords.outputSchema')
-    >>> print csw.request
+    >>> c.getdomain('GetRecords.outputSchema')
+    >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     <csw:GetDomain service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:ParameterName>GetRecords.outputSchema</csw:ParameterName></csw:GetDomain>
-    >>> csw.results['values']
+    >>> c.results['values']
     ['http://www.opengis.net/cat/csw/2.0.2', 'http://www.isotc211.org/2005/gmd']
-    >>> csw.getrecords('dataset',['birds'])
-    >>> print csw.request
+    >>> c.getrecords('dataset',['birds'])
+    >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     <csw:GetRecords maxRecords="10" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:And><ogc:PropertyIsEqualTo><ogc:PropertyName>dc:type</ogc:PropertyName><ogc:Literal>dataset</ogc:Literal></ogc:PropertyIsEqualTo><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%birds%</ogc:Literal></ogc:PropertyIsLike></ogc:And></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
-    >>> csw.results['matches']
+    >>> c.results['matches']
     19
-    >>> csw.results['returned']
+    >>> c.results['returned']
     10
-    >>> csw.results['nextrecord']
+    >>> c.results['nextrecord']
     11
-    >>> csw.results['records'][0].identifier
+    >>> c.results['records'][0].identifier
     '643ec912-ae24-4c10-aa38-5b420ee46aff'
-    >>> csw.results['records'][0].title
+    >>> c.results['records'][0].title
     'Marsh Monitoring Program Route Locations'
-    >>> csw.results['records'][0].abstract
+    >>> c.results['records'][0].abstract
     'A Spring survey of birds and amphibians carried out primarily within the Great Lakes region of North America.'
-    >>> csw.results['records'][0].type
+    >>> c.results['records'][0].type
     'dataset'
-    >>> csw.results['records'][0].uri
+    >>> c.results['records'][0].uri
     'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
-    >>> csw.results['records'][0].subjects
+    >>> c.results['records'][0].subjects
     ['birds', 'waterbirds', 'amphibians', 'marsh', 'wetland', 'survey', 'populations', 'volunteers', 'canada', 'united states', 'great lakes', 'AOC']
-    >>> csw.getrecordbyid(['643ec912-ae24-4c10-aa38-5b420ee46aff'])
-    >>> csw.results['records'][0].title
+    >>> c.getrecordbyid(['643ec912-ae24-4c10-aa38-5b420ee46aff'])
+    >>> c.results['records'][0].title
     'Marsh Monitoring Program Route Locations'
-    >>> csw.results['records'][0].uri
+    >>> c.results['records'][0].uri
     'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
-    >>> csw.getdomain('foo.param')
-    >>> csw.exceptionreport.exceptions
+    >>> c.getdomain('foo.param')
+    >>> c.exceptionreport.exceptions
     [{'locator': 'foo', 'ExceptionText': None, 'exceptionCode': 'OperationNotSupported'}]
     >>> 
-    >>> csw.getrecords(qtype='dataset',keywords=['bird','frog'],maxrecords=100)
-    >>> print csw.request
+    >>> c.getrecords(qtype='dataset',keywords=['bird','frog'],maxrecords=100)
+    >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     <csw:GetRecords maxRecords="100" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:And><ogc:PropertyIsEqualTo><ogc:PropertyName>dc:type</ogc:PropertyName><ogc:Literal>dataset</ogc:Literal></ogc:PropertyIsEqualTo><ogc:Or><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%bird%</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%frog%</ogc:Literal></ogc:PropertyIsLike></ogc:Or></ogc:And></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
-    >>> csw.results['matches']
+    >>> c.results['matches']
     21
-    >>> csw.getrecords(qtype='dataset',keywords=['birds'],schema='http://www.isotc211.org/2005/gmd')
-    >>> csw.results['records'][8].identifier
+    >>> c.getrecords(qtype='dataset',keywords=['birds'],schema='http://www.isotc211.org/2005/gmd')
+    >>> c.results['records'][8].identifier
     '83d250a7-a05a-4a59-b8a7-0cf5e817949f'
-    >>> csw.results['records'][8].language  
+    >>> c.results['records'][8].language  
     'eng'
-    >>> csw.results['records'][8].charset 
+    >>> c.results['records'][8].charset 
     'utf8'
-    >>> csw.results['records'][8].hierarchy
+    >>> c.results['records'][8].hierarchy
     'dataset'
-    >>> csw.results['records'][8].datestamp
+    >>> c.results['records'][8].datestamp
     '2009-04-14T09:32:38-04:00'
-    >>> csw.results['records'][8].stdname  
+    >>> c.results['records'][8].stdname  
     'ISO 19115:2003/19139'
-    >>> csw.results['records'][8].stdver 
+    >>> c.results['records'][8].stdver 
     '1.0'
-    >>> csw.results['records'][8].contact.name
+    >>> c.results['records'][8].contact.name
     'Andrew Couturier'
-    >>> csw.results['records'][8].contact.organization
+    >>> c.results['records'][8].contact.organization
     'Bird Studies Canada'
-    >>> csw.results['records'][8].contact.position    
+    >>> c.results['records'][8].contact.position    
     'GIS Analyst'
-    >>> csw.results['records'][8].contact.onlineresource.url
+    >>> c.results['records'][8].contact.onlineresource.url
     'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3919&entryLang=en&portal=gdp'
-    >>> csw.results['records'][8].identification.title      
+    >>> c.results['records'][8].identification.title      
     'eBird Canada - Summarized Data'
-    >>> csw.results['records'][8].identification.date 
+    >>> c.results['records'][8].identification.date 
     '2009-04-14T09:32:38-04:00'
-    >>> csw.results['records'][8].identification.datetype
+    >>> c.results['records'][8].identification.datetype
     'revision'
-    >>> csw.results['records'][8].identification.status  
+    >>> c.results['records'][8].identification.status  
     'completed'
-    >>> csw.results['records'][8].identification.contact.name
+    >>> c.results['records'][8].identification.contact.name
     'Andrew Couturier'
-    >>> csw.results['records'][8].identification.contact.onlineresource.url
+    >>> c.results['records'][8].identification.contact.onlineresource.url
     'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3919&entryLang=en&portal=gdp'
-    >>> csw.results['records'][8].identification.keywords                  
+    >>> c.results['records'][8].identification.keywords                  
     {'list': ['birds', 'monitoring', 'abundance', 'distribution', 'survey', 'population', 'volunteers', 'ebird', 'canada'], 'type': 'theme'}
-    >>> csw.results['records'][8].identification.bbox.minx
+    >>> c.results['records'][8].identification.bbox.minx
     '-141'
-    >>> csw.results['records'][8].identification.bbox.miny
+    >>> c.results['records'][8].identification.bbox.miny
     '41'
-    >>> csw.results['records'][8].identification.bbox.maxx
+    >>> c.results['records'][8].identification.bbox.maxx
     '-52'
-    >>> csw.results['records'][8].identification.bbox.maxy
+    >>> c.results['records'][8].identification.bbox.maxy
     '78'
-    >>> csw.results['records'][8].distribution.format     
-    >>> csw.results['records'][8].distribution.onlineresource.url
+    >>> c.results['records'][8].distribution.format     
+    >>> c.results['records'][8].distribution.onlineresource.url
     'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
-    >>> csw.results['records'][8].distribution.onlineresource.protocol
+    >>> c.results['records'][8].distribution.onlineresource.protocol
     'OGC:WMS-1.1.1-http-get-map'
-    >>> csw.results['records'][8].distribution.onlineresource.name    
+    >>> c.results['records'][8].distribution.onlineresource.name    
     'EBIRD_S'
-    >>> csw.getrecords(qtype='service',keywords=['bird'],schema='http://www.isotc211.org/2005/gmd')
-    >>> csw.results['records'][0].identifier
+    >>> c.getrecords(qtype='service',keywords=['bird'],schema='http://www.isotc211.org/2005/gmd')
+    >>> c.results['records'][0].identifier
     'ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'
-    >>> csw.results['records'][0].identification.service.type
+    >>> c.results['records'][0].identification.service.type
     'OGC:WMS'
-    >>> csw.results['records'][0].identification.service.version
+    >>> c.results['records'][0].identification.service.version
     '1.1.1'
-    >>> csw.results['records'][0].identification.service.fees   
+    >>> c.results['records'][0].identification.service.fees   
     'None'
-    >>> csw.results['records'][0].identification.service.couplingtype
+    >>> c.results['records'][0].identification.service.couplingtype
     'tight'
-    >>> for i in csw.results['records'][0].identification.service.operations:
+    >>> for i in c.results['records'][0].identification.service.operations:
     ...     print i['name']
     ... 
     GetCapabilities
@@ -172,7 +172,7 @@
     GetFeatureInfo
     DescribeLayer
     GetLegendGraphic
-    >>> for i in csw.results['records'][0].identification.service.operations:
+    >>> for i in c.results['records'][0].identification.service.operations:
     ...     for k in i['connectpoint']:
     ...             print k.url
     ...             print k.name
@@ -260,7 +260,7 @@
     image/wbmp
     Format : image/wbmp
     information
-    >>> csw.results['records'][0].identification.service.operateson  
+    >>> c.results['records'][0].identification.service.operateson  
     [{'href': '/geonetwork/srv/en/metadata.show?id=2642', 'uuidref': '1e7ff99a-a17f-420f-9dfb-3c245a2a8120', 'title': 'IBA'}, {'href': '/geonetwork/srv/en/metadata.show?id=2643', 'uuidref': '834b6734-5a21-45d3-8fbc-b32bffd0d1a5', 'title': 'CBC_PT'}, {'href': '/geonetwork/srv/en/metadata.show?id=2644', 'uuidref': '9ed85271-da69-49eb-867f-2d3c533e1fa5', 'title': 'CBC_PY'}, {'href': '/geonetwork/srv/en/metadata.show?id=2645', 'uuidref': '643ec912-ae24-4c10-aa38-5b420ee46aff', 'title': 'MMP'}, {'href': '/geonetwork/srv/en/metadata.show?id=2646', 'uuidref': '15bea07a-5168-496e-870c-92224d74d75a', 'title': 'CLLS'}, {'href': '/geonetwork/srv/en/metadata.show?id=2647', 'uuidref': '4a5ebc6f-cd67-4fae-855c-631b1ec634fa', 'title': 'OBBA_SQUARE'}, {'href': '/geonetwork/srv/en/metadata.show?id=2648', 'uuidref': '8f659478-9f53-4c79-9802-b7e3e024ea2e', 'title': 'OBBA_REGION'}, {'href': '/geonetwork/srv/en/metadata.show?id=2649', 'uuidref': 'd7092f4e-0ecd-429e-bb1e-1583b3c2ec96', 'title': 'OBBA_BLOCK'}, {'href': '/geonetwork/srv/en/metadata.show?id=2650', 'uuidref': '6c3160d4-25e2-42ae-a7e9-73bd77f705b6', 'title': 'OWLS'}, {'href': '/geonetwork/srv/en/metadata.show?id=2651', 'uuidref': 'b6516a64-73df-4697-a497-fa92d8daf3d3', 'title': 'BBS_PT'}, {'href': '/geonetwork/srv/en/metadata.show?id=2652', 'uuidref': '775e9c3b-b404-416c-a84b-2cf3681a5fd9', 'title': 'PFW_R'}, {'href': '/geonetwork/srv/en/metadata.show?id=2653', 'uuidref': '1498d906-5e5a-41cc-9cb8-7b898a33e501', 'title': 'PFW_L'}, {'href': '/geonetwork/srv/en/metadata.show?id=2654', 'uuidref': '7ce1ddb0-9baf-4621-92e8-90da6dbee109', 'title': 'PFW_S'}, {'href': '/geonetwork/srv/en/metadata.show?id=2655', 'uuidref': '49cc05bc-299e-4be6-b43e-c301c88d8df3', 'title': 'GBBC_R'}, {'href': '/geonetwork/srv/en/metadata.show?id=2656', 'uuidref': '5f10b2b8-8234-413e-82a4-973719650993', 'title': 'GBBC_L'}, {'href': '/geonetwork/srv/en/metadata.show?id=2657', 'uuidref': '5202a681-848e-42a6-8ac1-1725fbc219c6', 'title': 'GBBC_S'}, {'href': '/geonetwork/srv/en/metadata.show?id=2658', 'uuidref': 'd66a0296-9349-460f-8c47-8e8aa5e4822f', 'title': 'EBIRD_R'}, {'href': '/geonetwork/srv/en/metadata.show?id=2659', 'uuidref': 'cae7bcf7-6c02-40c4-9928-8ab4516c1997', 'title': 'EBIRD_L'}, {'href': '/geonetwork/srv/en/metadata.show?id=2660', 'uuidref': '83d250a7-a05a-4a59-b8a7-0cf5e817949f', 'title': 'EBIRD_S'}]
     >>> 
     
