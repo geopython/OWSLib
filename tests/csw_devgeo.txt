@@ -1,5 +1,5 @@
     >>> from owslib.csw import CatalogueServiceWeb
-    >>> csw = CatalogueServiceWeb('http://devgeo.cciw.ca/geonetwork/srv/en/csw')
+    >>> c = CatalogueServiceWeb('http://devgeo.cciw.ca/geonetwork/srv/en/csw')
     >>> c.url
     'http://devgeo.cciw.ca/geonetwork/srv/en/csw'
     >>> c.version
