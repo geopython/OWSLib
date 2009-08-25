@@ -32,7 +32,7 @@ class WCSBase(object):
         """
         obj=object.__new__(self, url, xml)
         obj.__init__(url, xml)
-        self.log = logging.getLogger()
+        self.log = logging.getLogger(__name__)
         consoleh  = logging.StreamHandler()
         self.log.addHandler(consoleh)	
         self._describeCoverage = {} #cache for DescribeCoverage responses
