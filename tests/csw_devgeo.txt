@@ -33,9 +33,7 @@
     >>> c.provider.contact.position
     'Editor'
     >>> c.provider.contact.phone
-    '$VOICE'
     >>> c.provider.contact.fax
-    '$FACSIMILE'
     >>> c.provider.contact.address
     '4905 Dufferin Street'
     >>> c.provider.contact.city
@@ -82,15 +80,11 @@
     'A Spring survey of birds and amphibians carried out primarily within the Great Lakes region of North America.'
     >>> c.results['records'][0].type
     'dataset'
-    >>> c.results['records'][0].uri
-    'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
     >>> c.results['records'][0].subjects
     ['birds', 'waterbirds', 'amphibians', 'marsh', 'wetland', 'survey', 'populations', 'volunteers', 'canada', 'united states', 'great lakes', 'AOC']
     >>> c.getrecordbyid(['643ec912-ae24-4c10-aa38-5b420ee46aff'])
     >>> c.results['records'][0].title
     'Marsh Monitoring Program Route Locations'
-    >>> c.results['records'][0].uri
-    'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
     >>> c.getdomain('foo.param')
     >>> c.exceptionreport.exceptions
     [{'locator': 'foo', 'ExceptionText': None, 'exceptionCode': 'OperationNotSupported'}]
@@ -261,7 +255,7 @@
     Format : image/wbmp
     information
     >>> c.results['records'][0].identification.service.operateson  
-    [{'href': '/geonetwork/srv/en/metadata.show?id=2642', 'uuidref': '1e7ff99a-a17f-420f-9dfb-3c245a2a8120', 'title': 'IBA'}, {'href': '/geonetwork/srv/en/metadata.show?id=2643', 'uuidref': '834b6734-5a21-45d3-8fbc-b32bffd0d1a5', 'title': 'CBC_PT'}, {'href': '/geonetwork/srv/en/metadata.show?id=2644', 'uuidref': '9ed85271-da69-49eb-867f-2d3c533e1fa5', 'title': 'CBC_PY'}, {'href': '/geonetwork/srv/en/metadata.show?id=2645', 'uuidref': '643ec912-ae24-4c10-aa38-5b420ee46aff', 'title': 'MMP'}, {'href': '/geonetwork/srv/en/metadata.show?id=2646', 'uuidref': '15bea07a-5168-496e-870c-92224d74d75a', 'title': 'CLLS'}, {'href': '/geonetwork/srv/en/metadata.show?id=2647', 'uuidref': '4a5ebc6f-cd67-4fae-855c-631b1ec634fa', 'title': 'OBBA_SQUARE'}, {'href': '/geonetwork/srv/en/metadata.show?id=2648', 'uuidref': '8f659478-9f53-4c79-9802-b7e3e024ea2e', 'title': 'OBBA_REGION'}, {'href': '/geonetwork/srv/en/metadata.show?id=2649', 'uuidref': 'd7092f4e-0ecd-429e-bb1e-1583b3c2ec96', 'title': 'OBBA_BLOCK'}, {'href': '/geonetwork/srv/en/metadata.show?id=2650', 'uuidref': '6c3160d4-25e2-42ae-a7e9-73bd77f705b6', 'title': 'OWLS'}, {'href': '/geonetwork/srv/en/metadata.show?id=2651', 'uuidref': 'b6516a64-73df-4697-a497-fa92d8daf3d3', 'title': 'BBS_PT'}, {'href': '/geonetwork/srv/en/metadata.show?id=2652', 'uuidref': '775e9c3b-b404-416c-a84b-2cf3681a5fd9', 'title': 'PFW_R'}, {'href': '/geonetwork/srv/en/metadata.show?id=2653', 'uuidref': '1498d906-5e5a-41cc-9cb8-7b898a33e501', 'title': 'PFW_L'}, {'href': '/geonetwork/srv/en/metadata.show?id=2654', 'uuidref': '7ce1ddb0-9baf-4621-92e8-90da6dbee109', 'title': 'PFW_S'}, {'href': '/geonetwork/srv/en/metadata.show?id=2655', 'uuidref': '49cc05bc-299e-4be6-b43e-c301c88d8df3', 'title': 'GBBC_R'}, {'href': '/geonetwork/srv/en/metadata.show?id=2656', 'uuidref': '5f10b2b8-8234-413e-82a4-973719650993', 'title': 'GBBC_L'}, {'href': '/geonetwork/srv/en/metadata.show?id=2657', 'uuidref': '5202a681-848e-42a6-8ac1-1725fbc219c6', 'title': 'GBBC_S'}, {'href': '/geonetwork/srv/en/metadata.show?id=2658', 'uuidref': 'd66a0296-9349-460f-8c47-8e8aa5e4822f', 'title': 'EBIRD_R'}, {'href': '/geonetwork/srv/en/metadata.show?id=2659', 'uuidref': 'cae7bcf7-6c02-40c4-9928-8ab4516c1997', 'title': 'EBIRD_L'}, {'href': '/geonetwork/srv/en/metadata.show?id=2660', 'uuidref': '83d250a7-a05a-4a59-b8a7-0cf5e817949f', 'title': 'EBIRD_S'}]
+    [{'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2642', 'uuidref': '1e7ff99a-a17f-420f-9dfb-3c245a2a8120', 'title': 'IBA'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2643', 'uuidref': '834b6734-5a21-45d3-8fbc-b32bffd0d1a5', 'title': 'CBC_PT'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2644', 'uuidref': '9ed85271-da69-49eb-867f-2d3c533e1fa5', 'title': 'CBC_PY'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2645', 'uuidref': '643ec912-ae24-4c10-aa38-5b420ee46aff', 'title': 'MMP'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2646', 'uuidref': '15bea07a-5168-496e-870c-92224d74d75a', 'title': 'CLLS'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2647', 'uuidref': '4a5ebc6f-cd67-4fae-855c-631b1ec634fa', 'title': 'OBBA_SQUARE'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2648', 'uuidref': '8f659478-9f53-4c79-9802-b7e3e024ea2e', 'title': 'OBBA_REGION'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2649', 'uuidref': 'd7092f4e-0ecd-429e-bb1e-1583b3c2ec96', 'title': 'OBBA_BLOCK'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2650', 'uuidref': '6c3160d4-25e2-42ae-a7e9-73bd77f705b6', 'title': 'OWLS'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2651', 'uuidref': 'b6516a64-73df-4697-a497-fa92d8daf3d3', 'title': 'BBS_PT'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2652', 'uuidref': '775e9c3b-b404-416c-a84b-2cf3681a5fd9', 'title': 'PFW_R'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2653', 'uuidref': '1498d906-5e5a-41cc-9cb8-7b898a33e501', 'title': 'PFW_L'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2654', 'uuidref': '7ce1ddb0-9baf-4621-92e8-90da6dbee109', 'title': 'PFW_S'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2655', 'uuidref': '49cc05bc-299e-4be6-b43e-c301c88d8df3', 'title': 'GBBC_R'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2656', 'uuidref': '5f10b2b8-8234-413e-82a4-973719650993', 'title': 'GBBC_L'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2657', 'uuidref': '5202a681-848e-42a6-8ac1-1725fbc219c6', 'title': 'GBBC_S'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2658', 'uuidref': 'd66a0296-9349-460f-8c47-8e8aa5e4822f', 'title': 'EBIRD_R'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2659', 'uuidref': 'cae7bcf7-6c02-40c4-9928-8ab4516c1997', 'title': 'EBIRD_L'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2660', 'uuidref': '83d250a7-a05a-4a59-b8a7-0cf5e817949f', 'title': 'EBIRD_S'}]
     >>> 
     
     
