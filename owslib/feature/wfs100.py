@@ -129,7 +129,7 @@ class WebFeatureService_1_0_0(object):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
-                   method='{http://www.opengis.net/wfs}Get'):
+                   srsname=None, method='{http://www.opengis.net/wfs}Get'):
         """Request and return feature data as a file-like object.
         
         Parameters
@@ -150,7 +150,9 @@ class WebFeatureService_1_0_0(object):
             Maximum number of features to be returned.
         method : string
             Qualified name of the HTTP DCP method to use.
-
+        srsname: string
+            EPSG code to request the data in
+            
         There are 3 different modes of use
 
         1) typename and bbox (simple spatial query)
@@ -167,6 +169,10 @@ class WebFeatureService_1_0_0(object):
             request['bbox'] = ','.join([str(x) for x in bbox])
         elif filter and typename:
             request['filter'] = str(filter)
+        
+        if srsname:
+            request['srsname'] = str(srsname)
+            
         assert len(typename) > 0
         request['typename'] = ','.join(typename)
         
