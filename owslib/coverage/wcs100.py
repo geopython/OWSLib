@@ -46,7 +46,7 @@ class WebCoverageService_1_0_0(WCSBase):
 
         #serviceIdentification metadata
         subelem=self._capabilities.find(ns('Service'))
-        self.identification=ServiceIdenfication(subelem)                               
+        self.identification=ServiceIdentification(subelem)                               
                    
         #serviceProvider metadata
         self.provider=None
@@ -167,10 +167,11 @@ class OperationMetadata(object):
             methods.append(('Post', {'url': url}))        
         self.methods = dict(methods)
             
-class ServiceIdenfication(object):
+class ServiceIdentification(object):
     """ Abstraction for ServiceIdentification metadata """
     def __init__(self,elem):
         # properties              
+        self.type='OGC:WCS'
         self.version='1.0.0'
         self.service = testXMLValue(elem.find(ns('name')))
         self.abstract = testXMLValue(elem.find(ns('description')))
