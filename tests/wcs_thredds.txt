@@ -47,8 +47,8 @@ Print the ids of all layers (actually just the first 3):
 	>>> cvg.boundingBoxWGS84
 	(-153.21272373696925, 11.968943490602328, -49.029734977681301, 57.381662765023037)
     
-	>>> cvg.timepositions[:3]
-	['2009-05-29T06:00:00Z', '2009-05-29T09:00:00Z', '2009-05-29T12:00:00Z']
+	>>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
+	True
 
 	>>> cvg.supportedCRS
 	['EPSG:9802[Lambert_Conformal_Conic_2SP]']
@@ -59,7 +59,7 @@ Print the ids of all layers (actually just the first 3):
 #Now we have enough information to build a getCoverage request: 	
 	>>> covID='Temperature'
 	>>> timeRange=['2009-01-08T06:00:00',  '2009-01-08T12:00:00']  #Okay, you should be able to select a range of times, but the server doesn't seem to like it. 
-	>>> timeRange=['2009-01-08T09:00:00Z'] #So for now I'll just  choose one timestep (from cvg.timepositions)
+	>>> timeRange=[cvg.timepositions[10]] #So for now I'll just  choose one timestep (from cvg.timepositions)
 	>>> bb=(-140, -15, 30, 55) # chosen from cvg.boundingBoxWGS84
 	>>> formatType='NetCDF3' # chosen from cvg.supportedFormats
 	
