@@ -223,8 +223,13 @@ class ServiceIdentification(object):
     def __init__(self,elem):        
         self.service="WCS"
         self.version="1.1.0"
-        self.title = elem.find('{http://www.opengis.net/ows}Title').text
-        self.abstract=elem.find('{http://www.opengis.net/ows}Abstract').text
+        self.title=testXMLValue(elem.find('{http://www.opengis.net/ows}Title'))
+        if self.title is None:  #may have used the wcs ows namespace:
+            self.title=testXMLValue(elem.find('{http://www.opengis.net/wcs/1.1/ows}Title'))
+        
+        self.abstract=testXMLValue(elem.find('{http://www.opengis.net/ows}Abstract'))
+        if self.abstract is None:#may have used the wcs ows namespace:
+            self.abstract=testXMLValue(elem.find('{http://www.opengis.net/wcs/1.1/ows}Abstract'))
         if elem.find('{http://www.opengis.net/ows}Abstract') is not None:
             self.abstract=elem.find('{http://www.opengis.net/ows}Abstract').text
         else:

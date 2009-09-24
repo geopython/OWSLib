@@ -114,13 +114,12 @@ class WCSCapabilitiesReader(object):
     def readString(self, st):
         """Parse a WCS capabilities document, returning an
         instance of WCSCapabilitiesInfoset
-
         string should be an XML capabilities document
         """
         if not isinstance(st, str):
             raise ValueError("String must be of type string, not %s" % type(st))
         return etree.fromstring(st)
-    
+
 class DescribeCoverageReader(object):
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
