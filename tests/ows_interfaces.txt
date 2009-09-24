@@ -120,10 +120,12 @@
 
 #Check any item (WCS coverage, WMS layer etc) from the contents of each service
 #Check it conforms to IContentMetadata interface
+	
     >>> for service in services:
-    ...     service.identification.type
-    ...     content=service.contents[wcs.contents.iterkeys().next()] #get random item from contents dictionary -has to be a nicer way to do this!
-    ...     [[attribute, hasattr(content, attribute)] for attribute in ['id','title','boundingBox', 'boundingBoxWGS84', 'crsOptions', 'styles', 'timepositions']]
+    ...	    if type(service.contents) is dict:
+    ...         service.identification.type
+    ...         content=service.contents[service.contents.iterkeys().next()] #get random item from contents dictionary -has to be a nicer way to do this!
+    ...         [[attribute, hasattr(content, attribute)] for attribute in ['id','title','boundingBox', 'boundingBoxWGS84', 'crsOptions', 'styles', 'timepositions']]
     'CSW'
     [['id', True], ['title', True], ['boundingBox', True],['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
     'OGC:WMS'

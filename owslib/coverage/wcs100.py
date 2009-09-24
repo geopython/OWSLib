@@ -49,10 +49,8 @@ class WebCoverageService_1_0_0(WCSBase):
         self.identification=ServiceIdentification(subelem)                               
                    
         #serviceProvider metadata
-        self.provider=None
         subelem=self._capabilities.find(ns('Service/')+ns('responsibleParty'))
-        if subelem is not None:
-            self.provider=ServiceProvider(subelem)   
+        self.provider=ServiceProvider(subelem)   
         
         #serviceOperations metadata
         self.operations=[]
@@ -185,13 +183,16 @@ class ServiceProvider(object):
     """ Abstraction for WCS ResponsibleParty 
     Implements IServiceProvider"""
     def __init__(self,elem):
-        name=elem.find(ns('organisationName'))
-        if name is not None:
-            self.name=name.text
-        else:
+        #it's not uncommon for the service provider info to be missing
+        #so handle case where None is passed in
+        if elem is None:
             self.name=None
-        self.url=self.name #there is no definitive place for url  WCS, repeat organisationName
-        self.contact=ContactMetadata(elem)
+            self.url=None
+            self.contact = None
+        else:
+            self.name=testXMLValue(elem.find(ns('organisationName')))
+            self.url=self.name #there is no definitive place for url  WCS, repeat organisationName
+            self.contact=ContactMetadata(elem)
 
 class ContactMetadata(object):
     ''' implements IContactMetadata'''
