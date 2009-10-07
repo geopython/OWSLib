@@ -295,14 +295,18 @@ class CatalogueServiceWeb:
             self.results['nextrecord'] = int(util.testXMLValue(val, True))
     
             # process list of matching records
-            self.results['records'] = []
+            self.records = {}
 
             if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
                 for f in self._records.findall(util.nspath('SearchResults', namespaces['csw']) + '/' + util.nspath('MD_Metadata', namespaces['gmd'])):
-                    self.results['records'].append(MD_Metadata(f))
+                    val = f.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+                    identifier = util.testXMLValue(val)
+                    self.records[identifier] = MD_Metadata(f)
             else: # process default
                 for f in self._records.findall(util.nspath('SearchResults/' + self._setesnel(esn), namespaces['csw'])):
-                    self.results['records'].append(CswRecord(f))
+                    val = f.find(util.nspath('identifier', namespaces['dc']))
+                    identifier = util.testXMLValue(val)
+                    self.records[identifier] = CswRecord(f)
 
     def getrecordbyid(self, id=[], esn='full', schema=namespaces['csw'], format=outputformat):
         """
@@ -341,17 +345,19 @@ class CatalogueServiceWeb:
         self._isexception(self._capabilities, self.owscommon.namespace)
  
         if self.exceptionreport is None:
-            self.results = {}
-
-            self.results['records'] = []
+            self.records = {}
 
             # process matching record
             if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
                 for i in self._records.findall(util.nspath('MD_Metadata', namespaces['gmd'])):
-                    self.results['records'].append(MD_Metadata(i))
+                    val = i.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+                    identifier = util.testXMLValue(val)
+                    self.records[identifier] = MD_Metadata(i)
             else: # process default 
                 for i in self._records.findall(util.nspath(self._setesnel(esn), namespaces['csw'])):
-                    self.results['records'].append(CswRecord(i))
+                    val = i.find(util.nspath('identifier', namespaces['dc']))
+                    identifier = util.testXMLValue(val)
+                    self.records[identifier] = CswRecord(i)
 
     def _setesnel(self, esn):
         """ Set the element name to parse depending on the ElementSetName requested """
