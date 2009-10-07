@@ -53,20 +53,18 @@
     80
     >>> c.results['returned']
     10
-    >>> c.results['records'][8].title
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
     'CERISE: Computationally Efficient Radar Image Simulation Environment'
-    >>> c.results['records'][8].identifier
-    'DGFKRYMCWUZSCDRBWRXMIETZE'
-    >>> c.results['records'][8].abstract  
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].abstract  
     'Microwave image simulation is an important tool in gaining\n   understanding in microwave imaging with air- or spaceborne sensors.\n   The package FEMIS was developed for this purpose in 1991. Its use was\n   limited due to software limitations (FORTRAN) and its being dependent\n   on a VAX computer and the IVAS image processing system. A new project\n   was proposed to upgrade FEMIS to: run on a PC, provide a user friendly\n   interface, provide links to a microwave backscatter data base, and a\n   Geographical Information System (GIS).\n\n   The new package that has now been developed is called CERISE. It is\n   programmed in C, runs on a PC in a window environment, and is able to\n   use data from a backscatter data base and a GIS (ARC-INFO) in a\n   semi-automatic manner. A start has been made with the inclusion of\n   radar image artefacts caused by varying terrain or object height and\n   the use of data from a DEM (Digital elevation model). Since the\n   project has stirred interest in the area of Defense, modifications\n   such as full DEM utilization and simulation of man-made objects are\n   being planned for the near future.\n\n   J.C.M. Kleijweg\n   M.P.G. Otten\n   TNO Physics and Electronics Laboratory'
-    >>> c.results['records'][8].type    
-    >>> c.results['records'][8].uri 
-    >>> c.results['records'][8].subjects
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].type    
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].uri 
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].subjects
     ['Technical report']
-    >>> c.getrecordbyid([c.results['records'][8].identifier])
+    >>> c.getrecordbyid([c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].identifier])
     >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     <csw:GetRecordById outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Id>DGFKRYMCWUZSCDRBWRXMIETZE</csw:Id><csw:ElementSetName>full</csw:ElementSetName></csw:GetRecordById>
-    >>> c.results['records'][0].title
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
     'CERISE: Computationally Efficient Radar Image Simulation Environment'
     >>> 

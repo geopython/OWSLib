@@ -67,23 +67,23 @@
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     <csw:GetRecords maxRecords="10" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:And><ogc:PropertyIsEqualTo><ogc:PropertyName>dc:type</ogc:PropertyName><ogc:Literal>dataset</ogc:Literal></ogc:PropertyIsEqualTo><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%birds%</ogc:Literal></ogc:PropertyIsLike></ogc:And></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
     >>> c.results['matches']
-    19
+    38
     >>> c.results['returned']
     10
     >>> c.results['nextrecord']
     11
-    >>> c.results['records'][0].identifier
-    '643ec912-ae24-4c10-aa38-5b420ee46aff'
-    >>> c.results['records'][0].title
+    >>> c.records['874d8f7e-9bbb-417e-83d1-b659dbd73d25'].identifier
+    '874d8f7e-9bbb-417e-83d1-b659dbd73d25'
+    >>> c.records['874d8f7e-9bbb-417e-83d1-b659dbd73d25'].title
     'Marsh Monitoring Program Route Locations'
-    >>> c.results['records'][0].abstract
+    >>> c.records['874d8f7e-9bbb-417e-83d1-b659dbd73d25'].abstract
     'A Spring survey of birds and amphibians carried out primarily within the Great Lakes region of North America.'
-    >>> c.results['records'][0].type
+    >>> c.records['874d8f7e-9bbb-417e-83d1-b659dbd73d25'].type
     'dataset'
-    >>> c.results['records'][0].subjects
-    ['birds', 'waterbirds', 'amphibians', 'marsh', 'wetland', 'survey', 'populations', 'volunteers', 'canada', 'united states', 'great lakes', 'AOC']
+    >>> c.records['874d8f7e-9bbb-417e-83d1-b659dbd73d25'].subjects
+    ['birds', 'waterbirds', 'amphibians', 'marsh', 'wetland', 'survey', 'populations', 'volunteers', 'canada', 'united states', 'great lakes', 'AOC', 'environment']
     >>> c.getrecordbyid(['643ec912-ae24-4c10-aa38-5b420ee46aff'])
-    >>> c.results['records'][0].title
+    >>> c.records['643ec912-ae24-4c10-aa38-5b420ee46aff'].title
     'Marsh Monitoring Program Route Locations'
     >>> c.getdomain('foo.param')
     >>> c.exceptionreport.exceptions
@@ -94,71 +94,71 @@
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     <csw:GetRecords maxRecords="100" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:And><ogc:PropertyIsEqualTo><ogc:PropertyName>dc:type</ogc:PropertyName><ogc:Literal>dataset</ogc:Literal></ogc:PropertyIsEqualTo><ogc:Or><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%bird%</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsLike escapeChar="\" singleChar="_" wildCard="%"><ogc:PropertyName>AnyText</ogc:PropertyName><ogc:Literal>%frog%</ogc:Literal></ogc:PropertyIsLike></ogc:Or></ogc:And></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
     >>> c.results['matches']
-    21
+    42
     >>> c.getrecords(qtype='dataset',keywords=['birds'],schema='http://www.isotc211.org/2005/gmd')
-    >>> c.results['records'][8].identifier
-    '83d250a7-a05a-4a59-b8a7-0cf5e817949f'
-    >>> c.results['records'][8].language  
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identifier
+    '26dc0f69-0a73-4751-ac91-083be09404bb'
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].language  
     'eng'
-    >>> c.results['records'][8].charset 
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].charset 
     'utf8'
-    >>> c.results['records'][8].hierarchy
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].hierarchy
     'dataset'
-    >>> c.results['records'][8].datestamp
-    '2009-04-14T09:32:38-04:00'
-    >>> c.results['records'][8].stdname  
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].datestamp
+    '2009-09-26T11:48:40'
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].stdname
     'ISO 19115:2003/19139'
-    >>> c.results['records'][8].stdver 
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].stdver 
     '1.0'
-    >>> c.results['records'][8].contact.name
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].contact.name
     'Andrew Couturier'
-    >>> c.results['records'][8].contact.organization
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].contact.organization
     'Bird Studies Canada'
-    >>> c.results['records'][8].contact.position    
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].contact.position
     'GIS Analyst'
-    >>> c.results['records'][8].contact.onlineresource.url
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].contact.onlineresource.url
     'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3919&entryLang=en&portal=gdp'
-    >>> c.results['records'][8].identification.title      
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.title      
     'eBird Canada - Summarized Data'
-    >>> c.results['records'][8].identification.date 
-    '2009-04-14T09:32:38-04:00'
-    >>> c.results['records'][8].identification.datetype
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.date 
+    '2009-09-26T11:48:40'
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.datetype
     'revision'
-    >>> c.results['records'][8].identification.status  
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.status  
     'completed'
-    >>> c.results['records'][8].identification.contact.name
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.contact.name
     'Andrew Couturier'
-    >>> c.results['records'][8].identification.contact.onlineresource.url
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.contact.onlineresource.url
     'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3919&entryLang=en&portal=gdp'
-    >>> c.results['records'][8].identification.keywords                  
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.keywords                  
     {'list': ['birds', 'monitoring', 'abundance', 'distribution', 'survey', 'population', 'volunteers', 'ebird', 'canada'], 'type': 'theme'}
-    >>> c.results['records'][8].identification.bbox.minx
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.bbox.minx
     '-141'
-    >>> c.results['records'][8].identification.bbox.miny
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.bbox.miny
     '41'
-    >>> c.results['records'][8].identification.bbox.maxx
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.bbox.maxx
     '-52'
-    >>> c.results['records'][8].identification.bbox.maxy
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].identification.bbox.maxy
     '78'
-    >>> c.results['records'][8].distribution.format     
-    >>> c.results['records'][8].distribution.onlineresource.url
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].distribution.format     
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].distribution.onlineresource.url
     'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'
-    >>> c.results['records'][8].distribution.onlineresource.protocol
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].distribution.onlineresource.protocol
     'OGC:WMS-1.1.1-http-get-map'
-    >>> c.results['records'][8].distribution.onlineresource.name    
+    >>> c.records['26dc0f69-0a73-4751-ac91-083be09404bb'].distribution.onlineresource.name    
     'EBIRD_S'
     >>> c.getrecords(qtype='service',keywords=['bird'],schema='http://www.isotc211.org/2005/gmd')
-    >>> c.results['records'][0].identifier
+    >>> c.records['ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'].identifier
     'ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'
-    >>> c.results['records'][0].identification.service.type
+    >>> c.records['ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'].identification.service.type
     'OGC:WMS'
-    >>> c.results['records'][0].identification.service.version
+    >>> c.records['ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'].identification.service.version
     '1.1.1'
-    >>> c.results['records'][0].identification.service.fees   
+    >>> c.records['ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'].identification.service.fees   
     'None'
-    >>> c.results['records'][0].identification.service.couplingtype
+    >>> c.records['ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'].identification.service.couplingtype
     'tight'
-    >>> for i in c.results['records'][0].identification.service.operations:
+    >>> for i in c.records['ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'].identification.service.operations:
     ...     print i['name']
     ... 
     GetCapabilities
@@ -166,7 +166,7 @@
     GetFeatureInfo
     DescribeLayer
     GetLegendGraphic
-    >>> for i in c.results['records'][0].identification.service.operations:
+    >>> for i in c.records['ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'].identification.service.operations:
     ...     for k in i['connectpoint']:
     ...             print k.url
     ...             print k.name
@@ -254,8 +254,6 @@
     image/wbmp
     Format : image/wbmp
     information
-    >>> c.results['records'][0].identification.service.operateson  
-    [{'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2642', 'uuidref': '1e7ff99a-a17f-420f-9dfb-3c245a2a8120', 'title': 'IBA'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2643', 'uuidref': '834b6734-5a21-45d3-8fbc-b32bffd0d1a5', 'title': 'CBC_PT'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2644', 'uuidref': '9ed85271-da69-49eb-867f-2d3c533e1fa5', 'title': 'CBC_PY'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2645', 'uuidref': '643ec912-ae24-4c10-aa38-5b420ee46aff', 'title': 'MMP'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2646', 'uuidref': '15bea07a-5168-496e-870c-92224d74d75a', 'title': 'CLLS'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2647', 'uuidref': '4a5ebc6f-cd67-4fae-855c-631b1ec634fa', 'title': 'OBBA_SQUARE'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2648', 'uuidref': '8f659478-9f53-4c79-9802-b7e3e024ea2e', 'title': 'OBBA_REGION'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2649', 'uuidref': 'd7092f4e-0ecd-429e-bb1e-1583b3c2ec96', 'title': 'OBBA_BLOCK'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2650', 'uuidref': '6c3160d4-25e2-42ae-a7e9-73bd77f705b6', 'title': 'OWLS'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2651', 'uuidref': 'b6516a64-73df-4697-a497-fa92d8daf3d3', 'title': 'BBS_PT'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2652', 'uuidref': '775e9c3b-b404-416c-a84b-2cf3681a5fd9', 'title': 'PFW_R'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2653', 'uuidref': '1498d906-5e5a-41cc-9cb8-7b898a33e501', 'title': 'PFW_L'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2654', 'uuidref': '7ce1ddb0-9baf-4621-92e8-90da6dbee109', 'title': 'PFW_S'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2655', 'uuidref': '49cc05bc-299e-4be6-b43e-c301c88d8df3', 'title': 'GBBC_R'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2656', 'uuidref': '5f10b2b8-8234-413e-82a4-973719650993', 'title': 'GBBC_L'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2657', 'uuidref': '5202a681-848e-42a6-8ac1-1725fbc219c6', 'title': 'GBBC_S'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2658', 'uuidref': 'd66a0296-9349-460f-8c47-8e8aa5e4822f', 'title': 'EBIRD_R'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2659', 'uuidref': 'cae7bcf7-6c02-40c4-9928-8ab4516c1997', 'title': 'EBIRD_L'}, {'href': 'http://devgeo.cciw.ca/geonetwork/srv/en/metadata.show?id=2660', 'uuidref': '83d250a7-a05a-4a59-b8a7-0cf5e817949f', 'title': 'EBIRD_S'}]
+    >>> c.records['ae7498ed3523bf16bc25e9a5b5623ab8aac2c822'].identification.service.operateson  
+    [{'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6178', 'uuidref': '25524792-aadf-412d-b016-4ed36ac7bd79', 'title': 'IBA'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6179', 'uuidref': '2d66e7d5-262e-42d5-99ab-7cb5e94c9104', 'title': 'CBC_PT'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6180', 'uuidref': '7030bd0e-3a23-4958-8683-8042ff395a66', 'title': 'CBC_PY'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6181', 'uuidref': '874d8f7e-9bbb-417e-83d1-b659dbd73d25', 'title': 'MMP'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6182', 'uuidref': '9115d2cf-1e11-4b78-8ef8-518170568472', 'title': 'CLLS'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6183', 'uuidref': '4d0a7867-b6a3-40f2-93a2-53007f7eed7b', 'title': 'OBBA_SQUARE'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6184', 'uuidref': '33489b75-95e1-4be7-8ebb-f7ad1d2f7acc', 'title': 'OBBA_REGION'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6185', 'uuidref': 'c63eb5d6-eab2-4d1a-aab2-6c50de52a9ad', 'title': 'OBBA_BLOCK'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6186', 'uuidref': '3409517d-e9fb-4f05-b96f-a98d21bf1f91', 'title': 'OWLS'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6187', 'uuidref': 'fb17c88a-a7d5-45b4-a03e-454acf4573d6', 'title': 'BBS_PT'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6188', 'uuidref': 'af25a7eb-1830-456b-b6b5-4138dd7ace8f', 'title': 'PFW_R'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6189', 'uuidref': '9c6bec9c-ff04-419d-bcd6-4706387c487d', 'title': 'PFW_L'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6190', 'uuidref': 'ce4b4e27-aa66-40be-a42a-eaf1e07cb847', 'title': 'PFW_S'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6191', 'uuidref': '914d2c3b-f664-41d6-afb0-8a5ae7ca9fb7', 'title': 'GBBC_R'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6192', 'uuidref': '84e5e41a-9b5b-4963-8e27-215a90fe3033', 'title': 'GBBC_L'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6193', 'uuidref': 'bdcc84e6-3191-4dd7-9edc-8fe1331be1b0', 'title': 'GBBC_S'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6194', 'uuidref': '460f6017-4d77-4fe9-a90c-d2b6acc22ef0', 'title': 'EBIRD_R'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6195', 'uuidref': '459a3253-98d8-49c8-bfb2-bd9a15d18643', 'title': 'EBIRD_L'}, {'href': 'http://devgeo.cciw.ca:80/geonetwork/srv/en/metadata.show?id=6196', 'uuidref': '26dc0f69-0a73-4751-ac91-083be09404bb', 'title': 'EBIRD_S'}]
     >>> 
-    
-    
