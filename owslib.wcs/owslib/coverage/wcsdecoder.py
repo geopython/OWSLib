@@ -14,7 +14,7 @@
 #decoder.getCoverages()
 
 import os
-from owslib.etree import etree
+from owslib.common.etree import etree
 import email
 import errno
 
