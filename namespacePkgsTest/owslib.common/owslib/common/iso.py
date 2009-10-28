@@ -11,8 +11,8 @@
 """ ISO metadata parser """
 
 import StringIO
-from owslib.etree import etree
-from owslib import util
+from owslib.common.etree import etree
+from owslib.common import util
 
 # default variables
 

@@ -15,8 +15,8 @@ OWS Common: http://www.opengeospatial.org/standards/common
 Currently supports version 1.1.0 (06-121r3).
 """
 
-from owslib.etree import etree
-from owslib import util
+from owslib.common.etree import etree
+from owslib.common import util
 
 OWS_NAMESPACE_1_0_0 = 'http://www.opengis.net/ows'
 OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
