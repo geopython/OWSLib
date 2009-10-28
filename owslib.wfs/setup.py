@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 readme = open('README.txt', 'rb').read()
 
-setup(name          = 'OWSLib',
+setup(name          = 'OWSLib.wfs',
       version       = '0.4',
-      description   = 'OGC Web Service utility library',
+      description   = 'OGC Web Service utility library for WFS',
       long_description = readme,
       license       = 'BSD',
       keywords      = 'gis ogc ows wfs wms sos csw capabilities metadata',
@@ -13,7 +13,9 @@ setup(name          = 'OWSLib',
       maintainer        = 'Sean Gillies',
       maintainer_email  = 'sgillies@frii.com',
       url           = 'http://trac.gispython.org/lab/wiki/OwsLib',
-      install_requires =      ['OWSLib.common','OWSLib.wms', 'OWSLib.wcs', 'OWSLib.wfs'],
+      namespace_packages  =  ['owslib'],
+      install_requires =      ['OWSLib.common'],
+
       packages      = find_packages(),
       test_suite    = 'tests.test_suite',
       classifiers   = [

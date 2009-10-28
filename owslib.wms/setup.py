@@ -14,7 +14,7 @@ setup(name          = 'OWSLib.wms',
       maintainer_email  = 'sgillies@frii.com',
       url           = 'http://trac.gispython.org/lab/wiki/OwsLib',
       namespace_packages  =  ['owslib'],
-
+      install_requires =      ['OWSLib.common'],
       packages      = find_packages(),
       test_suite    = 'tests.test_suite',
       classifiers   = [
