@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 readme = open('README.txt', 'rb').read()
 
-setup(name          = 'OWSLib_WMS',
+setup(name          = 'OWSLib.wms',
       version       = '0.4',
       description   = 'OGC Web Service utility library',
       long_description = readme,
