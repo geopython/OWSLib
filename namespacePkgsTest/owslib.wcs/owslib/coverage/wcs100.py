@@ -11,8 +11,8 @@
 
 from wcsBase import WCSBase, WCSCapabilitiesReader
 from urllib import urlencode
-from owslib.util import openURL, testXMLValue
-from owslib.etree import etree
+from owslib.common.util import openURL, testXMLValue
+from owslib.common.etree import etree
 import os, errno
 
 #  function to save writing out WCS namespace in full each time

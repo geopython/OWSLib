@@ -8,7 +8,7 @@
 # Contact email: tomkralidis@hotmail.com
 # =============================================================================
 
-from owslib.etree import etree
+from owslib.common.etree import etree
 import urlparse, urllib2
 from urllib2 import urlopen, HTTPError
 from StringIO import StringIO

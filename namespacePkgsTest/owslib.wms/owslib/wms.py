@@ -23,7 +23,7 @@ from urllib2 import HTTPBasicAuthHandler
 from urllib2 import build_opener
 from urllib2 import install_opener
 
-from etree import etree
+from owslib.common.etree import etree
 
 
 class ServiceException(Exception):
