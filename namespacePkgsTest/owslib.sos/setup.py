@@ -4,7 +4,7 @@ readme = open('README.txt', 'rb').read()
 
 setup(name          = 'OWSLib.sos',
       version       = '0.4',
-      description   = 'OGC Web Service utility library - SOS',
+      description   = 'OGC Web Service utility library for Sensor Observation Service (SOS)',
       long_description = readme,
       license       = 'BSD',
       keywords      = 'gis ogc ows wfs wms sos csw capabilities metadata',

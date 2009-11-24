@@ -4,7 +4,7 @@ readme = open('README.txt', 'rb').read()
 
 setup(name          = 'OWSLib.wms',
       version       = '0.4',
-      description   = 'OGC Web Service utility library',
+      description   = 'OGC Web Service utility library for Web Map Service (WMS)',
       long_description = readme,
       license       = 'BSD',
       keywords      = 'gis ogc ows wfs wms sos csw capabilities metadata',

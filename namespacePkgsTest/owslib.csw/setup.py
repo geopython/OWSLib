@@ -4,7 +4,7 @@ readme = open('README.txt', 'rb').read()
 
 setup(name          = 'OWSLib.csw',
       version       = '0.4',
-      description   = 'OGC Web Service utility library for CSW',
+      description   = 'OGC Web Service utility library for Catalog Service for Web (CSW)',
       long_description = readme,
       license       = 'BSD',
       keywords      = 'gis ogc ows wfs wms sos csw capabilities metadata',
