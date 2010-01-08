@@ -308,7 +308,7 @@ class ContentMetadata:
 		self.parent = parent
 		if elem.tag != 'Layer':
 			raise ValueError('%s should be a Layer' % (elem,))
-		for key in ('Name', 'Title', 'Attribution'):
+		for key in ('Name', 'Title'):
 			val = elem.find(key)
 			if val is not None:
 				setattr(self, key.lower(), val.text.strip())
@@ -333,7 +333,23 @@ class ContentMetadata:
 		elif self.parent:
                     if hasattr(self.parent, 'boundingBox'):
 			self.boundingBox = self.parent.boundingBox
-                    
+
+		attribution = elem.find('Attribution')
+		if attribution is not None:
+			self.attribution = dict()
+			title = attribution.find('Title')
+			url = attribution.find('OnlineResource')
+			logo = attribution.find('LogoURL')
+			if title is not None: 
+			    self.attribution['title'] = title.text
+			if url is not None:
+			    self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
+			if logo is not None: 
+				self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
+				self.attribution['logo_url'] = logo.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+
+
+
 		b = elem.find('LatLonBoundingBox')
 		if b is not None:
 			self.boundingBoxWGS84 = (
