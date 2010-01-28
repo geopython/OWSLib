@@ -222,16 +222,21 @@ class WebFeatureService_2_0_0(object):
                 return StringIO(data)
             return u
 
-    def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get')):
+    def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get'),**kwargs):
         ''' the WFS GetPropertyValue method'''         
         base_url = self.getOperationByName('GetPropertyValue').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetPropertyValue'}
+        if query:
+            request['query'] = str(query)
         if valuereference: 
             request['valueReference'] = str(valuereference)
         if storedquery_id: 
             request['storedQuery_id'] = str(storedquery_id)
         if typename:
             request['typename']=str(typename)
+        if kwargs:
+            for kw in kwargs.keys():
+                request[kw]=str(kwargs[kw])
         data=urlencode(request)
         u = urlopen(base_url + data)
         return u.read()

@@ -34,11 +34,12 @@ class WebCoverageService_1_0_0(WCSBase):
         else:
             raise KeyError, "No content named %s" % name
     
-    def __init__(self,url,xml):
+    def __init__(self,url,xml, cookies):
         self.version='1.0.0'
         self.url = url   
+        self.cookies=cookies
         # initialize from saved capability document or access the server
-        reader = WCSCapabilitiesReader(self.version)
+        reader = WCSCapabilitiesReader(self.version, self.cookies)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -136,7 +137,7 @@ class WebCoverageService_1_0_0(WCSBase):
         self.log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
         
         
-        u=openURL(base_url, data, method)
+        u=openURL(base_url, data, method, self.cookies)
 
         return u
                

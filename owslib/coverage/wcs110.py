@@ -12,7 +12,7 @@
 ##########NOTE: Does not conform to new interfaces yet #################
 
 from wcsBase import WCSBase, WCSCapabilitiesReader
-from owslib.util import RereadableURL, testXMLValue
+from owslib.util import openURL, testXMLValue
 from urllib import urlencode
 from urllib2 import urlopen
 from owslib.etree import etree
@@ -37,9 +37,10 @@ class WebCoverageService_1_1_0(WCSBase):
         else:
             raise KeyError, "No content named %s" % name
     
-    def __init__(self,url,xml):
+    def __init__(self,url,xml, cookies):
         self.version='1.1.0'
         self.url = url   
+        self.cookies=cookies
         # initialize from saved capability document or access the server
         reader = WCSCapabilitiesReader(self.version)
         if xml:
@@ -167,33 +168,8 @@ class WebCoverageService_1_1_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
-        #u = urlopen(base_url+data)
-        self.log.debug('WCS 1.1.0 DEBUG: base url of server: %s'%base_url)
-        self.log.debug('WCS 1.1.0 DEBUG: second part of URL: %s'%data)      
-        try:
-            u = urlopen(base_url + data) 
-            self.log.debug('WCS 1.1.0 DEBUG: called urlopen(base_url+data)')            
-        except:   
-            u = urlopen(base_url,data)
-            self.log.debug('WCS 1.1.0 DEBUG: called urlopen(base_url, data)')
-            
         
-        self.log.debug('WCS 1.1.0 DEBUG: GetCoverage request made: %s'%u.url)
-        self.log.debug('WCS 1.1.0 DEBUG: Headers returned: %s'%str(u.headers))
-                
-        # check for service exceptions, and return
-        if 'content-type' in u.info().keys():      
-            if u.info()['content-type'] == 'text/xml':          
-                #going to have to read the xml to see if it's an exception report.
-                #wrap the url stream in a extended StringIO object so it's re-readable
-                u=RereadableURL(u)      
-                se_xml= u.read()
-                se_tree = etree.fromstring(se_xml)
-                serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
-                if serviceException is not None:
-                    raise ServiceException, \
-                    str(serviceException.text).strip()
-                u.seek(0)
+        u=openURL(base_url, data, method, self.cookies)
         return u
         
         

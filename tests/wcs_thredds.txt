@@ -45,7 +45,8 @@ Print the ids of all layers (actually just the first 3):
 	>>> cvg=wcs['Temperature'] 
 
 	>>> cvg.boundingBoxWGS84
-	(-153.21272373696925, 11.968943490602328, -49.029734977681301, 57.381662765023037)
+	(-153.21273081043725, 11.968943066973155, -49.029741463948938, 57.381664838271625)
+
     
 	>>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
 	True
