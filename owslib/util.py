@@ -10,7 +10,7 @@
 
 from owslib.etree import etree
 import urlparse, urllib2
-from urllib2 import urlopen, HTTPError
+from urllib2 import urlopen, HTTPError, Request
 from StringIO import StringIO
 
 """
@@ -31,23 +31,25 @@ class ServiceException(Exception):
     #TODO: this should go in ows common module when refactored.  
     pass
 
-
-def openURL(url_base, data, method='Get'):
-    ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting'''
+def openURL(url_base, data, method='Get', cookies=None):
+    ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies'''
     url_base.strip() 
     lastchar = url_base[-1]
     if lastchar not in ['?', '&']:
         if url_base.find('?') == -1:
             url_base = url_base + '?'
         else:
-            url_base = url_base + '&'
+            url_base = url_base + '&'   
     try:
         if method == 'Post':
-            u=urlopen(url_base,  data)
+            req = Request(url_base, data)
         else:
-            u=urlopen(url_base + data)
-    except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception.
-        if e.code == 400:
+            req=Request(url_base + data)
+        if cookies is not None:
+            req.add_header('Cookie', cookies)
+        u=urlopen(req)
+    except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
+        if e.code in [400, 401]:
             raise ServiceException, e.read()
 
     # check for service exceptions without the http header set

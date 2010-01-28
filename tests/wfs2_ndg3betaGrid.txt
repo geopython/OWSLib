@@ -2,7 +2,7 @@
 Imports and initialize
 
     >>> from owslib.wfs import WebFeatureService
-    >>> wfs = WebFeatureService('http://ndg3beta.badc.rl.ac.uk/cows/demo_famous/wfs?', version='2.0.0')
+    >>> wfs = WebFeatureService('http://ndg3beta.badc.rl.ac.uk/cows/demo_hadcm3/wfs?', version='2.0.0')
 
 Test the capabilities info
 
@@ -11,7 +11,7 @@ Test the capabilities info
     >>> wfs.identification.version
     '2.0.0'
     >>> wfs.identification.title
-    'CSML test server'
+    'BADC OGC Service'
     >>> wfs.identification.abstract
     >>> wfs.identification.keywords
     ['Grid', 'Climate', 'CSML']
@@ -47,36 +47,44 @@ Test the getfeature method
 	True
 
 Test Stored Queries
-	>>> storedqid='urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractGridSeriesFromGridSeries'
-	>>> sqparams={'featureid':'air_temperature','mintime':'2799-06-01T00:00:00.0','maxtime':'2803-06-01T00:00:00.0','bbox':'-180,-90,180,90'}
+    >>> storedqid='urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractGridSeriesFromGridSeries'
+    >>> sqparams={'featureid':'air_temperature','mintime':'2799-06-01T00:00:00.0','maxtime':'2803-06-01T00:00:00.0','bbox':'-180,-90,180,90'}
     >>> response=wfs.getfeature(typename=['csml:GridSeriesFeature'],storedQueryID=storedqid, storedQueryParams=sqparams)	
-	>>> response.read().find('<wfs:member') >0
-	True
-	>>> for sq in wfs.storedqueries: print sq.id
-	queryOne
-	urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:phenomenonQuery
-	urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointFromPointSeries
-	urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractGridSeriesFromGridSeries
-	urn-x:wfs:StoredQueryId:ISO:GetFeatureById
-	>>> for sq in wfs.storedqueries: print sq.title
-	test query
-	SelectFeaturesByPhenomenon
-	ExtractPointFromPointSeries
-	ExtractGridSeriesFromGridSeries
-	GetFeatureById
+    >>> response.read().find('<wfs:member') >0
+    True
+    >>> for sq in wfs.storedqueries: print sq.id
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointSeriesFromGridSeries
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:phenomenonQuery
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractGridSeriesFromGridSeries
+    queryOne
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointFromPointSeries
+    urn-x:wfs:StoredQueryId:ISO:GetFeatureById
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointSeriesFromPointSeries
+    >>> for sq in wfs.storedqueries: print sq.title
+    ExtractPointSeriesFromGridSeries
+    SelectFeaturesByPhenomenon
+    ExtractGridSeriesFromGridSeries
+    test query
+    ExtractPointFromPointSeries
+    GetFeatureById
+    ExtractPointSeriesFromPointSeries
     >>> for sq in wfs.storedqueries: print sq.returnfeaturetype
-    xyzml:SomeFeatureType
+    csml:PointSeriesFeature
     csml:AbstractFeature
-    csml:PointFeature
     csml:GridSeriesFeature
+    xyzml:SomeFeatureType
+    csml:PointFeature
     csml:AbstractFeature
+    csml:PointSeriesFeature
     >>> for sq in wfs.storedqueries: print sq.abstract
-    my test query
+    Extract a csml:PointSeries from a csml:GridSeriesFeature
     Select features based on their phenomenon type, e.g. "temperature"
-    Extract a csml:PointFeature for a single time instance from a csml:PointSeriesFeature
     Extract a csml:GridSeries from a csml:GridSeriesFeature
+    my test query
+    Extract a csml:PointFeature for a single time instance from a csml:PointSeriesFeature
     Get any feature by id
-    >>> sq = wfs.storedqueries[3]
+    Extract a csml:PointSeriesFeature for a range of times from a csml:PointSeriesFeature
+    >>> sq = wfs.storedqueries[2]
     >>> for param in sq.parameters: print "%s,  %s"%(param.name, param.type)
     featureid,  xsd:anyURI
     mintime,  gml:TimePositionUnion

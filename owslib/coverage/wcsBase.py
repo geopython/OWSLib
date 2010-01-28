@@ -10,7 +10,7 @@
 # =============================================================================
 
 from urllib import urlencode
-from urllib2 import urlopen
+from urllib2 import urlopen, Request
 from owslib.etree import etree
 import cgi
 from StringIO import StringIO
@@ -21,7 +21,7 @@ import logging
 
 class WCSBase(object):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
-    def __new__(self,url, xml):
+    def __new__(self,url, xml, cookies):
         """ overridden __new__ method 
         
         @type url: string
@@ -30,8 +30,9 @@ class WCSBase(object):
         @param xml: elementtree object
         @return: inititalised WCSBase object
         """
-        obj=object.__new__(self, url, xml)
-        obj.__init__(url, xml)
+        obj=object.__new__(self, url, xml ,cookies)
+        obj.__init__(url, xml, cookies)
+        self.cookies=cookies
         self.log = logging.getLogger(__name__)
         consoleh  = logging.StreamHandler()
         self.log.addHandler(consoleh)	
@@ -44,7 +45,7 @@ class WCSBase(object):
     def getDescribeCoverage(self, identifier):
         ''' returns a describe coverage document - checks the internal cache to see if it has been fetched before '''
         if identifier not in self._describeCoverage.keys():
-            reader = DescribeCoverageReader(self.version, identifier)
+            reader = DescribeCoverageReader(self.version, identifier, self.cookies)
             self._describeCoverage[identifier] = reader.read(self.url)
         return self._describeCoverage[identifier]
         
@@ -66,13 +67,14 @@ class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version=None):
+    def __init__(self, version=None, cookies = None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
         """
         self.version = version
         self._infoset = None
+        self.cookies = cookies
 
     def capabilities_url(self, service_url):
         """Return a capabilities url
@@ -108,7 +110,10 @@ class WCSCapabilitiesReader(object):
         @return: An elementtree tree representation of the capabilities document
         """
         request = self.capabilities_url(service_url)
-        u = urlopen(request)
+        req = Request(request)
+        if self.cookies is not None:
+            req.add_header('Cookie', self.cookies)   
+        u = urlopen(req)
         return etree.fromstring(u.read())
     
     def readString(self, st):
@@ -124,7 +129,7 @@ class DescribeCoverageReader(object):
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
 
-    def __init__(self, version, identifier):
+    def __init__(self, version, identifier, cookies):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -132,6 +137,7 @@ class DescribeCoverageReader(object):
         self.version = version
         self._infoset = None
         self.identifier=identifier
+        self.cookies = cookies
 
     def descCov_url(self, service_url):
         """Return a describe coverage url
@@ -177,7 +183,10 @@ class DescribeCoverageReader(object):
         @return: An elementtree tree representation of the capabilities document
         """
         request = self.descCov_url(service_url)
-        u = urlopen(request)
+        req = Request(request)
+        if self.cookies is not None:
+            req.add_header('Cookie', self.cookies)   
+        u = urlopen(req)
         return etree.fromstring(u.read())
     
        
