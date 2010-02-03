@@ -66,7 +66,8 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
     except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
         if e.code in [400, 401]:
             raise ServiceException, e.read()
-
+        else:
+            raise e
     # check for service exceptions without the http header set
     if u.info()['Content-Type'] in ['text/xml', 'application/xml']:          
         #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
