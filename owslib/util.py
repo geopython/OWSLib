@@ -11,6 +11,8 @@
 from owslib.etree import etree
 import urlparse, urllib2
 from urllib2 import urlopen, HTTPError, Request
+from urllib2 import HTTPPasswordMgrWithDefaultRealm
+from urllib2 import HTTPBasicAuthHandler
 from StringIO import StringIO
 
 """
@@ -31,15 +33,28 @@ class ServiceException(Exception):
     #TODO: this should go in ows common module when refactored.  
     pass
 
-def openURL(url_base, data, method='Get', cookies=None):
-    ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies'''
+def openURL(url_base, data, method='Get', cookies=None, username=None, password=None):
+    ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
     url_base.strip() 
     lastchar = url_base[-1]
     if lastchar not in ['?', '&']:
         if url_base.find('?') == -1:
             url_base = url_base + '?'
         else:
-            url_base = url_base + '&'   
+            url_base = url_base + '&'
+            
+    if username and password:
+        # Provide login information in order to use the WMS server
+        # Create an OpenerDirector with support for Basic HTTP 
+        # Authentication...
+        passman = HTTPPasswordMgrWithDefaultRealm()
+        passman.add_password(None, self.url, self.username, self.password)
+        auth_handler = HTTPBasicAuthHandler(passman)
+        opener = build_opener(auth_handler)
+        openit = opener.open
+    else:
+        openit = urlopen
+   
     try:
         if method == 'Post':
             req = Request(url_base, data)
@@ -47,7 +62,7 @@ def openURL(url_base, data, method='Get', cookies=None):
             req=Request(url_base + data)
         if cookies is not None:
             req.add_header('Cookie', cookies)
-        u=urlopen(req)
+        u = openit(req)
     except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
         if e.code in [400, 401]:
             raise ServiceException, e.read()
