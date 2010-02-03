@@ -17,14 +17,8 @@ Currently supports only version 1.1.1 of the WMS protocol.
 
 import cgi
 from urllib import urlencode
-from urllib2 import urlopen
-from urllib2 import HTTPPasswordMgrWithDefaultRealm
-from urllib2 import HTTPBasicAuthHandler
-from urllib2 import build_opener
-from urllib2 import install_opener
-
 from etree import etree
-
+from .util import openURL
 
 class ServiceException(Exception):
     pass
@@ -57,31 +51,18 @@ class WebMapService(object):
         self.password = password
         self.version = version
         self._capabilities = None
-        self._open = urlopen
         
-        if self.username and self.password:
-            # Provide login information in order to use the WMS server
-            # Create an OpenerDirector with support for Basic HTTP 
-            # Authentication...
-            passman = HTTPPasswordMgrWithDefaultRealm()
-            passman.add_password(None, self.url, self.username, self.password)
-            auth_handler = HTTPBasicAuthHandler(passman)
-            opener = build_opener(auth_handler)
-            self._open = opener.open
-            reader = WMSCapabilitiesReader(
+        # Authentication handled by Reader
+        reader = WMSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
                 )
-            self._capabilities = reader.readString(self.url)
+        if xml:
+            #read from stored xml
+            self._capabilities = reader.readString(xml)
         else:
-            reader = WMSCapabilitiesReader(self.version)
-            if xml:
-                #read from stored xml
-                self._capabilities = reader.readString(xml)
-            else:
-                #read from non-password protected server
-                self._capabilities = reader.read(self.url)
-                
-       
+            #read from server
+            self._capabilities = reader.read(self.url)
+
         #build metadata objects
         self._buildMetadata()
 
@@ -221,10 +202,8 @@ class WebMapService(object):
             request['time'] = str(time)
         
         data = urlencode(request)
-        if method == 'Post':
-            u = self._open(base_url, data=data)
-        else:
-            u = self._open(base_url + data)
+        
+        u = openURL(base_url, data, method, username = self.username, password = self.password)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -482,17 +461,16 @@ class WMSCapabilitiesReader:
         self.url = url
         self.username = un
         self.password = pw
-        self._open = urlopen
 
-        if self.username and self.password:
-            # Provide login information in order to use the WMS server
-            # Create an OpenerDirector with support for Basic HTTP 
-            # Authentication...
-            passman = HTTPPasswordMgrWithDefaultRealm()
-            passman.add_password(None, self.url, self.username, self.password)
-            auth_handler = HTTPBasicAuthHandler(passman)
-            opener = build_opener(auth_handler)
-            self._open = opener.open
+        #if self.username and self.password:
+            ## Provide login information in order to use the WMS server
+            ## Create an OpenerDirector with support for Basic HTTP 
+            ## Authentication...
+            #passman = HTTPPasswordMgrWithDefaultRealm()
+            #passman.add_password(None, self.url, self.username, self.password)
+            #auth_handler = HTTPBasicAuthHandler(passman)
+            #opener = build_opener(auth_handler)
+            #self._open = opener.open
 
     def capabilities_url(self, service_url):
         """Return a capabilities url
@@ -520,8 +498,11 @@ class WMSCapabilitiesReader:
         service_url is the base url, to which is appended the service,
         version, and request parameters
         """
-        request = self.capabilities_url(service_url)
-        u = self._open(request)
+        getcaprequest = self.capabilities_url(service_url)
+
+        #now split it up again to use the generic openURL function...
+        spliturl=getcaprequest.split('?')
+        u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
         return etree.fromstring(u.read())
 
     def readString(self, st):
