@@ -48,9 +48,9 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         # Create an OpenerDirector with support for Basic HTTP 
         # Authentication...
         passman = HTTPPasswordMgrWithDefaultRealm()
-        passman.add_password(None, self.url, self.username, self.password)
+        passman.add_password(None, url_base, username, password)
         auth_handler = HTTPBasicAuthHandler(passman)
-        opener = build_opener(auth_handler)
+        opener = urllib2.build_opener(auth_handler)
         openit = opener.open
     else:
         openit = urlopen
