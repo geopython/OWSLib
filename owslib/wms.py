@@ -20,8 +20,21 @@ from urllib import urlencode
 from etree import etree
 from .util import openURL
 
+
 class ServiceException(Exception):
-    pass
+    """WMS ServiceException
+
+    Attributes:
+        message -- short error message
+        xml  -- full xml error message from server
+    """
+
+    def __init__(self, message, xml):
+        self.message = message
+        self.xml = xml
+        
+    def __str__(self):
+        return repr(self.message)
 
 
 class CapabilitiesError(Exception):
@@ -73,7 +86,6 @@ class WebMapService(object):
                 )
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
-    capabilities = property(_getcapproperty, None)
 
     def _buildMetadata(self):         
         ''' set up capabilities metadata objects '''
@@ -105,7 +117,6 @@ class WebMapService(object):
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
             
-            
     def items(self):
         '''supports dict-like items() access'''
         items=[]
@@ -126,8 +137,8 @@ class WebMapService(object):
         if u.info().gettype() == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            raise ServiceException, \
-                str(se_tree.find('ServiceException').text).strip()
+            err_message = str(se_tree.find('ServiceException').text).strip()
+            raise ServiceException(err_message, se_xml)
         return u
 
     def getmap(self, layers=None, styles=None, srs=None, bbox=None,
@@ -209,9 +220,15 @@ class WebMapService(object):
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            raise ServiceException, \
-                str(se_tree.find('ServiceException').text).strip()
+            err_message = str(se_tree.find('ServiceException').text).strip()
+            raise ServiceException(err_message, se_xml)
         return u
+        
+    def getServiceXML(self):
+        xml = None
+        if self._capabilities:
+            xml = etree.tostring(self._capabilities)
+        return xml
 
     def getfeatureinfo(self):
         raise NotImplementedError
@@ -232,10 +249,10 @@ class ServiceIdentification(object):
         self.version = version
         self.title = self._root.find('Title').text
         abstract = self._root.find('Abstract')
-	if abstract is not None:
-	        self.abstract = abstract.text
-	else:
-		self.abstract = None
+        if abstract is not None:
+            self.abstract = abstract.text
+        else:
+            self.abstract = None
         self.keywords = [f.text for f in self._root.findall('KeywordList/Keyword')]
         accessconstraints=self._root.find('AccessConstraints')
         if accessconstraints is not None:
@@ -255,10 +272,10 @@ class ServiceProvider(object):
             self.name=None
         self.url=self._root.find('OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
         #contact metadata
-	contact = self._root.find('ContactInformation')
-	## sometimes there is a contact block that is empty, so make
-	## sure there are children to parse
-	if contact is not None and contact[:] != []:
+        contact = self._root.find('ContactInformation')
+        ## sometimes there is a contact block that is empty, so make
+        ## sure there are children to parse
+        if contact is not None and contact[:] != []:
             self.contact = ContactMetadata(contact)
         else:
             self.contact = None
@@ -278,116 +295,131 @@ class ServiceProvider(object):
         raise KeyError, "No operation named %s" % name
 
 class ContentMetadata:
-	"""
-	Abstraction for WMS layer metadata.
+    """
+    Abstraction for WMS layer metadata.
 
-	Implements IContentMetadata.
-	"""
-	def __init__(self, elem, parent=None):
-		self.parent = parent
-		if elem.tag != 'Layer':
-			raise ValueError('%s should be a Layer' % (elem,))
-		for key in ('Name', 'Title'):
-			val = elem.find(key)
-			if val is not None:
-				setattr(self, key.lower(), val.text.strip())
-			else:
-				setattr(self, key.lower(), None)
-                self.id=self.name #conform to new interface
-		# bboxes
-		b = elem.find('BoundingBox')
-		self.boundingBox = None
-                if b is not None:
-                    try: #sometimes the SRS attribute is (wrongly) not provided
-                        srs=b.attrib['SRS']
-                    except KeyError:
-                        srs=None
-                    self.boundingBox = (
-                            float(b.attrib['minx']),
-                            float(b.attrib['miny']),
-                            float(b.attrib['maxx']),
-                            float(b.attrib['maxy']),
-                            srs,
+    Implements IContentMetadata.
+    """
+    def __init__(self, elem, parent=None):
+        self.parent = parent
+        if elem.tag != 'Layer':
+            raise ValueError('%s should be a Layer' % (elem,))
+        for key in ('Name', 'Title'):
+            val = elem.find(key)
+            if val is not None:
+                setattr(self, key.lower(), val.text.strip())
+            else:
+                setattr(self, key.lower(), None)
+            self.id=self.name #conform to new interface
+        # bboxes
+        b = elem.find('BoundingBox')
+        self.boundingBox = None
+        if b is not None:
+            try: #sometimes the SRS attribute is (wrongly) not provided
+                srs=b.attrib['SRS']
+            except KeyError:
+                srs=None
+                self.boundingBox = (
+                    float(b.attrib['minx']),
+                    float(b.attrib['miny']),
+                    float(b.attrib['maxx']),
+                    float(b.attrib['maxy']),
+                    srs,
                     )
-		elif self.parent:
-                    if hasattr(self.parent, 'boundingBox'):
-			self.boundingBox = self.parent.boundingBox
+        elif self.parent:
+            if hasattr(self.parent, 'boundingBox'):
+                self.boundingBox = self.parent.boundingBox
 
-		attribution = elem.find('Attribution')
-		if attribution is not None:
-			self.attribution = dict()
-			title = attribution.find('Title')
-			url = attribution.find('OnlineResource')
-			logo = attribution.find('LogoURL')
-			if title is not None: 
-			    self.attribution['title'] = title.text
-			if url is not None:
-			    self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
-			if logo is not None: 
-				self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
-				self.attribution['logo_url'] = logo.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+        attribution = elem.find('Attribution')
+        if attribution is not None:
+            self.attribution = dict()
+            title = attribution.find('Title')
+            url = attribution.find('OnlineResource')
+            logo = attribution.find('LogoURL')
+            if title is not None: 
+                self.attribution['title'] = title.text
+            if url is not None:
+                self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
+            if logo is not None: 
+                self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
+                self.attribution['logo_url'] = logo.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
 
+        b = elem.find('LatLonBoundingBox')
+        if b is not None:
+            self.boundingBoxWGS84 = (
+                float(b.attrib['minx']),
+                float(b.attrib['miny']),
+                float(b.attrib['maxx']),
+                float(b.attrib['maxy']),
+            )
+        elif self.parent:
+            self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
+        else:
+            self.boundingBoxWGS84 = None
+            
+        #SRS options
+        self.crsOptions = []
+            
+        #Copy any parent SRS options (they are inheritable properties)
+        if self.parent:
+            self.crsOptions = list(self.parent.crsOptions)
 
+        #Look for SRS option attached to this layer
+        if elem.find('SRS') is not None:
+            ## some servers found in the wild use a single SRS
+            ## tag containing a whitespace separated list of SRIDs
+            ## instead of several SRS tags. hence the inner loop
+            for srslist in map(lambda x: x.text, elem.findall('SRS')):
+                if srslist:
+                    for srs in srslist.split():
+                        self.crsOptions.append(srs)
+                        
+        #Get rid of duplicate entries
+        self.crsOptions = list(set(self.crsOptions))
 
-		b = elem.find('LatLonBoundingBox')
-		if b is not None:
-			self.boundingBoxWGS84 = (
-				float(b.attrib['minx']),
-				float(b.attrib['miny']),
-				float(b.attrib['maxx']),
-				float(b.attrib['maxy']),
-			)
-		elif self.parent:
-			self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
-		else:
-			self.boundingBoxWGS84 = None
-		# crs options
-		self.crsOptions = []
-		if elem.find('SRS') is not None:
-			## some servers found in the wild use a single SRS
-			## tag containing a whitespace separated list of SRIDs
-			## instead of several SRS tags. hence the inner loop
-			for srslist in map(lambda x: x.text, elem.findall('SRS')):
-                            if srslist:
-				for srs in srslist.split():
-					self.crsOptions.append(srs)
-		elif self.parent:
-                        self.crsOptions = self.parent.crsOptions
-		else:
-			#raise ValueError('%s no SRS available!?' % (elem,))
-                        #Comment by D Lowe.
-                        #Do not raise ValueError as it is possible that a layer is purely a parent layer and does not have SRS specified. Instead set crsOptions to None
-                        self.crsOptions=None
-		# styles
-		self.styles = {}
-		for s in elem.findall('Style'):
-			name = s.find('Name')
-			title = s.find('Title')
-			if name is None or title is None:
-				raise ValueError('%s missing name or title' % (s,))
-			style = { 'title' : title.text }
-			# legend url
-			legend = s.find('LegendURL/OnlineResource')
-			if legend is not None:
-				style['legend'] = legend.attrib['{http://www.w3.org/1999/xlink}href']
-			self.styles[name.text] = style
+        #Set self.crsOptions to None if the layer (and parents) had no SRS options
+        if len(self.crsOptions) == 0:
+            #raise ValueError('%s no SRS available!?' % (elem,))
+            #Comment by D Lowe.
+            #Do not raise ValueError as it is possible that a layer is purely a parent layer and does not have SRS specified. Instead set crsOptions to None
+            self.crsOptions=None
+            
+        #Styles
+        self.styles = {}
+        
+        #Copy any parent styles (they are inheritable properties)
+        if self.parent:
+            self.styles = self.parent.styles.copy()
+ 
+        #Get the styles for this layer (items with the same name are replaced)
+        for s in elem.findall('Style'):
+            name = s.find('Name')
+            title = s.find('Title')
+            if name is None or title is None:
+                raise ValueError('%s missing name or title' % (s,))
+            style = { 'title' : title.text }
+            # legend url
+            legend = s.find('LegendURL/OnlineResource')
+            if legend is not None:
+                style['legend'] = legend.attrib['{http://www.w3.org/1999/xlink}href']
+            self.styles[name.text] = style
 
-		# keywords
-		self.keywords = [f.text for f in elem.findall('KeywordList/Keyword')]
+        # keywords
+        self.keywords = [f.text for f in elem.findall('KeywordList/Keyword')]
 
-                # timepositions - times for which data is available.
-                self.timepositions=None
-                for extent in elem.findall('Extent'):
-                    if extent.attrib.get("name").lower() =='time':
-                        self.timepositions=extent.text.split(',')
-                        break
+        # timepositions - times for which data is available.
+        self.timepositions=None
+        for extent in elem.findall('Extent'):
+            if extent.attrib.get("name").lower() =='time':
+                self.timepositions=extent.text.split(',')
+                break
                 
-		self.layers = []
-		for child in elem.findall('Layer'):
-			self.layers.append(ContentMetadata(child, self))
+        self.layers = []
+        for child in elem.findall('Layer'):
+            self.layers.append(ContentMetadata(child, self))
 
-	def __str__(self):
-		return 'Layer Name: %s Title: %s' % (self.name, self.title)
+    def __str__(self):
+        return 'Layer Name: %s Title: %s' % (self.name, self.title)
 
 
 class OperationMetadata:
@@ -407,49 +439,48 @@ class OperationMetadata:
         self.methods = dict(methods)
 
 class ContactMetadata:
-	"""Abstraction for contact details advertised in GetCapabilities.
-	"""
-	def __init__(self, elem):
-		name = elem.find('ContactPersonPrimary/ContactPerson')
-		if name is not None:
-                    self.name=name.text
-                else:
-                    self.name=None
-                email = elem.find('ContactElectronicMailAddress')
-                if email is not None:
-                    self.email=email.text
-                else:
-                    self.email=None
-		self.address = self.city = self.region = None
-		self.postcode = self.country = None
+    """Abstraction for contact details advertised in GetCapabilities.
+    """
+    def __init__(self, elem):
+        name = elem.find('ContactPersonPrimary/ContactPerson')
+        if name is not None:
+            self.name=name.text
+        else:
+            self.name=None
+        email = elem.find('ContactElectronicMailAddress')
+        if email is not None:
+            self.email=email.text
+        else:
+            self.email=None
+        self.address = self.city = self.region = None
+        self.postcode = self.country = None
 
-		address = elem.find('ContactAddress')
-		if address is not None:
-			street = address.find('Address')
-			if street is not None: self.address = street.text
+        address = elem.find('ContactAddress')
+        if address is not None:
+            street = address.find('Address')
+            if street is not None: self.address = street.text
 
-			city = address.find('City')
-			if city is not None: self.city = city.text
+            city = address.find('City')
+            if city is not None: self.city = city.text
 
-			region = address.find('StateOrProvince')
-			if region is not None: self.region = region.text
+            region = address.find('StateOrProvince')
+            if region is not None: self.region = region.text
 
-			postcode = address.find('PostCode')
-			if postcode is not None: self.postcode = postcode.text
+            postcode = address.find('PostCode')
+            if postcode is not None: self.postcode = postcode.text
 
-			country = address.find('Country')
-			if country is not None: self.country = country.text
+            country = address.find('Country')
+            if country is not None: self.country = country.text
 
-		organization = elem.find('ContactPersonPrimary/ContactOrganization')
-		if organization is not None: self.organization = organization.text
-		else:self.organization = None
+        organization = elem.find('ContactPersonPrimary/ContactOrganization')
+        if organization is not None: self.organization = organization.text
+        else:self.organization = None
 
-		position = elem.find('ContactPosition')
-		if position is not None: self.position = position.text
-		else: self.position = None
+        position = elem.find('ContactPosition')
+        if position is not None: self.position = position.text
+        else: self.position = None
 
-
-        
+      
 class WMSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
