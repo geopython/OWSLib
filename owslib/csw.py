@@ -11,6 +11,7 @@
 """ CSW request and response processor """
 
 import StringIO
+import random
 from owslib.etree import etree
 from owslib.filter import *
 from owslib import util
@@ -300,13 +301,13 @@ class CatalogueServiceWeb:
             if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
                 for f in self._records.findall(util.nspath('SearchResults', namespaces['csw']) + '/' + util.nspath('MD_Metadata', namespaces['gmd'])):
                     val = f.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
-                    identifier = util.testXMLValue(val)
-                    self.records[identifier] = MD_Metadata(f)
+                    identifier = self._setidentifierkey(util.testXMLValue(val))
+                    self.records[identifier] = MD_Metadata(f, identifier)
             else: # process default
                 for f in self._records.findall(util.nspath('SearchResults/' + self._setesnel(esn), namespaces['csw'])):
                     val = f.find(util.nspath('identifier', namespaces['dc']))
-                    identifier = util.testXMLValue(val)
-                    self.records[identifier] = CswRecord(f)
+                    identifier = self._setidentifierkey(util.testXMLValue(val))
+                    self.records[identifier] = CswRecord(f, identifier)
 
     def getrecordbyid(self, id=[], esn='full', schema=namespaces['csw'], format=outputformat):
         """
@@ -351,12 +352,12 @@ class CatalogueServiceWeb:
             if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
                 for i in self._records.findall(util.nspath('MD_Metadata', namespaces['gmd'])):
                     val = i.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
-                    identifier = util.testXMLValue(val)
+                    identifier = self._setidentifierkey(util.testXMLValue(val))
                     self.records[identifier] = MD_Metadata(i)
             else: # process default 
                 for i in self._records.findall(util.nspath(self._setesnel(esn), namespaces['csw'])):
                     val = i.find(util.nspath('identifier', namespaces['dc']))
-                    identifier = util.testXMLValue(val)
+                    identifier = self._setidentifierkey(util.testXMLValue(val))
                     self.records[identifier] = CswRecord(i)
 
     def _setesnel(self, esn):
@@ -375,11 +376,20 @@ class CatalogueServiceWeb:
         else:
             self.exceptionreport = None
 
+    def _setidentifierkey(self, el):
+        if el is None: 
+            return 'owslib_random_%i' % random.randint(1,65536)
+        else:
+            return el
+
 class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
-    def __init__(self, record):
-        val = record.find(util.nspath('identifier', namespaces['dc']))
-        self.identifier = util.testXMLValue(val)
+    def __init__(self, record, identifier=None):
+        if identifier is None:
+            val = record.find(util.nspath('identifier', namespaces['dc']))
+            self.identifier = util.testXMLValue(val)
+        else:
+            self.identifier = identifier
 
         val = record.find(util.nspath('type', namespaces['dc']))
         self.type = util.testXMLValue(val)
