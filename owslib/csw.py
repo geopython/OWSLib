@@ -282,7 +282,7 @@ class CatalogueServiceWeb:
         self._records = etree.parse(StringIO.StringIO(self.response))
 
         # check for exceptions
-        self._isexception(self._capabilities, self.owscommon.namespace)
+        self._isexception(self._records, self.owscommon.namespace)
  
         if self.exceptionreport is None:
             self.results = {}
@@ -343,7 +343,7 @@ class CatalogueServiceWeb:
         self._records = etree.parse(StringIO.StringIO(self.response))
 
         # check for exceptions
-        self._isexception(self._capabilities, self.owscommon.namespace)
+        self._isexception(self._records, self.owscommon.namespace)
  
         if self.exceptionreport is None:
             self.records = {}
@@ -359,6 +359,76 @@ class CatalogueServiceWeb:
                     val = i.find(util.nspath('identifier', namespaces['dc']))
                     identifier = self._setidentifierkey(util.testXMLValue(val))
                     self.records[identifier] = CswRecord(i)
+
+    def harvest(self, source, resourcetype, resourceformat=None, harvestinterval=None, responsehandler=None):
+        """
+
+        Construct and process a Harvest request
+
+        Parameters
+        ----------
+
+        - source: a URI to harvest
+        - resourcetype: namespace identifying the type of resource
+        - resourceformat: MIME type of the resource
+        - harvestinterval: frequency of harvesting, in ISO8601
+        - responsehandler: endpoint that CSW should responsd to with response
+
+        """
+
+        # construct request
+        node0 = etree.Element(util.nspath('Harvest', namespaces['csw']))
+        node0.set('version', self.version)
+        node0.set('service', self.service)
+        node0.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
+        etree.SubElement(node0, util.nspath('Source', namespaces['csw'])).text = source
+        etree.SubElement(node0, util.nspath('ResourceType', namespaces['csw'])).text = resourcetype
+        if resourceformat is not None:
+            etree.SubElement(node0, util.nspath('ResourceFormat', namespaces['csw'])).text = resourceformat
+        if harvestinterval is not None:
+            etree.SubElement(node0, util.nspath('HarvestInterval', namespaces['csw'])).text = harvestinterval
+        if responsehandler is not None:
+            etree.SubElement(node0, util.nspath('ResponseHandler', namespaces['csw'])).text = responsehandler
+       
+        self.request = util.xml2string(etree.tostring(node0))
+
+        self.response = util.http_post(self.url, self.request, self.lang)
+
+        # parse result
+        self._response = etree.parse(StringIO.StringIO(self.response))
+
+        # check for exceptions
+        self._isexception(self._response, self.owscommon.namespace)
+
+        self.results = {}
+
+        if self.exceptionreport is None:
+            val = self._response.find(util.nspath('Acknowledgement', namespaces['csw']))
+            if util.testXMLValue(val) is not None:
+                ts = val.attrib.get('timeStamp')
+                self.timestamp = util.testXMLValue(ts, True)
+                id = val.find(util.nspath('RequestId', namespaces['csw']))
+                self.id = util.testXMLValue(id) 
+            else:
+                self._parsetransactionsummary()
+
+            self.results['inserted'] = []
+
+            for i in self._response.findall(util.nspath('TransactionResponse/InsertResult', namespaces['csw'])):
+                for j in i.findall(util.nspath('BriefRecord', namespaces['csw']) + '/' + util.nspath('identifier', namespaces['dc'])):
+                    self.results['inserted'].append(util.testXMLValue(j))
+
+    def _parsetransactionsummary(self):
+        val = self._response.find(util.nspath('TransactionResponse/TransactionSummary', namespaces['csw']))
+        if val is not None:
+            id = val.attrib.get('requestId')
+            self.results['requestid'] = util.testXMLValue(id, True)
+            ts = val.find(util.nspath('totalInserted', namespaces['csw']))
+            self.results['inserted'] = util.testXMLValue(ts)
+            ts = val.find(util.nspath('totalUpdated', namespaces['csw']))
+            self.results['updated'] = util.testXMLValue(ts)
+            ts = val.find(util.nspath('totalDeleted', namespaces['csw']))
+            self.results['deleted'] = util.testXMLValue(ts)
 
     def _setesnel(self, esn):
         """ Set the element name to parse depending on the ElementSetName requested """
