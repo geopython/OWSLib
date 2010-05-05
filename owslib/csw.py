@@ -176,7 +176,7 @@ class CatalogueServiceWeb:
             for f in self._values.findall(util.nspath('DomainValues/ListOfValues/Value', namespaces['csw'])):
                 self.results['values'].append(util.testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None, esn='full', sortby=None, schema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10):
         """
 
         Construct and process a  GetRecords request
@@ -191,7 +191,7 @@ class CatalogueServiceWeb:
         - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
         - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'full')
         - sortby: property to sort results on (default is 'dc:title')
-        - schema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
+        - outputschema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
         - format: the outputFormat (default is 'application/xml')
         - startposition: requests a slice of the result set, starting at this position (default is 0)
         - maxrecords: the maximum number of records to return. No records are returned if 0 (default is 10)
@@ -200,7 +200,7 @@ class CatalogueServiceWeb:
 
         # construct request
         node0 = etree.Element(util.nspath('GetRecords', namespaces['csw']))
-        node0.set('outputSchema', schema)
+        node0.set('outputSchema', outputschema)
         node0.set('outputFormat', format)
         node0.set('version', self.version)
         node0.set('resultType', 'results')
@@ -298,7 +298,7 @@ class CatalogueServiceWeb:
             # process list of matching records
             self.records = {}
 
-            if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
+            if outputschema == 'http://www.isotc211.org/2005/gmd': # iso 19139
                 for f in self._records.findall(util.nspath('SearchResults', namespaces['csw']) + '/' + util.nspath('MD_Metadata', namespaces['gmd'])):
                     val = f.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
                     identifier = self._setidentifierkey(util.testXMLValue(val))
@@ -309,7 +309,7 @@ class CatalogueServiceWeb:
                     identifier = self._setidentifierkey(util.testXMLValue(val))
                     self.records[identifier] = CswRecord(f, identifier)
 
-    def getrecordbyid(self, id=[], esn='full', schema=namespaces['csw'], format=outputformat):
+    def getrecordbyid(self, id=[], esn='full', outputschema=namespaces['csw'], format=outputformat):
         """
 
         Construct and process a GetRecordById request
@@ -319,14 +319,14 @@ class CatalogueServiceWeb:
 
         - id: the list of Ids
         - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'full')
-        - schema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
+        - outputschema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
         - format: the outputFormat (default is 'application/xml')
 
         """
 
         # construct request 
         node0 = etree.Element(util.nspath('GetRecordById', namespaces['csw']))
-        node0.set('outputSchema', schema)
+        node0.set('outputSchema', outputschema)
         node0.set('outputFormat', format)
         node0.set('version', self.version)
         node0.set('service', self.service)
@@ -349,7 +349,7 @@ class CatalogueServiceWeb:
             self.records = {}
 
             # process matching record
-            if schema == 'http://www.isotc211.org/2005/gmd': # iso 19139
+            if outputschema == 'http://www.isotc211.org/2005/gmd': # iso 19139
                 for i in self._records.findall(util.nspath('MD_Metadata', namespaces['gmd'])):
                     val = i.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
                     identifier = self._setidentifierkey(util.testXMLValue(val))
