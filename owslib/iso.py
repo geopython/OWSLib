@@ -27,21 +27,22 @@ namespaces = {
 
 class MD_Metadata(object):
     """ Process gmd:MD_Metadata """
-    def __init__(self, md):
-        val = md.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
-        self.identifier = util.testXMLValue(val)
+    def __init__(self, md, identifier=None):
+        if identifier is None:
+            val = md.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+            self.identifier = util.testXMLValue(val)
+        else:
+            self.identifier = identifier
 
         val = md.find(util.nspath('language', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.language = util.testXMLValue(val)
 
-        val = md.find(util.nspath('characterSet/MD_CharacterSetCode', namespaces['gmd'])).attrib.get('codeListValue')
-        self.charset = util.testXMLValue(val, True)
+        self.charset = _testCodeListValue(md.find(util.nspath('characterSet/MD_CharacterSetCode', namespaces['gmd'])))
   
-        val = md.find(util.nspath('hierarchyLevel/MD_ScopeCode', namespaces['gmd'])).attrib.get('codeListValue')
-        self.hierarchy = util.testXMLValue(val, True)
+        self.hierarchy = _testCodeListValue(md.find(util.nspath('hierarchyLevel/MD_ScopeCode', namespaces['gmd'])))
 
         val = md.find(util.nspath('contact/CI_ResponsibleParty', namespaces['gmd']))
-        if val:
+        if val is not None:
             self.contact = CI_ResponsibleParty(val)
         else:
             self.contact = None
@@ -56,7 +57,7 @@ class MD_Metadata(object):
         self.stdver = util.testXMLValue(val)
 
         val = md.find(util.nspath('referenceSystemInfo/MD_ReferenceSystem', namespaces['gmd']))
-        if val:
+        if val is not None:
             self.referencesystem = MD_ReferenceSystem(val)
         else:
             self.referencesystem = None
@@ -64,16 +65,16 @@ class MD_Metadata(object):
         val = md.find(util.nspath('identificationInfo/MD_DataIdentification', namespaces['gmd']))
         val2 = md.find(util.nspath('identificationInfo', namespaces['gmd']) + '/' + util.nspath('SV_ServiceIdentification', namespaces['srv']))
 
-        if val:
+        if val is not None:
             self.identification = MD_DataIdentification(val, 'dataset')
-        elif val2:
+        elif val2 is not None:
             self.identification = MD_DataIdentification(val2, 'service')
             self.identification.service = SV_ServiceIdentification(val2)
         else:
             self.identification = None
 
         val = md.find(util.nspath('distributionInfo/MD_Distribution', namespaces['gmd']))
-        if val:
+        if val is not None:
             self.distribution = MD_Distribution(val)
         else:
             self.distribution = None
@@ -112,13 +113,12 @@ class CI_ResponsibleParty(object):
         self.country = util.testXMLValue(val)
 
         val = md.find(util.nspath('contactInfo/CI_Contact/onlineResource/CI_OnlineResource', namespaces['gmd']))
-        if val:
+        if val is not None:
           self.onlineresource = CI_OnlineResource(val)
         else:
           self.onlineresource = None
       
-        val = md.find(util.nspath('role/CI_RoleCode', namespaces['gmd'])).attrib.get('codeListValue')
-        self.role = util.testXMLValue(val, True)
+        self.role = _testCodeListValue(md.find(util.nspath('role/CI_RoleCode', namespaces['gmd'])))
 
 class MD_DataIdentification(object):
     """ process MD_DataIdentification """
@@ -130,8 +130,7 @@ class MD_DataIdentification(object):
         val = md.find(util.nspath('citation/CI_Citation/date/CI_Date/date', namespaces['gmd']) + '/' + util.nspath('DateTime', namespaces['gco']))
         self.date = util.testXMLValue(val)
 
-        val = md.find(util.nspath('citation/CI_Citation/date/CI_Date/dateType/CI_DateTypeCode', namespaces['gmd'])).attrib.get('codeListValue')
-        self.datetype = util.testXMLValue(val, True)
+        self.datetype = _testCodeListValue(md.find(util.nspath('citation/CI_Citation/date/CI_Date/dateType/CI_DateTypeCode', namespaces['gmd'])))
 
         val = md.find(util.nspath('abstract', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.abstract = util.testXMLValue(val)
@@ -139,20 +138,18 @@ class MD_DataIdentification(object):
         val = md.find(util.nspath('purpose', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.purpose = util.testXMLValue(val, True)
 
-        val = md.find(util.nspath('status/MD_ProgressCode', namespaces['gmd'])).attrib.get('codeListValue')
-        self.status = util.testXMLValue(val, True)
+        self.status = _testCodeListValue(md.find(util.nspath('status/MD_ProgressCode', namespaces['gmd'])))
 
         val = md.find(util.nspath('pointOfContact/CI_ResponsibleParty', namespaces['gmd']))
 
-        if val:
+        if val is not None:
             self.contact = CI_ResponsibleParty(val)
         else:
             self.contact = None
 
         self.keywords = {}
 
-        val = md.find(util.nspath('descriptiveKeywords/MD_Keywords/type/MD_KeywordTypeCode', namespaces['gmd'])).attrib.get('codeListValue')
-        self.keywords['type'] = util.testXMLValue(val, True)
+        self.keywords['type'] = _testCodeListValue(md.find(util.nspath('descriptiveKeywords/MD_Keywords/type/MD_KeywordTypeCode', namespaces['gmd'])))
 
         self.keywords['list'] = [] 
         for i in md.findall(util.nspath('descriptiveKeywords/MD_Keywords/keyword', namespaces['gmd'])):
@@ -164,7 +161,7 @@ class MD_DataIdentification(object):
 
         val = md.find(util.nspath('extent/EX_Extent', namespaces['gmd']))
 
-        if val:
+        if val is not None:
             self.bbox = EX_Extent(val)
         else:
             self.bbox = None
@@ -180,7 +177,7 @@ class MD_Distribution(object):
 
         val = md.find(util.nspath('transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource', namespaces['gmd']))
 
-        if val:
+        if val is not None:
             self.onlineresource = CI_OnlineResource(val)
         else:
             self.onlineresource = None
@@ -199,13 +196,12 @@ class SV_ServiceIdentification(object):
 
         val = md.find(util.nspath('extent', namespaces['srv']) + '/' + util.nspath('EX_Extent', namespaces['gmd']))
 
-        if val:
+        if val is not None:
             self.bbox = EX_Extent(val)
         else:
             self.bbox = None
 
-        val = md.find(util.nspath('couplingType/SV_CouplingType', namespaces['srv'])).attrib.get('codeListValue')
-        self.couplingtype = util.testXMLValue(val, True)
+        self.couplingtype = _testCodeListValue(md.find(util.nspath('couplingType/SV_CouplingType', namespaces['gmd'])))
 
         self.operations = []
 
@@ -215,8 +211,8 @@ class SV_ServiceIdentification(object):
             tmp['name'] = util.testXMLValue(val)
             tmp['dcplist'] = []
             for d in i.findall(util.nspath('SV_OperationMetadata/DCP', namespaces['srv'])):
-                tmp2 = d.find(util.nspath('DCPList', namespaces['srv'])).attrib.get('codeListValue')
-                tmp['dcplist'].append(util.testXMLValue(tmp2, True))
+                tmp2 = _testCodeListValue(d.find(util.nspath('DCPList', namespaces['srv'])))
+                tmp['dcplist'].append(tmp2)
          
             tmp['connectpoint'] = []
  
@@ -249,11 +245,7 @@ class CI_OnlineResource(object):
         val = md.find(util.nspath('description', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.description = util.testXMLValue(val)
 
-        val = md.find(util.nspath('function', namespaces['gmd']))
-        if val:
-            self.function = val.find(util.nspath('CI_OnLineFunctionCode', namespaces['gmd'])).attrib.get('codeListValue')
-        else:
-            self.function = None
+        self.function = _testCodeListValue(md.find(util.nspath('function/CI_OnLineFunctionCode', namespaces['gmd'])))
 
 class EX_Extent(object):
     """ process EX_Extent """
@@ -272,21 +264,9 @@ class MD_ReferenceSystem(object):
     def __init__(self, md):
         val = md.find(util.nspath('referenceSystemIdentifier/RS_Identifier/code', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.code = util.testXMLValue(val)
-    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def _testCodeListValue(elpath):
+    if elpath is not None:
+        return util.testXMLValue(elpath.attrib.get('codeListValue'), True)
+    else:
+        return None
