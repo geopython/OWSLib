@@ -298,16 +298,7 @@ class CatalogueServiceWeb:
             # process list of matching records
             self.records = {}
 
-            if outputschema == 'http://www.isotc211.org/2005/gmd': # iso 19139
-                for f in self._records.findall(util.nspath('SearchResults', namespaces['csw']) + '/' + util.nspath('MD_Metadata', namespaces['gmd'])):
-                    val = f.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
-                    identifier = self._setidentifierkey(util.testXMLValue(val))
-                    self.records[identifier] = MD_Metadata(f, identifier)
-            else: # process default
-                for f in self._records.findall(util.nspath('SearchResults/' + self._setesnel(esn), namespaces['csw'])):
-                    val = f.find(util.nspath('identifier', namespaces['dc']))
-                    identifier = self._setidentifierkey(util.testXMLValue(val))
-                    self.records[identifier] = CswRecord(f, identifier)
+            self._parserecords(outputschema, esn)
 
     def getrecordbyid(self, id=[], esn='full', outputschema=namespaces['csw'], format=outputformat):
         """
@@ -348,17 +339,7 @@ class CatalogueServiceWeb:
         if self.exceptionreport is None:
             self.records = {}
 
-            # process matching record
-            if outputschema == 'http://www.isotc211.org/2005/gmd': # iso 19139
-                for i in self._records.findall(util.nspath('MD_Metadata', namespaces['gmd'])):
-                    val = i.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
-                    identifier = self._setidentifierkey(util.testXMLValue(val))
-                    self.records[identifier] = MD_Metadata(i)
-            else: # process default 
-                for i in self._records.findall(util.nspath(self._setesnel(esn), namespaces['csw'])):
-                    val = i.find(util.nspath('identifier', namespaces['dc']))
-                    identifier = self._setidentifierkey(util.testXMLValue(val))
-                    self.records[identifier] = CswRecord(i)
+            self._parserecords(outputschema, esn)
 
     def harvest(self, source, resourcetype, resourceformat=None, harvestinterval=None, responsehandler=None):
         """
@@ -417,6 +398,18 @@ class CatalogueServiceWeb:
             for i in self._response.findall(util.nspath('TransactionResponse/InsertResult', namespaces['csw'])):
                 for j in i.findall(util.nspath('BriefRecord', namespaces['csw']) + '/' + util.nspath('identifier', namespaces['dc'])):
                     self.results['inserted'].append(util.testXMLValue(j))
+
+    def _parserecords(self, outputschema, esn):
+        if outputschema == 'http://www.isotc211.org/2005/gmd': # iso 19139
+            for i in self._records.findall('//'+util.nspath('MD_Metadata', namespaces['gmd'])):
+                val = i.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+                identifier = self._setidentifierkey(util.testXMLValue(val))
+                self.records[identifier] = MD_Metadata(i)
+        else: # process default
+            for i in self._records.findall('//'+util.nspath(self._setesnel(esn), namespaces['csw'])):
+                val = i.find(util.nspath('identifier', namespaces['dc']))
+                identifier = self._setidentifierkey(util.testXMLValue(val))
+                self.records[identifier] = CswRecord(i)
 
     def _parsetransactionsummary(self):
         val = self._response.find(util.nspath('TransactionResponse/TransactionSummary', namespaces['csw']))
