@@ -44,4 +44,6 @@
     '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator="Access"><ows:ExceptionText>Access to Harvest denied</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
     >>> c.exceptionreport.exceptions
     [{'locator': 'Access', 'ExceptionText': 'Access to Harvest denied', 'exceptionCode': 'NoApplicableCode'}]
-    >>> 
+    >>> c.getrecords(keywords=['glacial'],outputschema='http://www.fgdc.gov')
+    >>> c.results['matches']
+    375
