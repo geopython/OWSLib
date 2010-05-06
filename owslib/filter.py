@@ -136,8 +136,8 @@ class FilterRequest(object):
 
         """
 
-        tmp = etree.SubElement(parent, util.nspath('SortBy', namespaces1['ogc']))
-        tmp2 = etree.SubElement(tmp, util.nspath('SortProperty', namespaces1['ogc']))
+        tmp = etree.SubElement(parent, util.nspath('SortBy', namespaces['ogc']))
+        tmp2 = etree.SubElement(tmp, util.nspath('SortProperty', namespaces['ogc']))
         etree.SubElement(tmp2, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
         etree.SubElement(tmp2, util.nspath('SortOrder', namespaces['ogc'])).text = order
 
