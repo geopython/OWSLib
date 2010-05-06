@@ -42,7 +42,7 @@ class Idinfo(object):
         self.spdom = Spdom(val)
 
         val = md.find('idinfo/keywords')
-        self.keywords = Spdom(val)
+        self.keywords = Keywords(val)
 
         val = md.find('idinfo/accconst')
         self.accconst = util.testXMLValue(val)
