@@ -10,7 +10,6 @@
 
 """ ISO metadata parser """
 
-import StringIO
 from owslib.etree import etree
 from owslib import util
 
