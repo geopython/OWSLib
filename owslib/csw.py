@@ -17,6 +17,7 @@ from owslib.filter import *
 from owslib import util
 from owslib.ows import *
 from owslib.iso import *
+from owslib.fgdc import *
 
 # default variables
 
@@ -405,6 +406,11 @@ class CatalogueServiceWeb:
                 val = i.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
+        elif outputschema == 'http://www.fgdc.gov': # fgdc csdgm
+            for i in self._records.findall('//metadata'):
+                val = i.find('idinfo/datasetid')
+                identifier = self._setidentifierkey(util.testXMLValue(val))
+                self.records[identifier] = Metadata(i)
         else: # process default
             for i in self._records.findall('//'+util.nspath(self._setesnel(esn), namespaces['csw'])):
                 val = i.find(util.nspath('identifier', namespaces['dc']))
