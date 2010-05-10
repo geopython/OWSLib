@@ -65,7 +65,7 @@ class Citation(object):
         if md is not None:
             self.citeinfo = {}
     
-            val = md.find(util.nspath('citeinfo/origin', 'None'))
+            val = md.find('citeinfo/origin')
             self.citeinfo['origin'] = util.testXMLValue(val)
     
             val = md.find('citeinfo/pubdate')
