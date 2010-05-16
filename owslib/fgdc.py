@@ -15,7 +15,7 @@ from owslib import util
 
 class Metadata(object):
     """ Process metadata """
-    def __init__(self, md, identifier=None):
+    def __init__(self, md):
         self.idinfo = Idinfo(md)
         self.eainfo = Eainfo(md)
         self.metainfo = Metainfo(md)

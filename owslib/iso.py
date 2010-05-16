@@ -26,12 +26,9 @@ namespaces = {
 
 class MD_Metadata(object):
     """ Process gmd:MD_Metadata """
-    def __init__(self, md, identifier=None):
-        if identifier is None:
-            val = md.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
-            self.identifier = util.testXMLValue(val)
-        else:
-            self.identifier = identifier
+    def __init__(self, md):
+        val = md.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.identifier = util.testXMLValue(val)
 
         val = md.find(util.nspath('language', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.language = util.testXMLValue(val)
