@@ -18,6 +18,7 @@ from owslib import util
 from owslib.ows import *
 from owslib.iso import *
 from owslib.fgdc import *
+from owslib.dif import *
 
 # default variables
 
@@ -31,6 +32,7 @@ namespaces = {
     'dct': 'http://purl.org/dc/terms/',
     'gco': 'http://www.isotc211.org/2005/gco',
     'gmd': 'http://www.isotc211.org/2005/gmd',
+    'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
     'gml': 'http://www.opengis.net/gml',
     'ogc': 'http://www.opengis.net/ogc',
     'ows': 'http://www.opengis.net/ows',
@@ -401,16 +403,25 @@ class CatalogueServiceWeb:
                     self.results['inserted'].append(util.testXMLValue(j))
 
     def _parserecords(self, outputschema, esn):
-        if outputschema == 'http://www.isotc211.org/2005/gmd': # iso 19139
+        if outputschema == namespaces['gmd']: # iso 19139
             for i in self._records.findall('//'+util.nspath('MD_Metadata', namespaces['gmd'])):
                 val = i.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
-        elif outputschema == 'http://www.fgdc.gov': # fgdc csdgm
+        elif outputschema == namespaces['fgdc']: # fgdc csdgm
             for i in self._records.findall('//metadata'):
                 val = i.find('idinfo/datasetid')
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = Metadata(i)
+        # CSWs define the dif namespace with the trailing '/' as an
+        # outputSchema, but actual responses indeed define it with '/' as an outputSchema
+        # this is an interoperability issue to be resolved
+        # [:-1] is a workaround for now
+        elif outputschema == namespaces['dif'][:-1]: # nasa dif, strip the trailing '/' for now
+            for i in self._records.findall('//'+util.nspath('DIF', namespaces['dif'])):
+                val = i.find(util.nspath('Entry_ID', namespaces['dif']))
+                identifier = self._setidentifierkey(util.testXMLValue(val))
+                self.records[identifier] = DIF(i)
         else: # process default
             for i in self._records.findall('//'+util.nspath(self._setesnel(esn), namespaces['csw'])):
                 val = i.find(util.nspath('identifier', namespaces['dc']))
@@ -453,12 +464,9 @@ class CatalogueServiceWeb:
 
 class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
-    def __init__(self, record, identifier=None):
-        if identifier is None:
-            val = record.find(util.nspath('identifier', namespaces['dc']))
-            self.identifier = util.testXMLValue(val)
-        else:
-            self.identifier = identifier
+    def __init__(self, record):
+        val = record.find(util.nspath('identifier', namespaces['dc']))
+        self.identifier = util.testXMLValue(val)
 
         val = record.find(util.nspath('type', namespaces['dc']))
         self.type = util.testXMLValue(val)
