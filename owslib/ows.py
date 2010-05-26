@@ -20,6 +20,7 @@ from owslib import util
 
 OWS_NAMESPACE_1_0_0 = 'http://www.opengis.net/ows'
 OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
+OWS_NAMESPACE_2_0 = 'http://www.opengis.net/ows/2.0'
 XSI_NAMESPACE       = 'http://www.w3.org/2001/XMLSchema-instance'
 XLINK_NAMESPACE     = 'http://www.w3.org/1999/xlink'
 
@@ -59,6 +60,9 @@ class ServiceIdentification(object):
 
         val = self._root.find(util.nspath('ServiceTypeVersion', namespace))
         self.version = util.testXMLValue(val)
+
+        val = self._root.find(util.nspath('Profile', namespace))
+        self.profile = util.testXMLValue(val)
 
 class ServiceProvider(object):
     """Initialize an OWS Common ServiceProvider construct"""
@@ -156,6 +160,9 @@ class BoundingBox(object):
 
         val = elem.attrib.get('crs')
         self.crs = util.testXMLValue(val, True)
+
+        val = elem.attrib.get('dimensions')
+        self.dimensions = util.testXMLValue(val, True)
 
         val = elem.find(util.nspath('LowerCorner', namespace))
         if val is not None:
