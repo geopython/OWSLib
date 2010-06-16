@@ -148,8 +148,6 @@ class OperationsMetadata(object):
             methods.append((verb.tag, {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
         self.methods = dict(methods)
 
-
-
 class BoundingBox(object):
     """Initialize an OWS BoundingBox construct"""
     def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE): 
@@ -165,14 +163,15 @@ class BoundingBox(object):
         self.dimensions = util.testXMLValue(val, True)
 
         val = elem.find(util.nspath('LowerCorner', namespace))
-        if val is not None:
-            tmp = util.testXMLValue(val)
+        tmp = util.testXMLValue(val)
+        if tmp is not None:
             xy = tmp.split()
             if len(xy) > 1:
                 self.minx, self.miny = xy[0], xy[1] 
+
         val = elem.find(util.nspath('UpperCorner', namespace))
-        if val is not None:
-            tmp = util.testXMLValue(val)
+        tmp = util.testXMLValue(val)
+        if tmp is not None:
             xy = tmp.split()
             if len(xy) > 1:
                 self.maxx, self.maxy = xy[0], xy[1]
