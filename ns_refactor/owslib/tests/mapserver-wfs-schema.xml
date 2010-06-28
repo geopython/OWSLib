@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<schema targetNamespace="http://www.bsc-eoc.org/bsc" xmlns:bsc="http://www.bsc-eoc.org/bsc" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml" elementFormDefault="qualified" version="0.1">
+
+  <import namespace="http://www.opengis.net/gml" schemaLocation="http://schemas.opengeospatial.net//gml/2.1.2/feature.xsd"/>
+
+  <element name="IBA" type="bsc:IBAType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="IBAType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="CBC_PT" type="bsc:CBC_PTType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="CBC_PTType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="CBC_PY" type="bsc:CBC_PYType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="CBC_PYType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="MMP" type="bsc:MMPType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="MMPType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="CLLS" type="bsc:CLLSType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="CLLSType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="OBBA_SQUARE" type="bsc:OBBA_SQUAREType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="OBBA_SQUAREType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="OBBA_REGION" type="bsc:OBBA_REGIONType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="OBBA_REGIONType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="OBBA_BLOCK" type="bsc:OBBA_BLOCKType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="OBBA_BLOCKType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="OWLS" type="bsc:OWLSType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="OWLSType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="BBS_PT" type="bsc:BBS_PTType" substitutionGroup="gml:_Feature"/>
+
+  <complexType name="BBS_PTType">
+    <complexContent>
+      <extension base="gml:AbstractFeatureType">
+        <sequence>
+          <element name="msGeometry" type="gml:GeometryPropertyType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+</schema>
