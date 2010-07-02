@@ -108,6 +108,9 @@ class CI_ResponsibleParty(object):
         val = md.find(util.nspath('contactInfo/CI_Contact/address/CI_Address/country', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.country = util.testXMLValue(val)
 
+        val = md.find(util.nspath('contactInfo/CI_Contact/address/CI_Address/electronicMailAddress', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.email = util.testXMLValue(val)
+
         val = md.find(util.nspath('contactInfo/CI_Contact/onlineResource/CI_OnlineResource', namespaces['gmd']))
         if val is not None:
           self.onlineresource = CI_OnlineResource(val)
@@ -127,6 +130,9 @@ class MD_DataIdentification(object):
         self.date = util.testXMLValue(val)
 
         self.datetype = _testCodeListValue(md.find(util.nspath('citation/CI_Citation/date/CI_Date/dateType/CI_DateTypeCode', namespaces['gmd'])))
+
+        val = md.find(util.nspath('edition', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.edition = util.testXMLValue(val)
 
         val = md.find(util.nspath('abstract', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.abstract = util.testXMLValue(val)
@@ -156,6 +162,9 @@ class MD_DataIdentification(object):
         self.topiccategory = util.testXMLValue(val)
 
         val = md.find(util.nspath('extent/EX_Extent', namespaces['gmd']))
+
+        val = md.find(util.nspath('supplementalInformation', namespaces['gmd'])+ '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.supplementalinformation = util.testXMLValue(val)
 
         if val is not None:
             self.bbox = EX_Extent(val)
