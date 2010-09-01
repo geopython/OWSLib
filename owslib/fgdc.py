@@ -149,6 +149,7 @@ class Keywords(object):
             self.theme.append(theme)
 
         for i in md.findall('place'):
+            theme = {}
             place = {}
             val = i.find('placekt')
             theme['placekt'] = util.testXMLValue(val)
@@ -158,6 +159,7 @@ class Keywords(object):
             self.place.append(place)
 
         for i in md.findall('temporal'):
+            theme = {}
             temporal = {}
             val = i.find('tempkt')
             theme['tempkt'] = util.testXMLValue(val)
