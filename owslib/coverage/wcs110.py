@@ -307,7 +307,7 @@ class ContentMetadata(object):
                 if kw is not None:
                     self.keywords.append(kw.text)
             
-        
+        self.boundingBox=None #needed for iContentMetadata harmonisation
         self.boundingBoxWGS84 = None
         b = elem.find('{http://www.opengis.net/ows}WGS84BoundingBox')
         if b is not None:
@@ -332,18 +332,22 @@ class ContentMetadata(object):
                     self.boundingboxes.append(boundingBox)
                 except:
                      pass
+
+        #others not used but needed for iContentMetadata harmonisation
+        self.styles=None
+        self.crsOptions=None
                 
         #SupportedCRS
         self.supportedCRS=[]
         for crs in elem.findall('{http://www.opengis.net/wcs/1.1}SupportedCRS'):
             self.supportedCRS.append(crs.text)
             
+            
         #SupportedFormats         
         self.supportedFormats=[]
         for format in elem.findall('{http://www.opengis.net/wcs/1.1}SupportedFormat'):
             self.supportedFormats.append(format.text)
             
-        
     #grid is either a gml:Grid or a gml:RectifiedGrid if supplied as part of the DescribeCoverage response.
     def _getGrid(self):
         grid=None

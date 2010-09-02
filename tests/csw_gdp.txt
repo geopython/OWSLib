@@ -45,8 +45,8 @@
     >>> c.exceptionreport.exceptions
     [{'locator': 'Access', 'ExceptionText': 'Access to Harvest denied', 'exceptionCode': 'NoApplicableCode'}]
     >>> c.getrecords(keywords=['glacial'],outputschema='http://www.fgdc.gov')
-    >>> c.results['matches']
-    373
+    >>> c.results['matches']>370
+    True
     >>> c.getrecords(keywords=['glacial'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif', maxrecords=2)
     >>> len(c.records)
     2

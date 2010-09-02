@@ -245,7 +245,8 @@ class ContentMetadata(object):
         self.id=elem.find(ns('name')).text
         self.title =elem.find(ns('label')).text       
         self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]        
-        self.boundingBoxWGS84 = None
+        self.boundingBox=None #needed for iContentMetadata harmonisation
+        self.boundingBoxWGS84 = None        
         b = elem.find(ns('lonLatEnvelope')) 
         if b is not None:
             gmlpositions=b.findall('{http://www.opengis.net/gml}pos')
@@ -255,7 +256,10 @@ class ContentMetadata(object):
                     float(lc.split()[0]),float(lc.split()[1]),
                     float(uc.split()[0]), float(uc.split()[1]),
                     )
-        
+        #others not used but needed for iContentMetadata harmonisation
+        self.styles=None
+        self.crsOptions=None
+
     #grid is either a gml:Grid or a gml:RectifiedGrid if supplied as part of the DescribeCoverage response.
     def _getGrid(self):
         if not hasattr(self, 'descCov'):
@@ -304,7 +308,6 @@ class ContentMetadata(object):
             self.descCov=self._service.getDescribeCoverage(self.id)
         return bboxes        
     boundingboxes=property(_getOtherBoundingBoxes,None)
-
     
     def _getSupportedCRSProperty(self):
         # gets supported crs info

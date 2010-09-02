@@ -50,7 +50,7 @@ class WebFeatureService_2_0_0(object):
         @param xml: elementtree object
         @return: initialized WebFeatureService_2_0_0 object
         """
-        obj=object.__new__(self, url, version, xml)
+        obj=object.__new__(self)
         obj.__init__(url, version, xml)
         self.log = logging.getLogger()
         consoleh  = logging.StreamHandler()
@@ -349,7 +349,9 @@ class ContentMetadata:
             in elem.findall(nspath('Operations/*',ns=WFS_NAMESPACE)) \
             if op.tag not in self.verbOptions]
         
-
+        #others not used but needed for iContentMetadata harmonisation
+        self.styles=None
+        self.timepositions=None
 
 class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset

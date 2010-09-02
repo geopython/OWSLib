@@ -54,7 +54,8 @@ Test single item accessor
     (-180.0, -90.0, 180.0, 90.0)
     
     >>> wms['world.topo.bathy.200409'].crsOptions
-    ['init=epsg:4326']
+    ['EPSG:4326', 'init=epsg:4326']
+
     
     >>> wms['world.topo.bathy.200409'].styles
     {}

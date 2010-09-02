@@ -30,7 +30,7 @@ class WCSBase(object):
         @param xml: elementtree object
         @return: inititalised WCSBase object
         """
-        obj=object.__new__(self, url, xml ,cookies)
+        obj=object.__new__(self)
         obj.__init__(url, xml, cookies)
         self.cookies=cookies
         self.log = logging.getLogger(__name__)
