@@ -104,7 +104,8 @@
 
 
 #Check all contents implement IContentMetadata as a dictionary
-    >>> csw.contents=['1']
+#CSW does not work in this way so use dummy
+    >>> csw.contents={'dummy':'1'}
     >>> for service in services:
     ...     service.identification.type
     ...     type(service.contents)
@@ -120,6 +121,9 @@
 
 #Check any item (WCS coverage, WMS layer etc) from the contents of each service
 #Check it conforms to IContentMetadata interface
+#CSW does not conform to this
+#WCS boundingbox handling is also different (has multiple boundingboxes). TODO: needs harmonising.
+
 	
     >>> for service in services:
     ...	    if type(service.contents) is dict:
@@ -127,10 +131,10 @@
     ...         content=service.contents[service.contents.iterkeys().next()] #get random item from contents dictionary -has to be a nicer way to do this!
     ...         [[attribute, hasattr(content, attribute)] for attribute in ['id','title','boundingBox', 'boundingBoxWGS84', 'crsOptions', 'styles', 'timepositions']]
     'CSW'
-    [['id', True], ['title', True], ['boundingBox', True],['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
+    [['id', False], ['title', True], ['boundingBox', False], ['boundingBoxWGS84', False], ['crsOptions', False], ['styles', False], ['timepositions', False]]
     'OGC:WMS'
-    [['id', True], ['title', True], ['boundingBox', True],['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
+    [['id', True], ['title', True], ['boundingBox', True], ['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
     'OGC:WCS'
-    [['id', True], ['title', True], ['boundingBox', True],['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
+    [['id', True], ['title', True], ['boundingBox', True], ['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
     'MapServer WFS'
-    [['id', True], ['title', True], ['boundingBox', True],['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
+    [['id', True], ['title', True], ['boundingBox', True], ['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
