@@ -319,13 +319,13 @@ class ContentMetadata:
                 srs=b.attrib['SRS']
             except KeyError:
                 srs=None
-                self.boundingBox = (
-                    float(b.attrib['minx']),
-                    float(b.attrib['miny']),
-                    float(b.attrib['maxx']),
-                    float(b.attrib['maxy']),
-                    srs,
-                    )
+            self.boundingBox = (
+                float(b.attrib['minx']),
+                float(b.attrib['miny']),
+                float(b.attrib['maxx']),
+                float(b.attrib['maxy']),
+                srs,
+                )
         elif self.parent:
             if hasattr(self.parent, 'boundingBox'):
                 self.boundingBox = self.parent.boundingBox
