@@ -156,11 +156,20 @@ def http_post(url=None, request=None, lang='en-US'):
         r.add_header('Accept-Encoding', 'gzip,deflate')
         r.add_header('Host', u.netloc)
         up = urllib2.urlopen(r)
+        ui = up.info()  # headers
         response = up.read()
         up.close()
+
+        # check if response is gzip compressed
+        if ui.has_key('Content-Encoding'):
+            if ui['Content-Encoding'] == 'gzip':  # uncompress response
+                import gzip
+                cds = StringIO(response)
+                gz = gzip.GzipFile(fileobj=cds)
+                response = gz.read()
+
         return response
-       
-        
+
 def xml2string(xml):
     """
 
