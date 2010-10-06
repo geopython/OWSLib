@@ -199,5 +199,5 @@ def xmlvalid(xml, xsd):
     xsd1 = etree.parse(xsd)
     xsd2 = etree.XMLSchema(xsd1)
 
-    doc = etree.parse(StringIO.StringIO(xml))
+    doc = etree.parse(StringIO(xml))
     return xsd2.validate(doc)
