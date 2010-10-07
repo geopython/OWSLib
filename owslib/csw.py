@@ -47,7 +47,7 @@ schema_location = '%s %s' % (namespaces['csw'], schema)
 
 class CatalogueServiceWeb:
     """ csw request class """
-    def __init__(self, url, lang='en-US', version='2.0.2'):
+    def __init__(self, url, lang='en-US', version='2.0.2', timeout=10):
         """
 
         Construct and process a GetCapabilities request
@@ -58,6 +58,7 @@ class CatalogueServiceWeb:
         - url: the URL of the CSW
         - lang: the language (default is 'en-US')
         - version: version (default is '2.0.2')
+        - timeout: timeout in seconds
 
         """
 
@@ -79,7 +80,7 @@ class CatalogueServiceWeb:
         self.request = util.xml2string(etree.tostring(node0))
 
         # invoke
-        self.response = util.http_post(self.url, self.request, self.lang)
+        self.response = util.http_post(self.url, self.request, self.lang, timeout)
 
         # parse result
         self._capabilities = etree.parse(StringIO.StringIO(self.response))
