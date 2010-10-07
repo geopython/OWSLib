@@ -80,29 +80,22 @@ class CatalogueServiceWeb:
         etree.SubElement(tmp2, util.nspath('OutputFormat', namespaces['ows'])).text = outputformat
         self.request = util.xml2string(etree.tostring(node0))
 
-        # invoke
-        self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
-
-        # parse result
-        self._capabilities = etree.parse(StringIO.StringIO(self.response))
-
-        # check for exceptions
-        self._isexception(self._capabilities, self.owscommon.namespace)
+        self._invoke()
 
         if self.exceptionreport is None:
             # ServiceIdentification
-            val = self._capabilities.find(util.nspath('ServiceIdentification', namespaces['ows']))
+            val = self._exml.find(util.nspath('ServiceIdentification', namespaces['ows']))
             self.identification=ServiceIdentification(val,self.owscommon.namespace)
             # ServiceProvider
-            val = self._capabilities.find(util.nspath('ServiceProvider', namespaces['ows']))
+            val = self._exml.find(util.nspath('ServiceProvider', namespaces['ows']))
             self.provider=ServiceProvider(val,self.owscommon.namespace)
             # ServiceOperations metadata 
             self.operations=[]
-            for elem in self._capabilities.findall(util.nspath('OperationsMetadata/Operation', namespaces['ows'])):
+            for elem in self._exml.findall(util.nspath('OperationsMetadata/Operation', namespaces['ows'])):
                 self.operations.append(OperationsMetadata(elem, self.owscommon.namespace))
     
             # FilterCapabilities
-            val = self._capabilities.find(util.nspath('Filter_Capabilities', namespaces['ogc']))
+            val = self._exml.find(util.nspath('Filter_Capabilities', namespaces['ogc']))
             self.filters=FilterCapabilities(val)
  
     def describerecord(self, typename='csw:Record', format=outputformat):
@@ -128,8 +121,7 @@ class CatalogueServiceWeb:
         etree.SubElement(node0, util.nspath('TypeName', namespaces['csw'])).text = typename
         self.request = util.xml2string(etree.tostring(node0))
 
-        # invoke
-        self.response = util.http_post(self.url, self.request, self.lang)
+        self._invoke()
 
         # parse result
         # TODO: process the XML Schema (you're on your own for now with self.response)
@@ -158,28 +150,21 @@ class CatalogueServiceWeb:
         etree.SubElement(node0, util.nspath(dtypename, namespaces['csw'])).text = dname
         self.request = util.xml2string(etree.tostring(node0))
 
-        # invoke
-        self.response = util.http_post(self.url, self.request, self.lang)
-
-        # parse result
-        self._values = etree.parse(StringIO.StringIO(self.response))
-
-        # check for exceptions
-        self._isexception(self._values, self.owscommon.namespace)
+        self._invoke()
 
         if self.exceptionreport is None:
             self.results = {}
 
-            val = self._values.find(util.nspath('DomainValues', namespaces['csw'])).attrib.get('type')
+            val = self._exml.find(util.nspath('DomainValues', namespaces['csw'])).attrib.get('type')
             self.results['type'] = util.testXMLValue(val, True)
 
-            val = self._values.find(util.nspath('DomainValues/' + dtypename, namespaces['csw']))
+            val = self._exml.find(util.nspath('DomainValues/' + dtypename, namespaces['csw']))
             self.results[dtype] = util.testXMLValue(val)
 
             # get the list of values associated with the Domain
             self.results['values'] = []
 
-            for f in self._values.findall(util.nspath('DomainValues/ListOfValues/Value', namespaces['csw'])):
+            for f in self._exml.findall(util.nspath('DomainValues/ListOfValues/Value', namespaces['csw'])):
                 self.results['values'].append(util.testXMLValue(f))
 
     def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10):
@@ -281,24 +266,17 @@ class CatalogueServiceWeb:
     
         self.request = util.xml2string(etree.tostring(node0))
 
-        # invoke
-        self.response = util.http_post(self.url, self.request, self.lang)
-
-        # parse result 
-        self._records = etree.parse(StringIO.StringIO(self.response))
-
-        # check for exceptions
-        self._isexception(self._records, self.owscommon.namespace)
+        self._invoke()
  
         if self.exceptionreport is None:
             self.results = {}
     
             # process search results attributes
-            val = self._records.find(util.nspath('SearchResults', namespaces['csw'])).attrib.get('numberOfRecordsMatched')
+            val = self._exml.find(util.nspath('SearchResults', namespaces['csw'])).attrib.get('numberOfRecordsMatched')
             self.results['matches'] = int(util.testXMLValue(val, True))
-            val = self._records.find(util.nspath('SearchResults', namespaces['csw'])).attrib.get('numberOfRecordsReturned')
+            val = self._exml.find(util.nspath('SearchResults', namespaces['csw'])).attrib.get('numberOfRecordsReturned')
             self.results['returned'] = int(util.testXMLValue(val, True))
-            val = self._records.find(util.nspath('SearchResults', namespaces['csw'])).attrib.get('nextRecord')
+            val = self._exml.find(util.nspath('SearchResults', namespaces['csw'])).attrib.get('nextRecord')
             self.results['nextrecord'] = int(util.testXMLValue(val, True))
     
             # process list of matching records
@@ -333,18 +311,10 @@ class CatalogueServiceWeb:
         etree.SubElement(node0, util.nspath('ElementSetName', namespaces['csw'])).text = esn
         self.request = util.xml2string(etree.tostring(node0))
 
-        # invoke
-        self.response = util.http_post(self.url, self.request, self.lang)
-
-        # parse result
-        self._records = etree.parse(StringIO.StringIO(self.response))
-
-        # check for exceptions
-        self._isexception(self._records, self.owscommon.namespace)
+        self._invoke()
  
         if self.exceptionreport is None:
             self.records = {}
-
             self._parserecords(outputschema, esn)
 
     def harvest(self, source, resourcetype, resourceformat=None, harvestinterval=None, responsehandler=None):
@@ -379,18 +349,11 @@ class CatalogueServiceWeb:
        
         self.request = util.xml2string(etree.tostring(node0))
 
-        self.response = util.http_post(self.url, self.request, self.lang)
-
-        # parse result
-        self._response = etree.parse(StringIO.StringIO(self.response))
-
-        # check for exceptions
-        self._isexception(self._response, self.owscommon.namespace)
-
+        self._invoke()
         self.results = {}
 
         if self.exceptionreport is None:
-            val = self._response.find(util.nspath('Acknowledgement', namespaces['csw']))
+            val = self._exml.find(util.nspath('Acknowledgement', namespaces['csw']))
             if util.testXMLValue(val) is not None:
                 ts = val.attrib.get('timeStamp')
                 self.timestamp = util.testXMLValue(ts, True)
@@ -401,18 +364,18 @@ class CatalogueServiceWeb:
 
             self.results['inserted'] = []
 
-            for i in self._response.findall(util.nspath('TransactionResponse/InsertResult', namespaces['csw'])):
+            for i in self._exml.findall(util.nspath('TransactionResponse/InsertResult', namespaces['csw'])):
                 for j in i.findall(util.nspath('BriefRecord', namespaces['csw']) + '/' + util.nspath('identifier', namespaces['dc'])):
                     self.results['inserted'].append(util.testXMLValue(j))
 
     def _parserecords(self, outputschema, esn):
         if outputschema == namespaces['gmd']: # iso 19139
-            for i in self._records.findall('//'+util.nspath('MD_Metadata', namespaces['gmd'])):
+            for i in self._exml.findall('//'+util.nspath('MD_Metadata', namespaces['gmd'])):
                 val = i.find(util.nspath('fileIdentifier', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
         elif outputschema == namespaces['fgdc']: # fgdc csdgm
-            for i in self._records.findall('//metadata'):
+            for i in self._exml.findall('//metadata'):
                 val = i.find('idinfo/datasetid')
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = Metadata(i)
@@ -421,18 +384,18 @@ class CatalogueServiceWeb:
         # this is an interoperability issue to be resolved
         # [:-1] is a workaround for now
         elif outputschema == namespaces['dif'][:-1]: # nasa dif, strip the trailing '/' for now
-            for i in self._records.findall('//'+util.nspath('DIF', namespaces['dif'])):
+            for i in self._exml.findall('//'+util.nspath('DIF', namespaces['dif'])):
                 val = i.find(util.nspath('Entry_ID', namespaces['dif']))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = DIF(i)
         else: # process default
-            for i in self._records.findall('//'+util.nspath(self._setesnel(esn), namespaces['csw'])):
+            for i in self._exml.findall('//'+util.nspath(self._setesnel(esn), namespaces['csw'])):
                 val = i.find(util.nspath('identifier', namespaces['dc']))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = CswRecord(i)
 
     def _parsetransactionsummary(self):
-        val = self._response.find(util.nspath('TransactionResponse/TransactionSummary', namespaces['csw']))
+        val = self._exml.find(util.nspath('TransactionResponse/TransactionSummary', namespaces['csw']))
         if val is not None:
             id = val.attrib.get('requestId')
             self.results['requestid'] = util.testXMLValue(id, True)
@@ -452,18 +415,40 @@ class CatalogueServiceWeb:
             el = 'SummaryRecord'
         return el
 
-    def _isexception(self, elem, namespace):
-        val = elem.find(util.nspath('Exception', namespaces['ows']))
-        if val is not None:
-            self.exceptionreport = ExceptionReport(elem, namespace)
-        else:
-            self.exceptionreport = None
-
     def _setidentifierkey(self, el):
         if el is None: 
             return 'owslib_random_%i' % random.randint(1,65536)
         else:
             return el
+
+    def _invoke(self):
+        # do HTTP request
+        self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
+
+        # parse result see if it's XML
+        self._exml = etree.parse(StringIO.StringIO(self.response))
+
+        # it's XML.  Attempt to decipher whether the XML response is CSW-ish """
+        valid_xpaths = [
+            util.nspath('ExceptionReport', namespaces['ows']),
+            util.nspath('Capabilities', namespaces['csw']),
+            util.nspath('DescribeRecordResponse', namespaces['csw']),
+            util.nspath('GetDomainResponse', namespaces['csw']),
+            util.nspath('GetRecordsResponse', namespaces['csw']),
+            util.nspath('GetRecordByIdResponse', namespaces['csw']),
+            util.nspath('HarvestResponse', namespaces['csw']),
+            util.nspath('TransactionResponse', namespaces['csw'])
+        ]
+
+        if self._exml.getroot().tag not in valid_xpaths:
+            raise RuntimeError, 'Document is XML, but not CSW-ish'
+
+        # check if it's an OGC Exception
+        val = self._exml.find(util.nspath('Exception', namespaces['ows']))
+        if val is not None:
+            self.exceptionreport = ExceptionReport(self._exml, self.owscommon.namespace)
+        else:
+            self.exceptionreport = None
 
 class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
