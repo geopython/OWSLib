@@ -65,6 +65,7 @@ class CatalogueServiceWeb:
         self.url = url
         self.lang = lang
         self.version = version
+        self.timeout = timeout
         self.service = 'CSW'
         self.exceptionreport = None
         self.owscommon = OwsCommon('1.0.0')
@@ -80,7 +81,7 @@ class CatalogueServiceWeb:
         self.request = util.xml2string(etree.tostring(node0))
 
         # invoke
-        self.response = util.http_post(self.url, self.request, self.lang, timeout)
+        self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
 
         # parse result
         self._capabilities = etree.parse(StringIO.StringIO(self.response))
