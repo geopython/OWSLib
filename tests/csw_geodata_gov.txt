@@ -4,11 +4,7 @@
     >>> c.results
     {'matches': 3479, 'nextrecord': 11, 'returned': 10}
     >>> c.getrecords(keywords=['water'])
-    >>> c.results
-    {'matches': 210554, 'nextrecord': 11, 'returned': 10}
     >>> c.getrecords()
-    >>> c.results
-    {'matches': 471462, 'nextrecord': 11, 'returned': 10}
     >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].title
     'Alaska DNR Well Sites'
     >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].source      
