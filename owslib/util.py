@@ -158,12 +158,12 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
         r.add_header('Accept-Encoding', 'gzip,deflate')
         r.add_header('Host', u.netloc)
 
-        if float(sys.version[:3]) < 2.6:  # use socket timeouts
+        try:
+            up = urllib2.urlopen(r,timeout=timeout);
+        except TypeError:
             import socket
             socket.setdefaulttimeout(timeout)
             up = urllib2.urlopen(r)
-        else:  # use urllib2's built in timeout parameter
-            up = urllib2.urlopen(r,timeout=timeout)
 
         ui = up.info()  # headers
         response = up.read()
