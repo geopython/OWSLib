@@ -453,8 +453,19 @@ class CatalogueServiceWeb:
 class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
     def __init__(self, record):
+
+        # some CSWs return records with multiple identifiers based on 
+        # different schemes.  Use the first dc:identifier value to set
+        # self.identifier, and set self.identifiers as a list of dicts
         val = record.find(util.nspath('identifier', namespaces['dc']))
         self.identifier = util.testXMLValue(val)
+
+        self.identifiers = []
+        for i in record.findall(util.nspath('identifier', namespaces['dc'])):
+            d = {}
+            d['scheme'] = i.attrib.get('scheme')
+            d['identifier'] = i.text
+            self.identifiers.append(d)
 
         val = record.find(util.nspath('type', namespaces['dc']))
         self.type = util.testXMLValue(val)
