@@ -1,0 +1,26 @@
+>>> from owslib.csw import CatalogueServiceWeb as cs
+>>> c=cs('http://gptogc.esri.com/GPT931/csw/discovery')
+>>> c.idenfitication.title
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: CatalogueServiceWeb instance has no attribute 'idenfitication'
+>>> c.identification.title
+'\n      GPT 9.3 CSW \n    '
+>>> c.getrecords(maxrecords=5)
+>>> for i in c.records:
+...     print c.records[i].identifier
+... 
+{44EC0429-0A2F-47D0-84AA-EECF601EB594}
+{F5913195-682E-4015-8F24-467A6D6724A1}
+{6AC76EFA-358B-44F7-8224-4A8663517370}
+{06BA10F7-AFE1-4E91-83F5-01367C232428}
+http://public1.co.waupaca.wi.us/ArcGIS/rest/services/public/FEMA_Floodplains/MapServer
+>>> for i in c.records:
+...     print c.records[i].identifiers
+... 
+[{'scheme': 'urn:x-esri:specification:ServiceType:ArcIMS:Metadata:FileID', 'identifier': '{44EC0429-0A2F-47D0-84AA-EECF601EB594}'}, {'scheme': 'urn:x-esri:specification:ServiceType:ArcIMS:Metadata:DocID', 'identifier': '{7B7698F2-A32A-4816-BDE4-4EDC1D2B3298}'}]
+[{'scheme': 'urn:x-esri:specification:ServiceType:ArcIMS:Metadata:DocID', 'identifier': '{F5913195-682E-4015-8F24-467A6D6724A1}'}]
+[{'scheme': 'urn:x-esri:specification:ServiceType:ArcIMS:Metadata:FileID', 'identifier': '{6AC76EFA-358B-44F7-8224-4A8663517370}'}, {'scheme': 'urn:x-esri:specification:ServiceType:ArcIMS:Metadata:DocID', 'identifier': '{9FD8E616-FAE0-4145-BB82-3F5A5880D254}'}]
+[{'scheme': 'urn:x-esri:specification:ServiceType:ArcIMS:Metadata:DocID', 'identifier': '{06BA10F7-AFE1-4E91-83F5-01367C232428}'}]
+[{'scheme': 'urn:x-esri:specification:ServiceType:ArcIMS:Metadata:FileID', 'identifier': 'http://public1.co.waupaca.wi.us/ArcGIS/rest/services/public/FEMA_Floodplains/MapServer'}, {'scheme': 'urn:x-esri:specification:ServiceType:ArcIMS:Metadata:DocID', 'identifier': '{444494E9-052B-4ADB-B7A9-6851B79FEB53}'}]
+>>> 
