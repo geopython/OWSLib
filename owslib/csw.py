@@ -314,6 +314,7 @@ class CatalogueServiceWeb:
         self._invoke()
  
         if self.exceptionreport is None:
+            self.results = {}
             self.records = {}
             self._parserecords(outputschema, esn)
 
