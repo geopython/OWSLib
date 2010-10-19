@@ -14,3 +14,6 @@
     >>> c.getrecords('downloadableData')
     >>> c.results['returned']
     10
+    >>> c.getrecords(cql='title = \'water\'')
+    >>> c.exceptionreport.exceptions
+    [{'locator': None, 'ExceptionText': '\nCqlText is not currently supported as a filter option.\n', 'exceptionCode': 'NoApplicableCode'}]

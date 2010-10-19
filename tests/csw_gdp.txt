@@ -1,5 +1,5 @@
     >>> from owslib.csw import CatalogueServiceWeb as cs
-    >>> c=cs('http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw')
+    >>> c=cs('http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw',timeout=30)
     >>> c.identification.title
     'Compusult CSW'
     >>> c.identification.version
