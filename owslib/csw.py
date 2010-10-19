@@ -167,7 +167,7 @@ class CatalogueServiceWeb:
             for f in self._exml.findall(util.nspath('DomainValues/ListOfValues/Value', namespaces['csw'])):
                 self.results['values'].append(util.testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None):
         """
 
         Construct and process a  GetRecords request
@@ -186,6 +186,7 @@ class CatalogueServiceWeb:
         - format: the outputFormat (default is 'application/xml')
         - startposition: requests a slice of the result set, starting at this position (default is 0)
         - maxrecords: the maximum number of records to return. No records are returned if 0 (default is 10)
+        - cql: common query language text.  Note this overrides bbox, qtype, keywords
 
         """
 
@@ -201,69 +202,16 @@ class CatalogueServiceWeb:
         node0.set('maxRecords', str(maxrecords))
         node0.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
 
-        # decipher number of query parameters ( > 1 sets an 'And' Filter
-        pcount = 0
-        if qtype is not None:
-            pcount += 1
-        if keywords:
-            pcount += 1
-        if bbox is not None:
-            pcount += 1
-
         node1 = etree.SubElement(node0, util.nspath('Query', namespaces['csw']))
         node1.set('typeNames', typenames)
     
         etree.SubElement(node1, util.nspath('ElementSetName', namespaces['csw'])).text = esn
 
-        # decipher if the query is for real
-        if keywords or bbox is not None or qtype is not None:    
-            node2 = etree.SubElement(node1, util.nspath('Constraint', namespaces['csw']))
-            node2.set('version', '1.1.0')
-            node3 = etree.SubElement(node2, util.nspath('Filter', namespaces['ogc']))
-            node4 = None
+        self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
 
-            # construct a Filter request
-            flt   = FilterRequest()    
- 
-            if pcount > 1: # Filter should be And-ed
-                node4 = etree.SubElement(node3, util.nspath('And', namespaces['ogc']))
-
-            # set the query type if passed
-            # TODO: need a smarter way to figure these out
-            if qtype is not None:
-                if node4 is not None:
-                    flt.setpropertyisequalto(node4, 'dc:type', qtype)
-                else:
-                    flt.setpropertyisequalto(node3, 'dc:type', qtype)
-
-            # set a bbox query if passed
-            if bbox is not None:
-                if node4 is not None:
-                    flt.setbbox(node4, bbox)
-                else:
-                    flt.setbbox(node3, bbox)
-
-            # set a keyword query if passed
-            if len(keywords) > 0:
-                if len(keywords) > 1: # loop multiple keywords into an Or
-                    if node4 is not None:
-                        node5 = etree.SubElement(node4, util.nspath('Or', namespaces['ogc']))
-                    else:
-                        node5 = etree.SubElement(node3, util.nspath('Or', namespaces['ogc']))
-
-                    for i in keywords:
-                        flt.setpropertyislike(node5, propertyname, '%%%s%%' % i)
-
-                else: # one keyword
-                    if node4 is not None:
-                        flt.setpropertyislike(node4, propertyname, '%%%s%%' % keywords[0])
-                    else:
-                        flt.setpropertyislike(node3, propertyname, '%%%s%%' % keywords[0])
-
-        # set a sort if passed
         if sortby is not None:
-            flt.setsortby(node1, sortby)
-    
+            setsortby(node1, sortby)
+
         self.request = util.xml2string(etree.tostring(node0))
 
         self._invoke()
@@ -318,6 +266,68 @@ class CatalogueServiceWeb:
             self.records = {}
             self._parserecords(outputschema, esn)
 
+    def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None, bbox=None, keywords=[], cql=None):
+        """
+
+        Construct and process a Transaction request
+
+        Parameters
+        ----------
+
+        - ttype: the type of transaction 'insert, 'update', 'delete'
+        - typename: the typename to describe (default is 'csw:Record')
+        - record: the XML record to insert
+        - propertyname: the RecordProperty/PropertyName to Filter against
+        - propertyvalue: the RecordProperty Value to Filter against (for updates)
+        - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
+        - keywords: list of keywords
+        - cql: common query language text.  Note this overrides bbox, qtype, keywords
+
+        """
+
+        # construct request
+        node0 = etree.Element(util.nspath('Transaction', namespaces['csw']))
+        node0.set('version', self.version)
+        node0.set('service', self.service)
+        node0.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
+
+        validtransactions = ['insert', 'update', 'delete']
+
+        if ttype not in validtransactions:  # invalid transaction
+            raise RuntimeError, 'Invalid transaction \'%s\'.' % ttype
+
+        node1 = etree.SubElement(node0, util.nspath('%s' % ttype.capitalize(), namespaces['csw']))
+
+        if ttype != 'update':  
+            node1.set('typeName', typename)
+
+        if ttype == 'insert':
+            if record is None:
+                raise RuntimeError, 'Nothing to insert.'
+            node1.append(etree.fromstring(record))
+ 
+        if ttype == 'update':
+            if record is not None:
+                node1.append(etree.fromstring(record))
+            else:
+                if propertyname is not None and propertyvalue is not None:
+                    node2 = etree.SubElement(node1, util.nspath('RecordProperty', namespaces['csw']))
+                    etree.SubElement(node2, util.nspath('Name', namespaces['csw'])).text = propertyname
+                    etree.SubElement(node2, util.nspath('Value', namespaces['csw'])).text = propertyvalue
+                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
+
+        if ttype == 'delete':
+            self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
+
+        self.request = util.xml2string(etree.tostring(node0))
+
+        self._invoke()
+        self.results = {}
+
+        if self.exceptionreport is None:
+            self._parsetransactionsummary()
+            self._parseinsertresult()
+
     def harvest(self, source, resourcetype, resourceformat=None, harvestinterval=None, responsehandler=None):
         """
 
@@ -362,12 +372,13 @@ class CatalogueServiceWeb:
                 self.id = util.testXMLValue(id) 
             else:
                 self._parsetransactionsummary()
+                self._parseinsertresult()
 
-            self.results['inserted'] = []
-
-            for i in self._exml.findall(util.nspath('TransactionResponse/InsertResult', namespaces['csw'])):
-                for j in i.findall(util.nspath('BriefRecord', namespaces['csw']) + '/' + util.nspath('identifier', namespaces['dc'])):
-                    self.results['inserted'].append(util.testXMLValue(j))
+    def _parseinsertresult(self):
+        self.results['inserted'] = []
+        for i in self._exml.findall(util.nspath('TransactionResponse/InsertResult', namespaces['csw'])):
+            for j in i.findall(util.nspath('BriefRecord', namespaces['csw']) + '/' + util.nspath('identifier', namespaces['dc'])):
+                self.results['inserted'].append(util.testXMLValue(j))
 
     def _parserecords(self, outputschema, esn):
         if outputschema == namespaces['gmd']: # iso 19139
@@ -421,6 +432,21 @@ class CatalogueServiceWeb:
             return 'owslib_random_%i' % random.randint(1,65536)
         else:
             return el
+
+    def _setconstraint(self, parent, qtype=None, propertyname='AnyText', keywords=[], bbox=None, cql=None):
+        #if keywords or bbox is not None or qtype is not None or cql is not None:
+        if keywords or bbox is not None or qtype is not None or cql is not None:
+            node0 = etree.SubElement(parent, util.nspath('Constraint', namespaces['csw']))
+            node0.set('version', '1.1.0')
+
+            if cql is not None:  # send raw CQL query
+                import warnings
+                warnings.warn('CQL passed (overrides all other parameters', UserWarning)
+                node1 = etree.SubElement(node0, util.nspath('CqlText', namespaces['csw']))
+                node1.text = cql
+            else:  # construct a Filter request
+                flt = FilterRequest()
+                node0.append(flt.set(qtype=qtype, keywords=keywords, propertyname=propertyname,bbox=bbox))
 
     def _invoke(self):
         # do HTTP request

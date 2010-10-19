@@ -50,15 +50,76 @@ class FilterRequest(object):
 
         self.version = version
 
-    def setfilter(self, parent=None):
-        if parent is None:
-            tmp = etree.Element(util.nspath('Filter', namespaces['ogc']))
-            tmp.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
-            return tmp
-        else:
-            etree.SubElement(parent, util.nspath('Filter', namespaces['ogc']))
+    def set(self, parent=False, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None):
+        """
 
-    def setpropertyisequalto(self, parent, propertyname, literal, matchcase=True):
+        Construct and process a  GetRecords request
+    
+        Parameters
+        ----------
+
+        - parent: the parent Element object.  If this is not, then generate a standalone request
+        - qtype: type of resource to query (i.e. service, dataset)
+        - keywords: list of keywords
+        - propertyname: the PropertyName to Filter against 
+        - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
+
+        """
+
+        # construct
+        node0 = etree.Element(util.nspath('Filter', namespaces['ogc']))
+        if parent is True:
+            node0.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
+
+        # decipher number of query parameters ( > 1 sets an 'And' Filter)
+        pcount = 0
+        if qtype is not None:
+            pcount += 1
+        if keywords:
+            pcount += 1
+        if bbox is not None:
+            pcount += 1
+
+        if pcount > 1: # Filter should be And-ed
+            node1 = etree.SubElement(node3, util.nspath('And', namespaces['ogc']))
+        else: 
+            node1 = None
+    
+        # set the query type if passed
+        # TODO: need a smarter way to figure these out
+        if qtype is not None:
+            if node1 is not None:
+                self._setpropertyisequalto(node1, 'dc:type', qtype)
+            else:
+                self._setpropertyisequalto(node0, 'dc:type', qtype)
+    
+        # set a bbox query if passed
+        if bbox is not None:
+            if node1 is not None:
+                self._setbbox(node1, bbox)
+            else:
+                self._setbbox(node0, bbox)
+    
+        # set a keyword query if passed
+        if len(keywords) > 0:
+            if len(keywords) > 1: # loop multiple keywords into an Or
+                if node1 is not None:
+                    node3 = etree.SubElement(node1, util.nspath('Or', namespaces['ogc']))
+                else:
+                    node3 = etree.SubElement(node0, util.nspath('Or', namespaces['ogc']))
+    
+                for i in keywords:
+                    self._setpropertyislike(node3, propertyname, '%%%s%%' % i)
+    
+            else: # one keyword
+                if node1 is not None:
+                    self._setpropertyislike(node1, propertyname, '%%%s%%' % keywords[0])
+                else:
+                    self._setpropertyislike(node0, propertyname, '%%%s%%' % keywords[0])
+    
+        return node0
+
+    def _setpropertyisequalto(self, parent, propertyname, literal, matchcase=True):
         """
 
         construct a PropertyIsEqualTo
@@ -79,7 +140,7 @@ class FilterRequest(object):
         etree.SubElement(tmp, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
         etree.SubElement(tmp, util.nspath('Literal', namespaces['ogc'])).text = literal
     
-    def setbbox(self, parent, bbox):
+    def _setbbox(self, parent, bbox):
         """
 
         construct a BBOX search predicate
@@ -98,7 +159,7 @@ class FilterRequest(object):
         etree.SubElement(tmp2, util.nspath('lowerCorner', namespaces['gml'])).text = '%s %s' % (bbox[0], bbox[1])
         etree.SubElement(tmp2, util.nspath('upperCorner', namespaces['gml'])).text = '%s %s' % (bbox[2], bbox[3])
 
-    def setpropertyislike(self, parent, propertyname, literal, wildcard='%', singlechar='_', escapechar='\\'):  
+    def _setpropertyislike(self, parent, propertyname, literal, wildcard='%', singlechar='_', escapechar='\\'):  
         """
 
         construct a PropertyIsLike
@@ -122,25 +183,6 @@ class FilterRequest(object):
         etree.SubElement(tmp, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
         etree.SubElement(tmp, util.nspath('Literal', namespaces['ogc'])).text = literal
 
-    def setsortby(self, parent, propertyname, order='ASC'):
-        """
-
-        constructs a SortBy element
-
-        Parameters
-        ----------
-
-        - parent: parent etree.Element object
-        - propertyname: the PropertyName
-        - order: the SortOrder (default is 'ASC')
-
-        """
-
-        tmp = etree.SubElement(parent, util.nspath('SortBy', namespaces['ogc']))
-        tmp2 = etree.SubElement(tmp, util.nspath('SortProperty', namespaces['ogc']))
-        etree.SubElement(tmp2, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
-        etree.SubElement(tmp2, util.nspath('SortOrder', namespaces['ogc'])).text = order
-
 class FilterCapabilities(object):
     """ Abstraction for Filter_Capabilities """
     def __init__(self, elem):
@@ -158,3 +200,22 @@ class FilterCapabilities(object):
 
         # Scalar_Capabilities
         self.scalar_comparison_operators = [f.text for f in elem.findall(util.nspath('Scalar_Capabilities/ComparisonOperators/ComparisonOperator', namespaces['ogc']))]
+
+def setsortby(parent, propertyname, order='ASC'):
+    """
+
+    constructs a SortBy element
+
+    Parameters
+    ----------
+
+    - parent: parent etree.Element object
+    - propertyname: the PropertyName
+    - order: the SortOrder (default is 'ASC')
+
+    """
+
+    tmp = etree.SubElement(parent, util.nspath('SortBy', namespaces['ogc']))
+    tmp2 = etree.SubElement(tmp, util.nspath('SortProperty', namespaces['ogc']))
+    etree.SubElement(tmp2, util.nspath('PropertyName', namespaces['ogc'])).text = propertyname
+    etree.SubElement(tmp2, util.nspath('SortOrder', namespaces['ogc'])).text = order
