@@ -1,30 +1,16 @@
     >>> from owslib.csw import CatalogueServiceWeb as cs
     >>> c=cs('http://catalog.geodata.gov/geoportal/csw/discovery')
+    >>> c.identification.title
+    'Geospatial One-Stop'
     >>> c.getrecords(keywords=['birds'])
-    >>> c.results
-    {'matches': 3479, 'nextrecord': 11, 'returned': 10}
-    >>> c.getrecords(keywords=['water'])
-    >>> c.getrecords()
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].title
-    'Alaska DNR Well Sites'
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].source      
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].type
-    'downloadableData'
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].subjects
-    ['planningCadastre']
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].rights  
-    []
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].language
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].modified
-    '2010-10-05T16:27:17-07:00'
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].creator 
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].bbox.minx, c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].bbox.miny, c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].bbox.maxx, c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].bbox.maxy
-    ('-180.0', '42.509212', '180.0', '76.786209')
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].abstract 
-    'An area of land or water that contains one or more active or abandoned oil and gas wells within a 1/4 mile radius. A site may include wastes, such as drilling waste stored in reserve pits. This shape file characterizes the geographic representation of land parcels within the State of Alaska contained by the Well Sites category. It has been extracted from data sets used to produce the State status plats. This data set includes cases noted on the digital status plats up to one day prior to data extraction. Each feature has an associated attribute record, including a Land Administration System (LAS) file-type and file-number which serves as an index to related LAS case-file information. Additional LAS case-file and customer information may be obtained at: http://www.dnr.state.ak.us/las/LASMenu.cfm Those requiring more information regarding State land records should contact the Alaska Department of Natural Resources Public Information Center directly.'
-    >>> c.records['{43380282-F745-3D4D-2C54-3010A6226A6D}'].publisher
-    'AK Department of Natural Resources - Information Resource Management Section'
+    >>> c.results['nextrecord']
+    11
+    >>> c.getrecords(keywords=['water'], maxrecords=25)
+    >>> c.results['nextrecord']
+    26
+    >>> c.getdomain('GetRecords.outputSchema')
+    >>> c.exceptionreport.exceptions
+    [{'locator': None, 'ExceptionText': '\nUnrecognized CSW request.\n', 'exceptionCode': 'NoApplicableCode'}]
     >>> c.getrecords('downloadableData')
-    >>> c.results
-    {'matches': 368939, 'nextrecord': 11, 'returned': 10}
-    >>> 
+    >>> c.results['returned']
+    10
