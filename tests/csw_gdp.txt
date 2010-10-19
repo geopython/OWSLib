@@ -23,11 +23,8 @@
     >>> c.records['9250AA67-F3AC-6C12-0CB9-0662231AA181'].abstract
     '272 Categorized Initiatives: Initiatives are referenced to a Category, Sub-Category and Subject Term index, through the cititzen science web site at http://www.citizenscience.ca'
     >>> c.getrecordbyid(['9250AA67-F3AC-6C12-0CB9-0662231AA181'])
-    >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/gmd/2005/gmd')
-    >>> c.results['matches']
-    101
-    >>> c.results['returned']
-    10
+    >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd')
+    >>> c.exceptionreport
     >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd',maxrecords=2)
     >>> c.results['returned']
     2
