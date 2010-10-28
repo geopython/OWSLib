@@ -275,3 +275,40 @@ def _testCodeListValue(elpath):
         return util.testXMLValue(elpath.attrib.get('codeListValue'), True)
     else:
         return None
+
+class CodelistCatalogue(object):
+    """ process CT_CodelistCatalogue """
+    def __init__(self, ct):
+        self.name = ct.find('{http://www.isotc211.org/2005/gmx}name/{http://www.isotc211.org/2005/gco}CharacterString').text
+        self.scope = ct.find('{http://www.isotc211.org/2005/gmx}scope/{http://www.isotc211.org/2005/gco}CharacterString').text
+        self.fieldapp = ct.find('{http://www.isotc211.org/2005/gmx}fieldOfApplication/{http://www.isotc211.org/2005/gco}CharacterString').text
+        self.version = ct.find('{http://www.isotc211.org/2005/gmx}versionNumber/{http://www.isotc211.org/2005/gco}CharacterString').text
+        self.date = ct.find('{http://www.isotc211.org/2005/gmx}versionDate/{http://www.isotc211.org/2005/gco}Date').text
+
+        self.dictionaries = {}
+
+        for i in ct.findall('{http://www.isotc211.org/2005/gmx}codelistItem/{http://www.isotc211.org/2005/gmx}CodeListDictionary'):
+            id = i.attrib.get('{http://www.opengis.net/gml/3.2}id')
+            self.dictionaries[id] = {}
+            self.dictionaries[id]['description'] = i.find('{http://www.opengis.net/gml/3.2}description').text
+            self.dictionaries[id]['identifier'] = i.find('{http://www.opengis.net/gml/3.2}identifier').text
+            self.dictionaries[id]['entries'] = {}
+
+            for j in i.findall('{http://www.isotc211.org/2005/gmx}codeEntry'):
+                id2 = j.find('{http://www.isotc211.org/2005/gmx}CodeDefinition').attrib.get('{http://www.opengis.net/gml/3.2}id')
+                self.dictionaries[id]['entries'][id2] = {}
+                self.dictionaries[id]['entries'][id2]['description'] = j.find('{http://www.isotc211.org/2005/gmx}CodeDefinition/{http://www.opengis.net/gml/3.2}description').text
+                self.dictionaries[id]['entries'][id2]['identifier'] = j.find('{http://www.isotc211.org/2005/gmx}CodeDefinition/{http://www.opengis.net/gml/3.2}identifier').text
+                self.dictionaries[id]['entries'][id2]['codespace'] = j.find('{http://www.isotc211.org/2005/gmx}CodeDefinition/{http://www.opengis.net/gml/3.2}identifier').attrib.get('codeSpace')
+
+    def getcodelistdictionaries(self):
+        return self.dictionaries.keys()
+
+    def getcodedefinitionidentifiers(self, cdl):
+        if self.dictionaries.has_key(cdl):
+            ids = []
+            for i in self.dictionaries[cdl]['entries']:
+                ids.append(self.dictionaries[cdl]['entries'][i]['identifier'])
+            return ids
+        else:
+            return None
