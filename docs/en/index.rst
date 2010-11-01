@@ -257,6 +257,10 @@ ISO
   'farming'
   >>> 
 
+ISO Codelists:
+
+.. include:: /home/tkralidi/foss4g/OWSLib/trunk/tests/iso_codelist.txt
+
 Dublin Core
 -----------
 
