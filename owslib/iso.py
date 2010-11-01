@@ -19,6 +19,8 @@ namespaces = {
     None : 'http://www.isotc211.org/2005/gmd',
     'gco': 'http://www.isotc211.org/2005/gco',
     'gmd': 'http://www.isotc211.org/2005/gmd',
+    'gml': 'http://www.opengis.net/gml/3.2',
+    'gmx': 'http://www.isotc211.org/2005/gmx',
     'gts': 'http://www.isotc211.org/2005/gts',
     'srv': 'http://www.isotc211.org/2005/srv',
     'xlink': 'http://www.w3.org/1999/xlink'
@@ -279,27 +281,39 @@ def _testCodeListValue(elpath):
 class CodelistCatalogue(object):
     """ process CT_CodelistCatalogue """
     def __init__(self, ct):
-        self.name = ct.find('{http://www.isotc211.org/2005/gmx}name/{http://www.isotc211.org/2005/gco}CharacterString').text
-        self.scope = ct.find('{http://www.isotc211.org/2005/gmx}scope/{http://www.isotc211.org/2005/gco}CharacterString').text
-        self.fieldapp = ct.find('{http://www.isotc211.org/2005/gmx}fieldOfApplication/{http://www.isotc211.org/2005/gco}CharacterString').text
-        self.version = ct.find('{http://www.isotc211.org/2005/gmx}versionNumber/{http://www.isotc211.org/2005/gco}CharacterString').text
-        self.date = ct.find('{http://www.isotc211.org/2005/gmx}versionDate/{http://www.isotc211.org/2005/gco}Date').text
+        val = ct.find(util.nspath('name', namespaces['gmx']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.name = util.testXMLValue(val)
+        val = ct.find(util.nspath('scope', namespaces['gmx']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.scope = util.testXMLValue(val)
+        val = ct.find(util.nspath('fieldOfApplication', namespaces['gmx']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.fieldapp = util.testXMLValue(val)
+        val = ct.find(util.nspath('versionNumber', namespaces['gmx']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.version = util.testXMLValue(val)
+        val = ct.find(util.nspath('versionDate', namespaces['gmx']) + '/' + util.nspath('Date', namespaces['gco']))
+        self.date = util.testXMLValue(val)
 
         self.dictionaries = {}
 
-        for i in ct.findall('{http://www.isotc211.org/2005/gmx}codelistItem/{http://www.isotc211.org/2005/gmx}CodeListDictionary'):
-            id = i.attrib.get('{http://www.opengis.net/gml/3.2}id')
+        for i in ct.findall(util.nspath('codelistItem/CodeListDictionary', namespaces['gmx'])):
+            id = i.attrib.get(util.nspath('id', namespaces['gml']))
             self.dictionaries[id] = {}
-            self.dictionaries[id]['description'] = i.find('{http://www.opengis.net/gml/3.2}description').text
-            self.dictionaries[id]['identifier'] = i.find('{http://www.opengis.net/gml/3.2}identifier').text
+            val = i.find(util.nspath('description', namespaces['gml']))
+            self.dictionaries[id]['description'] = util.testXMLValue(val)
+            val = i.find(util.nspath('identifier', namespaces['gml']))
+            self.dictionaries[id]['identifier'] = util.testXMLValue(val)
             self.dictionaries[id]['entries'] = {}
 
-            for j in i.findall('{http://www.isotc211.org/2005/gmx}codeEntry'):
-                id2 = j.find('{http://www.isotc211.org/2005/gmx}CodeDefinition').attrib.get('{http://www.opengis.net/gml/3.2}id')
+            for j in i.findall(util.nspath('codeEntry', namespaces['gmx'])):
+                id2 = j.find(util.nspath('CodeDefinition', namespaces['gmx'])).attrib.get(util.nspath('id', namespaces['gml']))
                 self.dictionaries[id]['entries'][id2] = {}
-                self.dictionaries[id]['entries'][id2]['description'] = j.find('{http://www.isotc211.org/2005/gmx}CodeDefinition/{http://www.opengis.net/gml/3.2}description').text
-                self.dictionaries[id]['entries'][id2]['identifier'] = j.find('{http://www.isotc211.org/2005/gmx}CodeDefinition/{http://www.opengis.net/gml/3.2}identifier').text
-                self.dictionaries[id]['entries'][id2]['codespace'] = j.find('{http://www.isotc211.org/2005/gmx}CodeDefinition/{http://www.opengis.net/gml/3.2}identifier').attrib.get('codeSpace')
+                val = j.find(util.nspath('CodeDefinition', namespaces['gmx'])+'/'+util.nspath('description', namespaces['gml']))
+                self.dictionaries[id]['entries'][id2]['description'] = util.testXMLValue(val)
+
+                val = j.find(util.nspath('CodeDefinition', namespaces['gmx'])+'/'+util.nspath('identifier', namespaces['gml']))
+                self.dictionaries[id]['entries'][id2]['identifier'] = util.testXMLValue(val)
+
+                val = j.find(util.nspath('CodeDefinition', namespaces['gmx'])).attrib.get('codeSpace')
+                self.dictionaries[id]['entries'][id2]['codespace'] = util.testXMLValue(val, True)
 
     def getcodelistdictionaries(self):
         return self.dictionaries.keys()
