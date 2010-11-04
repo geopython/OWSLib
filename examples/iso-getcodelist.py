@@ -19,28 +19,30 @@ from owslib.iso import CodelistCatalogue
 e=etree.fromstring(urllib2.urlopen('http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml').read())
 c=CodelistCatalogue(e)
 
-def valid_cdls():
+clds = c.getcodelistdictionaries()
+
+def valid_clds():
     return  '''
 Valid code list dictionaries are:
 
 %s
-''' % '\n'.join(c.getcodelistdictionaries())
+''' % '\n'.join(clds)
 
 
 if len(sys.argv) < 2:
     print '''
 Usage: %s <codelistdictionary>
 %s
-''' % (sys.argv[0], valid_cdls())
+''' % (sys.argv[0], valid_clds())
     sys.exit(1)
 
-cdl = c.getcodedefinitionidentifiers(sys.argv[1])
+cld = c.getcodedefinitionidentifiers(sys.argv[1])
 
-if cdl is None:
+if cld is None:
     print '''
 Invalid code list dictionary: %s
 %s
-''' % (sys.argv[1],valid_cdls())
+''' % (sys.argv[1],valid_clds())
     sys.exit(2)
 
 print '''
@@ -51,4 +53,4 @@ codeEntry's:
 
  %s
 
-''' % (sys.argv[1],'\n '.join(cdl))
+''' % (sys.argv[1],'\n '.join(cld))
