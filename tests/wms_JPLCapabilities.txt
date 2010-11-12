@@ -55,11 +55,11 @@ Test available content layers
 NOTE: Not sure this dictionary interface is right...??
 
     >>> wms.contents.keys()
-    ['us_landsat_wgs84', 'modis', 'global_mosaic_base', 'huemapped_srtm', 'srtm_mag', 'daily_terra', 'us_ned', 'us_elevation', 'global_mosaic', 'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_aqua_721', 'daily_aqua', 'BMNG', 'srtmplus', None, 'us_colordem', 'worldwind_dem', 'daily_terra_721']
+    ['us_landsat_wgs84', 'modis', 'global_mosaic_base', 'huemapped_srtm', 'srtm_mag', 'daily_terra', 'us_ned', 'us_elevation', 'global_mosaic', 'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_aqua_721', 'unnamed_layer', 'daily_aqua', 'BMNG', 'srtmplus', 'us_colordem', 'worldwind_dem', 'daily_terra_721']
 
     
     >>> [wms[layer].id for layer in wms.contents]
-    ['us_landsat_wgs84', 'modis', 'global_mosaic_base', 'huemapped_srtm', 'srtm_mag', 'daily_terra', 'us_ned', 'us_elevation', 'global_mosaic', 'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_aqua_721', 'daily_aqua', 'BMNG', 'srtmplus', None, 'us_colordem', 'worldwind_dem', 'daily_terra_721']
+    ['us_landsat_wgs84', 'modis', 'global_mosaic_base', 'huemapped_srtm', 'srtm_mag', 'daily_terra', 'us_ned', 'us_elevation', 'global_mosaic', 'daily_terra_ndvi', 'daily_aqua_ndvi', 'daily_aqua_721', 'unnamed_layer', 'daily_aqua', 'BMNG', 'srtmplus', 'us_colordem', 'worldwind_dem', 'daily_terra_721']
 
 
  
