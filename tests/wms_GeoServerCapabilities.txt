@@ -32,14 +32,15 @@ Test capabilities
 
 Test available content layers
 
-    >>> wms.contents.keys()
-    [None, 'opengeo:poi']
-
+    >>> 'opengeo:poi' in wms.contents.keys()
+    True
     
-    >>> [wms[layer].title for layer in wms.contents]
-    ['My GeoServer WMS', 'Points of Interest']
-
-    
+    >>> layers=[wms[layer].title for layer in wms.contents]
+    >>> 'My GeoServer WMS' in layers
+    True
+    >>> 'Points of Interest' in layers
+    True
+        
 Test single item accessor
 
     >>> wms['opengeo:poi'].title
