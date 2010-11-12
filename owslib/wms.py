@@ -111,7 +111,11 @@ class WebMapService(object):
             self.contents[cm.id]=cm       
             for subelem in elem.findall('Layer'):
                 subcm=ContentMetadata(subelem, cm)
-                self.contents[subcm.id]=subcm 
+                self.contents[subcm.id]=subcm
+                #added another layer of nesting - should really be recursive though...
+                for subsubelem in subelem.findall('Layer'):
+                    subsubcm=ContentMetadata(subsubelem, cm)
+                    self.contents[subsubcm.id]=subsubcm  
         
         #exceptions
         self.exceptions = [f.text for f \
@@ -309,8 +313,8 @@ class ContentMetadata:
             if val is not None:
                 setattr(self, key.lower(), val.text.strip())
             else:
-                setattr(self, key.lower(), None)
-            self.id=self.name #conform to new interface
+                setattr(self, key.lower(), 'unnamed_layer')
+        self.id=self.name #conform to new interface
         # bboxes
         b = elem.find('BoundingBox')
         self.boundingBox = None
