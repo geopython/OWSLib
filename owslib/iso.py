@@ -182,12 +182,10 @@ class MD_Distribution(object):
         val = md.find(util.nspath('distributionFormat/MD_Format/version', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
         self.version = util.testXMLValue(val)
 
-        val = md.find(util.nspath('transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource', namespaces['gmd']))
+        self.online = []
 
-        if val is not None:
-            self.onlineresource = CI_OnlineResource(val)
-        else:
-            self.onlineresource = None
+        for ol in md.findall(util.nspath('transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource', namespaces['gmd'])):
+            self.online.append(CI_OnlineResource(ol))
         
 class SV_ServiceIdentification(object):
     """ process SV_ServiceIdentification """
