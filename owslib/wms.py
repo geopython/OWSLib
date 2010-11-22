@@ -114,7 +114,7 @@ class WebMapService(object):
                 self.contents[subcm.id]=subcm
                 #added another layer of nesting - should really be recursive though...
                 for subsubelem in subelem.findall('Layer'):
-                    subsubcm=ContentMetadata(subsubelem, cm)
+                    subsubcm=ContentMetadata(subsubelem, subcm)
                     self.contents[subsubcm.id]=subsubcm  
         
         #exceptions
