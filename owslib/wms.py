@@ -106,16 +106,18 @@ class WebMapService(object):
         #layer as a metadata organizer, nothing more.
         self.contents={}
         caps = self._capabilities.find('Capability')
-        for elem in caps.findall('Layer'):
-            cm=ContentMetadata(elem)
-            self.contents[cm.id]=cm       
-            for subelem in elem.findall('Layer'):
-                subcm=ContentMetadata(subelem, cm)
-                self.contents[subcm.id]=subcm
-                #added another layer of nesting - should really be recursive though...
-                for subsubelem in subelem.findall('Layer'):
-                    subsubcm=ContentMetadata(subsubelem, subcm)
-                    self.contents[subsubcm.id]=subsubcm  
+        
+        #recursively gather content metadata for all layer elements.
+        #To the WebMapService.contents store only metadata of named layers.
+        def gather_layers(parent_elem, parent_metadata):
+            for index, elem in enumerate(parent_elem.findall('Layer')):
+                cm = ContentMetadata(elem, parent=parent_metadata, index=index+1)
+                if cm.id:
+                    if cm.id in self.contents:
+                        raise KeyError('Content metadata for layer "%s" already exists' % cm.id)
+                    self.contents[cm.id] = cm
+                gather_layers(elem, cm)
+        gather_layers(caps, None)
         
         #exceptions
         self.exceptions = [f.text for f \
@@ -304,16 +306,21 @@ class ContentMetadata:
 
     Implements IContentMetadata.
     """
-    def __init__(self, elem, parent=None):
-        self.parent = parent
+    def __init__(self, elem, parent=None, index=0):
         if elem.tag != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
-        for key in ('Name', 'Title'):
-            val = elem.find(key)
-            if val is not None:
-                setattr(self, key.lower(), val.text.strip())
-            else:
-                setattr(self, key.lower(), 'unnamed_layer')
+        
+        self.parent = parent
+        if parent:
+            self.index = "%s.%d" % (parent.index, index)
+        else:
+            self.index = str(index)
+        
+        # title is mandatory property
+        self.title = elem.find('Title').text.strip()
+        name = elem.find('Name')
+        self.name = name.text.strip() if name is not None else None
+        
         self.id=self.name #conform to new interface
         # bboxes
         b = elem.find('BoundingBox')
