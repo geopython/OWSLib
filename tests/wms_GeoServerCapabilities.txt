@@ -36,8 +36,6 @@ Test available content layers
     True
     
     >>> layers=[wms[layer].title for layer in wms.contents]
-    >>> 'My GeoServer WMS' in layers
-    True
     >>> 'Points of Interest' in layers
     True
         
