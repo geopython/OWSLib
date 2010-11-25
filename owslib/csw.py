@@ -317,7 +317,7 @@ class CatalogueServiceWeb:
                     self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
 
         if ttype == 'delete':
-            self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
+            self._setconstraint(node1, None, propertyname, keywords, bbox, cql)
 
         self.request = util.xml2string(etree.tostring(node0))
 
@@ -376,7 +376,7 @@ class CatalogueServiceWeb:
 
     def _parseinsertresult(self):
         self.results['inserted'] = []
-        for i in self._exml.findall(util.nspath('TransactionResponse/InsertResult', namespaces['csw'])):
+        for i in self._exml.findall(util.nspath('InsertResult', namespaces['csw'])):
             for j in i.findall(util.nspath('BriefRecord', namespaces['csw']) + '/' + util.nspath('identifier', namespaces['dc'])):
                 self.results['inserted'].append(util.testXMLValue(j))
 
@@ -407,7 +407,7 @@ class CatalogueServiceWeb:
                 self.records[identifier] = CswRecord(i)
 
     def _parsetransactionsummary(self):
-        val = self._exml.find(util.nspath('TransactionResponse/TransactionSummary', namespaces['csw']))
+        val = self._exml.find(util.nspath('TransactionSummary', namespaces['csw']))
         if val is not None:
             id = val.attrib.get('requestId')
             self.results['requestid'] = util.testXMLValue(id, True)
