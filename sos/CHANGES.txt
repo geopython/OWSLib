@@ -1,0 +1,18 @@
+Changes
+=======
+
+0.3 (2008-05-08)
+----------------
+- WCS support.
+- Support for basic authorization in WMS requests (#107).
+
+0.2.1 (2007-08-06)
+------------------
+- Added support for Python 2.5.
+- Fixed ticket #105: Don't depend on Content-length in the http headers for
+  getfeature.
+
+0.2.0 (2007-02-01)
+------------------
+- Change license to BSD.
+- Added service contact metadata.

@@ -1,0 +1,14 @@
+    >>> from owslib.csw import CatalogueServiceWeb as cs
+    >>> c=cs('http://gptogc.esri.com/GPT931/csw/discovery')
+    >>> c.idenfitication.title
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    AttributeError: CatalogueServiceWeb instance has no attribute 'idenfitication'
+    >>> c.identification.title
+    '\n      GPT 9.3 CSW \n    '
+    >>> c.getrecords(maxrecords=5)
+    >>> c.results['matches'] < 4
+    False
+    >>> c.getdomain('GetRecords.outputSchema')
+    >>> c.exceptionreport.exceptions
+    [{'locator': None, 'ExceptionText': '\nUnrecognized CSW request.\n', 'exceptionCode': 'NoApplicableCode'}]

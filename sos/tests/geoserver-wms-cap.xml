@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://localhost:8080/geoserver/schemas/wms/1.1.1/WMS_MS_Capabilities.dtd">
+<WMT_MS_Capabilities version="1.1.1" updateSequence="0">
+  <Service>
+    <Name>OGC:WMS</Name>
+    <Title>My GeoServer WMS</Title>
+    <Abstract>This is a description of your Web Map Server.</Abstract>
+    <KeywordList>
+      <Keyword>WFS</Keyword>
+      <Keyword>WMS</Keyword>
+      <Keyword>GEOSERVER</Keyword>
+    </KeywordList>
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms"/>
+    <ContactInformation>
+      <ContactPersonPrimary>
+        <ContactPerson/>
+        <ContactOrganization/>
+      </ContactPersonPrimary>
+      <ContactPosition/>
+      <ContactAddress>
+        <AddressType/>
+        <Address/>
+        <City/>
+        <StateOrProvince/>
+        <PostCode/>
+        <Country/>
+      </ContactAddress>
+      <ContactVoiceTelephone/>
+      <ContactFacsimileTelephone/>
+      <ContactElectronicMailAddress/>
+    </ContactInformation>
+    <Fees>NONE</Fees>
+    <AccessConstraints>NONE</AccessConstraints>
+  </Service>
+  <Capability>
+    <Request>
+      <GetCapabilities>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?SERVICE=WMS&amp;"/>
+            </Get>
+            <Post>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?SERVICE=WMS&amp;"/>
+            </Post>
+          </HTTP>
+        </DCPType>
+      </GetCapabilities>
+      <GetMap>
+        <Format>image/png</Format>
+        <Format>application/atom xml</Format>
+        <Format>application/atom+xml</Format>
+        <Format>application/openlayers</Format>
+        <Format>application/pdf</Format>
+        <Format>application/rss xml</Format>
+        <Format>application/rss+xml</Format>
+        <Format>application/vnd.google-earth.kml</Format>
+        <Format>application/vnd.google-earth.kml xml</Format>
+        <Format>application/vnd.google-earth.kml+xml</Format>
+        <Format>application/vnd.google-earth.kmz</Format>
+        <Format>application/vnd.google-earth.kmz xml</Format>
+        <Format>application/vnd.google-earth.kmz+xml</Format>
+        <Format>atom</Format>
+        <Format>image/geotiff</Format>
+        <Format>image/geotiff8</Format>
+        <Format>image/gif</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/png8</Format>
+        <Format>image/svg</Format>
+        <Format>image/svg xml</Format>
+        <Format>image/svg+xml</Format>
+        <Format>image/tiff</Format>
+        <Format>image/tiff8</Format>
+        <Format>kml</Format>
+        <Format>kmz</Format>
+        <Format>openlayers</Format>
+        <Format>rss</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetMap>
+      <GetFeatureInfo>
+        <Format>text/plain</Format>
+        <Format>text/html</Format>
+        <Format>application/vnd.ogc.gml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?SERVICE=WMS&amp;"/>
+            </Get>
+            <Post>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?SERVICE=WMS&amp;"/>
+            </Post>
+          </HTTP>
+        </DCPType>
+      </GetFeatureInfo>
+      <DescribeLayer>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </DescribeLayer>
+      <GetLegendGraphic>
+        <Format>image/png</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/gif</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetLegendGraphic>
+    </Request>
+    <Exception>
+      <Format>application/vnd.ogc.se_xml</Format>
+      <Format>application/vnd.ogc.se_inimage</Format>
+    </Exception>
+    <UserDefinedSymbolization SupportSLD="1" UserLayer="1" UserStyle="1" RemoteWFS="1"/>
+    <Layer>
+      <Title>My GeoServer WMS</Title>
+      <Abstract>This is a description of your Web Map Server.</Abstract>
+      <!--Limited list of EPSG projections:-->
+      <SRS>EPSG:4326</SRS>
+      <LatLonBoundingBox minx="-74.012" miny="40.708" maxx="-74.002" maxy="40.72"/>
+      <Layer queryable="1">
+        <Name>opengeo:poi</Name>
+        <Title>Points of Interest</Title>
+        <Abstract>Points of Interest in New York City</Abstract>
+        <KeywordList/>
+        <SRS>EPSG:4326</SRS>
+        <!--WKT definition of this CRS:
+GEOGCS["WGS 84", 
+  DATUM["World Geodetic System 1984", 
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
+    AUTHORITY["EPSG","6326"]], 
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
+  UNIT["degree", 0.017453292519943295], 
+  AXIS["Geodetic longitude", EAST], 
+  AXIS["Geodetic latitude", NORTH], 
+  AUTHORITY["EPSG","4326"]]-->
+        <LatLonBoundingBox minx="-74.012" miny="40.708" maxx="-74.002" maxy="40.72"/>
+        <BoundingBox SRS="EPSG:4326" minx="-74.012" miny="40.708" maxx="-74.002" maxy="40.72"/>
+        <Attribution>
+          <Title>GeoServer Sample Data</Title>
+          <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://svn.codehaus.org/geoserver/trunk/data/release/data/"/>
+          <LogoURL height="112" width="353">
+            <Format>image/png;charset=UTF-8</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://geoserver.org/s/1518/25/0.1/_/download/resources/com.atlassian.confluence.themes.geoserver%3Ageoserver/chrome/geoserver-logo.png"/>
+          </LogoURL>
+        </Attribution>
+        <Style>
+          <Name>point</Name>
+          <Title>A boring default style</Title>
+          <Abstract>A sample style that just prints out a purple square</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=poi"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+    </Layer>
+  </Capability>
+</WMT_MS_Capabilities>
