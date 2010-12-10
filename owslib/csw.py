@@ -503,6 +503,15 @@ class CswRecord(object):
         val = record.find(util.nspath('abstract', namespaces['dct']))
         self.abstract = util.testXMLValue(val)
 
+        val = record.find(util.nspath('date', namespaces['dc']))
+        self.date = util.testXMLValue(val)
+
+        val = record.find(util.nspath('created', namespaces['dc']))
+        self.created = util.testXMLValue(val)
+
+        val = record.find(util.nspath('relation', namespaces['dc']))
+        self.relation = util.testXMLValue(val)
+
         val = record.find(util.nspath('URI', namespaces['dc']))
         self.uri = util.testXMLValue(val)
 
@@ -534,6 +543,9 @@ class CswRecord(object):
         self.rights = []
         for i in record.findall(util.nspath('rights', namespaces['dc'])):
             self.rights.append(util.testXMLValue(i))
+
+        val = record.find(util.nspath('spatial', namespaces['dct']))
+        self.spatial = util.testXMLValue(val)
 
         val = record.find(util.nspath('BoundingBox', namespaces['ows']))
         if val is not None:
