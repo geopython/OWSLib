@@ -81,7 +81,7 @@ class FilterRequest(object):
             pcount += 1
 
         if pcount > 1: # Filter should be And-ed
-            node1 = etree.SubElement(node3, util.nspath('And', namespaces['ogc']))
+            node1 = etree.SubElement(node0, util.nspath('And', namespaces['ogc']))
         else: 
             node1 = None
     
