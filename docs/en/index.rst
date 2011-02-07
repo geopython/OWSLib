@@ -257,6 +257,10 @@ ISO
   'farming'
   >>> 
 
+ISO Codelists:
+
+.. include:: ../../tests/iso_codelist.txt
+
 Dublin Core
 -----------
 
