@@ -524,6 +524,9 @@ class CswRecord(object):
         val = record.find(util.nspath('publisher', namespaces['dc']))
         self.publisher = util.testXMLValue(val)
 
+        val = record.find(util.nspath('coverage', namespaces['dc']))
+        self.coverage = util.testXMLValue(val)
+
         val = record.find(util.nspath('contributor', namespaces['dc']))
         self.contributor = util.testXMLValue(val)
 
