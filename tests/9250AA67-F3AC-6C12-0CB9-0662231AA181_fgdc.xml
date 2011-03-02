@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<metadata xmlns:langUtil="net.compusult.wes.i18n.LanguageUtils">
+	<idinfo>
+		<citation>
+			<citeinfo>
+				<origin>EMAN Coordinating Office, Environment Canada</origin>
+				<pubdate>20090903</pubdate>
+				<title>ALLSPECIES</title>
+				<geoform>Map service</geoform>
+				<onlink type="accessLink">http://www.citizenscience.ca/</onlink>
+				<onlink type="none">DisplayFullMetadata.jsp?id=FBAED13B-DF3C-9CCC-95A6-27BEB390001C</onlink>
+			</citeinfo>
+		</citation>
+		<descript>
+			<abstract>272 Categorized Initiatives: Initiatives are referenced to a Category, Sub-Category and Subject Term index, through the cititzen science web site at http://www.citizenscience.ca</abstract>
+			<purpose>Not Specified</purpose>
+		</descript>
+		<status>
+			<progress>Complete</progress>
+			<update>Not Specified</update>
+		</status>
+		<spdom>
+			<bounding>
+				<westbc>-180</westbc>
+				<eastbc>180</eastbc>
+				<northbc>90</northbc>
+				<southbc>-90</southbc>
+			</bounding>
+		</spdom>
+		<keywords>
+			<theme>
+				<themekt>NRCan</themekt>
+				<themekey>Agriculture and Farming</themekey>
+				<themekey>Atmosphere and Climate</themekey>
+				<themekey>Biology and Ecology</themekey>
+				<themekey>Environment and Conservation</themekey>
+				<themekey>Inland Water Resources</themekey>
+				<themekey>Oceans and Coasts</themekey>
+			</theme>
+			<theme>
+				<themekt>Other</themekt>
+				<themekey>citizen</themekey>
+				<themekey>science</themekey>
+				<themekey>community</themekey>
+				<themekey>monitoring</themekey>
+				<themekey>species</themekey>
+				<themekey>birds</themekey>
+				<themekey>amphibians</themekey>
+				<themekey>plants</themekey>
+				<themekey>fish</themekey>
+				<themekey>mammals</themekey>
+				<themekey>reptiles</themekey>
+				<themekey>insects</themekey>
+				<themekey>aquatic</themekey>
+				<themekey>invertebrates</themekey>
+				<themekey>hunting</themekey>
+				<themekey>water</themekey>
+				<themekey>water quality</themekey>
+				<themekey>marine</themekey>
+				<themekey>freshwater</themekey>
+				<themekey>groundwater</themekey>
+				<themekey>waterprotection</themekey>
+				<themekey>ice</themekey>
+				<themekey>sustainability</themekey>
+				<themekey>air</themekey>
+				<themekey>weather</themekey>
+				<themekey>climate change</themekey>
+				<themekey>land</themekey>
+				<themekey>grasslands</themekey>
+				<themekey>urban</themekey>
+				<themekey>forestlant</themekey>
+				<themekey>arctic</themekey>
+				<themekey>mining</themekey>
+				<themekey>agriculture</themekey>
+			</theme>
+			<place>
+				<placekt>NRCan</placekt>
+				<placekey>Canada &gt; Alberta</placekey>
+				<placekey>Canada &gt; British Columbia</placekey>
+				<placekey>Canada &gt; Manitoba</placekey>
+				<placekey>Canada &gt; New Brunswick</placekey>
+				<placekey>Canada &gt; Newfoundland and Labrador</placekey>
+				<placekey>Canada &gt; Northwest Territories</placekey>
+				<placekey>Canada &gt; Nova Scotia</placekey>
+				<placekey>Canada &gt; Nunavut</placekey>
+				<placekey>Canada &gt; Ontario</placekey>
+				<placekey>Canada &gt; Prince Edward Island</placekey>
+				<placekey>Canada &gt; Quebec</placekey>
+				<placekey>Canada &gt; Saskatchewan</placekey>
+				<placekey>Canada &gt; Yukon</placekey>
+				<placekey>Canada Regional &gt; Atlantic Canada</placekey>
+				<placekey>Canada Regional &gt; Central Canada</placekey>
+				<placekey>Canada Regional &gt; Territorial North</placekey>
+				<placekey>Canada Regional &gt; Western Canada</placekey>
+				<placekey>International &gt; North America</placekey>
+			</place>
+		</keywords>
+		<accconst>Not Specified</accconst>
+		<useconst>Not Specified</useconst>
+		<ptcontac>
+			<cntinfo>
+				<cntperp>
+					<cntper>EMAN Office</cntper>
+					<cntorg>Environment Canada</cntorg>
+				</cntperp>
+				<cntpos>Database Administrator</cntpos>
+				<cntaddr>
+					<addrtype>Not Specified</addrtype>
+					<address>867 Lakeshore Road</address>
+					<city>Burlington</city>
+					<state>Ontario</state>
+					<postal>L7R-4A6</postal>
+					<country>CAN</country>
+				</cntaddr>
+				<cntvoice>+01-905-336-4453</cntvoice>
+				<cntfax>+01-905-336-4499</cntfax>
+				<cntemail>Marlene.Doyle@ec.gc.ca</cntemail>
+			</cntinfo>
+		</ptcontac>
+	</idinfo>
+	<spdoinfo>
+		<direct>Vector</direct>
+	</spdoinfo>
+	<distinfo>
+		<distrib>
+			<cntinfo>
+				<cntorgp>
+					<cntorg>Not Specified</cntorg>
+				</cntorgp>
+				<cntaddr>
+					<addrtype>Not Specified</addrtype>
+					<city>Not Specified</city>
+					<state>Not Specified</state>
+					<postal>Not Specified</postal>
+				</cntaddr>
+				<cntvoice>Not Specified</cntvoice>
+			</cntinfo>
+		</distrib>
+		<distliab>Not Specified</distliab>
+		<stdorder>
+			<digform>
+				<digtinfo>
+					<formname>ASCII</formname>
+				</digtinfo>
+				<digtopt>
+					<onlinopt>
+						<computer>
+							<networka>
+								<networkr>Not Specified</networkr>
+							</networka>
+						</computer>
+					</onlinopt>
+				</digtopt>
+			</digform>
+			<fees>Not Specified</fees>
+		</stdorder>
+	</distinfo>
+	<metainfo>
+		<metd>20090903</metd>
+		<metfrd>20100903</metfrd>
+		<metc>
+			<cntinfo>
+				<cntperp>
+					<cntper>Not Specified</cntper>
+				</cntperp>
+				<cntaddr>
+					<addrtype>Not Specified</addrtype>
+					<city>Not Specified</city>
+					<state>Not Specified</state>
+					<postal>Not Specified</postal>
+				</cntaddr>
+				<cntvoice>Not Specified</cntvoice>
+			</cntinfo>
+		</metc>
+		<metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+		<metstdv>FGDC-STD-001-1998</metstdv>
+	</metainfo>
+</metadata>
+
