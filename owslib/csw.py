@@ -167,7 +167,7 @@ class CatalogueServiceWeb:
             for f in self._exml.findall(util.nspath('DomainValues/ListOfValues/Value', namespaces['csw'])):
                 self.results['values'].append(util.testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None):
         """
 
         Construct and process a  GetRecords request
@@ -433,7 +433,7 @@ class CatalogueServiceWeb:
         else:
             return el
 
-    def _setconstraint(self, parent, qtype=None, propertyname='AnyText', keywords=[], bbox=None, cql=None):
+    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None):
         #if keywords or bbox is not None or qtype is not None or cql is not None:
         if keywords or bbox is not None or qtype is not None or cql is not None:
             node0 = etree.SubElement(parent, util.nspath('Constraint', namespaces['csw']))
