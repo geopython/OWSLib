@@ -50,7 +50,7 @@ class FilterRequest(object):
 
         self.version = version
 
-    def set(self, parent=False, qtype=None, keywords=[], typenames='csw:Record', propertyname='AnyText', bbox=None):
+    def set(self, parent=False, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None):
         """
 
         Construct and process a  GetRecords request
