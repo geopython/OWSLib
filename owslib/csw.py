@@ -485,7 +485,10 @@ class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
     def __init__(self, record):
 
-        self.xml = etree.tostring(record)
+        if isinstance(record, etree._Element) is False:  # standalone document
+            self.xml = etree.tostring(record.getroot())
+        else:  # part of a larger document
+            self.xml = etree.tostring(record)
 
         # some CSWs return records with multiple identifiers based on 
         # different schemes.  Use the first dc:identifier value to set
