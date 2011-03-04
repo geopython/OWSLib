@@ -167,7 +167,7 @@ class CatalogueServiceWeb:
             for f in self._exml.findall(util.nspath('DomainValues/ListOfValues/Value', namespaces['csw'])):
                 self.results['values'].append(util.testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None):
         """
 
         Construct and process a  GetRecords request
@@ -187,32 +187,36 @@ class CatalogueServiceWeb:
         - startposition: requests a slice of the result set, starting at this position (default is 0)
         - maxrecords: the maximum number of records to return. No records are returned if 0 (default is 10)
         - cql: common query language text.  Note this overrides bbox, qtype, keywords
+        - xml: raw XML request.  Note this overrides all other options
 
         """
 
-        # construct request
-        node0 = etree.Element(util.nspath('GetRecords', namespaces['csw']))
-        node0.set('outputSchema', outputschema)
-        node0.set('outputFormat', format)
-        node0.set('version', self.version)
-        node0.set('resultType', 'results')
-        node0.set('service', self.service)
-        if startposition > 0:
-            node0.set('startPosition', str(startposition))
-        node0.set('maxRecords', str(maxrecords))
-        node0.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
-
-        node1 = etree.SubElement(node0, util.nspath('Query', namespaces['csw']))
-        node1.set('typeNames', typenames)
+        if xml is not None:
+            self.request = xml
+        else:
+            # construct request
+            node0 = etree.Element(util.nspath('GetRecords', namespaces['csw']))
+            node0.set('outputSchema', outputschema)
+            node0.set('outputFormat', format)
+            node0.set('version', self.version)
+            node0.set('resultType', 'results')
+            node0.set('service', self.service)
+            if startposition > 0:
+                node0.set('startPosition', str(startposition))
+            node0.set('maxRecords', str(maxrecords))
+            node0.set(util.nspath('schemaLocation', namespaces['xsi']), schema_location)
     
-        etree.SubElement(node1, util.nspath('ElementSetName', namespaces['csw'])).text = esn
-
-        self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
-
-        if sortby is not None:
-            setsortby(node1, sortby)
-
-        self.request = util.xml2string(etree.tostring(node0))
+            node1 = etree.SubElement(node0, util.nspath('Query', namespaces['csw']))
+            node1.set('typeNames', typenames)
+        
+            etree.SubElement(node1, util.nspath('ElementSetName', namespaces['csw'])).text = esn
+    
+            self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
+    
+            if sortby is not None:
+                setsortby(node1, sortby)
+    
+            self.request = util.xml2string(etree.tostring(node0))
 
         self._invoke()
  
@@ -480,6 +484,8 @@ class CatalogueServiceWeb:
 class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
     def __init__(self, record):
+
+        self.xml = etree.tostring(record)
 
         # some CSWs return records with multiple identifiers based on 
         # different schemes.  Use the first dc:identifier value to set
