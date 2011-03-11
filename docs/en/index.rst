@@ -244,7 +244,7 @@ Search with a CQL query
 
 .. code-block:: python
 
-  >>> csw.getrecords(cql='where csw:AnyText like "%birds%"')
+  >>> csw.getrecords(cql='csw:AnyText like "%birds%"')
 
 Transaction: insert
 
