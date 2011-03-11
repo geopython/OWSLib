@@ -240,6 +240,48 @@ Search for a specific record:
   >>> c.records['9250AA67-F3AC-6C12-0CB9-0662231AA181'].title
   'ALLSPECIES'
 
+Search with a CQL query
+
+.. code-block:: python
+
+  >>> csw.getrecords(cql='where csw:AnyText like "%birds%"')
+
+Transaction: insert
+
+.. code-block:: python
+
+  >>> csw.transaction(ttype='insert', typename='gmd:MD_Metadata', record=open(file.xml).read())
+
+Transaction: update
+
+.. code-block:: python
+
+
+  >>> # update ALL records
+  >>> csw.transaction(ttype='update', typename='csw:Record', propertyname='dc:title', propertyvalue='New Title')
+  >>> # update records satisfying keywords filter
+  >>> csw.transaction(ttype='update', typename='csw:Record', propertyname='dc:title', propertyvalue='New Title', keywords=['birds','fowl'])
+  >>> # update records satisfying BBOX filter
+  >>> csw.transaction(ttype='update', typename='csw:Record', propertyname='dc:title', propertyvalue='New Title', bbox=[-141,42,-52,84])
+
+Transaction: delete
+
+.. code-block:: python
+
+  >>> # delete ALL records
+  >>> csw.transaction(ttype='delete', typename='gmd:MD_Metadata')
+  >>> # delete records satisfying keywords filter
+  >>> csw.transaction(ttype='delete', typename='gmd:MD_Metadata', keywords=['birds','fowl'])
+  >>> # delete records satisfying BBOX filter
+  >>> csw.transaction(ttype='delete', typename='gmd:MD_Metadata', bbox=[-141,42,-52,84])
+
+Harvest a resource
+
+.. code-block:: python
+
+  >>> csw.harvest('http://host/url.xml', 'http://www.isotc211.org/2005/gmd')
+
+
 WMC
 ---
 
