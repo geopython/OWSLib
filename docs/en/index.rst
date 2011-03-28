@@ -113,7 +113,7 @@ Details of a layer:
   >>> wms['global_mosaic'].boundingBox
   >>> wms['global_mosaic'].boundingBoxWGS84
   (-180.0, -60.0, 180.0, 84.0)
-  >>> ['global_mosaic'].crsOptions
+  >>> wms['global_mosaic'].crsOptions
   ['EPSG:4326', 'AUTO:42003']
   >>> wms['global_mosaic'].styles
   {'pseudo_bright': {'title': 'Pseudo-color image (Uses IR and Visual bands, 542 mapping), gamma 1.5'}, 'pseudo': {'title': '(default) Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping), gamma 1.5'}, 'visual': {'title': 'Real-color image, pan sharpened (Uses the visual bands, 321 mapping), gamma 1.5'}, 'pseudo_low': {'title': 'Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping)'}, 'visual_low': {'title': 'Real-color image, pan sharpened (Uses the visual bands, 321 mapping)'}, 'visual_bright': {'title': 'Real-color image (Uses the visual bands, 321 mapping), gamma 1.5'}}
