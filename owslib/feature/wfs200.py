@@ -18,7 +18,14 @@ from urllib import urlencode
 from urllib2 import urlopen
 
 import logging
-hdlr = logging.FileHandler('/tmp/owslibwfs.log')
+
+try:
+    hdlr = logging.FileHandler('/tmp/owslibwfs.log')
+except:
+    import tempfile
+    f=tempfile.NamedTemporaryFile(prefix='owslib.wfs-', delete=False)
+    hdlr = logging.FileHandler(f.name)
+
 log = logging.getLogger(__name__)
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
