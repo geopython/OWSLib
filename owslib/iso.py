@@ -393,6 +393,9 @@ class EX_Extent(object):
         val = md.find(util.nspath('EX_GeographicBoundingBox/northBoundLatitude', namespaces['gmd']) + '/' + util.nspath('Decimal', namespaces['gco']))
         self.maxy = util.testXMLValue(val)
 
+        val = md.find(util.nspath('EX_GeographicDescription/geographicIdentifier/MD_Identifier/code', namespaces['gmd']) + '/' + util.nspath('CharacterString', namespaces['gco']))
+        self.description_code = util.testXMLValue(val)
+
 class MD_ReferenceSystem(object):
     """ process MD_ReferenceSystem """
     def __init__(self, md):
