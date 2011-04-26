@@ -129,7 +129,7 @@ class CI_ResponsibleParty(object):
         val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString', namespaces))
         self.postcode = util.testXMLValue(val)
 
-        val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/CharacterString', namespaces))
+        val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/gco:CharacterString', namespaces))
         self.country = util.testXMLValue(val)
 
         val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString', namespaces))
