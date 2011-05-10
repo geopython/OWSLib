@@ -166,7 +166,7 @@ class WebFeatureService_1_0_0(object):
         if featureid:
             request['featureid'] = ','.join(featureid)
         elif bbox and typename:
-            request['bbox'] = ','.join([str(x) for x in bbox])
+            request['bbox'] = ','.join([repr(x) for x in bbox])
         elif filter and typename:
             request['filter'] = str(filter)
         

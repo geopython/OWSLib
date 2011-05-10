@@ -108,7 +108,7 @@ class WebCoverageService_1_0_0(WCSBase):
         request['Coverage']=identifier
         #request['identifier'] = ','.join(identifier)
         if bbox:
-            request['BBox']=','.join([str(x) for x in bbox])
+            request['BBox']=','.join([repr(x) for x in bbox])
         else:
             request['BBox']=None
         if time:
