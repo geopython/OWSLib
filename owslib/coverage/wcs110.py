@@ -139,7 +139,7 @@ class WebCoverageService_1_1_0(WCSBase):
         request['identifier']=identifier
         #request['identifier'] = ','.join(identifier)
         if bbox:
-            request['boundingbox']=','.join([str(x) for x in bbox])
+            request['boundingbox']=','.join([repr(x) for x in bbox])
         if time:
             request['timesequence']=','.join(time)
         request['format']=format
