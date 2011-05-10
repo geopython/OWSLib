@@ -209,7 +209,7 @@ class WebMapService(object):
         request['height'] = str(size[1])
         
         request['srs'] = str(srs)
-        request['bbox'] = ','.join([str(x) for x in bbox])
+        request['bbox'] = ','.join([repr(x) for x in bbox])
         request['format'] = str(format)
         request['transparent'] = str(transparent).upper()
         request['bgcolor'] = '0x' + bgcolor[1:7]
