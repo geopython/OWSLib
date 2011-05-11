@@ -193,6 +193,11 @@ class CatalogueServiceWeb:
 
         if xml is not None:
             self.request = xml
+            e=etree.fromstring(xml)
+            val = e.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
+            if val is not None:
+                esn = util.testXMLValue(val)
+
         else:
             # construct request
             node0 = etree.Element(util.nspath_eval('csw:GetRecords', namespaces))
@@ -386,12 +391,12 @@ class CatalogueServiceWeb:
 
     def _parserecords(self, outputschema, esn):
         if outputschema == namespaces['gmd']: # iso 19139
-            for i in self._exml.findall('./'+util.nspath_eval('gmd:MD_Metadata', namespaces)):
+            for i in self._exml.findall('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)):
                 val = i.find(util.nspath_eval('gmd:fileIdentifier/gco:CharacterString', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
         elif outputschema == namespaces['fgdc']: # fgdc csdgm
-            for i in self._exml.findall('./metadata'):
+            for i in self._exml.findall('.//metadata'):
                 val = i.find('idinfo/datasetid')
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = Metadata(i)
@@ -400,12 +405,12 @@ class CatalogueServiceWeb:
         # this is an interoperability issue to be resolved
         # [:-1] is a workaround for now
         elif outputschema == namespaces['dif'][:-1]: # nasa dif, strip the trailing '/' for now
-            for i in self._exml.findall('./'+util.nspath_eval('dif:DIF', namespaces)):
+            for i in self._exml.findall('.//'+util.nspath_eval('dif:DIF', namespaces)):
                 val = i.find(util.nspath_eval('dif:Entry_ID', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = DIF(i)
         else: # process default
-            for i in self._exml.findall('./'+util.nspath_eval('csw:%s' % self._setesnel(esn), namespaces)):
+            for i in self._exml.findall('.//'+util.nspath_eval('csw:%s' % self._setesnel(esn), namespaces)):
                 val = i.find(util.nspath_eval('dc:identifier', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = CswRecord(i)
