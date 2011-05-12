@@ -32,7 +32,7 @@ class MD_Metadata(object):
     """ Process gmd:MD_Metadata """
     def __init__(self, md):
 
-        if isinstance(md, etree._Element) is False:  # standalone document
+        if isinstance(md, etree._Element) is True:  # standalone document
             self.xml = etree.tostring(md.getroot())
         else:  # part of a larger document
             self.xml = etree.tostring(md)
