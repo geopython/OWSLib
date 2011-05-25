@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<WFS_Capabilities version="1.0.0" updateSequence="0" xmlns="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengeospatial.net//wfs/1.0.0/WFS-capabilities.xsd">
+
+<!-- MapServer version 4.8.1 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=WBMP OUTPUT=PDF OUTPUT=SWF OUTPUT=SVG SUPPORTS=PROJ SUPPORTS=FREETYPE SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER INPUT=JPEG INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE DEBUG=MSDEBUG -->
+
+<Service>
+  <Name>MapServer WFS</Name>
+  <Title>Bird Studies Canada WMS/WFS Server</Title>
+  <Abstract>Bird Studies Canada WMS/WFS Server for bird distribution and abundance data, and related information.  Bird Studies Canada gratefully acknowledges the support of Environment Canada - Canadian Information System for the Environment in developing this service.</Abstract>
+  <Keywords>
+    birds
+    distribution
+    abundance
+    conservation
+    sites
+    monitoring
+    populations
+    canada
+  </Keywords>
+  <OnlineResource>http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&amp;entryType=webService&amp;entryId=3920&amp;entryLang=en&amp;portal=gdp</OnlineResource>
+  <Fees>None</Fees>
+  <AccessConstraints>None</AccessConstraints>
+</Service>
+
+<Capability>
+  <Request>
+    <GetCapabilities>
+      <DCPType>
+        <HTTP>
+          <Get onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+        </HTTP>
+      </DCPType>
+      <DCPType>
+        <HTTP>
+          <Post onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+        </HTTP>
+      </DCPType>
+    </GetCapabilities>
+    <DescribeFeatureType>
+      <SchemaDescriptionLanguage>
+        <XMLSCHEMA/>
+        <SFE_XMLSCHEMA/>
+      </SchemaDescriptionLanguage>
+      <DCPType>
+        <HTTP>
+          <Get onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+        </HTTP>
+      </DCPType>
+      <DCPType>
+        <HTTP>
+          <Post onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+        </HTTP>
+      </DCPType>
+    </DescribeFeatureType>
+    <GetFeature>
+      <ResultFormat>
+        <GML2/>
+        <GML3/>
+      </ResultFormat>
+      <DCPType>
+        <HTTP>
+          <Get onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+        </HTTP>
+      </DCPType>
+      <DCPType>
+        <HTTP>
+          <Post onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+        </HTTP>
+      </DCPType>
+    </GetFeature>
+  </Request>
+</Capability>
+
+<FeatureTypeList>
+  <Operations>
+    <Query/>
+  </Operations>
+    <FeatureType>
+        <Name>IBA</Name>
+        <Title>Canadian Important Bird Areas</Title>
+        <Abstract>This layer represents *generalized* boundaries of Important Bird Areas (IBA) in Canada.  IBAs, in Canada and elsewhere, are evaluated and designated on the basis of internationally criteria.  The polygons contained in the dataset meet these criteria and are therefore deemed significant at the national, continental, or global level.  In Canada, IBAs are not legally recognized entities and therefore do not have any regulatory status.  Nevertheless, they are extremely useful for conservation planning for birds.  Polygon boundaries were digitized on-screen in ArcView GIS 3.2 by using NTDB 1:50K or 1:250K digital layers for reference.  If NTDB coverage was not available (e.g., far north), the Digital Chart of the World (1:1M) was used.  The boundaries of IBAs in this dataset are intentionally generalized to reflect the importance of the surrounding ecosystem on the values present within IBAs.  For example, small islands supporting colonies of seabirds might be buffered by 1 or 2 km to form an IBA.  Boundaries for a very small minority of IBAs were available in paper form as part of IBA conservation plans that had been developed previously.  In such cases, we visually estimated their boundaries against the NTDB or other base layers.  Many IBAs are already recognized as other types of protected areas, e.g., National Wildlife Areas, National and Provincial Parks, Migratory Bird Sanctuaries, conservation reserves, and so on.  In these cases, we used digital boundaries from other sources (e.g., WWF Canada's Designated Areas Database, Environment Canada's Canadian Conservation Areas Database) as reference points when digitizing IBA boundaries.  Please cite as follows:  Bird Studies Canada and Nature Canada.  2004.  Important Bird Areas of Canada Database.  Port Rowan, Ontario:  Bird Studies Canada.  To access the Canadian IBA directory: http://www.bsc-eoc.org/iba/ibasites.html.  Full metadata for this layer:  http://www.bsc-eoc.org/website/metadata/caniba_poly.xml</Abstract>
+        <Keywords>
+          iba
+          birdlife
+          birds
+          conservation
+          sites
+          canada
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-141.238" miny="41.6718" maxx="-52.667" maxy="78.1059"/>
+        <MetadataURL type="FGDC" format="XML">http://www.bsc-eoc.org/website/metadata/caniba_poly.xml</MetadataURL>
+    </FeatureType>
+    <FeatureType>
+        <Name>CBC_PT</Name>
+        <Title>Canadian Christmas Bird Count Locations</Title>
+        <Abstract>A winter survey of bird populations conducted during the Christmas period - December 14 to January 5th inclusive.  More than 1800 counts are conducted each year across Canada, the United States and Latin America.  On a selected day within the count period, local birders count as many birds as possible within a 24 km (15 mile) diameter circle.  The Christmas Bird Count had long been organized on the continental scale by the New York-based National Audubon Society. In 2000, Audubon finalized an agreement with Bird Studies Canada that would see BSC partner with Audubon to coordinate CBCs in Canada.  This layer represents the centre point of all the Christmas Bird Counts conducted in Canada.  An accompanying layer (CBC_PY) contains the 24 km circles.</Abstract>
+        <Keywords>
+          birds
+          winter
+          survey
+          population
+          volunteers
+          cbc
+          christmas
+          canada
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-137.517" miny="42.0317" maxx="-52.7" maxy="65.2784"/>
+    </FeatureType>
+    <FeatureType>
+        <Name>CBC_PY</Name>
+        <Title>Canadian Christmas Bird Count Locations</Title>
+        <Abstract>A winter survey of bird populations conducted during the Christmas period - December 14 to January 5th inclusive.  More than 1800 counts are conducted each year across Canada, the United States and Latin America.  On a selected day within the count period, local birders count as many birds as possible within a 24 km (15 mile) diameter circle.  The Christmas Bird Count had long been organized on the continental scale by the New York-based National Audubon Society. In 2000, Audubon finalized an agreement with Bird Studies Canada that would see BSC partner with Audubon to coordinate CBCs in Canada.  This layer represents the 24 km circles surveyed as part of each Christmas Bird Count conducted in Canada.  An accompanying layer (CBC_PT) contains the centre point of the circles.</Abstract>
+        <Keywords>
+          birds
+          winter
+          survey
+          population
+          volunteers
+          cbc
+          christmas
+          canada
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-137.745" miny="41.9265" maxx="-52.5407" maxy="65.39"/>
+    </FeatureType>
+    <FeatureType>
+        <Name>MMP</Name>
+        <Title>Marsh Monitoring Program Route Locations</Title>
+        <Abstract>A Spring survey of birds and amphibians carried out primarily within the Great Lakes region of North America.</Abstract>
+        <Keywords>
+          birds
+          waterbirds
+          amphibians
+          marsh
+          wetland
+          survey
+          populations
+          volunteers
+          canada
+          united states
+          great lakes
+          AOC
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-99.5513" miny="40.4143" maxx="-66.4431" maxy="50.3027"/>
+    </FeatureType>
+    <FeatureType>
+        <Name>CLLS</Name>
+        <Title>Canadian Lakes Loon Survey Locations</Title>
+        <Abstract>A volunteer-based program that monitors the effects of acid rain and other human disturbance on loon breeding and presence on Canada's cottage lakes and other waterbodies.</Abstract>
+        <Keywords>
+          birds
+          Gavia immer
+          loons
+          lakes
+          survey
+          populations
+          volunteers
+          canada
+          acid rain
+          disturbance
+          ecosystem health
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-137.1" miny="42.4667" maxx="-52.7" maxy="62.91"/>
+    </FeatureType>
+    <FeatureType>
+        <Name>OBBA_SQUARE</Name>
+        <Title>Ontario Breeding Bird Atlas 10 km Squares</Title>
+        <Abstract>A sampling unit used by the Ontario Breeding Bird Atlas to collect breeding evidence data for all bird species within the Province of Ontario.  Squares are based upon the Universal Transverse Mercator (UTM) grid system, NAD83, and measure 10Km by 10Km except near UTM zone boundaries, where they are smaller.</Abstract>
+        <Keywords>
+          birds
+          distribution
+          abundance
+          breeding range
+          survey
+          populations
+          volunteers
+          Ontario
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-95.2926" miny="41.6296" maxx="-74.2355" maxy="56.9225"/>
+    </FeatureType>
+    <FeatureType>
+        <Name>OBBA_REGION</Name>
+        <Title>Ontario Breeding Bird Atlas Administrative Regions</Title>
+        <Abstract>An administrative unit that is used for local bird atlas co-ordination, which is based on bioregions and access.  Each region is assigned a Regional Coordinator who administers bird surveys within their region.</Abstract>
+        <Keywords>
+          birds
+          distribution
+          abundance
+          breeding range
+          survey
+          populations
+          volunteers
+          Ontario
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-95.2926" miny="41.6296" maxx="-74.2355" maxy="56.9225"/>
+    </FeatureType>
+    <FeatureType>
+        <Name>OBBA_BLOCK</Name>
+        <Title>Ontario Breeding Bird Atlas 100 km Blocks</Title>
+        <Abstract>A sampling unit used by the Ontario Breeding Bird Atlas to collect breeding evidence data for all bird species within the Province of Ontario.  Blocks are based upon the Universal Transverse Mercator (UTM) grid system, NAD83, and measure 100Km by 100Km except near UTM zone boundaries, where they are smaller.</Abstract>
+        <Keywords>
+          birds
+          distribution
+          abundance
+          breeding range
+          survey
+          populations
+          volunteers
+          Ontario
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-96" miny="41.5286" maxx="-73.7075" maxy="57.7329"/>
+    </FeatureType>
+    <FeatureType>
+        <Name>OWLS</Name>
+        <Title>Nocturnal Owl Survey Locations</Title>
+        <Abstract>A volunteer-based program that monitors the abundance of owl species across Canada by means of broadcast surveys.  Ontario survey locations are currently available through this service.</Abstract>
+        <Keywords>
+          birds
+          owls
+          survey
+          populations
+          volunteers
+          canada
+          broadcast
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-94.9897" miny="43.2858" maxx="-74.755" maxy="51.7095"/>
+    </FeatureType>
+    <FeatureType>
+        <Name>BBS_PT</Name>
+        <Title>Breeding Bird Survey Route Start Points</Title>
+        <Abstract>The Breeding Bird Survey, initiated in 1966, is one of the oldest surveys of breeding birds in North America. It is conducted primarily by volunteers, who follow a predetermined, roadside route each year at the height of the breeding season.  This layer portrays the start point for each BBS route in Canada.</Abstract>
+        <Keywords>
+          birds
+          breeding
+          survey
+          roadside
+          populations
+          volunteers
+          canada
+        </Keywords>
+        <SRS>EPSG:4326</SRS>
+        <LatLongBoundingBox minx="-140.952" miny="42.0986" maxx="-52.8184" maxy="68.0856"/>
+    </FeatureType>
+</FeatureTypeList>
+
+<ogc:Filter_Capabilities>
+  <ogc:Spatial_Capabilities>
+    <ogc:Spatial_Operators>
+      <ogc:Intersect/>
+      <ogc:DWithin/>
+      <ogc:BBOX/>
+    </ogc:Spatial_Operators>
+  </ogc:Spatial_Capabilities>
+  <ogc:Scalar_Capabilities>
+    <ogc:Logical_Operators/>
+    <ogc:Comparison_Operators>
+      <ogc:Simple_Comparisons/>
+      <ogc:Like/>
+      <ogc:Between/>
+    </ogc:Comparison_Operators>
+  </ogc:Scalar_Capabilities>
+</ogc:Filter_Capabilities>
+
+</WFS_Capabilities>
