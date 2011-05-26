@@ -1,6 +1,5 @@
 #!/usr/bin/python
-# -*- coding: ISO-8859-15 -*-
-# =============================================================================
+
 # Copyright (c) 2009 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@hotmail.com>
@@ -32,7 +31,7 @@ class MD_Metadata(object):
     """ Process gmd:MD_Metadata """
     def __init__(self, md):
 
-        if isinstance(md, etree._Element) is True:  # standalone document
+        if hasattr(md, 'getroot'):  # standalone document
             self.xml = etree.tostring(md.getroot())
         else:  # part of a larger document
             self.xml = etree.tostring(md)
@@ -224,30 +223,30 @@ class MD_DataIdentification(object):
             o = CI_ResponsibleParty(i)
             self.contact.append(o)
         
-        self.keywords = {}
+        self.keywords = []
 
-        self.keywords['type'] = _testCodeListValue(md.find(util.nspath_eval('gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:type/gmd:MD_KeywordTypeCode', namespaces)))
+        for i in md.findall(util.nspath_eval('gmd:descriptiveKeywords', namespaces)):
+            mdkw = {}
+            mdkw['type'] = _testCodeListValue(i.find(util.nspath_eval('gmd:MD_Keywords/gmd:type/gmd:MD_KeywordTypeCode', namespaces)))
 
-        self.keywords['list'] = [] 
-        self.keywords['thesaurustitle'] = []
-        self.keywords['thesaurusdate'] = []
-        self.keywords['thesaurusdatetype'] = []
-        for i in md.findall(util.nspath_eval('gmd:descriptiveKeywords/gmd:MD_Keywords', namespaces)):
-            k = i.find(util.nspath_eval('gmd:keyword/gco:CharacterString', namespaces))
-            self.keywords['list'].append(util.testXMLValue(k))
-            k1 = i.find(util.nspath_eval('gmd:thesaurusName/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
-            k2 = util.testXMLValue(k1)
-            if k2 is not None:
-                self.keywords['thesaurustitle'].append(k2)
-            k1 = i.find(util.nspath_eval('gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces))
-            k2 = util.testXMLValue(k1)
-            if k2 is not None:
-                self.keywords['thesaurusdate'].append(k2)
-            k1 = i.find(util.nspath_eval('gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces))
-            k2 = util.testXMLValue(k1)
-            if k2 is not None:
-                self.keywords['thesaurusdatetype'].append(k2)
+            mdkw['thesaurus'] = {}
 
+            val = i.find(util.nspath_eval('gmd:thesaurusName/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
+            mdkw['thesaurus']['title'] = util.testXMLValue(val)
+
+            val = i.find(util.nspath_eval('gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces))
+            mdkw['thesaurus']['date'] = util.testXMLValue(val)
+
+            val = i.find(util.nspath_eval('gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces))
+            mdkw['thesaurus']['datetype'] = util.testXMLValue(val)
+
+            mdkw['keywords'] = []
+
+            for k in i.findall(util.nspath_eval('gmd:MD_Keywords/gmd:keyword', namespaces)):
+                val = k.find(util.nspath_eval('gco:CharacterString', namespaces))
+                mdkw['keywords'].append(util.testXMLValue(val))
+
+            self.keywords.append(mdkw)
         
         self.topiccategory = []
         for i in md.findall(util.nspath_eval('gmd:topicCategory/gmd:MD_TopicCategoryCode', namespaces)):
