@@ -1,5 +1,5 @@
-#!/usr/bin/python
-
+# -*- coding: ISO-8859-15 -*- 
+# ============================================================================= 
 # Copyright (c) 2009 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@hotmail.com>
