@@ -11,7 +11,7 @@ from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
 import logging
-
+from owslib.util import openURL
 from owslib.etree import etree
 
 WFS_NAMESPACE = 'http://www.opengis.net/wfs'
@@ -181,11 +181,8 @@ class WebFeatureService_1_0_0(object):
         if maxfeatures: request['maxfeatures'] = str(maxfeatures)
 
         data = urlencode(request)
-
-        if method == 'Post':
-            u = urlopen(base_url, data=data)
-        else:
-            u = urlopen(base_url + data)
+        u = openURL(base_url, data, method)
+        
         
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -193,7 +190,7 @@ class WebFeatureService_1_0_0(object):
         try:
             length = int(u.info()['Content-Length'])
             have_read = False
-        except KeyError:
+        except (KeyError, AttributeError):
             data = u.read()
             have_read = True
             length = len(data)
