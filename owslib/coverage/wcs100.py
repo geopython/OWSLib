@@ -88,7 +88,7 @@ class WebCoverageService_1_0_0(WCSBase):
             sval=repr(value)
         else:
             sval = value
-        return value
+        return sval
   
     def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  crs=None, width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
