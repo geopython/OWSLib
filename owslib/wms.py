@@ -424,6 +424,16 @@ class ContentMetadata:
             if extent.attrib.get("name").lower() =='time':
                 self.timepositions=extent.text.split(',')
                 break
+
+        # MetadataURLs
+        self.metadataUrls = []
+        for m in elem.findall('MetadataURL'):
+            metadataUrl = {
+                'type': m.attrib['type'],
+                'format': m.find('Format').text.strip(),
+                'url': m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+            }
+            self.metadataUrls.append(metadataUrl)
                 
         self.layers = []
         for child in elem.findall('Layer'):
