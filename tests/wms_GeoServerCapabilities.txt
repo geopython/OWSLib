@@ -1,0 +1,91 @@
+Imports
+
+    >>> from owslib.wms import WebMapService
+    
+Fake a request to a WMS Server using saved doc from GeoServer, using a subset
+of the sample data distributed with the installer.
+http://localhost:8080/geoserver/wms?request=GetCapabilities
+
+    >>> xml = open_file('geoserver-wms-cap.xml', 'r').read() 
+    >>> wms = WebMapService('url', version='1.1.1', xml=xml)
+    
+Test capabilities
+
+    >>> wms.identification.type
+    'OGC:WMS'
+
+    >>> wms.identification.title
+    'My GeoServer WMS'
+
+    >>> wms.identification.abstract
+    'This is a description of your Web Map Server.'
+    
+    >>> wms.provider.url
+    'http://localhost:8080/geoserver/wms'
+    
+    >>> wms.identification.keywords
+    ['WFS', 'WMS', 'GEOSERVER']
+
+    >>> p = wms.provider.contact
+    >>> p.name
+    >>> p.email
+
+Test available content layers
+
+    >>> 'opengeo:poi' in wms.contents.keys()
+    True
+    
+    >>> layers=[wms[layer].title for layer in wms.contents]
+    >>> 'Points of Interest' in layers
+    True
+        
+Test single item accessor
+
+    >>> wms['opengeo:poi'].title
+    'Points of Interest'
+    
+    >>> wms['opengeo:poi'].boundingBox
+    (-74.012, 40.707999999999998, -74.001999999999995, 40.719999999999999, 'EPSG:4326')
+    
+    >>> wms['opengeo:poi'].boundingBoxWGS84
+    (-74.012, 40.707999999999998, -74.001999999999995, 40.719999999999999)
+    
+    >>> wms['opengeo:poi'].crsOptions
+    ['EPSG:4326']
+
+    >>> wms['opengeo:poi'].attribution
+    {'url': 'http://svn.codehaus.org/geoserver/trunk/data/release/data/', 'logo_size': (353, 112), 'logo_url': 'http://geoserver.org/s/1518/25/0.1/_/download/resources/com.atlassian.confluence.themes.geoserver%3Ageoserver/chrome/geoserver-logo.png', 'title': 'GeoServer Sample Data'}
+    
+    >>> wms['opengeo:poi'].styles
+    {'point': {'legend': 'http://localhost:8080/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=poi', 'title': 'A boring default style'}}
+    
+Expect a KeyError for invalid names
+
+    >>> wms['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wms.operations]
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
+    
+    >>> wms.getOperationByName('GetMap').methods
+    {'Get': {'url': 'http://localhost:8080/geoserver/wms?SERVICE=WMS&'}}
+    
+    >>> wms.getOperationByName('GetMap').formatOptions
+    ['image/png', 'application/atom xml', 'application/atom+xml', 'application/openlayers', 'application/pdf', 'application/rss xml', 'application/rss+xml', 'application/vnd.google-earth.kml', 'application/vnd.google-earth.kml xml', 'application/vnd.google-earth.kml+xml', 'application/vnd.google-earth.kmz', 'application/vnd.google-earth.kmz xml', 'application/vnd.google-earth.kmz+xml', 'atom', 'image/geotiff', 'image/geotiff8', 'image/gif', 'image/jpeg', 'image/png8', 'image/svg', 'image/svg xml', 'image/svg+xml', 'image/tiff', 'image/tiff8', 'kml', 'kmz', 'openlayers', 'rss']
+
+Test exceptions
+
+    >>> wms.exceptions
+    ['application/vnd.ogc.se_xml', 'application/vnd.ogc.se_inimage']
+
+Lastly, test the getcapabilities method
+
+#    >>> wms = WebMapService('http://wms.telascience.org/cgi-bin/ngBM_wms?', version='1.1.1')
+#    >>> xml = wms.getcapabilities().read()
+#    >>> xml.find('<WMT_MS_Capabilities version="1.1.1">') > 0
+#    True
+
