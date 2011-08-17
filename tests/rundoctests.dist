@@ -1,3 +1,4 @@
 #!/bin/sh
-export PYTHONPATH="/home/sean/Projects/GeoJSON/dev-packages"
-python runalldoctests.py -v
+export PYTHONPATH="/home/sean/Projects/PCL-mindep/dev-packages"
+python runalldoctests.py
+

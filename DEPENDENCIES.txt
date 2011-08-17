@@ -1,2 +1,1 @@
-simplejson
-
+- elementtree or lxml
