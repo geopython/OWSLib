@@ -5,10 +5,16 @@ import sys
 
 try:
     import pkg_resources
-    pkg_resources.require('PCL-Core')
-    pkg_resources.require('PCL-GeoJSON')
-except:
+    pkg_resources.require('OWSLib')
+except (ImportError, pkg_resources.DistributionNotFound):
     pass
+
+def open_file(filename, mode='r'):
+    """Helper function to open files from within the tests package."""
+    import os
+    return open(os.path.join(os.path.dirname(__file__), filename), mode)
+
+EXTRA_GLOBALS = {'open_file': open_file}
 
 def run(pattern):
     if pattern is None:
@@ -16,7 +22,7 @@ def run(pattern):
     else:
         testfiles = glob.glob(pattern)
     for file in testfiles: 
-        doctest.testfile(file)
+        doctest.testfile(file, extraglobs=EXTRA_GLOBALS)
 
 if __name__ == "__main__":
     try:

@@ -1,0 +1,19 @@
+    >>> from owslib.csw import CatalogueServiceWeb as cs
+    >>> c=cs('http://catalog.geodata.gov/geoportal/csw/discovery')
+    >>> c.identification.title
+    'Geospatial One-Stop'
+    >>> c.getrecords(keywords=['birds'])
+    >>> c.results['nextrecord']
+    11
+    >>> c.getrecords(keywords=['water'], maxrecords=25)
+    >>> c.results['nextrecord']
+    26
+    >>> c.getdomain('GetRecords.outputSchema')
+    >>> c.exceptionreport.exceptions
+    [{'locator': None, 'ExceptionText': '\nUnrecognized CSW request.\n', 'exceptionCode': 'NoApplicableCode'}]
+    >>> c.getrecords('downloadableData')
+    >>> c.results['returned']
+    10
+    >>> c.getrecords(cql='title = \'water\'')
+    >>> c.exceptionreport.exceptions
+    [{'locator': None, 'ExceptionText': '\nCqlText is not currently supported as a filter option.\n', 'exceptionCode': 'NoApplicableCode'}]

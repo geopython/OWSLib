@@ -1,17 +1,20 @@
+from setuptools import setup, find_packages
 
-from setuptools import setup
+readme = open('README.txt', 'rb').read()
 
-setup(name          = 'GeoJSON',
-      version       = '0.1.0',
-      description   = 'Encoder/decoder for simple GIS features',
+setup(name          = 'OWSLib',
+      version       = '0.3.2beta',
+      description   = 'OGC Web Service utility library',
+      long_description = readme,
       license       = 'BSD',
-      keywords      = 'gis geography json',
+      keywords      = 'gis ogc ows wfs wms sos csw capabilities metadata',
       author        = 'Sean Gillies',
       author_email  = 'sgillies@frii.com',
       maintainer        = 'Sean Gillies',
       maintainer_email  = 'sgillies@frii.com',
-      url           = 'http://trac.gispython.org/projects/PCL/wiki/PythonFeatureProtocol',
-      packages      = ['geojson'],
+      url           = 'http://trac.gispython.org/lab/wiki/OwsLib',
+      packages      = find_packages(),
+      test_suite    = 'tests.test_suite',
       classifiers   = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
