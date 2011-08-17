@@ -78,7 +78,7 @@ Subversion:
 
 .. code-block:: bash
 
-  $ svn co http://svn.gispython.org/svn/gispy/OWSLib/trunk OWSLib
+  $ svn co https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/
 
 Usage
 =====
@@ -315,9 +315,9 @@ FGDC
 Development
 ===========
 
-The OWSLib wiki is located at http://trac.gispython.org/lab/wiki/OwsLib.
+The OWSLib wiki is located at https://sourceforge.net/apps/trac/owslib.
 
-The OWSLib source code is available at http://svn.gispython.org/svn/gispy/OWSLib.  You can browse the source code at at http://trac.gispython.org/lab/browser/OWSLib.
+The OWSLib source code is available at https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/.  You can browse the source code at https://sourceforge.net/apps/trac/owslib/browser.
 
 You can find out about software metrics at the OWSLib ohloh page at http://www.ohloh.net/p/OWSLib.
 
@@ -334,17 +334,17 @@ The Community is the primary means for OWSLib users and developers to exchange a
 Subscribing to Community
 ------------------------
 
-To subscribe to the Community listserv visit http://lists.gispython.org/mailman/listinfo/community. You can later change your subscription information or leave the list at this website.
+To subscribe to the Community listserv visit https://lists.sourceforge.net/mailman/listinfo/owslib-devel. You can later change your subscription information or leave the list at this website.
 
 Submitting Questions to Community
 ---------------------------------
 
-To submit questions to the Community listserv, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to community@lists.gispython.org.
+To submit questions to the Community listserv, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to owslib-devel@lists.sourceforge.net.
 
 Searching the Archives
 ----------------------
 
-All Community archives are located in http://lists.gispython.org/pipermail/community/.
+All Community archives are located in https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-devel.
 
 License
 =======

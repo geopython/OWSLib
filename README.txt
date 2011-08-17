@@ -92,12 +92,8 @@ supported at this time.
 Support
 -------
 
-OWSLib shares a wiki and email list with the Python Cartographic Library:
-
-http://lists.gispython.org/mailman/listinfo/community
-
-http://trac.gispython.org/lab/wiki
+https://lists.sourceforge.net/mailman/listinfo/owslib-devel
 
 Updated project information can be found at
 
-http://trac.gispython.org/lab/wiki/OwsLib
+https://sourceforge.net/apps/trac/owslib
