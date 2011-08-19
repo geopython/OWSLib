@@ -315,6 +315,13 @@ class ContentMetadata:
         """."""
         self.id = elem.find(nspath('Name')).text
         self.title = elem.find(nspath('Title')).text
+        self.abstract = elem.find(nspath('Abstract'))
+        if abstract is not None:
+            self.abstract = abstract.text
+        else:
+            self.abstract = None
+        self.keywords = [f.text for f in elem.findall(nspath('Keywords'))]
+
         # bboxes
         self.boundingBox = None
         b = elem.find(nspath('BoundingBox'))
