@@ -92,6 +92,7 @@ supported at this time.
 Support
 -------
 
+https://lists.sourceforge.net/mailman/listinfo/owslib-users
 https://lists.sourceforge.net/mailman/listinfo/owslib-devel
 
 Updated project information can be found at
