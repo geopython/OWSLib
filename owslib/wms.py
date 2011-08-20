@@ -226,7 +226,7 @@ class WebMapService(object):
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = str(se_tree.find('ServiceException').text).strip()
+            err_message = unicode(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
         
