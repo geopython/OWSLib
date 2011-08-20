@@ -151,7 +151,8 @@ class WebMapService(object):
                format=None, size=None, time=None, transparent=False,
                bgcolor='#FFFFFF',
                exceptions='application/vnd.ogc.se_xml',
-               method='Get'
+               method='Get',
+               **kwargs
                ):
         """Request and return an image from the WMS as a file-like object.
         
@@ -176,6 +177,8 @@ class WebMapService(object):
             Optional. Image background color.
         method : string
             Optional. HTTP DCP method name: Get or Post.
+        **kwargs : extra arguments
+            anything else e.g. vendor specific parameters
         
         Example
         -------
@@ -218,6 +221,10 @@ class WebMapService(object):
         if time is not None:
             request['time'] = str(time)
         
+        if kwargs:
+            for kw in kwargs:
+                request[kw]=kwargs[kw]
+
         data = urlencode(request)
         
         u = openURL(base_url, data, method, username = self.username, password = self.password)
