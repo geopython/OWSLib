@@ -348,6 +348,12 @@ class ContentMetadata:
             if hasattr(self.parent, 'boundingBox'):
                 self.boundingBox = self.parent.boundingBox
 
+        # ScaleHint 
+ 	sh = elem.find('ScaleHint') 
+ 	self.scaleHint = None 
+ 	if sh is not None: 
+ 	    self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
+
         attribution = elem.find('Attribution')
         if attribution is not None:
             self.attribution = dict()
