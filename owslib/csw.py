@@ -490,8 +490,8 @@ class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
     def __init__(self, record):
 
-        if isinstance(record, etree._Element) is False:  # standalone document
-            self.xml = etree.tostring(record.getroot())
+        if hasattr(record, 'getroot'):  # standalone document
+            self.xml = etree.tostring(md.getroot())
         else:  # part of a larger document
             self.xml = etree.tostring(record)
 
