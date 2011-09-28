@@ -514,17 +514,29 @@ class CswRecord(object):
         val = record.find(util.nspath_eval('dc:title', namespaces))
         self.title = util.testXMLValue(val)
 
+        val = record.find(util.nspath_eval('dct:alternative', namespaces))
+        self.alternative = util.testXMLValue(val)
+
+        val = record.find(util.nspath_eval('dct:isPartOf', namespaces))
+        self.ispartof = util.testXMLValue(val)
+
         val = record.find(util.nspath_eval('dct:abstract', namespaces))
         self.abstract = util.testXMLValue(val)
 
         val = record.find(util.nspath_eval('dc:date', namespaces))
         self.date = util.testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:created', namespaces))
+        val = record.find(util.nspath_eval('dct:created', namespaces))
         self.created = util.testXMLValue(val)
+
+        val = record.find(util.nspath_eval('dct:issued', namespaces))
+        self.issued = util.testXMLValue(val)
 
         val = record.find(util.nspath_eval('dc:relation', namespaces))
         self.relation = util.testXMLValue(val)
+
+        val = record.find(util.nspath_eval('dc:temporal', namespaces))
+        self.temporal = util.testXMLValue(val)
 
         val = record.find(util.nspath_eval('dc:URI', namespaces))
         self.uri = util.testXMLValue(val)
@@ -549,6 +561,15 @@ class CswRecord(object):
 
         val = record.find(util.nspath_eval('dc:source', namespaces))
         self.source = util.testXMLValue(val)
+
+        val = record.find(util.nspath_eval('dct:rightsHolder', namespaces))
+        self.rightsholder = util.testXMLValue(val)
+
+        val = record.find(util.nspath_eval('dct:accessRights', namespaces))
+        self.accessrights = util.testXMLValue(val)
+
+        val = record.find(util.nspath_eval('dct:license', namespaces))
+        self.license = util.testXMLValue(val)
 
         val = record.find(util.nspath_eval('dc:format', namespaces))
         self.format = util.testXMLValue(val)
