@@ -1,6 +1,21 @@
 Changes
 =======
 
+0.4 (2011-10-02)
+----------------
+- Support for the following parsers:
+ - CSW 2.0.2
+ - OWS Common 1.0.0, 1.1.0, 2.0.0
+ - Filter Encoding 1.1.0
+ - ISO 19115:2003
+ - FGDC CSDGM
+ - NASA DIF
+ - Dublin Core
+ - WFS 2.0
+ - WCS 1.1
+- New SCM/bug/mailing list infrastructure
+- Sphinx documentation
+
 0.3 (2008-05-08)
 ----------------
 - WCS support.
