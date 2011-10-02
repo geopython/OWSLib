@@ -1,12 +1,16 @@
 OWSLib
 ======
 
-Package for working with OGC map, feature, and coverage services.
+OWSLib is a Python package for client programming with Open Geospatial
+Consortium (OGC) web service (hence OWS) interface standards, and their
+related content models.
+
+Full documentation is available at http://owslib.sourceforge.net/.
 
 OWSLib provides a common API for accessing service metadata and wrappers for
-GetCapabilities, GetMap, and GetFeature requests.
+numerous OGC Web Service interfaces.
 
-The OWSLib version 0.3 API is incompatible with version 0.2.1.
+The OWSLib version 0.4 API is incompatible with version 0.2.1.
 
 Dependencies
 ------------
@@ -83,18 +87,10 @@ That's everything needed to make a request for imagery::
 A very similar API exists for WebFeatureService. See
 tests/MapServerWFSCapabilities.txt for details.
 
-Known Issues
-------------
-
-OWSLib works with WMS version 1.1.1 and WFS 1.0.0 Other versions are not
-supported at this time.
-
 Support
 -------
 
 https://lists.sourceforge.net/mailman/listinfo/owslib-users
 https://lists.sourceforge.net/mailman/listinfo/owslib-devel
 
-Updated project information can be found at
-
-https://sourceforge.net/apps/trac/owslib
+Updated project information can be found at https://owslib.sourceforge.net/
