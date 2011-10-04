@@ -18,7 +18,7 @@ Currently supports only version 1.1.1 of the WMS protocol.
 import cgi
 from urllib import urlencode
 from etree import etree
-from .util import openURL
+from .util import openURL, testXMLValue
 
 
 class ServiceException(Exception):
@@ -258,22 +258,14 @@ class ServiceIdentification(object):
     
     def __init__(self, infoset, version):
         self._root=infoset
-        self.type = self._root.find('Name').text
+        self.type = testXMLValue(self._root.find('Name'))
         self.version = version
-        self.title = self._root.find('Title').text
-        abstract = self._root.find('Abstract')
-        if abstract is not None:
-            self.abstract = abstract.text
-        else:
-            self.abstract = None
+        self.title = testXMLValue(self._root.find('Title'))
+        self.abstract = testXMLValue(self._root.find('Abstract'))
         self.keywords = [f.text for f in self._root.findall('KeywordList/Keyword')]
-        accessconstraints=self._root.find('AccessConstraints')
-        if accessconstraints is not None:
-            self.accessconstraints = accessconstraints.text
-        fees = self._root.find('Fees')
-        if fees is not None:
-            self.fees = fees.text
-             
+        self.accessconstraints = testXMLValue(self._root.find('AccessConstraints'))
+        self.fees = testXMLValue(self._root.find('Fees'))
+
 class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
     def __init__(self, infoset):
@@ -323,12 +315,11 @@ class ContentMetadata:
         else:
             self.index = str(index)
         
+        self.id = self.name = testXMLValue(elem.find('Name'))
         # title is mandatory property
-        self.title = elem.find('Title').text.strip()
-        name = elem.find('Name')
-        self.name = name.text.strip() if name is not None else None
+        self.title = testXMLValue(elem.find('Title')).strip()
+        self.abstract = testXMLValue(elem.find('Abstract'))
         
-        self.id=self.name #conform to new interface
         # bboxes
         b = elem.find('BoundingBox')
         self.boundingBox = None
@@ -447,6 +438,15 @@ class ContentMetadata:
                 'url': m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
             }
             self.metadataUrls.append(metadataUrl)
+
+        # DataURLs
+        self.dataUrls = []
+        for m in elem.findall('DataURL'):
+            dataUrl = {
+                'format': m.find('Format').text.strip(),
+                'url': m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+            }
+            self.dataUrls.append(dataUrl)
                 
         self.layers = []
         for child in elem.findall('Layer'):
