@@ -11,8 +11,10 @@ from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
 import logging
-from owslib.util import openURL
+from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
+from owslib.fgdc import Metadata
+from owslib.iso import MD_Metadata
 
 WFS_NAMESPACE = 'http://www.opengis.net/wfs'
 OGC_NAMESPACE = 'http://www.opengis.net/ogc'
@@ -221,89 +223,19 @@ class ServiceIdentification(object):
     
     def __init__(self, infoset, version):
         self._root=infoset
-        self.type = self._root.find(nspath('Name')).text
+        self.type = testXMLValue(self._root.find(nspath('Name')))
         self.version = version
-        self.title = self._root.find(nspath('Title')).text
-        abstract = self._root.find(nspath('Abstract'))
-        if abstract is not None:
-            self.abstract = abstract.text
-        else:
-            self.abstract = None
+        self.title = testXMLValue(self._root.find(nspath('Title')))
+        self.abstract = testXMLValue(self._root.find(nspath('Abstract')))
         self.keywords = [f.text for f in self._root.findall(nspath('Keywords'))]
-        accessconstraints=self._root.find(nspath('AccessConstraints'))
-        if accessconstraints is not None:
-            self.accessconstraints = accessconstraints.text
-        else:
-            accessconstraints=None
-        fees = self._root.find(nspath('Fees'))
-        if fees is not None:
-            self.fees = fees.text
-             
+        self.fees = testXMLValue(self._root.find(nspath('Fees')))
+        self.accessconstraints = testXMLValue(self._root.find(nspath('AccessConstraints')))
+
 class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
     def __init__(self, infoset):
         self._root=infoset
-        name=self._root.find(nspath('ContactInformation/ContactPersonPrimary/ContactOrganization'))
-        if name is not None:
-            self.name=name.text
-        else:
-            self.name=None
-        self.url=self._root.find(nspath('OnlineResource')).attrib.get('{http://www.w3.org/1999/xlink}href', '')
-        if self.url == '':
-            self.url=self._root.find(nspath('OnlineResource')).text
-        #contact metadata
-        contact = self._root.find('ContactInformation')
-        ## sometimes there is a contact block that is empty, so make
-        ## sure there are children to parse
-        if contact is not None and contact.getchildren():
-            self.contact = ContactMetadata(contact)
-        else:
-            self.contact = None
-
-class ContactMetadata:
-    """Abstraction for contact details advertised in GetCapabilities.
-    Not fully tested due to lack of Contact info in test capabilities doc.
-    """
-    def __init__(self, elem):
-        name = elem.find(nspath('ContactPersonPrimary/ContactPerson'))
-        if name is not None:
-            self.name=name.text
-        else:
-            self.name=None
-        email = elem.find(nspath('ContactElectronicMailAddress'))
-        if email is not None:
-            self.email=email.text
-        else:
-            self.email=None
-
-        self.address = self.city = self.region = None
-        self.postcode = self.country = None
-
-        address = elem.find(nspath('ContactAddress'))
-        if address is not None:
-            street = address.find(nspath('Address'))
-            if street is not None: self.address = street.text
-
-            city = address.find(nspath('City'))
-            if city is not None: self.city = city.text
-
-            region = address.find(nspath('StateOrProvince'))
-            if region is not None: self.region = region.text
-
-            postcode = address.find(nspath('PostCode'))
-            if postcode is not None: self.postcode = postcode.text
-
-            country = address.find(nspath('Country'))
-            if country is not None: self.country = country.text
-
-        organization = elem.find(nspath('ContactPersonPrimary/ContactOrganization'))
-        if organization is not None: self.organization = organization.text
-        else:self.organization = None
-
-        position = elem.find(nspath('ContactPosition'))
-        if position is not None: self.position = position.text
-        else: self.position = None
-
+        self.url = testXMLValue(self._root.find(nspath('OnlineResource')))
 
 class ContentMetadata:
     """Abstraction for WFS metadata.
@@ -313,13 +245,9 @@ class ContentMetadata:
 
     def __init__(self, elem, parent):
         """."""
-        self.id = elem.find(nspath('Name')).text
-        self.title = elem.find(nspath('Title')).text
-        self.abstract = elem.find(nspath('Abstract'))
-        if abstract is not None:
-            self.abstract = abstract.text
-        else:
-            self.abstract = None
+        self.id = testXMLValue(elem.find(nspath('Name')))
+        self.title = testXMLValue(elem.find(nspath('Title')))
+        self.abstract = testXMLValue(elem.find(nspath('Abstract')))
         self.keywords = [f.text for f in elem.findall(nspath('Keywords'))]
 
         # bboxes
@@ -349,6 +277,29 @@ class ContentMetadata:
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.timepositions=None
+
+        # MetadataURLs
+        self.metadataUrls = []
+        for m in elem.findall(nspath('MetadataURL')):
+            metadataUrl = {
+                'type': testXMLValue(m.attrib['type'], attrib=True),
+                'format': testXMLValue(m.find('Format')),
+                'url': testXMLValue(m)
+            }
+
+            if metadataUrl['url'] is not None:  # download URL
+                try:
+                    content = urlopen(metadataUrl['url'])
+                    doc = etree.parse(content)
+                    if metadataUrl['type'] is not None:
+                        if metadataUrl['type'] == 'FGDC':
+                            metadataUrl['metadata'] = Metadata(doc)
+                        if metadataUrl['type'] == 'TC211':
+                            metadataUrl['metadata'] = MD_Metadata(doc)
+                except Exception, err:
+                    metadataUrl['metadata'] = None
+
+            self.metadataUrls.append(metadataUrl)
 
 class OperationMetadata:
     """Abstraction for WFS metadata.

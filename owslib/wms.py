@@ -16,10 +16,12 @@ Currently supports only version 1.1.1 of the WMS protocol.
 """
 
 import cgi
+import urllib2
 from urllib import urlencode
 from etree import etree
 from .util import openURL, testXMLValue
-
+from fgdc import Metadata
+from iso import MD_Metadata
 
 class ServiceException(Exception):
     """WMS ServiceException
@@ -433,10 +435,23 @@ class ContentMetadata:
         self.metadataUrls = []
         for m in elem.findall('MetadataURL'):
             metadataUrl = {
-                'type': m.attrib['type'],
-                'format': m.find('Format').text.strip(),
-                'url': m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+                'type': testXMLValue(m.attrib['type'], attrib=True),
+                'format': testXMLValue(m.find('Format')),
+                'url': testXMLValue(m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
+
+            if metadataUrl['url'] is not None:  # download URL
+                try:
+                    content = urllib2.urlopen(metadataUrl['url'])
+                    doc = etree.parse(content)
+                    if metadataUrl['type'] is not None:
+                        if metadataUrl['type'] == 'FGDC':
+                            metadataUrl['metadata'] = Metadata(doc)
+                        if metadataUrl['type'] == 'TC211':
+                            metadataUrl['metadata'] = MD_Metadata(doc)
+                except Exception, err:
+                    metadataUrl['metadata'] = None
+
             self.metadataUrls.append(metadataUrl)
 
         # DataURLs
