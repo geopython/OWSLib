@@ -367,6 +367,29 @@ class ContentMetadata:
         self.styles=None
         self.timepositions=None
 
+        # MetadataURLs
+        self.metadataUrls = []
+        for m in elem.findall('MetadataURL'):
+            metadataUrl = {
+                'type': testXMLValue(m.attrib['type'], attrib=True),
+                'format': m.find('Format').text.strip(),
+                'url': testXMLValue(m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
+            }
+
+            if metadataUrl['url'] is not None:  # download URL
+                try:
+                    content = urllib2.urlopen(metadataUrl['url'])
+                    doc = etree.parse(content)
+                    try:  # FGDC
+                        metadataUrl['metadata'] = Metadata(doc)
+                    except:  # ISO
+                        metadataUrl['metadata'] = MD_Metadata(doc)
+                except Exception, err:
+                    metadataUrl['metadata'] = None
+
+            self.metadataUrls.append(metadataUrl)
+
+
 class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
