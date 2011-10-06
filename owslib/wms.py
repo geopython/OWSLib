@@ -58,7 +58,7 @@ class WebMapService(object):
 
     
     def __init__(self, url, version='1.1.1', xml=None, 
-                username=None, password=None
+                username=None, password=None, parse_remote_metadata=False
                 ):
         """Initialize."""
         self.url = url
@@ -79,7 +79,7 @@ class WebMapService(object):
             self._capabilities = reader.read(self.url)
 
         #build metadata objects
-        self._buildMetadata()
+        self._buildMetadata(parse_remote_metadata)
 
     def _getcapproperty(self):
         if not self._capabilities:
@@ -89,7 +89,7 @@ class WebMapService(object):
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
 
-    def _buildMetadata(self):         
+    def _buildMetadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
         
         #serviceIdentification metadata
@@ -113,7 +113,7 @@ class WebMapService(object):
         #To the WebMapService.contents store only metadata of named layers.
         def gather_layers(parent_elem, parent_metadata):
             for index, elem in enumerate(parent_elem.findall('Layer')):
-                cm = ContentMetadata(elem, parent=parent_metadata, index=index+1)
+                cm = ContentMetadata(elem, parent=parent_metadata, index=index+1, parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
                         raise KeyError('Content metadata for layer "%s" already exists' % cm.id)
@@ -307,7 +307,7 @@ class ContentMetadata:
 
     Implements IContentMetadata.
     """
-    def __init__(self, elem, parent=None, index=0):
+    def __init__(self, elem, parent=None, index=0, parse_remote_metadata=False):
         if elem.tag != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
         
@@ -440,7 +440,7 @@ class ContentMetadata:
                 'url': testXMLValue(m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
 
-            if metadataUrl['url'] is not None:  # download URL
+            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
                     content = urllib2.urlopen(metadataUrl['url'])
                     doc = etree.parse(content)
