@@ -48,17 +48,19 @@ class WebFeatureService_2_0_0(object):
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml):
+    def __new__(self,url, version, xml, parse_remote_metadata=False):
         """ overridden __new__ method 
         
         @type url: string
         @param url: url of WFS capabilities document
         @type xml: string
         @param xml: elementtree object
+        @type parse_remote_metadata: boolean
+        @param parse_remote_metadata: whether to fully process MetadataURL elements
         @return: initialized WebFeatureService_2_0_0 object
         """
         obj=object.__new__(self)
-        obj.__init__(url, version, xml)
+        obj.__init__(url, version, xml, parse_remote_metadata)
         self.log = logging.getLogger()
         consoleh  = logging.StreamHandler()
         self.log.addHandler(consoleh)    
@@ -72,7 +74,7 @@ class WebFeatureService_2_0_0(object):
             raise KeyError, "No content named %s" % name
     
     
-    def __init__(self, url,  version, xml=None):
+    def __init__(self, url,  version, xml=None, parse_remote_metadata=False):
         """Initialize."""
         log.debug('building WFS %s'%url)
         self.url = url
@@ -83,9 +85,9 @@ class WebFeatureService_2_0_0(object):
             self._capabilities = reader.readString(xml)
         else:
             self._capabilities = reader.read(self.url)
-        self._buildMetadata()
+        self._buildMetadata(parse_remote_metadata)
     
-    def _buildMetadata(self):
+    def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
         
         #serviceIdentification metadata
@@ -120,7 +122,7 @@ class WebFeatureService_2_0_0(object):
         featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns=WFS_NAMESPACE))
         features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType', ns=WFS_NAMESPACE))
         for feature in features:
-            cm=ContentMetadata(feature, featuretypelist)
+            cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
             self.contents[cm.id]=cm       
         
         #exceptions
@@ -328,7 +330,7 @@ class ContentMetadata:
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parent):
+    def __init__(self, elem, parent, parse_remote_metadata=False):
         """."""
         self.id = elem.find(nspath('Name',ns=WFS_NAMESPACE)).text
         self.title = elem.find(nspath('Title',ns=WFS_NAMESPACE)).text
@@ -376,7 +378,7 @@ class ContentMetadata:
                 'url': testXMLValue(m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
 
-            if metadataUrl['url'] is not None:  # download URL
+            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
                     content = urllib2.urlopen(metadataUrl['url'])
                     doc = etree.parse(content)
