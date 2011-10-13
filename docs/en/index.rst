@@ -327,24 +327,20 @@ Testing
 Support
 =======
 
-OWSLib shares a wiki and email list with the Python Cartographic Library Community.
+Mailing Lists
+-------------
 
-The Community is the primary means for OWSLib users and developers to exchange application ideas, discuss potential software improvements, and ask questions.
-
-Subscribing to Community
-------------------------
-
-To subscribe to the Community listserv visit https://lists.sourceforge.net/mailman/listinfo/owslib-devel. You can later change your subscription information or leave the list at this website.
+OWSLib provides users and developers mailing lists.  Subscription options and archives are available at https://lists.sourceforge.net/mailman/listinfo/owslib-users and https://lists.sourceforge.net/mailman/listinfo/owslib-devel.
 
 Submitting Questions to Community
 ---------------------------------
 
-To submit questions to the Community listserv, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to owslib-devel@lists.sourceforge.net.
+To submit questions to a mailing list, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to either owslib-users@sourceforge.net or owslib-devel@lists.sourceforge.net.
 
 Searching the Archives
 ----------------------
 
-All Community archives are located in https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-devel.
+All Community archives are located in https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-users https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-devel.
 
 License
 =======
