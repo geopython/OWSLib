@@ -301,7 +301,13 @@ class MD_DataIdentification(object):
         val = md.find(util.nspath_eval('gmd:supplementalInformation/gco:CharacterString', namespaces))
         self.supplementalinformation = util.testXMLValue(val)
         
-        val = md.find(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:geographicElement', namespaces))
+        # there may be multiple geographicElement, create an extent
+        # from the one containing an EX_GeographicBoundingBox
+        val = None
+        for e in md.findall(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:geographicElement', namespaces)):
+            if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)):
+                val = e
+                break
 
         if val is not None:
             self.bbox = EX_Extent(val)
