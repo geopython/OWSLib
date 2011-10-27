@@ -117,10 +117,7 @@ class CI_Date(object):
                 self.date = None
 
         val = md.find(util.nspath_eval('gmd:dateType/gmd:CI_DateTypeCode', namespaces))
-        if val is not None:
-            self.type = util.testXMLValue(val)
-        else:
-            self.type = util.testXMLValue(md.attrib.get('codeListValue'), True)
+        self.type = _testCodeListValue(val)
 
 class CI_ResponsibleParty(object):
     """ process CI_ResponsibleParty """
@@ -194,13 +191,13 @@ class MD_DataIdentification(object):
         
         self.accessconstraints = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_RestrictionCode', namespaces)):
-            val = util.testXMLValue(i)
+            val = _testCodeListValue(i)
             if val is not None:
                 self.accessconstraints.append(val)
         
         self.classification = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_ClassificationCode', namespaces)):
-            val = util.testXMLValue(i)
+            val = _testCodeListValue(i)
             if val is not None:
                 self.classification.append(val)
         
@@ -215,6 +212,12 @@ class MD_DataIdentification(object):
             val = util.testXMLValue(i)
             if val is not None:
                 self.securityconstraints.append(val)
+
+        self.useconstraints = []
+        for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints/gmd:MD_RestrictionCode', namespaces)):
+            val = _testCodeListValue(i)
+            if val is not None:
+                self.useconstraints.append(val)
         
         self.denominators = []
         for i in md.findall(util.nspath_eval('gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer', namespaces)):
@@ -232,7 +235,7 @@ class MD_DataIdentification(object):
         
         self.resourcelanguage = []
         for i in md.findall(util.nspath_eval('gmd:language/gmd:LanguageCode', namespaces)):
-            val = util.testXMLValue(i)
+            val = _testCodeListValue(i)
             if val is not None:
                 self.resourcelanguage.append(val)
 
@@ -344,7 +347,7 @@ class DQ_DataQuality(object):
         
         self.conformancedatetype = []
         for i in md.findall(util.nspath_eval('gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces)):
-            val = util.testXMLValue(i)
+            val = _testCodeListValue(i)
             if val is not None:
                 self.conformancedatetype.append(val)
         
@@ -453,8 +456,13 @@ class MD_ReferenceSystem(object):
         self.code = util.testXMLValue(val)
 
 def _testCodeListValue(elpath):
-    if elpath is not None:
-        return util.testXMLValue(elpath.attrib.get('codeListValue'), True)
+    """ get gco:CodeListValue_Type attribute, else get text content """
+    if elpath is not None:  # try to get @codeListValue
+        val = util.testXMLValue(elpath.attrib.get('codeListValue'), True)
+        if val is not None:
+            return val
+        else:  # see if there is element text
+            return util.testXMLValue(elpath)
     else:
         return None
 
