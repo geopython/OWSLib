@@ -92,10 +92,9 @@ class WebFeatureService_1_1_0(object):
         #layer as a metadata organizer, nothing more. 
         
         self.contents={} 
-        featuretypelist=self._capabilities.find(nspath_eval('wfs:FeatureTypeList', namespaces))
-        features = self._capabilities.findall(nspath_eval('wfs:FeatureTypeList/FeatureType', namespaces))
+        features = self._capabilities.findall(nspath_eval('wfs:FeatureTypeList/wfs:FeatureType', namespaces))
         for feature in features:
-            cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
+            cm=ContentMetadata(feature, parse_remote_metadata)
             self.contents[cm.id]=cm       
         
         #exceptions
@@ -214,13 +213,13 @@ class ContentMetadata:
     def __init__(self, elem, parse_remote_metadata=False):
         """."""
         self.id = testXMLValue(elem.find(nspath_eval('wfs:Name', namespaces)))
-        self.title = testXMLValue(elem.find(nspath_eval('Title', namespaces)))
+        self.title = testXMLValue(elem.find(nspath_eval('wfs:Title', namespaces)))
         self.abstract = testXMLValue(elem.find(nspath_eval('wfs:Abstract', namespaces)))
         self.keywords = [f.text for f in elem.findall(nspath_eval('ows:Keywords/ows:Keyword', namespaces))]
 
         # bbox
         self.boundingBoxWGS84 = None
-        b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox')))
+        b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)))
         if b is not None:
             self.boundingBoxWGS84 = (
                     float(b.minx), float(b.miny),
@@ -264,23 +263,6 @@ class ContentMetadata:
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.timepositions=None
-
-class OperationMetadata:
-    """Abstraction for WFS metadata.
-    
-    Implements IMetadata.
-    """
-    def __init__(self, elem):
-        """."""
-        self.name = elem.tag
-        # formatOptions
-        self.formatOptions = [f.tag for f in elem.findall(nspath('ResultFormat/*'))]
-        methods = []
-        for verb in elem.findall(nspath('DCPType/HTTP/*')):
-            url = verb.attrib['onlineResource']
-            methods.append((verb.tag, {'url': url}))
-        self.methods = dict(methods)
-
 
 class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
