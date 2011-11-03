@@ -219,7 +219,8 @@ class ContentMetadata:
 
         # bbox
         self.boundingBoxWGS84 = None
-        b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)))
+        b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)), namespaces['ows'])
+        print b.minx, b.miny, b.maxx, b.maxy
         if b is not None:
             self.boundingBoxWGS84 = (
                     float(b.minx), float(b.miny),
@@ -239,7 +240,7 @@ class ContentMetadata:
 
         # MetadataURLs
         self.metadataUrls = []
-        for m in elem.findall(nspath('MetadataURL')):
+        for m in elem.findall(nspath_eval('wfs:MetadataURL', namespaces)):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
                 'format': testXMLValue(m.find('Format')),
@@ -253,7 +254,7 @@ class ContentMetadata:
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':
                             metadataUrl['metadata'] = Metadata(doc)
-                        if metadataUrl['type'] == 'TC211':
+                        if metadataUrl['type'] in ['TC211', '19115', '19139']:
                             metadataUrl['metadata'] = MD_Metadata(doc)
                 except Exception, err:
                     metadataUrl['metadata'] = None
