@@ -58,6 +58,12 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
     try:
         if method == 'Post':
             req = Request(url_base, data)
+            # set appropriate header if posting XML
+            try:
+                xml = etree.fromstring(data)
+                req.add_header('Content-Type', "text/xml")
+            except:
+                pass
         else:
             req=Request(url_base + data)
         if cookies is not None:
