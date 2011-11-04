@@ -1,6 +1,6 @@
 # Example script that performs a set of (small) requests versus the live USGS WPS service
 
-from owslib.wps import WebProcessingService, WPSExecution, FeatureCollection, WPSExecution, Query
+from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WPSExecution, Query
 from owslib.wps_utils import dump
 
 # instantiate WPS client
@@ -44,7 +44,7 @@ for output in process.processOutputs:
 
 wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
 query = Query("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
-featureCollection = FeatureCollection(wfsUrl, query)
+featureCollection = WFSFeatureCollection(wfsUrl, query)
 processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
 inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),
            ("DATASET_URI", "dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml"),

@@ -811,8 +811,20 @@ class Process(object):
     
 class FeatureCollection():
     '''
-    Base class to represent a WFS feature collection used as input to a WPS request.
+    Base class to represent a Feature Collection used as input to a WPS request.
     The method getXml() is invoked by the WPS execute() method to build the WPS request.
+    All subclasses must implement the getXml() method to provide their specific XML.
+    '''
+    
+    def __init__(self):
+        pass
+    
+    def getXml(self):
+        raise NotImplementedError
+    
+class WFSFeatureCollection(FeatureCollection):
+    '''
+    FeatureCollection specified by a WFS query.
     All subclasses must implement the getQuery() method to provide the specific query portion of the XML.
     '''
     

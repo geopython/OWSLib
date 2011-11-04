@@ -90,8 +90,13 @@ Output written to file: /tmp/output.csv
 
 3b) submit a request via command-line inputs:
 
->>> from owslib.wps import FeatureCollection
+'''
+>>> from owslib.wps import WFSFeatureCollection
 >>> processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
+>>> wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
+>>> query = Query("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
+>>> featureCollection = WFSFeatureCollection(wfsUrl, query)
+
 >>> inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),
 ...            ("DATASET_URI","dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml"),
 ...            ("DATASET_ID","ccsm3_a1b_tmax"),           
@@ -111,7 +116,7 @@ Output written to file: /tmp/output.csv
 ...            ("GROUP_BY","STATISTIC"),
 ...            ("SUMMARIZE_TIMESTEP","true"),
 ...            ("SUMMARIZE_FEATURE_ATTRIBUTE","true"),
-...            ("FEATURE_COLLECTION", FeatureCollection())
+...            ("FEATURE_COLLECTION", featureCollection)
 ...           ]
 >>> execution = wps.execute(processid, inputs)
 >>> while execution.isComplete()==False:
