@@ -4,12 +4,12 @@ To run: python -m doctest wps_request2.txt
 ----------------------------------------------------------------------------------------------------------------
 
 Import python modules
->>> from owslib.wps import WPSExecution, WFSFeatureCollection, Query
+>>> from owslib.wps import WPSExecution, WFSFeatureCollection, WFSQuery
 >>> from owslib.etree import etree
 
 Supply process input arguments
 >>> wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
->>> query = Query("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
+>>> query = WFSQuery("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
 >>> featureCollection = WFSFeatureCollection(wfsUrl, query)
 >>> processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
 >>> inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),

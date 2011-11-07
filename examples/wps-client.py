@@ -16,31 +16,32 @@ def usage():
     
 Usage: %s [parameters]
 
-Required Parameters
+Common Parameters for all request types
 -------------------
 
-    -u, --url=[URL] the base URL of the WPS
-    -r, --request=[REQUEST] the request (GetCapabilities, DescribeProcess)
-
-Optional Parameters
--------------------
-
-    -x, --xml=[XML] path to an XML file containing the WPS response document (for debugging, prevents invocation of actual service)
-    -v, --verbose set flag for verbose output
+    -u, --url=[URL] the base URL of the WPS - required
+    -r, --request=[REQUEST] the request type (GetCapabilities, DescribeProcess, Execute) - required 
+    -v, --verbose set flag for verbose output - optional (defaults to False)    
 
 Request Specific Parameters
 ---------------------------
 
     DescribeProcess
-    -i, --identifier=[ID] process identifier (required)
+        -i, --identifier=[ID] process identifier - required
+    Execute
+        -x, --xml XML file containing pre-made request to be submitted - required
 
 Examples
 --------
-wps-client.py -v -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities -x ../tests/USGSCapabilities.xml
-wps-client.py --verbose --url=http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request=GetCapabilities --xml=../tests/USGSCapabilities.xml
+wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities
+wps-client.py --verbose --url=http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request=GetCapabilities
 
-wps-client.py -v -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r DescribeProcess -x ../tests/USGSDescribeProcess.xml -i gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
-wps-client.py --verbose --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request DescribeProcess --xml ../tests/USGSDescribeProcess.xml --identifier gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
+wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r DescribeProcess -i gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
+wps-client.py --verbose --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request DescribeProcess --identifier gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
+
+
+wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r Execute -x ../tests/USGSExecuteRequest1.xml
+wps-client.py --verbose --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request Execute --xml ../tests/USGSExecuteRequest1.xml
 
 """ % sys.argv[0]
     
@@ -89,10 +90,45 @@ if request is None or url is None:
 wps = WebProcessingService(url, verbose=verbose)
 
 if request == 'GetCapabilities':
-    wps.getcapabilities(xml=xml)
+    wps.getcapabilities()
+    print 'WPS Identification type: %s' % wps.identification.type
+    print 'WPS Identification title: %s' % wps.identification.title
+    print 'WPS Identification abstract: %s' % wps.identification.abstract
+    for operation in wps.operations:
+        print 'WPS Operation: %s' % operation.name
+    for process in wps.processes:
+        print 'WPS Process: identifier=%s title=%s' % (process.identifier, process.title)
     
 elif request == 'DescribeProcess':
     if identifier is None:
+        print '\nERROR: missing mandatory "-i (or --identifier)" argument'
         usage()
         sys.exit(4)
-    wps.describeprocess(identifier, xml=xml)
+    process = wps.describeprocess(identifier)
+    print 'WPS Process: identifier=%s' % process.identifier
+    print 'WPS Process: title=%s' % process.title
+    print 'WPS Process: abstract=%s' % process.abstract
+    for input in process.dataInputs:
+        print 'Process input: identifier=%s, data type=%s, minOccurs=%d, maxOccurs=%d' % (input.identifier, input.dataType, input.minOccurs, input.maxOccurs)
+    for output in process.processOutputs:
+        print 'Process output: identifier=%s, data type=%s' % (output.identifier, output.dataType)
+        
+elif request == 'Execute':
+    if xml is None:
+        print '\nERROR: missing mandatory "-x (or --xml)" argument'
+        usage()
+        sys.exit(5)
+    execution = wps.execute(None, [], request=xml)
+    while execution.isComplete()==False:
+        execution.checkStatus(sleepSecs=3)
+    print 'Execution status: %s' % execution.status
+    if execution.isSucceded():
+        execution.getOutput(filepath='/tmp/output.csv')
+    else:
+        for ex in execution.errors:
+            print 'Error: code=%s, locator=%s, text=%s' % (self.code, self.locator, self.text)
+    
+else:
+    print '\nERROR: Unknown request type'
+    usage()
+    sys.exit(6)

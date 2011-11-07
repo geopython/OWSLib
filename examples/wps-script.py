@@ -1,6 +1,6 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
-from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WPSExecution, Query, GMLMultiPolygonFeatureCollection
+from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WPSExecution, WFSQuery, GMLMultiPolygonFeatureCollection
 from owslib.wps_utils import dump
 
 # instantiate WPS client
@@ -43,7 +43,7 @@ for output in process.processOutputs:
 # and retrieves the output once the request terminates successfully (displaying any errors if found).
 # This request uses a FEATURE_COLLECTION input obtained from a live WFS service.
 wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
-query = Query("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
+query = WFSQuery("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
 featureCollection = WFSFeatureCollection(wfsUrl, query)
 processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
 inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),

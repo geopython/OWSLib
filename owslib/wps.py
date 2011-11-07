@@ -870,7 +870,7 @@ class WFSFeatureCollection(FeatureCollection):
         
         return root
     
-class Query():
+class WFSQuery():
     '''
     Class representing a WFS query, for insertion into a WFSFeatureCollection instance.
     '''
