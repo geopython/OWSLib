@@ -1,4 +1,4 @@
-# Example script that performs a set of (small) requests versus the live USGS WPS service
+# Example script that performs a set of (small) live requests versus the live USGS WPS service
 
 from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WPSExecution, Query
 from owslib.wps_utils import dump
