@@ -126,7 +126,7 @@ elif request == 'Execute':
         execution.getOutput(filepath='/tmp/output.csv')
     else:
         for ex in execution.errors:
-            print 'Error: code=%s, locator=%s, text=%s' % (self.code, self.locator, self.text)
+            print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
     
 else:
     print '\nERROR: Unknown request type'
