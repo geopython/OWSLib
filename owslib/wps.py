@@ -444,7 +444,7 @@ class WPSExecution():
             # override status location
             if url is not None:
                 self.statusLocation = url
-            print '\nChecking execution status... (location=%s)' % url
+            print '\nChecking execution status... (location=%s)' % self.statusLocation
             response = reader.readFromUrl(self.statusLocation, username=self.username, password=self.password)
         else:
             response = reader.readFromString(response)

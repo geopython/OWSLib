@@ -1,6 +1,6 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
-from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WPSExecution, Query
+from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WPSExecution, Query, GMLMultiPolygonFeatureCollection
 from owslib.wps_utils import dump
 
 # instantiate WPS client
@@ -38,10 +38,10 @@ for input in process.dataInputs:
 for output in process.processOutputs:
     print 'Process output: identifier=%s, data type=%s' % (output.identifier, output.dataType)
 
-# 3) Execute
+# 3a) Execute
 # Submits an HTTP POST "Execute" process request to the WPS service, keeps checking the status of the request,
 # and retrieves the output once the request terminates successfully (displaying any errors if found).
-
+# This request uses a FEATURE_COLLECTION input obtained from a live WFS service.
 wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
 query = Query("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
 featureCollection = WFSFeatureCollection(wfsUrl, query)
@@ -67,10 +67,52 @@ inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),
            ("SUMMARIZE_FEATURE_ATTRIBUTE","true"),
            ("FEATURE_COLLECTION", featureCollection)
           ]
-#execution = wps.execute(processid, inputs)
+execution = wps.execute(processid, inputs)
 # alternatively, submit a pre-made request specified in an XML file
-request = open('../tests/USGSExecuteRequest1.xml','r').read()
-execution = wps.execute(None, [], request=request)
+#request = open('../tests/USGSExecuteRequest1.xml','r').read()
+#execution = wps.execute(None, [], request=request)
+
+while execution.isComplete()==False:
+    execution.checkStatus(sleepSecs=3)
+    
+print 'Execution status: %s' % execution.status
+if execution.isSucceded():
+    execution.getOutput(filepath='/tmp/output.csv')
+else:
+    for ex in execution.errors:
+        print 'Error: code=%s, locator=%s, text=%s' % (self.code, self.locator, self.text)
+    
+# 3b) Execute
+# Submits an HTTP POST "Execute" process request to the WPS service, keeps checking the status of the request,
+# and retrieves the output once the request terminates successfully (displaying any errors if found).
+# This request uses a FEATURE_COLLECTION input defined as a GML (lat, lon) polygon.
+
+polygon = [(-102.8184, 39.5273), (-102.8184, 37.418), (-101.2363, 37.418), (-101.2363, 39.5273), (-102.8184, 39.5273)]
+featureCollection = GMLMultiPolygonFeatureCollection( [polygon] )
+processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
+inputs =  [ ("FEATURE_ATTRIBUTE_NAME","the_geom"),
+            ("DATASET_URI", "dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml"),
+            ("DATASET_ID", "ccsm3_a1b_tmax"),
+            ("TIME_START","1960-01-01T00:00:00.000Z"),
+            ("TIME_END","1960-12-31T00:00:00.000Z"),
+            ("REQUIRE_FULL_COVERAGE","true"),
+            ("DELIMITER","COMMA"),
+            ("STATISTICS","MEAN"),
+            ("STATISTICS","MINIMUM"),
+            ("STATISTICS","MAXIMUM"),
+            ("STATISTICS","WEIGHT_SUM"),
+            ("STATISTICS","VARIANCE"),
+            ("STATISTICS","STD_DEV"),
+            ("STATISTICS","COUNT"),
+            ("GROUP_BY","STATISTIC"),
+            ("SUMMARIZE_TIMESTEP","false"),
+            ("SUMMARIZE_FEATURE_ATTRIBUTE","false"),
+            ("FEATURE_COLLECTION", featureCollection)
+           ]
+execution = wps.execute(processid, inputs)
+# alternatively, submit a pre-made request specified in an XML file
+#request = open('../tests/USGSExecuteRequest3.xml','r').read()
+#execution = wps.execute(None, [], request=request)
 
 while execution.isComplete()==False:
     execution.checkStatus(sleepSecs=3)
