@@ -9,26 +9,28 @@ Client-side API for invoking WPS services.
 """
 
 from etree import etree
-from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE, \
+from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE, OWS_NAMESPACE_1_0_0, \
     ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
 from wps_utils import build_get_url, dump, getTypedValue, parseText
 from xml.dom.minidom import parseString
 import util
 
-#from owslib.interfaces import IService
-
-
-#from xml.dom.minidom import parseString
-
 # the following namespaces should be inserted in ows.py
 WPS_NAMESPACE="http://www.opengis.net/wps/1.0.0"
-WFS_NAMESPACE = 'http://www.opengis.net/wfs'
-OGC_NAMESPACE = 'http://www.opengis.net/ogc'
-GML_NAMESPACE = 'http://www.opengis.net/gml'
-
 WPS_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
+
+WFS_NAMESPACE = 'http://www.opengis.net/wfs'
+OGC_NAMESPACE = 'http://www.opengis.net/ogc'
+
+GML_NAMESPACE = 'http://www.opengis.net/gml'
+GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
+
+DRAW_NAMESPACE = 'gov.usgs.cida.gdp.draw'
+DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd'
+
+
 
 # list of namespaces used by this module
 namespaces = {
@@ -436,14 +438,13 @@ class WPSExecution():
              If not provided, the current 'statusLocation' URL will be used.
         sleepSecs: number of seconds to sleep before returning control to the caller
         """
-        
-        print '\nChecking execution status... (url=%s)' % url
-            
+                    
         reader = WPSExecuteReader(verbose=self.verbose)
         if response is None:
             # override status location
             if url is not None:
                 self.statusLocation = url
+            print '\nChecking execution status... (location=%s)' % url
             response = reader.readFromUrl(self.statusLocation, username=self.username, password=self.password)
         else:
             response = reader.readFromString(response)
@@ -543,7 +544,7 @@ class WPSExecution():
         else:
             print 'Unknown Response'
             
-               # print status, errors
+        # print status, errors
         print 'Execution status=%s' % self.status
         for error in self.errors:
             dump(error)
@@ -867,43 +868,11 @@ class WFSFeatureCollection(FeatureCollection):
         #            </wfs:Query>
         getFeatureElement.append( self.query.getXml() )
         
-        '''
-        queryElement = etree.SubElement(getFeatureElement, util.nspath_eval('wfs:Query', namespaces), attrib = { "typeName":"sample:CONUS_States" })
-        propertyNameElement1 = etree.SubElement(queryElement, util.nspath_eval('wfs:PropertyName', namespaces))
-        propertyNameElement1.text = "the_geom"
-        propertyNameElement2 = etree.SubElement(queryElement, util.nspath_eval('wfs:PropertyName', namespaces))
-        propertyNameElement2.text = "STATE"
-        filterElement = etree.SubElement(queryElement, util.nspath_eval('ogc:Filter', namespaces))
-        gmlObjectIdElement = etree.SubElement(filterElement, util.nspath_eval('ogc:GmlObjectId', namespaces), 
-                                              attrib={util.nspath_eval('gml:id', namespaces):"CONUS_States.508"})
-        '''
-      
-        
-        #            <wfs:Query typeName="sample:Alaska">
-        #                <wfs:PropertyName>the_geom</wfs:PropertyName>
-        #                <wfs:PropertyName>AREA</wfs:PropertyName>
-        #            </wfs:Query>
-        """
-        queryElement = etree.SubElement(getFeatureElement, util.nspath_eval('wfs:Query', namespaces), attrib = { "typeName":"sample:Alaska" })
-        propertyNameElement1 = etree.SubElement(queryElement, util.nspath_eval('wfs:PropertyName', namespaces))
-        propertyNameElement1.text = "the_geom"
-        propertyNameElement2 = etree.SubElement(queryElement, util.nspath_eval('wfs:PropertyName', namespaces))
-        propertyNameElement2.text = "STATE"
-        """
-        
-
-        """   
-        queryElement = etree.SubElement(getFeatureElement, util.nspath_eval('wfs:Query', namespaces), attrib = { "typeName": "draw:luca" })
-        propertyNameElement1 = etree.SubElement(queryElement, util.nspath_eval('wfs:PropertyName', namespaces))
-        propertyNameElement1.text = "the_geom"
-        propertyNameElement2 = etree.SubElement(queryElement, util.nspath_eval('wfs:PropertyName', namespaces))
-        propertyNameElement2.text = "ID"
-        """
         return root
     
 class Query():
     '''
-    Class representing a WFS query, for insertion into a FeatureCollection instance.
+    Class representing a WFS query, for insertion into a WFSFeatureCollection instance.
     '''
     
     def __init__(self, typeName, propertyNames=[], filters=[]):
@@ -932,4 +901,72 @@ class Query():
                                                       attrib={util.nspath_eval('gml:id', namespaces):filter})
         return queryElement
         
+class GMLMultiPolygonFeatureCollection(FeatureCollection):
+    '''
+    Class that represents a FeatureCollection defined as a GML multi-polygon.
+    '''
     
+    def __init__(self, polygons):
+        '''
+        Initializer accepts an array of polygons, where each polygon is an array of (lat,lon) tuples.
+        Example: polygons = [ [(-102.8184, 39.5273), (-102.8184, 37.418), (-101.2363, 37.418), (-101.2363, 39.5273), (-102.8184, 39.5273)],
+                              [(-92.8184, 39.5273), (-92.8184, 37.418), (-91.2363, 37.418), (-91.2363, 39.5273), (-92.8184, 39.5273)] ]
+        '''
+        self.polygons = polygons
+    
+    def getXml(self):
+        '''
+            <wps:Data>
+                <wps:ComplexData mimeType="text/xml" encoding="UTF-8"
+                    schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd">
+                    <gml:featureMembers xmlns:ogc="http://www.opengis.net/ogc"
+                        xmlns:draw="gov.usgs.cida.gdp.draw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xsi:schemaLocation="gov.usgs.cida.gdp.draw http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd">
+                        <gml:box gml:id="box.1">
+                            <gml:the_geom>
+                                <gml:MultiPolygon srsDimension="2"
+                                    srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+                                    <gml:polygonMember>
+                                        <gml:Polygon>
+                                            <gml:exterior>
+                                                <gml:LinearRing>
+                                                    <gml:posList>-102.8184 39.5273 -102.8184 37.418 -101.2363 37.418 -101.2363 39.5273 -102.8184 39.5273</gml:posList>
+                                                </gml:LinearRing>
+                                            </gml:exterior>
+                                        </gml:Polygon>
+                                    </gml:polygonMember>
+                                </gml:MultiPolygon>
+                            </gml:the_geom>
+                            <gml:ID>0</gml:ID>
+                        </gml:box>
+                    </gml:featureMembers>
+                </wps:ComplexData>
+            </wps:Data>
+        '''
+        dataElement = etree.Element(util.nspath_eval('wps:Data', namespaces))
+        complexDataElement = etree.SubElement(dataElement, util.nspath_eval('wps:ComplexData', namespaces),
+                                              attrib={"mimeType":"text/xml", "encoding":"UTF-8", "schema":GML_SCHEMA_LOCATION} )
+        featureMembersElement = etree.SubElement(complexDataElement, util.nspath_eval('gml:featureMembers', namespaces),
+                                                 attrib={"xmlns:ogc":OGC_NAMESPACE, 
+                                                         "xmlns:draw":DRAW_NAMESPACE,
+                                                         "xmlns:ows":OWS_NAMESPACE_1_0_0,
+                                                         #"xmlns:gml":GML_NAMESPACE,
+                                                         "xmlns:xlink":XLINK_NAMESPACE,
+                                                         "xsi:schemaLocation":"%s %s" % (DRAW_NAMESPACE, DRAW_SCHEMA_LOCATION)})
+        boxElement = etree.SubElement(featureMembersElement, util.nspath_eval('gml:box', namespaces), attrib={"gml:id":"box.1"})
+        geomElement = etree.SubElement(boxElement, util.nspath_eval('gml:the_geom', namespaces))
+        multiPolygonElement = etree.SubElement(geomElement, util.nspath_eval('gml:MultiPolygon', namespaces),
+                                               attrib={"srsDimension":"2", "srsName":"http://www.opengis.net/gml/srs/epsg.xml#4326"} )
+        for polygon in self.polygons:
+            polygonMemberElement = etree.SubElement(multiPolygonElement, util.nspath_eval('gml:polygonMember', namespaces))
+            polygonElement = etree.SubElement(polygonMemberElement, util.nspath_eval('gml:Polygon', namespaces))
+            exteriorElement = etree.SubElement(polygonElement, util.nspath_eval('gml:exterior', namespaces))
+            linearRingElement = etree.SubElement(exteriorElement, util.nspath_eval('gml:LinearRing', namespaces))
+            posListElement = etree.SubElement(linearRingElement, util.nspath_eval('gml:posList', namespaces))
+            posListElement.text =  ' '.join(["%s %s" % (x, y) for x, y in polygon[:] ])
+        
+        idElement = etree.SubElement(boxElement, util.nspath_eval('gml:ID', namespaces))
+        idElement.text = "0"
+        return dataElement

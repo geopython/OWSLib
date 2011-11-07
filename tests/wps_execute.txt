@@ -23,8 +23,6 @@ False
 Simulate end of process
 >>> response = open('./USGSExecuteResponse1b.xml', 'r').read()
 >>> execution.checkStatus(sleepSecs=0, response=response)
-<BLANKLINE>
-Checking execution status... (url=None)
 Execution status=ProcessSucceeded
 >>> execution.status
 'ProcessSucceeded'
