@@ -7,6 +7,15 @@ import cgi
 from etree import etree
 from urllib import urlencode
 
+def getNamespace(tag):
+    '''
+    Utility method to extract the namespace from an XML tag encoded as {namespace}localname.
+    '''
+    if tag[0]=='{':
+        return tag[1:].split("}")[0]
+    else:
+        return None
+
 def build_get_url(base_url, params):
     """
     Utility function to build a full HTTP GET URL from the service base URL and a dictionary of HTTP parameters.
