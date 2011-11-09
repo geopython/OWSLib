@@ -33,10 +33,11 @@ Supply process input arguments
 ...            ("SUMMARIZE_FEATURE_ATTRIBUTE","true"),
 ...            ("FEATURE_COLLECTION", featureCollection)
 ...           ]
+>>> output = "OUTPUT"
 
 # build XML request for WPS process execution
 >>> execution = WPSExecution()
->>> requestElement = execution.buildRequest(processid, inputs)
+>>> requestElement = execution.buildRequest(processid, inputs, output=output)
 >>> request = etree.tostring( requestElement )
 
 Compare to cached XML request

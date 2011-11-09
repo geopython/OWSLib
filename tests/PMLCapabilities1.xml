@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<ns0:Capabilities service="WPS" updateSequence="1" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsGetCapabilities_response.xsd" xml:lang="en-CA" xmlns:ns0="http://www.opengis.net/wps/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ows:ServiceIdentification xmlns:ows="http://www.opengis.net/ows/1.1">
+		<ows:Title>PyWPS Server</ows:Title>
+		<ows:Abstract>PML WPS server</ows:Abstract>
+		<ows:Keywords>
+			<ows:Keyword>PML</ows:Keyword>
+			<ows:Keyword>NETMAR</ows:Keyword>
+			<ows:Keyword>RSG</ows:Keyword>
+			<ows:Keyword>Non-Grass</ows:Keyword>
+		</ows:Keywords>
+		<ows:ServiceType>WPS</ows:ServiceType>
+		<ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+		<ows:Fees>None</ows:Fees>
+		<ows:AccessConstraints>none</ows:AccessConstraints>
+	</ows:ServiceIdentification>
+	<ows:ServiceProvider xmlns:ows="http://www.opengis.net/ows/1.1">
+		<ows:ProviderName>Plymouth Marine Laboratory</ows:ProviderName>
+		<ows:ProviderSite xlink:href="http://rsg.pml.ac.uk" xmlns:xlink="http://www.w3.org/1999/xlink" />
+		<ows:ServiceContact>
+			<ows:IndividualName>Jorge Samuel Mendes de Jesus</ows:IndividualName>
+			<ows:PositionName>Scientifical Programmer</ows:PositionName>
+			<ows:ContactInfo>
+				<ows:Address>
+					<ows:DeliveryPoint>Prospect Place,The Hoe</ows:DeliveryPoint>
+					<ows:City>Plymouth</ows:City>
+					<ows:PostalCode>PL1 3DH</ows:PostalCode>
+					<ows:Country>uk</ows:Country>
+					<ows:ElectronicMailAddress>rsgweb@pml.ac.uk</ows:ElectronicMailAddress>
+				</ows:Address>
+				<ows:OnlineResource xlink:href="http://rsg.pml.ac.uk" xmlns:xlink="http://www.w3.org/1999/xlink" />
+				<ows:HoursOfService>0:00-24:00</ows:HoursOfService>
+				<ows:ContactInstructions>none</ows:ContactInstructions>
+			</ows:ContactInfo>
+			<ows:Role>Administrator</ows:Role>
+		</ows:ServiceContact>
+	</ows:ServiceProvider>
+	<ows:OperationsMetadata xmlns:ows="http://www.opengis.net/ows/1.1">
+		<ows:Operation name="GetCapabilities">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi?" xmlns:xlink="http://www.w3.org/1999/xlink" />
+					<ows:Post xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi" xmlns:xlink="http://www.w3.org/1999/xlink" />
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+		<ows:Operation name="DescribeProcess">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi?" xmlns:xlink="http://www.w3.org/1999/xlink" />
+					<ows:Post xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi" xmlns:xlink="http://www.w3.org/1999/xlink" />
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+		<ows:Operation name="Execute">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi?" xmlns:xlink="http://www.w3.org/1999/xlink" />
+					<ows:Post xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi" xmlns:xlink="http://www.w3.org/1999/xlink" />
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+	</ows:OperationsMetadata>
+	<ns0:ProcessOfferings>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">fetchMODISTimeStamp</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">fetch RSG_MODIS_zg_1daycomp datetime availables thredds data server</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">WPS that parses RSG_MODIS_zg_1daycomp_AGGSLOW descriveCoverage for chlor_a and outputs the  available timestamps</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">fetchMODIS</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">fetch RSG_MODIS_zg_1daycomp from thredds data server</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">Process that fetches the desired RSG_MODIS_zg_1daycomp layer data and returns it as GeoTiff. Data Available from 2011-05-01 till 2011-11-02. Use the fetchMODISTimeStamp to get list of dateTimes avalilable</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">fetchMRCS</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">fetchMRCS layer from thredds data server</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">Process that fetches the desired MRCS layer data and returns it as GeoTiff</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">r.colors</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Creates/modifies the color table associated with a raster map.</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">http://grass.osgeo.org/grass70/manuals/html70_user/r.colors.html</ows:Abstract>
+                        <ows:Metadata xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi?service=WPS&amp;request=DescribeProcess&amp;version=1.0.0&amp;identifier=r.colors" xlink:title="raster" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" />
+                        <ows:Metadata xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi?service=WPS&amp;request=DescribeProcess&amp;version=1.0.0&amp;identifier=r.colors" xlink:title="color table" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" />
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">reprojectCoords</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">reproject coordinates</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">reprojectCoords uses gdaltransform to reproject a list of coordinates from one projection to another. DataInputs example using 3 UK points in lat/long to UTM 30N e.g: '[coords=http://rsg.pml.ac.uk/wps/testdata/coords.txt;outputSRS=EPSG:32630;inputSRS=EPSG:4326]'</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">intersectBBOX</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">intersection between 2 bounding boxex</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">intersectBBOX calculates the intersection between 2 bounding boxes</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">reprojectImage</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">reproject image</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">
+Reproject an image to a new projection. 
+If outputResolution is specified then the image will be scaled to the new resolution.
+If outputHeight or outputWidth are specified then the image will be scaled to the new dimensions
+Data values to be ignored by the interpolation are specified in the NoData list. E.g: 'datainputs=[inputImage=http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img;outputSRS=EPSG:4326]' and with imageOutput as reference e.g: 'responsedocument=outputImage=@asreference=true'
+</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">mergeImages</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">combine 2 image with identical grid into a single multiband GeoTIFF</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">combine 2 image with identical grid into a single multiband GeoTIFF</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">compareImages</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">compare 2 images</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">Compare image runs a predefined statistical comparison on the 2 input images</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">buoyGraphic</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">L4 and E1 Chr-a graphic with metoffice MRCS data</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">L4 and E1 fluroescence data obtained from WFS (http://rsg.pml.ac.uk/geoserver/wfs) and MRCS chr-a (http://rsg.pml.ac.uk/thredds/catalog/metoffice_mrcs/catalog.html) raster model data for buoy location</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gml2svg</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">GML to PNG</ows:Title>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">geotiff2png</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">PNG</ows:Title>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="2.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">dummyprocess</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Dummy Process</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">The Dummy process is used for testing the WPS structure. The process will accept 2 input numbers and will return the XML result with an add one and subtract one operation</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gdalinfo</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">GDALinfo command</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">GDALinfo command to check image properties</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="1.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">ncdump</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">ncdump command</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">ncdump returning file header as string or xml. Running basic command ncdump -h file_name, or with extra flag -x</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="2.0">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">ultimatequestionprocess</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Answer to Life, the Universe and Everything</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">Numerical solution that is the answer to Life, Universe and Everything. The process is an improvement to Deep Tought computer (therefore version 2.0) since it no longer takes 7.5 milion years, but only a few seconds to give a response, with an update of status every 10 seconds.</ows:Abstract>
+		</ns0:Process>
+		<ns0:Process ns0:processVersion="0.1">
+			<ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">reducer</ows:Identifier>
+			<ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Geotiff sizer reducer</ows:Title>
+			<ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">GDAL and Numpy code that will reduze the dimension of a satelite image by using a mean calculation of values. Test GeoTiff in: http://rsg.pml.ac.uk/wps/sat_image.tif</ows:Abstract>
+		</ns0:Process>
+	</ns0:ProcessOfferings>
+	<ns0:Languages>
+		<ns0:Default>
+			<ows:Language xmlns:ows="http://www.opengis.net/ows/1.1">en-CA</ows:Language>
+		</ns0:Default>
+		<ns0:Supported>
+			<ows:Language xmlns:ows="http://www.opengis.net/ows/1.1">en-CA</ows:Language>
+		</ns0:Supported>
+	</ns0:Languages>
+	<ns0:WSDL xlink:href="http://rsg.pml.ac.uk/wps/generic.cgi?WSDL" xmlns:xlink="http://www.w3.org/1999/xlink" />
+</ns0:Capabilities>

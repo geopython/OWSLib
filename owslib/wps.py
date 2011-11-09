@@ -9,8 +9,8 @@ Client-side API for invoking WPS services.
 """
 
 from etree import etree
-from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE, OWS_NAMESPACE_1_0_0, \
-    ServiceIdentification, ServiceProvider, OperationsMetadata
+from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE, \
+    OWS_NAMESPACE_1_0_0, ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
 from wps_utils import build_get_url, dump, getTypedValue, parseText
 from xml.dom.minidom import parseString
@@ -123,13 +123,14 @@ class WebProcessingService(object):
         # build metadata objects
         return self._parseProcessMetadata(process)
         
-    def execute(self, identifier, inputs, request=None, response=None):
+    def execute(self, identifier, inputs, output=None, request=None, response=None):
         """
         Submits a WPS process execution request. 
         Returns a WPSExecution object, which can be used to monitor the status of the job, and ultimately retrieve the result.
         
         identifier: the requested process identifier
         inputs: list of process inputs as (key, value) tuples (where value is either a string for LiteralData, or an object for ComplexData)
+        output: optional identifier for process output reference (if not provided, output will be embedded in the response)
         request: optional pre-built XML request document, prevents building of request from other arguments
         response: optional pre-built XML response document, prevents submission of request to live WPS server
         """
@@ -140,7 +141,7 @@ class WebProcessingService(object):
 
         # build XML request from parameters 
         if request is None:
-           requestElement = execution.buildRequest(identifier, inputs)
+           requestElement = execution.buildRequest(identifier, inputs, output)
            request = etree.tostring( requestElement )   
         if self.verbose==True:
                print request
@@ -245,8 +246,6 @@ class WPSReader(object):
             return etree.fromstring(u.read())
         
         elif method == 'Post':
-            # FIXME
-            print 'url=%s' % url
             u = util.openURL(url, data, method='Post', username = username, password = password)
             return etree.fromstring(u.read())
             
@@ -342,7 +341,7 @@ class WPSExecution():
         self.dataInputs=[]
         self.processOutputs=[]
         
-    def buildRequest(self, identifier, inputs=[]):
+    def buildRequest(self, identifier, inputs=[], output=None):
         """
         Method to build a WPS process request.
         identifier: the requested process identifier
@@ -350,6 +349,7 @@ class WPSExecution():
             - LiteralData inputs are expressed as simple (key,value) tuples where key is the input identifier, value is the value
             - ComplexData inputs are express as (key, object) tuples, where key is the input identifier,
               and the object must contain a 'getXml()' method that returns an XML infoset to be included in the WPS request
+        output: optional identifier if process output is to be returned as a hyperlink reference
         """
         
         #<wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0" 
@@ -420,12 +420,13 @@ class WPSExecution():
         #     </wps:Output>
         #   </wps:ResponseDocument>
         # </wps:ResponseForm>
-        responseFormElement = etree.SubElement(root, util.nspath_eval('wps:ResponseForm', namespaces))
-        responseDocumentElement = etree.SubElement(responseFormElement, util.nspath_eval('wps:ResponseDocument', namespaces), 
-                                                   attrib={'storeExecuteResponse':'true', 'status':'true'} )
-        outputElement = etree.SubElement(responseDocumentElement, util.nspath_eval('wps:Output', namespaces), 
-                                                   attrib={'asReference':'true'} )
-        outputIdentifierElement = etree.SubElement(outputElement, util.nspath_eval('ows:Identifier', namespaces)).text = "OUTPUT"
+        if output is not None:
+            responseFormElement = etree.SubElement(root, util.nspath_eval('wps:ResponseForm', namespaces))
+            responseDocumentElement = etree.SubElement(responseFormElement, util.nspath_eval('wps:ResponseDocument', namespaces), 
+                                                       attrib={'storeExecuteResponse':'true', 'status':'true'} )
+            outputElement = etree.SubElement(responseDocumentElement, util.nspath_eval('wps:Output', namespaces), 
+                                                       attrib={'asReference':'true'} )
+            outputIdentifierElement = etree.SubElement(outputElement, util.nspath_eval('ows:Identifier', namespaces)).text = output
                     
         return root
                 
@@ -468,6 +469,8 @@ class WPSExecution():
             return True
         elif (self.status=='ProcessStarted'):
             return False
+        elif (self.status=='ProcessAccepted' or self.status=='ProcessPaused'):
+            return False
         else:
             raise Exception('Unknown process execution status: %s' % self.status)
         
@@ -489,17 +492,29 @@ class WPSExecution():
         
         if self.isSucceded():
             for output in self.processOutputs:
-                # 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
-                url = output.reference
-                spliturl=url.split('?')
-                u = util.openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
-                # extract output filepath from URL ?id paramater
-                if filepath is None:
-                    filepath = spliturl[1].split('=')[1]
-                out = open(filepath, 'wb')
-                out.write(u.read())
-                out.close()
-                print 'Output written to file: %s' %filepath
+                if output.reference is not None:
+                    # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
+                    # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
+                    url = output.reference
+                    if '?' in url:
+                        spliturl=url.split('?')
+                        u = util.openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
+                        # extract output filepath from URL query string
+                        if filepath is None:
+                            filepath = spliturl[1].split('=')[1]
+                    else:
+                        u = util.openURL(url, '', method='Get', username = self.username, password = self.password)
+                        # extract output filepath from base URL
+                        if filepath is None:
+                            filepath = url.split('/')[-1]
+                            print 'filepath=%s' % filepath
+                    out = open(filepath, 'wb')
+                    out.write(u.read())
+                    out.close()
+                    print 'Output written to file: %s' %filepath
+                    
+                if output.data is not None:
+                    print output.data
             
         else:
             raise Exception("Execution not successfully completed: status=%s" % self.status)
@@ -623,6 +638,25 @@ class InputOutput(object):
         self.allowedValues = []
         self.supportedValues = []
         self.defaultValue = None
+        self.dataType = None
+        
+    def _parseData(self, element):
+        """
+        Method to parse a "Data" element
+        """
+        
+        # <ns0:Data>
+        #        <ns0:ComplexData mimeType="text/plain">
+        #             7504912.93758151 -764109.175074507,7750849.82379226 -22141.8611641468,8561828.42371234 -897195.923493867,7724946.16844165 -602984.014261927 
+        #        </ns0:ComplexData>
+        # </ns0:Data>
+        #util.nspath('Data', ns=WPS_NAMESPACE)
+        complexDataElement = element.find( util.nspath('ComplexData', ns=WPS_NAMESPACE) )
+        if complexDataElement is not None:
+            self.dataType = "ComplexData"
+            
+        print 'found: %s' % complexDataElement
+
         
     def _parseLiteralData(self, element, literalElementName):
         """
@@ -735,6 +769,10 @@ class Output(InputOutput):
         # superclass initializer
         super(Output,self).__init__(outputElement)
         
+        self.reference = None
+        self.mimeType = None
+        self.data = None
+        
         # <ns:Reference encoding="UTF-8" mimeType="text/csv"
         #     href="http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e" />
         referenceElement = outputElement.find( util.nspath('Reference', ns=WPS_NAMESPACE) )
@@ -748,6 +786,21 @@ class Output(InputOutput):
         # <ComplexData>
         self._parseComplexData(outputElement, 'ComplexOutput')
         
+        # <Data>
+        dataElement = outputElement.find( util.nspath('Data', ns=WPS_NAMESPACE) )       
+        # <ns0:Data>
+        #        <ns0:ComplexData mimeType="text/plain">
+        #             7504912.93758151 -764109.175074507,7750849.82379226 -22141.8611641468,8561828.42371234 -897195.923493867,7724946.16844165 -602984.014261927 
+        #        </ns0:ComplexData>
+        # </ns0:Data>
+        #util.nspath('Data', ns=WPS_NAMESPACE)
+        if dataElement is not None:
+            complexDataElement = dataElement.find( util.nspath('ComplexData', ns=WPS_NAMESPACE) )
+            if complexDataElement is not None:
+                self.dataType = "ComplexData"
+                self.mimeType = complexDataElement.get('mimeType')
+                self.data = complexDataElement.text
+                    
 class WPSException:
     """
     Class representing an exception raised by a WPS.

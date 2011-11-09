@@ -1,6 +1,6 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
-from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WPSExecution, WFSQuery, GMLMultiPolygonFeatureCollection
+from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection
 from owslib.wps_utils import dump
 
 # instantiate WPS client
@@ -67,7 +67,8 @@ inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),
            ("SUMMARIZE_FEATURE_ATTRIBUTE","true"),
            ("FEATURE_COLLECTION", featureCollection)
           ]
-execution = wps.execute(processid, inputs)
+output = "OUTPUT"
+execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
 #request = open('../tests/USGSExecuteRequest1.xml','r').read()
 #execution = wps.execute(None, [], request=request)
@@ -109,7 +110,8 @@ inputs =  [ ("FEATURE_ATTRIBUTE_NAME","the_geom"),
             ("SUMMARIZE_FEATURE_ATTRIBUTE","false"),
             ("FEATURE_COLLECTION", featureCollection)
            ]
-execution = wps.execute(processid, inputs)
+output = "OUTPUT"
+execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
 #request = open('../tests/USGSExecuteRequest3.xml','r').read()
 #execution = wps.execute(None, [], request=request)
@@ -122,5 +124,5 @@ if execution.isSucceded():
     execution.getOutput(filepath='/tmp/output.csv')
 else:
     for ex in execution.errors:
-        print 'Error: code=%s, locator=%s, text=%s' % (self.code, self.locator, self.text)
+        print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
     
