@@ -9,7 +9,7 @@
 import sys
 import getopt
 import os
-from owslib.wps import WebProcessingService
+from owslib.wps import WebProcessingService, monitorExecution
 
 def usage():
     print  """
@@ -119,14 +119,7 @@ elif request == 'Execute':
         usage()
         sys.exit(5)
     execution = wps.execute(None, [], request=xml)
-    while execution.isComplete()==False:
-        execution.checkStatus(sleepSecs=3)
-    print 'Execution status: %s' % execution.status
-    if execution.isSucceded():
-        execution.getOutput(filepath='/tmp/output.csv')
-    else:
-        for ex in execution.errors:
-            print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
+    monitorExecution(execution)
     
 else:
     print '\nERROR: Unknown request type'

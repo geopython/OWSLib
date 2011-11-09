@@ -1,6 +1,6 @@
 # Example script that performs a set of (small) live requests versus the live PML WPS service
 
-from owslib.wps import WebProcessingService
+from owslib.wps import WebProcessingService, monitorExecution
 
 # instantiate WPS client
 verbose = False
@@ -35,13 +35,4 @@ processid = "v.net.path"
 inputs = [ ("input","http://rsg.pml.ac.uk/wps/example/graph.gml"),
            ("file","1 -960123.1421801624 4665723.56559387 -101288.65106088226 5108200.011823481")]
 execution = wps.execute(processid, inputs)
-
-while execution.isComplete()==False:
-    execution.checkStatus(sleepSecs=3)
-    
-print 'Execution status: %s' % execution.status
-if execution.isSucceded():
-    execution.getOutput()
-else:
-    for ex in execution.errors:
-        print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
+monitorExecution(execution)

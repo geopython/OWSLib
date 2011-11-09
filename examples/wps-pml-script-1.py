@@ -1,6 +1,6 @@
 # Example script that performs a set of (small) live requests versus the live PML WPS service
 
-from owslib.wps import WebProcessingService
+from owslib.wps import WebProcessingService, monitorExecution
 
 # instantiate WPS client
 verbose = False
@@ -34,15 +34,7 @@ inputs = [ ("inputImage","http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img"),
 output = "outputImage"
 execution = wps.execute(processid, inputs, output)
 
-while execution.isComplete()==False:
-    execution.checkStatus(sleepSecs=3)
-    
-print 'Execution status: %s' % execution.status
-if execution.isSucceded():
-    execution.getOutput()
-else:
-    for ex in execution.errors:
-        print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
+monitorExecution(execution)
         
 # 3b) Execute
 # GET request: http://rsg.pml.ac.uk/wps/generic.cgi?request=Execute&service=WPS&version=1.0.0&identifier=reprojectCoords&datainputs=[coords=http://rsg.pml.ac.uk/wps/testdata/coords.txt;outputSRS=EPSG:32630;inputSRS=EPSG:4326]
@@ -52,12 +44,4 @@ inputs = [ ("coords","http://rsg.pml.ac.uk/wps/testdata/coords.txt"),
            ("inputSRS","EPSG:4326") ]
 execution = wps.execute(processid, inputs)
 
-while execution.isComplete()==False:
-    execution.checkStatus(sleepSecs=3)
-    
-print 'Execution status: %s' % execution.status
-if execution.isSucceded():
-    execution.getOutput()
-else:
-    for ex in execution.errors:
-        print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
+monitorExecution(execution)

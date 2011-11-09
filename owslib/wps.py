@@ -485,13 +485,18 @@ class WPSExecution():
         
     def getOutput(self, filepath=None):
         """
-        Method to retrieve the output of a WPS process from the remote server.
+        Method to write the output of a WPS process to a file: 
+        either retrieve the referenced file from the server, or write out the content of response embedded output.
         
-        filepath: optional path to the output file, otherwise a file will be created in the local directory with the name assigned by the server.
+        filepath: optional path to the output file, otherwise a file will be created in the local directory with the name assigned by the server, 
+                  or default name 'wps.out' for embedded output.
         """
         
         if self.isSucceded():
+            content = ''
             for output in self.processOutputs:
+                
+                # ExecuteResponse contains reference to server-side output
                 if output.reference is not None:
                     # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
                     # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
@@ -507,14 +512,21 @@ class WPSExecution():
                         # extract output filepath from base URL
                         if filepath is None:
                             filepath = url.split('/')[-1]
-                            print 'filepath=%s' % filepath
-                    out = open(filepath, 'wb')
-                    out.write(u.read())
-                    out.close()
-                    print 'Output written to file: %s' %filepath
+                    content = content + u.read()
+                 
+                # ExecuteResponse contain embedded output   
+                if len(output.data)>0:
+                    if filepath is None:
+                        filepath = 'wps.out'
+                    for data in output.data:
+                        content = content + data
                     
-                if output.data is not None:
-                    print output.data
+            # write out content
+            if content is not '':
+                out = open(filepath, 'wb')
+                out.write(content)
+                out.close()
+                print 'Output written to file: %s' %filepath
             
         else:
             raise Exception("Execution not successfully completed: status=%s" % self.status)
@@ -771,7 +783,7 @@ class Output(InputOutput):
         
         self.reference = None
         self.mimeType = None
-        self.data = None
+        self.data = []
         
         # <ns:Reference encoding="UTF-8" mimeType="text/csv"
         #     href="http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e" />
@@ -786,20 +798,50 @@ class Output(InputOutput):
         # <ComplexData>
         self._parseComplexData(outputElement, 'ComplexOutput')
         
-        # <Data>
-        dataElement = outputElement.find( util.nspath('Data', ns=WPS_NAMESPACE) )       
+        # <Data>   
         # <ns0:Data>
         #        <ns0:ComplexData mimeType="text/plain">
         #             7504912.93758151 -764109.175074507,7750849.82379226 -22141.8611641468,8561828.42371234 -897195.923493867,7724946.16844165 -602984.014261927 
         #        </ns0:ComplexData>
         # </ns0:Data>
-        #util.nspath('Data', ns=WPS_NAMESPACE)
+        # OR:
+        # <ns0:Data>
+        #     <ns0:ComplexData encoding="UTF-8" mimeType="text/xml" schema="http://schemas.opengis.net/gml/2.1.2/feature.xsd">
+        #         <ns3:FeatureCollection xsi:schemaLocation="http://ogr.maptools.org/ output_0n7ij9D.xsd" xmlns:ns3="http://ogr.maptools.org/">
+        #             <gml:boundedBy xmlns:gml="http://www.opengis.net/gml">
+        #                 <gml:Box>
+        #                     <gml:coord><gml:X>-960123.1421801626</gml:X><gml:Y>4665723.56559387</gml:Y></gml:coord>
+        #                     <gml:coord><gml:X>-101288.6510608822</gml:X><gml:Y>5108200.011823481</gml:Y></gml:coord>
+        #                 </gml:Box>
+        #            </gml:boundedBy>                         
+        #            <gml:featureMember xmlns:gml="http://www.opengis.net/gml">
+        #                <ns3:output fid="F0">
+        #                    <ns3:geometryProperty><gml:LineString><gml:coordinates>-960123.142180162365548,4665723.565593870356679,0 -960123.142180162365548,4665723.565593870356679,0 -960123.142180162598379,4665723.565593870356679,0 -960123.142180162598379,4665723.565593870356679,0 -711230.141176006174646,4710278.48552671354264,0 -711230.141176006174646,4710278.48552671354264,0 -623656.677859728806652,4848552.374973464757204,0 -623656.677859728806652,4848552.374973464757204,0 -410100.337491964863148,4923834.82589447684586,0 -410100.337491964863148,4923834.82589447684586,0 -101288.651060882242746,5108200.011823480948806,0 -101288.651060882242746,5108200.011823480948806,0 -101288.651060882257298,5108200.011823480948806,0 -101288.651060882257298,5108200.011823480948806,0</gml:coordinates></gml:LineString></ns3:geometryProperty>
+        #                    <ns3:cat>1</ns3:cat>
+        #                    <ns3:id>1</ns3:id>
+        #                    <ns3:fcat>0</ns3:fcat>
+        #                    <ns3:tcat>0</ns3:tcat>
+        #                    <ns3:sp>0</ns3:sp>
+        #                    <ns3:cost>1002619.181</ns3:cost>
+        #                    <ns3:fdist>0</ns3:fdist>
+        #                    <ns3:tdist>0</ns3:tdist>
+        #                </ns3:output>
+        #            </gml:featureMember>
+        #        </ns3:FeatureCollection>
+        #     </ns0:ComplexData>
+        # </ns0:Data>
+        dataElement = outputElement.find( util.nspath('Data', ns=WPS_NAMESPACE) )    
         if dataElement is not None:
             complexDataElement = dataElement.find( util.nspath('ComplexData', ns=WPS_NAMESPACE) )
             if complexDataElement is not None:
                 self.dataType = "ComplexData"
                 self.mimeType = complexDataElement.get('mimeType')
-                self.data = complexDataElement.text
+                #print etree.tostring(complexDataElement)
+                if complexDataElement.text is not None and complexDataElement.text.strip() is not '':
+                    self.data.append(complexDataElement.text.strip())
+                for child in complexDataElement:
+                    self.data.append(etree.tostring(child))
+                
                     
 class WPSException:
     """
@@ -1023,3 +1065,19 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
         idElement = etree.SubElement(boxElement, util.nspath_eval('gml:ID', namespaces))
         idElement.text = "0"
         return dataElement
+    
+def monitorExecution(execution, sleepSecs=3, filepath=None):
+    '''
+    Convenience method to monitor the status of a WPS execution till it completes (succesfully or not),
+    and write the output to file after a succesfull job completion.
+    '''
+    
+    while execution.isComplete()==False:
+        execution.checkStatus(sleepSecs=sleepSecs)
+        print 'Execution status: %s' % execution.status
+        
+    if execution.isSucceded():
+        execution.getOutput(filepath=filepath)
+    else:
+        for ex in execution.errors:
+            print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)

@@ -1,6 +1,6 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
-from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection
+from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
 from owslib.wps_utils import dump
 
 # instantiate WPS client
@@ -73,15 +73,9 @@ execution = wps.execute(processid, inputs, output = "OUTPUT")
 #request = open('../tests/USGSExecuteRequest1.xml','r').read()
 #execution = wps.execute(None, [], request=request)
 
-while execution.isComplete()==False:
-    execution.checkStatus(sleepSecs=3)
-    
-print 'Execution status: %s' % execution.status
-if execution.isSucceded():
-    execution.getOutput(filepath='/tmp/output.csv')
-else:
-    for ex in execution.errors:
-        print 'Error: code=%s, locator=%s, text=%s' % (self.code, self.locator, self.text)
+# The monitorExecution() function can be conveniently used to wait for the process termination
+# It will eventually write the process output to the specified file, or to the file specified by the server.
+monitorExecution(execution)    
     
 # 3b) Execute
 # Submits an HTTP POST "Execute" process request to the WPS service, keeps checking the status of the request,
@@ -115,14 +109,4 @@ execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
 #request = open('../tests/USGSExecuteRequest3.xml','r').read()
 #execution = wps.execute(None, [], request=request)
-
-while execution.isComplete()==False:
-    execution.checkStatus(sleepSecs=3)
-    
-print 'Execution status: %s' % execution.status
-if execution.isSucceded():
-    execution.getOutput(filepath='/tmp/output.csv')
-else:
-    for ex in execution.errors:
-        print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
-    
+monitorExecution(execution)    
