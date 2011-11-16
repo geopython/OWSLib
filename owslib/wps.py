@@ -919,7 +919,7 @@ class WPSException:
     def __init__(self, root):
         self.code = root.attrib.get("exceptionCode", None)
         self.locator = root.attrib.get("locator", None)
-        textEl = root.find( util.nspath('ExceptionText', ns=DEFAULT_OWS_NAMESPACE) )
+        textEl = root.find( util.nspath('ExceptionText', ns=getNamespace(root)) )
         if textEl is not None:
             self.text = textEl.text
         else:
