@@ -78,7 +78,7 @@ execution = wps.execute(processid, inputs, output = "OUTPUT")
 # The monitorExecution() function can be conveniently used to wait for the process termination
 # It will eventually write the process output to the specified file, or to the file specified by the server.
 monitorExecution(execution)    
-    
+'''    
 # 3b) Execute
 # Submits an HTTP POST "Execute" process request to the WPS service, keeps checking the status of the request,
 # and retrieves the output once the request terminates successfully (displaying any errors if found).
@@ -112,3 +112,4 @@ execution = wps.execute(processid, inputs, output = "OUTPUT")
 #request = open('../tests/USGSExecuteRequest3.xml','r').read()
 #execution = wps.execute(None, [], request=request)
 monitorExecution(execution)    
+'''

@@ -10,15 +10,15 @@ Client-side API for invoking WPS services.
 
 from etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE, \
-    OWS_NAMESPACE_1_0_0, ServiceIdentification, ServiceProvider, OperationsMetadata
+                       OWS_NAMESPACE_1_0_0, ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
 from wps_utils import build_get_url, dump, getTypedValue, parseText, getNamespace
 from xml.dom.minidom import parseString
 import util
 
 # the following namespaces should be inserted in ows.py
-WPS_NAMESPACE="http://www.opengis.net/wps/1.0.0"
-WPS_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
+WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
+WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
 
 WFS_NAMESPACE = 'http://www.opengis.net/wfs'
@@ -34,8 +34,9 @@ DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd'
 
 # list of namespaces used by this module
 namespaces = {
-    None : WPS_NAMESPACE,
-    'wps': WPS_NAMESPACE,
+    # FIXME ?
+    None : WPS_DEFAULT_NAMESPACE,
+    'wps': WPS_DEFAULT_NAMESPACE,
     'ows': DEFAULT_OWS_NAMESPACE,
     'xlink': XLINK_NAMESPACE,
     'xsi': XSI_NAMESPACE,
@@ -384,7 +385,7 @@ class WPSExecution():
         root.set('version', WPS_DEFAULT_VERSION)
         root.set('xmlns:ows', namespaces['ows'])
         root.set('xmlns:xlink', namespaces['xlink'])
-        root.set(util.nspath_eval('xsi:schemaLocation', namespaces), '%s %s' % (namespaces['wps'], WPS_SCHEMA_LOCATION) )
+        root.set(util.nspath_eval('xsi:schemaLocation', namespaces), '%s %s' % (namespaces['wps'], WPS_DEFAULT_SCHEMA_LOCATION) )
         
         # <ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
         identifierElement = etree.SubElement(root, util.nspath_eval('ows:Identifier', namespaces))
@@ -601,12 +602,11 @@ class WPSExecution():
         """
         Method to parse a WPS ExceptionReport document and populate this object's metadata.
         """
-        
         # set exception status, unless set already
         if self.status is None:
             self.status = "Exception"
             
-        for exceptionEl in root.findall( util.nspath('Exception', ns=DEFAULT_OWS_NAMESPACE) ):
+        for exceptionEl in root.findall( util.nspath('Exception', ns=getNamespace(root)) ):
             self.errors.append( WPSException(exceptionEl) )
 
 
@@ -615,28 +615,44 @@ class WPSExecution():
         Method to parse a WPS ExecuteResponse response document and populate this object's metadata.
         """
         
+        # retrieve WPS namespace directly from root element
+        wpsns = getNamespace(root)
+
         self.serviceInstance = root.get( 'serviceInstance' )
         self.statusLocation = root.get( 'statusLocation' )
-        # {http://www.opengis.net/wps/1.0.0}ProcessStarted
-        statusEl = root.find( util.nspath('Status/*', ns=WPS_NAMESPACE) )
-        self.status = statusEl.tag.split('}')[1]
-        self.process = Process(root.find(util.nspath('Process', ns=WPS_NAMESPACE)), verbose=self.verbose)
         
+        # <ns0:Status creationTime="2011-11-09T14:19:50Z">
+        #  <ns0:ProcessSucceeded>PyWPS Process v.net.path successfully calculated</ns0:ProcessSucceeded>
+        # </ns0:Status>
+        # OR
+        # <ns0:Status creationTime="2011-11-07T08:26:44.359-06:00">
+        #  <ns0:ProcessFailed>
+        #   <ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows/1.1">
+        #    <ows:Exception>
+        #     <ows:ExceptionText>Attribute null not found in feature collection</ows:ExceptionText>
+        #    </ows:Exception>
+        #   </ows:ExceptionReport>
+        #  </ns0:ProcessFailed>
+        # </ns0:Status>
+        statusEl = root.find( util.nspath('Status/*', ns=wpsns) )
+        self.status = statusEl.tag.split('}')[1]
         # exceptions ?
-        exceptionEl = statusEl.find( util.nspath('ExceptionReport', ns=DEFAULT_OWS_NAMESPACE) )
-        if exceptionEl is not None:
-            self._parseExceptionReport(exceptionEl)
+        for element in statusEl:
+            if element.tag.endswith('ExceptionReport'):
+                self._parseExceptionReport(element)
+        
+        self.process = Process(root.find(util.nspath('Process', ns=wpsns)), verbose=self.verbose)
         
         #<wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
         #                xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
-        for inputElement in root.findall( util.nspath('DataInputs/Input', ns='http://www.opengis.net/wps/1.0.0') ):
+        for inputElement in root.findall( util.nspath('DataInputs/Input', ns=wpsns) ):
             self.dataInputs.append( Input(inputElement) )
             if self.verbose==True:
                 dump(self.dataInputs[-1])
         
         # <ns:ProcessOutputs>
         # xmlns:ns="http://www.opengis.net/wps/1.0.0" 
-        for outputElement in root.findall( util.nspath('ProcessOutputs/Output', ns=WPS_NAMESPACE)  ):
+        for outputElement in root.findall( util.nspath('ProcessOutputs/Output', ns=wpsns)  ):
             self.processOutputs.append( Output(outputElement) )
             if self.verbose==True:
                 dump(self.processOutputs[-1])
