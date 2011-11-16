@@ -12,7 +12,7 @@ from etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE, \
     OWS_NAMESPACE_1_0_0, ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
-from wps_utils import build_get_url, dump, getTypedValue, parseText
+from wps_utils import build_get_url, dump, getTypedValue, parseText, getNamespace
 from xml.dom.minidom import parseString
 import util
 
@@ -111,17 +111,16 @@ class WebProcessingService(object):
         reader = WPSDescribeProcessReader(version=self.version, verbose=self.verbose)
         if xml:
             # read from stored XML file
-            process = reader.readFromString(xml)
+            rootElement = reader.readFromString(xml)
         else:
             # read from server
-            process = reader.readFromUrl(self.url, identifier)
+            rootElement = reader.readFromUrl(self.url, identifier)
             
         if self.verbose==True:
-            print util.xml2string(etree.tostring(process))
-            #print parseString(etree.tostring(process)).toprettyxml()
+            print util.xml2string(etree.tostring(rootElement))
 
         # build metadata objects
-        return self._parseProcessMetadata(process)
+        return self._parseProcessMetadata(rootElement)
         
     def execute(self, identifier, inputs, output=None, request=None, response=None):
         """
@@ -163,7 +162,7 @@ class WebProcessingService(object):
         
     def _parseProcessMetadata(self, rootElement):
         """
-        Method to parse a <ProcessDescription> XML element and returned the constructed Process object
+        Method to parse a <ProcessDescriptions> XML element and returned the constructed Process object
         """
         
         processDescriptionElement = rootElement.find( 'ProcessDescription' )
@@ -185,37 +184,58 @@ class WebProcessingService(object):
     def _parseCapabilitiesMetadata(self, root):         
         ''' Sets up capabilities metadata objects '''
         
-        # <ows:ServiceIdentification> metadata
-        serviceIdentificationElement=root.find( util.nspath('ServiceIdentification', ns=DEFAULT_OWS_NAMESPACE) )
-        #self.identification=ServiceIdentification(serviceIdentificationElement, namespace=OWS_NAMESPACE_1_1_0)
-        self.identification=ServiceIdentification(serviceIdentificationElement)
-        if self.verbose==True:
-            dump(self.identification)
+        # use the WPS namespace defined in the document root
+        wpsns = getNamespace(root)
         
-        # <ows:ServiceProvider> metadata
-        serviceProviderElement=root.find( util.nspath('ServiceProvider', ns=DEFAULT_OWS_NAMESPACE) )
-        self.provider=ServiceProvider(serviceProviderElement)  
-        if self.verbose==True:
-            dump(self.provider)
-        
-        # <ows:OperationsMetadata> metadata
-        for operationElement in root.find( util.nspath('OperationsMetadata', ns=DEFAULT_OWS_NAMESPACE)):
-            self.operations.append( OperationsMetadata(operationElement) )
-            if self.verbose==True:
-                dump(self.operations[-1])
+        # loop over children WITHOUT requiring a specific namespace
+        for element in root:
+            
+            # thie element's namespace
+            ns = getNamespace(element)
+            
+            # <ows:ServiceIdentification> metadata
+            if element.tag.endswith('ServiceIdentification'):
+                self.identification=ServiceIdentification(element, namespace=ns)
+                if self.verbose==True:
+                    dump(self.identification)
+                    
+            # <ows:ServiceProvider> metadata
+            elif element.tag.endswith('ServiceProvider'):
+                self.provider=ServiceProvider(element, namespace=ns)  
+                if self.verbose==True:
+                    dump(self.provider)
+                    
+            # <ns0:OperationsMetadata xmlns:ns0="http://www.opengeospatial.net/ows">
+            #   <ns0:Operation name="GetCapabilities">
+            #     <ns0:DCP>
+            #       <ns0:HTTP>
+            #         <ns0:Get xlink:href="http://ceda-wps2.badc.rl.ac.uk/wps?" xmlns:xlink="http://www.w3.org/1999/xlink" />
+            #       </ns0:HTTP>
+            #    </ns0:DCP>
+            #  </ns0:Operation>
+            #  ........
+            # </ns0:OperationsMetadata>
+            elif element.tag.endswith('OperationsMetadata'):
+                for child in element.findall( util.nspath('Operation', ns=ns) ):
+                    self.operations.append( OperationsMetadata(child, namespace=ns) )
+                    if self.verbose==True:
+                        dump(self.operations[-1])
+               
+            # <wps:ProcessOfferings>
+            #   <wps:Process ns0:processVersion="1.0.0">
+            #     <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.filemanagement.ReceiveFiles</ows:Identifier>
+            #     <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.filemanagement.ReceiveFiles</ows:Title>
+            #   </wps:Process>
+            #   ......
+            # </wps:ProcessOfferings>
+            elif element.tag.endswith('ProcessOfferings'):
+                for child in element.findall( util.nspath('Process', ns=ns) ):
+                    p = Process(child, verbose=self.verbose)
+                    self.processes.append(p)
+                    if self.verbose==True:
+                        dump(self.processes[-1])
+
                    
-        # <wps:ProcessOfferings>
-        #   <wps:Process ns0:processVersion="1.0.0">
-        #     <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.filemanagement.ReceiveFiles</ows:Identifier>
-        #     <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.filemanagement.ReceiveFiles</ows:Title>
-        #   </wps:Process>
-        #   ......
-        # </wps:ProcessOfferings>
-        for processElement in root.find( util.nspath('ProcessOfferings', ns=WPS_NAMESPACE)):
-            p = Process(processElement, verbose=self.verbose)
-            self.processes.append(p)
-            if self.verbose==True:
-                dump(self.processes[-1])
         
 class WPSReader(object):
     """
@@ -638,14 +658,20 @@ class InputOutput(object):
     
     def __init__(self, element):
                 
-        # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">SUMMARIZE_TIMESTEP</ows:Identifier>
-        self.identifier = parseText( element.find( util.nspath('Identifier', ns=DEFAULT_OWS_NAMESPACE) ) )
+        # loop over sub-elements without requiring a specific namespace
+        for subElement in element:
+            
+            # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">SUMMARIZE_TIMESTEP</ows:Identifier>
+            if subElement.tag.endswith('Identifier'):
+                self.identifier = parseText( subElement )
 
-        # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Summarize Timestep</ows:Title>
-        self.title = parseText( element.find( util.nspath('Title', ns=DEFAULT_OWS_NAMESPACE) ) )
+            # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Summarize Timestep</ows:Title>
+            elif subElement.tag.endswith('Title'):
+                self.title = parseText( subElement )
         
-        # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">If selected, processing output will include columns with summarized statistics for all feature attribute values for each timestep</ows:Abstract>
-        self.abstract = parseText( element.find( util.nspath('Abstract', ns=DEFAULT_OWS_NAMESPACE) ) )
+            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">If selected, processing output will include columns with summarized statistics for all feature attribute values for each timestep</ows:Abstract>
+            elif subElement.tag.endswith('Abstract'):
+                self.abstract = parseText( subElement )
                 
         self.allowedValues = []
         self.supportedValues = []
@@ -663,12 +689,9 @@ class InputOutput(object):
         #        </ns0:ComplexData>
         # </ns0:Data>
         #util.nspath('Data', ns=WPS_NAMESPACE)
-        complexDataElement = element.find( util.nspath('ComplexData', ns=WPS_NAMESPACE) )
+        complexDataElement = element.find( util.nspath('ComplexData', ns=getNamespace(element)) )
         if complexDataElement is not None:
             self.dataType = "ComplexData"
-            
-        print 'found: %s' % complexDataElement
-
         
     def _parseLiteralData(self, element, literalElementName):
         """
@@ -691,13 +714,19 @@ class InputOutput(object):
         # </LiteralData>
         literalDataElement = element.find( literalElementName )
         if literalDataElement is not None:
-            dataTypeElement = literalDataElement.find( util.nspath('DataType', ns=DEFAULT_OWS_NAMESPACE) ) 
-            self.dataType = dataTypeElement.get( util.nspath("reference", ns=DEFAULT_OWS_NAMESPACE) ).split(':')[1]
-            for value in literalDataElement.findall( util.nspath('AllowedValues/Value', ns=DEFAULT_OWS_NAMESPACE) ):
-                self.allowedValues.append( getTypedValue(self.dataType, value.text) )
-            defaultValue = literalDataElement.find( 'DefaultValue' ) 
-            if defaultValue is not None:
-                self.defaultValue = getTypedValue(self.dataType, defaultValue.text)    
+            self.dataType = 'LiteralData'
+            for subElement in literalDataElement:
+                subns = getNamespace(subElement)
+                if subElement.tag.endswith('DataType'):
+                    self.dataType = subElement.get( util.nspath("reference", ns=subns) ).split(':')[1]
+                elif subElement.tag.endswith('AllowedValues'):
+                    for value in subElement.findall( util.nspath('Value', ns=subns) ):
+                        self.allowedValues.append( getTypedValue(self.dataType, value.text) )
+                elif subElement.tag.endswith('DefaultValue'):
+                    self.defaultValue = getTypedValue(self.dataType, subElement.text)
+                elif subElement.tag.endswith('AnyValue'):
+                    self.allowedValues.append( getTypedValue(self.dataType, 'AnyValue') )
+                    
 
     def _parseComplexData(self, element, complexDataElementName):
         """
@@ -725,10 +754,26 @@ class InputOutput(object):
         #        </Format>
         #    </Supported>
         # </ComplexData>
+        # OR
+        # <ComplexOutput defaultEncoding="UTF-8" defaultFormat="text/XML" defaultSchema="NONE">
+        #     <SupportedComplexData>
+        #         <Format>text/XML</Format>
+        #         <Encoding>UTF-8</Encoding>
+        #         <Schema>NONE</Schema>
+        #     </SupportedComplexData>
+        # </ComplexOutput>
+        
         complexDataElement = element.find( complexDataElementName )
         if complexDataElement is not None:
             self.dataType = "ComplexData"
             
+            for supportedComlexDataElement in complexDataElement.findall( 'SupportedComplexData' ):
+                self.supportedValues.append( ComplexData( mimeType=parseText( supportedComlexDataElement.find( 'Format' ) ),
+                                                          encoding=parseText( supportedComlexDataElement.find( 'Encoding' ) ),
+                                                          schema=parseText( supportedComlexDataElement.find( 'Schema' ) ) 
+                                                         ) 
+                )
+                
             for formatElement in complexDataElement.findall( 'Supported/Format'):
                 self.supportedValues.append( ComplexData( mimeType=parseText( formatElement.find( 'MimeType' ) ),
                                                           encoding=parseText( formatElement.find( 'Encoding' ) ),
@@ -755,14 +800,18 @@ class Input(InputOutput):
         super(Input,self).__init__(inputElement)
         
         # <Input maxOccurs="1" minOccurs="0">
+        # OR
+        # <MinimumOccurs>1</MinimumOccurs>
+        self.minOccurs = -1
         if inputElement.get("minOccurs") is not None:
             self.minOccurs = int( inputElement.get("minOccurs") )
-        else:
-            self.minOccurs = -1
+        if inputElement.find('MinimumOccurs') is not None:
+            self.minOccurs = int( parseText( inputElement.find('MinimumOccurs') ) )  
+        self.maxOccurs = -1
         if inputElement.get("maxOccurs") is not None:
             self.maxOccurs = int( inputElement.get("maxOccurs") )
-        else:
-            self.maxOccurs = -1
+        if inputElement.find('MaximumOccurs') is not None:
+            self.maxOccurs = int( parseText( inputElement.find('MaximumOccurs') ) )       
         
         # <LiteralData>
         self._parseLiteralData(inputElement, 'LiteralData')
@@ -785,9 +834,12 @@ class Output(InputOutput):
         self.mimeType = None
         self.data = []
         
+        # extract wps namespace from outputElement itself
+        wpsns = getNamespace(outputElement)
+        
         # <ns:Reference encoding="UTF-8" mimeType="text/csv"
         #     href="http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e" />
-        referenceElement = outputElement.find( util.nspath('Reference', ns=WPS_NAMESPACE) )
+        referenceElement = outputElement.find( util.nspath('Reference', ns=wpsns) )
         if referenceElement is not None:
             self.reference = referenceElement.get('href')
             self.mimeType = referenceElement.get('mimeType')
@@ -795,7 +847,7 @@ class Output(InputOutput):
         # <LiteralData>
         self._parseLiteralData(outputElement, 'LiteralData')
         
-        # <ComplexData>
+        # <ComplexData> or <ComplexOutput>
         self._parseComplexData(outputElement, 'ComplexOutput')
         
         # <Data>   
@@ -830,9 +882,9 @@ class Output(InputOutput):
         #        </ns3:FeatureCollection>
         #     </ns0:ComplexData>
         # </ns0:Data>
-        dataElement = outputElement.find( util.nspath('Data', ns=WPS_NAMESPACE) )    
+        dataElement = outputElement.find( util.nspath('Data', ns=wpsns) )    
         if dataElement is not None:
-            complexDataElement = dataElement.find( util.nspath('ComplexData', ns=WPS_NAMESPACE) )
+            complexDataElement = dataElement.find( util.nspath('ComplexData', ns=wpsns) )
             if complexDataElement is not None:
                 self.dataType = "ComplexData"
                 self.mimeType = complexDataElement.get('mimeType')
@@ -873,19 +925,29 @@ class Process(object):
         self._root = elem
         self.verbose = verbose
         
+        wpsns = getNamespace(elem)
+        
         # <ProcessDescription statusSupported="true" storeSupported="true" ns0:processVersion="1.0.0">
-        self.processVersion = elem.get( util.nspath('processVersion', ns=WPS_NAMESPACE) )
+        self.processVersion = elem.get( util.nspath('processVersion', ns=wpsns) )
         self.statusSupported = bool( elem.get( "statusSupported" ) )
         self.storeSupported = bool( elem.get( "storeSupported" ) )
         
-        # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
-        self.identifier = parseText( elem.find( util.nspath('Identifier', ns=DEFAULT_OWS_NAMESPACE) ) )
+        for child in elem:
+            
+            # this element's namespace
+            ns = getNamespace(child)
+            
+            # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
+            if child.tag.endswith('Identifier'):
+                self.identifier = parseText( child )
         
-        # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Feature Weighted Grid Statistics</ows:Title>
-        self.title =  parseText( elem.find( util.nspath('Title', ns=DEFAULT_OWS_NAMESPACE) ) )
+            # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Feature Weighted Grid Statistics</ows:Title>
+            elif child.tag.endswith('Title'):
+                self.title =  parseText( child )
         
-        # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">This algorithm generates area weighted statistics of a gridded dataset for a set of vector polygon features. Using the bounding-box that encloses the feature data and the time range, if provided, a subset of the gridded dataset is requested from the remote gridded data server. Polygon representations are generated for cells in the retrieved grid. The polygon grid-cell representations are then projected to the feature data coordinate reference system. The grid-cells are used to calculate per grid-cell feature coverage fractions. Area-weighted statistics are then calculated for each feature using the grid values and fractions as weights. If the gridded dataset has a time range the last step is repeated for each time step within the time range or all time steps if a time range was not supplied.</ows:Abstract>
-        self.abstract = parseText( elem.find( util.nspath('Abstract', ns=DEFAULT_OWS_NAMESPACE) ) )
+            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">This algorithm generates area weighted statistics of a gridded dataset for a set of vector polygon features. Using the bounding-box that encloses the feature data and the time range, if provided, a subset of the gridded dataset is requested from the remote gridded data server. Polygon representations are generated for cells in the retrieved grid. The polygon grid-cell representations are then projected to the feature data coordinate reference system. The grid-cells are used to calculate per grid-cell feature coverage fractions. Area-weighted statistics are then calculated for each feature using the grid values and fractions as weights. If the gridded dataset has a time range the last step is repeated for each time step within the time range or all time steps if a time range was not supplied.</ows:Abstract>
+            elif child.tag.endswith('Abstract'):
+                self.abstract = parseText( child )
         
         if self.verbose==True:
             dump(self)
@@ -1081,3 +1143,38 @@ def monitorExecution(execution, sleepSecs=3, filepath=None):
     else:
         for ex in execution.errors:
             print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
+
+def printValue(value):
+    '''
+    Utility method to format a value for printing.
+    '''
+    
+    # ComplexData type
+    if isinstance(value, ComplexData):
+        return "mimeType=%s, encoding=%s, schema=%s" % (value.mimeType, value.encoding, value.schema)
+    # other type
+    else:
+        return value
+
+def printInputOutput(value, indent=''):
+    '''
+    Utility method to inspect an input/output element.
+    '''
+
+    # InputOutput fields
+    print '%s identifier=%s, title=%s, abstract=%s, data type=%s' % (indent, value.identifier, value.title, value.abstract, value.dataType)
+    for val in value.allowedValues:
+        print '%s Allowed Value: %s' % (indent, printValue(val))
+    for val in value.supportedValues:
+        print '%s Supported Value: %s' % (indent, printValue(val))
+    print '%s Default Value: %s ' % (indent, printValue(value.defaultValue))
+    
+    # Input fields
+    if isinstance(value, Input):
+        print '%s minOccurs=%d, maxOccurs=%d' % (indent, value.minOccurs, value.maxOccurs)
+        
+    # Output fields
+    if isinstance(value, Output):
+        print '%s reference=%s, mimeType=%s' % (indent, value.reference, value.mimeType)
+        for datum in value.data:
+            print '%s Data Value: %s' % (indent, printValue(datum))

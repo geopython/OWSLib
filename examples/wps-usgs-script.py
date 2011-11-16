@@ -1,6 +1,6 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
-from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
+from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution, printInputOutput
 from owslib.wps_utils import dump
 
 # instantiate WPS client
@@ -34,9 +34,11 @@ print 'WPS Process: identifier=%s' % process.identifier
 print 'WPS Process: title=%s' % process.title
 print 'WPS Process: abstract=%s' % process.abstract
 for input in process.dataInputs:
-    print 'Process input: identifier=%s, data type=%s, minOccurs=%d, maxOccurs=%d' % (input.identifier, input.dataType, input.minOccurs, input.maxOccurs)
+    print 'Process input:'
+    printInputOutput(input, indent='\t')
 for output in process.processOutputs:
-    print 'Process output: identifier=%s, data type=%s' % (output.identifier, output.dataType)
+    print 'Process output:'
+    printInputOutput(output, indent='\t')
 
 # 3a) Execute
 # Submits an HTTP POST "Execute" process request to the WPS service, keeps checking the status of the request,

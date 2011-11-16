@@ -7,14 +7,14 @@ import cgi
 from etree import etree
 from urllib import urlencode
 
-def getNamespace(tag):
+def getNamespace(element):
     '''
-    Utility method to extract the namespace from an XML tag encoded as {namespace}localname.
+    Utility method to extract the namespace from an XML element tag encoded as {namespace}localname.
     '''
-    if tag[0]=='{':
-        return tag[1:].split("}")[0]
+    if element.tag[0]=='{':
+        return element.tag[1:].split("}")[0]
     else:
-        return None
+        return ""
 
 def build_get_url(base_url, params):
     """

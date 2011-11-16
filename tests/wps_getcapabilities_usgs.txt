@@ -1,6 +1,6 @@
 Python doctest file to simulate a WPS GetCapabilities invocation.
 This test does not execute any live HTTP request, rather it parses XML files containing pre-made HTTP responses.
-To run: python -m doctest wps_getcapabilities.txt
+To run: python -m doctest wps_getcapabilities_usgs.txt
 ----------------------------------------------------------------------------------------------------------------
 
 Import python modules
