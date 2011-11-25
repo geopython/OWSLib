@@ -305,7 +305,7 @@ class MD_DataIdentification(object):
         # from the one containing an EX_GeographicBoundingBox
         val = None
         for e in md.findall(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:geographicElement', namespaces)):
-            if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)):
+            if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None:
                 val = e
                 break
 
