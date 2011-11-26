@@ -491,7 +491,7 @@ class CswRecord(object):
     def __init__(self, record):
 
         if hasattr(record, 'getroot'):  # standalone document
-            self.xml = etree.tostring(md.getroot())
+            self.xml = etree.tostring(record.getroot())
         else:  # part of a larger document
             self.xml = etree.tostring(record)
 
