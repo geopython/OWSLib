@@ -1720,7 +1720,7 @@ axisorder_xy = [
 class Crs(object):
     """Initialize a CRS construct"""
     def __init__(self, crs):
-        self.urn = crs
+        self.id = crs
 
         values = crs.split(':')
 
