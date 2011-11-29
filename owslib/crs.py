@@ -1721,8 +1721,15 @@ class Crs(object):
     """Initialize a CRS construct"""
     def __init__(self, crs):
         self.id = crs
+        self.naming_authority = None
+        self.category = None
+        self.type = None
+        self.authority = None
+        self.version = None
+        self.code = -1
+        self.axisorder = 'xy'
 
-        values = crs.split(':')
+        values = self.id.split(':')
 
         if len(values) > 2:  # it's a URN style
             self.naming_authority = values[1]
@@ -1738,8 +1745,11 @@ class Crs(object):
                 self.axisorder = 'yx'
             else:
                 self.axisorder = 'xy'
-        else:  # it's an authority:code code
+        elif len(values) == 2:  # it's an authority:code code
             self.authority = values[0]
             self.code = values[1]
             self.axisorder = 'xy'
-
+        elif self.id.find('#') != -1:  # it's a URI
+            self.authority = 'EPSG'
+            self.code = int(self.id.split('#')[-1])
+            self.axisorder = 'xy'
