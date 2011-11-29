@@ -16,7 +16,7 @@ Currently supports version 1.1.0 (06-121r3).
 """
 
 from owslib.etree import etree
-from owslib import util
+from owslib import crs, util
 
 OWS_NAMESPACE_1_0_0 = 'http://www.opengis.net/ows'
 OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
@@ -157,24 +157,36 @@ class BoundingBox(object):
         self.maxy = None
 
         val = elem.attrib.get('crs')
-        self.crs = util.testXMLValue(val, True)
+        if val is not None:
+            self.crs = crs.Crs(val)
+        else:
+            self.crs = None
 
         val = elem.attrib.get('dimensions')
-        self.dimensions = util.testXMLValue(val, True)
+        if val is not None:
+            self.dimensions = int(util.testXMLValue(val, True))
+        else:  # assume 2
+            self.dimensions = 2
 
         val = elem.find(util.nspath('LowerCorner', namespace))
         tmp = util.testXMLValue(val)
         if tmp is not None:
             xy = tmp.split()
             if len(xy) > 1:
-                self.minx, self.miny = xy[0], xy[1] 
+                if self.crs is not None and self.crs.axisorder == 'yx':
+                    self.minx, self.miny = xy[1], xy[0] 
+                else:
+                    self.minx, self.miny = xy[0], xy[1]
 
         val = elem.find(util.nspath('UpperCorner', namespace))
         tmp = util.testXMLValue(val)
         if tmp is not None:
             xy = tmp.split()
             if len(xy) > 1:
-                self.maxx, self.maxy = xy[0], xy[1]
+                if self.crs is not None and self.crs.axisorder == 'yx':
+                    self.maxx, self.maxy = xy[1], xy[0]
+                else:
+                    self.maxx, self.maxy = xy[0], xy[1]
 
 class ExceptionReport(object):
     """Initialize an OWS ExceptionReport construct"""
