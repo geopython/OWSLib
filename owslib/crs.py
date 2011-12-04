@@ -1731,7 +1731,11 @@ class Crs(object):
 
         values = self.id.split(':')
 
-        if len(values) > 2:  # it's a URN style
+        if self.id.find('#') != -1:  # it's a URI
+            vals = self.id.split('#')
+            self.authority = vals[0].split('/')[-1].split('.')[0]
+            self.code = int(vals[-1])
+        elif len(values) > 2:  # it's a URN style
             self.naming_authority = values[1]
             self.category = values[2]
             self.type = values[3]
@@ -1743,13 +1747,6 @@ class Crs(object):
             # yx and set axis order accordingly
             if self.code in axisorder_xy:
                 self.axisorder = 'yx'
-            else:
-                self.axisorder = 'xy'
         elif len(values) == 2:  # it's an authority:code code
             self.authority = values[0]
             self.code = values[1]
-            self.axisorder = 'xy'
-        elif self.id.find('#') != -1:  # it's a URI
-            self.authority = 'EPSG'
-            self.code = int(self.id.split('#')[-1])
-            self.axisorder = 'xy'
