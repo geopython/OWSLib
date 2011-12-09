@@ -16,7 +16,11 @@ import urllib2
 from owslib.etree import etree
 from owslib.iso import CodelistCatalogue
 
-e=etree.fromstring(urllib2.urlopen('http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml').read())
+if len(sys.argv) < 3:
+    print 'Usage: %s <path/to/gmxCodelists.xml> <CodeListDictionary>' % sys.argv[0]
+    sys.exit(1)
+
+e=etree.parse(sys.argv[1])
 c=CodelistCatalogue(e)
 
 clds = c.getcodelistdictionaries()
@@ -36,13 +40,13 @@ Usage: %s <codelistdictionary>
 ''' % (sys.argv[0], valid_clds())
     sys.exit(1)
 
-cld = c.getcodedefinitionidentifiers(sys.argv[1])
+cld = c.getcodedefinitionidentifiers(sys.argv[2])
 
 if cld is None:
     print '''
 Invalid code list dictionary: %s
 %s
-''' % (sys.argv[1],valid_clds())
+''' % (sys.argv[2],valid_clds())
     sys.exit(2)
 
 print '''
@@ -53,4 +57,4 @@ codeEntry's:
 
  %s
 
-''' % (sys.argv[1],'\n '.join(cld))
+''' % (sys.argv[2],'\n '.join(cld))
