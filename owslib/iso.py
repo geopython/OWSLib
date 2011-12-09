@@ -489,21 +489,21 @@ class CodelistCatalogue(object):
         self.dictionaries = {}
 
         for i in ct.findall(util.nspath_eval('gmx:codelistItem/gmx:CodeListDictionary', namespaces)):
-            id = i.attrib.get(util.nspath_eval('gml:id', namespaces))
+            id = i.attrib.get(util.nspath_eval('gml32:id', namespaces))
             self.dictionaries[id] = {}
-            val = i.find(util.nspath_eval('gml:description', namespaces))
+            val = i.find(util.nspath_eval('gml32:description', namespaces))
             self.dictionaries[id]['description'] = util.testXMLValue(val)
-            val = i.find(util.nspath_eval('gml:identifier', namespaces))
+            val = i.find(util.nspath_eval('gml32:identifier', namespaces))
             self.dictionaries[id]['identifier'] = util.testXMLValue(val)
             self.dictionaries[id]['entries'] = {}
 
             for j in i.findall(util.nspath_eval('gmx:codeEntry', namespaces)):
-                id2 = j.find(util.nspath_eval('gmx:CodeDefinition', namespaces)).attrib.get(util.nspath_eval('gml:id', namespaces))
+                id2 = j.find(util.nspath_eval('gmx:CodeDefinition', namespaces)).attrib.get(util.nspath_eval('gml32:id', namespaces))
                 self.dictionaries[id]['entries'][id2] = {}
-                val = j.find(util.nspath_eval('gmx:CodeDefinition/gml:description', namespaces))
+                val = j.find(util.nspath_eval('gmx:CodeDefinition/gml32:description', namespaces))
                 self.dictionaries[id]['entries'][id2]['description'] = util.testXMLValue(val)
 
-                val = j.find(util.nspath_eval('gmx:CodeDefinition/gml:identifier', namespaces))
+                val = j.find(util.nspath_eval('gmx:CodeDefinition/gml32:identifier', namespaces))
                 self.dictionaries[id]['entries'][id2]['identifier'] = util.testXMLValue(val)
 
                 val = j.find(util.nspath_eval('gmx:CodeDefinition', namespaces)).attrib.get('codeSpace')
