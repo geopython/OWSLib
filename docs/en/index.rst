@@ -303,6 +303,21 @@ ISO Codelists:
 
 .. include:: ../../tests/iso_codelist.txt
 
+CRS Handling
+------------
+
+.. code-block:: python
+
+  >>> from owslib import crs
+  >>> c=crs.Crs('EPSG:4326')
+  >>> c.code
+  4326
+  >>> c=crs.Crs('urn:ogc:def:crs:EPSG::4326')
+  >>> c.authority
+  'EPSG'
+  >>> c.axisorder
+  'yx'
+
 Dublin Core
 -----------
 
