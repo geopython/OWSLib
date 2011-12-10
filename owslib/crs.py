@@ -1718,7 +1718,15 @@ axisorder_xy = [
 ]
 
 class Crs(object):
-    """Initialize a CRS construct"""
+    """Initialize a CRS construct
+
+        :param string crs: the Coordinate reference system. Examples:
+          * EPSG:<EPSG code>
+          * http://www.opengis.net/gml/srs/epsg.xml#<EPSG code>
+          * urn:EPSG:geographicCRC:<epsg code>
+          * urn:ogc:def:crs:EPSG::4326
+          * urn:ogc:def:crs:EPSG:4326
+    """
     def __init__(self, crs):
         self.id = crs
         self.naming_authority = None
@@ -1740,8 +1748,12 @@ class Crs(object):
             self.category = values[2]
             self.type = values[3]
             self.authority = values[4]
-            self.version = values[5]
-            self.code = int(values[6])
+
+            if len(values) == 7:  # version, even if empty, is included
+                self.version = values[5]
+
+            # code is always the last value
+            self.code = int(values[-1])
 
             # scan the list of codes that have an axis ordering of
             # yx and set axis order accordingly
@@ -1749,4 +1761,4 @@ class Crs(object):
                 self.axisorder = 'yx'
         elif len(values) == 2:  # it's an authority:code code
             self.authority = values[0]
-            self.code = values[1]
+            self.code = int(values[1])
