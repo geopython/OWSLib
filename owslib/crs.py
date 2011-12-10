@@ -1723,7 +1723,7 @@ class Crs(object):
         :param string crs: the Coordinate reference system. Examples:
           * EPSG:<EPSG code>
           * http://www.opengis.net/gml/srs/epsg.xml#<EPSG code>
-          * urn:EPSG:geographicCRC:<epsg code>
+          * urn:EPSG:geographicCRS:<epsg code>
           * urn:ogc:def:crs:EPSG::4326
           * urn:ogc:def:crs:EPSG:4326
     """
@@ -1745,12 +1745,17 @@ class Crs(object):
             self.code = int(vals[-1])
         elif len(values) > 2:  # it's a URN style
             self.naming_authority = values[1]
-            self.category = values[2]
-            self.type = values[3]
-            self.authority = values[4]
+
+            if len(values) == 4:
+                self.type = values[2]
+            else:
+                self.category = values[2]
+                self.type = values[3]
+                self.authority = values[4]
 
             if len(values) == 7:  # version, even if empty, is included
-                self.version = values[5]
+                if values[5]:
+                    self.version = values[5]
 
             # code is always the last value
             self.code = int(values[-1])
