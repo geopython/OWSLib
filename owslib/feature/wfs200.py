@@ -10,6 +10,7 @@
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
 from owslib.util import nspath, testXMLValue
+from owslib.crs import Crs
 
 #other imports
 import cgi
@@ -356,7 +357,7 @@ class ContentMetadata:
                     float(b.attrib['maxx']), float(b.attrib['maxy']),
                     )
         # crs options
-        self.crsOptions = [srs.text for srs in elem.findall(nspath('SRS'))]
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS'))]
 
         # verbs
         self.verbOptions = [op.tag for op \
