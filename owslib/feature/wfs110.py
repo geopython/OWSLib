@@ -18,6 +18,7 @@ from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.ows import *
 from owslib.filter import *
+from owslib.crs import Crs
 
 namespaces = {
     'gml': 'http://www.opengis.net/gml',
@@ -229,7 +230,7 @@ class ContentMetadata:
         self.crsOptions = [srs.text for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
         dsrs = testXMLValue(elem.find(nspath_eval('wfs:DefaultSRS', namespaces)))
         if dsrs is not None:  # first element is default srs
-            self.crsOptions.insert(0, dsrs)
+            self.crsOptions.insert(0, Crs(dsrs))
 
         # verbs
         self.verbOptions = [op.text for op in elem.findall(nspath_eval('wfs:Operations/wfs:Operation', namespaces))]
