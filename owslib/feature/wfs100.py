@@ -15,6 +15,7 @@ from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
+from owslib.crs import Crs
 
 WFS_NAMESPACE = 'http://www.opengis.net/wfs'
 OGC_NAMESPACE = 'http://www.opengis.net/ogc'
@@ -267,7 +268,7 @@ class ContentMetadata:
                     float(b.attrib['maxx']), float(b.attrib['maxy']),
                     )
         # crs options
-        self.crsOptions = [srs.text for srs in elem.findall(nspath('SRS'))]
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS'))]
 
         # verbs
         self.verbOptions = [op.tag for op \
