@@ -13,6 +13,7 @@ from wcsBase import WCSBase, WCSCapabilitiesReader
 from urllib import urlencode
 from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
+from owslib.crs import Crs
 import os, errno
 
 #  function to save writing out WCS namespace in full each time
@@ -322,13 +323,13 @@ class ContentMetadata(object):
         crss=[]
         for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('responseCRSs')):
             for crs in elem.text.split(' '):
-                crss.append(crs)
+                crss.append(Crs(crs))
         for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('requestResponseCRSs')):
             for crs in elem.text.split(' '):
-                crss.append(crs)
+                crss.append(Crs(crs))
         for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedCRSs/')+ns('nativeCRSs')):
             for crs in elem.text.split(' '):
-                crss.append(crs)
+                crss.append(Crs(crs))
         return crss
     supportedCRS=property(_getSupportedCRSProperty, None)
        
