@@ -11,7 +11,7 @@
 
 # list of URN codes for EPSG in which axis order
 # of coordinates are y,x (e.g. lat, long)
-axisorder_xy = [
+axisorder_yx = frozenset([
     4326,
     4258,
     31466,
@@ -1715,7 +1715,7 @@ axisorder_xy = [
     31289,
     31290,
     31700
-]
+])
 
 class Crs(object):
     """Initialize a CRS construct
@@ -1726,8 +1726,9 @@ class Crs(object):
           * urn:EPSG:geographicCRS:<epsg code>
           * urn:ogc:def:crs:EPSG::4326
           * urn:ogc:def:crs:EPSG:4326
+        :param string axisorder: Force / override axisorder ('xy' or 'yx')
     """
-    def __init__(self, crs):
+    def __init__(self, crs, axisorder=None):
         self.id = crs
         self.naming_authority = None
         self.category = None
@@ -1736,6 +1737,9 @@ class Crs(object):
         self.version = None
         self.code = -1
         self.axisorder = 'xy'
+
+        if axisorder is not None:  # forced axisorder
+            self.axisorder = axisorder
 
         values = self.id.split(':')
 
@@ -1760,10 +1764,12 @@ class Crs(object):
             # code is always the last value
             self.code = int(values[-1])
 
+            # if the user has not forced the axisorder,
             # scan the list of codes that have an axis ordering of
             # yx and set axis order accordingly
-            if self.code in axisorder_xy:
-                self.axisorder = 'yx'
+            if axisorder is None:
+                if self.code in axisorder_yx:
+                    self.axisorder = 'yx'
         elif len(values) == 2:  # it's an authority:code code
             self.authority = values[0]
             self.code = int(values[1])
