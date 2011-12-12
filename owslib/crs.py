@@ -1773,3 +1773,14 @@ class Crs(object):
         elif len(values) == 2:  # it's an authority:code code
             self.authority = values[0]
             self.code = int(values[1])
+
+    def getcode(self):
+        """Create for example "EPSG:4326" string and return back
+
+        :returns: String code formated in "authority:code"
+        """
+
+        if self.authority is not None and self.code is not None:
+            return '%s:%s' % (self.authority, self.code)
+        return None
+
