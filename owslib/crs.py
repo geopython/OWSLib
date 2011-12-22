@@ -1762,7 +1762,10 @@ class Crs(object):
                     self.version = values[5]
 
             # code is always the last value
-            self.code = int(values[-1])
+            try:
+                self.code = int(values[-1])
+            except:
+                self.code = values[-1]
 
             # if the user has not forced the axisorder,
             # scan the list of codes that have an axis ordering of
