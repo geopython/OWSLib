@@ -538,8 +538,15 @@ class CswRecord(object):
         val = record.find(util.nspath_eval('dc:temporal', namespaces))
         self.temporal = util.testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:URI', namespaces))
-        self.uri = util.testXMLValue(val)
+        self.uris = []  # list of dicts
+        for i in record.findall(util.nspath_eval('dc:URI', namespaces)):
+            uri = {}
+            uri['protocol'] = util.testXMLValue(i.attrib.get('protocol'), True)
+            uri['name'] = util.testXMLValue(i.attrib.get('name'), True)
+            uri['description'] = util.testXMLValue(i.attrib.get('description'), True)
+            uri['uri'] = util.testXMLValue(i)
+
+            self.uris.append(uri)
 
         val = record.find(util.nspath_eval('dct:modified', namespaces))
         self.modified = util.testXMLValue(val)
