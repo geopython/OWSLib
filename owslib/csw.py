@@ -201,6 +201,9 @@ class CatalogueServiceWeb:
             # construct request
             node0 = etree.Element(util.nspath_eval('csw:GetRecords', namespaces))
             node0.set('xmlns:ows', namespaces['ows'])
+            node0.set('xmlns:gmd', namespaces['gmd'])
+            node0.set('xmlns:dif', namespaces['dif'])
+            node0.set('xmlns:fgdc', namespaces['fgdc'])
             node0.set('outputSchema', outputschema)
             node0.set('outputFormat', format)
             node0.set('version', self.version)
