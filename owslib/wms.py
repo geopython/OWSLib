@@ -428,8 +428,9 @@ class ContentMetadata:
         self.timepositions=None
         for extent in elem.findall('Extent'):
             if extent.attrib.get("name").lower() =='time':
-                self.timepositions=extent.text.split(',')
-                break
+                if extent.text:
+                    self.timepositions=extent.text.split(',')
+                    break
 
         # MetadataURLs
         self.metadataUrls = []
