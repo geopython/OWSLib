@@ -144,9 +144,20 @@ class OperationsMetadata(object):
         self.name = elem.attrib['name']
         self.formatOptions = ['text/xml']
         methods = []
+        parameters = []
+        constraints = []
+
         for verb in elem.findall(util.nspath('DCP/HTTP/*', namespace)):
-            methods.append((verb.tag, {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
+            methods.append((util.xmltag_split(verb.tag), {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
         self.methods = dict(methods)
+
+        for parameter in elem.findall(util.nspath('Parameter', namespace)):
+            parameters.append((parameter.attrib['name'], {'values': [i.text for i in parameter.findall(util.nspath('Value', namespace))]}))
+        self.parameters = dict(parameters)
+
+        for constraint in elem.findall(util.nspath('Constraint', namespace)):
+            constraints.append((constraint.attrib['name'], {'values': [i.text for i in constraint.findall(util.nspath('Value', namespace))]}))
+        self.constraints = dict(constraints)
 
 class BoundingBox(object):
     """Initialize an OWS BoundingBox construct"""
