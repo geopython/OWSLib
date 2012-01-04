@@ -36,11 +36,9 @@ def patch_well_known_namespaces(etree_module):
             "http://www.w3.org/2001/XMLSchema-instance":    "xsi",
             "http://www.w3.org/1999/xlink":                 "xlink"})
 
-# try to find elementtree or lxml
+# try to find lxml or elementtree
 try:
-    # Python < 2.5 with ElementTree installed
-    import elementtree.ElementTree as etree
-    patch_well_known_namespaces(etree)
+    from lxml import etree
 except ImportError:
     try:
         # Python 2.5 with ElementTree included
@@ -48,7 +46,8 @@ except ImportError:
         patch_well_known_namespaces(etree)
     except ImportError:
         try:
-            from lxml import etree
+            # Python < 2.5 with ElementTree installed
+            import elementtree.ElementTree as etree
+            patch_well_known_namespaces(etree)
         except ImportError:
-            raise RuntimeError('You need either ElementTree or lxml to use OWSLib!')
-
+            raise RuntimeError('You need either lxml or ElementTree to use OWSLib!')
