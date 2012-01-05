@@ -1750,7 +1750,9 @@ class Crs(object):
         elif len(values) > 2:  # it's a URN style
             self.naming_authority = values[1]
 
-            if len(values) == 4:
+            if len(values) == 3:  # bogus
+                pass
+            elif len(values) == 4:
                 self.type = values[2]
             else:
                 self.category = values[2]

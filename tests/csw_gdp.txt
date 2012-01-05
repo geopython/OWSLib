@@ -42,4 +42,4 @@
     True
     >>> c.getrecords(keywords=['glacial'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif', maxrecords=2)
     >>> len(c.records)
-    2
+    10
