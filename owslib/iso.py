@@ -54,6 +54,10 @@ class MD_Metadata(object):
         val = md.find(util.nspath_eval('gmd:dateStamp/gco:Date', namespaces))
         self.datestamp = util.testXMLValue(val)
 
+        if not self.datestamp:
+            val = md.find(util.nspath_eval('gmd:dateStamp/gco:DateTime', namespaces))
+            self.datestamp = util.testXMLValue(val)
+
         self.charset = _testCodeListValue(md.find(util.nspath_eval('gmd:characterSet/gmd:MD_CharacterSetCode', namespaces)))
   
         self.hierarchy = _testCodeListValue(md.find(util.nspath_eval('gmd:hierarchyLevel/gmd:MD_ScopeCode', namespaces)))
