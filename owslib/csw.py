@@ -555,7 +555,7 @@ class CswRecord(object):
             uri['protocol'] = util.testXMLValue(i.attrib.get('protocol'), True)
             uri['name'] = util.testXMLValue(i.attrib.get('name'), True)
             uri['description'] = util.testXMLValue(i.attrib.get('description'), True)
-            uri['uri'] = util.testXMLValue(i)
+            uri['url'] = util.testXMLValue(i)
 
             self.uris.append(uri)
 
