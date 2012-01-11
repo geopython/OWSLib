@@ -559,6 +559,14 @@ class CswRecord(object):
 
             self.uris.append(uri)
 
+        self.references = []  # list of dicts
+        for i in record.findall(util.nspath_eval('dct:references', namespaces)):
+            ref = {}
+            ref['scheme'] = util.testXMLValue(i.attrib.get('scheme'), True)
+            ref['url'] = util.testXMLValue(i)
+
+            self.references.append(ref)
+
         val = record.find(util.nspath_eval('dct:modified', namespaces))
         self.modified = util.testXMLValue(val)
 
