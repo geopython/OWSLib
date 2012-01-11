@@ -168,7 +168,7 @@ class CatalogueServiceWeb:
             for f in self._exml.findall(util.nspath_eval('csw:DomainValues/csw:ListOfValues/csw:Value', namespaces)):
                 self.results['values'].append(util.testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='summary', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None):
         """
 
         Construct and process a  GetRecords request
@@ -181,7 +181,7 @@ class CatalogueServiceWeb:
         - typenames: the typeNames to query against (default is csw:Record)
         - propertyname: the PropertyName to Filter against 
         - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
-        - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'full')
+        - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'summary')
         - sortby: property to sort results on (default is 'dc:title')
         - outputschema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
         - format: the outputFormat (default is 'application/xml')
