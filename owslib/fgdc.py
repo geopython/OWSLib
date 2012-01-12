@@ -40,13 +40,15 @@ class Idinfo(object):
         self.timeperd = Timeperd(val)
 
         val = md.find('idinfo/status')
-        self.status = Status(val)
+        if val is not None:
+            self.status = Status(val)
 
         val = md.find('idinfo/spdom')
         self.spdom = Spdom(val)
 
         val = md.find('idinfo/keywords')
-        self.keywords = Keywords(val)
+        if val is not None:
+            self.keywords = Keywords(val)
 
         val = md.find('idinfo/accconst')
         self.accconst = util.testXMLValue(val)
@@ -55,7 +57,8 @@ class Idinfo(object):
         self.useconst = util.testXMLValue(val)
 
         val = md.find('idinfo/ptcontac')
-        self.ptcontac = Ptcontac(val)
+        if val is not None:
+            self.ptcontac = Ptcontac(val)
 
         val = md.find('idinfo/datacred')
         self.datacred = util.testXMLValue(val)
@@ -97,7 +100,7 @@ class Descript(object):
         self.abstract = util.testXMLValue(val)
         
         val = md.find('purpose')
-        self.abstract = util.testXMLValue(val)
+        self.purpose = util.testXMLValue(val)
 
         val = md.find('supplinf')
         self.supplinf = util.testXMLValue(val)
@@ -286,7 +289,8 @@ class Metainfo(object):
         self.metrd = util.testXMLValue(val)
 
         val = md.find('metainfo/metc')        
-        self.metc = Ptcontac(val)
+        if val is not None:
+            self.metc = Ptcontac(val)
 
         val = md.find('metainfo/metstdn')
         self.metstdn = util.testXMLValue(val)
