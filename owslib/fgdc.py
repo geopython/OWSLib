@@ -15,6 +15,11 @@ from owslib import util
 class Metadata(object):
     """ Process metadata """
     def __init__(self, md):
+        if hasattr(md, 'getroot'):  # standalone document
+            self.xml = etree.tostring(md.getroot())
+        else:  # part of a larger document
+            self.xml = etree.tostring(md)
+
         self.idinfo = Idinfo(md)
         self.eainfo = Eainfo(md)
         self.metainfo = Metainfo(md)
@@ -101,11 +106,40 @@ class Timeperd(object):
     """ Process timeperd """
     def __init__(self, md):
         if md is not None:
-            val = md.find('timeinfo/sngdate/caldate')
-            self.caldate = util.testXMLValue(val)
-
             val = md.find('current')
             self.current = util.testXMLValue(val)
+
+            val = md.find('timeinfo')
+            if val is not None:
+                self.timeinfo = Timeinfo(val)
+
+class Timeinfo(object):
+    """ Process timeinfo """
+    def __init__(self, md):
+        val = md.find('sngdate')
+        self.sngdate = Sngdate(val)
+        val = md.find('rngdates')
+        self.rngdates = Rngdates(val)
+
+class Sngdate(object):
+    """ Process sngdate """
+    def __init__(self, md):
+        val = md.find('caldate')
+        self.caldate = util.testXMLValue(val)
+        val = md.find('time')
+        self.time = util.testXMLValue(val)
+
+class Rngdates(object):
+    """ Process rngdates """
+    def __init__(self, md):
+        val = md.find('begdate')
+        self.begdate = util.testXMLValue(val)
+        val = md.find('begtime')
+        self.begtime = util.testXMLValue(val)
+        val = md.find('enddate')
+        self.enddate = util.testXMLValue(val)
+        val = md.find('endtime')
+        self.endtime = util.testXMLValue(val)
 
 class Status(object):
     """ Process status """
@@ -130,6 +164,16 @@ class Spdom(object):
 
         val = md.find('bounding/southbc')
         self.southbc = util.testXMLValue(val)
+
+        self.bbox = Bbox(self)
+
+class Bbox(object):
+    """ Generate bbox for spdom (convenience function) """
+    def __init__(self, spdom):
+        self.minx = spdom.westbc
+        self.miny = spdom.southbc
+        self.maxx = spdom.eastbc
+        self.maxy = spdom.northbc
 
 class Keywords(object):
     """ Process keywords """
