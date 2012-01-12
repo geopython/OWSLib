@@ -30,7 +30,7 @@ namespaces = {
     'dc' : 'http://purl.org/dc/elements/1.1/',
     'dct': 'http://purl.org/dc/terms/',
     'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
-    'fgdc': 'http://www.fgdc.gov',
+    'fgdc': 'http://www.opengis.net/cat/csw/csdgm',
     'gco': 'http://www.isotc211.org/2005/gco',
     'gmd': 'http://www.isotc211.org/2005/gmd',
     'gml': 'http://www.opengis.net/gml',
