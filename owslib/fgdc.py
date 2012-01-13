@@ -89,9 +89,10 @@ class Citation(object):
     
             val = md.find('citeinfo/pubinfo/publish')
             self.citeinfo['publish'] = util.testXMLValue(val)
-    
-            val = md.find('citeinfo/onlink')
-            self.citeinfo['onlink'] = util.testXMLValue(val)
+
+            self.citeinfo['onlink'] = []
+            for link in md.findall('citeinfo/onlink'):
+                self.citeinfo['onlink'].append(util.testXMLValue(link))
 
 class Descript(object):
     """ Process descript """
