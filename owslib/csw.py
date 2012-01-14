@@ -405,11 +405,7 @@ class CatalogueServiceWeb:
                 val = i.find('idinfo/datasetid')
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = Metadata(i)
-        # CSWs define the dif namespace with the trailing '/' as an
-        # outputSchema, but actual responses indeed define it with '/' as an outputSchema
-        # this is an interoperability issue to be resolved
-        # [:-1] is a workaround for now
-        elif outputschema == namespaces['dif'][:-1]: # nasa dif, strip the trailing '/' for now
+        elif outputschema == namespaces['dif']: # nasa dif
             for i in self._exml.findall('.//'+util.nspath_eval('dif:DIF', namespaces)):
                 val = i.find(util.nspath_eval('dif:Entry_ID', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
