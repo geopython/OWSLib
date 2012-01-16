@@ -17,7 +17,7 @@ from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.ows import *
-from owslib.filter import *
+from owslib.fes import *
 from owslib.crs import Crs
 
 namespaces = {
