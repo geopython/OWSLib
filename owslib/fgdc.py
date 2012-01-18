@@ -121,9 +121,12 @@ class Timeinfo(object):
     """ Process timeinfo """
     def __init__(self, md):
         val = md.find('sngdate')
-        self.sngdate = Sngdate(val)
+        if val is not None:
+            self.sngdate = Sngdate(val)
+
         val = md.find('rngdates')
-        self.rngdates = Rngdates(val)
+        if val is not None:
+            self.rngdates = Rngdates(val)
 
 class Sngdate(object):
     """ Process sngdate """
