@@ -389,10 +389,10 @@ class CatalogueServiceWeb:
                 self._parseinsertresult()
 
     def _parseinsertresult(self):
-        self.results['inserted'] = []
+        self.results['insertresults'] = []
         for i in self._exml.findall(util.nspath_eval('csw:InsertResult', namespaces)):
             for j in i.findall(util.nspath_eval('csw:BriefRecord/dc:identifier', namespaces)):
-                self.results['inserted'].append(util.testXMLValue(j))
+                self.results['insertresults'].append(util.testXMLValue(j))
 
     def _parserecords(self, outputschema, esn):
         if outputschema == namespaces['gmd']: # iso 19139
