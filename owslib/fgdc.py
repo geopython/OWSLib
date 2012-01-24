@@ -34,7 +34,8 @@ class Idinfo(object):
         self.citation = Citation(val)
 
         val = md.find('idinfo/descript')
-        self.descript = Descript(val)
+        if val is not None:
+            self.descript = Descript(val)
 
         val = md.find('idinfo/timeperd')
         self.timeperd = Timeperd(val)
@@ -44,7 +45,8 @@ class Idinfo(object):
             self.status = Status(val)
 
         val = md.find('idinfo/spdom')
-        self.spdom = Spdom(val)
+        if val is not None:
+            self.spdom = Spdom(val)
 
         val = md.find('idinfo/keywords')
         if val is not None:
