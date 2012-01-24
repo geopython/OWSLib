@@ -172,7 +172,9 @@ class Spdom(object):
         val = md.find('bounding/southbc')
         self.southbc = util.testXMLValue(val)
 
-        self.bbox = Bbox(self)
+        if (self.southbc is not None and self.northbc is not None and
+        self.eastbc is not None and self.westbc is not None):
+            self.bbox = Bbox(self)
 
 class Bbox(object):
     """ Generate bbox for spdom (convenience function) """
@@ -195,7 +197,9 @@ class Keywords(object):
             theme['themekt'] = util.testXMLValue(val)
             theme['themekey'] = []
             for j in i.findall('themekey'):
-                theme['themekey'].append(util.testXMLValue(j))
+                themekey = util.testXMLValue(j)
+                if themekey is not None:
+                    theme['themekey'].append(themekey)
             self.theme.append(theme)
 
         for i in md.findall('place'):
