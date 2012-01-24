@@ -311,10 +311,25 @@ class ContentMetadata(object):
             
     def _getOtherBoundingBoxes(self):
         ''' incomplete, should return other bounding boxes not in WGS84
-            #TODO: find any other bounding boxes. Need to check for CoverageOffering/domainSet/spatialDomain/gml:Envelope & gml:EnvelopeWithTimePeriod.'''
+            #TODO: find any other bounding boxes. Need to check for gml:EnvelopeWithTimePeriod.'''
+
         bboxes=[]
+
         if not hasattr(self, 'descCov'):
             self.descCov=self._service.getDescribeCoverage(self.id)
+
+        for envelope in self.descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('spatialDomain/')+'{http://www.opengis.net/gml}Envelope'):
+            bbox = {}
+            bbox['nativeSrs'] = envelope.attrib['srsName']
+            gmlpositions = envelope.findall('{http://www.opengis.net/gml}pos')
+            lc=gmlpositions[0].text.split()
+            uc=gmlpositions[1].text.split()
+            bbox['bbox'] = (
+                float(lc[0]),float(lc[1]),
+                float(uc[0]), float(uc[1])
+            )
+            bboxes.append(bbox)
+
         return bboxes        
     boundingboxes=property(_getOtherBoundingBoxes,None)
     
