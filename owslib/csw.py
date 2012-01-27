@@ -418,14 +418,14 @@ class CatalogueServiceWeb:
     def _parsetransactionsummary(self):
         val = self._exml.find(util.nspath_eval('csw:TransactionSummary', namespaces))
         if val is not None:
-            id = val.attrib.get('requestId')
-            self.results['requestid'] = util.testXMLValue(id, True)
+            rid = val.attrib.get('requestId')
+            self.results['requestid'] = util.testXMLValue(rid, True)
             ts = val.find(util.nspath_eval('csw:totalInserted', namespaces))
-            self.results['inserted'] = util.testXMLValue(ts)
+            self.results['inserted'] = int(util.testXMLValue(ts))
             ts = val.find(util.nspath_eval('csw:totalUpdated', namespaces))
-            self.results['updated'] = util.testXMLValue(ts)
+            self.results['updated'] = int(util.testXMLValue(ts))
             ts = val.find(util.nspath_eval('csw:totalDeleted', namespaces))
-            self.results['deleted'] = util.testXMLValue(ts)
+            self.results['deleted'] = int(util.testXMLValue(ts))
 
     def _setesnel(self, esn):
         """ Set the element name to parse depending on the ElementSetName requested """
