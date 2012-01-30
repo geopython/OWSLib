@@ -292,10 +292,13 @@ class MD_DataIdentification(object):
 
             for k in i.findall(util.nspath_eval('gmd:MD_Keywords/gmd:keyword', namespaces)):
                 val = k.find(util.nspath_eval('gco:CharacterString', namespaces))
-                mdkw['keywords'].append(util.testXMLValue(val))
+                if val is not None:
+                    val2 = util.testXMLValue(val) 
+                    if val2 is not None:
+                        mdkw['keywords'].append(val2)
 
             self.keywords.append(mdkw)
-        
+
         self.topiccategory = []
         for i in md.findall(util.nspath_eval('gmd:topicCategory/gmd:MD_TopicCategoryCode', namespaces)):
             val = util.testXMLValue(i)
