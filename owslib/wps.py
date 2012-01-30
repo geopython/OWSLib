@@ -522,6 +522,7 @@ class WPSExecution():
                     # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
                     # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
                     url = output.reference
+                    print 'Output URL=%s' % url
                     if '?' in url:
                         spliturl=url.split('?')
                         u = util.openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
@@ -1144,7 +1145,7 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
         idElement.text = "0"
         return dataElement
     
-def monitorExecution(execution, sleepSecs=3, filepath=None):
+def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     '''
     Convenience method to monitor the status of a WPS execution till it completes (succesfully or not),
     and write the output to file after a succesfull job completion.
@@ -1155,7 +1156,12 @@ def monitorExecution(execution, sleepSecs=3, filepath=None):
         print 'Execution status: %s' % execution.status
         
     if execution.isSucceded():
-        execution.getOutput(filepath=filepath)
+        if download:
+            execution.getOutput(filepath=filepath)
+        else:
+            for output in execution.processOutputs:               
+                if output.reference is not None:
+                    print 'Output URL=%s' % output.reference
     else:
         for ex in execution.errors:
             print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
