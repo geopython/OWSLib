@@ -34,11 +34,9 @@ for output in process.processOutputs:
 # 3) Execute
 # POST request:
 # Note: not working, requires openid login ?
-'''
 processid = "DoubleIt"
 inputs = [ ("NumberToDouble","1") ]
 output = "OutputXML"
 execution = wps.execute(processid, inputs, output)
 
 monitorExecution(execution)
-'''
