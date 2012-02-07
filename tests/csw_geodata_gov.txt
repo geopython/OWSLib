@@ -9,11 +9,13 @@
     >>> c.results['nextrecord']
     26
     >>> c.getdomain('GetRecords.outputSchema')
-    >>> c.exceptionreport.exceptions
-    [{'locator': 'root-node', 'ExceptionText': '\nOperation not supported: locator=root-node\n', 'exceptionCode': 'OperationNotSupported'}]
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: '\nOperation not supported: locator=root-node\n'
     >>> c.getrecords('downloadableData')
     >>> c.results['returned']
     10
     >>> c.getrecords(cql='title = \'water\'')
-    >>> c.exceptionreport.exceptions
-    [{'locator': 'csw:CqlText', 'ExceptionText': '\nInvalid parameter value: locator=csw:CqlText\n', 'exceptionCode': 'InvalidParameterValue'}]
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: '\nInvalid parameter value: locator=csw:CqlText\n'
