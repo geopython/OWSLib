@@ -12,12 +12,12 @@
 import StringIO
 import random
 from owslib.etree import etree
-from owslib.fes import *
+from owslib import fes
 from owslib import util
-from owslib.ows import *
-from owslib.iso import *
-from owslib.fgdc import *
-from owslib.dif import *
+from owslib import ows
+from owslib.iso import MD_Metadata
+from owslib.fgdc import Metadata
+from owslib.dif import DIF
 
 # default variables
 
@@ -67,7 +67,7 @@ class CatalogueServiceWeb:
         self.timeout = timeout
         self.service = 'CSW'
         self.exceptionreport = None
-        self.owscommon = OwsCommon('1.0.0')
+        self.owscommon = ows.OwsCommon('1.0.0')
 
         if not skip_caps:  # process GetCapabilities
             # construct request
@@ -85,18 +85,18 @@ class CatalogueServiceWeb:
             if self.exceptionreport is None:
                 # ServiceIdentification
                 val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
-                self.identification=ServiceIdentification(val,self.owscommon.namespace)
+                self.identification=ows.ServiceIdentification(val,self.owscommon.namespace)
                 # ServiceProvider
                 val = self._exml.find(util.nspath_eval('ows:ServiceProvider', namespaces))
-                self.provider=ServiceProvider(val,self.owscommon.namespace)
+                self.provider=ows.ServiceProvider(val,self.owscommon.namespace)
                 # ServiceOperations metadata 
                 self.operations=[]
                 for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
-                    self.operations.append(OperationsMetadata(elem, self.owscommon.namespace))
+                    self.operations.append(ows.OperationsMetadata(elem, self.owscommon.namespace))
         
                 # FilterCapabilities
                 val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
-                self.filters=FilterCapabilities(val)
+                self.filters=fes.FilterCapabilities(val)
  
     def describerecord(self, typename='csw:Record', format=outputformat):
         """
@@ -223,7 +223,7 @@ class CatalogueServiceWeb:
             self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
     
             if sortby is not None:
-                setsortby(node1, sortby)
+                fes.setsortby(node1, sortby)
     
             self.request = util.xml2string(etree.tostring(node0))
 
@@ -460,7 +460,7 @@ class CatalogueServiceWeb:
                 node1 = etree.SubElement(node0, util.nspath_eval('csw:CqlText', namespaces))
                 node1.text = cql
             else:  # construct a Filter request
-                flt = FilterRequest()
+                flt = fes.FilterRequest()
                 node0.append(flt.set(qtype=qtype, keywords=keywords, propertyname=propertyname,bbox=bbox))
 
     def _invoke(self):
@@ -488,7 +488,7 @@ class CatalogueServiceWeb:
         # check if it's an OGC Exception
         val = self._exml.find(util.nspath_eval('ows:Exception', namespaces))
         if val is not None:
-            raise ExceptionReport(self._exml, self.owscommon.namespace)
+            raise ows.ExceptionReport(self._exml, self.owscommon.namespace)
         else:
             self.exceptionreport = None
 
@@ -608,6 +608,6 @@ class CswRecord(object):
 
         val = record.find(util.nspath_eval('ows:BoundingBox', namespaces))
         if val is not None:
-            self.bbox = BoundingBox(val, namespaces['ows'])
+            self.bbox = ows.BoundingBox(val, namespaces['ows'])
         else:
             self.bbox = None
