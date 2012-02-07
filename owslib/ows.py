@@ -199,8 +199,9 @@ class BoundingBox(object):
                 else:
                     self.maxx, self.maxy = xy[0], xy[1]
 
-class ExceptionReport(object):
-    """Initialize an OWS ExceptionReport construct"""
+class ExceptionReport(Exception):
+    """OWS ExceptionReport"""
+
     def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
         self.exceptions = []
         for i in elem.findall(util.nspath('Exception', namespace)):
@@ -212,3 +213,12 @@ class ExceptionReport(object):
             val = i.find(util.nspath('ExceptionText', namespace))
             tmp['ExceptionText'] = util.testXMLValue(val)
             self.exceptions.append(tmp)
+
+        # set topmost stacktrace as return message
+        self.code = self.exceptions[0]['exceptionCode']
+        self.locator = self.exceptions[0]['locator']
+        self.msg = self.exceptions[0]['ExceptionText']
+        self.xml = etree.tostring(elem)
+
+    def __str__(self):
+        return repr(self.msg)

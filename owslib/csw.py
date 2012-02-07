@@ -488,7 +488,7 @@ class CatalogueServiceWeb:
         # check if it's an OGC Exception
         val = self._exml.find(util.nspath_eval('ows:Exception', namespaces))
         if val is not None:
-            self.exceptionreport = ExceptionReport(self._exml, self.owscommon.namespace)
+            raise ExceptionReport(self._exml, self.owscommon.namespace)
         else:
             self.exceptionreport = None
 
