@@ -9,13 +9,14 @@
 #owslib imports:
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue, Client
+from owslib.util import nspath, testXMLValue
 from owslib.crs import Crs
 
 #other imports
 import cgi
 from cStringIO import StringIO
 from urllib import urlencode
+from urllib2 import urlopen
 
 import logging
 
@@ -43,12 +44,12 @@ class ServiceException(Exception):
     pass
 
 
-class WebFeatureService_2_0_0(Client):
+class WebFeatureService_2_0_0(object):
     """Abstraction for OGC Web Feature Service (WFS).
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, opener, cookies, username, password, parse_remote_metadata=False):
+    def __new__(self,url, version, xml, parse_remote_metadata=False):
         """ overridden __new__ method 
         
         @type url: string
@@ -60,7 +61,6 @@ class WebFeatureService_2_0_0(Client):
         @return: initialized WebFeatureService_2_0_0 object
         """
         obj=object.__new__(self)
-        obj.__init__(url, version, xml, opener, cookies, username, password, parse_remote_metadata)
         obj.__init__(url, version, xml, parse_remote_metadata)
         self.log = logging.getLogger()
         consoleh  = logging.StreamHandler()
@@ -75,14 +75,13 @@ class WebFeatureService_2_0_0(Client):
             raise KeyError, "No content named %s" % name
     
     
-    def __init__(self, url, version, xml, opener, cookies, username, password, parse_remote_metadata=False):
+    def __init__(self, url,  version, xml=None, parse_remote_metadata=False):
         """Initialize."""
-        super(WebFeatureService_2_0_0, self).__init__(opener, cookies, username, password)
         log.debug('building WFS %s'%url)
         self.url = url
         self.version = version
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, self.opener)
+        reader = WFSCapabilitiesReader(self.version)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -136,7 +135,7 @@ class WebFeatureService_2_0_0(Client):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return self.opener.open(reader.capabilities_url(self.url))
+        return urlopen(reader.capabilities_url(self.url))
     
     def items(self):
         '''supports dict-like items() access'''
@@ -199,13 +198,14 @@ class WebFeatureService_2_0_0(Client):
             request['storedQuery_id']=str(storedQueryID)
             for param in storedQueryParams:
                 request[param]=storedQueryParams[param]
-
+                
+        
         data = urlencode(request)
 
         if method == 'Post':
-            u = self.opener.open(base_url, data=data)
+            u = urlopen(base_url, data=data)
         else:
-            u = self.opener.open(base_url + data)
+            u = urlopen(base_url + data)
         
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -248,7 +248,7 @@ class WebFeatureService_2_0_0(Client):
             for kw in kwargs.keys():
                 request[kw]=str(kwargs[kw])
         data=urlencode(request)
-        u = self.opener.open(base_url + data)
+        u = urlopen(base_url + data)
         return u.read()
         
         
@@ -263,7 +263,7 @@ class WebFeatureService_2_0_0(Client):
         base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         data = urlencode(request)
-        u = self.opener.open(base_url + data)
+        u = urlopen(base_url + data)
         tree=etree.fromstring(u.read())
         base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
         tempdict={}       
@@ -281,7 +281,7 @@ class WebFeatureService_2_0_0(Client):
         base_url = self.getOperationByName('DescribeStoredQueries').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         data = urlencode(request)
-        u = self.opener.open(base_url + data)
+        u = urlopen(base_url + data)
         tree=etree.fromstring(u.read())
         tempdict2={} 
         for sqelem in tree[:]:
@@ -393,13 +393,12 @@ class ContentMetadata:
             self.metadataUrls.append(metadataUrl)
 
 
-class WFSCapabilitiesReader(Client):
+class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version, opener):
+    def __init__(self, version='2.0.0'):
         """Initialize"""
-        super(WFSCapabilitiesReader, self).__init__(opener)
         self.version = version
         self._infoset = None
 
@@ -432,7 +431,7 @@ class WFSCapabilitiesReader(Client):
             The URL to the WFS capabilities document.
         """
         request = self.capabilities_url(url)
-        u = self.opener.open(request)
+        u = urlopen(request)
         return etree.fromstring(u.read())
 
     def readString(self, st):

@@ -11,7 +11,7 @@
 
 from wcsBase import WCSBase, WCSCapabilitiesReader
 from urllib import urlencode
-from owslib.util import testXMLValue
+from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
 from owslib.crs import Crs
 import os, errno
@@ -35,10 +35,7 @@ class WebCoverageService_1_0_0(WCSBase):
         else:
             raise KeyError, "No content named %s" % name
     
-    def __init__(self, url, xml, opener=None, cookies=None, username=None, password=None, url_base=None): 
-
-        super(WebCoverageService_1_0_0, self).__init__(opener, cookies, username, password, url_base) 
-
+    def __init__(self,url,xml, cookies):
         self.version='1.0.0'
         self.url = url   
         self.cookies=cookies
@@ -141,15 +138,18 @@ class WebCoverageService_1_0_0(WCSBase):
         if kwargs:
             for kw in kwargs:
                 request[kw]=kwargs[kw]
-
+        
         #encode and request
         data = urlencode(request)
         self.log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
-
-        u=self.openURL(base_url, data, method)
+        
+        
+        u=openURL(base_url, data, method, self.cookies)
 
         return u
+    
 
+               
     def getOperationByName(self, name):
         """Return a named operation item."""
         for item in self.operations:
