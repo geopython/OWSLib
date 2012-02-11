@@ -287,6 +287,33 @@ Harvest a resource
 
   >>> csw.harvest('http://host/url.xml', 'http://www.isotc211.org/2005/gmd')
 
+Authentication
+
+.. code-block:: python
+
+  import urllib, urllib2
+  from owslib.csw import CatalogueServiceWeb
+
+  ch = urllib2.HTTPCookieProcessor
+  rh = urllib2.HTTPRedirectHandler
+  _opener = urllib2.build_opener(rh,ch)
+
+  url = 'http://host/auth'
+
+  headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Accept": "text/plain"
+  }
+  post = urllib.urlencode({
+      "username": 'admin',
+      "password": 'admin'
+  })
+  request = urllib2.Request(url, post, headers)
+  response = _opener.open(request)
+
+  c=CatalogueServiceWeb('http://host/csw', opener=_opener)
+
+  c.transaction(ttype='insert', record=open('tests/foo.xml').read())
 
 WMC
 ---
