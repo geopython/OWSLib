@@ -19,7 +19,7 @@ import cgi
 import urllib2
 from urllib import urlencode
 from etree import etree
-from .util import openURL, testXMLValue
+from .util import Client, testXMLValue
 from fgdc import Metadata
 from iso import MD_Metadata
 
@@ -43,7 +43,7 @@ class CapabilitiesError(Exception):
     pass
 
 
-class WebMapService(object):
+class WebMapService(Client):
     """Abstraction for OGC Web Map Service (WMS).
 
     Implements IWebMapService.
@@ -58,9 +58,10 @@ class WebMapService(object):
 
     
     def __init__(self, url, version='1.1.1', xml=None, 
-                username=None, password=None, parse_remote_metadata=False
+                username=None, password=None, opener=None, parse_remote_metadata=False
                 ):
         """Initialize."""
+        super(WebMapService, self).__init__(opener, cookies = cookies, username=username, password=password, url_base = url)
         self.url = url
         self.username = username
         self.password = password
@@ -233,7 +234,7 @@ class WebMapService(object):
 
         data = urlencode(request)
         
-        u = openURL(base_url, data, method, username = self.username, password = self.password)
+        u = self.openURL(base_url, data, method, username = self.username, password = self.password)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -535,27 +536,18 @@ class ContactMetadata:
         else: self.position = None
 
       
-class WMSCapabilitiesReader:
+class WMSCapabilitiesReader(Client):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.1.1', url=None, un=None, pw=None):
+    def __init__(self, version='1.1.1', url=None, un=None, pw=None, client=None):
         """Initialize"""
+        super(WMSCapabilitiesReader, self).__init__(client)
         self.version = version
         self._infoset = None
         self.url = url
         self.username = un
         self.password = pw
-
-        #if self.username and self.password:
-            ## Provide login information in order to use the WMS server
-            ## Create an OpenerDirector with support for Basic HTTP 
-            ## Authentication...
-            #passman = HTTPPasswordMgrWithDefaultRealm()
-            #passman.add_password(None, self.url, self.username, self.password)
-            #auth_handler = HTTPBasicAuthHandler(passman)
-            #opener = build_opener(auth_handler)
-            #self._open = opener.open
 
     def capabilities_url(self, service_url):
         """Return a capabilities url
@@ -587,7 +579,7 @@ class WMSCapabilitiesReader:
 
         #now split it up again to use the generic openURL function...
         spliturl=getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
+        u = self.openURL(spliturl[0], spliturl[1], method='Get')
         return etree.fromstring(u.read())
 
     def readString(self, st):

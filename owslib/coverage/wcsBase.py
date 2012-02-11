@@ -10,8 +10,9 @@
 # =============================================================================
 
 from urllib import urlencode
-from urllib2 import urlopen, Request
+from urllib2 import Request
 from owslib.etree import etree
+from owslib.util import Client
 import cgi
 from StringIO import StringIO
 
@@ -19,9 +20,9 @@ from StringIO import StringIO
 
 import logging
 
-class WCSBase(object):
+class WCSBase(Client):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
-    def __new__(self,url, xml, cookies):
+    def __new__(self, url, xml, opener, cookies, username, password):
         """ overridden __new__ method 
         
         @type url: string
@@ -31,16 +32,16 @@ class WCSBase(object):
         @return: inititalised WCSBase object
         """
         obj=object.__new__(self)
-        obj.__init__(url, xml, cookies)
+        obj.__init__(url, xml, opener, cookies, username, password)
         self.cookies=cookies
         self.log = logging.getLogger(__name__)
         consoleh  = logging.StreamHandler()
         self.log.addHandler(consoleh)	
         self._describeCoverage = {} #cache for DescribeCoverage responses
         return obj
-    
-    def __init__(self):
-        pass    
+
+    def __init__(self, url, opener, cookies, username, password): 
+        super(WCSBase, self).__init__(opener, cookies, username, password, url)     
 
     def getDescribeCoverage(self, identifier):
         ''' returns a describe coverage document - checks the internal cache to see if it has been fetched before '''
@@ -63,15 +64,16 @@ class WCSBase(object):
         elif level=='CRITICAL':
             self.log.setLevel(logging.CRITICAL)
         
-class WCSCapabilitiesReader(object):
+class WCSCapabilitiesReader(Client):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version=None, cookies = None):
+    def __init__(self, version=None, cookies=None, opener=None, username=None, password=None, url_base=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
         """
+        super(WCSCapabilitiesReader, self).__init__(opener, cookies, username, password, url_base)
         self.version = version
         self._infoset = None
         self.cookies = cookies
@@ -109,11 +111,7 @@ class WCSCapabilitiesReader(object):
         @rtype: elementtree tree
         @return: An elementtree tree representation of the capabilities document
         """
-        request = self.capabilities_url(service_url)
-        req = Request(request)
-        if self.cookies is not None:
-            req.add_header('Cookie', self.cookies)   
-        u = urlopen(req)
+        u = self.openURL(self.capabilities_url(service_url), '')
         return etree.fromstring(u.read())
     
     def readString(self, st):
@@ -125,15 +123,16 @@ class WCSCapabilitiesReader(object):
             raise ValueError("String must be of type string, not %s" % type(st))
         return etree.fromstring(st)
 
-class DescribeCoverageReader(object):
+class DescribeCoverageReader(Client):
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
 
-    def __init__(self, version, identifier, cookies):
+    def __init__(self, version, identifier, cookies, opener=None, username=None, password=None, url_base=None): 
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
         """
+        super(DescribeCoverageReader, self).__init__(opener, cookies, username, password, url_base)
         self.version = version
         self._infoset = None
         self.identifier=identifier
@@ -182,11 +181,7 @@ class DescribeCoverageReader(object):
         @rtype: elementtree tree
         @return: An elementtree tree representation of the capabilities document
         """
-        request = self.descCov_url(service_url)
-        req = Request(request)
-        if self.cookies is not None:
-            req.add_header('Cookie', self.cookies)   
-        u = urlopen(req)
+        u = self.opener.open(self.descCov_url(service_url))
         return etree.fromstring(u.read())
     
        
