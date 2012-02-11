@@ -12,8 +12,9 @@
 ##########NOTE: Does not conform to new interfaces yet #################
 
 from wcsBase import WCSBase, WCSCapabilitiesReader
-from owslib.util import testXMLValue
+from owslib.util import openURL, testXMLValue
 from urllib import urlencode
+from urllib2 import urlopen
 from owslib.etree import etree
 import os, errno
 from owslib.coverage import wcsdecoder
@@ -169,7 +170,7 @@ class WebCoverageService_1_1_0(WCSBase):
         #encode and request
         data = urlencode(request)
         
-        u=self.openURL(base_url, data, method)
+        u=openURL(base_url, data, method, self.cookies)
         return u
         
         
