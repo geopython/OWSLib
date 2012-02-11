@@ -14,6 +14,7 @@ import random
 from owslib.etree import etree
 from owslib import fes
 from owslib import util
+from owslib.util import Client
 from owslib import ows
 from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
@@ -43,9 +44,9 @@ namespaces = {
 
 schema_location = '%s %s' % (namespaces['csw'], schema)
 
-class CatalogueServiceWeb:
+class CatalogueServiceWeb(Client):
     """ csw request class """
-    def __init__(self, url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False):
+    def __init__(self, url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False, opener=None, cookies=None, username=None, password=None):
         """
 
         Construct and process a GetCapabilities request
@@ -60,6 +61,8 @@ class CatalogueServiceWeb:
         - skip_caps: whether to skip GetCapabilities processing on init (default is False)
 
         """
+
+        super(CatalogueServiceWeb, self).__init__(opener, cookies, username, password, url)
 
         self.url = url
         self.lang = lang
@@ -279,7 +282,7 @@ class CatalogueServiceWeb:
             self.records = {}
             self._parserecords(outputschema, esn)
 
-    def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None, bbox=None, keywords=[], cql=None):
+    def transaction(self, ttype=None, typename='csw:Record', record=None, recordproperties=[], keywords=None, bbox=None, cql=None, identifier=None):
         """
 
         Construct and process a Transaction request
@@ -288,13 +291,13 @@ class CatalogueServiceWeb:
         ----------
 
         - ttype: the type of transaction 'insert, 'update', 'delete'
-        - typename: the typename to describe (default is 'csw:Record')
-        - record: the XML record to insert
-        - propertyname: the RecordProperty/PropertyName to Filter against
-        - propertyvalue: the RecordProperty Value to Filter against (for updates)
-        - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
+        - typename: the typename to insert (default is 'csw:Record')
+        - record: the XML record (for insert only)
+        - recordproperties: list of dicts of name/value pairs to update (e.g. [{'name': 'dc:title', 'value': 'foo'}] )
+        - bbox: bounding box filter [minx,miny,maxx,maxy]
         - keywords: list of keywords
         - cql: common query language text.  Note this overrides bbox, qtype, keywords
+        - identifier: identifier constraint (for update and delete requests); overrides all other constraints
 
         """
 
@@ -322,15 +325,18 @@ class CatalogueServiceWeb:
         if ttype == 'update':
             if record is not None:
                 node1.append(etree.fromstring(record))
+                if identifier is not None:
+                    self._setconstraint(node1, None, identifier=identifier)
             else:
-                if propertyname is not None and propertyvalue is not None:
-                    node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
-                    etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = propertyname
-                    etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = propertyvalue
-                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
+                if len(recordproperties) > 0:
+                    for rp in recordproperties: 
+                        node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
+                        etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = rp['name']
+                        etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = rp['value']
+                        self._setconstraint(node1, None, recordproperties, keywords, bbox, cql, identifier)
 
         if ttype == 'delete':
-            self._setconstraint(node1, None, propertyname, keywords, bbox, cql)
+            self._setconstraint(node1, None, recordproperties, keywords, bbox, cql, identifier)
 
         self.request = util.xml2string(etree.tostring(node0))
 
@@ -448,24 +454,25 @@ class CatalogueServiceWeb:
         else:
             return etree.Element(util.nspath_eval(el, namespaces))
 
-    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None):
+    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None, identifier=None):
         #if keywords or bbox is not None or qtype is not None or cql is not None:
-        if keywords or bbox is not None or qtype is not None or cql is not None:
+        if keywords or bbox is not None or qtype is not None or cql is not None or identifier is not None:
             node0 = etree.SubElement(parent, util.nspath_eval('csw:Constraint', namespaces))
             node0.set('version', '1.1.0')
 
-            if cql is not None:  # send raw CQL query
-                import warnings
-                warnings.warn('CQL passed (overrides all other parameters', UserWarning)
+            if cql is not None:  # override other params and send raw CQL query
                 node1 = etree.SubElement(node0, util.nspath_eval('csw:CqlText', namespaces))
                 node1.text = cql
+            elif identifier is not None:  # override other params and perform identifier constraint
+                flt = fes.FilterRequest()
+                node0.append(flt.set(identifier=identifier))
             else:  # construct a Filter request
                 flt = fes.FilterRequest()
                 node0.append(flt.set(qtype=qtype, keywords=keywords, propertyname=propertyname,bbox=bbox))
 
     def _invoke(self):
         # do HTTP request
-        self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
+        self.response = self.http_post(self.url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
         self._exml = etree.parse(StringIO.StringIO(self.response))

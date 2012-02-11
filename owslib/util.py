@@ -10,9 +10,13 @@
 import sys
 from owslib.etree import etree
 import urlparse, urllib2
-from urllib2 import urlopen, HTTPError, Request
-from urllib2 import HTTPPasswordMgrWithDefaultRealm
+from urllib2 import urlopen, HTTPError, Request 
+from urllib2 import HTTPPasswordMgrWithDefaultRealm 
 from urllib2 import HTTPBasicAuthHandler
+from urllib2 import HTTPCookieProcessor 
+from urllib2 import HTTPError 
+from urllib2 import HTTPPasswordMgrWithDefaultRealm 
+from urllib2 import Request 
 from StringIO import StringIO
 
 """
@@ -33,56 +37,110 @@ class ServiceException(Exception):
     #TODO: this should go in ows common module when refactored.  
     pass
 
-def openURL(url_base, data, method='Get', cookies=None, username=None, password=None):
-    ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
-    url_base.strip() 
-    lastchar = url_base[-1]
-    if lastchar not in ['?', '&']:
-        if url_base.find('?') == -1:
-            url_base = url_base + '?'
+class Client(object): 
+    def __init__(self, opener=None, cookies=None, username=None, password=None, url_base=None): 
+        if opener is None: 
+            self.opener = urllib2.build_opener()
         else:
-            url_base = url_base + '&'
-            
-    if username and password:
-        # Provide login information in order to use the WMS server
-        # Create an OpenerDirector with support for Basic HTTP 
-        # Authentication...
-        passman = HTTPPasswordMgrWithDefaultRealm()
-        passman.add_password(None, url_base, username, password)
-        auth_handler = HTTPBasicAuthHandler(passman)
-        opener = urllib2.build_opener(auth_handler)
-        openit = opener.open
-    else:
-        openit = urlopen
-   
-    try:
-        if method == 'Post':
-            req = Request(url_base, data)
-        else:
-            req=Request(url_base + data)
+            self.opener = opener
+
         if cookies is not None:
-            req.add_header('Cookie', cookies)
-        u = openit(req)
-    except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
-        if e.code in [400, 401]:
-            raise ServiceException, e.read()
-        else:
-            raise e
-    # check for service exceptions without the http header set
-    if u.info()['Content-Type'] in ['text/xml', 'application/xml']:          
-        #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
-        #wrap the url stram in a extended StringIO object so it's re-readable
-        u=RereadableURL(u)      
-        se_xml= u.read()
-        se_tree = etree.fromstring(se_xml)
-        serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
-        if serviceException is None:
-            serviceException=se_tree.find('ServiceException')
-        if serviceException is not None:
-            raise ServiceException, \
-            str(serviceException.text).strip()
-        u.seek(0) #return cursor to start of u      
-    return u
+            self.opener.add_handler(HTTPCookieProcessor(cookies))
+        
+        if None not in (username, password, url_base):
+            passman = HTTPPasswordMgrWithDefaultRealm()
+            passman.add_password(None, url_base, username, password)
+            self.opener.add_handler(HTTPBasicAuthHandler(passman))
+
+    def openURL(self, url_base, data, method='Get'):
+        ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
+        url_base.strip() 
+        lastchar = url_base[-1]
+        if lastchar not in ['?', '&']:
+            if url_base.find('?') == -1:
+                url_base = url_base + '?'
+            else:
+                url_base = url_base + '&'
+      
+        try:
+            if method == 'Post':
+                req = Request(url_base, data)
+            else:
+                req = Request(url_base + data)
+            u = self.opener.open(req)
+        except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
+            if e.code in [400, 401]:
+                raise ServiceException, e.read()
+            else:
+                raise e
+        # check for service exceptions without the http header set
+        if u.info()['Content-Type'] in ['text/xml', 'application/xml']:          
+            #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
+            #wrap the url stram in a extended StringIO object so it's re-readable
+            u=RereadableURL(u)      
+            se_xml= u.read()
+            se_tree = etree.fromstring(se_xml)
+            serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
+            if serviceException is None:
+                serviceException=se_tree.find('ServiceException')
+            if serviceException is not None:
+                raise ServiceException, \
+                str(serviceException.text).strip()
+            u.seek(0) #return cursor to start of u      
+        return u
+
+
+    def http_post(self, url=None, request=None, lang='en-US', timeout=10):
+        """
+
+        Invoke an HTTP POST request 
+
+        Parameters
+        ----------
+
+        - url: the URL of the server
+        - request: the request message
+        - lang: the language
+        - timeout: timeout in seconds
+
+        """
+        assert hasattr(self, 'opener')
+
+        if url is not None:
+            u = urlparse.urlsplit(url)
+            r = urllib2.Request(url, request)
+            r.add_header('User-Agent', 'OWSLib (http://owslib.sourceforge.net/)')
+            r.add_header('Content-type', 'text/xml')
+            r.add_header('Content-length', '%d' % len(request))
+            r.add_header('Accept', 'text/xml')
+            r.add_header('Accept-Language', lang)
+            r.add_header('Accept-Encoding', 'gzip,deflate')
+            r.add_header('Host', u.netloc)
+
+            try:
+                up = self.opener.open(r, timeout=timeout);
+            except TypeError:
+                import socket
+                socket.setdefaulttimeout(timeout)
+                up = self.opener.open(r)
+
+            ui = up.info()  # headers
+            response = up.read()
+            up.close()
+
+            # check if response is gzip compressed
+            if ui.has_key('Content-Encoding'):
+                if ui['Content-Encoding'] == 'gzip':  # uncompress response
+                    import gzip
+                    cds = StringIO(response)
+                    gz = gzip.GzipFile(fileobj=cds)
+                    response = gz.read()
+
+            return response
+
+
+
+
 
 #default namespace for nspath is OWS common
 OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
@@ -137,54 +195,6 @@ def testXMLValue(val, attrib=False):
             return val.text
     else:
         return None
-
-
-def http_post(url=None, request=None, lang='en-US', timeout=10):
-    """
-
-    Invoke an HTTP POST request 
-
-    Parameters
-    ----------
-
-    - url: the URL of the server
-    - request: the request message
-    - lang: the language
-    - timeout: timeout in seconds
-
-    """
-
-    if url is not None:
-        u = urlparse.urlsplit(url)
-        r = urllib2.Request(url, request)
-        r.add_header('User-Agent', 'OWSLib (https://sourceforge.net/apps/trac/owslib)')
-        r.add_header('Content-type', 'text/xml')
-        r.add_header('Content-length', '%d' % len(request))
-        r.add_header('Accept', 'text/xml')
-        r.add_header('Accept-Language', lang)
-        r.add_header('Accept-Encoding', 'gzip,deflate')
-        r.add_header('Host', u.netloc)
-
-        try:
-            up = urllib2.urlopen(r,timeout=timeout);
-        except TypeError:
-            import socket
-            socket.setdefaulttimeout(timeout)
-            up = urllib2.urlopen(r)
-
-        ui = up.info()  # headers
-        response = up.read()
-        up.close()
-
-        # check if response is gzip compressed
-        if ui.has_key('Content-Encoding'):
-            if ui['Content-Encoding'] == 'gzip':  # uncompress response
-                import gzip
-                cds = StringIO(response)
-                gz = gzip.GzipFile(fileobj=cds)
-                response = gz.read()
-
-        return response
 
 def xml2string(xml):
     """
