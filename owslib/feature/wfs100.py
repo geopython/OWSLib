@@ -9,8 +9,9 @@
 import cgi
 from cStringIO import StringIO
 from urllib import urlencode
+from urllib2 import urlopen
 import logging
-from owslib.util import Client, testXMLValue
+from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -45,12 +46,12 @@ class ServiceException(Exception):
     pass
 
 
-class WebFeatureService_1_0_0(Client):
+class WebFeatureService_1_0_0(object):
     """Abstraction for OGC Web Feature Service (WFS).
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, opener, cookies, username, password, parse_remote_metadata=False):
+    def __new__(self,url, version, xml, parse_remote_metadata=False):
         """ overridden __new__ method 
         
         @type url: string
@@ -62,7 +63,7 @@ class WebFeatureService_1_0_0(Client):
         @return: initialized WebFeatureService_1_0_0 object
         """
         obj=object.__new__(self)
-        obj.__init__(url, version, xml, opener, cookies, username, password, parse_remote_metadata)
+        obj.__init__(url, version, xml, parse_remote_metadata)
         self.log = logging.getLogger()
         consoleh  = logging.StreamHandler()
         self.log.addHandler(consoleh)    
@@ -76,9 +77,8 @@ class WebFeatureService_1_0_0(Client):
             raise KeyError, "No content named %s" % name
     
     
-    def __init__(self, url, version, xml, opener, cookies, username, password, parse_remote_metadata=False): 
+    def __init__(self, url, version, xml=None, parse_remote_metadata=False):
         """Initialize."""
-        super(WebFeatureService_1_0_0, self).__init__(opener, cookies, username, password, url) 
         self.url = url
         self.version = version
         self._capabilities = None
@@ -122,8 +122,8 @@ class WebFeatureService_1_0_0(Client):
         """Request and return capabilities document from the WFS as a 
         file-like object.
         NOTE: this is effectively redundant now"""
-        reader = WFSCapabilitiesReader(self.version, self.opener) 
-        return self.opener.open(reader.capabilities_url(self.url)) 
+        reader = WFSCapabilitiesReader(self.version)
+        return urlopen(reader.capabilities_url(self.url))
     
     def items(self):
         '''supports dict-like items() access'''
@@ -186,8 +186,9 @@ class WebFeatureService_1_0_0(Client):
         if maxfeatures: request['maxfeatures'] = str(maxfeatures)
 
         data = urlencode(request)
-        u = self.openURL(base_url, data, method)
-
+        u = openURL(base_url, data, method)
+        
+        
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
         # is data. We'll check anything smaller.
@@ -320,13 +321,12 @@ class OperationMetadata:
         self.methods = dict(methods)
 
 
-class WFSCapabilitiesReader(Client):
+class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0', opener=None):
+    def __init__(self, version='1.0'):
         """Initialize"""
-        super(WFSCapabilitiesReader, self).__init__(opener) 
         self.version = version
         self._infoset = None
 
@@ -359,7 +359,7 @@ class WFSCapabilitiesReader(Client):
             The URL to the WFS capabilities document.
         """
         request = self.capabilities_url(url)
-        u = self.opener.open(request)
+        u = urlopen(request)
         return etree.fromstring(u.read())
 
     def readString(self, st):
