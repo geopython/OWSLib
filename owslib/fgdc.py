@@ -24,6 +24,9 @@ class Metadata(object):
         self.eainfo = Eainfo(md)
         self.metainfo = Metainfo(md)
 
+        if self.idinfo.datasetid:
+            self.identifier = self.idinfo.datasetid
+
 class Idinfo(object):
     """ Process idinfo """
     def __init__(self, md):
