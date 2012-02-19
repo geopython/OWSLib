@@ -279,7 +279,7 @@ class CatalogueServiceWeb:
             self.records = {}
             self._parserecords(outputschema, esn)
 
-    def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None, bbox=None, keywords=[], cql=None):
+    def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None, bbox=None, keywords=[], cql=None, identifier=None):
         """
 
         Construct and process a Transaction request
@@ -295,6 +295,7 @@ class CatalogueServiceWeb:
         - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
         - keywords: list of keywords
         - cql: common query language text.  Note this overrides bbox, qtype, keywords
+        - identifier: record identifier.  Note this overrides bbox, qtype, keywords, cql
 
         """
 
@@ -327,10 +328,10 @@ class CatalogueServiceWeb:
                     node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
                     etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = propertyname
                     etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = propertyvalue
-                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
+                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql, identifier)
 
         if ttype == 'delete':
-            self._setconstraint(node1, None, propertyname, keywords, bbox, cql)
+            self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
 
         self.request = util.xml2string(etree.tostring(node0))
 
@@ -448,15 +449,16 @@ class CatalogueServiceWeb:
         else:
             return etree.Element(util.nspath_eval(el, namespaces))
 
-    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None):
-        #if keywords or bbox is not None or qtype is not None or cql is not None:
-        if keywords or bbox is not None or qtype is not None or cql is not None:
+    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None, identifier=None):
+        if keywords or bbox is not None or qtype is not None or cql is not None or identifier is not None:
             node0 = etree.SubElement(parent, util.nspath_eval('csw:Constraint', namespaces))
             node0.set('version', '1.1.0')
 
-            if cql is not None:  # send raw CQL query
-                import warnings
-                warnings.warn('CQL passed (overrides all other parameters', UserWarning)
+            if identifier is not None:  # set identifier filter, overrides all other parameters
+                flt = fes.FilterRequest()
+                node0.append(flt.set(identifier=identifier))
+            elif cql is not None:  # send raw CQL query
+                # CQL passed, overrides all other parameters
                 node1 = etree.SubElement(node0, util.nspath_eval('csw:CqlText', namespaces))
                 node1.text = cql
             else:  # construct a Filter request
