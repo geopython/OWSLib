@@ -227,7 +227,8 @@ class ContentMetadata:
                     float(b.maxx), float(b.maxy),
                     )
         # crs options
-        self.crsOptions = [srs.text for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
+
         dsrs = testXMLValue(elem.find(nspath_eval('wfs:DefaultSRS', namespaces)))
         if dsrs is not None:  # first element is default srs
             self.crsOptions.insert(0, Crs(dsrs))
