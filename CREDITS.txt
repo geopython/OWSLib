@@ -4,3 +4,4 @@ Kai Lautaportti <kai.lautaportti@hexagonit.fi>
 Dominic Lowe <D.Lowe@rl.ac.uk>
 Jo Walsh <jo@frot.org>
 Tom Kralidis <tomkralidis@hotmail.com>
+Jachym Cepicky <jachym.cepicky@gmail.com>
