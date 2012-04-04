@@ -22,6 +22,7 @@ class Metadata(object):
 
         self.idinfo = Idinfo(md)
         self.eainfo = Eainfo(md)
+        self.distinfo = Distinfo(md)
         self.metainfo = Metainfo(md)
 
         if self.idinfo.datasetid:
@@ -291,6 +292,20 @@ class Eainfo(object):
             attr['udom'] = util.testXMLValue(val)
 
             self.attr.append(attr)
+
+class Distinfo(object):
+    """ Process distinfo """
+    def __init__(self, md):
+        val = md.find('distinfo')
+        if val is not None:
+            val2 = val.find('stdorder')
+            if val2 is not None:
+                self.stdorder = {'digform': []}
+                for link in val2.findall('digform'):
+                    digform = {}
+                    digform['name'] = util.testXMLValue(link.find('digtinfo/formname'))
+                    digform['url'] = util.testXMLValue(link.find('digtopt/onlinopt/computer/networka/networkr/'))
+                    self.stdorder['digform'].append(digform)
 
 class Metainfo(object):
     """ Process metainfo """
