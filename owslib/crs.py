@@ -1737,6 +1737,7 @@ class Crs(object):
         self.version = None
         self.code = -1
         self.axisorder = 'xy'
+        self.encoding = "code"
 
         if axisorder is not None:  # forced axisorder
             self.axisorder = axisorder
@@ -1744,11 +1745,13 @@ class Crs(object):
         values = self.id.split(':')
 
         if self.id.find('#') != -1:  # it's a URI
+            self.encoding = "uri"
             vals = self.id.split('#')
-            self.authority = vals[0].split('/')[-1].split('.')[0]
+            self.authority = vals[0].split('/')[-1].split('.')[0].upper()
             self.code = int(vals[-1])
         elif len(values) > 2:  # it's a URN style
             self.naming_authority = values[1]
+            self.encoding = "urn"
 
             if len(values) == 3:  # bogus
                 pass
@@ -1757,7 +1760,7 @@ class Crs(object):
             else:
                 self.category = values[2]
                 self.type = values[3]
-                self.authority = values[4]
+                self.authority = values[4].upper()
 
             if len(values) == 7:  # version, even if empty, is included
                 if values[5]:
@@ -1769,15 +1772,18 @@ class Crs(object):
             except:
                 self.code = values[-1]
 
-            # if the user has not forced the axisorder,
-            # scan the list of codes that have an axis ordering of
-            # yx and set axis order accordingly
-            if axisorder is None:
-                if self.code in axisorder_yx:
-                    self.axisorder = 'yx'
         elif len(values) == 2:  # it's an authority:code code
-            self.authority = values[0]
+            self.encoding = "code"
+            self.authority = values[0].upper()
             self.code = int(values[1])
+
+        # if the user has not forced the axisorder,
+        # scan the list of codes that have an axis ordering of
+        # yx and set axis order accordingly
+        if axisorder is None:
+            if self.code in axisorder_yx:
+                self.axisorder = 'yx'
+
 
     def getcode(self):
         """Create for example "EPSG:4326" string and return back
@@ -1789,3 +1795,14 @@ class Crs(object):
             return '%s:%s' % (self.authority, self.code)
         return None
 
+    def getcodeurn(self):
+        """Create for example "urn:ogc:def:crs:EPSG::4326" string and return back
+
+        :returns: String code formated in "urn:ogc:def:authority:code"
+        """
+
+        return 'urn:%s:def:crs:%s:%s:%s' % (
+                    (self.naming_authority and self.naming_authority or "ogc"),
+                                    (self.authority or ""),
+                                    (self.version or ""),
+                                    (self.code or ""))
