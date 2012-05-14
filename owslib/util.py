@@ -88,10 +88,9 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
 
 #default namespace for nspath is OWS common
 OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
-def nspath(path, ns=OWS_NAMESPACE):
+def nspath(path, namespace=OWS_NAMESPACE):
 
     """
-
     Prefix the given path with the given namespace identifier.
     
     Parameters
@@ -102,13 +101,17 @@ def nspath(path, ns=OWS_NAMESPACE):
 
     """
 
-    if ns is None or path is None:
+    if path is None:
         return -1
+
+    # If no namespace, just return the unchanged path
+    if namespace is None:
+        return path
 
     components = []
     for component in path.split('/'):
         if component != '*':
-            component = '{%s}%s' % (ns, component)
+            component = '{%s}%s' % (namespace, component)
         components.append(component)
     return '/'.join(components)
 
