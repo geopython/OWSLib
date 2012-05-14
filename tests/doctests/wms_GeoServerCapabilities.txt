@@ -1,12 +1,13 @@
 Imports
 
     >>> from owslib.wms import WebMapService
+    >>> from tests.utils import open_file
     
 Fake a request to a WMS Server using saved doc from GeoServer, using a subset
 of the sample data distributed with the installer.
 http://localhost:8080/geoserver/wms?request=GetCapabilities
 
-    >>> xml = open_file('geoserver-wms-cap.xml', 'r').read() 
+    >>> xml = open_file('resources/geoserver-wms-cap.xml', 'r').read() 
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
     
 Test capabilities

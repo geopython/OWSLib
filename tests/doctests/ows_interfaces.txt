@@ -6,12 +6,13 @@
     >>> from owslib.wms import WebMapService
     >>> from owslib.wcs import WebCoverageService
     >>> from owslib.wfs import WebFeatureService
+    >>> from tests.utils import open_file
 
 
 #TODO, we should run all these from local XML documents (as per the WMS and WFS services)
 
-    >>> wmsxml = open_file('JPLCapabilities.xml', 'r').read() 
-    >>> wfsxml = open_file('mapserver-wfs-cap.xml', 'r').read()
+    >>> wmsxml = open_file('resources/JPLCapabilities.xml', 'r').read() 
+    >>> wfsxml = open_file('resources/mapserver-wfs-cap.xml', 'r').read()
     >>> wms = WebMapService('url', version='1.1.1', xml=wmsxml)
     >>> wfs = WebFeatureService('url', version='1.0', xml=wfsxml)
     >>> wcs=WebCoverageService('http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd', version='1.0.0')

@@ -2,11 +2,12 @@
 Imports
 
     >>> from owslib.wms import WebMapService
+    >>> from tests.utils import open_file
     
 Fake a request to a WMS Server using saved doc from telascience.org.
 http://wms.telascience.org/cgi-bin/ngBM_wms?
 
-    >>> xml = open_file('Telascience.xml', 'r').read() 
+    >>> xml = open_file('resources/Telascience.xml', 'r').read() 
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
     
 Test capabilities

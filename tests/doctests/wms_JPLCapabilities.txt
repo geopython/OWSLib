@@ -2,11 +2,12 @@
 Imports
 
     >>> from owslib.wms import WebMapService
+    >>> from tests.utils import open_file
     
 Fake a request to a WMS Server using saved doc from 
 http://wms.jpl.nasa.gov/wms.cgi.
 
-    >>> xml = open('JPLCapabilities.xml', 'r').read() 
+    >>> xml = open_file('resources/JPLCapabilities.xml', 'r').read() 
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
     
 Test capabilities
@@ -110,6 +111,6 @@ Lastly, test the getcapabilities and getmap methods
 
     >>> wms = WebMapService('http://wms.jpl.nasa.gov/wms.cgi', version='1.1.1')
     >>> img = wms.getmap(   layers=['global_mosaic'], styles=['visual_bright'],                  srs='EPSG:4326', bbox=(-112, 36, -106, 41), size=(300, 250), format='image/jpeg',         transparent=True)
-    >>> out = open('jpl_mosaic_visb.jpg', 'wb')
+    >>> out = open(os.path.join(os.path.dirname(__file__), 'jpl_mosaic_visb.jpg'), 'wb')
     >>> out.write(img.read())
     >>> out.close()

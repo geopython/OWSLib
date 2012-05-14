@@ -2,10 +2,11 @@
 Imports
 
     >>> from owslib.wfs import WebFeatureService
+    >>> from tests.utils import open_file
     
 Fake a request to a WFS Server using saved doc from.
 
-    >>> xml = open_file('mapserver-wfs-cap.xml', 'r').read() 
+    >>> xml = open_file('resources/mapserver-wfs-cap.xml', 'r').read() 
     >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
     
 Test capabilities
