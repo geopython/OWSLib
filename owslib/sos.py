@@ -1,18 +1,21 @@
 import cgi
-import etree
-import dateutil
+from owslib.etree import etree
+from urllib import urlencode
 from owslib import ows
 from owslib.crs import Crs
-from owslib import filter
-from owslib.util import openURL, testXMLValue, nspath_eval, extract_time
+from owslib.filter import FilterCapabilities
+from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, extract_time
 
 namespaces = {
-    None    : 'http://www.opengis.net/sos/1.0',
+    'sos'   : 'http://www.opengis.net/sos/1.0',
     'xlink' : 'http://www.w3.org/1999/xlink',
     'gml'   : 'http://www.opengis.net/gml',
     'ogc'   : 'http://www.opengis.net/ogc',
     'ows'   : 'http://www.opengis.net/ows',
 }
+
+def nsp(text):
+    return nspath_eval(text,namespaces)
 
 class SensorObservationService(object):
     """
@@ -36,7 +39,7 @@ class SensorObservationService(object):
         self.version = version
         self._capabilities = None
 
-        owscommon = ows.OwsCommon('1.0.0')
+        owscommon = ows.OwsCommon('1.1.0')
         namespaces['ows'] = owscommon.namespace
 
         # Authentication handled by Reader
@@ -56,9 +59,6 @@ class SensorObservationService(object):
         # build metadata objects
         self._buildMetadata()
 
-    def nsp(text):
-        return nspath_eval(text,namespaces)
-
     def _buildMetadata(self):
         """ 
             Set up capabilities metadata objects
@@ -72,13 +72,12 @@ class SensorObservationService(object):
         self.provider = ows.ServiceProvider(service_provider_element, namespaces['ows'])
             
         # ows:OperationsMetadata metadata
-        self.operations = []
-        for op in self._capabilities.findall(nsp('ows:OperationsMetadata/ows:Operation')):
-            self.operations.append(ows.OperationsMetadata(op, namespaces['ows']))
+        op = self._capabilities.find(nsp('ows:OperationsMetadata'))
+        self.operations = ows.OperationsMetadata(op, namespaces['ows']).operations
           
         # sos:FilterCapabilities
         filters = self._capabilities.find(nsp('sos:Filter_Capabilities'))
-        self.filters=filter.Filter_Capabilities(filters)
+        self.filters = FilterCapabilities(filters)
 
         # sos:Contents metadata
         self.contents = {}
@@ -86,19 +85,19 @@ class SensorObservationService(object):
             off = SosObservationOffering(offering)
             self.contents[off.id] = off
 
-    def get_operation(self, name): 
+    def get_operation_by_name(self, name): 
         """
-            Return a Operation item by name
+            Return a Operation item by name, case insensitive
         """
-        for item in self.operations:
-            if item.name == name:
-                return item
+        for item in self.operations.keys():
+            if item.lower() == name.lower():
+                return self.operations[item]
         raise KeyError, "No Operation named %s" % name
 
 class SosObservationOffering(object):
     def __init__(self, element):
-
         self._root = element
+
         self.id = testXMLAttribute(self._root,nsp('gml:id'))
         self.description = testXMLValue(self._root.find(nsp('gml:description')))
         self.name = testXMLValue(self._root.find(nsp('gml:name')))
@@ -107,11 +106,11 @@ class SosObservationOffering(object):
         # LOOK: Check on GML boundedBy to make sure we handle all of the cases
         # gml:boundedBy
         try:
-            envelope = self._root.find(nsp('gml:Envelope'))
+            envelope = self._root.find(nsp('gml:boundedBy/gml:Envelope'))
             lower_left_corner = testXMLValue(envelope.find(nsp('gml:lowerCorner'))).split(" ")
             upper_right_corner = testXMLValue(envelope.find(nsp('gml:upperCorner'))).split(" ")
             # (left, bottom, right, top) in self.bbox_srs units
-            self.bbox = (lower_left_corner[1], lower_left_corner[0], upper_right_corner[1], upper_right_corner[0])
+            self.bbox = (float(lower_left_corner[1]), float(lower_left_corner[0]), float(upper_right_corner[1]), float(upper_right_corner[0]))
             self.bbox_srs = Crs(testXMLAttribute(envelope,'srsName'))
         except Exception:
             self.bbox = None
@@ -120,10 +119,11 @@ class SosObservationOffering(object):
         # LOOK: Support all gml:TimeGeometricPrimitivePropertyType
         # Right now we are just supporting gml:TimePeriod
         # sos:Time
-        begin_position = testXMLValue(self._root.find(nsp('sos:time/gml:TimePeriod/gml:beginPosition')))
-        self.begin_position = extract_time(begin_position)
-        end_position = testXMLValue(self._root.find(nsp('sos:time/gml:TimePeriod/gml:endPosition')))
-        self.end_position = extract_time(end_position)
+        begin_position_element = self._root.find(nsp('sos:time/gml:TimePeriod/gml:beginPosition'))
+        self.begin_position = extract_time(begin_position_element)
+        end_position_element = self._root.find(nsp('sos:time/gml:TimePeriod/gml:endPosition'))
+        self.end_position = extract_time(end_position_element)
+
         self.result_model = testXMLValue(self._root.find(nsp('sos:resultModel')))
 
         self.procedures = []

@@ -1,2 +1,4 @@
 *.pyc
 OWSLib.egg-info/*
+tests/scratch/*
+!.gitkeep

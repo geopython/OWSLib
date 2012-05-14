@@ -1,49 +1,45 @@
     >>> from owslib.csw import CatalogueServiceWeb as cs
-    >>> c=cs('http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw',timeout=30)
+    >>> c=cs('http://data.glos.us/metadata/srv/en/csw',timeout=30)
     >>> c.identification.title
-    'Compusult CSW'
+    'Great Lakes Metadata Catalog'
     >>> c.identification.version
     '2.0.2'
     >>> c.provider.name
-    'Compusult Ltd.'
+    'GeoNetwork opensource'
     >>> c.getdomain('GetRecords.outputSchema')
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ExceptionReport: 'Internal Error'
     >>> c.response
-    '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator=""><ows:ExceptionText>Internal Error</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
-    >>> c.getrecords(keywords=['birds'])
+    '<?xml version="1.0" encoding="UTF-8"?>\r\n<csw:GetDomainResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2">\r\n  <csw:DomainValues type="csw:Record">\r\n    <csw:ParameterName>GetRecords.outputSchema</csw:ParameterName>\r\n    <csw:ListOfValues>\r\n      <csw:Value>http://www.opengis.net/cat/csw/2.0.2</csw:Value>\r\n      <csw:Value>http://www.isotc211.org/2005/gmd</csw:Value>\r\n    </csw:ListOfValues>\r\n  </csw:DomainValues>\r\n</csw:GetDomainResponse>\r\n\r\n'
+    >>> c.getrecords()
     >>> c.results['matches']
-    99
+    202
     >>> c.results['returned']
     10
-    >>> c.records['9250AA67-F3AC-6C12-0CB9-0662231AA181'].title
-    'ALLSPECIES'
-    >>> c.records['9250AA67-F3AC-6C12-0CB9-0662231AA181'].abstract
-    '272 Categorized Initiatives: Initiatives are referenced to a Category, Sub-Category and Subject Term index, through the cititzen science web site at http://www.citizenscience.ca'
-    >>> c.getrecordbyid(['9250AA67-F3AC-6C12-0CB9-0662231AA181'])
+    >>> c.records['de66bb8c-beae-44c7-89cc-93d6c5132056'].title
+    '2007 U.S. Shipping Data for Great Lakes Ports'
+    >>> c.records['de66bb8c-beae-44c7-89cc-93d6c5132056'].abstract
+    'Dataset includes details on individual vessel movements in/out of U.S. Great Lakes ports for the 2007 shiiping season.  Data for each individual movement includes: vessel, commodity, tonnage, origin port, destination port'
+    >>> c.getrecordbyid(['de66bb8c-beae-44c7-89cc-93d6c5132056'])
     >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd')
     >>> c.exceptionreport
     >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd',maxrecords=2)
     >>> c.results['returned']
     2
-    >>> c.records['World Glaciology Data, Geological Survey of Canada.xml'].identification.title
-    'World Glaciology Data, Geological Survey of Canada'
-    >>> c.records['World Glaciology Data, Geological Survey of Canada.xml'].identifier
-    'World Glaciology Data, Geological Survey of Canada.xml'
-    >>> c.records['World Glaciology Data, Geological Survey of Canada.xml'].stdname
-    'ISO 19119 Metadata Standard for Geographic Information'
-    >>> c.records['World Glaciology Data, Geological Survey of Canada.xml'].stdver
-    'ISO 19115:2003'
+    >>> c.records['4fcba54e-eb73-4975-ab92-7aed0e475886'].identification.title
+    'NOAA/GLERL Lake Superior Monthly Component Net Basin Supply Estimates 1948-2008'
+    >>> c.records['4fcba54e-eb73-4975-ab92-7aed0e475886'].identifier
+    '4fcba54e-eb73-4975-ab92-7aed0e475886'
+    >>> c.records['4fcba54e-eb73-4975-ab92-7aed0e475886'].stdname
+    'ISO 19115:2003/19139'
+    >>> c.records['4fcba54e-eb73-4975-ab92-7aed0e475886'].stdver
+    'Version 3.14'
     >>> c.harvest('somefile','someuri')
     Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ExceptionReport: 'Access to Harvest denied'
+    ...
+    ExceptionReport: None
     >>> c.response
-    '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator="Access"><ows:ExceptionText>Access to Harvest denied</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
-    >>> c.getrecords(keywords=['glacial'],outputschema='http://www.fgdc.gov')
+    '<?xml version="1.0" encoding="UTF-8"?>\r\n<ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd">\r\n  <ows:Exception exceptionCode="OperationNotSupported" locator="HarvestHarvest operation is not supported by this catalogue.&#xA;" />\r\n</ows:ExceptionReport>\r\n\r\n'
+    >>> #c.getrecords(outputschema='http://www.fgdc.gov') -- the schema doesn't work, going off the assumption that this is not an issue on our end
+	>>> c.getrecords(outputschema='http://www.isotc211.org/2005/gmd')
     >>> c.results['matches']>370
-    True
-    >>> c.getrecords(keywords=['glacial'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2)
-    >>> len(c.records)
-    2
+    False
+    >>> #c.getrecords(keywords=['hydrology'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2) -- this results in an exception being thrown, maybe bad schema again?

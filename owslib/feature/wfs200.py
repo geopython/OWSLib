@@ -33,7 +33,7 @@ hdlr.setFormatter(formatter)
 log.addHandler(hdlr)
 log.setLevel(logging.DEBUG)
 
-WFS_NAMESPACE = 'http://www.opengis.net/wfs/2.0'
+WFS_NAMESPACE = 'http://www.opengis.net/wfs'
 OGC_NAMESPACE = 'http://www.opengis.net/ogc'
 GML_NAMESPACE = 'http://www.opengis.net/gml'
 FES_NAMESPACE = 'http://www.opengis.net/fes/2.0'
@@ -233,7 +233,7 @@ class WebFeatureService_2_0_0(object):
             return u
 
     def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get'),**kwargs):
-        ''' the WFS GetPropertyValue method'''         
+        ''' the WFS GetPropertyValue method'''     
         base_url = self.getOperationByName('GetPropertyValue').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetPropertyValue'}
         if query:

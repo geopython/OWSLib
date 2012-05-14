@@ -10,8 +10,9 @@
     >>> c=crs.Crs('http://www.opengis.net/gml/epsg.xml#4326')
     >>> c.code
     4326
+	>>> #Since c.code is 4326 which exists in the axisorder_yx set, the axisorder will be changed into yx
     >>> c.axisorder
-    'xy'
+    'yx'
     >>> c=crs.Crs('urn:x-ogc:def:crs:EPSG:6.11:2192')
     >>> c.axisorder
     'xy'

@@ -187,19 +187,20 @@ class FilterCapabilities(object):
     """ Abstraction for Filter_Capabilities """
     def __init__(self, elem):
         # Spatial_Capabilities
-        self.spatial_operands = [f.text for f in elem.findall(util.nspath('Spatial_Capabilities/GeometryOperands/GeometryOperand', namespaces['ogc']))]
-        self.spatial_operators = []
-        for f in elem.findall(util.nspath('Spatial_Capabilities/SpatialOperators/SpatialOperator', namespaces['ogc'])):
-            self.spatial_operators.append(f.attrib['name'])
+        if elem:
+            self.spatial_operands = [f.text for f in elem.findall(util.nspath('Spatial_Capabilities/GeometryOperands/GeometryOperand', namespaces['ogc']))]
+            self.spatial_operators = []
+            for f in elem.findall(util.nspath('Spatial_Capabilities/SpatialOperators/SpatialOperator', namespaces['ogc'])):
+                self.spatial_operators.append(f.attrib['name'])
 
-        # Temporal_Capabilities
-        self.temporal_operands = [f.text for f in elem.findall(util.nspath('Temporal_Capabilities/TemporalOperands/TemporalOperand', namespaces['ogc']))]
-        self.temporal_operators = []
-        for f in elem.findall(util.nspath('Temporal_Capabilities/TemporalOperators/TemporalOperator', namespaces['ogc'])):
-            self.temporal_operators.append(f.attrib['name'])
+            # Temporal_Capabilities
+            self.temporal_operands = [f.text for f in elem.findall(util.nspath('Temporal_Capabilities/TemporalOperands/TemporalOperand', namespaces['ogc']))]
+            self.temporal_operators = []
+            for f in elem.findall(util.nspath('Temporal_Capabilities/TemporalOperators/TemporalOperator', namespaces['ogc'])):
+                self.temporal_operators.append(f.attrib['name'])
 
-        # Scalar_Capabilities
-        self.scalar_comparison_operators = [f.text for f in elem.findall(util.nspath('Scalar_Capabilities/ComparisonOperators/ComparisonOperator', namespaces['ogc']))]
+            # Scalar_Capabilities
+            self.scalar_comparison_operators = [f.text for f in elem.findall(util.nspath('Scalar_Capabilities/ComparisonOperators/ComparisonOperator', namespaces['ogc']))]
 
 def setsortby(parent, propertyname, order='ASC'):
     """

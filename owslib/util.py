@@ -10,7 +10,8 @@
 import sys
 from owslib.etree import etree
 import pytz
-import datetime
+from dateutil import parser
+from datetime import datetime
 import urlparse, urllib2
 from urllib2 import urlopen, HTTPError, Request
 from urllib2 import HTTPPasswordMgrWithDefaultRealm
@@ -34,6 +35,11 @@ class RereadableURL(StringIO,object):
 class ServiceException(Exception):
     #TODO: this should go in ows common module when refactored.  
     pass
+
+# http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
+dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
+  isinstance(d2.get(x),dict) else d2.get(x,d1.get(x)))) for x in
+  set(d1.keys()+d2.keys()))
 
 def openURL(url_base, data, method='Get', cookies=None, username=None, password=None):
     ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
@@ -87,8 +93,8 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
     return u
 
 #default namespace for nspath is OWS common
-OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
-def nspath(path, namespace=OWS_NAMESPACE):
+OWS_NAMESPACE = 'http://www.opengis.net/ows'
+def nspath(path, ns=OWS_NAMESPACE):
 
     """
     Prefix the given path with the given namespace identifier.
@@ -105,13 +111,13 @@ def nspath(path, namespace=OWS_NAMESPACE):
         return -1
 
     # If no namespace, just return the unchanged path
-    if namespace is None:
+    if ns is None:
         return path
 
     components = []
     for component in path.split('/'):
         if component != '*':
-            component = '{%s}%s' % (namespace, component)
+            component = '{%s}%s' % (ns, component)
         components.append(component)
     return '/'.join(components)
 
@@ -119,8 +125,12 @@ def nspath_eval(xpath, namespaces):
     ''' Return an etree friendly xpath '''
     out = []
     for chunks in xpath.split('/'):
-        namespace, element = chunks.split(':')
-        out.append('{%s}%s' % (namespaces[namespace], element))
+        if chunks.find(':') == -1:
+            out.append(chunks)
+        else:
+            namespace, element = chunks.split(':')
+            out.append('{%s}%s' % (namespaces[namespace], element))
+
     return '/'.join(out)
 
 def testXMLAttribute(element, attribute):
@@ -240,15 +250,29 @@ def xmltag_split(tag):
         return tag
 
 
-def extract_time(time_string):
-    ''' return a datetime object based on a gml text string '''
-    dt = None
+def extract_time(element):
+    ''' return a datetime object based on a gml text string 
+
+        ex:
+        <gml:beginPosition>2006-07-27T21:10:00Z</gml:beginPosition>
+        <gml:endPosition indeterminatePosition="now"/>
+
+        If there happens to be a strange element with both attributes and text,
+        use the text.
+        ex:  <gml:beginPosition indeterminatePosition="now">2006-07-27T21:10:00Z</gml:beginPosition>
+        Would be 2006-07-27T21:10:00Z, not 'now'
+
+    '''
+    if element is None:
+        return None
+
     try:            
-        dt = parser.parse(time_string)
+        dt = parser.parse(element.text)
     except Exception:
-        if time_string == 'now':
+        att = testXMLAttribute(element, 'indeterminatePosition')
+        if att and att == 'now':
             dt = datetime.utcnow()
-            dt.replace(tzinto=pytz.utc)
+            dt.replace(tzinfo=pytz.utc)
         else:
             dt = None
     return dt

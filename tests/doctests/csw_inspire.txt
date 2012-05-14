@@ -1,15 +1,19 @@
     >>> from owslib.csw import CatalogueServiceWeb as cs
-    >>> c=cs('http://www.inspire-geoportal.eu/discovery/csw')
+    >>> c=cs('http://data.glos.us/metadata/srv/en/csw')
     >>> c.version
     '2.0.2'
-    >>> c.identification.title
-    'INSPIRE Geoportal Discovery Service'
+	
+	#no longer inspire, files name is probably misleading at this point
+    >>> #c.identification.title
+    #'INSPIRE Geoportal Discovery Service'
+	>>> c.identification.title
+	'Great Lakes Metadata Catalog'
     >>> c.getdomain('GetRecords.typeNames')
     >>> c.results
     {'values': ['csw:Record', 'gmd:MD_Metadata'], 'parameter': 'GetRecords.typeNames', 'type': 'csw:Record'}
     >>> c.getrecords()
     >>> c.results
-    {'matches': 694, 'nextrecord': 11, 'returned': 10}
+    {'matches': 202, 'nextrecord': 11, 'returned': 10}
     >>> c.results['matches'] < 10
     False
     >>> c.getdomain('GetRecords.typeNamesFOO')
@@ -21,4 +25,4 @@
     >>> c.filters.temporal_operators
     []
     >>> c.filters.scalar_comparison_operators
-    ['EqualTo', 'Like', 'LessThan', 'GreaterThan', 'LessThanEqualTo', 'GreaterThanEqualTo', 'NotEqualTo', 'Between', 'NullCheck']
+    ['EqualTo', 'Like', 'LessThan', 'GreaterThan', 'LessThanEqualTo', 'LessThanOrEqualTo', 'GreaterThanEqualTo', 'GreaterThanOrEqualTo', 'NotEqualTo', 'Between', 'NullCheck']
