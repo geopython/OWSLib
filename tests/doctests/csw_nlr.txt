@@ -6,7 +6,7 @@
     >>> c.identification.title
     'NLR CSW'
     >>> c.identification.abstract
-    '\n\t\t\tNLR CSW: XQuery based catalog service conform to the HTTP protocol binding \n of the OpenGIS Catalogue Service specification version 2.0.2/2.0.1\n\t\t'
+    'NLR CSW: XQuery based catalog service conform to the HTTP protocol binding \n of the OpenGIS Catalogue Service specification version 2.0.2/2.0.1'
     >>> c.identification.keywords
     ['CSW', 'geospatial', 'catalogue']
     >>> c.identification.fees    

@@ -138,7 +138,7 @@ def testXMLAttribute(element, attribute):
     if ele is not None:
         attrib = ele.get(attribute)
         if attrib is not None:
-            return attrib
+            return attrib.strip()
 
     return None
 
@@ -158,7 +158,10 @@ def testXMLValue(val, attrib=False):
         if attrib == True:
             return val
         else:
-            return val.text
+            try:
+                return val.text.strip()
+            except:
+                return val.text
     else:
         return None
 
