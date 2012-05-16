@@ -72,10 +72,10 @@ Test operations
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
     
-    >>> wms.getOperationByName('GetMap').methods
+    >>> wms.get_operation_by_name('GetMap').methods
     {'Get': {'url': 'http://localhost:8080/geoserver/wms?SERVICE=WMS&'}}
     
-    >>> wms.getOperationByName('GetMap').formatOptions
+    >>> wms.get_operation_by_name('GetMap').formatOptions
     ['image/png', 'application/atom xml', 'application/atom+xml', 'application/openlayers', 'application/pdf', 'application/rss xml', 'application/rss+xml', 'application/vnd.google-earth.kml', 'application/vnd.google-earth.kml xml', 'application/vnd.google-earth.kml+xml', 'application/vnd.google-earth.kmz', 'application/vnd.google-earth.kmz xml', 'application/vnd.google-earth.kmz+xml', 'atom', 'image/geotiff', 'image/geotiff8', 'image/gif', 'image/jpeg', 'image/png8', 'image/svg', 'image/svg xml', 'image/svg+xml', 'image/tiff', 'image/tiff8', 'kml', 'kmz', 'openlayers', 'rss']
 
 Test exceptions

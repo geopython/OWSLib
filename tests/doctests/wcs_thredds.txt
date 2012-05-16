@@ -62,15 +62,15 @@ Print the ids of all layers (actually just the first 3):
 	>>> cvg.supportedFormats
 	['GeoTIFF', 'GeoTIFF_Float', 'NetCDF3']
 	
-#Now we have enough information to build a getCoverage request: 	
+#Now we have enough information to build a GetCoverage request: 	
 	>>> covID='Temperature'
 	>>> timeRange=['2009-01-08T06:00:00',  '2009-01-08T12:00:00']  #Okay, you should be able to select a range of times, but the server doesn't seem to like it. 
 	>>> timeRange=[cvg.timepositions[10]] #So for now I'll just  choose one timestep (from cvg.timepositions)
 	>>> bb=(-140, -15, 30, 55) # chosen from cvg.boundingBoxWGS84
 	>>> formatType='NetCDF3' # chosen from cvg.supportedFormats
 	
-#Make the actual getCoverage request.
-	>>> output=wcs.getCoverage(identifier=covID,time=timeRange,bbox=bb, format=formatType)
+#Make the actual GetCoverage request.
+	>>> output=wcs.get_coverage(identifier=covID,time=timeRange,bbox=bb, format=formatType)
 
 #Then write this to a netcdf file.
 	>>> from tests.utils import scratch_file

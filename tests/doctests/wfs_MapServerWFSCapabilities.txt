@@ -84,10 +84,10 @@ Test operations
     >>> [op.name for op in wfs.operations]
     ['{http://www.opengis.net/wfs}GetCapabilities', '{http://www.opengis.net/wfs}DescribeFeatureType', '{http://www.opengis.net/wfs}GetFeature']
     
-    >>> wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods
+    >>> wfs.get_operation_by_name('{http://www.opengis.net/wfs}GetFeature').methods
     {'{http://www.opengis.net/wfs}Get': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}, '{http://www.opengis.net/wfs}Post': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}}
     
-    >>> wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').formatOptions
+    >>> wfs.get_operation_by_name('{http://www.opengis.net/wfs}GetFeature').formatOptions
     ['{http://www.opengis.net/wfs}GML2', '{http://www.opengis.net/wfs}GML3']
 
 

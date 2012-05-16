@@ -494,6 +494,15 @@ class CatalogueServiceWeb:
         else:
             self.exceptionreport = None
 
+    def get_operation_by_name(self, name): 
+        """
+            Return a Operation item by name, case insensitive
+        """
+        for item in self.operations.keys():
+            if item.lower() == name.lower():
+                return self.operations[item]
+        raise KeyError, "No Operation named %s" % name
+
 class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
     def __init__(self, record):

@@ -91,12 +91,12 @@ class WebCoverageService_1_0_0(WCSBase):
             sval = value
         return sval
   
-    def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  crs=None, width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
+    def get_coverage(self, identifier=None, bbox=None, time=None, format = None,  crs=None, width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
         example:
-        cvg=wcs.getCoverage(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='cf-netcdf')
+        cvg=wcs.get_coverage(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='cf-netcdf')
 
         is equivalent to:
         http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIME=2792-06-01T00:00:00.0&FORMAT=cf-netcdf
@@ -105,7 +105,7 @@ class WebCoverageService_1_0_0(WCSBase):
         
         self.log.debug('WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
                 
-        base_url = self.getOperationByName('GetCoverage').methods[method]['url']
+        base_url = self.get_operation_by_name('GetCoverage').methods[method]['url']
         
         self.log.debug('WCS 1.0.0 DEBUG: base url of server: %s'%base_url)
         
@@ -148,9 +148,7 @@ class WebCoverageService_1_0_0(WCSBase):
 
         return u
     
-
-               
-    def getOperationByName(self, name):
+    def get_operation_by_name(self, name):
         """Return a named operation item."""
         for item in self.operations:
             if item.name == name:

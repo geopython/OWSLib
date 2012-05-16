@@ -72,7 +72,7 @@ class WebMapService(object):
                 self.version, url=self.url, un=self.username, pw=self.password
                 )
         if xml:  # read from stored xml
-            self._capabilities = reader.readString(xml)
+            self._capabilities = reader.read_string(xml)
         else:  # read from server
             self._capabilities = reader.read(self.url)
 
@@ -83,7 +83,7 @@ class WebMapService(object):
             raise ServiceException(err_message, xml) 
 
         # build metadata objects
-        self._buildMetadata(parse_remote_metadata)
+        self._build_metadata(parse_remote_metadata)
 
     def _getcapproperty(self):
         if not self._capabilities:
@@ -93,7 +93,7 @@ class WebMapService(object):
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
 
-    def _buildMetadata(self, parse_remote_metadata=False):
+    def _build_metadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
         
         #serviceIdentification metadata
@@ -201,7 +201,7 @@ class WebMapService(object):
             >>> out.close()
 
         """        
-        base_url = self.getOperationByName('GetMap').methods[method]['url']
+        base_url = self.get_operation_by_name('GetMap').methods[method]['url']
         request = {'version': self.version, 'request': 'GetMap'}
         
         # check layers and styles
@@ -252,7 +252,7 @@ class WebMapService(object):
     def getfeatureinfo(self):
         raise NotImplementedError
     
-    def getOperationByName(self, name): 
+    def get_operation_by_name(self, name): 
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
@@ -298,7 +298,7 @@ class ServiceProvider(object):
                 return item
         raise KeyError, "No content named %s" % name
 
-    def getOperationByName(self, name):
+    def get_operation_by_name(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
@@ -590,7 +590,7 @@ class WMSCapabilitiesReader:
         u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
         return etree.fromstring(u.read())
 
-    def readString(self, st):
+    def read_string(self, st):
         """Parse a WMS capabilities document, returning an elementtree instance
 
         string should be an XML capabilities document

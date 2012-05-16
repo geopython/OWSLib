@@ -61,12 +61,12 @@ class WebFeatureService_1_0_0(object):
         self._capabilities = None
         reader = WFSCapabilitiesReader(self.version)
         if xml:
-            self._capabilities = reader.readString(xml)
+            self._capabilities = reader.read_string(xml)
         else:
             self._capabilities = reader.read(self.url)
-        self._buildMetadata(parse_remote_metadata)
+        self._build_metadata(parse_remote_metadata)
     
-    def _buildMetadata(self, parse_remote_metadata=False):
+    def _build_metadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
         
         #serviceIdentification metadata
@@ -141,7 +141,7 @@ class WebFeatureService_1_0_0(object):
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
-        base_url = self.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
+        base_url = self.get_operation_by_name('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
         
         # check featureid
@@ -191,8 +191,8 @@ class WebFeatureService_1_0_0(object):
                 return StringIO(data)
             return u
 
-    def getOperationByName(self, name):
-        """Return a named content item."""
+    def get_operation_by_name(self, name):
+        """Return a named operation item."""
         for item in self.operations:
             if item.name == name:
                 return item
@@ -339,7 +339,7 @@ class WFSCapabilitiesReader(object):
         u = urlopen(request)
         return etree.fromstring(u.read())
 
-    def readString(self, st):
+    def read_string(self, st):
         """Parse a WFS capabilities document, returning an
         instance of WFSCapabilitiesInfoset
 

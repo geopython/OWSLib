@@ -73,10 +73,10 @@ Test operations
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
     
-    >>> wms.getOperationByName('GetMap').methods
+    >>> wms.get_operation_by_name('GetMap').methods
     {'Post': {'url': 'http://wms.telascience.org/cgi-bin/ngBM_wms?'}, 'Get': {'url': 'http://wms.telascience.org/cgi-bin/ngBM_wms?'}}
     
-    >>> wms.getOperationByName('GetMap').formatOptions
+    >>> wms.get_operation_by_name('GetMap').formatOptions
     ['image/gif', 'image/png', 'image/jpeg', 'image/wbmp', 'image/tiff', 'image/png; mode=24bit']
 
 Test exceptions

@@ -58,9 +58,9 @@ class MD_Metadata(object):
             val = md.find(util.nspath_eval('gmd:dateStamp/gco:DateTime', namespaces))
             self.datestamp = util.testXMLValue(val)
 
-        self.charset = _testCodeListValue(md.find(util.nspath_eval('gmd:characterSet/gmd:MD_CharacterSetCode', namespaces)))
+        self.charset = _test_code_list_value(md.find(util.nspath_eval('gmd:characterSet/gmd:MD_CharacterSetCode', namespaces)))
   
-        self.hierarchy = _testCodeListValue(md.find(util.nspath_eval('gmd:hierarchyLevel/gmd:MD_ScopeCode', namespaces)))
+        self.hierarchy = _test_code_list_value(md.find(util.nspath_eval('gmd:hierarchyLevel/gmd:MD_ScopeCode', namespaces)))
 
         self.contact = []
         for i in md.findall(util.nspath_eval('gmd:contact/gmd:CI_ResponsibleParty', namespaces)):
@@ -121,7 +121,7 @@ class CI_Date(object):
                 self.date = None
 
         val = md.find(util.nspath_eval('gmd:dateType/gmd:CI_DateTypeCode', namespaces))
-        self.type = _testCodeListValue(val)
+        self.type = _test_code_list_value(val)
 
 class CI_ResponsibleParty(object):
     """ process CI_ResponsibleParty """
@@ -166,7 +166,7 @@ class CI_ResponsibleParty(object):
         else:
           self.onlineresource = None
       
-        self.role = _testCodeListValue(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
+        self.role = _test_code_list_value(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
 
 class MD_DataIdentification(object):
     """ process MD_DataIdentification """
@@ -195,13 +195,13 @@ class MD_DataIdentification(object):
         
         self.accessconstraints = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_RestrictionCode', namespaces)):
-            val = _testCodeListValue(i)
+            val = _test_code_list_value(i)
             if val is not None:
                 self.accessconstraints.append(val)
         
         self.classification = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_ClassificationCode', namespaces)):
-            val = _testCodeListValue(i)
+            val = _test_code_list_value(i)
             if val is not None:
                 self.classification.append(val)
         
@@ -219,7 +219,7 @@ class MD_DataIdentification(object):
 
         self.useconstraints = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints/gmd:MD_RestrictionCode', namespaces)):
-            val = _testCodeListValue(i)
+            val = _test_code_list_value(i)
             if val is not None:
                 self.useconstraints.append(val)
         
@@ -239,7 +239,7 @@ class MD_DataIdentification(object):
         
         self.resourcelanguage = []
         for i in md.findall(util.nspath_eval('gmd:language/gmd:LanguageCode', namespaces)):
-            val = _testCodeListValue(i)
+            val = _test_code_list_value(i)
             if val is not None:
                 self.resourcelanguage.append(val)
 
@@ -247,7 +247,7 @@ class MD_DataIdentification(object):
         if val is not None:
             val2 = val.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)) 
             if val2 is not None:
-                clv = _testCodeListValue(val)
+                clv = _test_code_list_value(val)
                 if clv == 'originator':
                     self.creator = util.testXMLValue(val)
                 elif clv == 'publisher':
@@ -264,7 +264,7 @@ class MD_DataIdentification(object):
         val = md.find(util.nspath_eval('gmd:purpose/gco:CharacterString', namespaces))
         self.purpose = util.testXMLValue(val, True)
 
-        self.status = _testCodeListValue(md.find(util.nspath_eval('gmd:status/gmd:MD_ProgressCode', namespaces)))
+        self.status = _test_code_list_value(md.find(util.nspath_eval('gmd:status/gmd:MD_ProgressCode', namespaces)))
 
         self.contact = []
         for i in md.findall(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty', namespaces)):
@@ -275,7 +275,7 @@ class MD_DataIdentification(object):
 
         for i in md.findall(util.nspath_eval('gmd:descriptiveKeywords', namespaces)):
             mdkw = {}
-            mdkw['type'] = _testCodeListValue(i.find(util.nspath_eval('gmd:MD_Keywords/gmd:type/gmd:MD_KeywordTypeCode', namespaces)))
+            mdkw['type'] = _test_code_list_value(i.find(util.nspath_eval('gmd:MD_Keywords/gmd:type/gmd:MD_KeywordTypeCode', namespaces)))
 
             mdkw['thesaurus'] = {}
 
@@ -360,7 +360,7 @@ class DQ_DataQuality(object):
         
         self.conformancedatetype = []
         for i in md.findall(util.nspath_eval('gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces)):
-            val = _testCodeListValue(i)
+            val = _test_code_list_value(i)
             if val is not None:
                 self.conformancedatetype.append(val)
         
@@ -401,7 +401,7 @@ class SV_ServiceIdentification(object):
         else:
             self.bbox = None
 
-        self.couplingtype = _testCodeListValue(md.find(util.nspath_eval('gmd:couplingType/gmd:SV_CouplingType', namespaces)))
+        self.couplingtype = _test_code_list_value(md.find(util.nspath_eval('gmd:couplingType/gmd:SV_CouplingType', namespaces)))
 
         self.operations = []
 
@@ -411,7 +411,7 @@ class SV_ServiceIdentification(object):
             tmp['name'] = util.testXMLValue(val)
             tmp['dcplist'] = []
             for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:DCP', namespaces)):
-                tmp2 = _testCodeListValue(d.find(util.nspath_eval('srv:DCPList', namespaces)))
+                tmp2 = _test_code_list_value(d.find(util.nspath_eval('srv:DCPList', namespaces)))
                 tmp['dcplist'].append(tmp2)
          
             tmp['connectpoint'] = []
@@ -445,7 +445,7 @@ class CI_OnlineResource(object):
         val = md.find(util.nspath_eval('gmd:description/gco:CharacterString', namespaces))
         self.description = util.testXMLValue(val)
 
-        self.function = _testCodeListValue(md.find(util.nspath_eval('gmd:function/gmd:CI_OnLineFunctionCode', namespaces)))
+        self.function = _test_code_list_value(md.find(util.nspath_eval('gmd:function/gmd:CI_OnLineFunctionCode', namespaces)))
 
 class EX_Extent(object):
     """ process EX_Extent """
@@ -468,7 +468,7 @@ class MD_ReferenceSystem(object):
         val = md.find(util.nspath_eval('gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
         self.code = util.testXMLValue(val)
 
-def _testCodeListValue(elpath):
+def _test_code_list_value(elpath):
     """ get gco:CodeListValue_Type attribute, else get text content """
     if elpath is not None:  # try to get @codeListValue
         val = util.testXMLValue(elpath.attrib.get('codeListValue'), True)

@@ -93,7 +93,7 @@ class WebCoverageService_1_1_0(WCSBase):
           
     #TO DECIDE: Offer repackaging of coverageXML/Multipart MIME output?
     #def getData(self, directory='outputdir', outputfile='coverage.nc',  **kwargs):
-        #u=self.getCoverageRequest(**kwargs)
+        #u=self.get_coverage_request(**kwargs)
         ##create the directory if it doesn't exist:
         #try:
             #os.mkdir(directory)
@@ -104,21 +104,21 @@ class WebCoverageService_1_1_0(WCSBase):
         ##elif wcs.version=='1.1.0':
         ##Could be multipart mime or XML Coverages document, need to use the decoder...
         #decoder=wcsdecoder.WCSDecoder(u)
-        #x=decoder.getCoverages()
+        #x=decoder.get_coverages()
         #if type(x) is wcsdecoder.MpartMime:
-            #filenames=x.unpackToDir(directory)
+            #filenames=x.unpack_to_dir(directory)
             ##print 'Files from 1.1.0 service written to %s directory'%(directory)
         #else:
             #filenames=x
         #return filenames
     
     #TO DO: Handle rest of the  WCS 1.1.0 keyword parameters e.g. GridCRS etc. 
-    def getCoverage(self, identifier=None, bbox=None, time=None, format = None, store=False, rangesubset=None, gridbaseCRS=None, gridtype=None, gridCS=None, gridorigin=None, gridoffsets=None, method='Get',**kwargs):
+    def get_coverage(self, identifier=None, bbox=None, time=None, format = None, store=False, rangesubset=None, gridbaseCRS=None, gridtype=None, gridCS=None, gridorigin=None, gridoffsets=None, method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
         example:
-        cvg=wcs.getCoverageRequest(identifier=['TuMYrRQ4'], time=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='application/netcdf', store='true')
+        cvg=wcs.get_coverage_request(identifier=['TuMYrRQ4'], time=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='application/netcdf', store='true')
 
         is equivalent to:
         http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIMESEQUENCE=2792-06-01T00:00:00.0&FORMAT=application/netcdf
@@ -131,7 +131,7 @@ class WebCoverageService_1_1_0(WCSBase):
         
         if method == 'Get':
             method='{http://www.opengis.net/wcs/1.1/ows}Get'
-        base_url = self.getOperationByName('GetCoverage').methods[method]['url']
+        base_url = self.get_operation_by_name('GetCoverage').methods[method]['url']
 
 
         #process kwargs
@@ -173,8 +173,7 @@ class WebCoverageService_1_1_0(WCSBase):
         u=openURL(base_url, data, method, self.cookies)
         return u
         
-        
-    def getOperationByName(self, name):
+    def get_operation_by_name(self, name):
         """Return a named operation item."""
         for item in self.operations:
             if item.name == name:

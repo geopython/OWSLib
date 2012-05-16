@@ -57,9 +57,9 @@ class SensorObservationService(object):
             raise ows.ExceptionReport(se) 
 
         # build metadata objects
-        self._buildMetadata()
+        self._build_metadata()
 
-    def _buildMetadata(self):
+    def _build_metadata(self):
         """ 
             Set up capabilities metadata objects
         """

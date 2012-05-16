@@ -130,9 +130,9 @@ Available methods, their URLs, and available formats:
 
   >>> [op.name for op in wms.operations]
   ['GetCapabilities', 'GetMap']
-  >>> wms.getOperationByName('GetMap').methods
+  >>> wms.get_operation_by_name('GetMap').methods
   {'Get': {'url': 'http://wms.jpl.nasa.gov/wms.cgi?'}}
-  >>> wms.getOperationByName('GetMap').formatOptions
+  >>> wms.get_operation_by_name('GetMap').formatOptions
   ['image/jpeg', 'image/png', 'image/geotiff', 'image/tiff']
 
 That's everything needed to make a request for imagery:

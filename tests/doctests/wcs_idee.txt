@@ -29,7 +29,7 @@ WCS Version 1.0.0
     >>> id_list=[cvg.supportedCRS[0].id,cvg.supportedCRS[1].id,cvg.supportedCRS[2].id,cvg.supportedCRS[3].id,cvg.supportedCRS[4].id,cvg.supportedCRS[5].id,cvg.supportedCRS[6].id]
 	>>> id_list
 	['EPSG:4326', 'EPSG:4230', 'EPSG:23028', 'EPSG:23029', 'EPSG:23030', 'EPSG:23031', 'EPSG:23030']
-    >>> output=wcs.getCoverage(identifier='MDT25_peninsula_pendientes',bbox=(600000,4200000,601000,4201000),crs='EPSG:23030', format='AsciiGrid', resX=25, resY=25)
+    >>> output=wcs.get_coverage(identifier='MDT25_peninsula_pendientes',bbox=(600000,4200000,601000,4201000),crs='EPSG:23030', format='AsciiGrid', resX=25, resY=25)
 
     >>> from tests.utils import scratch_file
     >>> filename = scratch_file('test_idee.grd')

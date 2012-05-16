@@ -83,12 +83,12 @@ class WebFeatureService_2_0_0(object):
         self._capabilities = None
         reader = WFSCapabilitiesReader(self.version)
         if xml:
-            self._capabilities = reader.readString(xml)
+            self._capabilities = reader.read_string(xml)
         else:
             self._capabilities = reader.read(self.url)
-        self._buildMetadata(parse_remote_metadata)
+        self._build_metadata(parse_remote_metadata)
     
-    def _buildMetadata(self, parse_remote_metadata=False):
+    def _build_metadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
         
         #serviceIdentification metadata
@@ -174,8 +174,8 @@ class WebFeatureService_2_0_0(object):
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
         """
-        #log.debug(self.getOperationByName('GetFeature'))
-        base_url = self.getOperationByName('GetFeature').methods[method]['url']
+        #log.debug(self.get_operation_by_name('GetFeature'))
+        base_url = self.get_operation_by_name('GetFeature').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
         
         # check featureid
@@ -234,7 +234,8 @@ class WebFeatureService_2_0_0(object):
 
     def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get'),**kwargs):
         ''' the WFS GetPropertyValue method'''     
-        base_url = self.getOperationByName('GetPropertyValue').methods[method]['url']
+        base_url = self.get_operation_by_name('GetPropertyValue').methods[method]['url']
+
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetPropertyValue'}
         if query:
             request['query'] = str(query)
@@ -260,12 +261,12 @@ class WebFeatureService_2_0_0(object):
         method=nspath('Get')
         
         #first make the ListStoredQueries response and save the results in a dictionary if form {storedqueryid:(title, returnfeaturetype)}
-        base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
+        base_url = self.get_operation_by_name('ListStoredQueries').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         data = urlencode(request)
         u = urlopen(base_url + data)
         tree=etree.fromstring(u.read())
-        base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
+        base_url = self.get_operation_by_name('ListStoredQueries').methods[method]['url']
         tempdict={}       
         for sqelem in tree[:]:
             title=rft=id=None
@@ -278,7 +279,7 @@ class WebFeatureService_2_0_0(object):
             tempdict[id]=(title,rft)        #store in temporary dictionary
         
         #then make the DescribeStoredQueries request and get the rest of the information about the stored queries 
-        base_url = self.getOperationByName('DescribeStoredQueries').methods[method]['url']
+        base_url = self.get_operation_by_name('DescribeStoredQueries').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         data = urlencode(request)
         u = urlopen(base_url + data)
@@ -303,7 +304,7 @@ class WebFeatureService_2_0_0(object):
         return sqs
     storedqueries = property(_getStoredQueries, None)
 
-    def getOperationByName(self, name):
+    def get_operation_by_name(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
@@ -434,7 +435,7 @@ class WFSCapabilitiesReader(object):
         u = urlopen(request)
         return etree.fromstring(u.read())
 
-    def readString(self, st):
+    def read_string(self, st):
         """Parse a WFS capabilities document, returning an
         instance of WFSCapabilitiesInfoset
 
