@@ -81,9 +81,8 @@ class WebFeatureService_1_1_0(object):
         val = self._capabilities.find(util.nspath_eval('ows:ServiceProvider', namespaces))
         self.provider=ServiceProvider(val,self.owscommon.namespace)
         # ServiceOperations metadata
-        self.operations=[]
-        for elem in self._capabilities.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
-            self.operations.append(OperationsMetadata(elem, self.owscommon.namespace))
+        op = self._capabilities.find(util.nspath_eval('ows:OperationsMetadata', namespaces))
+        self.operations = OperationsMetadata(op, self.owscommon.namespace).operations
 
         # FilterCapabilities
         val = self._capabilities.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
@@ -241,12 +240,14 @@ class WebFeatureService_1_1_0(object):
                 return StringIO(data)
             return u
 
-    def get_operation_by_name(self, name):
-        """Return a named content item."""
-        for item in self.operations:
-            if item.name == name:
-                return item
-        raise KeyError, "No operation named %s" % name
+    def get_operation_by_name(self, name): 
+        """
+            Return a Operation item by name, case insensitive
+        """
+        for item in self.operations.keys():
+            if item.lower() == name.lower():
+                return self.operations[item]
+        raise KeyError, "No Operation named %s" % name
 
     def getSRS(self,srsname,typename):
         """Returns None or Crs object for given name

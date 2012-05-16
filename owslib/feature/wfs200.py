@@ -110,11 +110,8 @@ class WebFeatureService_2_0_0(object):
         self.provider=ServiceProvider(serviceproviderelem)   
         
         #serviceOperations metadata 
-        self.operations=[]
-        
-        for elem in self._capabilities.find(nspath('OperationsMetadata'))[:]:
-            if elem.tag !=nspath('ExtendedCapabilities'):
-                self.operations.append(OperationsMetadata(elem))
+        op = self._capabilities.find(util.nspath_eval('ows:OperationsMetadata', namespaces))
+        self.operations = OperationsMetadata(op, self.owscommon.namespace).operations
                    
         #serviceContents metadata: our assumption is that services use a top-level 
         #layer as a metadata organizer, nothing more. 
@@ -304,12 +301,14 @@ class WebFeatureService_2_0_0(object):
         return sqs
     storedqueries = property(_getStoredQueries, None)
 
-    def get_operation_by_name(self, name):
-        """Return a named content item."""
-        for item in self.operations:
-            if item.name == name:
-                return item
-        raise KeyError, "No operation named %s" % name
+    def get_operation_by_name(self, name): 
+        """
+            Return a Operation item by name, case insensitive
+        """
+        for item in self.operations.keys():
+            if item.lower() == name.lower():
+                return self.operations[item]
+        raise KeyError, "No Operation named %s" % name
 
 class StoredQuery(object):
     '''' Class to describe a storedquery '''

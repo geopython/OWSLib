@@ -33,8 +33,8 @@
     'Rob van Swol'
     >>> c.provider.contact.position
     'Senior Scientist NLR-ASSP'
-    >>> [op.name for op in c.operations]
-    ['GetCapabilities', 'DescribeRecord', 'GetRecords', 'GetRecordById']
+    >>> c.operations.keys()
+    ['GetRecords', 'GetCapabilities', 'GetRecordById', 'DescribeRecord']
     >>> c.describerecord()
     >>> print c.request
     <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>

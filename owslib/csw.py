@@ -90,9 +90,8 @@ class CatalogueServiceWeb:
                 val = self._exml.find(util.nspath_eval('ows:ServiceProvider', namespaces))
                 self.provider=ows.ServiceProvider(val,self.owscommon.namespace)
                 # ServiceOperations metadata 
-                self.operations=[]
-                for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
-                    self.operations.append(ows.OperationsMetadata(elem, self.owscommon.namespace))
+                op = self._exml.find(util.nspath_eval('ows:OperationsMetadata', namespaces))
+                self.operations = ows.OperationsMetadata(op, self.owscommon.namespace).operations
         
                 # FilterCapabilities
                 val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
