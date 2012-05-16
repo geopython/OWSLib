@@ -8,14 +8,16 @@
     >>> c.getrecords(keywords=['water'], maxrecords=25)
     >>> c.results['nextrecord']
     26
+
     >>> c.getdomain('GetRecords.outputSchema')
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-    ExceptionReport: '\nOperation not supported: locator=root-node\n'
+    ExceptionReport: 'Operation not supported: locator=root-node'
+
     >>> c.getrecords('downloadableData')
     >>> c.results['returned']
     10
     >>> c.getrecords(cql='title = \'water\'')
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-    ExceptionReport: '\nInvalid parameter value: locator=csw:CqlText\n'
+    ExceptionReport: 'Invalid parameter value: locator=csw:CqlText'

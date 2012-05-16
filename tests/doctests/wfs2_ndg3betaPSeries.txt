@@ -2,7 +2,7 @@
 Imports and initialize
 
     >>> from owslib.wfs import WebFeatureService
-    >>> wfs = WebFeatureService('http://giswebservices.massgis.state.ma.us/geoserver/wfs?', version='2.0.0')
+    >>> wfs = WebFeatureService('http://giswebservices.massgis.state.ma.us/geoserver/wfs?', version='1.1.0')
 	
     >>> #dir(wfs.getpropertyvalue)
 	'GetCapabilities'
@@ -42,27 +42,18 @@ Test the capabilities info
         
 Test the getfeature method
 
-    >>> #wfs.contents.keys() -- this results in a ridicously long response
+    TODO: Test GetFeature method
 
-	# getfeature results in error since there are no methods for this wfs...
-    >>> response = wfs.getfeature(typename=['csml:PointSeriesFeature'], maxfeatures=2)
-    Traceback (most recent call last):
-    ...
-    KeyError: '{http://www.opengis.net/ows}Get'
-    >>> response=wfs.getfeature(typename=['csml:PointSeriesFeature'],bbox=(-5,50,-4,60))
-    Traceback (most recent call last):
-    ...
-    KeyError: '{http://www.opengis.net/ows}Get'
+    >>> #wfs.contents.keys() -- this results in a ridicously long response
+    >>> #response = wfs.getfeature(typename=['csml:PointSeriesFeature'], maxfeatures=2)
 
 Test Stored Queries
     >>> storedqid='urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointFromPointSeries'
     >>> sqparams={'featureid':'meaneastward','timeinstance':'2002-01-01T10:45:00.0'}
 
-	# TODO: see what features are available from request and revisit the getfeature code, pretty much all of below relies on this
-    >>> response=wfs.getfeature(typename=['csml:PointSeriesFeature'],storedQueryID=storedqid, storedQueryParams=sqparams)	
-    Traceback (most recent call last):
-    ...
-    KeyError: '{http://www.opengis.net/ows}Get'
+	TODO: see what features are available from request and revisit the getfeature code, pretty much all of below relies on this
+
+    >>> #response=wfs.getfeature(typename=['csml:PointSeriesFeature'],storedQueryID=storedqid, storedQueryParams=sqparams)	
     >>> #for sq in wfs.storedqueries: print sq.id
     urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointSeriesFromGridSeries
     urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:phenomenonQuery
@@ -103,6 +94,7 @@ Test Stored Queries
     bbox,  xsd:string
  
  #TODO: 'GetPropertyValue' is not a valid operation in the current test, will have to circle back to this
+ 
  Test GetPropertyValue
     >>> #valref='{http://ndg.nerc.ac.uk/csml}parameter'
     >>> #response=wfs.getpropertyvalue(valuereference=valref)

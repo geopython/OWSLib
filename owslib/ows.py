@@ -100,16 +100,14 @@ class Operation(object):
             methods.append((xmltag_split(verb.tag), {'url': url}))
         self.methods = dict(methods)
 
-        # LOOK: ows:AllowedValues/ows:Value or just ows:Value
         parameters = []
         for parameter in self._root.findall(nspath_eval('ows:Parameter', namespaces)):
-            parameters.append((testXMLAttribute(parameter,'name'), {'values': [i.text for i in parameter.findall(nspath_eval('ows:AllowedValues/ows:Value', namespaces))]}))
+            parameters.append((testXMLAttribute(parameter,'name'), {'values': [i.text for i in parameter.findall(nspath_eval('.//ows:Value', namespaces))]}))
         self.parameters = dict(parameters)
 
-        # LOOK: ows:AllowedValues/ows:Value or just ows:Value
         constraints = []
         for constraint in self._root.findall(nspath_eval('ows:Constraint', namespaces)):
-            constraints.append((testXMLAttribute(constraint,'name'), {'values': [i.text for i in constraint.findall(nspath_eval('ows:AllowedValues/ows:Value', namespaces))]}))
+            constraints.append((testXMLAttribute(constraint,'name'), {'values': [i.text for i in constraint.findall(nspath_eval('.//ows:Value', namespaces))]}))
         self.constraints = dict(constraints)
 
 
@@ -122,16 +120,14 @@ class OperationsMetadata(object):
 
         # There can be parent parameters and constraints
 
-        # LOOK: ows:AllowedValues/ows:Value or just ows:Value
         parameters = []
         for parameter in self._root.findall(nspath_eval('ows:Parameter', namespaces)):
-            parameters.append((testXMLAttribute(parameter,'name'), {'values': [i.text for i in parameter.findall(nspath_eval('ows:AllowedValues/ows:Value', namespaces))]}))
+            parameters.append((testXMLAttribute(parameter,'name'), {'values': [i.text for i in parameter.findall(nspath_eval('.//ows:Value', namespaces))]}))
         parameters = dict(parameters)
 
-        # LOOK: ows:AllowedValues/ows:Value or just ows:Value
         constraints = []
         for constraint in self._root.findall(nspath_eval('ows:Constraint', namespaces)):
-            constraints.append((testXMLAttribute(constraint,'name'), {'values': [i.text for i in constraint.findall(nspath_eval('ows:AllowedValues/ows:Value', namespaces))]}))
+            constraints.append((testXMLAttribute(constraint,'name'), {'values': [i.text for i in constraint.findall(nspath_eval('.//ows:Value', namespaces))]}))
         constraints = dict(constraints)
 
         for op in self._root.findall(nspath_eval('ows:Operation', namespaces)):

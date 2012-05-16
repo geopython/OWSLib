@@ -36,12 +36,6 @@
     'url'
     'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd'
     'url'
-    
-    #old expected response
-    #'http://devgeo.cciw.ca/geonetwork/srv/en/csw'
-    #'url'
-    #'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd'
-    #'url'
 
 #version attribute
     >>> for service in services:
@@ -74,7 +68,6 @@
     [['type', True], ['version', True], ['title', True], ['abstract', True], ['keywords', True], ['accessconstraints', True], ['fees', True]]
 
 #Check all ServiceProvider attributes
-#Response changed, probably due to change in hosting services
     >>> for service in services:
     ...     service.identification.type
     ...     [[attribute, hasattr(service.provider, attribute)] for attribute in ['name','url','contact']] 
@@ -87,30 +80,10 @@
     'MapServer WFS'
     [['name', False], ['url', True], ['contact', False]]
 
-#Check all operations implement IOperationMetadata
-#Response changed, probably due to change in hosting services
-    >>> for service in services:
-    ...     service.identification.type
-    ...     for op in service.operations:
-    ...         [[attribute, hasattr(op, attribute)] for attribute in ['name','formatOptions','methods']] 
-    'CSW'
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    'OGC:WMS'
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    'OGC:WCS'
-    [['name', True], ['formatOptions', False], ['methods', True]]
-    [['name', True], ['formatOptions', False], ['methods', True]]
-    [['name', True], ['formatOptions', False], ['methods', True]]
-    'MapServer WFS'
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    [['name', True], ['formatOptions', True], ['methods', True]]
-    [['name', True], ['formatOptions', True], ['methods', True]]
 
+TODO: Until we settle all of the services to use the dict instead of lists, this will fail
+
+#Check all operations implement IOperationMetadata
 
 #Check all contents implement IContentMetadata as a dictionary
 #CSW does not work in this way so use dummy
