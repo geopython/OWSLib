@@ -1,5 +1,7 @@
 import cgi
+import pytz
 from owslib.etree import etree
+from datetime import datetime
 from urllib import urlencode
 from owslib import ows
 from owslib.crs import Crs
@@ -81,9 +83,59 @@ class SensorObservationService(object):
 
         # sos:Contents metadata
         self.contents = {}
+        self.offerings = []
         for offering in self._capabilities.findall(nsp('sos:Contents/sos:ObservationOfferingList/sos:ObservationOffering')):
             off = SosObservationOffering(offering)
             self.contents[off.id] = off
+            self.offerings.append(off)
+    def get_observation(self,   responseFormat=None,
+                                offerings=None,
+                                observedProperties=None,
+                                eventTime=None,
+                                method='Get',
+                                **kwargs):
+        """
+        Parameters
+        ----------
+        format : string
+            Output format. Provide one that is available for all offerings
+        method : string
+            Optional. HTTP DCP method name: Get or Post.  Must
+        **kwargs : extra arguments
+            anything else e.g. vendor specific parameters
+        """
+
+        base_url = self.get_operation_by_name('GetObservation').methods[method]['url']        
+        request = {'service': 'SOS', 'version': self.version, 'request': 'GetObservation'}
+
+        # Required Fields
+        assert isinstance(offerings, list) and len(offerings) > 0
+        request['offering'] = ','.join(offerings)
+
+        assert isinstance(observedProperties, list) and len(observedProperties) > 0
+        request['observedproperty'] = ','.join(observedProperties)
+
+        assert responseFormat is not None
+        request['responseFormat'] = str(responseFormat)
+
+
+        # Optional Fields
+        if eventTime is not None:
+            request['eventTime'] = eventTime
+
+        if kwargs:
+            for kw in kwargs:
+                request[kw]=kwargs[kw]
+
+        data = urlencode(request)        
+
+        response = openURL(base_url, data, method, username=self.username, password=self.password).read()
+        tr = etree.fromstring(response)
+
+        if tr.tag == nsp("ows:ExceptionReport"):
+            raise ows.ExceptionReport(etree.ElementTree(element=tr), namespaces['ows'])
+
+        return response
 
     def get_operation_by_name(self, name): 
         """
