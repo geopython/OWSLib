@@ -11,7 +11,7 @@ from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
 import logging
-from owslib.util import openURL, testXMLValue, nspath
+from owslib.util import openURL, testXMLValue, nspath, extract_xml_list
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -200,14 +200,14 @@ class WebFeatureService_1_0_0(object):
 
 class ServiceIdentification(object):
     ''' Implements IServiceIdentificationMetadata '''
-    
+     
     def __init__(self, infoset, version):
         self._root=infoset
         self.type = testXMLValue(self._root.find(nspath('Name',ns=WFS_NAMESPACE)))
         self.version = version
         self.title = testXMLValue(self._root.find(nspath('Title',ns=WFS_NAMESPACE)))
         self.abstract = testXMLValue(self._root.find(nspath('Abstract',ns=WFS_NAMESPACE)))
-        self.keywords = [f.text for f in self._root.findall(nspath('Keywords',ns=WFS_NAMESPACE))]
+        self.keywords = extract_xml_list(self._root.findall(nspath('Keywords', ns=WFS_NAMESPACE)))
         self.fees = testXMLValue(self._root.find(nspath('Fees',ns=WFS_NAMESPACE)))
         self.accessconstraints = testXMLValue(self._root.find(nspath('AccessConstraints',ns=WFS_NAMESPACE)))
 
@@ -228,7 +228,7 @@ class ContentMetadata:
         self.id = testXMLValue(elem.find(nspath('Name',ns=WFS_NAMESPACE)))
         self.title = testXMLValue(elem.find(nspath('Title',ns=WFS_NAMESPACE)))
         self.abstract = testXMLValue(elem.find(nspath('Abstract',ns=WFS_NAMESPACE)))
-        self.keywords = [f.text for f in elem.findall(nspath('Keywords',ns=WFS_NAMESPACE))]
+        self.keywords = extract_xml_list(elem.findall(nspath('Keywords',ns=WFS_NAMESPACE)))
 
         # bboxes
         self.boundingBox = None

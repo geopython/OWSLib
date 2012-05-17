@@ -7,7 +7,7 @@ Imports
 Fake a request to a WMS Server using saved doc from telascience.org.
 http://wms.telascience.org/cgi-bin/ngBM_wms?
 
-    >>> xml = open(resource_file('Telascience.xml'), 'r').read() 
+    >>> xml = open(resource_file('wms_Telascience.xml'), 'r').read() 
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
     
 Test capabilities
@@ -86,8 +86,4 @@ Test exceptions
 
 Lastly, test the getcapabilities method
 
-#    >>> wms = WebMapService('http://wms.telascience.org/cgi-bin/ngBM_wms?', version='1.1.1')
-#    >>> xml = wms.getcapabilities().read()
-#    >>> xml.find('<WMT_MS_Capabilities version="1.1.1">') > 0
-#    True
-
+    # LOOK: This WMS server no longer exists, so we are only testing the local XML file

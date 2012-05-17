@@ -7,6 +7,7 @@
 # Contact email: tomkralidis@hotmail.com
 # =============================================================================
 
+import re
 import sys
 from owslib.etree import etree
 import pytz
@@ -279,3 +280,13 @@ def extract_time(element):
         else:
             dt = None
     return dt
+
+def extract_xml_list(elements):
+    """
+        Some people don't have seperate tags for their keywords and seperate them with
+        a newline.  This will extract out all of the  keywords correctly.
+    """
+    keywords = [re.split(r'[\n\r]+',f.text) for f in elements if f.text]
+    flattened = [item.strip() for sublist in keywords for item in sublist]
+    remove_blank = filter(None, flattened)
+    return remove_blank

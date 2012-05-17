@@ -6,7 +6,7 @@ Imports
     
 Fake a request to a WFS Server using saved doc from.
 
-    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read() 
+    >>> xml = open(resource_file('wfs_mapserver_getcapabilities.xml'), 'r').read() 
     >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
     
 Test capabilities
@@ -26,7 +26,7 @@ Service Identification:
     'Bird Studies Canada WMS/WFS Server for bird distribution and abundance data, and related information.  Bird Studies Canada gratefully acknowledges the support of Environment Canada - Canadian Information System for the Environment in developing this service.'
     
     >>> wfs.identification.keywords
-    ['\n    birds\n    distribution\n    abundance\n    conservation\n    sites\n    monitoring\n    populations\n    canada\n  ']
+    ['birds', 'distribution', 'abundance', 'conservation', 'sites', 'monitoring', 'populations', 'canada']
 
     >>> wfs.identification.accessconstraints
     'None'

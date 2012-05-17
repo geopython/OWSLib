@@ -12,7 +12,7 @@ from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
 import logging
-from owslib.util import openURL, testXMLValue, nspath_eval, ServiceException
+from owslib.util import openURL, testXMLValue, nspath_eval, ServiceException, extract_xml_list
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -285,7 +285,7 @@ class ContentMetadata:
         self.id = testXMLValue(elem.find(nspath_eval('wfs:Name', namespaces)))
         self.title = testXMLValue(elem.find(nspath_eval('wfs:Title', namespaces)))
         self.abstract = testXMLValue(elem.find(nspath_eval('wfs:Abstract', namespaces)))
-        self.keywords = [f.text for f in elem.findall(nspath_eval('ows:Keywords/ows:Keyword', namespaces))]
+        self.keywords = extract_xml_list(elem.findall(nspath_eval('ows:Keywords/ows:Keyword', namespaces)))
 
         # bbox
         self.boundingBoxWGS84 = None

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://onearth.jpl.nasa.gov/WMS_MS_Capabilities.dtd" [ <!ELEMENT VendorSpecificCapabilities EMPTY> ]>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://wms.jpl.nasa.gov/WMS_MS_Capabilities.dtd" [ <!ELEMENT VendorSpecificCapabilities EMPTY> ]>
 <WMT_MS_Capabilities version="1.1.1">
 <Service>
   <Name>OGC:WMS</Name>
@@ -24,12 +24,20 @@
 </Service>
 <Capability>
   <Request>
+    <GetTileService>
+      <Format>text/xml</Format>
+      <DCPType>
+  <HTTP> <Get>
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.jpl.nasa.gov/wms.cgi?" />
+  </Get> </HTTP>
+      </DCPType>
+    </GetTileService>
     <GetCapabilities>
       <Format>application/vnd.ogc.wms_xml</Format>
       <DCPType>
-	<HTTP> <Get>
-	  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.jpl.nasa.gov/wms.cgi?" />
-	</Get> </HTTP>
+  <HTTP> <Get>
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.jpl.nasa.gov/wms.cgi?" />
+  </Get> </HTTP>
       </DCPType>
     </GetCapabilities>
     <GetMap>
@@ -37,10 +45,11 @@
       <Format>image/png</Format>
       <Format>image/geotiff</Format>
       <Format>image/tiff</Format>
+      <Format>application/vnd.google-earth.kml+xml</Format>
       <DCPType> <HTTP>
-	<Get>
-	  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.jpl.nasa.gov/wms.cgi?" />
-	</Get>
+  <Get>
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.jpl.nasa.gov/wms.cgi?" />
+  </Get>
       </HTTP> </DCPType>
     </GetMap>
   </Request>
@@ -60,20 +69,20 @@
       <Name>global_mosaic</Name> 
       <Title>WMS Global Mosaic, pan sharpened</Title>
       <Abstract>
-	Release 2 of the WMS Global Mosaic, a seamless mosaic of Landsat7 scenes.
-	Spatial resolution is 0.5 second for the pan band, 1 second for the visual and near-IR bands and 2 second for the thermal bands
-	Use this layer to request individual grayscale bands. The default styles may have gamma, sharpening and saturation filters applied.
-	The grayscale styles have no extra processing applied, and will return the image data as stored on the server.
-	The source dataset is part of the NASA Scientific Data Purchase, and contains scenes acquired in 1999-2003.
+  Release 2 of the WMS Global Mosaic, a seamless mosaic of Landsat7 scenes.
+  Spatial resolution is 0.5 second for the pan band, 1 second for the visual and near-IR bands and 2 second for the thermal bands
+  Use this layer to request individual grayscale bands. The default styles may have gamma, sharpening and saturation filters applied.
+  The grayscale styles have no extra processing applied, and will return the image data as stored on the server.
+  The source dataset is part of the NASA Scientific Data Purchase, and contains scenes acquired in 1999-2003.
         This layer provides pan-sharpened images, where the pan band is used for the image brightness regardless of the color combination requested.
       </Abstract>
       <LatLonBoundingBox minx="-180" miny="-60" maxx="180" maxy="84"/>
       <MetadataURL type="FGDC">
-	<Format>text/xml</Format>
-	<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
-	  xlink:type="simple"
-	  xlink:href="http://onearth.jpl.nasa.gov/WAF/WMS_GMR.xml"
-	/>
+  <Format>text/xml</Format>
+  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+    xlink:type="simple"
+    xlink:href="http://onearth.jpl.nasa.gov/WAF/WMS_GM.xml"
+  />
       </MetadataURL>
       <Style> <Name>pseudo</Name> <Title>(default) Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping), gamma 1.5</Title> </Style>
       <Style> <Name>pseudo_low</Name> <Title>Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping)</Title> </Style>
@@ -89,11 +98,11 @@
       <Name>global_mosaic_base</Name>
       <Title>WMS Global Mosaic, not pan sharpened</Title>
       <Abstract>
-	Release 2 of the WMS Global Mosaic, a seamless mosaic of Landsat7 scenes.
-	Spatial resolution is 0.5 second for the pan band, 1 second for the visual and near-IR bands and 2 second for the thermal bands
-	Use this layer to request individual grayscale bands. The default styles may have gamma, sharpening and saturation filters applied.
-	The source dataset is part of the NASA Scientific Data Purchase, and contains scenes acquired in 1999-2003.
-	Release 2.
+  Release 2 of the WMS Global Mosaic, a seamless mosaic of Landsat7 scenes.
+  Spatial resolution is 0.5 second for the pan band, 1 second for the visual and near-IR bands and 2 second for the thermal bands
+  Use this layer to request individual grayscale bands. The default styles may have gamma, sharpening and saturation filters applied.
+  The source dataset is part of the NASA Scientific Data Purchase, and contains scenes acquired in 1999-2003.
+  Release 2.
       </Abstract>
       <LatLonBoundingBox minx="-180" miny="-60" maxx="180" maxy="84"/>
       <Style> <Name>pseudo</Name> <Title>Pseudo-color image (Uses IR and Visual bands, 542 mapping) (default)</Title> </Style>
@@ -115,10 +124,10 @@
       <Name>us_landsat_wgs84</Name>
       <Title>CONUS mosaic of 1990 MRLC dataset</Title>
       <Abstract>
-	CONUS seamless mosaic of Landsat5 scenes. Maximum resolution is 1 arc-second.
-	The default styles may have gamma, sharpening and saturation filters applied.
-	The source dataset is part of the MRLC 1990 dataset.
-	This layer is not precisely geo-referenced!
+  CONUS seamless mosaic of Landsat5 scenes. Maximum resolution is 1 arc-second.
+  The default styles may have gamma, sharpening and saturation filters applied.
+  The source dataset is part of the MRLC 1990 dataset.
+  This layer is not precisely geo-referenced!
       </Abstract>
       <LatLonBoundingBox minx="-127" miny="23" maxx="-66" maxy="50"/>
 
@@ -143,7 +152,7 @@ A radar image has little in common with a visual image, depending mostly on the 
       </Abstract>
       <LatLonBoundingBox minx="-180" miny="-55" maxx="180" maxy="60"/>
       <Style> <Name>default</Name>
-	<Title>Arbitrary color image of the SRTM averaged reflectance</Title>
+  <Title>Arbitrary color image of the SRTM averaged reflectance</Title>
       </Style>
       <Style> <Name>all</Name> <Title>SRTM average reflectance, grayscale</Title> </Style>
       <Style> <Name>ss1</Name> <Title>SRTM average reflectance of subswath 1 data</Title> </Style>
@@ -156,123 +165,84 @@ A radar image has little in common with a visual image, depending mostly on the 
     </Layer>
 
     <Layer queryable="0">
-      <Name>daily_terra_721</Name>
-      <Title>Daily composite of MODIS-TERRA 721 pseudocolor</Title>
+      <Name>daily_planet</Name>
+      <Title>Current global view of the earth, morning</Title>
       <Abstract>
-	Daily generated mosaic of TERRA images released by the MODIS Rapid Response System.
-	Updates every day, at about 1200Z, with images taken during the previous day.
-	Maximum resolution is 8 arcseconds per pixel. The WMS "time" dimension can be used to retrieve past data.
-        The 721 band mapping is used to identify burnt and flooded areas.
+        A contiunously updating composite of visual images from TERRA MODIS scenes, see http://modis.gsfc.nasa.gov for details about MODIS.
+  This dataset is built local on the OnEarth server, it updates as soon as scenes are available, usually with a 6 to 24 hour delay from real time.
+        Images are produced from MODIS scenes using the HDFLook application.
+  Base resolution is 8 arcseconds per pixel. The WMS "time" dimension can be used to retrieve past data, by using the YYYY-MM-DD notation.
       </Abstract>
-      <LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />
-      <Dimension name="time" units="ISO8601" default="2006-05-27">2006-01-01/2006-09-22/P1D</Dimension>
-      <Style>
-        <Name>default</Name>
-	<Title>visual</Title>
-      </Style>
+      <LatLonBoundingBox minx="-180" miny="-72" maxx="180" maxy="72" />
+      <Dimension name="time" units="ISO8601"/>
+      <Extent name="time">2007-12-01/2010-03-20/P1D</Extent>
+      <Style> <Name>default</Name> <Title>visual</Title> </Style>
       <ScaleHint min="125" max="10000" />
     </Layer>
 
     <Layer queryable="0">
-      <Name>daily_aqua_721</Name>
-      <Title>Daily composite of MODIS-AQUA 721 pseudocolor</Title>
+      <Name>daily_afternoon</Name>
+      <Title>Current global view of the earth in the afternoon</Title>
       <Abstract>
-	Daily generated mosaic of the AQUA images released by the MODIS Rapid Response System.
-	Updates every day, at about 1200Z, with images taken during the previous day.
-	Maximum resolution is 8 arcseconds per pixel. The WMS "time" dimension can be used to retrieve past data.
-        The 721 band mapping is used to identify burnt and flooded areas.
+        A contiunously updating composite of visual images from AQUA MODIS scenes, see http://modis.gsfc.nasa.gov for details about MODIS.
+  This dataset is built local on the OnEarth server, it updates as soon as scenes are available, usually with a 6 to 24 hour delay from real time.
+        Images are produced from MODIS scenes using the HDFLook application.
+  Base resolution is 8 arcseconds per pixel. The WMS "time" dimension can be used to retrieve past data, by using the YYYY-MM-DD notation.
       </Abstract>
-      <LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />
-      <Dimension name="time" units="ISO8601" default="2006-05-27">2006-01-01/2006-09-22/P1D</Dimension>
+      <LatLonBoundingBox minx="-180" miny="-72" maxx="180" maxy="72" />
+      <Dimension name="time" units="ISO8601"/>
+      <Extent name="time">2008-12-01/2010-03-20/P1D</Extent>
       <Style> <Name>default</Name> <Title>visual</Title> </Style>
-      <ScaleHint min="125" max="10000"/>
-    </Layer>
-
-    <Layer queryable="0">
-      <Name>daily_terra_ndvi</Name>
-      <Title>Daily composite of MODIS-TERRA images, NDVI processing</Title>
-      <Abstract>
-	Daily generated mosaic of TERRA images released by the MODIS Rapid Response System.
-	Updates every day, at about 1200Z, with images taken during the previous day.
-	Maximum resolution is 8 arcseconds per pixel. The WMS "time" dimension can be used to retrieve past data.
-        The Normalized Difference Vegetation Index (NDVI) is strongly correlated with the plant density and state.
-      </Abstract>
-      <LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />
-      <Dimension name="time" units="ISO8601" default="2006-05-27">2006-01-01/2006-09-22/P1D</Dimension>
-      <Style>
-        <Name>default</Name>
-	<Title>visual</Title>
-      </Style>
       <ScaleHint min="125" max="10000" />
     </Layer>
-
-    <Layer queryable="0">
-      <Name>daily_aqua_ndvi</Name>
-      <Title>Daily composite of MODIS-AQUA images, NDVI processing</Title>
-      <Abstract>
-	Daily generated mosaic of the AQUA images released by the MODIS Rapid Response System.
-	Updates every day, at about 1200Z, with images taken during the previous day.
-	Maximum resolution is 8 arcseconds per pixel. The WMS "time" dimension can be used to retrieve past data.
-        The Normalized Difference Vegetation Index (NDVI) is strongly correlated with the plant density and state.
-      </Abstract>
-      <LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />
-      <Dimension name="time" units="ISO8601" default="2006-05-27">2006-01-01/2006-09-22/P1D</Dimension>
-      <Style> <Name>default</Name> <Title>visual</Title> </Style>
-      <ScaleHint min="125" max="10000"/>
-    </Layer>
-
-    <Layer queryable="0">
-      <Name>daily_terra</Name>
-      <Title>Daily composite of MODIS-TERRA images</Title>
-      <Abstract>
-	Daily generated mosaic of TERRA images released by the MODIS Rapid Response System.
-	Updates every day, at about 1200Z, with images taken during the previous day.
-	Maximum resolution is 8 arcseconds per pixel. The WMS "time" dimension can be used to retrieve past data.
-      </Abstract>
-      <LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />
-      <Dimension name="time" units="ISO8601" default="2006-05-27">2004-12-24/2006-09-22/P1D</Dimension>
-      <Style>
-        <Name>default</Name>
-	<Title>visual</Title>
-      </Style>
-      <ScaleHint min="125" max="10000" />
-    </Layer>
-
-    <Layer queryable="0">
-      <Name>daily_aqua</Name>
-      <Title>Daily composite of MODIS-AQUA images</Title>
-      <Abstract>
-	Daily generated mosaic of the AQUA images released by the MODIS Rapid Response System.
-	Updates every day, at about 1200Z, with images taken during the previous day.
-	Maximum resolution is 8 arcseconds per pixel. The WMS "time" dimension can be used to retrieve past data.
-      </Abstract>
-      <LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />
-      <Dimension name="time" units="ISO8601" default="2006-05-27">2004-12-24/2006-09-22/P1D</Dimension>
-      <Style> <Name>default</Name> <Title>visual</Title> </Style>
-      <ScaleHint min="125" max="10000"/>
-    </Layer>
-
     <Layer queryable="0">
       <Name>BMNG</Name>
       <Title>Blue Marble Next Generation, Global MODIS derived image</Title>
       <Abstract>
-        A set of twelve images built from MODIS data, one for each month of 2004. The native resolution is 15 arcseconds. This is the version with land and ocean bottom hillshading.
+        A set of twelve images built from MODIS data, one for each month of 2004. The native resolution is 15 arcseconds, native size is 86400x43200 pixels. 
+        For each month, three versions are available from this server. The versions with land topography and bathymetry shading are named after the month they represent.
+        The styles with names prefixed by _nb have land topography shading but No Bathymetry.
+        The styles with names prefixed by _ns have No extra Shading.
       </Abstract>
-	<LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />
-	<Style><Name>default</Name><Title>October</Title></Style>
-	<Style><Name>Jan</Name><Title>January</Title></Style>
-	<Style><Name>Feb</Name><Title>February</Title></Style>
-	<Style><Name>Mar</Name><Title>March</Title></Style>
-	<Style><Name>Apr</Name><Title>April</Title></Style>
-	<Style><Name>May</Name><Title>May</Title></Style>
-	<Style><Name>Jun</Name><Title>June</Title></Style>
-	<Style><Name>Jul</Name><Title>July</Title></Style> 
-	<Style><Name>Aug</Name><Title>August</Title></Style>
-	<Style><Name>Sep</Name><Title>September</Title></Style>
-	<Style><Name>Oct</Name><Title>October</Title></Style>
-	<Style><Name>Nov</Name><Title>November</Title></Style>
-	<Style><Name>Dec</Name><Title>December</Title></Style>
-	<ScaleHint min="250" max="10000" />
+  <LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />
+  <Style><Name>default</Name><Title>October</Title></Style>
+  <Style><Name>Jan</Name><Title>January</Title></Style>
+  <Style><Name>Feb</Name><Title>February</Title></Style>
+  <Style><Name>Mar</Name><Title>March</Title></Style>
+  <Style><Name>Apr</Name><Title>April</Title></Style>
+  <Style><Name>May</Name><Title>May</Title></Style>
+  <Style><Name>Jun</Name><Title>June</Title></Style>
+  <Style><Name>Jul</Name><Title>July</Title></Style> 
+  <Style><Name>Aug</Name><Title>August</Title></Style>
+  <Style><Name>Sep</Name><Title>September</Title></Style>
+  <Style><Name>Oct</Name><Title>October</Title></Style>
+  <Style><Name>Nov</Name><Title>November</Title></Style>
+  <Style><Name>Dec</Name><Title>December</Title></Style>
+  <Style><Name>Jan_nb</Name><Title>January, no bathymetry shading</Title></Style>
+  <Style><Name>Feb_nb</Name><Title>February, no bathymetry shading</Title></Style>
+  <Style><Name>Mar_nb</Name><Title>March, no bathymetry shading</Title></Style>
+  <Style><Name>Apr_nb</Name><Title>April, no bathymetry shading</Title></Style>
+  <Style><Name>May_nb</Name><Title>May, no bathymetry shading</Title></Style>
+  <Style><Name>Jun_nb</Name><Title>June, no bathymetry shading</Title></Style>
+  <Style><Name>Jul_nb</Name><Title>July, no bathymetry shading</Title></Style> 
+  <Style><Name>Aug_nb</Name><Title>August, no bathymetry shading</Title></Style>
+  <Style><Name>Sep_nb</Name><Title>September, no bathymetry shading</Title></Style>
+  <Style><Name>Oct_nb</Name><Title>October, no bathymetry shading</Title></Style>
+  <Style><Name>Nov_nb</Name><Title>November, no bathymetry shading</Title></Style>
+  <Style><Name>Dec_nb</Name><Title>December, no bathymetry shading</Title></Style>
+  <Style><Name>Jan_ns</Name><Title>January, no shading</Title></Style>
+  <Style><Name>Feb_ns</Name><Title>February, no shading</Title></Style>
+  <Style><Name>Mar_ns</Name><Title>March, no shading</Title></Style>
+  <Style><Name>Apr_ns</Name><Title>April, no shading</Title></Style>
+  <Style><Name>May_ns</Name><Title>May, no shading</Title></Style>
+  <Style><Name>Jun_ns</Name><Title>June, no shading</Title></Style>
+  <Style><Name>Jul_ns</Name><Title>July, no shading</Title></Style> 
+  <Style><Name>Aug_ns</Name><Title>August, no shading</Title></Style>
+  <Style><Name>Sep_ns</Name><Title>September, no shading</Title></Style>
+  <Style><Name>Oct_ns</Name><Title>October, no shading</Title></Style>
+  <Style><Name>Nov_ns</Name><Title>November, no shading</Title></Style>
+  <Style><Name>Dec_ns</Name><Title>December, no shading</Title></Style>
+  <ScaleHint min="250" max="10000" />
     </Layer>
 
     <Layer queryable="0">
@@ -296,19 +266,19 @@ A radar image has little in common with a visual image, depending mostly on the 
     <Layer queryable="0">
       <Name>srtmplus</Name> <Title>Global 1km elevation, seamless SRTM land elevation and ocean depth</Title>
       <Abstract>
-	The SRTM30 Plus dataset, a 30 arc-second seamless combination of GTOPO30, SRTM derived land elevation and UCSD Sandwell bathymetry data.  The default style is scaled to 8 bit, non-linear.
+  The SRTM30 Plus dataset, a 30 arc-second seamless combination of GTOPO30, SRTM derived land elevation and UCSD Sandwell bathymetry data.  The default style is scaled to 8 bit, non-linear.
  It is possible to request the elevation data in meters by the short_int tyle and requesting PNG format.  The resulting PNG file will be a unsigned 16 bit per pixel image. The values are then the elevation in meters.  Values are signed 16 bit integers, but PNG will present them as unsigned, any values larger than 32767 should be interpreted as negative numbers. 
 For elevation values in feet, request PNG format with the style feet_short_int.
       </Abstract>
       <LatLonBoundingBox minx="-180" miny="-80" maxx="180" maxy="80"/>
       <Style> <Name>default</Name> <Title>Default Elevation Style, scaled to 8 bit using a non-linear function</Title> </Style>
       <Style>
-	<Name>short_int</Name>
-	<Title>short int elevation values when format is image/png, identical to default for jpeg</Title>
+  <Name>short_int</Name>
+  <Title>short int elevation values when format is image/png, identical to default for jpeg</Title>
       </Style>
       <Style>
-	<Name>feet_short_int</Name>
-	<Title>short int elevation values in feet when format is image/png </Title>
+  <Name>feet_short_int</Name>
+  <Title>short int elevation values in feet when format is image/png </Title>
       </Style>
       <ScaleHint min="500" max="10000" />
       <MinScaleDenominator>120000</MinScaleDenominator>
@@ -318,24 +288,24 @@ For elevation values in feet, request PNG format with the style feet_short_int.
       <Name>worldwind_dem</Name>
       <Title>SRTM derived global elevation, 3 arc-second</Title>
       <Abstract>
-	A global elevation model, prepared from the 3 arc-second SRTM dataset by filling some of the problem areas. Prepared by the NASA Learning Technologies.
-	The default style is scaled to 8 bit, non-linear.
-	It is possible to request the elevation data in meters by the short_int tyle and requesting PNG format. The resulting PNG file will be a unsigned 16 bit per pixel image. The values are then the elevation in meters.
-	Values are signed 16 bit integers, but PNG will present them as unsigned, leading to a few areas with very large values (65000+)
-	For elevation values in feet, request PNG format with the style feet_short_int.
+  A global elevation model, prepared from the 3 arc-second SRTM dataset by filling some of the problem areas. Prepared by the NASA Learning Technologies.
+  The default style is scaled to 8 bit, non-linear.
+  It is possible to request the elevation data in meters by the short_int tyle and requesting PNG format. The resulting PNG file will be a unsigned 16 bit per pixel image. The values are then the elevation in meters.
+  Values are signed 16 bit integers, but PNG will present them as unsigned, leading to a few areas with very large values (65000+)
+  For elevation values in feet, request PNG format with the style feet_short_int.
       </Abstract>
       <LatLonBoundingBox minx="-180" miny="-80" maxx="180" maxy="80"/>
       <Style>
-	<Name>default</Name>
-	<Title>Default Elevation Style, scaled to 8 bit using a non-linear function</Title>
+  <Name>default</Name>
+  <Title>Default Elevation Style, scaled to 8 bit using a non-linear function</Title>
       </Style>
       <Style>
-	<Name>short_int</Name>
-	<Title>short int elevation values when format is image/png</Title>
+  <Name>short_int</Name>
+  <Title>short int elevation values when format is image/png</Title>
       </Style>
       <Style>
-	<Name>feet_short_int</Name>
-	<Title>short int elevation values in feet when format is image/png</Title>
+  <Name>feet_short_int</Name>
+  <Title>short int elevation values in feet when format is image/png</Title>
       </Style>
       <ScaleHint min="45" max="10000" />
       <MinScaleDenominator>120000</MinScaleDenominator>
@@ -361,21 +331,21 @@ For elevation values in feet, request PNG format with the style feet_short_int.
       <Name>us_elevation</Name>
       <Title>Digital Elevation Map of the United States, DTED dataset, 3 second resolution, grayscale</Title>
       <Abstract>
-	DTED Level 3 US elevation.  The default style is scaled to 8 bit.
-	It is possible to request the elevation data in meters by the short_int tyle and requesting PNG format. The resulting PNG file will be a unsigned 16 bit per pixel image. The values are elevation in meters, zero clipped (no negative values).
+  DTED Level 3 US elevation.  The default style is scaled to 8 bit.
+  It is possible to request the elevation data in meters by the short_int tyle and requesting PNG format. The resulting PNG file will be a unsigned 16 bit per pixel image. The values are elevation in meters, zero clipped (no negative values).
       </Abstract>
       <LatLonBoundingBox minx="-127" miny="23" maxx="-66" maxy="50"/>
       <Style>
-	<Name>default</Name>
-	<Title>Default Elevation</Title>
+  <Name>default</Name>
+  <Title>Default Elevation</Title>
       </Style>
       <Style>
-	<Name>short_int</Name>
-	<Title>short int elevation values when format is image/png</Title>
+  <Name>short_int</Name>
+  <Title>short int elevation values when format is image/png</Title>
       </Style>
       <Style>
-	<Name>feet_short_int</Name>
-	<Title>short int elevation values in feet when format is image/png</Title>
+  <Name>feet_short_int</Name>
+  <Title>short int elevation values in feet when format is image/png</Title>
       </Style>
       <ScaleHint min="45" max="10000" />
     </Layer>
@@ -384,13 +354,27 @@ For elevation values in feet, request PNG format with the style feet_short_int.
       <Name>us_colordem</Name>
       <Title>Digital Elevation Map of the United States, DTED dataset, 3 second resolution, hue mapped</Title>
       <Abstract>
-	The DTED Level 3 US elevation, mapped to a color image using the full spectrum.
-	This result is not achievable by using SLD, so it is presented as a different layer.
+  The DTED Level 3 US elevation, mapped to a color image using the full spectrum.
+  This result is not achievable by using SLD, so it is presented as a different layer.
       </Abstract>
       <LatLonBoundingBox minx="-127" miny="23" maxx="-66" maxy="50"/>
       <Style>
-	<Name>default</Name>
-	<Title>Default Color Elevation</Title>
+  <Name>default</Name>
+  <Title>Default Color Elevation</Title>
+      </Style>
+      <ScaleHint min="45" max="10000" />
+      <MinScaleDenominator>20000</MinScaleDenominator>
+    </Layer>
+
+    <Layer queryable="0">
+      <Name>gdem</Name>
+      <Title>ASTER DEM, tiled only, 1.5 arc-second per pixel</Title>
+      <Abstract> Subsampled version of the ASTER Global Digital Elevation Map (GDEM).  Details are available at http://asterweb.jpl.nasa.gov/gdem.asp. Redistribution of the full resolution original data is not allowed, this dataset is subsampled to 1/2400 pixels per degree (1.5 arc-sec, 45m).  Tiles, described by the http://onearth.jpl.nasa.gov/wms.cgi?request=GetTileService, are 16bit PNG files, where the 16 bit values should be interpreted as signed short integers, in meters.
+      </Abstract>
+      <LatLonBoundingBox minx="-180" miny="-90" maxx="180" maxy="90"/>
+      <Style>
+  <Name>short_int</Name>
+  <Title>short int elevation values when format is image/png</Title>
       </Style>
       <ScaleHint min="45" max="10000" />
       <MinScaleDenominator>20000</MinScaleDenominator>

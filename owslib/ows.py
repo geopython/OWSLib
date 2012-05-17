@@ -17,7 +17,7 @@ Currently supports version 1.1.0 (06-121r3).
 
 from owslib.etree import etree
 from owslib import crs, util
-from owslib.util import testXMLValue, testXMLAttribute, nspath_eval, xmltag_split, dict_union
+from owslib.util import testXMLValue, testXMLAttribute, nspath_eval, xmltag_split, dict_union, extract_xml_list
 
 OWS_NAMESPACE_1_0_0 = 'http://www.opengis.net/ows'
 OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
@@ -48,7 +48,7 @@ class ServiceIdentification(object):
 
         self.title    = testXMLValue(self._root.find(nspath_eval('ows:Title', namespaces)))
         self.abstract = testXMLValue(self._root.find(nspath_eval('ows:Abstract', namespaces)))
-        self.keywords = [f.text for f in self._root.findall(nspath_eval('ows:Keywords/ows:Keyword', namespaces))]
+        self.keywords = extract_xml_list(self._root.findall(nspath_eval('ows:Keywords/ows:Keyword', namespaces)))
         self.accessconstraints = testXMLValue(self._root.find(nspath_eval('ows:AccessConstraints', namespaces)))
         self.fees = testXMLValue(self._root.find(nspath_eval('ows:Fees', namespaces)))
         self.type = util.testXMLValue(self._root.find(nspath_eval('ows:ServiceType', namespaces)))

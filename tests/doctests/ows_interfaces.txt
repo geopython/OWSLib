@@ -11,8 +11,8 @@
 
 #TODO, we should run all these from local XML documents (as per the WMS and WFS services)
 
-    >>> wmsxml = open(resource_file('JPLCapabilities.xml'), 'r').read() 
-    >>> wfsxml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read()
+    >>> wmsxml = open(resource_file('wms_JPLCapabilities.xml'), 'r').read() 
+    >>> wfsxml = open(resource_file('wfs_mapserver_getcapabilities.xml'), 'r').read()
     >>> wms = WebMapService('url', version='1.1.1', xml=wmsxml)
     >>> wfs = WebFeatureService('url', version='1.0', xml=wfsxml)
     >>> wcs=WebCoverageService('http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd', version='1.0.0')

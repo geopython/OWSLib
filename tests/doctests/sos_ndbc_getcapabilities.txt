@@ -9,7 +9,7 @@ Imports
 
 Initialize
 
-    >>> xml = open(resource_file('ndbc_sos_getcapabilities.xml'), 'r').read()
+    >>> xml = open(resource_file('sos_ndbc_getcapabilities.xml'), 'r').read()
     >>> ndbc = sos(None, xml=xml)
 
 ServiceIdentification

@@ -101,8 +101,8 @@ class WebFeatureService_2_0_0(object):
             kwds=f.findall(nspath('Keywords/Keyword'))
             if kwds is not None:
                 for kwd in kwds[:]:
-                    if kwd.text not in self.identification.keywords:
-                        self.identification.keywords.append(kwd.text)
+                    if kwd.text.strip() and kwd.text.strip() not in self.identification.keywords:
+                        self.identification.keywords.append(kwd.text.strip())
 	
    
         #TODO: update serviceProvider metadata, miss it out for now
@@ -340,7 +340,7 @@ class ContentMetadata:
             self.abstract = abstract.text
         else:
             self.abstract = None
-        self.keywords = [f.text for f in elem.findall(nspath('Keywords',ns=WFS_NAMESPACE))]
+        self.keywords = extract_xml_list(elem.findall(nspath('Keywords',ns=WFS_NAMESPACE)))
 
         # bboxes
         self.boundingBox = None
