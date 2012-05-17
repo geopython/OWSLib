@@ -88,6 +88,37 @@ class SensorObservationService(object):
             off = SosObservationOffering(offering)
             self.contents[off.id] = off
             self.offerings.append(off)
+
+    def describe_sensor(self,   outputFormat=None,
+                                procedure=None,
+                                method='Get',
+                                **kwargs):
+
+        base_url = self.get_operation_by_name('DescribeSensor').methods[method]['url']        
+        request = {'service': 'SOS', 'version': self.version, 'request': 'DescribeSensor'}
+
+        # Required Fields
+        assert isinstance(outputFormat, str)
+        request['outputFormat'] = outputFormat
+
+        assert isinstance(procedure, str)
+        request['procedure'] = procedure
+
+        # Optional Fields
+        if kwargs:
+            for kw in kwargs:
+                request[kw]=kwargs[kw]
+       
+        data = urlencode(request)        
+
+        response = openURL(base_url, data, method, username=self.username, password=self.password).read()
+        tr = etree.fromstring(response)
+
+        if tr.tag == nsp("ows:ExceptionReport"):
+            raise ows.ExceptionReport(etree.ElementTree(element=tr), namespaces['ows'])
+
+        return response
+
     def get_observation(self,   responseFormat=None,
                                 offerings=None,
                                 observedProperties=None,
@@ -115,8 +146,8 @@ class SensorObservationService(object):
         assert isinstance(observedProperties, list) and len(observedProperties) > 0
         request['observedproperty'] = ','.join(observedProperties)
 
-        assert responseFormat is not None
-        request['responseFormat'] = str(responseFormat)
+        assert isinstance(responseFormat, str)
+        request['responseFormat'] = responseFormat
 
 
         # Optional Fields
