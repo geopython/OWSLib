@@ -12,7 +12,7 @@
     >>> c.getdomain('GetRecords.outputSchema')
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-    ExceptionReport: 'Operation not supported: locator=root-node'
+    ExceptionReport: 'OperationNotSupported - root-node / Operation not supported: locator=root-node'
 
     >>> c.getrecords('downloadableData')
     >>> c.results['returned']
@@ -20,4 +20,4 @@
     >>> c.getrecords(cql='title = \'water\'')
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-    ExceptionReport: 'Invalid parameter value: locator=csw:CqlText'
+    ExceptionReport: 'InvalidParameterValue - csw:CqlText / Invalid parameter value: locator=csw:CqlText'

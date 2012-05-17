@@ -197,7 +197,7 @@ class ExceptionReport(Exception):
         # set topmost stacktrace as return message
         self.code = self.exceptions[0]['exceptionCode']
         self.locator = self.exceptions[0]['locator']
-        self.msg = self.exceptions[0]['ExceptionText']
+        self.msg = ','.join(map(lambda x: "%s - %s / %s" % (x['exceptionCode'], x['locator'], x['ExceptionText']), self.exceptions))
         self.xml = etree.tostring(elem.getroot())
 
     def __str__(self):
