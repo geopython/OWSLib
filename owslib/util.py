@@ -18,6 +18,9 @@ from urllib2 import urlopen, HTTPError, Request
 from urllib2 import HTTPPasswordMgrWithDefaultRealm
 from urllib2 import HTTPBasicAuthHandler
 from StringIO import StringIO
+from owslib.namespaces import OWSLibNamespaces
+
+ns = OWSLibNamespaces()
 
 """
 Utility functions and classes
@@ -95,7 +98,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
 
 #default namespace for nspath is OWS common
 OWS_NAMESPACE = 'http://www.opengis.net/ows'
-def nspath(path, ns=OWS_NAMESPACE):
+def nspath(path, namespace=OWS_NAMESPACE):
 
     """
     Prefix the given path with the given namespace identifier.
@@ -112,25 +115,33 @@ def nspath(path, ns=OWS_NAMESPACE):
         return -1
 
     # If no namespace, just return the unchanged path
-    if ns is None:
+    if namespace is None:
         return path
 
     components = []
     for component in path.split('/'):
         if component != '*':
-            component = '{%s}%s' % (ns, component)
+            component = '{%s}%s' % (namespace, component)
         components.append(component)
     return '/'.join(components)
 
-def nspath_eval(xpath, namespaces):
+def nspath_eval(xpath, version=None):
     ''' Return an etree friendly xpath '''
     out = []
+    
+    if version is not None:
+        c_version = ''
+        for str in version.split('.'):
+            c_version += str
+    
     for chunks in xpath.split('/'):
         if chunks.find(':') == -1:
             out.append(chunks)
         else:
             namespace, element = chunks.split(':')
-            out.append('{%s}%s' % (namespaces[namespace], element))
+            if version is not None:
+                namespace += c_version
+            out.append('{%s}%s' % (ns.get_namespace(namespace), element))
 
     return '/'.join(out)
 

@@ -13,35 +13,28 @@ import StringIO
 import random
 from owslib.etree import etree
 from owslib import fes
-from owslib import util
+from owslib.util import nspath_eval, xml2string, testXMLValue, http_post
 from owslib import ows
 from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
+from owslib.namespaces import OWSLibNamespaces
 
 # default variables
 
 outputformat = 'application/xml'
 schema = 'http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd'
 
-namespaces = {
-    'csw': 'http://www.opengis.net/cat/csw/2.0.2',
-    'dc' : 'http://purl.org/dc/elements/1.1/',
-    'dct': 'http://purl.org/dc/terms/',
-    'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
-    'fgdc': 'http://www.opengis.net/cat/csw/csdgm',
-    'gco': 'http://www.isotc211.org/2005/gco',
-    'gmd': 'http://www.isotc211.org/2005/gmd',
-    'gml': 'http://www.opengis.net/gml',
-    'ogc': 'http://www.opengis.net/ogc',
-    'ows': 'http://www.opengis.net/ows',
-    'rim': 'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0',
-    'xs' : 'http://www.w3.org/2001/XMLSchema',
-    'xs2': 'http://www.w3.org/XML/Schema',
-    'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
-}
+ns = OWSLibNamespaces()
 
-schema_location = '%s %s' % (namespaces['csw'], schema)
+schema_location = '%s %s' % (ns.get_namespace('csw'), schema)
+
+_ows_version = '1.0.0'
+
+def nsp_ows(item):
+    return nspath_eval(item,_ows_version)
+def nsp(item):
+    return nspath_eval(item)
 
 class CatalogueServiceWeb:
     """ csw request class """
@@ -67,34 +60,33 @@ class CatalogueServiceWeb:
         self.timeout = timeout
         self.service = 'CSW'
         self.exceptionreport = None
-        self.owscommon = ows.OwsCommon('1.0.0')
 
         if not skip_caps:  # process GetCapabilities
             # construct request
             node0 = self._setrootelement('csw:GetCapabilities')
             node0.set('service', self.service)
-            node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-            tmp = etree.SubElement(node0, util.nspath_eval('ows:AcceptVersions', namespaces))
-            etree.SubElement(tmp, util.nspath_eval('ows:Version', namespaces)).text = self.version
-            tmp2 = etree.SubElement(node0, util.nspath_eval('ows:AcceptFormats', namespaces))
-            etree.SubElement(tmp2, util.nspath_eval('ows:OutputFormat', namespaces)).text = outputformat
-            self.request = util.xml2string(etree.tostring(node0))
+            node0.set(nsp('xsi:schemaLocation'), schema_location)
+            tmp = etree.SubElement(node0, nsp_ows('ows:AcceptVersions'))
+            etree.SubElement(tmp, nsp_ows('ows:Version')).text = self.version
+            tmp2 = etree.SubElement(node0, nsp_ows('ows:AcceptFormats'))
+            etree.SubElement(tmp2, nsp_ows('ows:OutputFormat')).text = outputformat
+            self.request = xml2string(etree.tostring(node0))
     
             self._invoke()
     
             if self.exceptionreport is None:
                 # ServiceIdentification
-                val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
-                self.identification=ows.ServiceIdentification(val,self.owscommon.namespace)
+                val = self._exml.find(nsp_ows('ows:ServiceIdentification'))
+                self.identification=ows.ServiceIdentification(val,_ows_version)
                 # ServiceProvider
-                val = self._exml.find(util.nspath_eval('ows:ServiceProvider', namespaces))
-                self.provider=ows.ServiceProvider(val,self.owscommon.namespace)
+                val = self._exml.find(nsp_ows('ows:ServiceProvider'))
+                self.provider=ows.ServiceProvider(val,_ows_version)
                 # ServiceOperations metadata 
-                op = self._exml.find(util.nspath_eval('ows:OperationsMetadata', namespaces))
-                self.operations = ows.OperationsMetadata(op, self.owscommon.namespace).operations
+                op = self._exml.find(nsp_ows('ows:OperationsMetadata'))
+                self.operations = ows.OperationsMetadata(op,_ows_version).operations
         
                 # FilterCapabilities
-                val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
+                val = self._exml.find(nsp('ogc:Filter_Capabilities'))
                 self.filters=fes.FilterCapabilities(val)
  
     def describerecord(self, typename='csw:Record', format=outputformat):
@@ -115,10 +107,10 @@ class CatalogueServiceWeb:
         node0.set('service', self.service)
         node0.set('version', self.version)
         node0.set('outputFormat', format)
-        node0.set('schemaLanguage', namespaces['xs2'])
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-        etree.SubElement(node0, util.nspath_eval('csw:TypeName', namespaces)).text = typename
-        self.request = util.xml2string(etree.tostring(node0))
+        node0.set('schemaLanguage',ns.get_namespace('xs2'))
+        node0.set(nsp('xsi:schemaLocation'), schema_location)
+        etree.SubElement(node0, nsp('csw:TypeName')).text = typename
+        self.request = xml2string(etree.tostring(node0))
 
         self._invoke()
 
@@ -143,30 +135,30 @@ class CatalogueServiceWeb:
         node0 = self._setrootelement('csw:GetDomain')
         node0.set('service', self.service)
         node0.set('version', self.version)
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+        node0.set(nsp('xsi:schemaLocation'), schema_location)
         if dtype == 'property':
             dtypename = 'PropertyName'
-        etree.SubElement(node0, util.nspath_eval('csw:%s' % dtypename, namespaces)).text = dname
-        self.request = util.xml2string(etree.tostring(node0))
+        etree.SubElement(node0, nsp('csw:%s' % dtypename)).text = dname
+        self.request = xml2string(etree.tostring(node0))
 
         self._invoke()
 
         if self.exceptionreport is None:
             self.results = {}
 
-            val = self._exml.find(util.nspath_eval('csw:DomainValues', namespaces)).attrib.get('type')
-            self.results['type'] = util.testXMLValue(val, True)
+            val = self._exml.find(nsp('csw:DomainValues')).attrib.get('type')
+            self.results['type'] = testXMLValue(val, True)
 
-            val = self._exml.find(util.nspath_eval('csw:DomainValues/csw:%s' % dtypename, namespaces))
-            self.results[dtype] = util.testXMLValue(val)
+            val = self._exml.find(nsp('csw:DomainValues/csw:%s' % dtypename))
+            self.results[dtype] = testXMLValue(val)
 
             # get the list of values associated with the Domain
             self.results['values'] = []
 
-            for f in self._exml.findall(util.nspath_eval('csw:DomainValues/csw:ListOfValues/csw:Value', namespaces)):
-                self.results['values'].append(util.testXMLValue(f))
+            for f in self._exml.findall(nsp('csw:DomainValues/csw:ListOfValues/csw:Value')):
+                self.results['values'].append(testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='summary', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='summary', sortby=None, outputschema=None, format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None):
         """
 
         Construct and process a  GetRecords request
@@ -190,20 +182,23 @@ class CatalogueServiceWeb:
 
         """
 
+        if outputschema is None:
+            outputschema = ns.get_namespace('csw')
+
         if xml is not None:
             self.request = xml
             e=etree.fromstring(xml)
-            val = e.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
+            val = e.find(nsp('csw:Query/csw:ElementSetName'))
             if val is not None:
-                esn = util.testXMLValue(val)
+                esn = testXMLValue(val)
         else:
             # construct request
             node0 = self._setrootelement('csw:GetRecords')
             if etree.__name__ != 'lxml.etree':  # apply nsmap manually
-                node0.set('xmlns:ows', namespaces['ows'])
-                node0.set('xmlns:gmd', namespaces['gmd'])
-                node0.set('xmlns:dif', namespaces['dif'])
-                node0.set('xmlns:fgdc', namespaces['fgdc'])
+                node0.set('xmlns:ows',ns.get_versioned_namespace('ows', _ows_version))
+                node0.set('xmlns:gmd',ns.get_namespace('gmd'))
+                node0.set('xmlns:dif',ns.get_namespace('dif'))
+                node0.set('xmlns:fgdc',ns.get_namespace('fgdc'))
             node0.set('outputSchema', outputschema)
             node0.set('outputFormat', format)
             node0.set('version', self.version)
@@ -212,19 +207,19 @@ class CatalogueServiceWeb:
             if startposition > 0:
                 node0.set('startPosition', str(startposition))
             node0.set('maxRecords', str(maxrecords))
-            node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+            node0.set(nsp('xsi:schemaLocation'), schema_location)
     
-            node1 = etree.SubElement(node0, util.nspath_eval('csw:Query', namespaces))
+            node1 = etree.SubElement(node0, nsp('csw:Query'))
             node1.set('typeNames', typenames)
         
-            etree.SubElement(node1, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
+            etree.SubElement(node1, nsp('csw:ElementSetName')).text = esn
     
             self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
     
             if sortby is not None:
                 fes.setsortby(node1, sortby)
     
-            self.request = util.xml2string(etree.tostring(node0))
+            self.request = xml2string(etree.tostring(node0))
 
         self._invoke()
  
@@ -232,19 +227,19 @@ class CatalogueServiceWeb:
             self.results = {}
     
             # process search results attributes
-            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsMatched')
-            self.results['matches'] = int(util.testXMLValue(val, True))
-            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsReturned')
-            self.results['returned'] = int(util.testXMLValue(val, True))
-            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('nextRecord')
-            self.results['nextrecord'] = int(util.testXMLValue(val, True))
+            val = self._exml.find(nsp('csw:SearchResults')).attrib.get('numberOfRecordsMatched')
+            self.results['matches'] = int(testXMLValue(val, True))
+            val = self._exml.find(nsp('csw:SearchResults')).attrib.get('numberOfRecordsReturned')
+            self.results['returned'] = int(testXMLValue(val, True))
+            val = self._exml.find(nsp('csw:SearchResults')).attrib.get('nextRecord')
+            self.results['nextrecord'] = int(testXMLValue(val, True))
     
             # process list of matching records
             self.records = {}
 
             self._parserecords(outputschema, esn)
 
-    def getrecordbyid(self, id=[], esn='full', outputschema=namespaces['csw'], format=outputformat):
+    def getrecordbyid(self, id=[], esn='full', outputschema=None, format=outputformat):
         """
 
         Construct and process a GetRecordById request
@@ -259,17 +254,20 @@ class CatalogueServiceWeb:
 
         """
 
+        if outputschema is None:
+            outputschema = ns.get_namespace('csw')
+
         # construct request 
         node0 = self._setrootelement('csw:GetRecordById')
         node0.set('outputSchema', outputschema)
         node0.set('outputFormat', format)
         node0.set('version', self.version)
         node0.set('service', self.service)
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+        node0.set(nsp('xsi:schemaLocation'), schema_location)
         for i in id:
-            etree.SubElement(node0, util.nspath_eval('csw:Id', namespaces)).text = i
-        etree.SubElement(node0, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
-        self.request = util.xml2string(etree.tostring(node0))
+            etree.SubElement(node0, nsp('csw:Id')).text = i
+        etree.SubElement(node0, nsp('csw:ElementSetName')).text = esn
+        self.request = xml2string(etree.tostring(node0))
 
         self._invoke()
  
@@ -302,14 +300,14 @@ class CatalogueServiceWeb:
         node0 = self._setrootelement('csw:Transaction')
         node0.set('version', self.version)
         node0.set('service', self.service)
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+        node0.set(nsp('xsi:schemaLocation'), schema_location)
 
         validtransactions = ['insert', 'update', 'delete']
 
         if ttype not in validtransactions:  # invalid transaction
             raise RuntimeError, 'Invalid transaction \'%s\'.' % ttype
 
-        node1 = etree.SubElement(node0, util.nspath_eval('csw:%s' % ttype.capitalize(), namespaces))
+        node1 = etree.SubElement(node0, nsp('csw:%s' % ttype.capitalize()))
 
         if ttype != 'update':  
             node1.set('typeName', typename)
@@ -324,15 +322,15 @@ class CatalogueServiceWeb:
                 node1.append(etree.fromstring(record))
             else:
                 if propertyname is not None and propertyvalue is not None:
-                    node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
-                    etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = propertyname
-                    etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = propertyvalue
+                    node2 = etree.SubElement(node1, nsp('csw:RecordProperty'))
+                    etree.SubElement(node2, nsp('csw:Name')).text = propertyname
+                    etree.SubElement(node2, nsp('csw:Value')).text = propertyvalue
                     self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql, identifier)
 
         if ttype == 'delete':
             self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
 
-        self.request = util.xml2string(etree.tostring(node0))
+        self.request = xml2string(etree.tostring(node0))
 
         self._invoke()
         self.results = {}
@@ -361,71 +359,71 @@ class CatalogueServiceWeb:
         node0 = self._setrootelement('csw:Harvest')
         node0.set('version', self.version)
         node0.set('service', self.service)
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-        etree.SubElement(node0, util.nspath_eval('csw:Source', namespaces)).text = source
-        etree.SubElement(node0, util.nspath_eval('csw:ResourceType', namespaces)).text = resourcetype
+        node0.set(nsp('xsi:schemaLocation'), schema_location)
+        etree.SubElement(node0, nsp('csw:Source')).text = source
+        etree.SubElement(node0, nsp('csw:ResourceType')).text = resourcetype
         if resourceformat is not None:
-            etree.SubElement(node0, util.nspath_eval('csw:ResourceFormat', namespaces)).text = resourceformat
+            etree.SubElement(node0, nsp('csw:ResourceFormat')).text = resourceformat
         if harvestinterval is not None:
-            etree.SubElement(node0, util.nspath_eval('csw:HarvestInterval', namespaces)).text = harvestinterval
+            etree.SubElement(node0, nsp('csw:HarvestInterval')).text = harvestinterval
         if responsehandler is not None:
-            etree.SubElement(node0, util.nspath_eval('csw:ResponseHandler', namespaces)).text = responsehandler
+            etree.SubElement(node0, nsp('csw:ResponseHandler')).text = responsehandler
        
-        self.request = util.xml2string(etree.tostring(node0))
+        self.request = xml2string(etree.tostring(node0))
 
         self._invoke()
         self.results = {}
 
         if self.exceptionreport is None:
-            val = self._exml.find(util.nspath_eval('csw:Acknowledgement', namespaces))
-            if util.testXMLValue(val) is not None:
+            val = self._exml.find(nsp('csw:Acknowledgement'))
+            if testXMLValue(val) is not None:
                 ts = val.attrib.get('timeStamp')
-                self.timestamp = util.testXMLValue(ts, True)
-                id = val.find(util.nspath_eval('csw:RequestId', namespaces))
-                self.id = util.testXMLValue(id) 
+                self.timestamp = testXMLValue(ts, True)
+                id = val.find(nsp('csw:RequestId'))
+                self.id = testXMLValue(id) 
             else:
                 self._parsetransactionsummary()
                 self._parseinsertresult()
 
     def _parseinsertresult(self):
         self.results['insertresults'] = []
-        for i in self._exml.findall(util.nspath_eval('csw:InsertResult', namespaces)):
-            for j in i.findall(util.nspath_eval('csw:BriefRecord/dc:identifier', namespaces)):
-                self.results['insertresults'].append(util.testXMLValue(j))
+        for i in self._exml.findall(nsp('csw:InsertResult')):
+            for j in i.findall(nsp('csw:BriefRecord/dc:identifier')):
+                self.results['insertresults'].append(testXMLValue(j))
 
     def _parserecords(self, outputschema, esn):
-        if outputschema == namespaces['gmd']: # iso 19139
-            for i in self._exml.findall('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)):
-                val = i.find(util.nspath_eval('gmd:fileIdentifier/gco:CharacterString', namespaces))
-                identifier = self._setidentifierkey(util.testXMLValue(val))
+        if outputschema == ns.get_namespace('gmd'): # iso 19139
+            for i in self._exml.findall('.//'+nsp('gmd:MD_Metadata')):
+                val = i.find(nsp('gmd:fileIdentifier/gco:CharacterString'))
+                identifier = self._setidentifierkey(testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
-        elif outputschema == namespaces['fgdc']: # fgdc csdgm
+        elif outputschema == ns.get_namespace('fgdc'): # fgdc csdgm
             for i in self._exml.findall('.//metadata'):
                 val = i.find('idinfo/datasetid')
-                identifier = self._setidentifierkey(util.testXMLValue(val))
+                identifier = self._setidentifierkey(testXMLValue(val))
                 self.records[identifier] = Metadata(i)
-        elif outputschema == namespaces['dif']: # nasa dif
-            for i in self._exml.findall('.//'+util.nspath_eval('dif:DIF', namespaces)):
-                val = i.find(util.nspath_eval('dif:Entry_ID', namespaces))
-                identifier = self._setidentifierkey(util.testXMLValue(val))
+        elif outputschema == ns.get_namespace('dif'): # nasa dif
+            for i in self._exml.findall('.//'+nsp('dif:DIF')):
+                val = i.find(nsp('dif:Entry_ID'))
+                identifier = self._setidentifierkey(testXMLValue(val))
                 self.records[identifier] = DIF(i)
         else: # process default
-            for i in self._exml.findall('.//'+util.nspath_eval('csw:%s' % self._setesnel(esn), namespaces)):
-                val = i.find(util.nspath_eval('dc:identifier', namespaces))
-                identifier = self._setidentifierkey(util.testXMLValue(val))
+            for i in self._exml.findall('.//'+nsp('csw:%s' % self._setesnel(esn))):
+                val = i.find(nsp('dc:identifier'))
+                identifier = self._setidentifierkey(testXMLValue(val))
                 self.records[identifier] = CswRecord(i)
 
     def _parsetransactionsummary(self):
-        val = self._exml.find(util.nspath_eval('csw:TransactionSummary', namespaces))
+        val = self._exml.find(nsp('csw:TransactionSummary'))
         if val is not None:
             rid = val.attrib.get('requestId')
-            self.results['requestid'] = util.testXMLValue(rid, True)
-            ts = val.find(util.nspath_eval('csw:totalInserted', namespaces))
-            self.results['inserted'] = int(util.testXMLValue(ts))
-            ts = val.find(util.nspath_eval('csw:totalUpdated', namespaces))
-            self.results['updated'] = int(util.testXMLValue(ts))
-            ts = val.find(util.nspath_eval('csw:totalDeleted', namespaces))
-            self.results['deleted'] = int(util.testXMLValue(ts))
+            self.results['requestid'] = testXMLValue(rid, True)
+            ts = val.find(nsp('csw:totalInserted'))
+            self.results['inserted'] = int(testXMLValue(ts))
+            ts = val.find(nsp('csw:totalUpdated'))
+            self.results['updated'] = int(testXMLValue(ts))
+            ts = val.find(nsp('csw:totalDeleted'))
+            self.results['deleted'] = int(testXMLValue(ts))
 
     def _setesnel(self, esn):
         """ Set the element name to parse depending on the ElementSetName requested """
@@ -444,13 +442,13 @@ class CatalogueServiceWeb:
 
     def _setrootelement(self, el):
         if etree.__name__ == 'lxml.etree':  # apply nsmap
-            return etree.Element(util.nspath_eval(el, namespaces), nsmap=namespaces)
+            return etree.Element(nsp(el), nsmap=ns.get_namespaces())
         else:
-            return etree.Element(util.nspath_eval(el, namespaces))
+            return etree.Element(nsp(el))
 
     def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None, identifier=None):
         if keywords or bbox is not None or qtype is not None or cql is not None or identifier is not None:
-            node0 = etree.SubElement(parent, util.nspath_eval('csw:Constraint', namespaces))
+            node0 = etree.SubElement(parent, nsp('csw:Constraint'))
             node0.set('version', '1.1.0')
 
             if identifier is not None:  # set identifier filter, overrides all other parameters
@@ -458,7 +456,7 @@ class CatalogueServiceWeb:
                 node0.append(flt.set(identifier=identifier))
             elif cql is not None:  # send raw CQL query
                 # CQL passed, overrides all other parameters
-                node1 = etree.SubElement(node0, util.nspath_eval('csw:CqlText', namespaces))
+                node1 = etree.SubElement(node0, nsp('csw:CqlText'))
                 node1.text = cql
             else:  # construct a Filter request
                 flt = fes.FilterRequest()
@@ -466,30 +464,30 @@ class CatalogueServiceWeb:
 
     def _invoke(self):
         # do HTTP request
-        self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
+        self.response = http_post(self.url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
         self._exml = etree.parse(StringIO.StringIO(self.response))
 
         # it's XML.  Attempt to decipher whether the XML response is CSW-ish """
         valid_xpaths = [
-            util.nspath_eval('ows:ExceptionReport', namespaces),
-            util.nspath_eval('csw:Capabilities', namespaces),
-            util.nspath_eval('csw:DescribeRecordResponse', namespaces),
-            util.nspath_eval('csw:GetDomainResponse', namespaces),
-            util.nspath_eval('csw:GetRecordsResponse', namespaces),
-            util.nspath_eval('csw:GetRecordByIdResponse', namespaces),
-            util.nspath_eval('csw:HarvestResponse', namespaces),
-            util.nspath_eval('csw:TransactionResponse', namespaces)
+            nsp_ows('ows:ExceptionReport'),
+            nsp('csw:Capabilities'),
+            nsp('csw:DescribeRecordResponse'),
+            nsp('csw:GetDomainResponse'),
+            nsp('csw:GetRecordsResponse'),
+            nsp('csw:GetRecordByIdResponse'),
+            nsp('csw:HarvestResponse'),
+            nsp('csw:TransactionResponse')
         ]
 
         if self._exml.getroot().tag not in valid_xpaths:
             raise RuntimeError, 'Document is XML, but not CSW-ish'
 
         # check if it's an OGC Exception
-        val = self._exml.find(util.nspath_eval('ows:Exception', namespaces))
+        val = self._exml.find(nsp_ows('ows:Exception'))
         if val is not None:
-            raise ows.ExceptionReport(self._exml, self.owscommon.namespace)
+            raise ows.ExceptionReport(self._exml, ns.get_versioned_namespace('ows',_ows_version))
         else:
             self.exceptionreport = None
 
@@ -514,110 +512,110 @@ class CswRecord(object):
         # some CSWs return records with multiple identifiers based on 
         # different schemes.  Use the first dc:identifier value to set
         # self.identifier, and set self.identifiers as a list of dicts
-        val = record.find(util.nspath_eval('dc:identifier', namespaces))
-        self.identifier = util.testXMLValue(val)
+        val = record.find(nsp('dc:identifier'))
+        self.identifier = testXMLValue(val)
 
         self.identifiers = []
-        for i in record.findall(util.nspath_eval('dc:identifier', namespaces)):
+        for i in record.findall(nsp('dc:identifier')):
             d = {}
             d['scheme'] = i.attrib.get('scheme')
             d['identifier'] = i.text
             self.identifiers.append(d)
 
-        val = record.find(util.nspath_eval('dc:type', namespaces))
-        self.type = util.testXMLValue(val)
+        val = record.find(nsp('dc:type'))
+        self.type = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:title', namespaces))
-        self.title = util.testXMLValue(val)
+        val = record.find(nsp('dc:title'))
+        self.title = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dct:alternative', namespaces))
-        self.alternative = util.testXMLValue(val)
+        val = record.find(nsp('dct:alternative'))
+        self.alternative = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dct:isPartOf', namespaces))
-        self.ispartof = util.testXMLValue(val)
+        val = record.find(nsp('dct:isPartOf'))
+        self.ispartof = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dct:abstract', namespaces))
-        self.abstract = util.testXMLValue(val)
+        val = record.find(nsp('dct:abstract'))
+        self.abstract = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:date', namespaces))
-        self.date = util.testXMLValue(val)
+        val = record.find(nsp('dc:date'))
+        self.date = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dct:created', namespaces))
-        self.created = util.testXMLValue(val)
+        val = record.find(nsp('dct:created'))
+        self.created = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dct:issued', namespaces))
-        self.issued = util.testXMLValue(val)
+        val = record.find(nsp('dct:issued'))
+        self.issued = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:relation', namespaces))
-        self.relation = util.testXMLValue(val)
+        val = record.find(nsp('dc:relation'))
+        self.relation = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:temporal', namespaces))
-        self.temporal = util.testXMLValue(val)
+        val = record.find(nsp('dc:temporal'))
+        self.temporal = testXMLValue(val)
 
         self.uris = []  # list of dicts
-        for i in record.findall(util.nspath_eval('dc:URI', namespaces)):
+        for i in record.findall(nsp('dc:URI')):
             uri = {}
-            uri['protocol'] = util.testXMLValue(i.attrib.get('protocol'), True)
-            uri['name'] = util.testXMLValue(i.attrib.get('name'), True)
-            uri['description'] = util.testXMLValue(i.attrib.get('description'), True)
-            uri['url'] = util.testXMLValue(i)
+            uri['protocol'] = testXMLValue(i.attrib.get('protocol'), True)
+            uri['name'] = testXMLValue(i.attrib.get('name'), True)
+            uri['description'] = testXMLValue(i.attrib.get('description'), True)
+            uri['url'] = testXMLValue(i)
 
             self.uris.append(uri)
 
         self.references = []  # list of dicts
-        for i in record.findall(util.nspath_eval('dct:references', namespaces)):
+        for i in record.findall(nsp('dct:references')):
             ref = {}
-            ref['scheme'] = util.testXMLValue(i.attrib.get('scheme'), True)
-            ref['url'] = util.testXMLValue(i)
+            ref['scheme'] = testXMLValue(i.attrib.get('scheme'), True)
+            ref['url'] = testXMLValue(i)
 
             self.references.append(ref)
 
-        val = record.find(util.nspath_eval('dct:modified', namespaces))
-        self.modified = util.testXMLValue(val)
+        val = record.find(nsp('dct:modified'))
+        self.modified = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:creator', namespaces))
-        self.creator = util.testXMLValue(val)
+        val = record.find(nsp('dc:creator'))
+        self.creator = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:publisher', namespaces))
-        self.publisher = util.testXMLValue(val)
+        val = record.find(nsp('dc:publisher'))
+        self.publisher = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:coverage', namespaces))
-        self.coverage = util.testXMLValue(val)
+        val = record.find(nsp('dc:coverage'))
+        self.coverage = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:contributor', namespaces))
-        self.contributor = util.testXMLValue(val)
+        val = record.find(nsp('dc:contributor'))
+        self.contributor = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:language', namespaces))
-        self.language = util.testXMLValue(val)
+        val = record.find(nsp('dc:language'))
+        self.language = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:source', namespaces))
-        self.source = util.testXMLValue(val)
+        val = record.find(nsp('dc:source'))
+        self.source = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dct:rightsHolder', namespaces))
-        self.rightsholder = util.testXMLValue(val)
+        val = record.find(nsp('dct:rightsHolder'))
+        self.rightsholder = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dct:accessRights', namespaces))
-        self.accessrights = util.testXMLValue(val)
+        val = record.find(nsp('dct:accessRights'))
+        self.accessrights = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dct:license', namespaces))
-        self.license = util.testXMLValue(val)
+        val = record.find(nsp('dct:license'))
+        self.license = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:format', namespaces))
-        self.format = util.testXMLValue(val)
+        val = record.find(nsp('dc:format'))
+        self.format = testXMLValue(val)
 
         self.subjects = []
-        for i in record.findall(util.nspath_eval('dc:subject', namespaces)):
-            self.subjects.append(util.testXMLValue(i))
+        for i in record.findall(nsp('dc:subject')):
+            self.subjects.append(testXMLValue(i))
 
         self.rights = []
-        for i in record.findall(util.nspath_eval('dc:rights', namespaces)):
-            self.rights.append(util.testXMLValue(i))
+        for i in record.findall(nsp('dc:rights')):
+            self.rights.append(testXMLValue(i))
 
-        val = record.find(util.nspath_eval('dct:spatial', namespaces))
-        self.spatial = util.testXMLValue(val)
+        val = record.find(nsp('dct:spatial'))
+        self.spatial = testXMLValue(val)
 
-        val = record.find(util.nspath_eval('ows:BoundingBox', namespaces))
+        val = record.find(nsp_ows('ows:BoundingBox'))
         if val is not None:
-            self.bbox = ows.BoundingBox(val, namespaces['ows'])
+            self.bbox = ows.BoundingBox(val,ns.get_versioned_namespace('ows', _ows_version))
         else:
             self.bbox = None

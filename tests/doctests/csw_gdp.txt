@@ -24,18 +24,26 @@
     >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd',maxrecords=2)
     >>> c.results['returned']
     2
-    >>> c.records['4fcba54e-eb73-4975-ab92-7aed0e475886'].identification.title
-    'NOAA/GLERL Lake Superior Monthly Component Net Basin Supply Estimates 1948-2008'
-    >>> c.records['4fcba54e-eb73-4975-ab92-7aed0e475886'].identifier
-    '4fcba54e-eb73-4975-ab92-7aed0e475886'
-    >>> c.records['4fcba54e-eb73-4975-ab92-7aed0e475886'].stdname
+    >>> for record in c.records:
+    ...    c.records[record].identification.title
+    'NOAA/GLERL Lake Erie Monthly Component Net Basin Supply Estimates 1948-2008'
+    'Lake Superior latent and sensible heat fluxes  - at Stannard Rock lighthouse'
+    >>> for record in c.records:
+    ...    c.records[record].identifier
+    '5e5c63a8-82e4-4ae5-af3c-9b71c1232f86'
+    '9af6502d-fc02-4471-8559-77ffc6b05bad'
+    >>> for record in c.records:
+    ...    c.records[record].stdname
     'ISO 19115:2003/19139'
-    >>> c.records['4fcba54e-eb73-4975-ab92-7aed0e475886'].stdver
+    'ISO 19115:2003/19139'
+    >>> for record in c.records:
+    ...    c.records[record].stdver
+    'Version 3.14'
     'Version 3.14'
     >>> c.harvest('somefile','someuri')
     Traceback (most recent call last):
     ...
-    ExceptionReport: None
+    ExceptionReport: 'OperationNotSupported - HarvestHarvest operation is not supported by this catalogue.\n / None'
     >>> c.response
     '<?xml version="1.0" encoding="UTF-8"?>\r\n<ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd">\r\n  <ows:Exception exceptionCode="OperationNotSupported" locator="HarvestHarvest operation is not supported by this catalogue.&#xA;" />\r\n</ows:ExceptionReport>\r\n\r\n'
     >>> #c.getrecords(outputschema='http://www.fgdc.gov') -- the schema doesn't work, going off the assumption that this is not an issue on our end

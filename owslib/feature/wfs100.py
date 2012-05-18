@@ -16,9 +16,12 @@ from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
+from owslib.namespaces import OWSLibNamespaces
 
-WFS_NAMESPACE = 'http://www.opengis.net/wfs'
-OGC_NAMESPACE = 'http://www.opengis.net/ogc'
+ns = OWSLibNamespaces()
+
+def wfs_ns(item):
+    return nspath(item,ns.get_namespace('wfs'))
 
 class ServiceException(Exception):
     pass
@@ -70,7 +73,7 @@ class WebFeatureService_1_0_0(object):
         '''set up capabilities metadata objects: '''
         
         #serviceIdentification metadata
-        serviceelem=self._capabilities.find(nspath('Service',ns=WFS_NAMESPACE))
+        serviceelem=self._capabilities.find(wfs_ns('Service'))
         self.identification=ServiceIdentification(serviceelem, self.version)  
     
         #serviceProvider metadata
@@ -78,15 +81,15 @@ class WebFeatureService_1_0_0(object):
         
         #serviceOperations metadata 
         self.operations=[]
-        for elem in self._capabilities.find(nspath('Capability/Request',ns=WFS_NAMESPACE))[:]:
+        for elem in self._capabilities.find(wfs_ns('Capability/Request'))[:]:
             self.operations.append(OperationMetadata(elem))
                    
         #serviceContents metadata: our assumption is that services use a top-level 
         #layer as a metadata organizer, nothing more. 
         
         self.contents={} 
-        featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns=WFS_NAMESPACE))
-        features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType',ns=WFS_NAMESPACE))
+        featuretypelist=self._capabilities.find(wfs_ns('FeatureTypeList'))
+        features = self._capabilities.findall(wfs_ns('FeatureTypeList/FeatureType'))
         for feature in features:
             cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
             self.contents[cm.id]=cm       
@@ -181,8 +184,8 @@ class WebFeatureService_1_0_0(object):
             if not have_read:
                 data = u.read()
             tree = etree.fromstring(data)
-            if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
-                se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
+            if tree.tag == "{%s}ServiceExceptionReport" % ns.get_namespace('ogc'):
+                se = tree.find(nspath('ServiceException', ns.get_namespace('ogc')))
                 raise ServiceException, str(se.text).strip()
 
             return StringIO(data)
@@ -203,19 +206,19 @@ class ServiceIdentification(object):
      
     def __init__(self, infoset, version):
         self._root=infoset
-        self.type = testXMLValue(self._root.find(nspath('Name',ns=WFS_NAMESPACE)))
+        self.type = testXMLValue(self._root.find(wfs_ns('Name')))
         self.version = version
-        self.title = testXMLValue(self._root.find(nspath('Title',ns=WFS_NAMESPACE)))
-        self.abstract = testXMLValue(self._root.find(nspath('Abstract',ns=WFS_NAMESPACE)))
-        self.keywords = extract_xml_list(self._root.findall(nspath('Keywords', ns=WFS_NAMESPACE)))
-        self.fees = testXMLValue(self._root.find(nspath('Fees',ns=WFS_NAMESPACE)))
-        self.accessconstraints = testXMLValue(self._root.find(nspath('AccessConstraints',ns=WFS_NAMESPACE)))
+        self.title = testXMLValue(self._root.find(wfs_ns('Title')))
+        self.abstract = testXMLValue(self._root.find(wfs_ns('Abstract')))
+        self.keywords = extract_xml_list(self._root.findall(wfs_ns('Keywords')))
+        self.fees = testXMLValue(self._root.find(wfs_ns('Fees')))
+        self.accessconstraints = testXMLValue(self._root.find(wfs_ns('AccessConstraints')))
 
 class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
     def __init__(self, infoset):
         self._root=infoset
-        self.url = testXMLValue(self._root.find(nspath('OnlineResource',ns=WFS_NAMESPACE)))
+        self.url = testXMLValue(self._root.find(wfs_ns('OnlineResource')))
 
 class ContentMetadata:
     """Abstraction for WFS metadata.
@@ -225,33 +228,33 @@ class ContentMetadata:
 
     def __init__(self, elem, parent, parse_remote_metadata=False):
         """."""
-        self.id = testXMLValue(elem.find(nspath('Name',ns=WFS_NAMESPACE)))
-        self.title = testXMLValue(elem.find(nspath('Title',ns=WFS_NAMESPACE)))
-        self.abstract = testXMLValue(elem.find(nspath('Abstract',ns=WFS_NAMESPACE)))
-        self.keywords = extract_xml_list(elem.findall(nspath('Keywords',ns=WFS_NAMESPACE)))
+        self.id = testXMLValue(elem.find(wfs_ns('Name')))
+        self.title = testXMLValue(elem.find(wfs_ns('Title')))
+        self.abstract = testXMLValue(elem.find(wfs_ns('Abstract')))
+        self.keywords = extract_xml_list(elem.findall(wfs_ns('Keywords')))
 
         # bboxes
         self.boundingBox = None
-        b = elem.find(nspath('BoundingBox',ns=WFS_NAMESPACE))
+        b = elem.find(wfs_ns('BoundingBox'))
         if b is not None:
             self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
                     float(b.attrib['maxx']), float(b.attrib['maxy']),
                     b.attrib['SRS'])
         self.boundingBoxWGS84 = None
-        b = elem.find(nspath('LatLongBoundingBox',ns=WFS_NAMESPACE))
+        b = elem.find(wfs_ns('LatLongBoundingBox'))
         if b is not None:
             self.boundingBoxWGS84 = (
                     float(b.attrib['minx']),float(b.attrib['miny']),
                     float(b.attrib['maxx']), float(b.attrib['maxy']),
                     )
         # crs options
-        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS',ns=WFS_NAMESPACE))]
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(wfs_ns('SRS'))]
 
         # verbs
         self.verbOptions = [op.tag for op \
-            in parent.findall(nspath('Operations/*',ns=WFS_NAMESPACE))]
+            in parent.findall(wfs_ns('Operations/*'))]
         self.verbOptions + [op.tag for op \
-            in elem.findall(nspath('Operations/*',ns=WFS_NAMESPACE)) \
+            in elem.findall(wfs_ns('Operations/*')) \
             if op.tag not in self.verbOptions]
         
         #others not used but needed for iContentMetadata harmonisation
@@ -260,7 +263,7 @@ class ContentMetadata:
 
         # MetadataURLs
         self.metadataUrls = []
-        for m in elem.findall(nspath('MetadataURL',ns=WFS_NAMESPACE)):
+        for m in elem.findall(wfs_ns('MetadataURL')):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
                 'format': testXMLValue(m.find('Format')),
@@ -290,9 +293,9 @@ class OperationMetadata:
         """."""
         self.name = elem.tag
         # formatOptions
-        self.formatOptions = [f.tag for f in elem.findall(nspath('ResultFormat/*',ns=WFS_NAMESPACE))]
+        self.formatOptions = [f.tag for f in elem.findall(wfs_ns('ResultFormat/*'))]
         methods = []
-        for verb in elem.findall(nspath('DCPType/HTTP/*',ns=WFS_NAMESPACE)):
+        for verb in elem.findall(wfs_ns('DCPType/HTTP/*')):
             url = verb.attrib['onlineResource']
             methods.append((verb.tag, {'url': url}))
         self.methods = dict(methods)

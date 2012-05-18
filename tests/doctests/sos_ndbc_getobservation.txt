@@ -24,6 +24,8 @@ GetObservation
     >>> #observedProperties = [ndbc.get_operation_by_name('GetObservation').parameters['observedProperty']['values'][0]]
     >>> eventTime = "This is not a valid eventTime!"
     >>> response = ndbc.get_observation(offerings=offerings, responseFormat=responseFormat, observedProperties=observedProperties, eventTime=eventTime)
+
+    #Not getting this exception anymore ... good thing?
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
     ExceptionReport: 'InvalidParameterValue - eventTime / This is not a valid eventTime!'
@@ -46,6 +48,8 @@ DescribeSensor
     >>> procedure = "foobar"
     >>> outputFormat = ndbc.get_operation_by_name('DescribeSensor').parameters['outputFormat']['values'][0]
     >>> response = ndbc.describe_sensor(procedure=procedure, outputFormat=outputFormat)
+
+    #Not getting this exception anymore ... good thing?
     Traceback (most recent call last):
       File "<stdin>", line 1, in <mo
     ExceptionReport: 'InvalidParameterValue - procedure / foobar'

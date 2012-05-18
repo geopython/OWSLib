@@ -9,8 +9,9 @@
 #owslib imports:
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue
+from owslib.util import nspath, testXMLValue, nspath_eval
 from owslib.crs import Crs
+from owslib.namespaces import OWSLibNamespaces
 
 #other imports
 import cgi
@@ -33,12 +34,7 @@ hdlr.setFormatter(formatter)
 log.addHandler(hdlr)
 log.setLevel(logging.DEBUG)
 
-WFS_NAMESPACE = 'http://www.opengis.net/wfs'
-OGC_NAMESPACE = 'http://www.opengis.net/ogc'
-GML_NAMESPACE = 'http://www.opengis.net/gml'
-FES_NAMESPACE = 'http://www.opengis.net/fes/2.0'
-
-
+ns = OWSLibNamespaces()
 
 class ServiceException(Exception):
     pass
@@ -95,14 +91,14 @@ class WebFeatureService_2_0_0(object):
         serviceidentelem=self._capabilities.find(nspath('ServiceIdentification'))
         self.identification=ServiceIdentification(serviceidentelem)  
         #need to add to keywords list from featuretypelist information:
-        featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns=WFS_NAMESPACE))
-        featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns=WFS_NAMESPACE))
+        featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns.getNamespace('wfs')))
+        featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns.getNamespace('wfs')))
         for f in featuretypeelems:  
             kwds=f.findall(nspath('Keywords/Keyword'))
             if kwds is not None:
                 for kwd in kwds[:]:
-                    if kwd.text.strip() and kwd.text.strip() not in self.identification.keywords:
-                        self.identification.keywords.append(kwd.text.strip())
+                    if kwd.text not in self.identification.keywords:
+                        self.identification.keywords.append(kwd.text)
 	
    
         #TODO: update serviceProvider metadata, miss it out for now
@@ -110,15 +106,15 @@ class WebFeatureService_2_0_0(object):
         self.provider=ServiceProvider(serviceproviderelem)   
         
         #serviceOperations metadata 
-        op = self._capabilities.find(util.nspath_eval('ows:OperationsMetadata', namespaces))
+        op = self._capabilities.find(nspath_eval('ows:OperationsMetadata', '1.0.0'))
         self.operations = OperationsMetadata(op, self.owscommon.namespace).operations
                    
         #serviceContents metadata: our assumption is that services use a top-level 
         #layer as a metadata organizer, nothing more. 
         
         self.contents={} 
-        featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns=WFS_NAMESPACE))
-        features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType', ns=WFS_NAMESPACE))
+        featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns.getNamespace('wfs')))
+        features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType',ns.getNamespace('wfs')))
         for feature in features:
             cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
             self.contents[cm.id]=cm       
@@ -219,8 +215,8 @@ class WebFeatureService_2_0_0(object):
             if not have_read:
                 data = u.read()
             tree = etree.fromstring(data)
-            if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
-                se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
+            if tree.tag == "{%s}ServiceExceptionReport" % ns.getVersionedNamespace('ogc'):
+                se = tree.find(nspath('ServiceException', ns.getVersionedNamespace('ogc')))
                 raise ServiceException, str(se.text).strip()
 
             return StringIO(data)
@@ -269,9 +265,9 @@ class WebFeatureService_2_0_0(object):
             title=rft=id=None
             id=sqelem.get('id')
             for elem in sqelem[:]:
-                if elem.tag==nspath('Title', WFS_NAMESPACE):
+                if elem.tag==nspath('Title',ns.getNamespace('wfs')):
                     title=elem.text
-                elif elem.tag==nspath('ReturnFeatureType', WFS_NAMESPACE):
+                elif elem.tag==nspath('ReturnFeatureType',ns.getNamespace('wfs')):
                     rft=elem.text
             tempdict[id]=(title,rft)        #store in temporary dictionary
         
@@ -286,9 +282,9 @@ class WebFeatureService_2_0_0(object):
             params=[] #list to store parameters for the stored query description
             id =sqelem.get('id')
             for elem in sqelem[:]:
-                if elem.tag==nspath('Abstract', WFS_NAMESPACE):
+                if elem.tag==nspath('Abstract',ns.getNamespace('wfs')):
                     abstract=elem.text
-                elif elem.tag==nspath('Parameter', WFS_NAMESPACE):
+                elif elem.tag==nspath('Parameter',ns.getNamespace('wfs')):
                     newparam=Parameter(elem.get('name'), elem.get('type'))
                     params.append(newparam)
             tempdict2[id]=(abstract, params) #store in another temporary dictionary
@@ -333,24 +329,24 @@ class ContentMetadata:
 
     def __init__(self, elem, parent, parse_remote_metadata=False):
         """."""
-        self.id = elem.find(nspath('Name',ns=WFS_NAMESPACE)).text
-        self.title = elem.find(nspath('Title',ns=WFS_NAMESPACE)).text
-        abstract = elem.find(nspath('Abstract',ns=WFS_NAMESPACE))
+        self.id = elem.find(nspath('Name',ns.getNamespace('wfs'))).text
+        self.title = elem.find(nspath('Title',ns.getNamespace('wfs'))).text
+        abstract = elem.find(nspath('Abstract',ns.getNamespace('wfs')))
         if abstract is not None:
             self.abstract = abstract.text
         else:
             self.abstract = None
-        self.keywords = extract_xml_list(elem.findall(nspath('Keywords',ns=WFS_NAMESPACE)))
+        self.keywords = [f.text for f in elem.findall(nspath('Keywords',ns.getNamespace('wfs')))]
 
         # bboxes
         self.boundingBox = None
-        b = elem.find(nspath('BoundingBox',ns=WFS_NAMESPACE))
+        b = elem.find(nspath('BoundingBox',ns.getNamespace('wfs')))
         if b is not None:
             self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
                     float(b.attrib['maxx']), float(b.attrib['maxy']),
                     b.attrib['SRS'])
         self.boundingBoxWGS84 = None
-        b = elem.find(nspath('LatLongBoundingBox',ns=WFS_NAMESPACE))
+        b = elem.find(nspath('LatLongBoundingBox',ns.getNamespace('wfs')))
         if b is not None:
             self.boundingBoxWGS84 = (
                     float(b.attrib['minx']),float(b.attrib['miny']),
@@ -361,9 +357,9 @@ class ContentMetadata:
 
         # verbs
         self.verbOptions = [op.tag for op \
-            in parent.findall(nspath('Operations/*',ns=WFS_NAMESPACE))]
+            in parent.findall(nspath('Operations/*',ns.getNamespace('wfs')))]
         self.verbOptions + [op.tag for op \
-            in elem.findall(nspath('Operations/*',ns=WFS_NAMESPACE)) \
+            in elem.findall(nspath('Operations/*',ns.getNamespace('wfs'))) \
             if op.tag not in self.verbOptions]
         
         #others not used but needed for iContentMetadata harmonisation
