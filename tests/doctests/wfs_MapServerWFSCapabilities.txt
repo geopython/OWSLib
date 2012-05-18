@@ -34,6 +34,7 @@ Service Identification:
     >>> wfs.identification.fees
     'None'
 
+
 Service Provider:
 	#Commenting out the line below since the name field doesn't seem to exist, unsure if this is a legitimate bug or just bad test 
     >>> #wfs.provider.name

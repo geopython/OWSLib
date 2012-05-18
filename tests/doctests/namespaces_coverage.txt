@@ -1,0 +1,40 @@
+Imports
+
+    >>> from owslib.namespaces import OWSLibNamespaces
+
+Correct Usage Tests
+
+    >>> ns = OWSLibNamespaces()
+    >>> ns.get_namespace('csw')
+    'http://www.opengis.net/cat/csw/2.0.2'
+    >>> ns.get_namespaces(['csw','gmd','fes'])
+    ['http://www.opengis.net/cat/csw/2.0.2', 'http://www.isotc211.org/2005/gmd', 'http://www.opengis.net/fes/2.0']
+    >>> ns.get_namespaces()
+    {'sos': 'http://www.opengis.net/sos/1.0', 'rim': 'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0', 'xs': 'http://www.w3.org/2001/XMLSchema', 'xs2': 'http://www.w3.org/XML/Schema', 'wcs': '{http://www.opengis.net/wcs}', 'gml': 'http://www.opengis.net/gml', 'ows200': 'http://www.opengis.net/ows/2.0', 'xlink': 'http://www.w3.org/1999/xlink', 'gco': 'http://www.isotc211.org/2005/gco', 'gmd': 'http://www.isotc211.org/2005/gmd', 'gts': 'http://www.isotc211.org/2005/gts', 'fes': 'http://www.opengis.net/fes/2.0', 'fgdc': 'http://www.opengis.net/cat/csw/csdgm', 'csw': 'http://www.opengis.net/cat/csw/2.0.2', 'ows110': 'http://www.opengis.net/ows/1.1', 'dc': 'http://purl.org/dc/elements/1.1/', 'dct': 'http://purl.org/dc/terms/', 'ogc': 'http://www.opengis.net/ogc', 'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', 'ows100': 'http://www.opengis.net/ows', 'gmx': 'http://www.isotc211.org/2005/gmx', 'srv': 'http://www.isotc211.org/2005/srv', 'wfs': 'http://www.opengis.net/wfs', 'xsi': 'http://www.w3.org/2001/XMLSchema-instance', 'gml32': 'http://www.opengis.net/gml/3.2'}
+    >>> ns.get_versioned_namespace('ows','1.0.0')
+    'http://www.opengis.net/ows'
+    >>> ns.get_versioned_namespace('ows','1.1.0')
+    'http://www.opengis.net/ows/1.1'
+    >>> ns.get_versioned_namespace('ows','2.0.0')
+    'http://www.opengis.net/ows/2.0'
+
+Functional Tests
+
+    >>> ns.get_versioned_namespace('csw','3.1.1')
+    'http://www.opengis.net/cat/csw/2.0.2'
+
+Invalid Usage Tests
+
+    >>> ns.get_namespace()
+    Traceback (most recent call last):
+    ...
+    TypeError: get_namespace() takes exactly 2 arguments (1 given)
+    >>> ns.get_namespaces('csw')
+    [None, None, None]
+
+    #'osw' only exists as a versioned namespace, so the below will return no result
+    >>> ns.get_namespace('osw')
+    >>> ns.get_versioned_namespace()
+    Traceback (most recent call last):
+    ...
+    TypeError: get_versioned_namespace() takes at least 2 arguments (1 given)

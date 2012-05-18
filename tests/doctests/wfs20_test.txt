@@ -1,0 +1,101 @@
+Imports
+
+    >>> from owslib.wfs import WebFeatureService
+    >>> from tests.utils import resource_file
+    
+Fake a request to a WFS Server using saved doc from.
+
+    >>> xml = open(resource_file('wfs_opengis_200.xml'), 'r').read() 
+    >>> wfs = WebFeatureService('url', version='2.0', xml=xml)
+    
+Test capabilities
+
+Service Identification:
+
+    >>> wfs.identification.type
+    'WFS'
+
+    >>> wfs.identification.version
+    '2.0.0'
+    
+    >>> wfs.identification.title
+    'OGC Member WFS'
+    
+    >>> wfs.identification.abstract
+    'Web Feature Service maintained by NSDI data provider, serving FGDC framework layer XXX; contact Paul.Bunyon@BlueOx.org'
+    
+    >>> wfs.identification.keywords
+    ['FGDC', 'NSDI', 'Framework Data Layer', 'BlueOx', 'forest', 'north', 'woods', 'arborial', 'diversity']
+
+    >>> wfs.identification.accessconstraints
+    'NONE'
+
+    >>> wfs.identification.fees
+    'NONE'
+    
+Service Provider:
+
+    >>> wfs.provider.name
+    'BlueOx Inc.'
+    
+    >>> wfs.provider.contact.postcode
+    '12345'
+    
+    >>> wfs.provider.contact.role
+    'PointOfContact'
+    
+Test available content layers
+
+    >>> wfs.contents.keys()
+    ['bo:Woods']
+    
+    >>> [wfs[layer].title for layer in wfs.contents]
+    ['The Great Northern Forest']
+    
+Test single item accessor
+
+    >>> wfs['bo:Woods'].title
+    'The Great Northern Forest'
+    
+    >>> wfs['bo:Woods'].boundingBox
+    
+    >>> wfs['bo:Woods'].boundingBoxWGS84
+    
+    #Another object that wasn't an object before, test needs to adapt
+    >>> wfs['bo:Woods'].crsOptions
+    []
+    
+    >>> wfs['bo:Woods'].verbOptions
+    []
+    
+Expect a KeyError for invalid names
+
+    >>> wfs['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+	#>>> dir(wfs.operations['GetCapabilities'])
+    >>> [op for op in wfs.operations]
+    ['DescribeFeatureType', 'GetCapabilities', 'ListStoredQueries', 'GetFeature', 'DescribeStoredQueries']
+    
+    >>> wfs.get_operation_by_name('GetFeature').methods
+    {'Post': {'url': None}, 'Get': {'url': None}}
+    
+    >>> wfs.get_operation_by_name('GetFeature').constraints
+    {'ImplementsTemporalJoins': {'values': []}, 'KVPEncoding': {'values': []}, 'SOAPEncoding': {'values': []}, 'ImplementsResultPaging': {'values': []}, 'ImplementsBasicWFS': {'values': []}, 'QueryExpressions': {'values': ['wfs:StoredQuery']}, 'ManageStoredQueries': {'values': []}, 'ImplementsTransactionalWFS': {'values': []}, 'ImplementsInheritance': {'values': []}, 'ImplementsFeatureVersioning': {'values': []}, 'ImplementsLockingWFS': {'values': []}, 'XMLEncoding': {'values': []}, 'CountDefault': {'values': []}, 'ImplementsStandardJoins': {'values': []}, 'ImplementsRemoteResolve': {'values': []}, 'ImplementsSpatialJoins': {'values': []}}
+
+
+Test exceptions
+
+    >>> wfs.exceptions
+    []
+
+Lastly, test the getcapabilities method
+
+    >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0')
+    >>> xml = wfs.getcapabilities().read()
+    >>> xml.find('<WFS_Capabilities') > 0
+    True

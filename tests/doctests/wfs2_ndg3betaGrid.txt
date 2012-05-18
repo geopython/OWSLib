@@ -31,6 +31,27 @@ Test the capabilities info
     '02114'
     >>> wfs.provider.contact.country
     'USA'
+	
+    >>> i=0
+    >>> for layer in wfs.contents:
+    ...   wfs[layer].title
+    ...   i+=1
+    ...   if i > 5:
+    ...     break
+    'Carcinus maenas 2010 Points (Green Carcinus Crab)'
+    'Boston Harbor Multibeam Bathymetry Survey Bounds'
+    'GeoServer Test Pt SV'
+    'Shellfish Landings MA 1990-2001'
+    'Lobster Harvest Zones 1997 Arcs'
+    'DAR.FIELDS_PONDS_ORG8'
+	
+    >>> wfs['doesnotexist']
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named doesnotexist'
+    >>> catch=wfs.getcapabilities()
+    >>> catch=wfs.items()
+    >>> catch=wfs.getfeature(typename=['GISDATA.UTMGRID_POLY'])
     
 Test the getfeature method
 
