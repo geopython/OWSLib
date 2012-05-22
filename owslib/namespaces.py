@@ -18,6 +18,7 @@ class OWSLibNamespaces(object):
         'gmx': 'http://www.isotc211.org/2005/gmx',
         'gts': 'http://www.isotc211.org/2005/gts',
         'ogc': 'http://www.opengis.net/ogc',
+        'ows': 'http://www.opengis.net/ows',
         'ows100': 'http://www.opengis.net/ows',
         'ows110': 'http://www.opengis.net/ows/1.1',
         'ows200': 'http://www.opengis.net/ows/2.0',
@@ -37,7 +38,7 @@ class OWSLibNamespaces(object):
         '''Retrieves a namespace from the dictionary
             For Example:
             
-            >>> ns=OWSLibNamespaces()
+            >>> ns = OWSLibNamespaces()
             >>> ns.get_namespace('csw')
             'http://www.opengis.net/cat/csw/2.0.2'
         '''
@@ -46,44 +47,46 @@ class OWSLibNamespaces(object):
             retval = self.namespace_dict[key]
         return retval
     
-    def get_versioned_namespace(self, key, ver='1.0.0'):
+    def get_versioned_namespace(self, key, ver=None):
         '''Retrieves a namespace from the dictionary with a specific version number
             For Example:
             
-            >>> ns=OWSLibNamespaces()
-            >>> ns.get_versioned_namespace('osw')
+            >>> ns = OWSLibNamespaces()
+            >>> ns.get_versioned_namespace('ows')
             'http://www.opengis.net/ows'
-            >>> ns.get_versioned_namespace('osw','1.1.0')
+            >>> ns.get_versioned_namespace('ows','1.1.0')
             'http://www.opengis.net/ows/1.1'
         '''
-        #split the version and recombine it w/o decimals
-        #realized that this is kinda unecessary, but it makes things slightly easier to read
+        
+        if ver is None:
+            return self.get_namespace(key)
+
         version = ''
+        # Strip the decimals out of the passed in version
         for s in ver.split('.'):
             version += s
-        # add the version to the key and see if it exists in dict
+        
+        key += version
+
         retval = None
-        verkey = key + version
-        if verkey in self.namespace_dict.keys():
-            retval = self.namespace_dict[verkey]
-        # else check to see if the key exists w/o the version string
-        elif key in self.namespace_dict.keys():
+        if key in self.namespace_dict.keys():
             retval = self.namespace_dict[key]
             
         return retval
     
-    def get_namespaces(self,keys=[]):
+    def get_namespaces(self,keys=None):
         '''Retrieves a list of namespaces from the dictionary
             For Example:
             
-            >>> ns=OWSLibNamespaces()
-            >>> ns.get_namespaces('csw','gmd')
-            ['http://www.opengis.net/cat/csw/2.0.2','http://www.isotc211.org/2005/gmd']
+            >>> ns = OWSLibNamespaces()
+            >>> ns.get_namespaces(['csw','gmd'])
+            ['http://www.opengis.net/cat/csw/2.0.2', 'http://www.isotc211.org/2005/gmd']
             >>> ns.get_namespaces()
-            # will return all namespaces in the dictionary
+            {...}
         '''
+
+        keys = keys if keys is not None else []
         retval = []
-        
         # if we aren't looking for namespaces in particular, return the whole dict
         if len(keys) < 1:
             retval = self.namespace_dict

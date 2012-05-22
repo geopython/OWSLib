@@ -188,15 +188,11 @@ class WebMapService(object):
         
         Example
         -------
-            >>> img = wms.getmap(layers=['global_mosaic'],
-            ...                  styles=['visual'],
-            ...                  srs='EPSG:4326', 
-            ...                  bbox=(-112,36,-106,41),
-            ...                  format='image/jpeg',
-            ...                  size=(300,250),
-            ...                  transparent=True,
-            ...                  )
-            >>> out = open('example.jpg', 'wb')
+            >>> from owslib.wms import WebMapService
+            >>> from tests.utils import scratch_file
+            >>> wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
+            >>> img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'],styles=[''], srs='EPSG:4326',bbox=(-70.8, 42, -70, 42.8),size=(300, 300),format='image/jpeg',transparent=True)
+            >>> out = open(scratch_file('massgis_shoreline.jpg'), 'wb')
             >>> out.write(img.read())
             >>> out.close()
 
