@@ -390,8 +390,6 @@ class WPSExecution():
         root = etree.Element(util.nspath_eval('wps:Execute', namespaces), nsmap=namespaces)
         root.set('service', 'WPS')
         root.set('version', WPS_DEFAULT_VERSION)
-        #root.set('xmlns:ows', namespaces['ows'])
-        #root.set('xmlns:xlink', namespaces['xlink'])
         root.set(util.nspath_eval('xsi:schemaLocation', namespaces), '%s %s' % (namespaces['wps'], WPS_DEFAULT_SCHEMA_LOCATION) )
         
         # <ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
@@ -1040,9 +1038,6 @@ class WFSFeatureCollection(FeatureCollection):
         getFeatureElement = etree.SubElement(bodyElement, util.nspath_eval('wfs:GetFeature', namespaces),
                                              attrib = { "service":"WFS",
                                                         "version":"1.1.0",
-                                                        #"xmlns:ogc":namespaces['ogc'],
-                                                        #"xmlns:gml":namespaces['gml'],
-                                                        #"xmlns:xsi":namespaces['xsi'],
                                                         "outputFormat":"text/xml; subtype=gml/3.1.1",
                                                         util.nspath_eval("xsi:schemaLocation",namespaces):"%s %s" % (namespaces['wfs'], '../wfs/1.1.0/WFS.xsd')})
         
@@ -1077,7 +1072,7 @@ class WFSQuery():
         #                </ogc:Filter>
         #            </wfs:Query>
    
-        queryElement = etree.Element(util.nspath_eval('wfs:Query', namespaces), attrib = { "typeName":self.typeName })
+        queryElement = etree.Element(util.nspath_eval('wfs:Query', namespaces), attrib = { "typeName":self.typeName }, nsmap=namespaces)
         for propertyName in self.propertyNames:
             propertyNameElement = etree.SubElement(queryElement, util.nspath_eval('wfs:PropertyName', namespaces))
             propertyNameElement.text = propertyName
