@@ -15,9 +15,18 @@ from owslib import util
 class Metadata(object):
     """ Process metadata """
     def __init__(self, md):
+        if hasattr(md, 'getroot'):  # standalone document
+            self.xml = etree.tostring(md.getroot())
+        else:  # part of a larger document
+            self.xml = etree.tostring(md)
+
         self.idinfo = Idinfo(md)
         self.eainfo = Eainfo(md)
+        self.distinfo = Distinfo(md)
         self.metainfo = Metainfo(md)
+
+        if self.idinfo.datasetid:
+            self.identifier = self.idinfo.datasetid
 
 class Idinfo(object):
     """ Process idinfo """
@@ -29,19 +38,23 @@ class Idinfo(object):
         self.citation = Citation(val)
 
         val = md.find('idinfo/descript')
-        self.descript = Descript(val)
+        if val is not None:
+            self.descript = Descript(val)
 
         val = md.find('idinfo/timeperd')
         self.timeperd = Timeperd(val)
 
         val = md.find('idinfo/status')
-        self.status = Status(val)
+        if val is not None:
+            self.status = Status(val)
 
         val = md.find('idinfo/spdom')
-        self.spdom = Spdom(val)
+        if val is not None:
+            self.spdom = Spdom(val)
 
         val = md.find('idinfo/keywords')
-        self.keywords = Keywords(val)
+        if val is not None:
+            self.keywords = Keywords(val)
 
         val = md.find('idinfo/accconst')
         self.accconst = util.testXMLValue(val)
@@ -50,7 +63,8 @@ class Idinfo(object):
         self.useconst = util.testXMLValue(val)
 
         val = md.find('idinfo/ptcontac')
-        self.ptcontac = Ptcontac(val)
+        if val is not None:
+            self.ptcontac = Ptcontac(val)
 
         val = md.find('idinfo/datacred')
         self.datacred = util.testXMLValue(val)
@@ -81,9 +95,10 @@ class Citation(object):
     
             val = md.find('citeinfo/pubinfo/publish')
             self.citeinfo['publish'] = util.testXMLValue(val)
-    
-            val = md.find('citeinfo/onlink')
-            self.citeinfo['onlink'] = util.testXMLValue(val)
+
+            self.citeinfo['onlink'] = []
+            for link in md.findall('citeinfo/onlink'):
+                self.citeinfo['onlink'].append(util.testXMLValue(link))
 
 class Descript(object):
     """ Process descript """
@@ -92,7 +107,7 @@ class Descript(object):
         self.abstract = util.testXMLValue(val)
         
         val = md.find('purpose')
-        self.abstract = util.testXMLValue(val)
+        self.purpose = util.testXMLValue(val)
 
         val = md.find('supplinf')
         self.supplinf = util.testXMLValue(val)
@@ -101,11 +116,43 @@ class Timeperd(object):
     """ Process timeperd """
     def __init__(self, md):
         if md is not None:
-            val = md.find('timeinfo/sngdate/caldate')
-            self.caldate = util.testXMLValue(val)
-
             val = md.find('current')
             self.current = util.testXMLValue(val)
+
+            val = md.find('timeinfo')
+            if val is not None:
+                self.timeinfo = Timeinfo(val)
+
+class Timeinfo(object):
+    """ Process timeinfo """
+    def __init__(self, md):
+        val = md.find('sngdate')
+        if val is not None:
+            self.sngdate = Sngdate(val)
+
+        val = md.find('rngdates')
+        if val is not None:
+            self.rngdates = Rngdates(val)
+
+class Sngdate(object):
+    """ Process sngdate """
+    def __init__(self, md):
+        val = md.find('caldate')
+        self.caldate = util.testXMLValue(val)
+        val = md.find('time')
+        self.time = util.testXMLValue(val)
+
+class Rngdates(object):
+    """ Process rngdates """
+    def __init__(self, md):
+        val = md.find('begdate')
+        self.begdate = util.testXMLValue(val)
+        val = md.find('begtime')
+        self.begtime = util.testXMLValue(val)
+        val = md.find('enddate')
+        self.enddate = util.testXMLValue(val)
+        val = md.find('endtime')
+        self.endtime = util.testXMLValue(val)
 
 class Status(object):
     """ Process status """
@@ -131,6 +178,18 @@ class Spdom(object):
         val = md.find('bounding/southbc')
         self.southbc = util.testXMLValue(val)
 
+        if (self.southbc is not None and self.northbc is not None and
+        self.eastbc is not None and self.westbc is not None):
+            self.bbox = Bbox(self)
+
+class Bbox(object):
+    """ Generate bbox for spdom (convenience function) """
+    def __init__(self, spdom):
+        self.minx = spdom.westbc
+        self.miny = spdom.southbc
+        self.maxx = spdom.eastbc
+        self.maxy = spdom.northbc
+
 class Keywords(object):
     """ Process keywords """
     def __init__(self, md):
@@ -144,7 +203,9 @@ class Keywords(object):
             theme['themekt'] = util.testXMLValue(val)
             theme['themekey'] = []
             for j in i.findall('themekey'):
-                theme['themekey'].append(util.testXMLValue(j))
+                themekey = util.testXMLValue(j)
+                if themekey is not None:
+                    theme['themekey'].append(themekey)
             self.theme.append(theme)
 
         for i in md.findall('place'):
@@ -232,6 +293,20 @@ class Eainfo(object):
 
             self.attr.append(attr)
 
+class Distinfo(object):
+    """ Process distinfo """
+    def __init__(self, md):
+        val = md.find('distinfo')
+        if val is not None:
+            val2 = val.find('stdorder')
+            if val2 is not None:
+                self.stdorder = {'digform': []}
+                for link in val2.findall('digform'):
+                    digform = {}
+                    digform['name'] = util.testXMLValue(link.find('digtinfo/formname'))
+                    digform['url'] = util.testXMLValue(link.find('digtopt/onlinopt/computer/networka/networkr/'))
+                    self.stdorder['digform'].append(digform)
+
 class Metainfo(object):
     """ Process metainfo """
     def __init__(self, md):
@@ -242,7 +317,8 @@ class Metainfo(object):
         self.metrd = util.testXMLValue(val)
 
         val = md.find('metainfo/metc')        
-        self.metc = Ptcontac(val)
+        if val is not None:
+            self.metc = Ptcontac(val)
 
         val = md.find('metainfo/metstdn')
         self.metstdn = util.testXMLValue(val)

@@ -71,14 +71,18 @@ class WebMapService(object):
         reader = WMSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
                 )
-        if xml:
-            #read from stored xml
+        if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
-        else:
-            #read from server
+        else:  # read from server
             self._capabilities = reader.read(self.url)
 
-        #build metadata objects
+        # avoid building capabilities metadata if the response is a ServiceExceptionReport
+        se = self._capabilities.find('ServiceException') 
+ 	if se is not None: 
+ 	    err_message = str(se.text).strip() 
+            raise ServiceException(err_message, xml) 
+
+        # build metadata objects
         self._buildMetadata(parse_remote_metadata)
 
     def _getcapproperty(self):
@@ -428,8 +432,9 @@ class ContentMetadata:
         self.timepositions=None
         for extent in elem.findall('Extent'):
             if extent.attrib.get("name").lower() =='time':
-                self.timepositions=extent.text.split(',')
-                break
+                if extent.text:
+                    self.timepositions=extent.text.split(',')
+                    break
 
         # MetadataURLs
         self.metadataUrls = []

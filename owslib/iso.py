@@ -54,6 +54,10 @@ class MD_Metadata(object):
         val = md.find(util.nspath_eval('gmd:dateStamp/gco:Date', namespaces))
         self.datestamp = util.testXMLValue(val)
 
+        if not self.datestamp:
+            val = md.find(util.nspath_eval('gmd:dateStamp/gco:DateTime', namespaces))
+            self.datestamp = util.testXMLValue(val)
+
         self.charset = _testCodeListValue(md.find(util.nspath_eval('gmd:characterSet/gmd:MD_CharacterSetCode', namespaces)))
   
         self.hierarchy = _testCodeListValue(md.find(util.nspath_eval('gmd:hierarchyLevel/gmd:MD_ScopeCode', namespaces)))
@@ -288,10 +292,13 @@ class MD_DataIdentification(object):
 
             for k in i.findall(util.nspath_eval('gmd:MD_Keywords/gmd:keyword', namespaces)):
                 val = k.find(util.nspath_eval('gco:CharacterString', namespaces))
-                mdkw['keywords'].append(util.testXMLValue(val))
+                if val is not None:
+                    val2 = util.testXMLValue(val) 
+                    if val2 is not None:
+                        mdkw['keywords'].append(val2)
 
             self.keywords.append(mdkw)
-        
+
         self.topiccategory = []
         for i in md.findall(util.nspath_eval('gmd:topicCategory/gmd:MD_TopicCategoryCode', namespaces)):
             val = util.testXMLValue(i)
@@ -305,7 +312,7 @@ class MD_DataIdentification(object):
         # from the one containing an EX_GeographicBoundingBox
         val = None
         for e in md.findall(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:geographicElement', namespaces)):
-            if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)):
+            if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None:
                 val = e
                 break
 
@@ -489,21 +496,21 @@ class CodelistCatalogue(object):
         self.dictionaries = {}
 
         for i in ct.findall(util.nspath_eval('gmx:codelistItem/gmx:CodeListDictionary', namespaces)):
-            id = i.attrib.get(util.nspath_eval('gml:id', namespaces))
+            id = i.attrib.get(util.nspath_eval('gml32:id', namespaces))
             self.dictionaries[id] = {}
-            val = i.find(util.nspath_eval('gml:description', namespaces))
+            val = i.find(util.nspath_eval('gml32:description', namespaces))
             self.dictionaries[id]['description'] = util.testXMLValue(val)
-            val = i.find(util.nspath_eval('gml:identifier', namespaces))
+            val = i.find(util.nspath_eval('gml32:identifier', namespaces))
             self.dictionaries[id]['identifier'] = util.testXMLValue(val)
             self.dictionaries[id]['entries'] = {}
 
             for j in i.findall(util.nspath_eval('gmx:codeEntry', namespaces)):
-                id2 = j.find(util.nspath_eval('gmx:CodeDefinition', namespaces)).attrib.get(util.nspath_eval('gml:id', namespaces))
+                id2 = j.find(util.nspath_eval('gmx:CodeDefinition', namespaces)).attrib.get(util.nspath_eval('gml32:id', namespaces))
                 self.dictionaries[id]['entries'][id2] = {}
-                val = j.find(util.nspath_eval('gmx:CodeDefinition/gml:description', namespaces))
+                val = j.find(util.nspath_eval('gmx:CodeDefinition/gml32:description', namespaces))
                 self.dictionaries[id]['entries'][id2]['description'] = util.testXMLValue(val)
 
-                val = j.find(util.nspath_eval('gmx:CodeDefinition/gml:identifier', namespaces))
+                val = j.find(util.nspath_eval('gmx:CodeDefinition/gml32:identifier', namespaces))
                 self.dictionaries[id]['entries'][id2]['identifier'] = util.testXMLValue(val)
 
                 val = j.find(util.nspath_eval('gmx:CodeDefinition', namespaces)).attrib.get('codeSpace')

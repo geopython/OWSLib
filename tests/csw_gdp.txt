@@ -7,6 +7,9 @@
     >>> c.provider.name
     'Compusult Ltd.'
     >>> c.getdomain('GetRecords.outputSchema')
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: 'Internal Error'
     >>> c.response
     '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator=""><ows:ExceptionText>Internal Error</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
     >>> c.getrecords(keywords=['birds'])
@@ -33,13 +36,14 @@
     >>> c.records['World Glaciology Data, Geological Survey of Canada.xml'].stdver
     'ISO 19115:2003'
     >>> c.harvest('somefile','someuri')
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: 'Access to Harvest denied'
     >>> c.response
     '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator="Access"><ows:ExceptionText>Access to Harvest denied</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
-    >>> c.exceptionreport.exceptions
-    [{'locator': 'Access', 'ExceptionText': 'Access to Harvest denied', 'exceptionCode': 'NoApplicableCode'}]
     >>> c.getrecords(keywords=['glacial'],outputschema='http://www.fgdc.gov')
     >>> c.results['matches']>370
     True
-    >>> c.getrecords(keywords=['glacial'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif', maxrecords=2)
+    >>> c.getrecords(keywords=['glacial'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2)
     >>> len(c.records)
     2

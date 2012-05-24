@@ -16,7 +16,7 @@ Currently supports version 1.1.0 (06-121r3).
 """
 
 from owslib.etree import etree
-from owslib import util
+from owslib import crs, util
 
 OWS_NAMESPACE_1_0_0 = 'http://www.opengis.net/ows'
 OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
@@ -144,9 +144,20 @@ class OperationsMetadata(object):
         self.name = elem.attrib['name']
         self.formatOptions = ['text/xml']
         methods = []
+        parameters = []
+        constraints = []
+
         for verb in elem.findall(util.nspath('DCP/HTTP/*', namespace)):
-            methods.append((verb.tag, {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
+            methods.append((util.xmltag_split(verb.tag), {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
         self.methods = dict(methods)
+
+        for parameter in elem.findall(util.nspath('Parameter', namespace)):
+            parameters.append((parameter.attrib['name'], {'values': [i.text for i in parameter.findall(util.nspath('Value', namespace))]}))
+        self.parameters = dict(parameters)
+
+        for constraint in elem.findall(util.nspath('Constraint', namespace)):
+            constraints.append((constraint.attrib['name'], {'values': [i.text for i in constraint.findall(util.nspath('Value', namespace))]}))
+        self.constraints = dict(constraints)
 
 class BoundingBox(object):
     """Initialize an OWS BoundingBox construct"""
@@ -157,27 +168,40 @@ class BoundingBox(object):
         self.maxy = None
 
         val = elem.attrib.get('crs')
-        self.crs = util.testXMLValue(val, True)
+        if val is not None:
+            self.crs = crs.Crs(val)
+        else:
+            self.crs = None
 
         val = elem.attrib.get('dimensions')
-        self.dimensions = util.testXMLValue(val, True)
+        if val is not None:
+            self.dimensions = int(util.testXMLValue(val, True))
+        else:  # assume 2
+            self.dimensions = 2
 
         val = elem.find(util.nspath('LowerCorner', namespace))
         tmp = util.testXMLValue(val)
         if tmp is not None:
             xy = tmp.split()
             if len(xy) > 1:
-                self.minx, self.miny = xy[0], xy[1] 
+                if self.crs is not None and self.crs.axisorder == 'yx':
+                    self.minx, self.miny = xy[1], xy[0] 
+                else:
+                    self.minx, self.miny = xy[0], xy[1]
 
         val = elem.find(util.nspath('UpperCorner', namespace))
         tmp = util.testXMLValue(val)
         if tmp is not None:
             xy = tmp.split()
             if len(xy) > 1:
-                self.maxx, self.maxy = xy[0], xy[1]
+                if self.crs is not None and self.crs.axisorder == 'yx':
+                    self.maxx, self.maxy = xy[1], xy[0]
+                else:
+                    self.maxx, self.maxy = xy[0], xy[1]
 
-class ExceptionReport(object):
-    """Initialize an OWS ExceptionReport construct"""
+class ExceptionReport(Exception):
+    """OWS ExceptionReport"""
+
     def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
         self.exceptions = []
         for i in elem.findall(util.nspath('Exception', namespace)):
@@ -189,3 +213,12 @@ class ExceptionReport(object):
             val = i.find(util.nspath('ExceptionText', namespace))
             tmp['ExceptionText'] = util.testXMLValue(val)
             self.exceptions.append(tmp)
+
+        # set topmost stacktrace as return message
+        self.code = self.exceptions[0]['exceptionCode']
+        self.locator = self.exceptions[0]['locator']
+        self.msg = self.exceptions[0]['ExceptionText']
+        self.xml = etree.tostring(elem)
+
+    def __str__(self):
+        return repr(self.msg)

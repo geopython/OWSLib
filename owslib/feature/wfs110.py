@@ -12,12 +12,13 @@ from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
 import logging
-from owslib.util import openURL, testXMLValue, nspath_eval
+from owslib.util import openURL, testXMLValue, nspath_eval, ServiceException
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.ows import *
-from owslib.filter import *
+from owslib.fes import *
+from owslib.crs import Crs
 
 namespaces = {
     'gml': 'http://www.opengis.net/gml',
@@ -117,7 +118,7 @@ class WebFeatureService_1_1_0(object):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
-                   srsname=None, method='{http://www.opengis.net/wfs}Get'):
+                   srsname=None, method='Get'):
         """Request and return feature data as a file-like object.
         
         Parameters
@@ -143,34 +144,77 @@ class WebFeatureService_1_1_0(object):
             
         There are 3 different modes of use
 
-        1) typename and bbox (simple spatial query)
+        1) typename and bbox (simple spatial query). It is assumed, that
+            bbox coordinates are given *always* in the east,north order
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
-        base_url = self.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
+        base_url = self.getOperationByName('GetFeature').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
+        srs_func = None
+
+        if type(typename) == type(""):
+            typename=[typename]
         
+        if srsname:
+            # check, if desired SRS is supported by the service
+            if typename:
+
+                # convert srsname string to Crs object
+                srsnameobj = self.getSRS(srsname,typename[0])
+
+                if srsname:
+                    # set the srsname string with propper function
+                    # (getcode or getcodeurn)
+                    request['srsname'] = srsnameobj.encoding == "urn" and\
+                                        srsnameobj.getcodeurn() or srsnameobj.getcode()
+                else:
+                    raise util.ServiceException, "SRSNAME %s not supported" % srsname
+            else:
+                request['srsname'] = str(srsname)
+
         # check featureid
         if featureid:
             request['featureid'] = ','.join(featureid)
+
+        # bbox
         elif bbox and typename:
-            request['bbox'] = ','.join([repr(x) for x in bbox])
+
+            # srs of the bbox is specified in the bbox as fifth paramter
+            srs = None
+            if len(bbox) == 5:
+                srs = self.getSRS(bbox[4],typename[0])
+            # take default srs
+            else:
+                srs = self.contents[typename[0]].crsOptions[0]
+
+            # format bbox parameter
+            if srs.encoding == "urn" :
+                    if srs.axisorder == "yx":
+                        request["bbox"] = "%s,%s,%s,%s,%s" % \
+                        (bbox[1],bbox[0],bbox[3],bbox[2],srs.getcodeurn())
+                    else:
+                        request["bbox"] = "%s,%s,%s,%s,%s" % \
+                        (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcodeurn())
+            else:
+                request["bbox"] = "%s,%s,%s,%s,%s" % \
+                        (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcode())
+
+        # or filter
         elif filter and typename:
             request['filter'] = str(filter)
         
-        if srsname:
-            request['srsname'] = str(srsname)
             
         assert len(typename) > 0
         request['typename'] = ','.join(typename)
         
-        request['propertyname'] = ','.join(propertyname)
+        if propertyname:
+            request['propertyname'] = ','.join(propertyname)
         if featureversion: request['featureversion'] = str(featureversion)
         if maxfeatures: request['maxfeatures'] = str(maxfeatures)
 
         data = urlencode(request)
         u = openURL(base_url, data, method)
-        
         
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -187,9 +231,9 @@ class WebFeatureService_1_1_0(object):
             if not have_read:
                 data = u.read()
             tree = etree.fromstring(data)
-            if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
-                se = tree.find(nspath_eval('ServiceException', OGC_NAMESPACE))
-                raise ServiceException, str(se.text).strip()
+            if tree.tag == "{%s}ServiceExceptionReport" % namespaces["ogc"]:
+                se = tree.find(nspath_eval('ServiceException', namespaces["ogc"]))
+                raise util.ServiceException, str(se.text).strip()
 
             return StringIO(data)
         else:
@@ -203,6 +247,31 @@ class WebFeatureService_1_1_0(object):
             if item.name == name:
                 return item
         raise KeyError, "No operation named %s" % name
+
+    def getSRS(self,srsname,typename):
+        """Returns None or Crs object for given name
+        """
+        if type(srsname) == type(""):
+            srs = Crs(srsname)
+        else:
+            srs = srsname
+
+        srss = map(lambda crs: crs.getcodeurn(),
+                self.contents[typename].crsOptions)
+
+        for s in srss:
+            s = Crs(s)
+            if srs.authority == s.authority and\
+                    srs.code == s.code:
+                if s.version and srs.version:
+                    if s.version  == srs.version:
+                        idx = srss.index(s.getcodeurn())
+                        return self.contents[typename].crsOptions[idx]
+                else:
+                    idx = srss.index(s.getcodeurn())
+                    return self.contents[typename].crsOptions[idx]
+        return None
+
 
 class ContentMetadata:
     """Abstraction for WFS metadata.
@@ -220,17 +289,16 @@ class ContentMetadata:
         # bbox
         self.boundingBoxWGS84 = None
         b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)), namespaces['ows'])
-        print b.minx, b.miny, b.maxx, b.maxy
         if b is not None:
             self.boundingBoxWGS84 = (
                     float(b.minx), float(b.miny),
                     float(b.maxx), float(b.maxy),
                     )
         # crs options
-        self.crsOptions = [srs.text for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
         dsrs = testXMLValue(elem.find(nspath_eval('wfs:DefaultSRS', namespaces)))
         if dsrs is not None:  # first element is default srs
-            self.crsOptions.insert(0, dsrs)
+            self.crsOptions.insert(0, Crs(dsrs))
 
         # verbs
         self.verbOptions = [op.text for op in elem.findall(nspath_eval('wfs:Operations/wfs:Operation', namespaces))]

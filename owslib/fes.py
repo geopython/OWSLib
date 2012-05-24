@@ -49,7 +49,7 @@ class FilterRequest(object):
 
         self.version = version
 
-    def set(self, parent=False, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None):
+    def set(self, parent=False, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, identifier=None):
         """
 
         Construct and process a  GetRecords request
@@ -69,6 +69,10 @@ class FilterRequest(object):
         node0 = etree.Element(util.nspath_eval('ogc:Filter', namespaces))
         if parent is True:
             node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+
+        if identifier is not None:
+            self._setpropertyisequalto(node0, 'dc:identifier', identifier)
+            return node0
 
         # decipher number of query parameters ( > 1 sets an 'And' Filter)
         pcount = 0

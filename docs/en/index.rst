@@ -80,6 +80,12 @@ Subversion:
 
   $ svn co https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/
 
+Git:
+
+.. code-block:: bash
+
+  $ git clone git@github.com:tomkralidis/owslib.git
+
 Usage
 =====
 
@@ -302,6 +308,11 @@ ISO
 ISO Codelists:
 
 .. include:: ../../tests/iso_codelist.txt
+
+CRS Handling
+------------
+
+.. include:: ../../tests/crs.txt
 
 Dublin Core
 -----------

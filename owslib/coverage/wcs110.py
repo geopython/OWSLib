@@ -18,6 +18,7 @@ from urllib2 import urlopen
 from owslib.etree import etree
 import os, errno
 from owslib.coverage import wcsdecoder
+from owslib.crs import Crs
 
 def ns(tag):
     return '{http://www.opengis.net/wcs/1.1}'+tag
@@ -340,7 +341,7 @@ class ContentMetadata(object):
         #SupportedCRS
         self.supportedCRS=[]
         for crs in elem.findall('{http://www.opengis.net/wcs/1.1}SupportedCRS'):
-            self.supportedCRS.append(crs.text)
+            self.supportedCRS.append(Crs(crs.text))
             
             
         #SupportedFormats         

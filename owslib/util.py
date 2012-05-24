@@ -226,3 +226,10 @@ def xmlvalid(xml, xsd):
 
     doc = etree.parse(StringIO(xml))
     return xsd2.validate(doc)
+
+def xmltag_split(tag):
+    ''' Return XML element bare tag name (without prefix) '''
+    try:
+        return tag.split('}')[1]
+    except:
+        return tag

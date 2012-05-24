@@ -12,12 +12,12 @@
 import StringIO
 import random
 from owslib.etree import etree
-from owslib.filter import *
+from owslib import fes
 from owslib import util
-from owslib.ows import *
-from owslib.iso import *
-from owslib.fgdc import *
-from owslib.dif import *
+from owslib import ows
+from owslib.iso import MD_Metadata
+from owslib.fgdc import Metadata
+from owslib.dif import DIF
 
 # default variables
 
@@ -25,12 +25,11 @@ outputformat = 'application/xml'
 schema = 'http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd'
 
 namespaces = {
-    None : 'http://www.opengis.net/cat/csw/2.0.2',
     'csw': 'http://www.opengis.net/cat/csw/2.0.2',
     'dc' : 'http://purl.org/dc/elements/1.1/',
     'dct': 'http://purl.org/dc/terms/',
     'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
-    'fgdc': 'http://www.fgdc.gov',
+    'fgdc': 'http://www.opengis.net/cat/csw/csdgm',
     'gco': 'http://www.isotc211.org/2005/gco',
     'gmd': 'http://www.isotc211.org/2005/gmd',
     'gml': 'http://www.opengis.net/gml',
@@ -46,7 +45,7 @@ schema_location = '%s %s' % (namespaces['csw'], schema)
 
 class CatalogueServiceWeb:
     """ csw request class """
-    def __init__(self, url, lang='en-US', version='2.0.2', timeout=10):
+    def __init__(self, url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False):
         """
 
         Construct and process a GetCapabilities request
@@ -58,6 +57,7 @@ class CatalogueServiceWeb:
         - lang: the language (default is 'en-US')
         - version: version (default is '2.0.2')
         - timeout: timeout in seconds
+        - skip_caps: whether to skip GetCapabilities processing on init (default is False)
 
         """
 
@@ -67,35 +67,36 @@ class CatalogueServiceWeb:
         self.timeout = timeout
         self.service = 'CSW'
         self.exceptionreport = None
-        self.owscommon = OwsCommon('1.0.0')
+        self.owscommon = ows.OwsCommon('1.0.0')
 
-        # construct request
-        node0 = etree.Element(util.nspath_eval('csw:GetCapabilities', namespaces))
-        node0.set('service', self.service)
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-        tmp = etree.SubElement(node0, util.nspath_eval('ows:AcceptVersions', namespaces))
-        etree.SubElement(tmp, util.nspath_eval('ows:Version', namespaces)).text = self.version
-        tmp2 = etree.SubElement(node0, util.nspath_eval('ows:AcceptFormats', namespaces))
-        etree.SubElement(tmp2, util.nspath_eval('ows:OutputFormat', namespaces)).text = outputformat
-        self.request = util.xml2string(etree.tostring(node0))
-
-        self._invoke()
-
-        if self.exceptionreport is None:
-            # ServiceIdentification
-            val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
-            self.identification=ServiceIdentification(val,self.owscommon.namespace)
-            # ServiceProvider
-            val = self._exml.find(util.nspath_eval('ows:ServiceProvider', namespaces))
-            self.provider=ServiceProvider(val,self.owscommon.namespace)
-            # ServiceOperations metadata 
-            self.operations=[]
-            for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
-                self.operations.append(OperationsMetadata(elem, self.owscommon.namespace))
+        if not skip_caps:  # process GetCapabilities
+            # construct request
+            node0 = self._setrootelement('csw:GetCapabilities')
+            node0.set('service', self.service)
+            node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+            tmp = etree.SubElement(node0, util.nspath_eval('ows:AcceptVersions', namespaces))
+            etree.SubElement(tmp, util.nspath_eval('ows:Version', namespaces)).text = self.version
+            tmp2 = etree.SubElement(node0, util.nspath_eval('ows:AcceptFormats', namespaces))
+            etree.SubElement(tmp2, util.nspath_eval('ows:OutputFormat', namespaces)).text = outputformat
+            self.request = util.xml2string(etree.tostring(node0))
     
-            # FilterCapabilities
-            val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
-            self.filters=FilterCapabilities(val)
+            self._invoke()
+    
+            if self.exceptionreport is None:
+                # ServiceIdentification
+                val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
+                self.identification=ows.ServiceIdentification(val,self.owscommon.namespace)
+                # ServiceProvider
+                val = self._exml.find(util.nspath_eval('ows:ServiceProvider', namespaces))
+                self.provider=ows.ServiceProvider(val,self.owscommon.namespace)
+                # ServiceOperations metadata 
+                self.operations=[]
+                for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
+                    self.operations.append(ows.OperationsMetadata(elem, self.owscommon.namespace))
+        
+                # FilterCapabilities
+                val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
+                self.filters=fes.FilterCapabilities(val)
  
     def describerecord(self, typename='csw:Record', format=outputformat):
         """
@@ -111,7 +112,7 @@ class CatalogueServiceWeb:
         """
 
         # construct request
-        node0 = etree.Element(util.nspath_eval('csw:DescribeRecord', namespaces))
+        node0 = self._setrootelement('csw:DescribeRecord')
         node0.set('service', self.service)
         node0.set('version', self.version)
         node0.set('outputFormat', format)
@@ -140,7 +141,7 @@ class CatalogueServiceWeb:
 
         # construct request
         dtypename = 'ParameterName'
-        node0 = etree.Element(util.nspath_eval('csw:GetDomain', namespaces))
+        node0 = self._setrootelement('csw:GetDomain')
         node0.set('service', self.service)
         node0.set('version', self.version)
         node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
@@ -166,7 +167,7 @@ class CatalogueServiceWeb:
             for f in self._exml.findall(util.nspath_eval('csw:DomainValues/csw:ListOfValues/csw:Value', namespaces)):
                 self.results['values'].append(util.testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='full', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='summary', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None):
         """
 
         Construct and process a  GetRecords request
@@ -179,7 +180,7 @@ class CatalogueServiceWeb:
         - typenames: the typeNames to query against (default is csw:Record)
         - propertyname: the PropertyName to Filter against 
         - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
-        - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'full')
+        - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'summary')
         - sortby: property to sort results on (default is 'dc:title')
         - outputschema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
         - format: the outputFormat (default is 'application/xml')
@@ -196,11 +197,14 @@ class CatalogueServiceWeb:
             val = e.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
             if val is not None:
                 esn = util.testXMLValue(val)
-
         else:
             # construct request
-            node0 = etree.Element(util.nspath_eval('csw:GetRecords', namespaces))
-            node0.set('xmlns:ows', namespaces['ows'])
+            node0 = self._setrootelement('csw:GetRecords')
+            if etree.__name__ != 'lxml.etree':  # apply nsmap manually
+                node0.set('xmlns:ows', namespaces['ows'])
+                node0.set('xmlns:gmd', namespaces['gmd'])
+                node0.set('xmlns:dif', namespaces['dif'])
+                node0.set('xmlns:fgdc', namespaces['fgdc'])
             node0.set('outputSchema', outputschema)
             node0.set('outputFormat', format)
             node0.set('version', self.version)
@@ -219,7 +223,7 @@ class CatalogueServiceWeb:
             self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
     
             if sortby is not None:
-                setsortby(node1, sortby)
+                fes.setsortby(node1, sortby)
     
             self.request = util.xml2string(etree.tostring(node0))
 
@@ -257,7 +261,7 @@ class CatalogueServiceWeb:
         """
 
         # construct request 
-        node0 = etree.Element(util.nspath_eval('csw:GetRecordById', namespaces))
+        node0 = self._setrootelement('csw:GetRecordById')
         node0.set('outputSchema', outputschema)
         node0.set('outputFormat', format)
         node0.set('version', self.version)
@@ -275,7 +279,7 @@ class CatalogueServiceWeb:
             self.records = {}
             self._parserecords(outputschema, esn)
 
-    def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None, bbox=None, keywords=[], cql=None):
+    def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None, bbox=None, keywords=[], cql=None, identifier=None):
         """
 
         Construct and process a Transaction request
@@ -291,11 +295,12 @@ class CatalogueServiceWeb:
         - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
         - keywords: list of keywords
         - cql: common query language text.  Note this overrides bbox, qtype, keywords
+        - identifier: record identifier.  Note this overrides bbox, qtype, keywords, cql
 
         """
 
         # construct request
-        node0 = etree.Element(util.nspath_eval('csw:Transaction', namespaces))
+        node0 = self._setrootelement('csw:Transaction')
         node0.set('version', self.version)
         node0.set('service', self.service)
         node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
@@ -323,10 +328,10 @@ class CatalogueServiceWeb:
                     node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
                     etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = propertyname
                     etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = propertyvalue
-                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
+                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql, identifier)
 
         if ttype == 'delete':
-            self._setconstraint(node1, None, propertyname, keywords, bbox, cql)
+            self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
 
         self.request = util.xml2string(etree.tostring(node0))
 
@@ -354,7 +359,7 @@ class CatalogueServiceWeb:
         """
 
         # construct request
-        node0 = etree.Element(util.nspath_eval('csw:Harvest', namespaces))
+        node0 = self._setrootelement('csw:Harvest')
         node0.set('version', self.version)
         node0.set('service', self.service)
         node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
@@ -384,10 +389,10 @@ class CatalogueServiceWeb:
                 self._parseinsertresult()
 
     def _parseinsertresult(self):
-        self.results['inserted'] = []
+        self.results['insertresults'] = []
         for i in self._exml.findall(util.nspath_eval('csw:InsertResult', namespaces)):
             for j in i.findall(util.nspath_eval('csw:BriefRecord/dc:identifier', namespaces)):
-                self.results['inserted'].append(util.testXMLValue(j))
+                self.results['insertresults'].append(util.testXMLValue(j))
 
     def _parserecords(self, outputschema, esn):
         if outputschema == namespaces['gmd']: # iso 19139
@@ -400,11 +405,7 @@ class CatalogueServiceWeb:
                 val = i.find('idinfo/datasetid')
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = Metadata(i)
-        # CSWs define the dif namespace with the trailing '/' as an
-        # outputSchema, but actual responses indeed define it with '/' as an outputSchema
-        # this is an interoperability issue to be resolved
-        # [:-1] is a workaround for now
-        elif outputschema == namespaces['dif'][:-1]: # nasa dif, strip the trailing '/' for now
+        elif outputschema == namespaces['dif']: # nasa dif
             for i in self._exml.findall('.//'+util.nspath_eval('dif:DIF', namespaces)):
                 val = i.find(util.nspath_eval('dif:Entry_ID', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
@@ -418,14 +419,14 @@ class CatalogueServiceWeb:
     def _parsetransactionsummary(self):
         val = self._exml.find(util.nspath_eval('csw:TransactionSummary', namespaces))
         if val is not None:
-            id = val.attrib.get('requestId')
-            self.results['requestid'] = util.testXMLValue(id, True)
+            rid = val.attrib.get('requestId')
+            self.results['requestid'] = util.testXMLValue(rid, True)
             ts = val.find(util.nspath_eval('csw:totalInserted', namespaces))
-            self.results['inserted'] = util.testXMLValue(ts)
+            self.results['inserted'] = int(util.testXMLValue(ts))
             ts = val.find(util.nspath_eval('csw:totalUpdated', namespaces))
-            self.results['updated'] = util.testXMLValue(ts)
+            self.results['updated'] = int(util.testXMLValue(ts))
             ts = val.find(util.nspath_eval('csw:totalDeleted', namespaces))
-            self.results['deleted'] = util.testXMLValue(ts)
+            self.results['deleted'] = int(util.testXMLValue(ts))
 
     def _setesnel(self, esn):
         """ Set the element name to parse depending on the ElementSetName requested """
@@ -442,19 +443,26 @@ class CatalogueServiceWeb:
         else:
             return el
 
-    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None):
-        #if keywords or bbox is not None or qtype is not None or cql is not None:
-        if keywords or bbox is not None or qtype is not None or cql is not None:
+    def _setrootelement(self, el):
+        if etree.__name__ == 'lxml.etree':  # apply nsmap
+            return etree.Element(util.nspath_eval(el, namespaces), nsmap=namespaces)
+        else:
+            return etree.Element(util.nspath_eval(el, namespaces))
+
+    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None, identifier=None):
+        if keywords or bbox is not None or qtype is not None or cql is not None or identifier is not None:
             node0 = etree.SubElement(parent, util.nspath_eval('csw:Constraint', namespaces))
             node0.set('version', '1.1.0')
 
-            if cql is not None:  # send raw CQL query
-                import warnings
-                warnings.warn('CQL passed (overrides all other parameters', UserWarning)
+            if identifier is not None:  # set identifier filter, overrides all other parameters
+                flt = fes.FilterRequest()
+                node0.append(flt.set(identifier=identifier))
+            elif cql is not None:  # send raw CQL query
+                # CQL passed, overrides all other parameters
                 node1 = etree.SubElement(node0, util.nspath_eval('csw:CqlText', namespaces))
                 node1.text = cql
             else:  # construct a Filter request
-                flt = FilterRequest()
+                flt = fes.FilterRequest()
                 node0.append(flt.set(qtype=qtype, keywords=keywords, propertyname=propertyname,bbox=bbox))
 
     def _invoke(self):
@@ -482,7 +490,7 @@ class CatalogueServiceWeb:
         # check if it's an OGC Exception
         val = self._exml.find(util.nspath_eval('ows:Exception', namespaces))
         if val is not None:
-            self.exceptionreport = ExceptionReport(self._exml, self.owscommon.namespace)
+            raise ows.ExceptionReport(self._exml, self.owscommon.namespace)
         else:
             self.exceptionreport = None
 
@@ -491,7 +499,7 @@ class CswRecord(object):
     def __init__(self, record):
 
         if hasattr(record, 'getroot'):  # standalone document
-            self.xml = etree.tostring(md.getroot())
+            self.xml = etree.tostring(record.getroot())
         else:  # part of a larger document
             self.xml = etree.tostring(record)
 
@@ -538,8 +546,23 @@ class CswRecord(object):
         val = record.find(util.nspath_eval('dc:temporal', namespaces))
         self.temporal = util.testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:URI', namespaces))
-        self.uri = util.testXMLValue(val)
+        self.uris = []  # list of dicts
+        for i in record.findall(util.nspath_eval('dc:URI', namespaces)):
+            uri = {}
+            uri['protocol'] = util.testXMLValue(i.attrib.get('protocol'), True)
+            uri['name'] = util.testXMLValue(i.attrib.get('name'), True)
+            uri['description'] = util.testXMLValue(i.attrib.get('description'), True)
+            uri['url'] = util.testXMLValue(i)
+
+            self.uris.append(uri)
+
+        self.references = []  # list of dicts
+        for i in record.findall(util.nspath_eval('dct:references', namespaces)):
+            ref = {}
+            ref['scheme'] = util.testXMLValue(i.attrib.get('scheme'), True)
+            ref['url'] = util.testXMLValue(i)
+
+            self.references.append(ref)
 
         val = record.find(util.nspath_eval('dct:modified', namespaces))
         self.modified = util.testXMLValue(val)
@@ -587,6 +610,6 @@ class CswRecord(object):
 
         val = record.find(util.nspath_eval('ows:BoundingBox', namespaces))
         if val is not None:
-            self.bbox = BoundingBox(val, namespaces['ows'])
+            self.bbox = ows.BoundingBox(val, namespaces['ows'])
         else:
             self.bbox = None
