@@ -44,7 +44,7 @@ for output in process.processOutputs:
 # Submits an HTTP POST "Execute" process request to the WPS service, keeps checking the status of the request,
 # and retrieves the output once the request terminates successfully (displaying any errors if found).
 # This request uses a FEATURE_COLLECTION input obtained from a live WFS service.
-wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
+wfsUrl = "http://cida.usgs.gov/climate/gdp/proxy/http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
 query = WFSQuery("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
 featureCollection = WFSFeatureCollection(wfsUrl, query)
 processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
@@ -70,10 +70,10 @@ inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),
            ("FEATURE_COLLECTION", featureCollection)
           ]
 output = "OUTPUT"
-execution = wps.execute(processid, inputs, output = "OUTPUT")
+#execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
-#request = open('../tests/USGSExecuteRequest1.xml','r').read()
-#execution = wps.execute(None, [], request=request)
+request = open('../tests/USGSExecuteRequest1.xml','r').read()
+execution = wps.execute(None, [], request=request)
 
 # The monitorExecution() function can be conveniently used to wait for the process termination
 # It will eventually write the process output to the specified file, or to the file specified by the server.
