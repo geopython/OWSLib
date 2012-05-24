@@ -16,7 +16,7 @@ from wps_utils import build_get_url, dump, getTypedValue, parseText, getNamespac
 from xml.dom.minidom import parseString
 import util
 
-# FIXME: the following namespaces should be inserted in ows.py
+# namespace definition
 WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
@@ -30,19 +30,16 @@ GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
 DRAW_NAMESPACE = 'gov.usgs.cida.gdp.draw'
 DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd'
 
-
-
 # list of namespaces used by this module
 namespaces = {
-    # FIXME ?
-    None : WPS_DEFAULT_NAMESPACE,
-    'wps': WPS_DEFAULT_NAMESPACE,
-    'ows': DEFAULT_OWS_NAMESPACE,
+     None  : WPS_DEFAULT_NAMESPACE,
+    'wps'  : WPS_DEFAULT_NAMESPACE,
+    'ows'  : DEFAULT_OWS_NAMESPACE,
     'xlink': XLINK_NAMESPACE,
-    'xsi': XSI_NAMESPACE,
-    'wfs': WFS_NAMESPACE,
-    'ogc': OGC_NAMESPACE,
-    'gml': GML_NAMESPACE,
+    'xsi'  : XSI_NAMESPACE,
+    'wfs'  : WFS_NAMESPACE,
+    'ogc'  : OGC_NAMESPACE,
+    'gml'  : GML_NAMESPACE,
 }
 
 #class IWebProcessingService(IService):
