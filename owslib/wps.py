@@ -1132,17 +1132,12 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
                 </wps:ComplexData>
             </wps:Data>
         '''
-        dataElement = etree.Element(util.nspath_eval('wps:Data', namespaces))
+        dataElement = etree.Element(util.nspath_eval('wps:Data', namespaces), nsmap=namespaces)
         complexDataElement = etree.SubElement(dataElement, util.nspath_eval('wps:ComplexData', namespaces),
                                               attrib={"mimeType":"text/xml", "encoding":"UTF-8", "schema":GML_SCHEMA_LOCATION} )
         featureMembersElement = etree.SubElement(complexDataElement, util.nspath_eval('gml:featureMembers', namespaces),
-                                                 attrib={"xmlns:ogc":OGC_NAMESPACE, 
-                                                         "xmlns:draw":DRAW_NAMESPACE,
-                                                         "xmlns:ows":OWS_NAMESPACE_1_0_0,
-                                                         #"xmlns:gml":GML_NAMESPACE,
-                                                         "xmlns:xlink":XLINK_NAMESPACE,
-                                                         "xsi:schemaLocation":"%s %s" % (DRAW_NAMESPACE, DRAW_SCHEMA_LOCATION)})
-        boxElement = etree.SubElement(featureMembersElement, util.nspath_eval('gml:box', namespaces), attrib={"gml:id":"box.1"})
+                                                 attrib={ util.nspath_eval("xsi:schemaLocation",namespaces):"%s %s" % (DRAW_NAMESPACE, DRAW_SCHEMA_LOCATION)})
+        boxElement = etree.SubElement(featureMembersElement, util.nspath_eval('gml:box', namespaces), attrib={ util.nspath_eval("gml:id",namespaces):"box.1" })
         geomElement = etree.SubElement(boxElement, util.nspath_eval('gml:the_geom', namespaces))
         multiPolygonElement = etree.SubElement(geomElement, util.nspath_eval('gml:MultiPolygon', namespaces),
                                                attrib={"srsDimension":"2", "srsName":"http://www.opengis.net/gml/srs/epsg.xml#4326"} )
