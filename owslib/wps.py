@@ -387,11 +387,11 @@ class WPSExecution():
         #             service="WPS" 
         #             version="1.0.0" 
         #             xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">       
-        root = etree.Element(util.nspath_eval('wps:Execute', namespaces))
+        root = etree.Element(util.nspath_eval('wps:Execute', namespaces), nsmap=namespaces)
         root.set('service', 'WPS')
         root.set('version', WPS_DEFAULT_VERSION)
-        root.set('xmlns:ows', namespaces['ows'])
-        root.set('xmlns:xlink', namespaces['xlink'])
+        #root.set('xmlns:ows', namespaces['ows'])
+        #root.set('xmlns:xlink', namespaces['xlink'])
         root.set(util.nspath_eval('xsi:schemaLocation', namespaces), '%s %s' % (namespaces['wps'], WPS_DEFAULT_SCHEMA_LOCATION) )
         
         # <ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
@@ -1034,17 +1034,17 @@ class WFSFeatureCollection(FeatureCollection):
     #   </wps:Reference>
     def getXml(self):
         
-        root = etree.Element(util.nspath_eval('wps:Reference', namespaces),
-                             attrib = { "xlink:href" : self.url} )
+        root = etree.Element(util.nspath_eval('wps:Reference', namespaces), nsmap=namespaces,
+                             attrib = { util.nspath_eval("xlink:href",namespaces) : self.url} )
         bodyElement = etree.SubElement(root, util.nspath_eval('wps:Body', namespaces))
         getFeatureElement = etree.SubElement(bodyElement, util.nspath_eval('wfs:GetFeature', namespaces),
                                              attrib = { "service":"WFS",
                                                         "version":"1.1.0",
-                                                        "xmlns:ogc":namespaces['ogc'],
-                                                        "xmlns:gml":namespaces['gml'],
-                                                        "xmlns:xsi":namespaces['xsi'],
+                                                        #"xmlns:ogc":namespaces['ogc'],
+                                                        #"xmlns:gml":namespaces['gml'],
+                                                        #"xmlns:xsi":namespaces['xsi'],
                                                         "outputFormat":"text/xml; subtype=gml/3.1.1",
-                                                        "xsi:schemaLocation":"%s %s" % (namespaces['wfs'], '../wfs/1.1.0/WFS.xsd')})
+                                                        util.nspath_eval("xsi:schemaLocation",namespaces):"%s %s" % (namespaces['wfs'], '../wfs/1.1.0/WFS.xsd')})
         
         #            <wfs:Query typeName="sample:CONUS_States">
         #                <wfs:PropertyName>the_geom</wfs:PropertyName>
