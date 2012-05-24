@@ -6,7 +6,7 @@ The wps module of the OWSlib package provides client-side functionality for exec
 
 Disclaimer
 ----------
-PLEASE NOTE: the owslib wps module should be considered in beta state: it has been tested versus only two real WPS services, deployed by the USGS and PML.
+PLEASE NOTE: the owslib wps module should be considered in beta state: it has been tested versus only a handful of WPS services (deployed by the USGS, BADC and PML).
 More extensive testing is needed and feedback is appreciated.
 
 Installation (from branch)
@@ -25,11 +25,13 @@ The module can be used to execute three types of requests versus a remote WPS en
 a) "GetCapabilities" 
 	- use the method wps.getcapabilities(xml=None)
 	- the optional keyword argument "xml" is used to avoid a real live request, and instead read the WPS capabilities document from a cached XML file
+	
 b) "DescribeProcess"
 	- use the method wps.describeprocess(identifier, xml=None)
+	- identifier is the process identifier, retrieved from the list obtained from a previous "GetCapabilities" invocation
 	- the optional keyword argument "xml" is used to avoid a real live request, and instead read the WPS process description document from a cached XML file
-c) "Execute"
 	
+c) "Execute"
 	- use the method wps.execute(identifier, inputs, output=None, request=None, response=None), 
 	  which submits the job to the remote WPS server and returns a WPSExecution object that can be used to periodically check the job status until completion 
 	  (or error)
@@ -49,24 +51,26 @@ c) "Execute"
 	  	
 	- the optional keyword argument "response" can be used to avoid submitting a real live request, and instead read the WPS execution response document
 	  from a cached XML file (for debugging or testing purposes)
-	- the convenience function monitorExecution() can be used to periodically check the status of a remote running job, and eventually download the output
+	- the convenience module function monitorExecution() can be used to periodically check the status of a remote running job, and eventually download the output
 	  either to a named file, or to a file specified by the server.
 	  
 	  
 Examples
 --------
 
-The files examples/wps-usgs-script.py, examples/wps-pml-script-1.py and examples/wps-pml-script-2.py contain real-world usage examples that submits a "GetCapabilities", "DescribeProcess" and "Execute" request 
-to the live USGS and PML servers. To run: 
+The files examples/wps-usgs-script.py, examples/wps-pml-script-1.py and examples/wps-pml-script-2.py contain real-world usage examples 
+that submits a "GetCapabilities", "DescribeProcess" and "Execute" requests to the live USGS and PML servers. To run: 
 	cd examples
 	python wps-usgs-script.py
 	python wps-pml-script-1.py
 	python wps-pml-script-2.py
 	
 The file wps-client.py contains a command-line client that can be used to submit a "GetCapabilities", "DescribeProcess" or "Execute"
-request to an arbitratry WPS server. To run:
+request to an arbitratry WPS server. For example, you can run it as follows:
 	cd examples
-	wps-client.py -v -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities -x ../tests/USGSCapabilities.xml
+	To prints out usage and example invocations: wps-client -help
+	To execute a (fake) WPS invocation: 
+		wps-client.py -v -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities -x ../tests/USGSCapabilities.xml
 	
 The directory tests/ includes several doctest-style files wps_*.txt that show how to interactively submit a 
 "GetCapabilities", "DescribeProcess" or "Execute" request, without making a live request but rather parsing the response of cached XML response documents. To run:
@@ -76,4 +80,4 @@ The directory tests/ includes several doctest-style files wps_*.txt that show ho
 
 Also, the directory tests/ contains several examples of well-formed "Execute" requests:
 	- The files USGSExecuteRequest*.xml contain requests that can be submitted to the live USGS WPS service.
-	- The files PMLExecuteReuqest*.xml contain requests that can be submitted to the live PML WPS service.
+	- The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.

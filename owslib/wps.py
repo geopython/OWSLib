@@ -16,7 +16,7 @@ from wps_utils import build_get_url, dump, getTypedValue, parseText, getNamespac
 from xml.dom.minidom import parseString
 import util
 
-# the following namespaces should be inserted in ows.py
+# FIXME: the following namespaces should be inserted in ows.py
 WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
@@ -353,6 +353,12 @@ class WPSExecution():
         self.password = password
         self.verbose = verbose
         
+        # request document
+        self.request = None
+        
+        # last response document
+        self.response = None
+        
         # status fields retrieved from the response documents
         self.process = None
         self.serviceInstance = None
@@ -361,6 +367,7 @@ class WPSExecution():
         self.statusLocation = None
         self.dataInputs=[]
         self.processOutputs=[]
+        
         
     def buildRequest(self, identifier, inputs=[], output=None):
         """
@@ -455,10 +462,11 @@ class WPSExecution():
     def checkStatus(self, url=None, response=None, sleepSecs=60):
         """
         Method to check the status of a job execution.
+        In the process, this method will upadte the object 'response' attribute.
         
         url: optional 'statusLocation' URL retrieved from a previous WPS Execute response document.
              If not provided, the current 'statusLocation' URL will be used.
-        sleepSecs: number of seconds to sleep before returning control to the caller
+        sleepSecs: number of seconds to sleep before returning control to the caller.
         """
                     
         reader = WPSExecuteReader(verbose=self.verbose)
@@ -471,8 +479,10 @@ class WPSExecution():
         else:
             response = reader.readFromString(response)
                 
+        # store latest response
+        self.response = etree.tostring(response)
         if self.verbose==True:
-            print etree.tostring(response)
+            print self.response
 
         self.parseResponse(response)
                     
@@ -556,12 +566,15 @@ class WPSExecution():
     def submitRequest(self, request):
         """
         Submits a WPS Execute document to a remote service, returns the XML response document from the server.
+        This method will save the request document and the first returned response document.
         
         request: the XML request document to be submitted as POST to the server.
         """ 
         
+        self.request = request
         reader = WPSExecuteReader(verbose=self.verbose)
         response = reader.readFromUrl(self.url, request, method='Post', username=self.username, password=self.password)
+        self.response = response
         return response
  
         '''       
@@ -1149,6 +1162,12 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     '''
     Convenience method to monitor the status of a WPS execution till it completes (succesfully or not),
     and write the output to file after a succesfull job completion.
+    
+    execution: WPSExecution instance
+    sleepSecs: number of seconds to sleep in between check status invocations
+    download: True to download the output when the process terminates, False otherwise
+    filepath: optional path to output file (if downloaded=True), otherwise filepath will be inferred from response document
+    
     '''
     
     while execution.isComplete()==False:

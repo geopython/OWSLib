@@ -53,7 +53,10 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         opener = urllib2.build_opener(auth_handler)
         openit = opener.open
     else:
-        openit = urlopen
+        # NOTE: set debuglevel>0 to debug HTTP connection
+        opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=0))
+        openit = opener.open
+        #openit = urlopen
    
     try:
         if method == 'Post':
