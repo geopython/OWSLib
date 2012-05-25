@@ -42,17 +42,42 @@ namespaces = {
     'gml'  : GML_NAMESPACE,
 }
 
-#class IWebProcessingService(IService):
-#    """
-#    Abstract interface for an OGC Web Processing Service (WPS).
-#    """
+class IWebProcessingService():
+    """
+    Abstract interface for an OGC Web Processing Service (WPS).
+    """
     
-#    def getcapabilities(self, **kw):
-#        """
-#        Makes a GetCapabilities request to the remote WPS server,
-#        returns an XML document wrapped in a python file-like object.
-#        """
+    url = property("""URL for the remote WPS server (string).""")
+    
+    def getcapabilities(**kw):
+        """
+        Makes a GetCapabilities request to the remote WPS server,
+        returns an XML document wrapped in a python file-like object.
+        """
+    
+    def describeprocess(**kw):
+        """
+        Makes a DescribeProcess request to the remote WPS server,
+        returns a Process object containing all the process metadata.
+        """
+        
+    def execute(**kw):
+        """
+        Submits an Execute request to the remote WPS server,
+        returns a WPSExecution object, which can be used to monitor the status of the job, and ultimately retrieve the result.
+        """
 
+class IComplexData():
+    """
+    Abstract interface representing complex input object for a WPS request.
+    """
+    
+    def getXml(self):
+        """
+        Method that returns the object data as an XML snippet, 
+        to be inserted into the WPS request document sent to the server.
+        """ 
+    
 class WebProcessingService(object):
     """
     Class that contains client-side functionality for invoking an OGC Web Processing Service (WPS).
@@ -997,6 +1022,8 @@ class FeatureCollection():
     Base class to represent a Feature Collection used as input to a WPS request.
     The method getXml() is invoked by the WPS execute() method to build the WPS request.
     All subclasses must implement the getXml() method to provide their specific XML.
+    
+    Implements IComplexData.
     '''
     
     def __init__(self):
@@ -1052,6 +1079,8 @@ class WFSFeatureCollection(FeatureCollection):
 class WFSQuery():
     '''
     Class representing a WFS query, for insertion into a WFSFeatureCollection instance.
+    
+    Implements IComplexData.
     '''
     
     def __init__(self, typeName, propertyNames=[], filters=[]):
