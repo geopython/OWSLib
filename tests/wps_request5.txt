@@ -19,6 +19,6 @@ Process input/ouutput arguments
 >>> request = etree.tostring( requestElement )
 
 Compare to cached XML request
->>> _request = open('./PMLExecuteRequest5.xml', 'r').read()
+>>> _request = open('./wps_PMLExecuteRequest5.xml', 'r').read()
 >>> request==_request
 True

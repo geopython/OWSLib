@@ -10,7 +10,7 @@ Initialize WPS client
 >>> wps = WebProcessingService('http://ceda-wps2.badc.rl.ac.uk/wps')
 
 Execute fake invocation of DescribeProcess operation by parsing cached response from USGS service
->>> xml = open('./CEDADescribeProcess.xml', 'r').read()
+>>> xml = open('./wps_CEDADescribeProcess.xml', 'r').read()
 >>> process = wps.describeprocess('Doubleit', xml=xml)
 
 Check process description

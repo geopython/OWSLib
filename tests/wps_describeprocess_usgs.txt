@@ -10,7 +10,7 @@ Initialize WPS client
 >>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService')
 
 Execute fake invocation of DescribeProcess operation by parsing cached response from USGS service
->>> xml = open('./USGSDescribeProcess.xml', 'r').read()
+>>> xml = open('./wps_USGSDescribeProcess.xml', 'r').read()
 >>> process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', xml=xml)
 
 Check process description

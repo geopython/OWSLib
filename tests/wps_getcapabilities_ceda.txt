@@ -10,7 +10,7 @@ Initialize WPS client
 >>> wps = WebProcessingService('http://ceda-wps2.badc.rl.ac.uk/wps')
 
 Execute fake invocation of GetCapabilities operation by parsing cached response from USGS service
->>> xml = open('./CEDACapabilities.xml', 'r').read()
+>>> xml = open('./wps_CEDACapabilities.xml', 'r').read()
 >>> wps.getcapabilities(xml=xml)
 
 Check WPS description

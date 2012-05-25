@@ -72,7 +72,7 @@ inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),
 output = "OUTPUT"
 #execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
-request = open('../tests/USGSExecuteRequest1.xml','r').read()
+request = open('../tests/wps_USGSExecuteRequest1.xml','r').read()
 execution = wps.execute(None, [], request=request)
 
 # The monitorExecution() function can be conveniently used to wait for the process termination
@@ -109,7 +109,7 @@ inputs =  [ ("FEATURE_ATTRIBUTE_NAME","the_geom"),
 output = "OUTPUT"
 execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
-#request = open('../tests/USGSExecuteRequest3.xml','r').read()
+#request = open('../tests/wps_USGSExecuteRequest3.xml','r').read()
 #execution = wps.execute(None, [], request=request)
 monitorExecution(execution)    
 '''
