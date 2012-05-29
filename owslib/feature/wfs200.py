@@ -146,7 +146,7 @@ class WebFeatureService_2_0_0(object):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   method=nspath('Get')):
+                   method='Get'):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
         Parameters
@@ -176,6 +176,9 @@ class WebFeatureService_2_0_0(object):
         """
         #log.debug(self.getOperationByName('GetFeature'))
         base_url = self.getOperationByName('GetFeature').methods[method]['url']
+
+        if method.upper() == "GET":
+            base_url = base_url if base_url.endswith("?") else base_url+"?"
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
         
         # check featureid
@@ -187,6 +190,7 @@ class WebFeatureService_2_0_0(object):
         elif filter:
             request['query'] = str(filter)
         if typename:
+            typename = [typename] if type(typename) == type("") else typename
             request['typename'] = ','.join(typename)
         if propertyname: 
             request['propertyname'] = ','.join(propertyname)
@@ -199,7 +203,6 @@ class WebFeatureService_2_0_0(object):
             for param in storedQueryParams:
                 request[param]=storedQueryParams[param]
                 
-        
         data = urlencode(request)
 
         if method == 'Post':
