@@ -34,6 +34,7 @@ log.addHandler(hdlr)
 log.setLevel(logging.DEBUG)
 
 WFS_NAMESPACE = 'http://www.opengis.net/wfs/2.0'
+OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
 OGC_NAMESPACE = 'http://www.opengis.net/ogc'
 GML_NAMESPACE = 'http://www.opengis.net/gml'
 FES_NAMESPACE = 'http://www.opengis.net/fes/2.0'
@@ -98,7 +99,7 @@ class WebFeatureService_2_0_0(object):
         featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns=WFS_NAMESPACE))
         featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns=WFS_NAMESPACE))
         for f in featuretypeelems:  
-            kwds=f.findall(nspath('Keywords/Keyword'))
+            kwds=f.findall(nspath('Keywords/Keyword',ns=OWS_NAMESPACE))
             if kwds is not None:
                 for kwd in kwds[:]:
                     if kwd.text not in self.identification.keywords:
@@ -346,21 +347,27 @@ class ContentMetadata:
         self.keywords = [f.text for f in elem.findall(nspath('Keywords',ns=WFS_NAMESPACE))]
 
         # bboxes
-        self.boundingBox = None
-        b = elem.find(nspath('BoundingBox',ns=WFS_NAMESPACE))
-        if b is not None:
-            self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
-                    float(b.attrib['maxx']), float(b.attrib['maxy']),
-                    b.attrib['SRS'])
         self.boundingBoxWGS84 = None
-        b = elem.find(nspath('LatLongBoundingBox',ns=WFS_NAMESPACE))
+        b = elem.find(nspath('WGS84BoundingBox',ns=OWS_NAMESPACE))
         if b is not None:
-            self.boundingBoxWGS84 = (
-                    float(b.attrib['minx']),float(b.attrib['miny']),
-                    float(b.attrib['maxx']), float(b.attrib['maxy']),
-                    )
+            lc = b.find(nspath("LowerCorner",ns=OWS_NAMESPACE))
+            uc = b.find(nspath("UpperCorner",ns=OWS_NAMESPACE))
+            ll = [float(s) for s in lc.text.split()]
+            ur = [float(s) for s in uc.text.split()]
+            self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
+
+        # there is no such think as bounding box
+        # make copy of the WGS84BoundingBox
+        self.boundingBox = (self.boundingBoxWGS84[0],
+                            self.boundingBoxWGS84[1],
+                            self.boundingBoxWGS84[2],
+                            self.boundingBoxWGS84[3],
+                            Crs("epsg:4326"))
         # crs options
-        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS'))]
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('OtherCRS',ns=WFS_NAMESPACE))]
+        defaultCrs =  elem.findall(nspath('DefaultCRS',ns=WFS_NAMESPACE))
+        if len(defaultCrs) > 0:
+            self.crsOptions.insert(-1,Crs(defaultCrs[0].text))
 
         # verbs
         self.verbOptions = [op.tag for op \
