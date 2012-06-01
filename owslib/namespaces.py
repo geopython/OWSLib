@@ -23,6 +23,7 @@ class OWSLibNamespaces(object):
         'ows110': 'http://www.opengis.net/ows/1.1',
         'ows200': 'http://www.opengis.net/ows/2.0',
         'rim': 'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0',
+        'sml': 'http://www.opengis.net/sensorML/1.0.1',
         'sos': 'http://www.opengis.net/sos/1.0',
         'srv': 'http://www.isotc211.org/2005/srv',
         'wfs': 'http://www.opengis.net/wfs',
