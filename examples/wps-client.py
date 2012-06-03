@@ -47,9 +47,9 @@ python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r DescribeProcess -
 
 python wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r Execute -x ../tests/wps_USGSExecuteRequest1.xml
 python wps-client.py --verbose --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request Execute --xml ../tests/wps_USGSExecuteRequest1.xml
-python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/PMLExecuteRequest4.xml 
-python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/PMLExecuteRequest5.xml 
-python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r Execute -x ../tests/PMLExecuteRequest6.xml 
+python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest4.xml 
+python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest5.xml 
+python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r Execute -x ../tests/wps_PMLExecuteRequest6.xml 
 
 """ % sys.argv[0]
     
