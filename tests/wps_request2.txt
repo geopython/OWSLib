@@ -42,7 +42,7 @@ Supply process input arguments
 
 Compare to cached XML request
 
->>> _request = open('./USGSExecuteRequest2.xml', 'r').read()
+>>> _request = open('./wps_USGSExecuteRequest2.xml', 'r').read()
 >>> request==_request
 True
 
