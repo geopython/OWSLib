@@ -12,9 +12,9 @@ from etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE, \
                        OWS_NAMESPACE_1_0_0, ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
-from wps_utils import build_get_url, dump, getTypedValue, parseText, getNamespace
+from util import (testXMLValue, build_get_url, dump, getTypedValue, 
+                  getNamespace, xml2string, nspath, openURL, nspath_eval)
 from xml.dom.minidom import parseString
-import util
 
 # namespace definition
 WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
@@ -119,7 +119,7 @@ class WebProcessingService(object):
             self._capabilities = reader.readFromUrl(self.url, username=self.username, password=self.password)
             
         if self.verbose==True:
-            print util.xml2string(etree.tostring(self._capabilities))
+            print xml2string(etree.tostring(self._capabilities))
 
         # populate the capabilities metadata obects from the XML tree
         self._parseCapabilitiesMetadata(self._capabilities)
@@ -140,7 +140,7 @@ class WebProcessingService(object):
             rootElement = reader.readFromUrl(self.url, identifier)
             
         if self.verbose==True:
-            print util.xml2string(etree.tostring(rootElement))
+            print xml2string(etree.tostring(rootElement))
 
         # build metadata objects
         return self._parseProcessMetadata(rootElement)
@@ -239,7 +239,7 @@ class WebProcessingService(object):
             #  ........
             # </ns0:OperationsMetadata>
             elif element.tag.endswith('OperationsMetadata'):
-                for child in element.findall( util.nspath('Operation', ns=ns) ):
+                for child in element.findall( nspath('Operation', ns=ns) ):
                     self.operations.append( OperationsMetadata(child, namespace=ns) )
                     if self.verbose==True:
                         dump(self.operations[-1])
@@ -252,7 +252,7 @@ class WebProcessingService(object):
             #   ......
             # </wps:ProcessOfferings>
             elif element.tag.endswith('ProcessOfferings'):
-                for child in element.findall( util.nspath('Process', ns=ns) ):
+                for child in element.findall( nspath('Process', ns=ns) ):
                     p = Process(child, verbose=self.verbose)
                     self.processes.append(p)
                     if self.verbose==True:
@@ -285,11 +285,11 @@ class WPSReader(object):
     
             # split URL into base url and query string to use utility function
             spliturl=request_url.split('?')
-            u = util.openURL(spliturl[0], spliturl[1], method='Get', username=username, password=password)
+            u = openURL(spliturl[0], spliturl[1], method='Get', username=username, password=password)
             return etree.fromstring(u.read())
         
         elif method == 'Post':
-            u = util.openURL(url, data, method='Post', username = username, password = password)
+            u = openURL(url, data, method='Post', username = username, password = password)
             return etree.fromstring(u.read())
             
         else:
@@ -409,24 +409,24 @@ class WPSExecution():
         #             service="WPS" 
         #             version="1.0.0" 
         #             xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">       
-        root = etree.Element(util.nspath_eval('wps:Execute', namespaces), nsmap=namespaces)
+        root = etree.Element(nspath_eval('wps:Execute', namespaces), nsmap=namespaces)
         root.set('service', 'WPS')
         root.set('version', WPS_DEFAULT_VERSION)
-        root.set(util.nspath_eval('xsi:schemaLocation', namespaces), '%s %s' % (namespaces['wps'], WPS_DEFAULT_SCHEMA_LOCATION) )
+        root.set(nspath_eval('xsi:schemaLocation', namespaces), '%s %s' % (namespaces['wps'], WPS_DEFAULT_SCHEMA_LOCATION) )
         
         # <ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
-        identifierElement = etree.SubElement(root, util.nspath_eval('ows:Identifier', namespaces))
+        identifierElement = etree.SubElement(root, nspath_eval('ows:Identifier', namespaces))
         identifierElement.text = identifier
         
         # <wps:DataInputs>
-        dataInputsElement = etree.SubElement(root, util.nspath_eval('wps:DataInputs', namespaces))
+        dataInputsElement = etree.SubElement(root, nspath_eval('wps:DataInputs', namespaces))
         
         for input in inputs:
             key = input[0]
             val = input[1]
             
-            inputElement = etree.SubElement(dataInputsElement, util.nspath_eval('wps:Input', namespaces))
-            identifierElement = etree.SubElement(inputElement, util.nspath_eval('ows:Identifier', namespaces))
+            inputElement = etree.SubElement(dataInputsElement, nspath_eval('wps:Input', namespaces))
+            identifierElement = etree.SubElement(inputElement, nspath_eval('ows:Identifier', namespaces))
             identifierElement.text = key
             
             # Literal data
@@ -437,8 +437,8 @@ class WPSExecution():
             #   </wps:Data>
             # </wps:Input>
             if isinstance(val, str):
-                dataElement = etree.SubElement(inputElement, util.nspath_eval('wps:Data', namespaces))
-                literalDataElement = etree.SubElement(dataElement, util.nspath_eval('wps:LiteralData', namespaces))
+                dataElement = etree.SubElement(inputElement, nspath_eval('wps:Data', namespaces))
+                literalDataElement = etree.SubElement(dataElement, nspath_eval('wps:LiteralData', namespaces))
                 literalDataElement.text = val
                 
             # Complex data
@@ -469,12 +469,12 @@ class WPSExecution():
         #   </wps:ResponseDocument>
         # </wps:ResponseForm>
         if output is not None:
-            responseFormElement = etree.SubElement(root, util.nspath_eval('wps:ResponseForm', namespaces))
-            responseDocumentElement = etree.SubElement(responseFormElement, util.nspath_eval('wps:ResponseDocument', namespaces), 
+            responseFormElement = etree.SubElement(root, nspath_eval('wps:ResponseForm', namespaces))
+            responseDocumentElement = etree.SubElement(responseFormElement, nspath_eval('wps:ResponseDocument', namespaces), 
                                                        attrib={'storeExecuteResponse':'true', 'status':'true'} )
-            outputElement = etree.SubElement(responseDocumentElement, util.nspath_eval('wps:Output', namespaces), 
+            outputElement = etree.SubElement(responseDocumentElement, nspath_eval('wps:Output', namespaces), 
                                                        attrib={'asReference':'true'} )
-            outputIdentifierElement = etree.SubElement(outputElement, util.nspath_eval('ows:Identifier', namespaces)).text = output
+            outputIdentifierElement = etree.SubElement(outputElement, nspath_eval('ows:Identifier', namespaces)).text = output
                     
         return root
                 
@@ -555,12 +555,12 @@ class WPSExecution():
                     print 'Output URL=%s' % url
                     if '?' in url:
                         spliturl=url.split('?')
-                        u = util.openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
+                        u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
                         # extract output filepath from URL query string
                         if filepath is None:
                             filepath = spliturl[1].split('=')[1]
                     else:
-                        u = util.openURL(url, '', method='Get', username = self.username, password = self.password)
+                        u = openURL(url, '', method='Get', username = self.username, password = self.password)
                         # extract output filepath from base URL
                         if filepath is None:
                             filepath = url.split('/')[-1]
@@ -640,7 +640,7 @@ class WPSExecution():
         if self.status is None:
             self.status = "Exception"
             
-        for exceptionEl in root.findall( util.nspath('Exception', ns=getNamespace(root)) ):
+        for exceptionEl in root.findall( nspath('Exception', ns=getNamespace(root)) ):
             self.errors.append( WPSException(exceptionEl) )
 
 
@@ -668,25 +668,25 @@ class WPSExecution():
         #   </ows:ExceptionReport>
         #  </ns0:ProcessFailed>
         # </ns0:Status>
-        statusEl = root.find( util.nspath('Status/*', ns=wpsns) )
+        statusEl = root.find( nspath('Status/*', ns=wpsns) )
         self.status = statusEl.tag.split('}')[1]
         # exceptions ?
         for element in statusEl:
             if element.tag.endswith('ExceptionReport'):
                 self._parseExceptionReport(element)
         
-        self.process = Process(root.find(util.nspath('Process', ns=wpsns)), verbose=self.verbose)
+        self.process = Process(root.find(nspath('Process', ns=wpsns)), verbose=self.verbose)
         
         #<wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
         #                xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
-        for inputElement in root.findall( util.nspath('DataInputs/Input', ns=wpsns) ):
+        for inputElement in root.findall( nspath('DataInputs/Input', ns=wpsns) ):
             self.dataInputs.append( Input(inputElement) )
             if self.verbose==True:
                 dump(self.dataInputs[-1])
         
         # <ns:ProcessOutputs>
         # xmlns:ns="http://www.opengis.net/wps/1.0.0" 
-        for outputElement in root.findall( util.nspath('ProcessOutputs/Output', ns=wpsns)  ):
+        for outputElement in root.findall( nspath('ProcessOutputs/Output', ns=wpsns)  ):
             self.processOutputs.append( Output(outputElement) )
             if self.verbose==True:
                 dump(self.processOutputs[-1])
@@ -713,15 +713,15 @@ class InputOutput(object):
             
             # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">SUMMARIZE_TIMESTEP</ows:Identifier>
             if subElement.tag.endswith('Identifier'):
-                self.identifier = parseText( subElement )
+                self.identifier = testXMLValue( subElement )
 
             # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Summarize Timestep</ows:Title>
             elif subElement.tag.endswith('Title'):
-                self.title = parseText( subElement )
+                self.title = testXMLValue( subElement )
         
             # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">If selected, processing output will include columns with summarized statistics for all feature attribute values for each timestep</ows:Abstract>
             elif subElement.tag.endswith('Abstract'):
-                self.abstract = parseText( subElement )
+                self.abstract = testXMLValue( subElement )
                 
         self.allowedValues = []
         self.supportedValues = []
@@ -738,8 +738,8 @@ class InputOutput(object):
         #             7504912.93758151 -764109.175074507,7750849.82379226 -22141.8611641468,8561828.42371234 -897195.923493867,7724946.16844165 -602984.014261927 
         #        </ns0:ComplexData>
         # </ns0:Data>
-        #util.nspath('Data', ns=WPS_NAMESPACE)
-        complexDataElement = element.find( util.nspath('ComplexData', ns=getNamespace(element)) )
+        #nspath('Data', ns=WPS_NAMESPACE)
+        complexDataElement = element.find( nspath('ComplexData', ns=getNamespace(element)) )
         if complexDataElement is not None:
             self.dataType = "ComplexData"
         
@@ -768,9 +768,9 @@ class InputOutput(object):
             for subElement in literalDataElement:
                 subns = getNamespace(subElement)
                 if subElement.tag.endswith('DataType'):
-                    self.dataType = subElement.get( util.nspath("reference", ns=subns) ).split(':')[1]
+                    self.dataType = subElement.get( nspath("reference", ns=subns) ).split(':')[1]
                 elif subElement.tag.endswith('AllowedValues'):
-                    for value in subElement.findall( util.nspath('Value', ns=subns) ):
+                    for value in subElement.findall( nspath('Value', ns=subns) ):
                         self.allowedValues.append( getTypedValue(self.dataType, value.text) )
                 elif subElement.tag.endswith('DefaultValue'):
                     self.defaultValue = getTypedValue(self.dataType, subElement.text)
@@ -818,24 +818,24 @@ class InputOutput(object):
             self.dataType = "ComplexData"
             
             for supportedComlexDataElement in complexDataElement.findall( 'SupportedComplexData' ):
-                self.supportedValues.append( ComplexData( mimeType=parseText( supportedComlexDataElement.find( 'Format' ) ),
-                                                          encoding=parseText( supportedComlexDataElement.find( 'Encoding' ) ),
-                                                          schema=parseText( supportedComlexDataElement.find( 'Schema' ) ) 
+                self.supportedValues.append( ComplexData( mimeType=testXMLValue( supportedComlexDataElement.find( 'Format' ) ),
+                                                          encoding=testXMLValue( supportedComlexDataElement.find( 'Encoding' ) ),
+                                                          schema=testXMLValue( supportedComlexDataElement.find( 'Schema' ) ) 
                                                          ) 
                 )
                 
             for formatElement in complexDataElement.findall( 'Supported/Format'):
-                self.supportedValues.append( ComplexData( mimeType=parseText( formatElement.find( 'MimeType' ) ),
-                                                          encoding=parseText( formatElement.find( 'Encoding' ) ),
-                                                          schema=parseText( formatElement.find( 'Schema' ) ) 
+                self.supportedValues.append( ComplexData( mimeType=testXMLValue( formatElement.find( 'MimeType' ) ),
+                                                          encoding=testXMLValue( formatElement.find( 'Encoding' ) ),
+                                                          schema=testXMLValue( formatElement.find( 'Schema' ) ) 
                                                          ) 
                 )
                
             defaultFormatElement = complexDataElement.find( 'Default/Format' ) 
             if defaultFormatElement is not None:
-                self.defaultValue = ComplexData( mimeType=parseText( defaultFormatElement.find( 'MimeType' ) ),
-                                                 encoding=parseText( defaultFormatElement.find( 'Encoding' ) ),
-                                                 schema=parseText( defaultFormatElement.find( 'Schema' ) ) 
+                self.defaultValue = ComplexData( mimeType=testXMLValue( defaultFormatElement.find( 'MimeType' ) ),
+                                                 encoding=testXMLValue( defaultFormatElement.find( 'Encoding' ) ),
+                                                 schema=testXMLValue( defaultFormatElement.find( 'Schema' ) ) 
                                                ) 
 
 
@@ -856,12 +856,12 @@ class Input(InputOutput):
         if inputElement.get("minOccurs") is not None:
             self.minOccurs = int( inputElement.get("minOccurs") )
         if inputElement.find('MinimumOccurs') is not None:
-            self.minOccurs = int( parseText( inputElement.find('MinimumOccurs') ) )  
+            self.minOccurs = int( testXMLValue( inputElement.find('MinimumOccurs') ) )  
         self.maxOccurs = -1
         if inputElement.get("maxOccurs") is not None:
             self.maxOccurs = int( inputElement.get("maxOccurs") )
         if inputElement.find('MaximumOccurs') is not None:
-            self.maxOccurs = int( parseText( inputElement.find('MaximumOccurs') ) )       
+            self.maxOccurs = int( testXMLValue( inputElement.find('MaximumOccurs') ) )       
         
         # <LiteralData>
         self._parseLiteralData(inputElement, 'LiteralData')
@@ -889,7 +889,7 @@ class Output(InputOutput):
         
         # <ns:Reference encoding="UTF-8" mimeType="text/csv"
         #     href="http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e" />
-        referenceElement = outputElement.find( util.nspath('Reference', ns=wpsns) )
+        referenceElement = outputElement.find( nspath('Reference', ns=wpsns) )
         if referenceElement is not None:
             self.reference = referenceElement.get('href')
             self.mimeType = referenceElement.get('mimeType')
@@ -932,9 +932,9 @@ class Output(InputOutput):
         #        </ns3:FeatureCollection>
         #     </ns0:ComplexData>
         # </ns0:Data>
-        dataElement = outputElement.find( util.nspath('Data', ns=wpsns) )    
+        dataElement = outputElement.find( nspath('Data', ns=wpsns) )    
         if dataElement is not None:
-            complexDataElement = dataElement.find( util.nspath('ComplexData', ns=wpsns) )
+            complexDataElement = dataElement.find( nspath('ComplexData', ns=wpsns) )
             if complexDataElement is not None:
                 self.dataType = "ComplexData"
                 self.mimeType = complexDataElement.get('mimeType')
@@ -953,7 +953,7 @@ class WPSException:
     def __init__(self, root):
         self.code = root.attrib.get("exceptionCode", None)
         self.locator = root.attrib.get("locator", None)
-        textEl = root.find( util.nspath('ExceptionText', ns=getNamespace(root)) )
+        textEl = root.find( nspath('ExceptionText', ns=getNamespace(root)) )
         if textEl is not None:
             self.text = textEl.text
         else:
@@ -978,7 +978,7 @@ class Process(object):
         wpsns = getNamespace(elem)
         
         # <ProcessDescription statusSupported="true" storeSupported="true" ns0:processVersion="1.0.0">
-        self.processVersion = elem.get( util.nspath('processVersion', ns=wpsns) )
+        self.processVersion = elem.get( nspath('processVersion', ns=wpsns) )
         self.statusSupported = bool( elem.get( "statusSupported" ) )
         self.storeSupported = bool( elem.get( "storeSupported" ) )
         
@@ -989,15 +989,15 @@ class Process(object):
             
             # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
             if child.tag.endswith('Identifier'):
-                self.identifier = parseText( child )
+                self.identifier = testXMLValue( child )
         
             # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Feature Weighted Grid Statistics</ows:Title>
             elif child.tag.endswith('Title'):
-                self.title =  parseText( child )
+                self.title =  testXMLValue( child )
         
             # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">This algorithm generates area weighted statistics of a gridded dataset for a set of vector polygon features. Using the bounding-box that encloses the feature data and the time range, if provided, a subset of the gridded dataset is requested from the remote gridded data server. Polygon representations are generated for cells in the retrieved grid. The polygon grid-cell representations are then projected to the feature data coordinate reference system. The grid-cells are used to calculate per grid-cell feature coverage fractions. Area-weighted statistics are then calculated for each feature using the grid values and fractions as weights. If the gridded dataset has a time range the last step is repeated for each time step within the time range or all time steps if a time range was not supplied.</ows:Abstract>
             elif child.tag.endswith('Abstract'):
-                self.abstract = parseText( child )
+                self.abstract = testXMLValue( child )
         
         if self.verbose==True:
             dump(self)
@@ -1056,14 +1056,14 @@ class WFSFeatureCollection(FeatureCollection):
     #   </wps:Reference>
     def getXml(self):
         
-        root = etree.Element(util.nspath_eval('wps:Reference', namespaces), nsmap=namespaces,
-                             attrib = { util.nspath_eval("xlink:href",namespaces) : self.url} )
-        bodyElement = etree.SubElement(root, util.nspath_eval('wps:Body', namespaces))
-        getFeatureElement = etree.SubElement(bodyElement, util.nspath_eval('wfs:GetFeature', namespaces),
+        root = etree.Element(nspath_eval('wps:Reference', namespaces), nsmap=namespaces,
+                             attrib = { nspath_eval("xlink:href",namespaces) : self.url} )
+        bodyElement = etree.SubElement(root, nspath_eval('wps:Body', namespaces))
+        getFeatureElement = etree.SubElement(bodyElement, nspath_eval('wfs:GetFeature', namespaces),
                                              attrib = { "service":"WFS",
                                                         "version":"1.1.0",
                                                         "outputFormat":"text/xml; subtype=gml/3.1.1",
-                                                        util.nspath_eval("xsi:schemaLocation",namespaces):"%s %s" % (namespaces['wfs'], '../wfs/1.1.0/WFS.xsd')})
+                                                        nspath_eval("xsi:schemaLocation",namespaces):"%s %s" % (namespaces['wfs'], '../wfs/1.1.0/WFS.xsd')})
         
         #            <wfs:Query typeName="sample:CONUS_States">
         #                <wfs:PropertyName>the_geom</wfs:PropertyName>
@@ -1098,15 +1098,15 @@ class WFSQuery():
         #                </ogc:Filter>
         #            </wfs:Query>
    
-        queryElement = etree.Element(util.nspath_eval('wfs:Query', namespaces), attrib = { "typeName":self.typeName }, nsmap=namespaces)
+        queryElement = etree.Element(nspath_eval('wfs:Query', namespaces), attrib = { "typeName":self.typeName }, nsmap=namespaces)
         for propertyName in self.propertyNames:
-            propertyNameElement = etree.SubElement(queryElement, util.nspath_eval('wfs:PropertyName', namespaces))
+            propertyNameElement = etree.SubElement(queryElement, nspath_eval('wfs:PropertyName', namespaces))
             propertyNameElement.text = propertyName
         if len(self.filters)>0:
-            filterElement = etree.SubElement(queryElement, util.nspath_eval('ogc:Filter', namespaces))
+            filterElement = etree.SubElement(queryElement, nspath_eval('ogc:Filter', namespaces))
             for filter in self.filters:
-                gmlObjectIdElement = etree.SubElement(filterElement, util.nspath_eval('ogc:GmlObjectId', namespaces), 
-                                                      attrib={util.nspath_eval('gml:id', namespaces):filter})
+                gmlObjectIdElement = etree.SubElement(filterElement, nspath_eval('ogc:GmlObjectId', namespaces), 
+                                                      attrib={nspath_eval('gml:id', namespaces):filter})
         return queryElement
         
 class GMLMultiPolygonFeatureCollection(FeatureCollection):
@@ -1153,24 +1153,24 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
                 </wps:ComplexData>
             </wps:Data>
         '''
-        dataElement = etree.Element(util.nspath_eval('wps:Data', namespaces), nsmap=namespaces)
-        complexDataElement = etree.SubElement(dataElement, util.nspath_eval('wps:ComplexData', namespaces),
+        dataElement = etree.Element(nspath_eval('wps:Data', namespaces), nsmap=namespaces)
+        complexDataElement = etree.SubElement(dataElement, nspath_eval('wps:ComplexData', namespaces),
                                               attrib={"mimeType":"text/xml", "encoding":"UTF-8", "schema":GML_SCHEMA_LOCATION} )
-        featureMembersElement = etree.SubElement(complexDataElement, util.nspath_eval('gml:featureMembers', namespaces),
-                                                 attrib={ util.nspath_eval("xsi:schemaLocation",namespaces):"%s %s" % (DRAW_NAMESPACE, DRAW_SCHEMA_LOCATION)})
-        boxElement = etree.SubElement(featureMembersElement, util.nspath_eval('gml:box', namespaces), attrib={ util.nspath_eval("gml:id",namespaces):"box.1" })
-        geomElement = etree.SubElement(boxElement, util.nspath_eval('gml:the_geom', namespaces))
-        multiPolygonElement = etree.SubElement(geomElement, util.nspath_eval('gml:MultiPolygon', namespaces),
+        featureMembersElement = etree.SubElement(complexDataElement, nspath_eval('gml:featureMembers', namespaces),
+                                                 attrib={ nspath_eval("xsi:schemaLocation",namespaces):"%s %s" % (DRAW_NAMESPACE, DRAW_SCHEMA_LOCATION)})
+        boxElement = etree.SubElement(featureMembersElement, nspath_eval('gml:box', namespaces), attrib={ nspath_eval("gml:id",namespaces):"box.1" })
+        geomElement = etree.SubElement(boxElement, nspath_eval('gml:the_geom', namespaces))
+        multiPolygonElement = etree.SubElement(geomElement, nspath_eval('gml:MultiPolygon', namespaces),
                                                attrib={"srsDimension":"2", "srsName":"http://www.opengis.net/gml/srs/epsg.xml#4326"} )
         for polygon in self.polygons:
-            polygonMemberElement = etree.SubElement(multiPolygonElement, util.nspath_eval('gml:polygonMember', namespaces))
-            polygonElement = etree.SubElement(polygonMemberElement, util.nspath_eval('gml:Polygon', namespaces))
-            exteriorElement = etree.SubElement(polygonElement, util.nspath_eval('gml:exterior', namespaces))
-            linearRingElement = etree.SubElement(exteriorElement, util.nspath_eval('gml:LinearRing', namespaces))
-            posListElement = etree.SubElement(linearRingElement, util.nspath_eval('gml:posList', namespaces))
+            polygonMemberElement = etree.SubElement(multiPolygonElement, nspath_eval('gml:polygonMember', namespaces))
+            polygonElement = etree.SubElement(polygonMemberElement, nspath_eval('gml:Polygon', namespaces))
+            exteriorElement = etree.SubElement(polygonElement, nspath_eval('gml:exterior', namespaces))
+            linearRingElement = etree.SubElement(exteriorElement, nspath_eval('gml:LinearRing', namespaces))
+            posListElement = etree.SubElement(linearRingElement, nspath_eval('gml:posList', namespaces))
             posListElement.text =  ' '.join(["%s %s" % (x, y) for x, y in polygon[:] ])
         
-        idElement = etree.SubElement(boxElement, util.nspath_eval('gml:ID', namespaces))
+        idElement = etree.SubElement(boxElement, nspath_eval('gml:ID', namespaces))
         idElement.text = "0"
         return dataElement
     

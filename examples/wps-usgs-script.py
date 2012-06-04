@@ -1,7 +1,7 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
 from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution, printInputOutput
-from owslib.wps_utils import dump
+from owslib.util import dump
 
 # instantiate WPS client
 # setting verbose=True will print out all HTTP request and responses to standard output
