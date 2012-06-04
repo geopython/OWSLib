@@ -79,5 +79,5 @@ The directory tests/ includes several doctest-style files wps_*.txt that show ho
 	(or python -m doctest -v wps_*.txt for verbose output)
 
 Also, the directory tests/ contains several examples of well-formed "Execute" requests:
-	- The files USGSExecuteRequest*.xml contain requests that can be submitted to the live USGS WPS service.
+	- The files wps_USGSExecuteRequest*.xml contain requests that can be submitted to the live USGS WPS service.
 	- The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
