@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Capabilities xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.opengeospatial.net/wps" xmlns:ows="http://www.opengeospatial.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengeospatial.net/wps  ..\wpsGetCapabilities.xsd">
+	<ows:ServiceIdentification>
+        <ows:Title>WPS Pylons Test Server</ows:Title>
+       <ows:Abstract/>
+        <ows:Keywords>
+             <ows:Keyword>keyword</ows:Keyword><ows:Keyword>keyword2</ows:Keyword>
+        </ows:Keywords>
+        <ows:ServiceType>WPS</ows:ServiceType>
+        <ows:Fees/>
+        <ows:AccessConstraints/>
+    </ows:ServiceIdentification>
+     <ows:ServiceProvider>
+        <ows:ProviderName>British Atmospheric Data Centre</ows:ProviderName>
+        <ows:ProviderSite xlink:href="http://badc.nerc.ac.uk"/>
+        <ows:ServiceContact>
+            <ows:IndividualName>Stephen Pascoe</ows:IndividualName>
+            <ows:PositionName/>
+            <ows:ContactInfo>
+                <ows:Phone>
+                    <ows:Voice/>
+                    <ows:Facsimile/>
+                </ows:Phone>
+                <ows:Address>
+                    <ows:DeliveryPoint>-</ows:DeliveryPoint>
+                    <ows:City/>
+					  <ows:AdministrativeArea/>
+	  <ows:PostalCode/>
+	  <ows:Country/>
+                    <ows:ElectronicMailAddress>S.Pascoe@rl.ac.uk</ows:ElectronicMailAddress>
+                </ows:Address>
+            </ows:ContactInfo>
+        </ows:ServiceContact>
+    </ows:ServiceProvider>
+	<ows:OperationsMetadata>
+		<ows:Operation name="GetCapabilities">
+			<ows:DCP>
+				<ows:HTTP>
+				<ows:Get xlink:href="http://ceda-wps2.badc.rl.ac.uk/wps?"/>
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+		<ows:Operation name="DescribeProcess">
+			<ows:DCP>
+				<ows:HTTP>
+				<ows:Get xlink:href="http://ceda-wps2.badc.rl.ac.uk/wps?"/>
+				<ows:Post xlink:href="http://ceda-wps2.badc.rl.ac.uk/wps?"/>
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+		<ows:Operation name="Execute">
+			<ows:DCP>
+				<ows:HTTP>
+				<ows:Get xlink:href="http://ceda-wps2.badc.rl.ac.uk/wps?"/>
+				<ows:Post xlink:href="http://ceda-wps2.badc.rl.ac.uk/wps?"/>
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+	</ows:OperationsMetadata>
+	<ProcessOfferings>
+			<Process processVersion="1">
+				<ows:Identifier>CDMSSubsetVariable</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>NCDumpIt</ows:Identifier>
+				<ows:Title>Calls ncdump on the input file path and writes it to an output file.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>TestDap</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>CDMSDescribeVariableDomain</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>CFCheck</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>DoubleIt</ows:Identifier>
+				<ows:Title>Doubles the input number and returns value</ows:Title>
+				<ows:Abstract>This is test process used to demonstrate how the WPS and the WPS User Interface work. The process accepts an integer or floating point number and returns some XML containing the input number double.</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>SimplePlot</ows:Identifier>
+				<ows:Title>Creates a simple map plot.</ows:Title>
+				<ows:Abstract>This process demonstrates the visualisation capabilities of the WPS. When using the WPS User Interface, the submission form renders a map from which the user can choose a bounding box. The user can also decide on a title for the plot. On submission, the plot is written to a file and the jobviewer page shows that the User Interface can provide a quick look of the output if requested. This process uses the matplotlib and basemap tools to render the map.</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>CDMSListDatasets</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>CDMSListVariables</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>WCSWrapper</ows:Identifier>
+				<ows:Title>Web Coverage Service Wrapper Process</ows:Title>
+				<ows:Abstract>The "WCSWrapper" process provides a method of requesting a chain of Web Coverage Service (WCS) calls within a single Web Processing Service (WPS) request. The user can potentially define a large set of individual WCS requests across such dimensions as "Coverage", "Time" and "Level" that may not be permitted with a direct WCS call. The asynchronous nature of WPS allows these requests to be scheduled and queued in a manner appropriate to the WPS. The resulting outputs are then zipped up and the user is informed where to download them.&lt;br /&gt;&lt;br /&gt;Since each coverage provided by a WCS may be defined against different dimensions (such as "Level") the client must consult various WCS methods to populate the options available for each parameter. The process configuration file defines a set of known (and supported) WCS End Points. Once the user has selected a WCS End Point the client can interrogate the "GetCapabilities" method of that particular WCS to dynamically populate the "Coverage" options. Once the user has selected the coverage then the client calls the WCS "DescribeCoverage" method with the appropriate coverage to populate the "TimeStep" option. Once the time steps have been selected the client can call the WPS "Execute" method which will manage a series of calls to the chosen WCS "GetCoverage" method, saving the outputs locally and returning information about them in the WPS "ExecuteResponse" document.</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>GetWeatherStations</ows:Identifier>
+				<ows:Title>Writes a text file with one weather station per line</ows:Title>
+				<ows:Abstract>The "GetWeatherStations" process allows the user to identify a set of Weather Station numeric IDs. These can be selected using temporal and spatial filters to derive a list of stations that the user is interested in. The output is a text file containing one station ID per line.</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>ListPPFileHeader</ows:Identifier>
+				<ows:Title>Writes a text file that contains a listing of pp-records in a file.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>TakeAges</ows:Identifier>
+				<ows:Title>A test process to last a long time.</ows:Title>
+				<ows:Abstract>It takes 10 minutes to run. That's it.</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>CMIP5FileFinder</ows:Identifier>
+				<ows:Title>Writes a test file of matched CMIP5 files.</ows:Title>
+				<ows:Abstract>Given a Modelling Centre, Model, Experiment, Realm and Variable Pattern (a regular expression pattern), this process matches all revelant files in the "latest" version of the CMIP5 archive and returns the paths to that files in "checkm" format.</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>SubsetPPFile</ows:Identifier>
+				<ows:Title>Filters a PP-file to generate a new subset PP-file.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>ExtractUKStationData</ows:Identifier>
+				<ows:Title>ExtractUKStationData</ows:Title>
+				<ows:Abstract>The "ExtractUKStationData" process provides tools to access surface station weather observations for a range of variables throughout the UK. These include temperature, rainfall and wind measurements. These records are available from 1859 to this year.&lt;br /&gt;&lt;br /&gt;You can select which stations you require using either a bounding box, a list of UK counties, a list of station IDs or an uploaded file containing station IDs. Data is returned in CSV or tab-delimited text files.</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>CDOWrapper1</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>MMDNCDiff</ows:Identifier>
+				<ows:Title>MMDNCDiff</ows:Title>
+				<ows:Abstract>Takes two URLs to NetCDF files, a variable ID, time and depth indices and differences the two variables returning a plot and netcdf file.</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>PlotRotatedGrid</ows:Identifier>
+				<ows:Title>Creates a plot - to show we can plot a rotated grid.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>MMDAsync</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>MashMyDataMultiplier</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>Delegator</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>ExArchProc1</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>CDOShowInfo</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>PostTest</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>StatusTestProcess</ows:Identifier>
+				<ows:Title>An process to test status responses</ows:Title>
+				<ows:Abstract>An process to test status responses</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>WaitForFileDeletionCached</ows:Identifier>
+				<ows:Title>An asynchronous job that waits for a file to be deleted</ows:Title>
+				<ows:Abstract>Test process that will not finish untill the file is deleted</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>WaitForAllFilesToBeDeleted</ows:Identifier>
+				<ows:Title>An asynchronous job that waits for a number of files to be deleted</ows:Title>
+				<ows:Abstract>Test process that will not finish untill all the watched files are deleted</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>AsyncTest</ows:Identifier>
+				<ows:Title>Does an asynchronous test job run</ows:Title>
+				<ows:Abstract>Pretend process to handle asynchronous running</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>SyncTest1</ows:Identifier>
+				<ows:Title>Just creates a file.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>WaitForFileDeletion</ows:Identifier>
+				<ows:Title>An asynchronous job that waits for a file to be deleted</ows:Title>
+				<ows:Abstract>Test process that will not finish untill the file is deleted</ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+			<Process processVersion="1">
+				<ows:Identifier>ProcessTemplate</ows:Identifier>
+				<ows:Title>Writes a text file and returns an output.</ows:Title>
+				<ows:Abstract></ows:Abstract>
+				<ows:Metadata xlink:title="none"/>
+			</Process>
+	</ProcessOfferings>
+</Capabilities>
