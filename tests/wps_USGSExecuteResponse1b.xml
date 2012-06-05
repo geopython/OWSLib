@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns:ExecuteResponse xmlns:ns="http://www.opengis.net/wps/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd"
+	serviceInstance="http://cida.usgs.gov/climate/gdp/process/WebProcessingService?REQUEST=GetCapabilities&amp;SERVICE=WPS"
+	xml:lang="en-US" service="WPS" version="1.0.0"
+	statusLocation="http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026">
+	<ns:Process ns:processVersion="1.0.0">
+		<ns1:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ns1:Identifier>
+		<ns1:Title xmlns:ns1="http://www.opengis.net/ows/1.1">Feature Weighted Grid Statistics</ns1:Title>
+	</ns:Process>
+	<ns:Status creationTime="2011-10-13T12:56:22.025-05:00">
+		<ns:ProcessSucceeded>Process successful</ns:ProcessSucceeded>
+	</ns:Status>
+	<wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
+		xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<wps:Input>
+			<ows:Identifier>FEATURE_ATTRIBUTE_NAME</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>ID</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>DATASET_URI</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>dods://hydra.fsl.noaa.gov/thredds/dodsC/oc_gis_downscaling/sresb1/ncar_ccsm3_0.1/Prcp/ncar_ccsm3_0.1.sresb1.monthly.Prcp.1950.nc</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>DATASET_ID</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>Prcp</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>TIME_START</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>1950-01-16T00:00:00.000Z</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>TIME_END</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>1950-12-15T00:00:00.000Z</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>REQUIRE_FULL_COVERAGE</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>true</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>DELIMITER</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>COMMA</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>STATISTICS</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>MEAN</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>GROUP_BY</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>STATISTIC</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>SUMMARIZE_TIMESTEP</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>true</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>SUMMARIZE_FEATURE_ATTRIBUTE</ows:Identifier>
+			<wps:Data>
+				<wps:LiteralData>true</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>FEATURE_COLLECTION</ows:Identifier>
+			<wps:Reference
+				xlink:href="http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs">
+				<wps:Body>
+					<wfs:GetFeature xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs"
+						outputFormat="text/xml; subtype=gml/3.1.1" service="WFS" version="1.1.0"
+						xsi:schemaLocation="http://www.opengis.net/wfs ../wfs/1.1.0/WFS.xsd">
+						<wfs:Query typeName="draw:luca">
+							<wfs:PropertyName>the_geom</wfs:PropertyName>
+							<wfs:PropertyName>ID</wfs:PropertyName>
+						</wfs:Query>
+					</wfs:GetFeature>
+				</wps:Body>
+			</wps:Reference>
+		</wps:Input>
+	</wps:DataInputs>
+	<ns:ProcessOutputs>
+		<ns:Output>
+			<ns1:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">OUTPUT</ns1:Identifier>
+			<ns1:Title xmlns:ns1="http://www.opengis.net/ows/1.1">Output File</ns1:Title>
+			<ns:Reference encoding="UTF-8" mimeType="text/csv"
+				href="http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e" />
+		</ns:Output>
+	</ns:ProcessOutputs>
+</ns:ExecuteResponse>
