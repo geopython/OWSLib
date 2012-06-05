@@ -44,36 +44,30 @@ for output in process.processOutputs:
 # Submits an HTTP POST "Execute" process request to the WPS service, keeps checking the status of the request,
 # and retrieves the output once the request terminates successfully (displaying any errors if found).
 # This request uses a FEATURE_COLLECTION input obtained from a live WFS service.
-wfsUrl = "http://cida.usgs.gov/climate/gdp/proxy/http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
-query = WFSQuery("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
-featureCollection = WFSFeatureCollection(wfsUrl, query)
+#wfsUrl = "http://cida.usgs.gov/climate/gdp/proxy/http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
+#query = WFSQuery("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
+#featureCollection = WFSFeatureCollection(wfsUrl, query)
+polygon = [(-102.8184, 39.5273), (-102.8184, 37.418), (-101.2363, 37.418), (-101.2363, 39.5273), (-102.8184, 39.5273)]
+featureCollection = GMLMultiPolygonFeatureCollection( [polygon] )
 processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
-inputs = [ ("FEATURE_ATTRIBUTE_NAME","STATE"),
-           ("DATASET_URI", "dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml"),
-           ("DATASET_ID", "ccsm3_a1b_tmax"),
-           ("DATASET_ID", "ccsm3_a1b_pr"),
-           ("DATASET_ID", "ccsm3_a1fi_tmax"),          
-           ("TIME_START","1960-01-01T00:00:00.000Z"),
-           ("TIME_END","1960-12-31T00:00:00.000Z"),
-           ("REQUIRE_FULL_COVERAGE","true"),
+inputs = [ ("FEATURE_ATTRIBUTE_NAME","the_geom"),
+           ("DATASET_URI", "dods://cida.usgs.gov/qa/thredds/dodsC/derivatives/derivative-days_above_threshold.pr.ncml"),
+           ("DATASET_ID", "ensemble_b1_pr-days_above_threshold"),
+           ("TIME_START","2010-01-01T00:00:00.000Z"),
+           ("TIME_END","2011-01-01T00:00:00.000Z"),
+           ("REQUIRE_FULL_COVERAGE","false"),
            ("DELIMITER","COMMA"),
            ("STATISTICS","MEAN"),
-           ("STATISTICS","MINIMUM"),
-           ("STATISTICS","MAXIMUM"),
-           ("STATISTICS","WEIGHT_SUM"),
-           ("STATISTICS","VARIANCE"),
-           ("STATISTICS","STD_DEV"),
-           ("STATISTICS","COUNT"),
            ("GROUP_BY","STATISTIC"),
-           ("SUMMARIZE_TIMESTEP","true"),
-           ("SUMMARIZE_FEATURE_ATTRIBUTE","true"),
+           ("SUMMARIZE_TIMESTEP","false"),
+           ("SUMMARIZE_FEATURE_ATTRIBUTE","false"),
            ("FEATURE_COLLECTION", featureCollection)
           ]
 output = "OUTPUT"
-#execution = wps.execute(processid, inputs, output = "OUTPUT")
+execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
-request = open('../tests/wps_USGSExecuteRequest1.xml','r').read()
-execution = wps.execute(None, [], request=request)
+#request = open('../tests/wps_USGSExecuteRequest1.xml','r').read()
+#execution = wps.execute(None, [], request=request)
 
 # The monitorExecution() function can be conveniently used to wait for the process termination
 # It will eventually write the process output to the specified file, or to the file specified by the server.
