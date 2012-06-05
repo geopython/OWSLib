@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:ExecuteResponse xmlns:ns="http://www.opengis.net/wps/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd"
+	serviceInstance="http://cida.usgs.gov/climate/gdp/process/WebProcessingService?REQUEST=GetCapabilities&amp;SERVICE=WPS"
+	xml:lang="en-US" service="WPS" version="1.0.0"
+	statusLocation="http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1317765263148">
+	<ns:Process ns:processVersion="1.0.0">
+		<ns1:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ns1:Identifier>
+		<ns1:Title xmlns:ns1="http://www.opengis.net/ows/1.1">Feature Weighted Grid Statistics</ns1:Title>
+	</ns:Process>
+	<ns:Status creationTime="2011-10-04T16:54:23.148-05:00">
+		<ns:ProcessStarted />
+	</ns:Status>
+</ns:ExecuteResponse>
