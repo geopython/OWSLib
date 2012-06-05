@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wps:Capabilities service="WPS" version="1.0.0"
+	xml:lang="en-US"
+	xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsGetCapabilities_response.xsd"
+	updateSequence="1" xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<ows:ServiceIdentification>
+		<ows:Title>Geo Data Portal WPS Implementation</ows:Title>
+		<ows:Abstract>A Geo Data Portal Service based on the 52north implementation of WPS 1.0.0</ows:Abstract>
+		<ows:Keywords>
+			<ows:Keyword>WPS</ows:Keyword>
+			<ows:Keyword>AAFC</ows:Keyword>
+			<ows:Keyword>geospatial</ows:Keyword>
+			<ows:Keyword>geoprocessing</ows:Keyword>
+		</ows:Keywords>
+		<ows:ServiceType>WPS</ows:ServiceType>
+		<ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+		<ows:ServiceTypeVersion>0.4.0</ows:ServiceTypeVersion>
+		<ows:Fees>NONE</ows:Fees>
+		<ows:AccessConstraints>NONE</ows:AccessConstraints>
+	</ows:ServiceIdentification>
+	
+	<ows:ServiceProvider>
+		<ows:ProviderName>CIDA</ows:ProviderName>
+		<ows:ProviderSite xlink:href="http://cida.usgs.gov/" />
+		<ows:ServiceContact>
+			<ows:IndividualName>Ivan Suftin</ows:IndividualName>
+			<ows:PositionName>Technical Lead</ows:PositionName>
+			<ows:ContactInfo>
+				<ows:Phone>
+					<ows:Voice>608-821-3899</ows:Voice>
+					<ows:Facsimile />
+				</ows:Phone>
+				<ows:Address>
+					<ows:DeliveryPoint>8505 Research Way</ows:DeliveryPoint>
+					<ows:City>Middleton</ows:City>
+					<ows:AdministrativeArea>WI</ows:AdministrativeArea>
+					<ows:PostalCode>53562</ows:PostalCode>
+					<ows:Country>US</ows:Country>
+					<ows:ElectronicMailAddress>isuftin@usgs.gov</ows:ElectronicMailAddress>
+				</ows:Address>
+			</ows:ContactInfo>
+		</ows:ServiceContact>
+	</ows:ServiceProvider>
+	
+	<ows:OperationsMetadata>
+		<ows:Operation name="GetCapabilities">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get
+						xlink:href="http://localhost:8080/gdp-utility-wps/WebProcessingService" />
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+		<ows:Operation name="DescribeProcess">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get
+						xlink:href="http://localhost:8080/gdp-utility-wps/WebProcessingService" />
+
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+		<ows:Operation name="Execute">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get
+						xlink:href="http://localhost:8080/gdp-utility-wps/WebProcessingService" />
+					<ows:Post
+						xlink:href="http://localhost:8080/gdp-utility-wps/WebProcessingService" />
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+	</ows:OperationsMetadata>
+
+	<wps:ProcessOfferings>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.filemanagement.ReceiveFiles</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.filemanagement.ReceiveFiles</ows:Title>
+		</wps:Process>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.discovery.CalculateWCSCoverageInfo</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.discovery.CalculateWCSCoverageInfo</ows:Title>
+		</wps:Process>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.communication.EmailWhenFinishedAlgorithm</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.communication.EmailWhenFinishedAlgorithm</ows:Title>
+		</wps:Process>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.communication.GeoserverManagementAlgorithm</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.communication.GeoserverManagementAlgorithm</ows:Title>
+		</wps:Process>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.discovery.GetWcsCoverages</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.discovery.GetWcsCoverages</ows:Title>
+		</wps:Process>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.filemanagement.GetWatersGeom</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.filemanagement.GetWatersGeom</ows:Title>
+		</wps:Process>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids</ows:Title>
+		</wps:Process>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.filemanagement.CreateNewShapefileDataStore</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.filemanagement.CreateNewShapefileDataStore</ows:Title>
+		</wps:Process>
+		<wps:Process wps:processVersion="1.0.0">
+			<ows:Identifier>gov.usgs.cida.gdp.wps.algorithm.discovery.GetGridTimeRange</ows:Identifier>
+			<ows:Title>gov.usgs.cida.gdp.wps.algorithm.discovery.GetGridTimeRange</ows:Title>
+		</wps:Process>
+	</wps:ProcessOfferings>
+	
+	<wps:Languages>
+		<wps:Default>
+			<ows:Language>en-US</ows:Language>
+		</wps:Default>
+		<wps:Supported>
+			<ows:Language>en-US</ows:Language>
+		</wps:Supported>
+	</wps:Languages>
+
+</wps:Capabilities>

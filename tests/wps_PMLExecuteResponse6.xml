@@ -1,0 +1,43 @@
+<ns0:ExecuteResponse service="WPS" serviceInstance="http://rsg.pml.ac.uk/wps/vector.cgi?service=WPS&amp;request=GetCapabilities&amp;version=1.0.0" statusLocation="http://rsg.pml.ac.uk/wps/wpsoutputs/pywps-132084838963.xml" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd" xml:lang="en-CA" xmlns:ns0="http://www.opengis.net/wps/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ns0:Process ns0:processVersion="1">
+        <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">v.net.path</ows:Identifier>
+        <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Finds shortest path on vector network.</ows:Title>
+        <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">http://grass.osgeo.org/grass70/manuals/html70_user/v.net.path.html</ows:Abstract>
+        <ows:Metadata xlink:href="http://rsg.pml.ac.uk/wps/vector.cgi?service=WPS&amp;request=DescribeProcess&amp;version=1.0.0&amp;identifier=v.net.path" xlink:title="vector" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" />
+        <ows:Metadata xlink:href="http://rsg.pml.ac.uk/wps/vector.cgi?service=WPS&amp;request=DescribeProcess&amp;version=1.0.0&amp;identifier=v.net.path" xlink:title="networking" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" />
+    </ns0:Process>
+    <ns0:Status creationTime="2011-11-09T14:19:50Z">
+        <ns0:ProcessSucceeded>PyWPS Process v.net.path successfully calculated</ns0:ProcessSucceeded>
+    </ns0:Status>
+    <ns0:ProcessOutputs>
+        <ns0:Output>
+            <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">output</ows:Identifier>
+            <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Name for output vector map</ows:Title>
+            <ns0:Data>
+                <ns0:ComplexData encoding="UTF-8" mimeType="text/xml" schema="http://schemas.opengis.net/gml/2.1.2/feature.xsd">
+					<ns3:FeatureCollection xsi:schemaLocation="http://ogr.maptools.org/ output_0n7ij9D.xsd" xmlns:ns3="http://ogr.maptools.org/">
+					  <gml:boundedBy xmlns:gml="http://www.opengis.net/gml">
+					    <gml:Box>
+					      <gml:coord><gml:X>-960123.1421801626</gml:X><gml:Y>4665723.56559387</gml:Y></gml:coord>
+					      <gml:coord><gml:X>-101288.6510608822</gml:X><gml:Y>5108200.011823481</gml:Y></gml:coord>
+					    </gml:Box>
+					  </gml:boundedBy>                         
+					  <gml:featureMember xmlns:gml="http://www.opengis.net/gml">
+					    <ns3:output fid="F0">
+					      <ns3:geometryProperty><gml:LineString><gml:coordinates>-960123.142180162365548,4665723.565593870356679,0 -960123.142180162365548,4665723.565593870356679,0 -960123.142180162598379,4665723.565593870356679,0 -960123.142180162598379,4665723.565593870356679,0 -711230.141176006174646,4710278.48552671354264,0 -711230.141176006174646,4710278.48552671354264,0 -623656.677859728806652,4848552.374973464757204,0 -623656.677859728806652,4848552.374973464757204,0 -410100.337491964863148,4923834.82589447684586,0 -410100.337491964863148,4923834.82589447684586,0 -101288.651060882242746,5108200.011823480948806,0 -101288.651060882242746,5108200.011823480948806,0 -101288.651060882257298,5108200.011823480948806,0 -101288.651060882257298,5108200.011823480948806,0</gml:coordinates></gml:LineString></ns3:geometryProperty>
+					      <ns3:cat>1</ns3:cat>
+					      <ns3:id>1</ns3:id>
+					      <ns3:fcat>0</ns3:fcat>
+					      <ns3:tcat>0</ns3:tcat>
+					      <ns3:sp>0</ns3:sp>
+					      <ns3:cost>1002619.181</ns3:cost>
+					      <ns3:fdist>0</ns3:fdist>
+					      <ns3:tdist>0</ns3:tdist>
+					    </ns3:output>
+					  </gml:featureMember>
+					</ns3:FeatureCollection>
+                </ns0:ComplexData>
+            </ns0:Data>
+        </ns0:Output>
+    </ns0:ProcessOutputs>
+</ns0:ExecuteResponse>
