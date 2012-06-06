@@ -85,7 +85,7 @@ That's everything needed to make a request for imagery::
     >>> out.close()
 
 A very similar API exists for WebFeatureService. See
-tests/MapServerWFSCapabilities.txt for details.
+tests/wfs_MapServerWFSCapabilities.txt for details.
 
 Support
 -------
