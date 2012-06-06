@@ -354,3 +354,13 @@ def extract_xml_list(elements):
     flattened = [item.strip() for sublist in keywords for item in sublist]
     remove_blank = filter(None, flattened)
     return remove_blank
+
+def setrootelement(element, nsmap=None):
+        if etree.__name__ == 'lxml.etree':  # apply nsmap
+            return etree.Element(nspath_eval(element), nsmap=nsmap)
+        else:
+            e = etree.Element(nspath_eval(element))
+            if nsmap is not None:
+                for m in nsmap:
+                    e.set('xmlns:%s' % m, nsmap[m])
+            return e

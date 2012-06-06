@@ -61,7 +61,7 @@ class WebFeatureService_2_0_0(object):
         @param parse_remote_metadata: whether to fully process MetadataURL elements
         @return: initialized WebFeatureService_2_0_0 object
         """
-        obj=object.__new__(self)
+        obj = object.__new__(self)
         obj.__init__(url, version, xml, parse_remote_metadata)
         self.log = logging.getLogger()
         consoleh  = logging.StreamHandler()
@@ -99,7 +99,7 @@ class WebFeatureService_2_0_0(object):
         featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns.get_namespace('wfs')))
         featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns.get_namespace('wfs')))
         for f in featuretypeelems:  
-            kwds=f.findall(nspath('Keywords/Keyword'))
+            kwds = f.findall(nspath('Keywords/Keyword'))
             if kwds is not None:
                 for kwd in kwds[:]:
                     if kwd.text not in self.identification.keywords:
@@ -111,7 +111,7 @@ class WebFeatureService_2_0_0(object):
         self.provider=ServiceProvider(serviceproviderelem)
         #serviceOperations metadata 
         op = self._capabilities.find(nspath_eval('ows:OperationsMetadata', _ows_version))
-        self.operations = OperationsMetadata(op, _ows_version).operations
+        self.operations = OperationsMetadata(op, ns.get_versioned_namespace('ows', _ows_version)).operations
                    
         #serviceContents metadata: our assumption is that services use a top-level 
         #layer as a metadata organizer, nothing more. 
@@ -120,7 +120,7 @@ class WebFeatureService_2_0_0(object):
         featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns.get_namespace('wfs')))
         features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType',ns.get_namespace('wfs')))
         for feature in features:
-            cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
+            cm = ContentMetadata(feature, featuretypelist, parse_remote_metadata)
             self.contents[cm.id]=cm
         
         #exceptions
@@ -136,7 +136,7 @@ class WebFeatureService_2_0_0(object):
     
     def items(self):
         '''supports dict-like items() access'''
-        items=[]
+        items = []
         for item in self.contents:
             items.append((item,self.contents[item]))
         return items
@@ -346,6 +346,7 @@ class ContentMetadata:
 
         # bboxes
         self.boundingBoxWGS84 = None
+        self.boundingBox = None
         b = elem.find(nsp_ows('WGS84BoundingBox'))
         if b is not None:
             lc = b.find(nsp_ows("LowerCorner"))
@@ -354,13 +355,13 @@ class ContentMetadata:
             ur = [float(s) for s in uc.text.split()]
             self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
 
-        # there is no such thing as a bounding box
-        # make copy of the WGS84BoundingBox
-        self.boundingBox = (self.boundingBoxWGS84[0],
-                            self.boundingBoxWGS84[1],
-                            self.boundingBoxWGS84[2],
-                            self.boundingBoxWGS84[3],
-                            Crs("epsg:4326"))
+            # there is no such thing as a bounding box
+            # make copy of the WGS84BoundingBox
+            self.boundingBox = (self.boundingBoxWGS84[0],
+                                self.boundingBoxWGS84[1],
+                                self.boundingBoxWGS84[2],
+                                self.boundingBoxWGS84[3],
+                                Crs("epsg:4326"))
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS'))]
         defaultCrs =  elem.findall(nspath('DefaultCRS',ns.get_namespace('wfs')))

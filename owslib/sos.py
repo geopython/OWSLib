@@ -6,18 +6,20 @@ from urllib import urlencode
 from owslib import ows
 from owslib.crs import Crs
 from owslib.filter import FilterCapabilities
-from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, extract_time
+from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, nspath, extract_time
 from owslib.namespaces import OWSLibNamespaces
 
 def nsp(text):
     return nspath_eval(text)
 
-_ows_version = '1.1.0'
-
-def nsp_ows(text):
-    return nspath_eval(text,_ows_version)
-
 ns = OWSLibNamespaces()
+
+_ows_namespace = ns.get_versioned_namespace('ows','1.1.0')
+
+def nsp_ows(text, namespace=None):
+    if namespace is None:
+        namespace = _ows_namespace
+    return nspath(text, namespace)
 
 class SensorObservationService(object):
     """
@@ -51,7 +53,7 @@ class SensorObservationService(object):
             self._capabilities = reader.read(self.url)
 
         # Avoid building metadata if the response is an Exception
-        se = self._capabilities.find(nsp_ows('ows:ExceptionReport'))
+        se = self._capabilities.find(nsp_ows('ExceptionReport'))
         if se is not None: 
             raise ows.ExceptionReport(se) 
 
@@ -63,16 +65,16 @@ class SensorObservationService(object):
             Set up capabilities metadata objects
         """
         # ows:ServiceIdentification metadata
-        service_id_element = self._capabilities.find(nsp_ows('ows:ServiceIdentification'))
-        self.identification = ows.ServiceIdentification(service_id_element, _ows_version)
+        service_id_element = self._capabilities.find(nsp_ows('ServiceIdentification'))
+        self.identification = ows.ServiceIdentification(service_id_element, _ows_namespace)
         
         # ows:ServiceProvider metadata
-        service_provider_element = self._capabilities.find(nsp_ows('ows:ServiceProvider'))
-        self.provider = ows.ServiceProvider(service_provider_element, _ows_version)
+        service_provider_element = self._capabilities.find(nsp_ows('ServiceProvider'))
+        self.provider = ows.ServiceProvider(service_provider_element, _ows_namespace)
             
         # ows:OperationsMetadata metadata
-        op = self._capabilities.find(nsp_ows('ows:OperationsMetadata'))
-        self.operations = ows.OperationsMetadata(op, _ows_version).operations
+        op = self._capabilities.find(nsp_ows('OperationsMetadata'))
+        self.operations = ows.OperationsMetadata(op, _ows_namespace).operations
           
         # sos:FilterCapabilities
         filters = self._capabilities.find(nsp('sos:Filter_Capabilities'))
@@ -111,8 +113,8 @@ class SensorObservationService(object):
         response = openURL(base_url, data, method, username=self.username, password=self.password).read()
         tr = etree.fromstring(response)
 
-        if tr.tag == nsp("ows:ExceptionReport"):
-            raise ows.ExceptionReport(etree.ElementTree(element=tr), ns.get_versioned_namespace('ows', _ows_version))
+        if tr.tag == nsp_ows("ExceptionReport"):
+            raise ows.ExceptionReport(etree.ElementTree(element=tr), _ows_namespace)
 
         return response
 
@@ -160,8 +162,8 @@ class SensorObservationService(object):
         response = openURL(base_url, data, method, username=self.username, password=self.password).read()
         tr = etree.fromstring(response)
 
-        if tr.tag == nsp("ows:ExceptionReport"):
-            raise ows.ExceptionReport(etree.ElementTree(element=tr), ns.get_versioned_namespace('ows', _ows_version))
+        if tr.tag == nsp_ows("ExceptionReport"):
+            raise ows.ExceptionReport(etree.ElementTree(element=tr), _ows_namespace)
 
         return response
 

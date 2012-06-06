@@ -34,6 +34,8 @@ class OWSLibNamespaces(object):
         'swe200': 'http://www.opengis.net/swe/2.0',
         'wfs': 'http://www.opengis.net/wfs',
         'wcs': 'http://www.opengis.net/wcs',
+        'wps': 'http://www.opengis.net/wps/1.0.0',
+        'wps100': 'http://www.opengis.net/wps/1.0.0',
         'xlink': 'http://www.w3.org/1999/xlink',
         'xs' : 'http://www.w3.org/2001/XMLSchema',
         'xs2': 'http://www.w3.org/XML/Schema',
@@ -81,6 +83,16 @@ class OWSLibNamespaces(object):
             
         return retval
     
+    def get_dict_namespaces(self, keys=None):
+        keys = keys if keys is not None else []
+        retval = {}
+        for key in keys:
+            if key in self.namespace_dict.keys():
+                retval[key] = self.namespace_dict[key]
+                
+        return retval
+
+
     def get_namespaces(self,keys=None):
         '''Retrieves a list of namespaces from the dictionary
             For Example:

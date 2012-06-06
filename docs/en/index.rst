@@ -480,6 +480,15 @@ You can also submit a pre-made request encoded as WPS XML:
 SOS
 ---
 
+GetCapabilities
+
+.. include:: ../../tests/doctests/sos_ndbc_getcapabilities.txt
+
+DescribeSensor / GetObservation
+
+.. include:: ../../tests/doctests/sos_ndbc_getobservation.txt
+
+
 ISO
 ---
 
@@ -493,12 +502,12 @@ ISO
 
 ISO Codelists:
 
-.. include:: ../../tests/iso_codelist.txt
+.. include:: ../../tests/doctests/iso_codelist.txt
 
 CRS Handling
 ------------
 
-.. include:: ../../tests/crs.txt
+.. include:: ../../tests/doctests/crs.txt
 
 Dublin Core
 -----------

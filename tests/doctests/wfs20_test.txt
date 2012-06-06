@@ -63,7 +63,7 @@ Test single item accessor
     
     #Another object that wasn't an object before, test needs to adapt
     >>> wfs['bo:Woods'].crsOptions
-    []
+    [<owslib.crs.Crs object at ...>]
     
     >>> wfs['bo:Woods'].verbOptions
     []
@@ -77,7 +77,6 @@ Expect a KeyError for invalid names
 
 Test operations
 
-	#>>> dir(wfs.operations['GetCapabilities'])
     >>> [op for op in wfs.operations]
     ['DescribeFeatureType', 'GetCapabilities', 'ListStoredQueries', 'GetFeature', 'DescribeStoredQueries']
     

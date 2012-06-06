@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML/1.0.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:swe="http://www.opengis.net/swe/1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sensorML/1.0.1 http://schemas.opengis.net/sensorML/1.0.1/sensorML.xsd" version="1.0.1">
+<!-- You have reached the NDBC TEST DIF SOS Server.  The production server is located at http://sdf.ndbc.noaa.gov/sos/. -->
+  <sml:member>
+    <sml:System gml:id="sensor-41012-adcp0">
+      <gml:description>Sensor metadata for adcp0 on 41012.</gml:description>
+      <sml:identification>
+        <sml:IdentifierList>
+          <sml:identifier name="SensorId">
+            <sml:Term definition="urn:ioos:def:identifier:NOAA:sensorID">
+              <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+              <sml:value>urn:ioos:sensor:wmo:41012::adcp0</sml:value>
+            </sml:Term>
+          </sml:identifier>
+          <sml:identifier name="Short Name">
+            <sml:Term definition="urn:ogc:def:identifier:OGC:shortName">
+              <sml:value>adcp0</sml:value>
+            </sml:Term>
+          </sml:identifier>
+          <sml:identifier name="Long Name">
+            <sml:Term definition="urn:ogc:def:identifier:OGC:longName">
+              <sml:value>Currents</sml:value>
+            </sml:Term>
+          </sml:identifier>
+          <sml:identifier name="Manufacturer Name">
+            <sml:Term definition="urn:ogc:def:identifier:OGC:manufacturerName">
+              <sml:value>Acme Co.</sml:value>
+            </sml:Term>
+          </sml:identifier>
+          <sml:identifier name="Model Number">
+            <sml:Term definition="urn:ogc:def:identifier:OGC:modelNumber">
+              <sml:value>XYZ</sml:value>
+            </sml:Term>
+          </sml:identifier>
+          <sml:identifier name="Serial Number">
+            <sml:Term definition="urn:ogc:def:identifier:OGC:serialNumber">
+              <sml:value>123</sml:value>
+            </sml:Term>
+          </sml:identifier>
+        </sml:IdentifierList>
+      </sml:identification>
+      <sml:contact xlink:role="urn:ogc:def:classifiers:OGC:contactType:operator">
+        <sml:ResponsibleParty>
+          <sml:organizationName>National Data Buoy Center</sml:organizationName>
+          <sml:contactInfo>
+            <sml:address>
+              <sml:country>US</sml:country>
+            </sml:address>
+          </sml:contactInfo>
+        </sml:ResponsibleParty>
+      </sml:contact>
+      <sml:contact xlink:role="urn:ogc:def:classifiers:OGC:contactType:publisher" xlink:href="http://sdf.ndbc.noaa.gov/">
+        <sml:ResponsibleParty>
+          <sml:organizationName>National Data Buoy Center</sml:organizationName>
+          <sml:contactInfo>
+            <sml:phone>
+              <sml:voice>228-688-2805</sml:voice>
+            </sml:phone>
+            <sml:address>
+              <sml:deliveryPoint>Bldg. 3205</sml:deliveryPoint>
+              <sml:city>Stennis Space Center</sml:city>
+              <sml:administrativeArea>MS</sml:administrativeArea>
+              <sml:postalCode>39529</sml:postalCode>
+              <sml:country>USA</sml:country>
+              <sml:electronicMailAddress>webmaster.ndbc@noaa.gov</sml:electronicMailAddress>
+            </sml:address>
+          </sml:contactInfo>
+        </sml:ResponsibleParty>
+      </sml:contact>
+      <sml:documentation xlink:arcrole="qualityControlDocument">
+        <sml:Document>
+          <gml:description>Handbook of Automated Data Quality Control Checks and Procedures, National Data Buoy Center, August 2009</gml:description>
+          <sml:format>pdf</sml:format>
+          <sml:onlineResource xlink:href="http://www.ndbc.noaa.gov/NDBCHandbookofAutomatedDataQualityControl2009.pdf"/>
+        </sml:Document>
+      </sml:documentation>
+      <sml:location>
+        <gml:Point gml:id="STATION-LOCATION-41012" srsName="urn:ogc:crs:epsg::4326">
+          <gml:coordinates>30.04 -80.55</gml:coordinates>
+        </gml:Point>
+      </sml:location>
+    </sml:System>
+  </sml:member>
+</sml:SensorML>

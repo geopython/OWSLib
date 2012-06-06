@@ -16,7 +16,7 @@ Currently supports version 1.1.0 (04-095).
 """
 
 from owslib.etree import etree
-from owslib.utils import nspath_eval
+from owslib.util import nspath_eval
 from owslib.namespaces import OWSLibNamespaces
 
 # default variables
