@@ -1,0 +1,296 @@
+Imports
+
+    >>> from owslib.sos import SensorObservationService as sos
+    >>> from owslib.ows import Operation
+    >>> from owslib.filter import FilterCapabilities
+    >>> from tests.utils import resource_file
+    >>> from owslib.crs import Crs
+    >>> from datetime import datetime
+
+Initialize
+
+    >>> xml = open(resource_file('sos_ndbc_getcapabilities.xml'), 'r').read()
+    >>> ndbc = sos(None, xml=xml)
+
+ServiceIdentification
+
+    >>> id = ndbc.identification
+
+    >>> id.service
+    'OGC:SOS'
+
+    >>> id.version
+    '1.0.0'
+
+    >>> id.title
+    'National Data Buoy Center SOS'
+
+    >>> id.abstract
+    'National Data Buoy Center SOS'
+
+    >>> id.keywords
+    ['Weather', 'Ocean Currents', 'Air Temperature', 'Water Temperature', 'Conductivity', 'Salinity', 'Barometric Pressure', 'Water Level', 'Waves', 'Winds', 'NDBC']
+
+    >>> id.fees
+    'NONE'
+
+    >>> id.accessconstraints
+    'NONE'
+
+
+ServiceProvider
+
+    >>> p = ndbc.provider
+
+    >>> p.name
+    'National Data Buoy Center'
+
+    >>> p.url
+    'http://sdf.ndbc.noaa.gov/'
+
+
+    ServiceContact
+
+        >>> sc = p.contact
+
+        Unused fields should return nothing
+        >>> sc.role
+        >>> sc.position
+        >>> sc.instructions
+        >>> sc.organization
+        >>> sc.fax
+        >>> sc.hours
+
+        >>> sc.name
+        'Webmaster'
+
+        >>> sc.phone
+        '228-688-2805'
+
+        >>> sc.address
+        'Bldg. 3205'
+
+        >>> sc.city
+        'Stennis Space Center'
+
+        >>> sc.region
+        'MS'
+
+        >>> sc.postcode
+        '39529'
+
+        >>> sc.country
+        'USA'
+
+        >>> sc.email
+        'webmaster.ndbc@noaa.gov'
+
+OperationsMetadata
+
+    >>> o = ndbc.operations
+    >>> len(o)
+    3
+
+    Name
+    >>> o.keys()
+    ['GetCapabilities', 'DescribeSensor', 'GetObservation']
+
+    Get by name
+    >>> getcap = ndbc.get_operation_by_name('GetCapabilities')
+    >>> isinstance(getcap, Operation)
+    True
+    
+    Get by name (case insensitive)
+    >>> getcap = ndbc.get_operation_by_name('getcapabilities')
+    >>> isinstance(getcap, Operation)
+    True
+
+    # GetCapabilities
+    >>> getcap.constraints
+    {}
+
+    >>> getcap.parameters
+    {'version': {'values': ['1.0.0']}, 'Sections': {'values': ['ServiceIdentification', 'ServiceProvider', 'OperationsMetadata', 'Contents', 'All']}, 'service': {'values': ['SOS']}}
+
+    >>> getcap.methods
+    {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+
+
+    # DescribeSensor
+    >>> descsen = ndbc.get_operation_by_name('describesensor')
+    >>> isinstance(descsen, Operation)
+    True
+
+    >>> descsen.constraints
+    {}
+
+    >>> descsen.parameters
+    {'outputFormat': {'values': ['text/xml;subtype="sensorML/1.0.0"']}, 'version': {'values': ['1.0.0']}, 'service': {'values': ['SOS']}}
+
+    >>> descsen.methods
+    {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+
+
+    # GetObservation
+    >>> getob = ndbc.get_operation_by_name('getobservation')
+    >>> isinstance(getob, Operation)
+    True
+
+    >>> getob.constraints
+    {}
+
+    >>> getob.parameters
+    {'version': {'values': ['1.0.0']}, 'service': {'values': ['SOS']}, 'observedProperty': {'values': ['air_temperature', 'air_pressure_at_sea_level', 'sea_water_electrical_conductivity', 'currents', 'sea_water_salinity', 'sea_floor_depth_below_sea_surface', 'sea_water_temperature', 'waves', 'winds']}}
+
+    >>> getob.methods
+    {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+
+
+
+Filter_Capabilities
+
+    >>> filter = ndbc.filters
+    >>> isinstance(filter, FilterCapabilities)
+    True
+
+
+Contents
+    >>> contents = ndbc.contents
+    >>> len(contents)
+    848
+
+
+    Network
+        >>> network = contents['network-all']
+        >>> network.id
+        'network-all'
+
+        >>> network.name
+        'urn:ioos:network:noaa.nws.ndbc:all'
+        
+        >>> network.description
+        'All stations on the NDBC SOS server'
+        
+        >>> srs = network.srs
+        >>> isinstance(srs, Crs)
+        True
+        >>> srs.getcodeurn()
+        'urn:ogc:def:crs:EPSG::4326'
+        >>> srs.getcode()
+        'EPSG:4326'
+
+        # (left, bottom, right, top)
+        >>> network.bbox 
+        (-179.995, -77.466, 180.0, 80.81)
+        >>> bbsrs = network.bbox_srs
+        >>> isinstance(bbsrs, Crs)
+        True
+        >>> bbsrs.getcodeurn()
+        'urn:ogc:def:crs:EPSG::4326'
+        >>> bbsrs.getcode()
+        'EPSG:4326'
+        
+        >>> bp = network.begin_position
+        >>> isinstance(bp, datetime)
+        True
+        >>> ep = network.end_position
+        >>> isinstance(ep, datetime)
+        True
+        
+        >>> network.result_model
+        'om:Observation'
+
+        >>> procs = network.procedures
+        >>> len(procs)
+        847
+
+        >>> network.observed_properties
+        ['http://mmisw.org/ont/cf/parameter/air_temperature', 'http://mmisw.org/ont/cf/parameter/air_pressure_at_sea_level', 'http://mmisw.org/ont/cf/parameter/sea_water_electrical_conductivity', 'http://mmisw.org/ont/cf/parameter/currents', 'http://mmisw.org/ont/cf/parameter/sea_water_salinity', 'http://mmisw.org/ont/cf/parameter/sea_floor_depth_below_sea_surface', 'http://mmisw.org/ont/cf/parameter/sea_water_temperature', 'http://mmisw.org/ont/cf/parameter/waves', 'http://mmisw.org/ont/cf/parameter/winds']
+
+        >>> foi = network.features_of_interest
+        >>> len(foi)
+        1082
+
+        >>> rfs = network.response_formats
+        >>> len(rfs)
+        5
+        >>> rfs[-1]
+        'application/vnd.google-earth.kml+xml'
+
+        >>> rms = network.response_modes
+        >>> len(rms)
+        1
+        >>> rms[0]
+        'inline'
+
+
+    Station
+
+
+        >>> station = contents['station-zbqn7']
+        >>> station.id
+        'station-zbqn7'
+
+        >>> station.name
+        'urn:ioos:station:wmo:zbqn7'
+
+        >>> station.description
+        "Zeke's Basin, North Carolina"
+        
+        >>> srs = station.srs
+        >>> isinstance(srs, Crs)
+        True
+        >>> srs.getcodeurn()
+        'urn:ogc:def:crs:EPSG::4326'
+        >>> srs.getcode()
+        'EPSG:4326'
+        >>> station.bbox
+        (-77.935, 33.955, -77.935, 33.955)
+        
+        >>> bbsrs = station.bbox_srs
+        >>> isinstance(bbsrs, Crs)
+        True
+        >>> bbsrs.getcodeurn()
+        'urn:ogc:def:crs:EPSG::4326'
+        >>> bbsrs.getcode()
+        'EPSG:4326'
+
+        >>> bp = station.begin_position
+        >>> isinstance(bp, datetime)
+        True
+        >>> ep = station.end_position
+        >>> isinstance(ep, datetime)
+        True
+
+        >>> station.result_model
+        'om:Observation'
+
+        >>> procs = station.procedures
+        >>> len(procs)
+        1
+        >>> procs[0]
+        'urn:ioos:station:wmo:zbqn7'
+
+        >>> ops = station.observed_properties
+        >>> len(ops)
+        3
+        >>> ops[0]
+        'http://mmisw.org/ont/cf/parameter/sea_water_electrical_conductivity'
+
+        >>> foi = station.features_of_interest
+        >>> len(foi)
+        1
+        >>> foi[0]
+        'urn:cgi:Feature:CGI:EarthOcean'
+
+        >>> rfs = station.response_formats
+        >>> len(rfs)
+        5
+        >>> rfs[0]
+        'text/xml;schema="ioos/0.6.1"'
+
+        >>> rm = station.response_modes
+        >>> len(rm)
+        1
+        >>> rm[0]
+        'inline'

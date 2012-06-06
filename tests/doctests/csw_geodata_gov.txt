@@ -1,0 +1,23 @@
+    >>> from owslib.csw import CatalogueServiceWeb as cs
+    >>> c=cs('http://geo.data.gov/geoportal/csw/discovery')
+    >>> c.identification.title
+    'Geo.data.gov CS-W'
+    >>> c.getrecords(keywords=['birds'])
+    >>> c.results['nextrecord']
+    11
+    >>> c.getrecords(keywords=['water'], maxrecords=25)
+    >>> c.results['nextrecord']
+    26
+
+    >>> c.getdomain('GetRecords.outputSchema')
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: 'OperationNotSupported - root-node / Operation not supported: locator=root-node'
+
+    >>> c.getrecords('downloadableData')
+    >>> c.results['returned']
+    10
+    >>> c.getrecords(cql='title = \'water\'')
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: 'InvalidParameterValue - csw:CqlText / Invalid parameter value: locator=csw:CqlText'

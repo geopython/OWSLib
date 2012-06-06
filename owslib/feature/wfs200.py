@@ -9,8 +9,9 @@
 #owslib imports:
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue
+from owslib.util import nspath, testXMLValue, nspath_eval
 from owslib.crs import Crs
+from owslib.namespaces import OWSLibNamespaces
 
 #other imports
 import cgi
@@ -33,13 +34,12 @@ hdlr.setFormatter(formatter)
 log.addHandler(hdlr)
 log.setLevel(logging.DEBUG)
 
-WFS_NAMESPACE = 'http://www.opengis.net/wfs/2.0'
-OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
-OGC_NAMESPACE = 'http://www.opengis.net/ogc'
-GML_NAMESPACE = 'http://www.opengis.net/gml'
-FES_NAMESPACE = 'http://www.opengis.net/fes/2.0'
+ns = OWSLibNamespaces()
 
+_ows_version='1.0.0'
 
+def nsp_ows(title):
+    return nspath_eval(title,_ows_version)
 
 class ServiceException(Exception):
     pass
@@ -84,22 +84,22 @@ class WebFeatureService_2_0_0(object):
         self._capabilities = None
         reader = WFSCapabilitiesReader(self.version)
         if xml:
-            self._capabilities = reader.readString(xml)
+            self._capabilities = reader.read_string(xml)
         else:
             self._capabilities = reader.read(self.url)
-        self._buildMetadata(parse_remote_metadata)
+        self._build_metadata(parse_remote_metadata)
     
-    def _buildMetadata(self, parse_remote_metadata=False):
+    def _build_metadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
         
         #serviceIdentification metadata
-        serviceidentelem=self._capabilities.find(nspath('ServiceIdentification'))
+        serviceidentelem=self._capabilities.find(nsp_ows('ows:ServiceIdentification'))
         self.identification=ServiceIdentification(serviceidentelem)  
         #need to add to keywords list from featuretypelist information:
-        featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns=WFS_NAMESPACE))
-        featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns=WFS_NAMESPACE))
+        featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns.get_namespace('wfs')))
+        featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns.get_namespace('wfs')))
         for f in featuretypeelems:  
-            kwds=f.findall(nspath('Keywords/Keyword',ns=OWS_NAMESPACE))
+            kwds=f.findall(nspath('Keywords/Keyword'))
             if kwds is not None:
                 for kwd in kwds[:]:
                     if kwd.text not in self.identification.keywords:
@@ -107,25 +107,21 @@ class WebFeatureService_2_0_0(object):
 	
    
         #TODO: update serviceProvider metadata, miss it out for now
-        serviceproviderelem=self._capabilities.find(nspath('ServiceProvider'))
-        self.provider=ServiceProvider(serviceproviderelem)   
-        
+        serviceproviderelem=self._capabilities.find(nsp_ows('ows:ServiceProvider'))
+        self.provider=ServiceProvider(serviceproviderelem)
         #serviceOperations metadata 
-        self.operations=[]
-        
-        for elem in self._capabilities.find(nspath('OperationsMetadata'))[:]:
-            if elem.tag !=nspath('ExtendedCapabilities'):
-                self.operations.append(OperationsMetadata(elem))
+        op = self._capabilities.find(nspath_eval('ows:OperationsMetadata', _ows_version))
+        self.operations = OperationsMetadata(op, _ows_version).operations
                    
         #serviceContents metadata: our assumption is that services use a top-level 
         #layer as a metadata organizer, nothing more. 
         
         self.contents={} 
-        featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns=WFS_NAMESPACE))
-        features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType', ns=WFS_NAMESPACE))
+        featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns.get_namespace('wfs')))
+        features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType',ns.get_namespace('wfs')))
         for feature in features:
             cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
-            self.contents[cm.id]=cm       
+            self.contents[cm.id]=cm
         
         #exceptions
         self.exceptions = [f.text for f \
@@ -147,7 +143,7 @@ class WebFeatureService_2_0_0(object):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   method='Get'):
+                   method=nspath('Get')):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
         Parameters
@@ -175,9 +171,8 @@ class WebFeatureService_2_0_0(object):
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
         """
-        #log.debug(self.getOperationByName('GetFeature'))
-        base_url = self.getOperationByName('GetFeature').methods[method]['url']
-
+        #log.debug(self.get_operation_by_name('GetFeature'))
+        base_url = self.get_operation_by_name('GetFeature').methods[method]['url']
         if method.upper() == "GET":
             base_url = base_url if base_url.endswith("?") else base_url+"?"
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
@@ -186,7 +181,7 @@ class WebFeatureService_2_0_0(object):
         if featureid:
             request['featureid'] = ','.join(featureid)
         elif bbox:
-#            request['bbox'] = ','.join([str(x) for x in bbox])
+            #request['bbox'] = ','.join([str(x) for x in bbox])
             request['query'] ='<Query xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" xmlns:csml="http://ndg.nerc.ac.uk/csml"><ogc:Filter><ogc:BBOX><gml:Envelope srsName="WGS84"><gml:lowerCorner>%s %s</gml:lowerCorner><gml:upperCorner>%s %s</gml:upperCorner></gml:Envelope></ogc:BBOX></ogc:Filter></Query>'%(bbox[1],bbox[0],bbox[3],bbox[2])
         elif filter:
             request['query'] = str(filter)
@@ -226,8 +221,8 @@ class WebFeatureService_2_0_0(object):
             if not have_read:
                 data = u.read()
             tree = etree.fromstring(data)
-            if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
-                se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
+            if tree.tag == "{%s}ServiceExceptionReport" % ns.get_namespace('ogc'):
+                se = tree.find(nspath('ServiceException', ns.get_namespace('ogc')))
                 raise ServiceException, str(se.text).strip()
 
             return StringIO(data)
@@ -237,8 +232,8 @@ class WebFeatureService_2_0_0(object):
             return u
 
     def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get'),**kwargs):
-        ''' the WFS GetPropertyValue method'''         
-        base_url = self.getOperationByName('GetPropertyValue').methods[method]['url']
+        ''' the WFS GetPropertyValue method'''     
+        base_url = self.get_operation_by_name('GetPropertyValue').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetPropertyValue'}
         if query:
             request['query'] = str(query)
@@ -264,25 +259,25 @@ class WebFeatureService_2_0_0(object):
         method=nspath('Get')
         
         #first make the ListStoredQueries response and save the results in a dictionary if form {storedqueryid:(title, returnfeaturetype)}
-        base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
+        base_url = self.get_operation_by_name('ListStoredQueries').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         data = urlencode(request)
         u = urlopen(base_url + data)
         tree=etree.fromstring(u.read())
-        base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
+        base_url = self.get_operation_by_name('ListStoredQueries').methods[method]['url']
         tempdict={}       
         for sqelem in tree[:]:
             title=rft=id=None
             id=sqelem.get('id')
             for elem in sqelem[:]:
-                if elem.tag==nspath('Title', WFS_NAMESPACE):
+                if elem.tag==nspath('Title',ns.get_namespace('wfs')):
                     title=elem.text
-                elif elem.tag==nspath('ReturnFeatureType', WFS_NAMESPACE):
+                elif elem.tag==nspath('ReturnFeatureType',ns.get_namespace('wfs')):
                     rft=elem.text
             tempdict[id]=(title,rft)        #store in temporary dictionary
         
         #then make the DescribeStoredQueries request and get the rest of the information about the stored queries 
-        base_url = self.getOperationByName('DescribeStoredQueries').methods[method]['url']
+        base_url = self.get_operation_by_name('DescribeStoredQueries').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         data = urlencode(request)
         u = urlopen(base_url + data)
@@ -292,9 +287,9 @@ class WebFeatureService_2_0_0(object):
             params=[] #list to store parameters for the stored query description
             id =sqelem.get('id')
             for elem in sqelem[:]:
-                if elem.tag==nspath('Abstract', WFS_NAMESPACE):
+                if elem.tag==nspath('Abstract',ns.get_namespace('wfs')):
                     abstract=elem.text
-                elif elem.tag==nspath('Parameter', WFS_NAMESPACE):
+                elif elem.tag==nspath('Parameter',ns.get_namespace('wfs')):
                     newparam=Parameter(elem.get('name'), elem.get('type'))
                     params.append(newparam)
             tempdict2[id]=(abstract, params) #store in another temporary dictionary
@@ -307,12 +302,14 @@ class WebFeatureService_2_0_0(object):
         return sqs
     storedqueries = property(_getStoredQueries, None)
 
-    def getOperationByName(self, name):
-        """Return a named content item."""
-        for item in self.operations:
-            if item.name == name:
-                return item
-        raise KeyError, "No operation named %s" % name
+    def get_operation_by_name(self, name): 
+        """
+            Return a Operation item by name, case insensitive
+        """
+        for item in self.operations.keys():
+            if item.lower() == name.lower():
+                return self.operations[item]
+        raise KeyError, "No Operation named %s" % name
 
 class StoredQuery(object):
     '''' Class to describe a storedquery '''
@@ -337,26 +334,27 @@ class ContentMetadata:
 
     def __init__(self, elem, parent, parse_remote_metadata=False):
         """."""
-        self.id = elem.find(nspath('Name',ns=WFS_NAMESPACE)).text
-        self.title = elem.find(nspath('Title',ns=WFS_NAMESPACE)).text
-        abstract = elem.find(nspath('Abstract',ns=WFS_NAMESPACE))
+        self.id = elem.find(nspath('Name',ns.get_namespace('wfs'))).text
+        self.title = elem.find(nspath('Title',ns.get_namespace('wfs'))).text
+        abstract = elem.find(nspath('Abstract',ns.get_namespace('wfs')))
         if abstract is not None:
             self.abstract = abstract.text
         else:
             self.abstract = None
-        self.keywords = [f.text for f in elem.findall(nspath('Keywords',ns=WFS_NAMESPACE))]
+
+        self.keywords = [f.text for f in elem.findall(nspath('Keywords',ns.get_namespace('wfs')))]
 
         # bboxes
         self.boundingBoxWGS84 = None
-        b = elem.find(nspath('WGS84BoundingBox',ns=OWS_NAMESPACE))
+        b = elem.find(nsp_ows('WGS84BoundingBox'))
         if b is not None:
-            lc = b.find(nspath("LowerCorner",ns=OWS_NAMESPACE))
-            uc = b.find(nspath("UpperCorner",ns=OWS_NAMESPACE))
+            lc = b.find(nsp_ows("LowerCorner"))
+            uc = b.find(nsp_ows("UpperCorner"))
             ll = [float(s) for s in lc.text.split()]
             ur = [float(s) for s in uc.text.split()]
             self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
 
-        # there is no such think as bounding box
+        # there is no such thing as a bounding box
         # make copy of the WGS84BoundingBox
         self.boundingBox = (self.boundingBoxWGS84[0],
                             self.boundingBoxWGS84[1],
@@ -364,16 +362,16 @@ class ContentMetadata:
                             self.boundingBoxWGS84[3],
                             Crs("epsg:4326"))
         # crs options
-        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('OtherCRS',ns=WFS_NAMESPACE))]
-        defaultCrs =  elem.findall(nspath('DefaultCRS',ns=WFS_NAMESPACE))
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS'))]
+        defaultCrs =  elem.findall(nspath('DefaultCRS',ns.get_namespace('wfs')))
         if len(defaultCrs) > 0:
             self.crsOptions.insert(-1,Crs(defaultCrs[0].text))
 
         # verbs
         self.verbOptions = [op.tag for op \
-            in parent.findall(nspath('Operations/*',ns=WFS_NAMESPACE))]
+            in parent.findall(nspath('Operations/*',ns.get_namespace('wfs')))]
         self.verbOptions + [op.tag for op \
-            in elem.findall(nspath('Operations/*',ns=WFS_NAMESPACE)) \
+            in elem.findall(nspath('Operations/*',ns.get_namespace('wfs'))) \
             if op.tag not in self.verbOptions]
         
         #others not used but needed for iContentMetadata harmonisation
@@ -444,7 +442,7 @@ class WFSCapabilitiesReader(object):
         u = urlopen(request)
         return etree.fromstring(u.read())
 
-    def readString(self, st):
+    def read_string(self, st):
         """Parse a WFS capabilities document, returning an
         instance of WFSCapabilitiesInfoset
 

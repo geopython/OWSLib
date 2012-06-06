@@ -9,9 +9,9 @@
 #example: used in conjunction with ows lib wcs:
 
 #from owslib import wcsdecoder
-#u=wcs.getcoverage(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='application/netcdf', store='true')
+#u=wcs.get_coverage(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),format='application/netcdf', store='true')
 #decoder=wcsdecoder.WCSDecoder(u)
-#decoder.getCoverages()
+#decoder.get_coverages()
 
 import os
 from owslib.etree import etree
@@ -36,7 +36,7 @@ class WCSDecoder(object):
             self.urlType='Multipart'
         
       
-    def getCoverages(self, unpackdir='./unpacked'):
+    def get_coverages(self, unpackdir='./unpacked'):
         if self.urlType=='XML': 
             paths=[]              
             u_xml = self.u.read()
@@ -51,7 +51,7 @@ class WCSDecoder(object):
             #Decode multipart mime and return fileobjects
             u_mpart=self.u.read()
             mpart =MpartMime(u_mpart)
-            paths= mpart.unpackToDir(unpackdir)
+            paths= mpart.unpack_to_dir(unpackdir)
         return paths
 
 class MpartMime(object):
@@ -59,13 +59,13 @@ class MpartMime(object):
         """ mpartmime is a multipart mime file  that has already been read in."""
         self.mpartmime=mpartmime
         
-    def unpackToDir(self, unpackdir):
+    def unpack_to_dir(self, unpackdir):
         """ unpacks contents of Multipart mime to a given directory"""
         
         names=[]
         #create the directory if it doesn't exist:
         try:
-            os.mkdir(unpackdir)
+            os.mkdir(unpack_to_dir)
         except OSError, e:
             # Ignore directory exists error
             if e.errno <> errno.EEXIST:
@@ -90,7 +90,7 @@ class MpartMime(object):
                     # Use a generic extension
                     ext = '.bin'
                 filename = 'part-%03d%s' % (counter, ext)                
-            fullpath=os.path.join(unpackdir, filename)
+            fullpath=os.path.join(unpack_to_dir, filename)
             names.append(fullpath)
             fp = open(fullpath, 'wb')
             fp.write(part.get_payload(decode=True))

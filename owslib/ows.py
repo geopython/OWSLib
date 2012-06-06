@@ -17,151 +17,128 @@ Currently supports version 1.1.0 (06-121r3).
 
 from owslib.etree import etree
 from owslib import crs, util
+from owslib.util import testXMLValue, testXMLAttribute, nspath_eval, xmltag_split, dict_union, extract_xml_list
+from owslib.namespaces import OWSLibNamespaces
 
-OWS_NAMESPACE_1_0_0 = 'http://www.opengis.net/ows'
-OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
-OWS_NAMESPACE_2_0 = 'http://www.opengis.net/ows/2.0'
-XSI_NAMESPACE       = 'http://www.w3.org/2001/XMLSchema-instance'
-XLINK_NAMESPACE     = 'http://www.w3.org/1999/xlink'
+_ows_version = '1.0.0'
 
-DEFAULT_OWS_NAMESPACE=OWS_NAMESPACE_1_1_0     #Use this as default for OWSCommon objects
+ns = OWSLibNamespaces()
 
-class OwsCommon(object):
-    """Initialize OWS Common object"""
-    def __init__(self,version):
-        self.version = version
-        if version == '1.0.0':
-            self.namespace = OWS_NAMESPACE_1_0_0
-        else:
-            self.namespace = OWS_NAMESPACE_1_1_0
+def ns_ows(item):
+    return nspath_eval(item,_ows_version)
     
 class ServiceIdentification(object):
     """Initialize an OWS Common ServiceIdentification construct"""
-    def __init__(self,infoset,namespace=DEFAULT_OWS_NAMESPACE): 
+    def __init__(self, infoset, ows_version='1.0.0'): 
         self._root = infoset
+        global _ows_version
+        _ows_version = ows_version
 
-        val = self._root.find(util.nspath('Title', namespace))
-        self.title = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('Abstract', namespace))
-        self.abstract = util.testXMLValue(val)
-
-        self.keywords = [f.text for f in self._root.findall(util.nspath('Keywords/Keyword', namespace))]
-
-        val = self._root.find(util.nspath('AccessConstraints', namespace))
-        self.accessconstraints = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('Fees', namespace))
-        self.fees = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('ServiceType', namespace))
-        self.type = util.testXMLValue(val)
-        self.service=self.type #alternative? keep both?discuss
-
-        val = self._root.find(util.nspath('ServiceTypeVersion', namespace))
-        self.version = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('Profile', namespace))
-        self.profile = util.testXMLValue(val)
+        self.title    = testXMLValue(self._root.find(ns_ows('ows:Title')))
+        self.abstract = testXMLValue(self._root.find(ns_ows('ows:Abstract')))
+        self.keywords = extract_xml_list(self._root.findall(ns_ows('ows:Keywords/ows:Keyword')))
+        self.accessconstraints = testXMLValue(self._root.find(ns_ows('ows:AccessConstraints')))
+        self.fees = testXMLValue(self._root.find(ns_ows('ows:Fees')))
+        self.type = util.testXMLValue(self._root.find(ns_ows('ows:ServiceType')))
+        self.service = self.type # LOOK: duplicate type as service here
+        self.version = util.testXMLValue(self._root.find(ns_ows('ows:ServiceTypeVersion')))
+        self.profile = util.testXMLValue(self._root.find(ns_ows('ows:Profile')))
 
 class ServiceProvider(object):
     """Initialize an OWS Common ServiceProvider construct"""
-    def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
-        self._root = infoset
-        val = self._root.find(util.nspath('ProviderName', namespace))
-        self.name = util.testXMLValue(val)
-        self.contact = ServiceContact(infoset, namespace)
-        val = self._root.find(util.nspath('ProviderSite', namespace))
-        if val is not None:
-            urlattrib=val.attrib[util.nspath('href', XLINK_NAMESPACE)]
-            self.url = util.testXMLValue(urlattrib, True)
-        else:
-            self.url =None
+    def __init__(self, element, ows_version='1.0.0'):
+        self._root = element
+        global _ows_version
+        _ows_version = ows_version
+
+        self.name = testXMLValue(self._root.find(ns_ows('ows:ProviderName')))
+        self.url = testXMLAttribute(self._root.find(ns_ows("ows:ProviderSite")),nspath_eval('xlink:href'))
+        self.contact = ServiceContact(self._root.find(ns_ows("ows:ServiceContact")),ows_version)
 
 class ServiceContact(object):
     """Initialize an OWS Common ServiceContact construct"""
-    def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
-        self._root = infoset
-        val = self._root.find(util.nspath('ProviderName', namespace))
-        self.name = util.testXMLValue(val)
+    def __init__(self, element, ows_version='1.0.0'):
+        self._root = element
+        global _ows_version
+        _ows_version = ows_version
         
-        self.organization=util.testXMLValue(self._root.find(util.nspath('ContactPersonPrimary/ContactOrganization', namespace)))
-        
-        val = self._root.find(util.nspath('ProviderSite', namespace))
-        if val is not None:
-            self.site = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
-        else:
-            self.site = None
-
-        val = self._root.find(util.nspath('ServiceContact/Role', namespace))
-        self.role = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('ServiceContact/IndividualName', namespace))
-        self.name = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/PositionName', namespace))
-        self.position = util.testXMLValue(val)
- 
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Phone/Voice', namespace))
-        self.phone = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Phone/Facsimile', namespace))
-        self.fax = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/DeliveryPoint', namespace))
-        self.address = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/City', namespace))
-        self.city = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/AdministrativeArea', namespace))
-        self.region = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/PostalCode', namespace))
-        self.postcode = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/Country', namespace))
-        self.country = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/ElectronicMailAddress', namespace))
-        self.email = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/OnlineResource', namespace))
-        if val is not None:
-            self.url = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
-        else:
-            self.url = None
-
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/HoursOfService', namespace))
-        self.hours = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/ContactInstructions', namespace))
-        self.instructions = util.testXMLValue(val)
+        self.name = testXMLValue(self._root.find(ns_ows('ows:IndividualName')))
+        self.role = testXMLValue(self._root.find(ns_ows('ows:Role')))
+        self.position = testXMLValue(self._root.find(ns_ows('ows:PositionName')))
+        self.email = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:ElectronicMailAddress')))
+        self.address = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:DeliveryPoint')))
+        self.city = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:City')))
+        self.region = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:AdministrativeArea')))
+        self.postcode = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:PostalCode')))
+        self.country = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:Country')))
+        self.city = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:City')))
+        self.phone = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Phone/ows:Voice')))
+        self.fax = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Phone/ows:Facsimile')))
+        self.hours = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:HoursOfService')))
+        self.instructions = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:ContactInstructions')))
+        self.organization = testXMLValue(self._root.find(ns_ows('ows:ContactPersonPrimary/ows:ContactOrganization')))
+        self.url = testXMLAttribute(self._root.find(ns_ows("ows:ContactInfo/ows:nlineResource")),nspath_eval('xlink:href'))
    
-class OperationsMetadata(object):
-    """Initialize an OWS OperationMetadata construct"""
-    def __init__(self,elem,namespace=DEFAULT_OWS_NAMESPACE):
-        self.name = elem.attrib['name']
-        self.formatOptions = ['text/xml']
-        methods = []
-        parameters = []
-        constraints = []
+class Operation(object):
+    """Initialize an OWS Operation construct"""
+    def __init__(self, element, ows_version='1.0.0'):
+        self._root = element
+        global _ows_version
+        _ows_version = ows_version
 
-        for verb in elem.findall(util.nspath('DCP/HTTP/*', namespace)):
-            methods.append((util.xmltag_split(verb.tag), {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
+        self.name = testXMLAttribute(self._root,'name')
+
+        methods = []
+        for verb in self._root.findall(ns_ows('ows:DCP/ows:HTTP/*')):
+            url = testXMLAttribute(verb, nspath_eval('xlink:href'))
+            methods.append((xmltag_split(verb.tag), {'url': url}))
         self.methods = dict(methods)
 
-        for parameter in elem.findall(util.nspath('Parameter', namespace)):
-            parameters.append((parameter.attrib['name'], {'values': [i.text for i in parameter.findall(util.nspath('Value', namespace))]}))
+        parameters = []
+        for parameter in self._root.findall(ns_ows('ows:Parameter')):
+            parameters.append((testXMLAttribute(parameter,'name'), {'values': [i.text for i in parameter.findall(ns_ows('.//ows:Value'))]}))
         self.parameters = dict(parameters)
 
-        for constraint in elem.findall(util.nspath('Constraint', namespace)):
-            constraints.append((constraint.attrib['name'], {'values': [i.text for i in constraint.findall(util.nspath('Value', namespace))]}))
+        constraints = []
+        for constraint in self._root.findall(ns_ows('ows:Constraint')):
+            constraints.append((testXMLAttribute(constraint,'name'), {'values': [i.text for i in constraint.findall(ns_ows('.//ows:Value'))]}))
         self.constraints = dict(constraints)
+
+
+class OperationsMetadata(object):
+    """Initialize an OWS OperationMetadata construct"""
+    def __init__(self, element, ows_version='1.0.0'):
+        self._root = element
+        global _ows_version
+        _ows_version = ows_version
+
+        self.operations = {}
+
+        # There can be parent parameters and constraints
+
+        parameters = []
+        for parameter in self._root.findall(ns_ows('ows:Parameter')):
+            parameters.append((testXMLAttribute(parameter,'name'), {'values': [i.text for i in parameter.findall(ns_ows('.//ows:Value'))]}))
+        parameters = dict(parameters)
+
+        constraints = []
+        for constraint in self._root.findall(ns_ows('ows:Constraint')):
+            constraints.append((testXMLAttribute(constraint,'name'), {'values': [i.text for i in constraint.findall(ns_ows('.//ows:Value'))]}))
+        constraints = dict(constraints)
+
+        for op in self._root.findall(ns_ows('ows:Operation')):
+            co = Operation(op, ows_version)
+            # Parent objects get overriden by children elements
+            co.parameters = dict_union(parameters, co.parameters)
+            co.constraints = dict_union(constraints, co.constraints)
+            self.operations[co.name] = co
+
+
 
 class BoundingBox(object):
     """Initialize an OWS BoundingBox construct"""
-    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE): 
+    def __init__(self, elem, namespace=None): 
+        global _ows_version
         self.minx = None
         self.miny = None
         self.maxx = None
@@ -178,6 +155,9 @@ class BoundingBox(object):
             self.dimensions = int(util.testXMLValue(val, True))
         else:  # assume 2
             self.dimensions = 2
+            
+        if namespace is None:
+            namespace = ns.get_versioned_namespace('ows', _ows_version)
 
         val = elem.find(util.nspath('LowerCorner', namespace))
         tmp = util.testXMLValue(val)
@@ -202,8 +182,13 @@ class BoundingBox(object):
 class ExceptionReport(Exception):
     """OWS ExceptionReport"""
 
-    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
+    def __init__(self, elem, namespace=None):
+        global _ows_version
         self.exceptions = []
+        
+        if namespace is None:
+            namespace = ns.get_versioned_namespace('ows',_ows_version)
+        
         for i in elem.findall(util.nspath('Exception', namespace)):
             tmp = {}
             val = i.attrib.get('exceptionCode')
@@ -217,8 +202,8 @@ class ExceptionReport(Exception):
         # set topmost stacktrace as return message
         self.code = self.exceptions[0]['exceptionCode']
         self.locator = self.exceptions[0]['locator']
-        self.msg = self.exceptions[0]['ExceptionText']
-        self.xml = etree.tostring(elem)
+        self.msg = ','.join(map(lambda x: "%s - %s / %s" % (x['exceptionCode'], x['locator'], x['ExceptionText']), self.exceptions))
+        self.xml = etree.tostring(elem.getroot())
 
     def __str__(self):
         return repr(self.msg)

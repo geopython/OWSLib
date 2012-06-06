@@ -1,0 +1,15 @@
+Testing OWSLib
+==============
+
+The OWSLib module is tested with the help of distribute and py.test
+
+  http://pypi.python.org/pypi/distribute
+  http://pypi.python.org/pypi/pytest
+
+To run all tests:
+
+  $ python setup.py test
+
+To run a single test:
+
+	$ python -m pytest path_to_test

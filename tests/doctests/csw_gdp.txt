@@ -1,0 +1,53 @@
+    >>> from owslib.csw import CatalogueServiceWeb as cs
+    >>> c=cs('http://data.glos.us/metadata/srv/en/csw',timeout=30)
+    >>> c.identification.title
+    'Great Lakes Metadata Catalog'
+    >>> c.identification.version
+    '2.0.2'
+    >>> c.provider.name
+    'GeoNetwork opensource'
+    >>> c.getdomain('GetRecords.outputSchema')
+    >>> c.response
+    '<?xml version="1.0" encoding="UTF-8"?>\r\n<csw:GetDomainResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2">\r\n  <csw:DomainValues type="csw:Record">\r\n    <csw:ParameterName>GetRecords.outputSchema</csw:ParameterName>\r\n    <csw:ListOfValues>\r\n      <csw:Value>http://www.opengis.net/cat/csw/2.0.2</csw:Value>\r\n      <csw:Value>http://www.isotc211.org/2005/gmd</csw:Value>\r\n    </csw:ListOfValues>\r\n  </csw:DomainValues>\r\n</csw:GetDomainResponse>\r\n\r\n'
+    >>> c.getrecords()
+    >>> c.results['matches']
+    202
+    >>> c.results['returned']
+    10
+    >>> c.records['de66bb8c-beae-44c7-89cc-93d6c5132056'].title
+    '2007 U.S. Shipping Data for Great Lakes Ports'
+    >>> c.records['de66bb8c-beae-44c7-89cc-93d6c5132056'].abstract
+    'Dataset includes details on individual vessel movements in/out of U.S. Great Lakes ports for the 2007 shiiping season.  Data for each individual movement includes: vessel, commodity, tonnage, origin port, destination port'
+    >>> c.getrecordbyid(['de66bb8c-beae-44c7-89cc-93d6c5132056'])
+    >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd')
+    >>> c.exceptionreport
+    >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd',maxrecords=2)
+    >>> c.results['returned']
+    2
+    >>> for record in c.records:
+    ...    c.records[record].identification.title
+    'NOAA/GLERL Lake Michigan-Huron Monthly Component Net Basin Supply Estimates 1948-2008'
+    'Lake Superior latent and sensible heat fluxes  - at Stannard Rock lighthouse'
+    >>> for record in c.records:
+    ...    c.records[record].identifier
+    'f16a5ef3-40cb-462d-a407-7a26c57cfd4f'
+    '9af6502d-fc02-4471-8559-77ffc6b05bad'
+    >>> for record in c.records:
+    ...    c.records[record].stdname
+    'ISO 19115:2003/19139'
+    'ISO 19115:2003/19139'
+    >>> for record in c.records:
+    ...    c.records[record].stdver
+    'Version 3.14'
+    'Version 3.14'
+    >>> c.harvest('somefile','someuri')
+    Traceback (most recent call last):
+    ...
+    ExceptionReport: 'OperationNotSupported - HarvestHarvest operation is not supported by this catalogue.\n / None'
+    >>> c.response
+    '<?xml version="1.0" encoding="UTF-8"?>\r\n<ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd">\r\n  <ows:Exception exceptionCode="OperationNotSupported" locator="HarvestHarvest operation is not supported by this catalogue.&#xA;" />\r\n</ows:ExceptionReport>\r\n\r\n'
+    >>> #c.getrecords(outputschema='http://www.fgdc.gov') -- the schema doesn't work, going off the assumption that this is not an issue on our end
+	>>> c.getrecords(outputschema='http://www.isotc211.org/2005/gmd')
+    >>> c.results['matches']>370
+    False
+    >>> #c.getrecords(keywords=['hydrology'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2) -- this results in an exception being thrown, maybe bad schema again?

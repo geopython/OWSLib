@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<DIF xmlns="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/ http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/dif.xsd">
+	<Entry_ID/>
+	<Entry_Title>ALLSPECIES</Entry_Title>
+	<Data_Set_Citation>
+		<Dataset_Creator>EMAN Coordinating Office, Environment Canada</Dataset_Creator>
+		<Dataset_Title>ALLSPECIES</Dataset_Title>
+		<Dataset_Release_Date>2009-09-03</Dataset_Release_Date>
+		<Data_Presentation_Form>Map service</Data_Presentation_Form>
+	</Data_Set_Citation>
+	<Personnel>
+		<Role>primary</Role>
+		<First_Name>EMAN</First_Name>
+		<Last_Name>Office</Last_Name>
+		<Email>Marlene.Doyle@ec.gc.ca</Email>
+		<Phone>+01-905-336-4453</Phone>
+		<Fax>+01-905-336-4499</Fax>
+		<Contact_Address>
+			<Address>867 Lakeshore Road</Address>
+			<City>Burlington</City>
+			<Province_or_State>Ontario</Province_or_State>
+			<Postal_Code>L7R-4A6</Postal_Code>
+			<Country>CAN</Country>
+		</Contact_Address>
+	</Personnel>
+	<Parameters>
+		<Category/>
+		<Topic/>
+		<Term/>
+	</Parameters>
+	<ISO_Topic_Category>farming</ISO_Topic_Category>
+	<ISO_Topic_Category>climatologyMeteorologyAtmosphere</ISO_Topic_Category>
+	<ISO_Topic_Category>biota</ISO_Topic_Category>
+	<ISO_Topic_Category>environment</ISO_Topic_Category>
+	<ISO_Topic_Category>inlandWaters</ISO_Topic_Category>
+	<ISO_Topic_Category>oceans</ISO_Topic_Category>
+	<Keyword>citizen</Keyword>
+	<Keyword>science</Keyword>
+	<Keyword>community</Keyword>
+	<Keyword>monitoring</Keyword>
+	<Keyword>species</Keyword>
+	<Keyword>birds</Keyword>
+	<Keyword>amphibians</Keyword>
+	<Keyword>plants</Keyword>
+	<Keyword>fish</Keyword>
+	<Keyword>mammals</Keyword>
+	<Keyword>reptiles</Keyword>
+	<Keyword>insects</Keyword>
+	<Keyword>aquatic</Keyword>
+	<Keyword>invertebrates</Keyword>
+	<Keyword>hunting</Keyword>
+	<Keyword>water</Keyword>
+	<Keyword>water quality</Keyword>
+	<Keyword>marine</Keyword>
+	<Keyword>freshwater</Keyword>
+	<Keyword>groundwater</Keyword>
+	<Keyword>waterprotection</Keyword>
+	<Keyword>ice</Keyword>
+	<Keyword>sustainability</Keyword>
+	<Keyword>air</Keyword>
+	<Keyword>weather</Keyword>
+	<Keyword>climate change</Keyword>
+	<Keyword>land</Keyword>
+	<Keyword>grasslands</Keyword>
+	<Keyword>urban</Keyword>
+	<Keyword>forestlant</Keyword>
+	<Keyword>arctic</Keyword>
+	<Keyword>mining</Keyword>
+	<Keyword>agriculture</Keyword>
+	<Keyword>Canada &gt; Alberta</Keyword>
+	<Keyword>Canada &gt; British Columbia</Keyword>
+	<Keyword>Canada &gt; Manitoba</Keyword>
+	<Keyword>Canada &gt; New Brunswick</Keyword>
+	<Keyword>Canada &gt; Newfoundland and Labrador</Keyword>
+	<Keyword>Canada &gt; Northwest Territories</Keyword>
+	<Keyword>Canada &gt; Nova Scotia</Keyword>
+	<Keyword>Canada &gt; Nunavut</Keyword>
+	<Keyword>Canada &gt; Ontario</Keyword>
+	<Keyword>Canada &gt; Prince Edward Island</Keyword>
+	<Keyword>Canada &gt; Quebec</Keyword>
+	<Keyword>Canada &gt; Saskatchewan</Keyword>
+	<Keyword>Canada &gt; Yukon</Keyword>
+	<Keyword>Canada Regional &gt; Atlantic Canada</Keyword>
+	<Keyword>Canada Regional &gt; Central Canada</Keyword>
+	<Keyword>Canada Regional &gt; Territorial North</Keyword>
+	<Keyword>Canada Regional &gt; Western Canada</Keyword>
+	<Keyword>International &gt; North America</Keyword>
+	<Data_Set_Progress>completed</Data_Set_Progress>
+	<Data_Set_Language>eng; CAN</Data_Set_Language>
+	<Originating_Center>EMAN Coordinating Office, Environment Canada</Originating_Center>
+	<Data_Center>
+		<Data_Center_Name>
+			<Short_Name/>
+		</Data_Center_Name>
+		<Personnel>
+			<Role/>
+			<Last_Name/>
+		</Personnel>
+	</Data_Center>
+	<Distribution>
+		<Fees>none</Fees>
+	</Distribution>
+	<Summary>272 Categorized Initiatives: Initiatives are referenced to a Category, Sub-Category and Subject Term index, through the cititzen science web site at http://www.citizenscience.ca</Summary>
+	<Related_URL>
+		<URL_Content_Type>
+			<Type>accessLink</Type>
+		</URL_Content_Type>
+		<URL>http://www.citizenscience.ca/</URL>
+	</Related_URL>
+	<Related_URL>
+		<URL_Content_Type>
+			<Type>none</Type>
+		</URL_Content_Type>
+		<URL>DisplayFullMetadata.jsp?id=FBAED13B-DF3C-9CCC-95A6-27BEB390001C</URL>
+	</Related_URL>
+	<Metadata_Name>CEOS IDN DIF</Metadata_Name>
+	<Metadata_Version>9.7</Metadata_Version>
+	<DIF_Creation_Date>2009-09-03</DIF_Creation_Date>
+	<Future_DIF_Review_Date>2010-09-03</Future_DIF_Review_Date>
+</DIF>
+

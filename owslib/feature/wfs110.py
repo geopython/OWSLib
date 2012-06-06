@@ -19,13 +19,9 @@ from owslib.iso import MD_Metadata
 from owslib.ows import *
 from owslib.fes import *
 from owslib.crs import Crs
+from owslib.namespaces import OWSLibNamespaces
 
-namespaces = {
-    'gml': 'http://www.opengis.net/gml',
-    'ogc': 'http://www.opengis.net/ogc',
-    'ows': 'http://www.opengis.net/ows',
-    'wfs': 'http://www.opengis.net/wfs'
-}
+ns = OWSLibNamespaces()
 
 class WebFeatureService_1_1_0(object):
     """Abstraction for OGC Web Feature Service (WFS).
@@ -63,37 +59,36 @@ class WebFeatureService_1_1_0(object):
         self.url = url
         self.version = version
         self._capabilities = None
-        self.owscommon = OwsCommon('1.0.0')
+        self.owsversion = '1.0.0'
         reader = WFSCapabilitiesReader(self.version)
         if xml:
-            self._capabilities = reader.readString(xml)
+            self._capabilities = reader.read_string(xml)
         else:
             self._capabilities = reader.read(self.url)
-        self._buildMetadata(parse_remote_metadata)
+        self._build_metadata(parse_remote_metadata)
     
-    def _buildMetadata(self, parse_remote_metadata=False):
+    def _build_metadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
 
         # ServiceIdentification
-        val = self._capabilities.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
-        self.identification=ServiceIdentification(val,self.owscommon.namespace)
+        val = self._capabilities.find(util.nspath_eval('ows:ServiceIdentification', self.owsversion))
+        self.identification=ServiceIdentification(val,self.owsversion)
         # ServiceProvider
-        val = self._capabilities.find(util.nspath_eval('ows:ServiceProvider', namespaces))
-        self.provider=ServiceProvider(val,self.owscommon.namespace)
+        val = self._capabilities.find(util.nspath_eval('ows:ServiceProvider', self.owsversion))
+        self.provider=ServiceProvider(val,self.owsversion)
         # ServiceOperations metadata
-        self.operations=[]
-        for elem in self._capabilities.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
-            self.operations.append(OperationsMetadata(elem, self.owscommon.namespace))
+        op = self._capabilities.find(util.nspath_eval('ows:OperationsMetadata', self.owsversion))
+        self.operations = OperationsMetadata(op, self.owsversion).operations
 
         # FilterCapabilities
-        val = self._capabilities.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
+        val = self._capabilities.find(util.nspath_eval('ogc:Filter_Capabilities'))
         self.filters=FilterCapabilities(val)
 
         #serviceContents metadata: our assumption is that services use a top-level 
         #layer as a metadata organizer, nothing more. 
         
         self.contents={} 
-        features = self._capabilities.findall(nspath_eval('wfs:FeatureTypeList/wfs:FeatureType', namespaces))
+        features = self._capabilities.findall(nspath_eval('wfs:FeatureTypeList/wfs:FeatureType'))
         for feature in features:
             cm=ContentMetadata(feature, parse_remote_metadata)
             self.contents[cm.id]=cm       
@@ -149,7 +144,7 @@ class WebFeatureService_1_1_0(object):
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
-        base_url = self.getOperationByName('GetFeature').methods[method]['url']
+        base_url = self.get_operation_by_name('GetFeature').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
         srs_func = None
 
@@ -231,8 +226,8 @@ class WebFeatureService_1_1_0(object):
             if not have_read:
                 data = u.read()
             tree = etree.fromstring(data)
-            if tree.tag == "{%s}ServiceExceptionReport" % namespaces["ogc"]:
-                se = tree.find(nspath_eval('ServiceException', namespaces["ogc"]))
+            if tree.tag == "{%s}ServiceExceptionReport" % ns.get_namespace("ogc"):
+                se = tree.find(nspath_eval('ServiceException'))
                 raise util.ServiceException, str(se.text).strip()
 
             return StringIO(data)
@@ -241,12 +236,14 @@ class WebFeatureService_1_1_0(object):
                 return StringIO(data)
             return u
 
-    def getOperationByName(self, name):
-        """Return a named content item."""
-        for item in self.operations:
-            if item.name == name:
-                return item
-        raise KeyError, "No operation named %s" % name
+    def get_operation_by_name(self, name): 
+        """
+            Return a Operation item by name, case insensitive
+        """
+        for item in self.operations.keys():
+            if item.lower() == name.lower():
+                return self.operations[item]
+        raise KeyError, "No Operation named %s" % name
 
     def getSRS(self,srsname,typename):
         """Returns None or Crs object for given name
@@ -281,34 +278,35 @@ class ContentMetadata:
 
     def __init__(self, elem, parse_remote_metadata=False):
         """."""
-        self.id = testXMLValue(elem.find(nspath_eval('wfs:Name', namespaces)))
-        self.title = testXMLValue(elem.find(nspath_eval('wfs:Title', namespaces)))
-        self.abstract = testXMLValue(elem.find(nspath_eval('wfs:Abstract', namespaces)))
-        self.keywords = [f.text for f in elem.findall(nspath_eval('ows:Keywords/ows:Keyword', namespaces))]
+        self.ows_version = '1.0.0'
+        self.id = testXMLValue(elem.find(nspath_eval('wfs:Name')))
+        self.title = testXMLValue(elem.find(nspath_eval('wfs:Title')))
+        self.abstract = testXMLValue(elem.find(nspath_eval('wfs:Abstract')))
+        self.keywords = [f.text for f in elem.findall(nspath_eval('ows:Keywords/ows:Keyword',self.ows_version))]
 
         # bbox
         self.boundingBoxWGS84 = None
-        b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)), namespaces['ows'])
+        b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox',self.ows_version)))
         if b is not None:
             self.boundingBoxWGS84 = (
                     float(b.minx), float(b.miny),
                     float(b.maxx), float(b.maxy),
                     )
         # crs options
-        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
-        dsrs = testXMLValue(elem.find(nspath_eval('wfs:DefaultSRS', namespaces)))
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath_eval('wfs:OtherSRS'))]
+        dsrs = testXMLValue(elem.find(nspath_eval('wfs:DefaultSRS')))
         if dsrs is not None:  # first element is default srs
             self.crsOptions.insert(0, Crs(dsrs))
 
         # verbs
-        self.verbOptions = [op.text for op in elem.findall(nspath_eval('wfs:Operations/wfs:Operation', namespaces))]
+        self.verbOptions = [op.text for op in elem.findall(nspath_eval('wfs:Operations/wfs:Operation'))]
 
         # output formats
-        self.verbOptions = [op.text for op in elem.findall(nspath_eval('wfs:OutputFormats/wfs:Format', namespaces))]
+        self.verbOptions = [op.text for op in elem.findall(nspath_eval('wfs:OutputFormats/wfs:Format'))]
 
         # MetadataURLs
         self.metadataUrls = []
-        for m in elem.findall(nspath_eval('wfs:MetadataURL', namespaces)):
+        for m in elem.findall(nspath_eval('wfs:MetadataURL')):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
                 'format': testXMLValue(m.find('Format')),
@@ -374,7 +372,7 @@ class WFSCapabilitiesReader(object):
         u = urlopen(request)
         return etree.fromstring(u.read())
 
-    def readString(self, st):
+    def read_string(self, st):
         """Parse a WFS capabilities document, returning an
         instance of WFSCapabilitiesInfoset
 

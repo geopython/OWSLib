@@ -1,0 +1,41 @@
+Imports
+
+    >>> from owslib.namespaces import OWSLibNamespaces
+
+Correct Usage Tests
+
+    >>> ns = OWSLibNamespaces()
+    >>> ns.get_namespace('csw')
+    'http://www.opengis.net/cat/csw/2.0.2'
+    >>> ns.get_namespaces(['csw','gmd','fes'])
+    ['http://www.opengis.net/cat/csw/2.0.2', 'http://www.isotc211.org/2005/gmd', 'http://www.opengis.net/fes/2.0']
+    >>> ns.get_namespaces()
+    {...}
+    >>> ns.get_versioned_namespace('ows','1.0.0')
+    'http://www.opengis.net/ows'
+    >>> ns.get_versioned_namespace('ows','1.1.0')
+    'http://www.opengis.net/ows/1.1'
+    >>> ns.get_versioned_namespace('ows','2.0.0')
+    'http://www.opengis.net/ows/2.0'
+
+Functional Tests
+
+    >>> ns.get_versioned_namespace('csw','3.1.1')
+    >>> ns.get_versioned_namespace('csw')
+    'http://www.opengis.net/cat/csw/2.0.2'
+
+Invalid Usage Tests
+
+    >>> ns.get_namespace()
+    Traceback (most recent call last):
+    ...
+    TypeError: get_namespace() takes exactly 2 arguments (1 given)
+    >>> ns.get_namespaces('csw')
+    [None, None, None]
+
+    #'om' only exists as a versioned namespace, so the below will return no result
+    >>> ns.get_namespace('om')
+    >>> ns.get_versioned_namespace()
+    Traceback (most recent call last):
+    ...
+    TypeError: get_versioned_namespace() takes at least 2 arguments (1 given)

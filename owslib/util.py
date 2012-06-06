@@ -7,8 +7,12 @@
 # Contact email: tomkralidis@hotmail.com
 # =============================================================================
 
+import re
 import sys
 from owslib.etree import etree
+import pytz
+from dateutil import parser
+from datetime import datetime
 import urlparse, urllib2
 from urllib2 import urlopen, HTTPError, Request
 from urllib2 import HTTPPasswordMgrWithDefaultRealm
@@ -16,6 +20,11 @@ from urllib2 import HTTPBasicAuthHandler
 from StringIO import StringIO
 import cgi
 from urllib import urlencode
+
+from owslib.namespaces import OWSLibNamespaces
+
+ns = OWSLibNamespaces()
+
 
 """
 Utility functions and classes
@@ -34,6 +43,11 @@ class RereadableURL(StringIO,object):
 class ServiceException(Exception):
     #TODO: this should go in ows common module when refactored.  
     pass
+
+# http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
+dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
+  isinstance(d2.get(x),dict) else d2.get(x,d1.get(x)))) for x in
+  set(d1.keys()+d2.keys()))
 
 def openURL(url_base, data, method='Get', cookies=None, username=None, password=None):
     ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
@@ -96,9 +110,8 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
     return u
 
 #default namespace for nspath is OWS common
-OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
-def nspath(path, ns=OWS_NAMESPACE):
-
+OWS_NAMESPACE = 'http://www.opengis.net/ows'
+def nspath(path, namespace=OWS_NAMESPACE):
     """
 
     Prefix the given path with the given namespace identifier.
@@ -110,24 +123,48 @@ def nspath(path, ns=OWS_NAMESPACE):
     - ns: the XML namespace URI.
 
     """
-
-    if ns is None or path is None:
+    if path is None:
         return -1
+
+    # If no namespace, just return the unchanged path
+    if namespace is None:
+        return path
 
     components = []
     for component in path.split('/'):
         if component != '*':
-            component = '{%s}%s' % (ns, component)
+            component = '{%s}%s' % (namespace, component)
         components.append(component)
     return '/'.join(components)
 
-def nspath_eval(xpath, namespaces):
+def nspath_eval(xpath, version=None):
     ''' Return an etree friendly xpath '''
     out = []
+    
+    if version is not None:
+        c_version = ''
+        for str in version.split('.'):
+            c_version += str
+    
     for chunks in xpath.split('/'):
-        namespace, element = chunks.split(':')
-        out.append('{%s}%s' % (namespaces[namespace], element))
+        if chunks.find(':') == -1:
+            out.append(chunks)
+        else:
+            namespace, element = chunks.split(':')
+            if version is not None:
+                namespace += c_version
+            out.append('{%s}%s' % (ns.get_namespace(namespace), element))
+
     return '/'.join(out)
+
+def testXMLAttribute(element, attribute):
+    ele = testXMLValue(element, attrib=True)
+    if ele is not None:
+        attrib = ele.get(attribute)
+        if attrib is not None:
+            return attrib.strip()
+
+    return None
 
 def testXMLValue(val, attrib=False):
     """
@@ -145,7 +182,10 @@ def testXMLValue(val, attrib=False):
         if attrib == True:
             return val
         else:
-            return val.text
+            try:
+                return val.text.strip()
+            except:
+                return val.text
     else:
         return None
 
@@ -277,3 +317,40 @@ def getTypedValue(type, value):
         return str(value)
     else:
         return value # no type casting
+
+def extract_time(element):
+    ''' return a datetime object based on a gml text string 
+
+        ex:
+        <gml:beginPosition>2006-07-27T21:10:00Z</gml:beginPosition>
+        <gml:endPosition indeterminatePosition="now"/>
+
+        If there happens to be a strange element with both attributes and text,
+        use the text.
+        ex:  <gml:beginPosition indeterminatePosition="now">2006-07-27T21:10:00Z</gml:beginPosition>
+        Would be 2006-07-27T21:10:00Z, not 'now'
+
+    '''
+    if element is None:
+        return None
+
+    try:            
+        dt = parser.parse(element.text)
+    except Exception:
+        att = testXMLAttribute(element, 'indeterminatePosition')
+        if att and att == 'now':
+            dt = datetime.utcnow()
+            dt.replace(tzinfo=pytz.utc)
+        else:
+            dt = None
+    return dt
+
+def extract_xml_list(elements):
+    """
+        Some people don't have seperate tags for their keywords and seperate them with
+        a newline.  This will extract out all of the  keywords correctly.
+    """
+    keywords = [re.split(r'[\n\r]+',f.text) for f in elements if f.text]
+    flattened = [item.strip() for sublist in keywords for item in sublist]
+    remove_blank = filter(None, flattened)
+    return remove_blank

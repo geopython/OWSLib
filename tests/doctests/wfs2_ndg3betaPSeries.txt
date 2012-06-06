@@ -1,0 +1,103 @@
+
+Imports and initialize
+
+    >>> from owslib.wfs import WebFeatureService
+    >>> wfs = WebFeatureService('http://giswebservices.massgis.state.ma.us/geoserver/wfs?', version='1.1.0')
+	
+    >>> #dir(wfs.getpropertyvalue)
+	'GetCapabilities'
+    'DescribeFeatureType'
+    'GetFeature'
+    'GetGmlObject'
+    'LockFeature'
+    'GetFeatureWithLock'
+    'Transaction'
+
+Test the capabilities info
+    >>> wfs.identification.service
+    'WFS'
+    >>> wfs.identification.version
+    '1.1.0'
+    >>> wfs.identification.title
+    >>> wfs.identification.abstract
+    >>> #wfs.identification.keywords -- this results in a ridicously long response
+    #['Point', 'Timeseries', 'Climate', 'CSML']
+    >>> wfs.identification.fees
+    >>> wfs.identification.accessconstraints
+    >>> wfs.provider.name
+    'MassGIS - Information Technology Division'
+    >>> wfs.provider.url
+    >>> wfs.provider.contact.email
+    >>> wfs.provider.contact.name
+    'Aleda Freeman'
+    >>> wfs.provider.contact.organization
+    >>> wfs.provider.contact.city
+    'Boston'
+    >>> wfs.provider.contact.region
+    'MA'
+    >>> wfs.provider.contact.postcode
+    '02114'
+    >>> wfs.provider.contact.country
+    'USA'
+        
+Test the getfeature method
+
+    TODO: Test GetFeature method
+
+    >>> #wfs.contents.keys() -- this results in a ridicously long response
+    >>> #response = wfs.getfeature(typename=['csml:PointSeriesFeature'], maxfeatures=2)
+
+Test Stored Queries
+    >>> storedqid='urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointFromPointSeries'
+    >>> sqparams={'featureid':'meaneastward','timeinstance':'2002-01-01T10:45:00.0'}
+
+	TODO: see what features are available from request and revisit the getfeature code, pretty much all of below relies on this
+
+    >>> #response=wfs.getfeature(typename=['csml:PointSeriesFeature'],storedQueryID=storedqid, storedQueryParams=sqparams)	
+    >>> #for sq in wfs.storedqueries: print sq.id
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointSeriesFromGridSeries
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:phenomenonQuery
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractGridSeriesFromGridSeries
+    queryOne
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointFromPointSeries
+    urn-x:wfs:StoredQueryId:ISO:GetFeatureById
+    urn-x:wfs:StoredQueryId:badc.nerc.ac.uk:extractPointSeriesFromPointSeries
+    >>> #for sq in wfs.storedqueries: print sq.title
+    ExtractPointSeriesFromGridSeries
+    SelectFeaturesByPhenomenon
+    ExtractGridSeriesFromGridSeries
+    test query
+    ExtractPointFromPointSeries
+    GetFeatureById
+    ExtractPointSeriesFromPointSeries
+    >>> #for sq in wfs.storedqueries: print sq.returnfeaturetype
+    csml:PointSeriesFeature
+    csml:AbstractFeature
+    csml:GridSeriesFeature
+    xyzml:SomeFeatureType
+    csml:PointFeature
+    csml:AbstractFeature
+    csml:PointSeriesFeature
+    >>> #for sq in wfs.storedqueries: print sq.abstract
+    Extract a csml:PointSeries from a csml:GridSeriesFeature
+    Select features based on their phenomenon type, e.g. "temperature"
+    Extract a csml:GridSeries from a csml:GridSeriesFeature
+    my test query
+    Extract a csml:PointFeature for a single time instance from a csml:PointSeriesFeature
+    Get any feature by id
+    Extract a csml:PointSeriesFeature for a range of times from a csml:PointSeriesFeature
+    >>> #sq = wfs.storedqueries[2]
+    >>> #for param in sq.parameters: print "%s,  %s"%(param.name, param.type)
+    featureid,  xsd:anyURI
+    mintime,  gml:TimePositionUnion
+    maxtime,  gml:TimePositionUnion
+    bbox,  xsd:string
+ 
+ #TODO: 'GetPropertyValue' is not a valid operation in the current test, will have to circle back to this
+ 
+ Test GetPropertyValue
+    >>> #valref='{http://ndg.nerc.ac.uk/csml}parameter'
+    >>> #response=wfs.getpropertyvalue(valuereference=valref)
+    >>> #response
+    '<?xml version="1.0"?>\n<wfs:ValueCollection xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:csml="http://ndg.nerc.ac.uk/csml" numberReturned="4">\n\t<wfs:member><csml:parameter xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://badc.rl.ac.uk/localparams#Maxiumum gust wind speed relative to mean speed"/></wfs:member><wfs:member><csml:parameter xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://badc.rl.ac.uk/localparams#Mean eastward wind"/></wfs:member><wfs:member><csml:parameter xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://badc.rl.ac.uk/localparams#Mean northward wind"/></wfs:member><wfs:member><csml:parameter xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://badc.rl.ac.uk/localparams#Miniumum gust wind speed relative to mean speed"/></wfs:member>\n</wfs:ValueCollection>'
+

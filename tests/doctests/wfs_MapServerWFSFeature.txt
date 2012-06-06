@@ -1,0 +1,28 @@
+
+Imports
+
+    >>> from owslib.wfs import WebFeatureService
+    
+Test the getfeature method
+
+    >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0.0')
+    >>> response = wfs.getfeature(typename=['IBA'], maxfeatures=5)
+    >>> response.read().find('<wfs:FeatureCollection') > 0
+    True
+    >>> catch=wfs.getfeature(typename=['IBA'], featureid=0)
+    >>> catch=wfs.getfeature(typename=['IBA'], bbox=(10,20,30,40))
+
+Coverage Tests
+    >>> wfs.get_operation_by_name('doesnotexist')
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No operation named doesnotexist'
+    >>> catch=wfs.items()
+
+Handle service exception
+
+    >>> response = wfs.getfeature(typename=['totally bogus'], maxfeatures=5)
+    Traceback (most recent call last):
+    ...
+    ServiceException: msWFSGetFeature(): WFS server error. TYPENAME 'totally bogus' doesn't exist in this server.  Please check the capabilities and reformulate your request.
+

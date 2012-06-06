@@ -6,3 +6,5 @@ Jo Walsh <jo@frot.org>
 Tom Kralidis <tomkralidis@hotmail.com>
 Jachym Cepicky <jachym.cepicky@gmail.com>
 Luca Cinquini <luca.cinquini@jpl.nasa.gov>
+Sean Cowan <scowan@asascience.com>
+Kyle Wilcox <kwilcox@asascience.com>

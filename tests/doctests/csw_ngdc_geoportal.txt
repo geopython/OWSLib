@@ -1,0 +1,30 @@
+    >>> from owslib.csw import CatalogueServiceWeb as cs
+    >>> c=cs('http://www.ngdc.noaa.gov/geoportal/csw',timeout=30)
+
+    >>> c.identification.title
+    'NGDC Geoportal Instance using ArcGIS Server Geoportal Extension 10 - OGC CSW 2.0.2 ISO AP'
+
+    >>> c.identification.version
+    '2.0.2'
+    
+    >>> c.provider.name
+    'NOAA NGDC'
+
+    >>> len(c.operations)
+    5
+
+    >>> getcap = c.get_operation_by_name('getcapabilities')
+    >>> getcap.methods
+    {'Post': {'url': 'http://www.ngdc.noaa.gov/geoportal/csw'}, 'Get': {'url': 'http://www.ngdc.noaa.gov/geoportal/csw'}}
+
+    >>> getcap.parameters['version']['values']
+    ['2.0.2']
+
+    >>> getcap.parameters['service']['values']
+    ['CSW', 'http://www.opengis.net/cat/csw/2.0.2']
+
+    >>> getcap.parameters['AcceptVersions']['values']
+    ['2.0.2']
+
+    >>> getcap.parameters['Sections']['values']
+    ['ServiceIdentification', 'ServiceProvider', 'OperationsMetadata', 'Filter_Capabilities']

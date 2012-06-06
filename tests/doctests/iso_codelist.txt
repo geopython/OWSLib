@@ -1,0 +1,11 @@
+    >>> from tests.utils import resource_file
+    >>> import urllib2
+    >>> import os
+    >>> from owslib.etree import etree
+    >>> from owslib.iso import CodelistCatalogue
+    >>> e=etree.parse(resource_file('gmxCodelists.xml'))
+    >>> c=CodelistCatalogue(e)
+    >>> print c.getcodelistdictionaries()
+    ['MD_RestrictionCode', 'CI_OnLineFunctionCode', 'DQ_EvaluationMethodTypeCode', 'DS_InitiativeTypeCode', 'MD_MaintenanceFrequencyCode', 'MD_SpatialRepresentationTypeCode', 'MD_ImagingConditionCode', 'MD_ObligationCode', 'MD_GeometricObjectTypeCode', 'MD_ScopeCode', 'MD_KeywordTypeCode', 'MD_CharacterSetCode', 'CI_PresentationFormCode', 'MX_ScopeCode', 'CI_DateTypeCode', 'MD_TopicCategoryCode', 'MD_DatatypeCode', 'MD_ProgressCode', 'MD_MediumNameCode', 'MD_ClassificationCode', 'DS_AssociationTypeCode', 'CI_RoleCode', 'MD_TopologyLevelCode', 'MD_DimensionNameTypeCode', 'MD_CoverageContentTypeCode', 'MD_MediumFormatCode', 'MD_PixelOrientationCode', 'MD_CellGeometryCode']
+    >>> print c.getcodedefinitionidentifiers('CI_RoleCode')
+    ['author', 'processor', 'publisher', 'custodian', 'pointOfContact', 'distributor', 'user', 'resourceProvider', 'originator', 'owner', 'principalInvestigator']

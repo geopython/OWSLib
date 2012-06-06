@@ -19,7 +19,7 @@ import cgi
 import urllib2
 from urllib import urlencode
 from etree import etree
-from .util import openURL, testXMLValue
+from owslib.util import openURL, testXMLValue, extract_xml_list
 from fgdc import Metadata
 from iso import MD_Metadata
 
@@ -72,7 +72,7 @@ class WebMapService(object):
                 self.version, url=self.url, un=self.username, pw=self.password
                 )
         if xml:  # read from stored xml
-            self._capabilities = reader.readString(xml)
+            self._capabilities = reader.read_string(xml)
         else:  # read from server
             self._capabilities = reader.read(self.url)
 
@@ -83,7 +83,7 @@ class WebMapService(object):
             raise ServiceException(err_message, xml) 
 
         # build metadata objects
-        self._buildMetadata(parse_remote_metadata)
+        self._build_metadata(parse_remote_metadata)
 
     def _getcapproperty(self):
         if not self._capabilities:
@@ -93,7 +93,7 @@ class WebMapService(object):
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
 
-    def _buildMetadata(self, parse_remote_metadata=False):
+    def _build_metadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
         
         #serviceIdentification metadata
@@ -188,20 +188,15 @@ class WebMapService(object):
         
         Example
         -------
-            >>> img = wms.getmap(layers=['global_mosaic'],
-            ...                  styles=['visual'],
-            ...                  srs='EPSG:4326', 
-            ...                  bbox=(-112,36,-106,41),
-            ...                  format='image/jpeg',
-            ...                  size=(300,250),
-            ...                  transparent=True,
-            ...                  )
-            >>> out = open('example.jpg', 'wb')
+            >>> from owslib.wms import WebMapService
+            >>> from tests.utils import scratch_file
+            >>> wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
+            >>> img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'],styles=[''], srs='EPSG:4326',bbox=(-70.8, 42, -70, 42.8),size=(300, 300),format='image/jpeg',transparent=True)
+            >>> out = open(scratch_file('massgis_shoreline.jpg'), 'wb')
             >>> out.write(img.read())
             >>> out.close()
-
         """        
-        base_url = self.getOperationByName('GetMap').methods[method]['url']
+        base_url = self.get_operation_by_name('GetMap').methods[method]['url']
         request = {'version': self.version, 'request': 'GetMap'}
         
         # check layers and styles
@@ -252,7 +247,7 @@ class WebMapService(object):
     def getfeatureinfo(self):
         raise NotImplementedError
     
-    def getOperationByName(self, name): 
+    def get_operation_by_name(self, name): 
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
@@ -268,7 +263,7 @@ class ServiceIdentification(object):
         self.version = version
         self.title = testXMLValue(self._root.find('Title'))
         self.abstract = testXMLValue(self._root.find('Abstract'))
-        self.keywords = [f.text for f in self._root.findall('KeywordList/Keyword')]
+        self.keywords = extract_xml_list(self._root.findall('KeywordList/Keyword'))
         self.accessconstraints = testXMLValue(self._root.find('AccessConstraints'))
         self.fees = testXMLValue(self._root.find('Fees'))
 
@@ -298,7 +293,7 @@ class ServiceProvider(object):
                 return item
         raise KeyError, "No content named %s" % name
 
-    def getOperationByName(self, name):
+    def get_operation_by_name(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
@@ -426,7 +421,7 @@ class ContentMetadata:
             self.styles[name.text] = style
 
         # keywords
-        self.keywords = [f.text for f in elem.findall('KeywordList/Keyword')]
+        self.keywords = extract_xml_list(elem.findall('KeywordList/Keyword'))
 
         # timepositions - times for which data is available.
         self.timepositions=None
@@ -590,7 +585,7 @@ class WMSCapabilitiesReader:
         u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
         return etree.fromstring(u.read())
 
-    def readString(self, st):
+    def read_string(self, st):
         """Parse a WMS capabilities document, returning an elementtree instance
 
         string should be an XML capabilities document
