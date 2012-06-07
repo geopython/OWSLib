@@ -95,7 +95,7 @@ if request is None or url is None:
     sys.exit(3)
         
 # instantiate client
-wps = WebProcessingService(url, verbose=verbose)
+wps = WebProcessingService(url, verbose=verbose, skip_caps=True)
 
 if request == 'GetCapabilities':
     wps.getcapabilities()
