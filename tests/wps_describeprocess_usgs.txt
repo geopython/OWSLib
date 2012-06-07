@@ -7,7 +7,7 @@ Import python modules
 >>> from owslib.wps import WebProcessingService, printInputOutput
 
 Initialize WPS client
->>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService')
+>>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', skip_caps=True)
 
 Execute fake invocation of DescribeProcess operation by parsing cached response from USGS service
 >>> xml = open('./wps_USGSDescribeProcess.xml', 'r').read()

@@ -163,7 +163,9 @@ class WebProcessingService(object):
     
     def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False):
         """
-        Initialization method resets the object status, it does NOT execute a GetCapabilities invocation to the remote service.
+        Initialization method resets the object status.
+        By default it will execute a GetCapabilities invocation to the remote service, 
+        which can be skipped by using skip_caps=True.
         """
         
         # fields passed in from object initializer
