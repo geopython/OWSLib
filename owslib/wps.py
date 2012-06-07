@@ -145,7 +145,7 @@ class WebProcessingService(object):
     Implements IWebProcessingService.
     """
     
-    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False):
+    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False):
         """
         Initialization method resets the object status, it does NOT execute a GetCapabilities invocation to the remote service.
         """
@@ -163,6 +163,9 @@ class WebProcessingService(object):
         self.provider = None
         self.operations=[]
         self.processes=[]
+
+        if not skip_caps:
+            self.getcapabilities()
         
     def getcapabilities(self, xml=None):
         """
