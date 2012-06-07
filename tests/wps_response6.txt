@@ -4,7 +4,7 @@ To run: python -m doctest wps_response6.txt
 
 Instantiate WPS
 >>> from owslib.wps import WebProcessingService
->>> wps = WebProcessingService('http://rsg.pml.ac.uk/wps/vector.cgi')
+>>> wps = WebProcessingService('http://rsg.pml.ac.uk/wps/vector.cgi', skip_caps=True)
 
 Execute face WPS invocation
 >>> request = open('./wps_PMLExecuteRequest6.xml', 'r').read()
