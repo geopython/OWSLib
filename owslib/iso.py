@@ -464,7 +464,6 @@ class EX_Polygon(object):
             self.exterior_ring = self._coordinates_for_ring(linear_ring)
                     
         interior_ring_elements = md.findall(util.nspath_eval('gml32:Polygon/gml32:interior', namespaces))
-        print "Interior rings", interior_ring_elements
         self.interior_rings = []
         for iring_element in interior_ring_elements:
             linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing', namespaces))
