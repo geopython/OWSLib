@@ -294,18 +294,16 @@ class MD_DataIdentification(object):
         val = md.find(util.nspath_eval('gmd:supplementalInformation/gco:CharacterString'))
         self.supplementalinformation = util.testXMLValue(val)
         
-        # there may be multiple geographicElement, create an extent
-        # from the one containing an EX_GeographicBoundingBox
+        # There may be multiple geographicElement, create an extent
+        # from the one containing either an EX_GeographicBoundingBox or EX_BoundingPolygon.
+        # The schema also specifies an EX_GeographicDescription. This is not implemented yet.
         val = None
         for e in md.findall(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:geographicElement')):
-            if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox')) is not None:
+            if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox')) is not None or e.find(util.nspath_eval('gmd:EX_BoundingPolygon')) is not None:
                 val = e
                 break
-
-        if val is not None:
-            self.bbox = EX_Extent(val)
-        else:
-            self.bbox = None
+        self.extent = EX_Extent(e)
+        self.bbox = self.extent.boundingBox #for backwards compatibility
         
         val = md.find(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:beginPosition'))
         self.temporalextent_start = util.testXMLValue(val)
@@ -433,8 +431,8 @@ class CI_OnlineResource(object):
 
         self.function = _test_code_list_value(md.find(util.nspath_eval('gmd:function/gmd:CI_OnLineFunctionCode')))
 
-class EX_Extent(object):
-    """ process EX_Extent """
+
+class EX_GeographicBoundingBox(object):
     def __init__(self, md):
         val = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox/gmd:westBoundLongitude/gco:Decimal'))
         self.minx = util.testXMLValue(val)
@@ -444,7 +442,51 @@ class EX_Extent(object):
         self.miny = util.testXMLValue(val)
         val = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox/gmd:northBoundLatitude/gco:Decimal'))
         self.maxy = util.testXMLValue(val)
-
+    
+class EX_Polygon(object):
+    def __init__(self, md):
+        linear_ring = md.find(util.nspath_eval('gml32:Polygon/gml32:exterior/gml32:LinearRing'))
+        if linear_ring is not None:
+            self.exterior_ring = self._coordinates_for_ring(linear_ring)
+                    
+        interior_ring_elements = md.findall(util.nspath_eval('gml32:Polygon/gml32:interior'))
+        self.interior_rings = []
+        for iring_element in interior_ring_elements:
+            linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing'))
+            self.interior_rings.append(self._coordinates_for_ring(linear_ring))
+            
+    def _coordinates_for_ring(self, linear_ring):
+        coordinates = []
+        positions = linear_ring.findall(util.nspath_eval('gml32:pos'))
+        for pos in positions:
+            tokens = pos.text.split()
+            coords = tuple([float(t) for t in tokens])
+            coordinates.append(coords)
+        return coordinates
+        
+class EX_GeographicBoundingPolygon(object):
+    def __init__(self, md):
+        val = md.find(util.nspath_eval('gmd:extentTypeCode'))
+        self.is_extent = util.testXMLValue(val)
+        
+        md_polygons = md.findall(util.nspath_eval('gmd:polygon'))
+        self.polygons = []
+        for val in md_polygons:
+            self.polygons.append(EX_Polygon(val))
+            
+class EX_Extent(object):
+    """ process EX_Extent """
+    def __init__(self, md):
+        self.boundingBox = None
+        self.boundingPolygon = None
+        bboxElement = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox'))
+        if bboxElement is not None:
+            self.boundingBox = EX_GeographicBoundingBox(bboxElement)
+        
+        polygonElement = md.find(util.nspath_eval('gmd:EX_BoundingPolygon'))
+        if polygonElement is not None:
+            self.boundingPolygon = EX_GeographicBoundingPolygon(polygonElement)
+ 
         val = md.find(util.nspath_eval('gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString'))
         self.description_code = util.testXMLValue(val)
 
@@ -513,3 +555,4 @@ class CodelistCatalogue(object):
             return ids
         else:
             return None
+
