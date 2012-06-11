@@ -302,8 +302,8 @@ class MD_DataIdentification(object):
             if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox')) is not None or e.find(util.nspath_eval('gmd:EX_BoundingPolygon')) is not None:
                 val = e
                 break
-        self.extent = EX_Extent(e)
-        self.bbox = self.extent.boundingBox #for backwards compatibility
+        self.extent = EX_Extent(val)
+        self.bbox = self.extent.boundingBox  # for backwards compatibility
         
         val = md.find(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:beginPosition'))
         self.temporalextent_start = util.testXMLValue(val)
@@ -434,13 +434,13 @@ class CI_OnlineResource(object):
 
 class EX_GeographicBoundingBox(object):
     def __init__(self, md):
-        val = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox/gmd:westBoundLongitude/gco:Decimal'))
+        val = md.find(util.nspath_eval('gmd:westBoundLongitude/gco:Decimal'))
         self.minx = util.testXMLValue(val)
-        val = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox/gmd:eastBoundLongitude/gco:Decimal'))
+        val = md.find(util.nspath_eval('gmd:eastBoundLongitude/gco:Decimal'))
         self.maxx = util.testXMLValue(val)
-        val = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox/gmd:southBoundLatitude/gco:Decimal'))
+        val = md.find(util.nspath_eval('gmd:southBoundLatitude/gco:Decimal'))
         self.miny = util.testXMLValue(val)
-        val = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox/gmd:northBoundLatitude/gco:Decimal'))
+        val = md.find(util.nspath_eval('gmd:northBoundLatitude/gco:Decimal'))
         self.maxy = util.testXMLValue(val)
     
 class EX_Polygon(object):
