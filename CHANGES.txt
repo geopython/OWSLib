@@ -1,6 +1,20 @@
 Changes
 =======
 
+0.5 (2012-06-15)
+----------------
+
+- Support for the following parsers:
+ - WPS 1.0.0
+ - WFS 1.1.0
+ - CRS handling
+  - URNs
+  - URIs
+  - EPSG:xxxx style
+- etree.py looks for lxml.etree first now
+- catch WMS service exceptions on GetCapabilities
+- CSW exceptions are now Pythonic
+
 0.4 (2011-10-02)
 ----------------
 - Support for the following parsers:
