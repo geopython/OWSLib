@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 readme = open('README.txt', 'rb').read()
 
 setup(name          = 'OWSLib',
-      version       = '0.4.0',
+      version       = '0.5.0',
       description   = 'OGC Web Service utility library',
       long_description = readme,
       license       = 'BSD',
-      keywords      = 'gis ogc iso 19115 fgdc dif ows wfs wms sos csw capabilities metadata',
+      keywords      = 'gis ogc iso 19115 fgdc dif ows wfs wms sos csw wps wcs capabilities metadata',
       author        = 'Sean Gillies',
       author_email  = 'sgillies@frii.com',
       maintainer        = 'Sean Gillies',
