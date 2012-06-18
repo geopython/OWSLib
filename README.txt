@@ -10,8 +10,6 @@ Full documentation is available at http://owslib.sourceforge.net/.
 OWSLib provides a common API for accessing service metadata and wrappers for
 numerous OGC Web Service interfaces.
 
-The OWSLib version 0.4 API is incompatible with version 0.2.1.
-
 Dependencies
 ------------
 
@@ -90,7 +88,7 @@ tests/wfs_MapServerWFSCapabilities.txt for details.
 Support
 -------
 
-https://lists.sourceforge.net/mailman/listinfo/owslib-users
-https://lists.sourceforge.net/mailman/listinfo/owslib-devel
+http://lists.osgeo.org/mailman/listinfo/owslib-users
+http://lists.osgeo.org/mailman/listinfo/owslib-devel
 
 Updated project information can be found at https://owslib.sourceforge.net/
