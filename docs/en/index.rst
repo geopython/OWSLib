@@ -527,12 +527,12 @@ Support
 Mailing Lists
 -------------
 
-OWSLib provides users and developers mailing lists.  Subscription options and archives are available at https://lists.sourceforge.net/mailman/listinfo/owslib-users and https://lists.sourceforge.net/mailman/listinfo/owslib-devel.
+OWSLib provides users and developers mailing lists.  Subscription options and archives are available at http://lists.osgeo.org/mailman/listinfo/owslib-users and http://lists.osgeo.org/mailman/listinfo/owslib-devel.
 
 Submitting Questions to Community
 ---------------------------------
 
-To submit questions to a mailing list, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to either owslib-users@sourceforge.net or owslib-devel@lists.sourceforge.net.
+To submit questions to a mailing list, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to either owslib-users@lists.osgeo.org or owslib-devel@lists.osgeo.org.
 
 Searching the Archives
 ----------------------
