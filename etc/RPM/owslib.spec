@@ -18,11 +18,10 @@ Url:            http://geopython.github.com/OWSLib/
 Group:          Productivity/Scientific/Other
 Source0:        %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-#BuildArch:      noarch
+BuildArch:      noarch
 BuildRequires:  python-devel python-setuptools
 BuildRequires:  fdupes
 Requires:	python
-%{py_requires}
 
 %description
 OWSLib is a Python package for client programming with Open Geospatial Consortium (OGC) web service (hence OWS) interface standards, and their related content models.
@@ -36,16 +35,17 @@ OWSLib is a Python package for client programming with Open Geospatial Consortiu
 %install
 rm -rf %{buildroot}
 
-python setup.py install --prefix=%{_prefix} --root=%{buildroot} \
-                                            --record-rpm=INSTALLED_FILES
+python setup.py install --prefix=%{_prefix} --root=%{buildroot}
+
+rm -rf %{buildroot}%{python_sitelib}/tests
 
 %fdupes -s %{buildroot}
 
 %clean
 rm -rf %{buildroot}
 
-%files -f INSTALLED_FILES
+%files
 %defattr(-,root,root,-)
-##%doc README LICENSE_geographiclib LICENSE_proj4
+%{python_sitelib}/
 
 %changelog
