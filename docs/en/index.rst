@@ -82,6 +82,14 @@ Git:
 
   $ git clone git@github.com:geopython/OWSLib.git
 
+openSUSE:
+
+.. code-block:: bash
+
+  $ zypper ar http://download.opensuse.org/repositories/Application:/Geo/openSUSE_12.1/ GEO
+  $ zypper refresh
+  $ zypper install owslib
+
 Usage
 =====
 
