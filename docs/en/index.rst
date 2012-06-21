@@ -90,6 +90,20 @@ openSUSE:
   $ zypper refresh
   $ zypper install owslib
 
+CentOS:
+
+.. code-block:: bash
+
+  $ wget -O /etc/yum.repos.d/CentOS-CBS.repo http://download.opensuse.org/repositories/Application:/Geo/CentOS_6/Application:Geo.repo
+  $ yum install owslib
+
+RedHat Enterprise Linux
+
+.. code-block:: bash
+
+  $ wget -O /etc/yum.repos.d/RHEL-CBS.repo http://download.opensuse.org/repositories/Application:/Geo/RHEL_6/Application:Geo.repo
+  $ yum install owslib
+
 Usage
 =====
 
