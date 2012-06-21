@@ -1,1 +1,732 @@
-<h1>test</h1>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>OWSLib 0.5-dev documentation &mdash; OWSLib 0.5-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.5-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="OWSLib 0.5-dev documentation" href="#" /> 
+  </head>
+  <body>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">OWSLib 0.5-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="owslib-release-documentation">
+<h1>OWSLib 0.5-dev documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<a class="reference external image-reference" href="http://www.ohloh.net/p/owslib?ref=WidgetProjectPartnerBadge"><img alt="OWSLib" src="http://www.ohloh.net/p/owslib/widgets/project_partner_badge.gif" style="width: 193px; height: 33px;" /></a>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Tom Kralidis</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at hotmail.com</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.5-dev</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2012-06-20</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>OWSLib is a Python package for client programming with <a class="reference external" href="http://www.opengeospatial.org/">Open Geospatial Consortium</a> (OGC) web service (hence OWS) interface standards, and their related content models.</p>
+<p>OWSLib was buried down inside PCL, but has been brought out as a separate project in <a class="reference external" href="http://trac.gispython.org/lab/changeset/481">r481</a>.</p>
+</div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="standards-support">
+<h3>Standards Support<a class="headerlink" href="#standards-support" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Standard</th>
+<th class="head">Version(s)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="http://www.opengeospatial.org/standards/wms">OGC WMS</a></td>
+<td>1.1.1</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.opengeospatial.org/standards/wfs">OGC WFS</a></td>
+<td>1.0.0, 1.1.0, 2.0.0</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.opengeospatial.org/standards/wcs">OGC WCS</a></td>
+<td>1.0.0, 1.1.0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.opengeospatial.org/standards/wmc">OGC WMC</a></td>
+<td>1.1.0</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.opengeospatial.org/standards/sos">OGC SOS</a></td>
+<td>1.0.0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.opengeospatial.org/standards/cat">OGC CSW</a></td>
+<td>2.0.2</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.opengeospatial.org/standards/wps">OGC WPS</a></td>
+<td>1.0.0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.opengeospatial.org/standards/filter">OGC Filter</a></td>
+<td>1.1.0</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.opengeospatial.org/standards/common">OGC OWS Common</a></td>
+<td>1.0.0, 1.1.0, 2.0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://gcmd.nasa.gov/User/difguide/">NASA DIF</a></td>
+<td>9.7</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.fgdc.gov/metadata/csdgm">FGDC CSDGM</a></td>
+<td>1998</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=32557">ISO 19139</a></td>
+<td>2007</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.dublincore.org/">Dublin Core</a></td>
+<td>1.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>OWSLib requires a Python interpreter, as well as <a class="reference external" href="http://effbot.org/zone/element-index.htm">ElementTree</a> or <a class="reference external" href="http://codespeak.net/lxml">lxml</a> for XML parsing.</p>
+</div>
+<div class="section" id="install">
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
+<p>PyPI:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>easy_install OWSLib
+</pre></div>
+</div>
+<p>Subversion:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>svn co https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/
+</pre></div>
+</div>
+<p>Git:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git clone git@github.com:tomkralidis/owslib.git
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="wms">
+<h3>WMS<a class="headerlink" href="#wms" title="Permalink to this headline">¶</a></h3>
+<p>Find out what a WMS has to offer. Service metadata:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wms</span> <span class="kn">import</span> <span class="n">WebMapService</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span> <span class="o">=</span> <span class="n">WebMapService</span><span class="p">(</span><span class="s">&#39;http://wms.jpl.nasa.gov/wms.cgi&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.1.1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">type</span>
+<span class="go">&#39;OGC:WMS&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">title</span>
+<span class="go">&#39;JPL Global Imagery Service&#39;</span>
+</pre></div>
+</div>
+<p>Available layers:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">wms</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span>
+<span class="go">[&#39;global_mosaic&#39;, &#39;global_mosaic_base&#39;, &#39;us_landsat_wgs84&#39;, &#39;srtm_mag&#39;, &#39;daily_terra_721&#39;, &#39;daily_aqua_721&#39;, &#39;daily_terra_ndvi&#39;, &#39;daily_aqua_ndvi&#39;, &#39;daily_terra&#39;, &#39;daily_aqua&#39;, &#39;BMNG&#39;, &#39;modis&#39;, &#39;huemapped_srtm&#39;, &#39;srtmplus&#39;, &#39;worldwind_dem&#39;, &#39;us_ned&#39;, &#39;us_elevation&#39;, &#39;us_colordem&#39;]</span>
+</pre></div>
+</div>
+<p>Details of a layer:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="p">[</span><span class="s">&#39;global_mosaic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">title</span>
+<span class="go">&#39;WMS Global Mosaic, pan sharpened&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="p">[</span><span class="s">&#39;global_mosaic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">boundingBox</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="p">[</span><span class="s">&#39;global_mosaic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">boundingBoxWGS84</span>
+<span class="go">(-180.0, -60.0, 180.0, 84.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="p">[</span><span class="s">&#39;global_mosaic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">crsOptions</span>
+<span class="go">[&#39;EPSG:4326&#39;, &#39;AUTO:42003&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="p">[</span><span class="s">&#39;global_mosaic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">styles</span>
+<span class="go">{&#39;pseudo_bright&#39;: {&#39;title&#39;: &#39;Pseudo-color image (Uses IR and Visual bands, 542 mapping), gamma 1.5&#39;}, &#39;pseudo&#39;: {&#39;title&#39;: &#39;(default) Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping), gamma 1.5&#39;}, &#39;visual&#39;: {&#39;title&#39;: &#39;Real-color image, pan sharpened (Uses the visual bands, 321 mapping), gamma 1.5&#39;}, &#39;pseudo_low&#39;: {&#39;title&#39;: &#39;Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping)&#39;}, &#39;visual_low&#39;: {&#39;title&#39;: &#39;Real-color image, pan sharpened (Uses the visual bands, 321 mapping)&#39;}, &#39;visual_bright&#39;: {&#39;title&#39;: &#39;Real-color image (Uses the visual bands, 321 mapping), gamma 1.5&#39;}}</span>
+</pre></div>
+</div>
+<p>Available methods, their URLs, and available formats:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">op</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">wms</span><span class="o">.</span><span class="n">operations</span><span class="p">]</span>
+<span class="go">[&#39;GetCapabilities&#39;, &#39;GetMap&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="o">.</span><span class="n">getOperationByName</span><span class="p">(</span><span class="s">&#39;GetMap&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">methods</span>
+<span class="go">{&#39;Get&#39;: {&#39;url&#39;: &#39;http://wms.jpl.nasa.gov/wms.cgi?&#39;}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wms</span><span class="o">.</span><span class="n">getOperationByName</span><span class="p">(</span><span class="s">&#39;GetMap&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">formatOptions</span>
+<span class="go">[&#39;image/jpeg&#39;, &#39;image/png&#39;, &#39;image/geotiff&#39;, &#39;image/tiff&#39;]</span>
+</pre></div>
+</div>
+<p>That&#8217;s everything needed to make a request for imagery:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">wms</span><span class="o">.</span><span class="n">getmap</span><span class="p">(</span>   <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;global_mosaic&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="n">styles</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;visual_bright&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="n">srs</span><span class="o">=</span><span class="s">&#39;EPSG:4326&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">bbox</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">112</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="o">-</span><span class="mi">106</span><span class="p">,</span> <span class="mi">41</span><span class="p">),</span>
+<span class="gp">... </span>                    <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span>
+<span class="gp">... </span>                    <span class="n">format</span><span class="o">=</span><span class="s">&#39;image/jpeg&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">transparent</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">... </span>                    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;jpl_mosaic_visb.jpg&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Result:</p>
+<img alt="WMS GetMap generated by OWSLib" src="_images/jpl_mosaic_visb.jpg" style="width: 300px; height: 250px;" />
+</div>
+<div class="section" id="wfs">
+<h3>WFS<a class="headerlink" href="#wfs" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="wcs">
+<h3>WCS<a class="headerlink" href="#wcs" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="csw">
+<h3>CSW<a class="headerlink" href="#csw" title="Permalink to this headline">¶</a></h3>
+<p>Connect to a CSW, and inspect its properties:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.csw</span> <span class="kn">import</span> <span class="n">CatalogueServiceWeb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span> <span class="o">=</span> <span class="n">CatalogueServiceWeb</span><span class="p">(</span><span class="s">&#39;http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">type</span>
+<span class="go">&#39;CSW&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">op</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">csw</span><span class="o">.</span><span class="n">operations</span><span class="p">]</span>
+<span class="go">[&#39;GetCapabilities&#39;, &#39;GetRecords&#39;, &#39;GetRecordById&#39;, &#39;DescribeRecord&#39;, &#39;GetDomain&#39;]</span>
+</pre></div>
+</div>
+<p>Get supported resultType&#8217;s:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getdomain</span><span class="p">(</span><span class="s">&#39;GetRecords.resultType&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">results</span>
+<span class="go">{&#39;values&#39;: [&#39;results&#39;, &#39;validate&#39;, &#39;hits&#39;], &#39;parameter&#39;: &#39;GetRecords.resultType&#39;, &#39;type&#39;: &#39;csw:DomainValuesType&#39;}</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Search for bird data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;birds&#39;</span><span class="p">],</span> <span class="n">maxrecords</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">results</span>
+<span class="go">{&#39;matches&#39;: 101, &#39;nextrecord&#39;: 21, &#39;returned&#39;: 20}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">csw</span><span class="o">.</span><span class="n">records</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">csw</span><span class="o">.</span><span class="n">records</span><span class="p">[</span><span class="n">rec</span><span class="p">]</span><span class="o">.</span><span class="n">title</span>
+<span class="gp">...</span>
+<span class="go">ALLSPECIES</span>
+<span class="go">NatureServe Canada References</span>
+<span class="go">Bird Studies Canada - BirdMap WMS</span>
+<span class="go">Parks Canada Geomatics Metadata Repository</span>
+<span class="go">Bird Studies Canada - BirdMap WFS</span>
+<span class="go">eBird Canada - Survey Locations</span>
+<span class="go">WHC CitizenScience WMS</span>
+<span class="go">Project FeederWatch - Survey Locations</span>
+<span class="go">North American Bird Banding and Encounter Database</span>
+<span class="go">Wildlife Habitat Canada CitizenScience WFS</span>
+<span class="go">Parks Canada Geomatics Metadata Repository</span>
+<span class="go">Parks Canada Geomatics Metadata Repository</span>
+<span class="go">Wildlife Habitat Canada CitizenScience WMS</span>
+<span class="go">Canadian IBA Polygon layer</span>
+<span class="go">Land</span>
+<span class="go">Wildlife Habitat Canada CitizenScience WMS</span>
+<span class="go">WATER</span>
+<span class="go">Parks Canada Geomatics Metadata Repository</span>
+<span class="go">Breeding Bird Survey</span>
+<span class="go">SCALE</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Search for bird data in Canada:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;birds&#39;</span><span class="p">],</span><span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">141</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span><span class="mi">84</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">results</span>
+<span class="go">{&#39;matches&#39;: 3, &#39;nextrecord&#39;: 0, &#39;returned&#39;: 3}</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Search for &#8216;birds&#8217; or &#8216;fowl&#8217;</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;birds&#39;</span><span class="p">,</span> <span class="s">&#39;fowl&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">results</span>
+<span class="go">{&#39;matches&#39;: 107, &#39;nextrecord&#39;: 11, &#39;returned&#39;: 10}</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Search for a specific record:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecordbyid</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;9250AA67-F3AC-6C12-0CB9-0662231AA181&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">records</span><span class="p">[</span><span class="s">&#39;9250AA67-F3AC-6C12-0CB9-0662231AA181&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">title</span>
+<span class="go">&#39;ALLSPECIES&#39;</span>
+</pre></div>
+</div>
+<p>Search with a CQL query</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">cql</span><span class="o">=</span><span class="s">&#39;csw:AnyText like &quot;%birds%&quot;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Transaction: insert</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">transaction</span><span class="p">(</span><span class="n">ttype</span><span class="o">=</span><span class="s">&#39;insert&#39;</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s">&#39;gmd:MD_Metadata&#39;</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="o">.</span><span class="n">xml</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Transaction: update</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># update ALL records</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">transaction</span><span class="p">(</span><span class="n">ttype</span><span class="o">=</span><span class="s">&#39;update&#39;</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s">&#39;csw:Record&#39;</span><span class="p">,</span> <span class="n">propertyname</span><span class="o">=</span><span class="s">&#39;dc:title&#39;</span><span class="p">,</span> <span class="n">propertyvalue</span><span class="o">=</span><span class="s">&#39;New Title&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># update records satisfying keywords filter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">transaction</span><span class="p">(</span><span class="n">ttype</span><span class="o">=</span><span class="s">&#39;update&#39;</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s">&#39;csw:Record&#39;</span><span class="p">,</span> <span class="n">propertyname</span><span class="o">=</span><span class="s">&#39;dc:title&#39;</span><span class="p">,</span> <span class="n">propertyvalue</span><span class="o">=</span><span class="s">&#39;New Title&#39;</span><span class="p">,</span> <span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;birds&#39;</span><span class="p">,</span><span class="s">&#39;fowl&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># update records satisfying BBOX filter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">transaction</span><span class="p">(</span><span class="n">ttype</span><span class="o">=</span><span class="s">&#39;update&#39;</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s">&#39;csw:Record&#39;</span><span class="p">,</span> <span class="n">propertyname</span><span class="o">=</span><span class="s">&#39;dc:title&#39;</span><span class="p">,</span> <span class="n">propertyvalue</span><span class="o">=</span><span class="s">&#39;New Title&#39;</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">141</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span><span class="mi">84</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Transaction: delete</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># delete ALL records</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">transaction</span><span class="p">(</span><span class="n">ttype</span><span class="o">=</span><span class="s">&#39;delete&#39;</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s">&#39;gmd:MD_Metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># delete records satisfying keywords filter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">transaction</span><span class="p">(</span><span class="n">ttype</span><span class="o">=</span><span class="s">&#39;delete&#39;</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s">&#39;gmd:MD_Metadata&#39;</span><span class="p">,</span> <span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;birds&#39;</span><span class="p">,</span><span class="s">&#39;fowl&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># delete records satisfying BBOX filter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">transaction</span><span class="p">(</span><span class="n">ttype</span><span class="o">=</span><span class="s">&#39;delete&#39;</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s">&#39;gmd:MD_Metadata&#39;</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">141</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span><span class="mi">84</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Harvest a resource</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">harvest</span><span class="p">(</span><span class="s">&#39;http://host/url.xml&#39;</span><span class="p">,</span> <span class="s">&#39;http://www.isotc211.org/2005/gmd&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="wmc">
+<h3>WMC<a class="headerlink" href="#wmc" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="wps">
+<h3>WPS<a class="headerlink" href="#wps" title="Permalink to this headline">¶</a></h3>
+<p>Inspect a remote WPS and retrieve the supported processes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wps</span> <span class="kn">import</span> <span class="n">WebProcessingService</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wps</span> <span class="o">=</span> <span class="n">WebProcessingService</span><span class="p">(</span><span class="s">&#39;http://cida.usgs.gov/climate/gdp/process/WebProcessingService&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">skip_caps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wps</span><span class="o">.</span><span class="n">getcapabilities</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wps</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">type</span>
+<span class="go">&#39;WPS&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wps</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">title</span>
+<span class="go">&#39;Geo Data Portal WPS Processing&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wps</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">abstract</span>
+<span class="go">&#39;Geo Data Portal WPS Processing&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">wps</span><span class="o">.</span><span class="n">operations</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">operation</span><span class="o">.</span><span class="n">name</span>
+<span class="gp">...</span>
+<span class="go">&#39;GetCapabilities&#39;</span>
+<span class="go">&#39;DescribeProcess&#39;</span>
+<span class="go">&#39;Execute&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">process</span> <span class="ow">in</span> <span class="n">wps</span><span class="o">.</span><span class="n">processes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">process</span><span class="o">.</span><span class="n">identifier</span><span class="p">,</span> <span class="n">process</span><span class="o">.</span><span class="n">title</span>
+<span class="gp">...</span>
+<span class="go">(&#39;gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageIntersectionAlgorithm&#39;, &#39;Feature Coverage WCS Intersection&#39;)</span>
+<span class="go">(&#39;gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageOPeNDAPIntersectionAlgorithm&#39;, &#39;Feature Coverage OPeNDAP Intersection&#39;)</span>
+<span class="go">(&#39;gov.usgs.cida.gdp.wps.algorithm.FeatureCategoricalGridCoverageAlgorithm&#39;, &#39;Feature Categorical Grid Coverage&#39;)</span>
+<span class="go">(&#39;gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm&#39;, &#39;Feature Weighted Grid Statistics&#39;)</span>
+<span class="go">(&#39;gov.usgs.cida.gdp.wps.algorithm.FeatureGridStatisticsAlgorithm&#39;, &#39;Feature Grid Statistics&#39;)</span>
+<span class="go">(&#39;gov.usgs.cida.gdp.wps.algorithm.PRMSParameterGeneratorAlgorithm&#39;, &#39;PRMS Parameter Generator&#39;)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Determine how a specific process needs to be invoked - i.e. what are its input parameters, and output result:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wps</span> <span class="kn">import</span> <span class="n">printInputOutput</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">process</span> <span class="o">=</span> <span class="n">wps</span><span class="o">.</span><span class="n">describeprocess</span><span class="p">(</span><span class="s">&#39;gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">process</span><span class="o">.</span><span class="n">identifier</span>
+<span class="go">&#39;gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">process</span><span class="o">.</span><span class="n">title</span>
+<span class="go">&#39;Feature Weighted Grid Statistics&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">process</span><span class="o">.</span><span class="n">abstract</span>
+<span class="go">&#39;This algorithm generates area weighted statistics of a gridded dataset for a set of vector polygon features. Using the bounding-box that encloses ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">process</span><span class="o">.</span><span class="n">dataInputs</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">printInputOutput</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go"> identifier=FEATURE_COLLECTION, title=Feature Collection, abstract=A feature collection encoded as a WFS request or one of the supported GML profiles.,...</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.1.1/feature.xsd</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.1.2/feature.xsd</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.1.2.1/feature.xsd</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.0.0/base/feature.xsd</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.0.1/base/feature.xsd</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.1.0/base/feature.xsd</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.1.1/base/feature.xsd</span>
+<span class="go"> Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.2.1/base/feature.xsd</span>
+<span class="go"> Default Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd</span>
+<span class="go"> minOccurs=1, maxOccurs=1</span>
+<span class="go"> identifier=DATASET_URI, title=Dataset URI, abstract=The base data web service URI for the dataset of interest., data type=anyURI</span>
+<span class="go"> Allowed Value: AnyValue</span>
+<span class="go"> Default Value: None</span>
+<span class="go"> minOccurs=1, maxOccurs=1</span>
+<span class="go"> identifier=DATASET_ID, title=Dataset Identifier, abstract=The unique identifier for the data type or variable of interest., data type=string</span>
+<span class="go"> Allowed Value: AnyValue</span>
+<span class="go"> Default Value: None</span>
+<span class="go"> minOccurs=1, maxOccurs=2147483647</span>
+<span class="go"> identifier=REQUIRE_FULL_COVERAGE, title=Require Full Coverage, abstract=If turned on, the service will require that the dataset of interest ....</span>
+<span class="go"> Allowed Value: True</span>
+<span class="go"> Default Value: True</span>
+<span class="go"> minOccurs=1, maxOccurs=1</span>
+<span class="go"> identifier=TIME_START, title=Time Start, abstract=The date to begin analysis., data type=dateTime</span>
+<span class="go"> Allowed Value: AnyValue</span>
+<span class="go"> Default Value: None</span>
+<span class="go"> minOccurs=0, maxOccurs=1</span>
+<span class="go"> identifier=TIME_END, title=Time End, abstract=The date to end analysis., data type=dateTime</span>
+<span class="go"> Allowed Value: AnyValue</span>
+<span class="go"> Default Value: None</span>
+<span class="go"> minOccurs=0, maxOccurs=1</span>
+<span class="go"> identifier=FEATURE_ATTRIBUTE_NAME, title=Feature Attribute Name, abstract=The attribute that will be used to label column headers in processing output., ...</span>
+<span class="go"> Allowed Value: AnyValue</span>
+<span class="go"> Default Value: None</span>
+<span class="go"> minOccurs=1, maxOccurs=1</span>
+<span class="go"> identifier=DELIMITER, title=Delimiter, abstract=The delimiter that will be used to separate columns in the processing output., data type=string</span>
+<span class="go"> Allowed Value: COMMA</span>
+<span class="go"> Allowed Value: TAB</span>
+<span class="go"> Allowed Value: SPACE</span>
+<span class="go"> Default Value: COMMA</span>
+<span class="go"> minOccurs=1, maxOccurs=1</span>
+<span class="go"> identifier=STATISTICS, title=Statistics, abstract=Statistics that will be returned for each feature in the processing output., data type=string</span>
+<span class="go"> Allowed Value: MEAN</span>
+<span class="go"> Allowed Value: MINIMUM</span>
+<span class="go"> Allowed Value: MAXIMUM</span>
+<span class="go"> Allowed Value: VARIANCE</span>
+<span class="go"> Allowed Value: STD_DEV</span>
+<span class="go"> Allowed Value: SUM</span>
+<span class="go"> Allowed Value: COUNT</span>
+<span class="go"> Default Value: None</span>
+<span class="go"> minOccurs=1, maxOccurs=7</span>
+<span class="go"> identifier=GROUP_BY, title=Group By, abstract=If multiple features and statistics are selected, this will change whether the processing output ...</span>
+<span class="go"> Allowed Value: STATISTIC</span>
+<span class="go"> Allowed Value: FEATURE_ATTRIBUTE</span>
+<span class="go"> Default Value: None</span>
+<span class="go"> minOccurs=1, maxOccurs=1</span>
+<span class="go"> identifier=SUMMARIZE_TIMESTEP, title=Summarize Timestep, abstract=If selected, processing output will include columns with summarized statistics ...</span>
+<span class="go"> Allowed Value: True</span>
+<span class="go"> Default Value: True</span>
+<span class="go"> minOccurs=0, maxOccurs=1</span>
+<span class="go"> identifier=SUMMARIZE_FEATURE_ATTRIBUTE, title=Summarize Feature Attribute, abstract=If selected, processing output will include a final row of ...</span>
+<span class="go"> Allowed Value: True</span>
+<span class="go"> Default Value: True</span>
+<span class="go"> minOccurs=0, maxOccurs=1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">process</span><span class="o">.</span><span class="n">processOutputs</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">printInputOutput</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go"> identifier=OUTPUT, title=Output File, abstract=A delimited text file containing requested process output., data type=ComplexData</span>
+<span class="go"> Supported Value: mimeType=text/csv, encoding=UTF-8, schema=None</span>
+<span class="go"> Default Value: mimeType=text/csv, encoding=UTF-8, schema=None</span>
+<span class="go"> reference=None, mimeType=None</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Submit a processing request (extraction of a climate index variable over a specific GML polygon, for a given period of time), monitor the execution until complete:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wps</span> <span class="kn">import</span> <span class="n">GMLMultiPolygonFeatureCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">polygon</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mf">102.8184</span><span class="p">,</span> <span class="mf">39.5273</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">102.8184</span><span class="p">,</span> <span class="mf">37.418</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">101.2363</span><span class="p">,</span> <span class="mf">37.418</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">101.2363</span><span class="p">,</span> <span class="mf">39.5273</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">102.8184</span><span class="p">,</span> <span class="mf">39.5273</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">featureCollection</span> <span class="o">=</span> <span class="n">GMLMultiPolygonFeatureCollection</span><span class="p">(</span> <span class="p">[</span><span class="n">polygon</span><span class="p">]</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processid</span> <span class="o">=</span> <span class="s">&#39;gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s">&quot;FEATURE_ATTRIBUTE_NAME&quot;</span><span class="p">,</span><span class="s">&quot;the_geom&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;DATASET_URI&quot;</span><span class="p">,</span> <span class="s">&quot;dods://cida.usgs.gov/qa/thredds/dodsC/derivatives/derivative-days_above_threshold.pr.ncml&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;DATASET_ID&quot;</span><span class="p">,</span> <span class="s">&quot;ensemble_b1_pr-days_above_threshold&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;TIME_START&quot;</span><span class="p">,</span><span class="s">&quot;2010-01-01T00:00:00.000Z&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;TIME_END&quot;</span><span class="p">,</span><span class="s">&quot;2011-01-01T00:00:00.000Z&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;REQUIRE_FULL_COVERAGE&quot;</span><span class="p">,</span><span class="s">&quot;false&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;DELIMITER&quot;</span><span class="p">,</span><span class="s">&quot;COMMA&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;STATISTICS&quot;</span><span class="p">,</span><span class="s">&quot;MEAN&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;GROUP_BY&quot;</span><span class="p">,</span><span class="s">&quot;STATISTIC&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;SUMMARIZE_TIMESTEP&quot;</span><span class="p">,</span><span class="s">&quot;false&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;SUMMARIZE_FEATURE_ATTRIBUTE&quot;</span><span class="p">,</span><span class="s">&quot;false&quot;</span><span class="p">),</span>
+<span class="gp">... </span>           <span class="p">(</span><span class="s">&quot;FEATURE_COLLECTION&quot;</span><span class="p">,</span> <span class="n">featureCollection</span><span class="p">)</span>
+<span class="gp">... </span>          <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="s">&quot;OUTPUT&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">execution</span> <span class="o">=</span> <span class="n">wps</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">processid</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="s">&quot;OUTPUT&quot;</span><span class="p">)</span>
+<span class="go">Executing WPS request...</span>
+<span class="go">Execution status=ProcessStarted</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wps</span> <span class="kn">import</span> <span class="n">monitorExecution</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">monitorExecution</span><span class="p">(</span><span class="n">execution</span><span class="p">)</span>
+
+<span class="go">Checking execution status... (location=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=6809217153012787208)</span>
+<span class="go">Execution status=ProcessSucceeded</span>
+<span class="go">Execution status: ProcessSucceeded</span>
+<span class="go">Output URL=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=6809217153012787208OUTPUT.3cbcd666-a912-456f-84a3-6ede450aca95</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Alternatively, define the feature through an embedded query to a WFS server:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wps</span> <span class="kn">import</span> <span class="n">WFSQuery</span><span class="p">,</span> <span class="n">WFSFeatureCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wfsUrl</span> <span class="o">=</span> <span class="s">&quot;http://cida.usgs.gov/climate/gdp/proxy/http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="n">WFSQuery</span><span class="p">(</span><span class="s">&quot;sample:CONUS_States&quot;</span><span class="p">,</span> <span class="n">propertyNames</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;the_geom&#39;</span><span class="p">,</span><span class="s">&quot;STATE&quot;</span><span class="p">],</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;CONUS_States.508&quot;</span><span class="p">,</span><span class="s">&quot;CONUS_States.469&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">featureCollection</span> <span class="o">=</span> <span class="n">WFSFeatureCollection</span><span class="p">(</span><span class="n">wfsUrl</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># same process submission as above</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<p>You can also submit a pre-made request encoded as WPS XML:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">request</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;/Users/cinquini/Documents/workspace-cog/wps/tests/wps_USGSExecuteRequest1.xml&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">execution</span> <span class="o">=</span> <span class="n">wps</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">[],</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)</span>
+<span class="go">Executing WPS request...</span>
+<span class="go">Execution status=ProcessStarted</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">monitorExecution</span><span class="p">(</span><span class="n">execution</span><span class="p">)</span>
+
+<span class="go">Checking execution status... (location=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=5103866488472745994)</span>
+<span class="go">Execution status=ProcessSucceeded</span>
+<span class="go">Execution status: ProcessSucceeded</span>
+<span class="go">Output URL=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=5103866488472745994OUTPUT.f80e2a78-96a9-4343-9777-be60fac5b256</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sos">
+<h3>SOS<a class="headerlink" href="#sos" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="iso">
+<h3>ISO<a class="headerlink" href="#iso" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.iso</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">=</span><span class="n">MD_Metadata</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;tests/data/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">topiccategory</span>
+<span class="go">&#39;farming&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>ISO Codelists:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.etree</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.iso</span> <span class="kn">import</span> <span class="n">CodelistCatalogue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">=</span><span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;gmxCodelists.xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">CodelistCatalogue</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">getcodelistdictionaries</span><span class="p">()</span>
+<span class="go">[&#39;MD_RestrictionCode&#39;, &#39;CI_OnLineFunctionCode&#39;, &#39;DQ_EvaluationMethodTypeCode&#39;, &#39;DS_InitiativeTypeCode&#39;, &#39;MD_MaintenanceFrequencyCode&#39;, &#39;MD_SpatialRepresentationTypeCode&#39;, &#39;MD_ImagingConditionCode&#39;, &#39;MD_ObligationCode&#39;, &#39;MD_GeometricObjectTypeCode&#39;, &#39;MD_ScopeCode&#39;, &#39;MD_KeywordTypeCode&#39;, &#39;MD_CharacterSetCode&#39;, &#39;CI_PresentationFormCode&#39;, &#39;MX_ScopeCode&#39;, &#39;CI_DateTypeCode&#39;, &#39;MD_TopicCategoryCode&#39;, &#39;MD_DatatypeCode&#39;, &#39;MD_ProgressCode&#39;, &#39;MD_MediumNameCode&#39;, &#39;MD_ClassificationCode&#39;, &#39;DS_AssociationTypeCode&#39;, &#39;CI_RoleCode&#39;, &#39;MD_TopologyLevelCode&#39;, &#39;MD_DimensionNameTypeCode&#39;, &#39;MD_CoverageContentTypeCode&#39;, &#39;MD_MediumFormatCode&#39;, &#39;MD_PixelOrientationCode&#39;, &#39;MD_CellGeometryCode&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">getcodedefinitionidentifiers</span><span class="p">(</span><span class="s">&#39;CI_RoleCode&#39;</span><span class="p">)</span>
+<span class="go">[&#39;author&#39;, &#39;processor&#39;, &#39;publisher&#39;, &#39;custodian&#39;, &#39;pointOfContact&#39;, &#39;distributor&#39;, &#39;user&#39;, &#39;resourceProvider&#39;, &#39;originator&#39;, &#39;owner&#39;, &#39;principalInvestigator&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="crs-handling">
+<h3>CRS Handling<a class="headerlink" href="#crs-handling" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib</span> <span class="kn">import</span> <span class="n">crs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s">&#39;EPSG:4326&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">code</span>
+<span class="go">4326</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s">&#39;urn:ogc:def:crs:EPSG::4326&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">authority</span>
+<span class="go">&#39;EPSG&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">axisorder</span>
+<span class="go">&#39;yx&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s">&#39;http://www.opengis.net/gml/epsg.xml#4326&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">code</span>
+<span class="go">4326</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">axisorder</span>
+<span class="go">&#39;xy&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s">&#39;urn:x-ogc:def:crs:EPSG:6.11:2192&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">axisorder</span>
+<span class="go">&#39;xy&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">code</span>
+<span class="go">2192</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">version</span>
+<span class="go">&#39;6.11&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dublin-core">
+<h3>Dublin Core<a class="headerlink" href="#dublin-core" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="nasa-dif">
+<h3>NASA DIF<a class="headerlink" href="#nasa-dif" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="fgdc">
+<h3>FGDC<a class="headerlink" href="#fgdc" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="development">
+<h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h2>
+<p>The OWSLib wiki is located at <a class="reference external" href="https://sourceforge.net/apps/trac/owslib">https://sourceforge.net/apps/trac/owslib</a>.</p>
+<p>The OWSLib source code is available at <a class="reference external" href="https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/">https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/</a>.  You can browse the source code at <a class="reference external" href="https://sourceforge.net/apps/trac/owslib/browser">https://sourceforge.net/apps/trac/owslib/browser</a>.</p>
+<p>You can find out about software metrics at the OWSLib ohloh page at <a class="reference external" href="http://www.ohloh.net/p/OWSLib">http://www.ohloh.net/p/OWSLib</a>.</p>
+<div class="section" id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="support">
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mailing-lists">
+<h3>Mailing Lists<a class="headerlink" href="#mailing-lists" title="Permalink to this headline">¶</a></h3>
+<p>OWSLib provides users and developers mailing lists.  Subscription options and archives are available at <a class="reference external" href="http://lists.osgeo.org/mailman/listinfo/owslib-users">http://lists.osgeo.org/mailman/listinfo/owslib-users</a> and <a class="reference external" href="http://lists.osgeo.org/mailman/listinfo/owslib-devel">http://lists.osgeo.org/mailman/listinfo/owslib-devel</a>.</p>
+</div>
+<div class="section" id="submitting-questions-to-community">
+<h3>Submitting Questions to Community<a class="headerlink" href="#submitting-questions-to-community" title="Permalink to this headline">¶</a></h3>
+<p>To submit questions to a mailing list, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to either <a class="reference external" href="mailto:owslib-users&#37;&#52;&#48;lists&#46;osgeo&#46;org">owslib-users<span>&#64;</span>lists<span>&#46;</span>osgeo<span>&#46;</span>org</a> or <a class="reference external" href="mailto:owslib-devel&#37;&#52;&#48;lists&#46;osgeo&#46;org">owslib-devel<span>&#64;</span>lists<span>&#46;</span>osgeo<span>&#46;</span>org</a>.</p>
+</div>
+<div class="section" id="searching-the-archives">
+<h3>Searching the Archives<a class="headerlink" href="#searching-the-archives" title="Permalink to this headline">¶</a></h3>
+<p>All Community archives are located in <a class="reference external" href="https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-users">https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-users</a> <a class="reference external" href="https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-devel">https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-devel</a>.</p>
+</div>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>Copyright (c) 2006, Ancient World Mapping Center
+All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.</li>
+<li>Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.</li>
+<li>Neither the name of the University of North Carolina nor the names of
+its contributors may be used to endorse or promote products derived
+from this software without specific prior written permission.</li>
+</ul>
+</div></blockquote>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &#8220;AS IS&#8221;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.</p>
+</div>
+<div class="section" id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Sean Gillies &lt;<a class="reference external" href="mailto:sgillies&#37;&#52;&#48;frii&#46;com">sgillies<span>&#64;</span>frii<span>&#46;</span>com</a>&gt;</li>
+<li>Julien Anguenot &lt;<a class="reference external" href="mailto:ja&#37;&#52;&#48;nuxeo&#46;com">ja<span>&#64;</span>nuxeo<span>&#46;</span>com</a>&gt;</li>
+<li>Kai Lautaportti &lt;<a class="reference external" href="mailto:kai&#46;lautaportti&#37;&#52;&#48;hexagonit&#46;fi">kai<span>&#46;</span>lautaportti<span>&#64;</span>hexagonit<span>&#46;</span>fi</a>&gt;</li>
+<li>Dominic Lowe &lt;<a class="reference external" href="mailto:D&#46;Lowe&#37;&#52;&#48;rl&#46;ac&#46;uk">D<span>&#46;</span>Lowe<span>&#64;</span>rl<span>&#46;</span>ac<span>&#46;</span>uk</a>&gt;</li>
+<li>Jo Walsh &lt;<a class="reference external" href="mailto:jo&#37;&#52;&#48;frot&#46;org">jo<span>&#64;</span>frot<span>&#46;</span>org</a>&gt;</li>
+<li>Tom Kralidis &lt;<a class="reference external" href="mailto:tomkralidis&#37;&#52;&#48;hotmail&#46;com">tomkralidis<span>&#64;</span>hotmail<span>&#46;</span>com</a>&gt;</li>
+<li>Luca Cinquini &lt;<a class="reference external" href="mailto:luca&#46;cinquini&#37;&#52;&#48;jpl&#46;nasa&#46;gov">luca<span>&#46;</span>cinquini<span>&#64;</span>jpl<span>&#46;</span>nasa<span>&#46;</span>gov</a>&gt;</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">OWSLib 0.5-dev documentation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#features">Features</a><ul>
+<li><a class="reference internal" href="#standards-support">Standards Support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#install">Install</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#wms">WMS</a></li>
+<li><a class="reference internal" href="#wfs">WFS</a></li>
+<li><a class="reference internal" href="#wcs">WCS</a></li>
+<li><a class="reference internal" href="#csw">CSW</a></li>
+<li><a class="reference internal" href="#wmc">WMC</a></li>
+<li><a class="reference internal" href="#wps">WPS</a></li>
+<li><a class="reference internal" href="#sos">SOS</a></li>
+<li><a class="reference internal" href="#iso">ISO</a></li>
+<li><a class="reference internal" href="#crs-handling">CRS Handling</a></li>
+<li><a class="reference internal" href="#dublin-core">Dublin Core</a></li>
+<li><a class="reference internal" href="#nasa-dif">NASA DIF</a></li>
+<li><a class="reference internal" href="#fgdc">FGDC</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#development">Development</a><ul>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#support">Support</a><ul>
+<li><a class="reference internal" href="#mailing-lists">Mailing Lists</a></li>
+<li><a class="reference internal" href="#submitting-questions-to-community">Submitting Questions to Community</a></li>
+<li><a class="reference internal" href="#searching-the-archives">Searching the Archives</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#credits">Credits</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">OWSLib 0.5-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+
+    <div class="footer">
+        &copy; Copyright 2010, Tom Kralidis.
+      Last updated on 2012-06-20T21:11:16Z.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+
+  <!-- Piwik -->
+  <script type="text/javascript">
+    var pkBaseURL = (("https:" == document.location.protocol) ? "https://sourceforge.net/apps/piwik/owslib/" : "http://sourceforge.net/apps/piwik/owslib/");
+    document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+    try {
+      var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+      piwikTracker.trackPageView();
+      piwikTracker.enableLinkTracking();
+    } catch( err ) {}
+  </script>
+  <noscript>
+    <p>
+      <img src="http://sourceforge.net/apps/piwik/owslib/piwik.php?idsite=1" style="border:0" alt=""/>
+    </p>
+  </noscript>
+  <!-- End Piwik Tag -->
+
+
+  </body>
+</html>
