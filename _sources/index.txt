@@ -76,17 +76,11 @@ PyPI:
 
   $ easy_install OWSLib
 
-Subversion:
-
-.. code-block:: bash
-
-  $ svn co https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/
-
 Git:
 
 .. code-block:: bash
 
-  $ git clone git@github.com:tomkralidis/owslib.git
+  $ git clone git@github.com:geopython/OWSLib.git
 
 Usage
 =====
@@ -512,9 +506,9 @@ FGDC
 Development
 ===========
 
-The OWSLib wiki is located at https://sourceforge.net/apps/trac/owslib.
+The OWSLib wiki is located at https://github.com/geopython/OWSLib/wiki
 
-The OWSLib source code is available at https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/.  You can browse the source code at https://sourceforge.net/apps/trac/owslib/browser.
+The OWSLib source code is available at https://github.com/geopython/OWSLib
 
 You can find out about software metrics at the OWSLib ohloh page at http://www.ohloh.net/p/OWSLib.
 
@@ -537,7 +531,7 @@ To submit questions to a mailing list, first join the list by following the subs
 Searching the Archives
 ----------------------
 
-All Community archives are located in https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-users https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-devel.
+All Community archives are located in http://lists.osgeo.org/pipermail/owslib-users/ http://lists.osgeo.org/pipermail/owslib-devel/
 
 License
 =======
