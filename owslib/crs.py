@@ -1722,7 +1722,8 @@ class Crs(object):
 
         :param string crs: the Coordinate reference system. Examples:
           * EPSG:<EPSG code>
-          * http://www.opengis.net/gml/srs/epsg.xml#<EPSG code>
+          * http://www.opengis.net/def/crs/EPSG/0/<EPSG code> (URI Style 1)
+          * http://www.opengis.net/gml/srs/epsg.xml#<EPSG code> (URI Style 2)
           * urn:EPSG:geographicCRS:<epsg code>
           * urn:ogc:def:crs:EPSG::4326
           * urn:ogc:def:crs:EPSG:4326
@@ -1744,7 +1745,12 @@ class Crs(object):
 
         values = self.id.split(':')
 
-        if self.id.find('#') != -1:  # it's a URI
+        if self.id.find('/def/crs/') != -1: # URI Style 1
+            self.encoding = "uri"
+            vals = self.id.split('/')
+            self.authority = vals[5].upper()
+            self.code = int(vals[-1])
+        elif self.id.find('#') != -1:  # URI Style 2
             self.encoding = "uri"
             vals = self.id.split('#')
             self.authority = vals[0].split('/')[-1].split('.')[0].upper()

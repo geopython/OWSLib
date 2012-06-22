@@ -19,3 +19,10 @@
     2192
     >>> c.version
     '6.11'
+    >>> c=crs.Crs('http://www.opengis.net/def/crs/EPSG/0/4326')
+    >>> c.authority
+    'EPSG'
+    >>> c.code
+    4326
+    >>> c.axisorder
+    'yx'
