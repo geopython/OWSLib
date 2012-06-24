@@ -1,0 +1,6 @@
+*.pyc
+default.cfg
+docs/build
+tester/results
+tester/index.html
+tester/suites/manager/data/records.db
