@@ -24,19 +24,19 @@
     >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd',maxrecords=2)
     >>> c.results['returned']
     2
-    >>> for record in c.records:
+    >>> for record in sorted(c.records):
     ...    c.records[record].identification.title
-    'NOAA/GLERL Lake Michigan-Huron Monthly Component Net Basin Supply Estimates 1948-2008'
+    'NOAA/GLERL Lake Ontario Monthly Component Net Basin Supply Estimates 1948-2008'
     'Lake Superior latent and sensible heat fluxes  - at Stannard Rock lighthouse'
-    >>> for record in c.records:
+    >>> for record in sorted(c.records):
     ...    c.records[record].identifier
-    'f16a5ef3-40cb-462d-a407-7a26c57cfd4f'
+    '54be0d0d-2f25-4d79-9dfd-dcf4738193db'
     '9af6502d-fc02-4471-8559-77ffc6b05bad'
-    >>> for record in c.records:
+    >>> for record in sorted(c.records):
     ...    c.records[record].stdname
     'ISO 19115:2003/19139'
     'ISO 19115:2003/19139'
-    >>> for record in c.records:
+    >>> for record in sorted(c.records):
     ...    c.records[record].stdver
     'Version 3.14'
     'Version 3.14'
@@ -46,8 +46,8 @@
     ExceptionReport: 'OperationNotSupported - HarvestHarvest operation is not supported by this catalogue.\n / None'
     >>> c.response
     '<?xml version="1.0" encoding="UTF-8"?>\r\n<ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd">\r\n  <ows:Exception exceptionCode="OperationNotSupported" locator="HarvestHarvest operation is not supported by this catalogue.&#xA;" />\r\n</ows:ExceptionReport>\r\n\r\n'
-    >>> #c.getrecords(outputschema='http://www.fgdc.gov') -- the schema doesn't work, going off the assumption that this is not an issue on our end
 	>>> c.getrecords(outputschema='http://www.isotc211.org/2005/gmd')
-    >>> c.results['matches']>370
+    >>> len(c.results)
+    3
+    >>> c.results['matches'] > 370
     False
-    >>> #c.getrecords(keywords=['hydrology'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2) -- this results in an exception being thrown, maybe bad schema again?

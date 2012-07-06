@@ -58,8 +58,10 @@ Test single item accessor
     'The Great Northern Forest'
     
     >>> wfs['bo:Woods'].boundingBox
+    (-180.0, -90.0, 180.0, 90.0, <owslib.crs.Crs object ...>)
     
     >>> wfs['bo:Woods'].boundingBoxWGS84
+    (-180.0, -90.0, 180.0, 90.0)
     
     #Another object that wasn't an object before, test needs to adapt
     >>> wfs['bo:Woods'].crsOptions
