@@ -177,7 +177,7 @@ class CatalogueServiceWeb:
             for f in self._exml.findall(nsp('csw:DomainValues/csw:ListOfValues/csw:Value')):
                 self.results['values'].append(testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='summary', sortby=None, outputschema=None, format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='summary', sortby=None, outputschema=None, format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None, resulttype='results'):
         """
 
         Construct and process a  GetRecords request
@@ -198,6 +198,7 @@ class CatalogueServiceWeb:
         - maxrecords: the maximum number of records to return. No records are returned if 0 (default is 10)
         - cql: common query language text.  Note this overrides bbox, qtype, keywords
         - xml: raw XML request.  Note this overrides all other options
+        - resulttype: the resultType 'hits', 'results', 'validate' (default is 'results')
         """
 
         if outputschema is None:
@@ -226,7 +227,7 @@ class CatalogueServiceWeb:
             node0.set('outputSchema', outputschema)
             node0.set('outputFormat', format)
             node0.set('version', self.version)
-            node0.set('resultType', 'results')
+            node0.set('resultType', resulttype)
             node0.set('service', self.service)
             if startposition > 0:
                 node0.set('startPosition', str(startposition))

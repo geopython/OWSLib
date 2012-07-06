@@ -98,8 +98,8 @@ class WebFeatureService_2_0_0(object):
         #need to add to keywords list from featuretypelist information:
         featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns.get_namespace('wfs')))
         featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns.get_namespace('wfs')))
-        for f in featuretypeelems:  
-            kwds = f.findall(nspath('Keywords/Keyword'))
+        for f in featuretypeelems:
+            kwds = f.findall(nsp_ows('ows:Keywords/ows:Keyword'))
             if kwds is not None:
                 for kwd in kwds[:]:
                     if kwd.text not in self.identification.keywords:
@@ -143,7 +143,7 @@ class WebFeatureService_2_0_0(object):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   method=nspath('Get')):
+                   method='Get'):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
         Parameters
@@ -173,6 +173,7 @@ class WebFeatureService_2_0_0(object):
         """
         #log.debug(self.get_operation_by_name('GetFeature'))
         base_url = self.get_operation_by_name('GetFeature').methods[method]['url']
+        
         if method.upper() == "GET":
             base_url = base_url if base_url.endswith("?") else base_url+"?"
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
@@ -347,10 +348,10 @@ class ContentMetadata:
         # bboxes
         self.boundingBoxWGS84 = None
         self.boundingBox = None
-        b = elem.find(nsp_ows('WGS84BoundingBox'))
+        b = elem.find(nsp_ows('ows:WGS84BoundingBox'))
         if b is not None:
-            lc = b.find(nsp_ows("LowerCorner"))
-            uc = b.find(nsp_ows("UpperCorner"))
+            lc = b.find(nsp_ows("ows:LowerCorner"))
+            uc = b.find(nsp_ows("ows:UpperCorner"))
             ll = [float(s) for s in lc.text.split()]
             ur = [float(s) for s in uc.text.split()]
             self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
@@ -363,7 +364,7 @@ class ContentMetadata:
                                 self.boundingBoxWGS84[3],
                                 Crs("epsg:4326"))
         # crs options
-        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS'))]
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('OtherCRS',ns.get_namespace('wfs')))]
         defaultCrs =  elem.findall(nspath('DefaultCRS',ns.get_namespace('wfs')))
         if len(defaultCrs) > 0:
             self.crsOptions.insert(-1,Crs(defaultCrs[0].text))

@@ -102,6 +102,7 @@ GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
 
 ns = OWSLibNamespaces()
 
+
 class IWebProcessingService():
     """
     Abstract interface for an OGC Web Processing Service (WPS).
@@ -147,7 +148,9 @@ class WebProcessingService(object):
     
     def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False):
         """
-        Initialization method resets the object status, it does NOT execute a GetCapabilities invocation to the remote service.
+        Initialization method resets the object status.
+        By default it will execute a GetCapabilities invocation to the remote service, 
+        which can be skipped by using skip_caps=True.
         """
         
         # fields passed in from object initializer
@@ -320,8 +323,6 @@ class WebProcessingService(object):
                     if self.verbose==True:
                         dump(self.processes[-1])
 
-                   
-        
 class WPSReader(object):
     """
     Superclass for reading a WPS document into a lxml.etree infoset.

@@ -29,35 +29,35 @@ Features
 Standards Support
 -----------------
 
-+-------------------+-------------------+
-| Standard          | Version(s)        |
-+===================+===================+
-| `OGC WMS`_        | 1.1.1             |
-+-------------------+-------------------+
-| `OGC WFS`_        | 1.0.0, 2.0.0      |
-+-------------------+-------------------+
-| `OGC WCS`_        | 1.0.0, 1.1.0      |
-+-------------------+-------------------+
-| `OGC WMC`_        | 1.1.0             |
-+-------------------+-------------------+
-| `OGC SOS`_        | 1.0.0             |
-+-------------------+-------------------+
-| `OGC CSW`_        | 2.0.2             |
-+-------------------+-------------------+
-| `OGC WPS`_        | 1.0.0             |
-+-------------------+-------------------+
-| `OGC Filter`_     | 1.1.0             |
-+-------------------+-------------------+
-| `OGC OWS Common`_ | 1.0.0, 1.1.0, 2.0 |
-+-------------------+-------------------+
-| `NASA DIF`_       | 9.7               |
-+-------------------+-------------------+
-| `FGDC CSDGM`_     | 1998              |
-+-------------------+-------------------+
-| `ISO 19139`_      | 2007              |
-+-------------------+-------------------+
-| `Dublin Core`_    | 1.1               |
-+-------------------+-------------------+
++-------------------+---------------------+
+| Standard          | Version(s)          |
++===================+=====================+
+| `OGC WMS`_        | 1.1.1               |
++-------------------+---------------------+
+| `OGC WFS`_        | 1.0.0, 1.1.0, 2.0.0 |
++-------------------+---------------------+
+| `OGC WCS`_        | 1.0.0, 1.1.0        |
++-------------------+---------------------+
+| `OGC WMC`_        | 1.1.0               |
++-------------------+---------------------+
+| `OGC SOS`_        | 1.0.0               |
++-------------------+---------------------+
+| `OGC CSW`_        | 2.0.2               |
++-------------------+---------------------+
+| `OGC WPS`_        | 1.0.0               |
++-------------------+---------------------+
+| `OGC Filter`_     | 1.1.0               |
++-------------------+---------------------+
+| `OGC OWS Common`_ | 1.0.0, 1.1.0, 2.0   |
++-------------------+---------------------+
+| `NASA DIF`_       | 9.7                 |
++-------------------+---------------------+
+| `FGDC CSDGM`_     | 1998                |
++-------------------+---------------------+
+| `ISO 19139`_      | 2007                |
++-------------------+---------------------+
+| `Dublin Core`_    | 1.1                 |
++-------------------+---------------------+
 
 Installation
 ============
@@ -76,17 +76,11 @@ PyPI:
 
   $ easy_install OWSLib
 
-Subversion:
-
-.. code-block:: bash
-
-  $ svn co https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/
-
 Git:
 
 .. code-block:: bash
 
-  $ git clone git@github.com:tomkralidis/owslib.git
+  $ git clone git@github.com:geopython/OWSLib.git
 
 Usage
 =====
@@ -301,7 +295,7 @@ Inspect a remote WPS and retrieve the supported processes:
 .. code-block:: python
 
 	>>> from owslib.wps import WebProcessingService
-	>>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', verbose=False)
+	>>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', verbose=False, skip_caps=True)
 	>>> wps.getcapabilities()
 	>>> wps.identification.type
 	'WPS'
@@ -521,9 +515,9 @@ FGDC
 Development
 ===========
 
-The OWSLib wiki is located at https://sourceforge.net/apps/trac/owslib.
+The OWSLib wiki is located at https://github.com/geopython/OWSLib/wiki
 
-The OWSLib source code is available at https://owslib.svn.sourceforge.net/svnroot/owslib/trunk/.  You can browse the source code at https://sourceforge.net/apps/trac/owslib/browser.
+The OWSLib source code is available at https://github.com/geopython/OWSLib
 
 You can find out about software metrics at the OWSLib ohloh page at http://www.ohloh.net/p/OWSLib.
 
@@ -536,17 +530,27 @@ Support
 Mailing Lists
 -------------
 
-OWSLib provides users and developers mailing lists.  Subscription options and archives are available at https://lists.sourceforge.net/mailman/listinfo/owslib-users and https://lists.sourceforge.net/mailman/listinfo/owslib-devel.
+OWSLib provides users and developers mailing lists.  Subscription options and archives are available at http://lists.osgeo.org/mailman/listinfo/owslib-users and http://lists.osgeo.org/mailman/listinfo/owslib-devel.
 
 Submitting Questions to Community
 ---------------------------------
 
-To submit questions to a mailing list, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to either owslib-users@sourceforge.net or owslib-devel@lists.sourceforge.net.
+To submit questions to a mailing list, first join the list by following the subscription procedure above. Then post questions to the list by sending an email message to either owslib-users@lists.osgeo.org or owslib-devel@lists.osgeo.org.
 
 Searching the Archives
 ----------------------
 
-All Community archives are located in https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-users https://sourceforge.net/mailarchive/forum.php?forum_name=owslib-devel.
+All Community archives are located in http://lists.osgeo.org/pipermail/owslib-users/ http://lists.osgeo.org/pipermail/owslib-devel/
+
+Metrics
+-------
+
+You can find out about software metrics at the pycsw `ohloh`_ page.  pycsw is also registered on `CIA.vc`_.
+
+IRC
+---
+
+As well, visit OWSLib on IRC on ``#geopython`` at `freenode`_ for realtime discussion.
 
 License
 =======
@@ -606,3 +610,7 @@ Credits
 .. _`ISO 19115`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=26020
 .. _`ISO 19139`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=32557
 .. _`Dublin Core`: http://www.dublincore.org/
+.. _`freenode`: http://freenode.net/
+.. _`ohloh`: http://www.ohloh.net/p/OWSLib
+.. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
+
