@@ -178,10 +178,15 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """
 
         url = data = None
+        if typename and type(typename) == type(""):
+            typename = [typename]
         if method.upper() == "GET":
-            (url) = self.getGETGetFeatureRequest()
+            (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid, 
+                    featureversion, propertyname, maxfeatures,storedQueryID, storedQueryParams)
+            log.debug('GetFeature WFS GET url %s'% url)
         else:
             (url,data) = self.getPOSTGetFeatureRequest()
+
 
 
         if method == 'Post':

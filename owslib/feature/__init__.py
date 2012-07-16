@@ -8,6 +8,20 @@
 from owslib.crs import Crs
 
 from urllib import urlencode
+import logging
+
+try:
+    hdlr = logging.FileHandler('/tmp/owslibwfs.log')
+except:
+    import tempfile
+    f=tempfile.NamedTemporaryFile(prefix='owslib.wfs-', delete=False)
+    hdlr = logging.FileHandler(f.name)
+
+log = logging.getLogger(__name__)
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+log.addHandler(hdlr)
+log.setLevel(logging.DEBUG)
 
 class WebFeatureService_:
     """Base class for WebFeatureService implementations"""
