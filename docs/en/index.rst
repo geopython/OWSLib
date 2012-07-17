@@ -555,6 +555,16 @@ Searching the Archives
 
 All Community archives are located in http://lists.osgeo.org/pipermail/owslib-users/ http://lists.osgeo.org/pipermail/owslib-devel/
 
+Metrics
+-------
+
+You can find out about software metrics at the pycsw `ohloh`_ page.  pycsw is also registered on `CIA.vc`_.
+
+IRC
+---
+
+As well, visit OWSLib on IRC on ``#geopython`` at `freenode`_ for realtime discussion.
+
 License
 =======
 
@@ -611,3 +621,7 @@ Credits
 .. _`ISO 19115`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=26020
 .. _`ISO 19139`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=32557
 .. _`Dublin Core`: http://www.dublincore.org/
+.. _`freenode`: http://freenode.net/
+.. _`ohloh`: http://www.ohloh.net/p/OWSLib
+.. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
+
