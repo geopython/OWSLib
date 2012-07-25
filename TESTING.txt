@@ -5,6 +5,7 @@ The OWSLib module is tested with the help of distribute and py.test
 
   http://pypi.python.org/pypi/distribute
   http://pypi.python.org/pypi/pytest
+  http://pypi.python.org/pypi/pytest-cov/
 
 To run all tests:
 
