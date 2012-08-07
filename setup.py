@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 readme = open('README.txt', 'rb').read()
 
 setup(name          = 'OWSLib',
-      version       = '0.5.1',
+      version       = '0.5-dev',
       description   = 'OGC Web Service utility library',
       long_description = readme,
       license       = 'BSD',
@@ -16,7 +16,7 @@ setup(name          = 'OWSLib',
       packages      = find_packages(),
       test_suite    = 'tests.test_suite',
       classifiers   = [
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: BSD License',
