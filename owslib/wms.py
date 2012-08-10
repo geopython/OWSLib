@@ -323,7 +323,11 @@ class ContentMetadata:
         
         self.id = self.name = testXMLValue(elem.find('Name'))
         # title is mandatory property
-        self.title = testXMLValue(elem.find('Title')).strip()
+        self.title = None
+        title = testXMLValue(elem.find('Title'))
+        if title is not None:
+            self.title = title.strip()
+
         self.abstract = testXMLValue(elem.find('Abstract'))
         
         # bboxes
