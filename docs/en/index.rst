@@ -80,7 +80,7 @@ Git:
 
 .. code-block:: bash
 
-  $ git clone git@github.com:geopython/OWSLib.git
+  $ git clone git://github.com/geopython/OWSLib.git
 
 openSUSE:
 
