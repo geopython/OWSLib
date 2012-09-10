@@ -407,7 +407,10 @@ class ContentMetadata:
             #raise ValueError('%s no SRS available!?' % (elem,))
             #Comment by D Lowe.
             #Do not raise ValueError as it is possible that a layer is purely a parent layer and does not have SRS specified. Instead set crsOptions to None
-            self.crsOptions=None
+            # Comment by Jachym:
+            # Do not set it to None, but to [], which will make the code
+            # work further. Fixed by anthonybaxter
+            self.crsOptions=[]
             
         #Styles
         self.styles = {}
