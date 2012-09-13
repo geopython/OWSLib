@@ -1,5 +1,5 @@
 #
-# spec file for package OWSLib (0.5.0)
+# spec file for package OWSLib (0.5.1)
 #
 # Copyright (c) 2011 Angelos Tzotsos <tzotsos@opensuse.org>
 #
@@ -9,14 +9,16 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 
-Name:           owslib
-Version:        0.5.0
+%define pyname owslib
+
+Name:           python-%{pyname}
+Version:        0.5.1
 Release:        0
 Summary:        Python interface to OGC Web Services
 License:        MIT
 Url:            http://geopython.github.com/OWSLib/
 Group:          Productivity/Scientific/Other
-Source0:        %{name}-%{version}.tar.gz
+Source0:        %{pyname}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  python-devel python-setuptools
@@ -27,7 +29,7 @@ Requires:	python
 OWSLib is a Python package for client programming with Open Geospatial Consortium (OGC) web service (hence OWS) interface standards, and their related content models.
 
 %prep
-%setup -q 
+%setup -q -n %{pyname}-%{version}
 
 %build
 %{__python} setup.py build
@@ -35,17 +37,15 @@ OWSLib is a Python package for client programming with Open Geospatial Consortiu
 %install
 rm -rf %{buildroot}
 
-python setup.py install --prefix=%{_prefix} --root=%{buildroot}
-
-rm -rf %{buildroot}%{python_sitelib}/tests
+python setup.py install --prefix=%{_prefix} --root=%{buildroot} \
+                                            --record-rpm=INSTALLED_FILES
 
 %fdupes -s %{buildroot}
 
 %clean
 rm -rf %{buildroot}
 
-%files
+%files -f INSTALLED_FILES
 %defattr(-,root,root,-)
-%{python_sitelib}/
 
 %changelog
