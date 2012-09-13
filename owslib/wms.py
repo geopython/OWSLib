@@ -245,7 +245,7 @@ class WebMapService(object):
         
     def getServiceXML(self):
         xml = None
-        if self._capabilities:
+        if self._capabilities is not None:
             xml = etree.tostring(self._capabilities)
         return xml
 
