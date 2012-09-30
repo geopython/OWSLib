@@ -1,6 +1,18 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Command
+import os
 
 readme = open('README.txt', 'rb').read()
+
+class PyTest(Command):
+    user_options = []
+    def initialize_options(self):
+        pass
+    def finalize_options(self):
+        pass
+    def run(self):
+        import sys,subprocess
+        errno = subprocess.call([sys.executable, 'runtests.py'])
+        raise SystemExit(errno)
 
 setup(name          = 'OWSLib',
       version       = '0.5-dev',
@@ -14,7 +26,8 @@ setup(name          = 'OWSLib',
       maintainer_email  = 'sgillies@frii.com',
       url           = 'https://geopython.github.com/OWSLib',
       packages      = find_packages(),
-      test_suite    = 'tests.test_suite',
+      cmdclass      = {'test': PyTest},
+      tests_require = ['pytest','pytest-cov'],
       classifiers   = [
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

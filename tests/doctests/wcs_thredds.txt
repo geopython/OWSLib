@@ -1,0 +1,80 @@
+Web Coverage Service: #This is an example that shows how to the OWSLib wcs client to make requests from the Unidata WCS.
+====================
+
+Version 1.0.0
+========
+
+
+    >>> from owslib.wcs import WebCoverageService
+    >>> wcs=WebCoverageService('http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd', version='1.0.0')
+    >>> wcs.url
+    'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd'
+    >>> wcs.version
+    '1.0.0'
+    >>> wcs.identification.service
+    >>> wcs.identification.version
+    '1.0.0'
+    >>> wcs.identification.title
+    >>> wcs.identification.abstract
+    >>> wcs.identification.keywords
+    []
+    >>> wcs.identification.fees
+    'NONE'
+    >>> wcs.identification.accessConstraints
+    'NONE'
+
+#There is no 'ResponsibleParty' information in the NCEP/NAM capabilities document, so wcs.provider is empty.
+#but if there was you could do:
+#wcs.provider.url
+#and..
+#wcs.provider.contact.organization
+#wcs.provider.contact.email
+#wcs.provider.contact.address
+#etc... for region, city, postcode, country
+
+Print the ids of all layers (actually just the first 3):
+   >>> wcs.contents.keys()[:3]
+   ['Total_Column-Integrated_Cloud_Ice', 'Categorical_Snow', 'Exchange_Coefficient']
+	
+
+#To further interrogate a single "coverage" get the coverageMetadata object
+#You can either do:
+	>>> cvg= wcs.contents['Temperature'] #to get it from the dictonary
+	
+#or even simpler you can do:
+	>>> cvg=wcs['Temperature'] 
+
+	>>> cvg.boundingBoxWGS84
+	(-153.21273081043725, 11.968943066973155, -49.02974146394894, 57.381664838271625)
+
+    
+	>>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
+	True
+
+	#check it: this is now returned as a list of CRS objects, the expected list are the ids of two crs objects now, so will change the test
+	>>> #cvg.supportedCRS
+	#['EPSG:9802[Lambert_Conformal_Conic_2SP]']
+	>>> cvg.supportedCRS[0].id
+	'EPSG:9802'
+	>>> cvg.supportedCRS[1].id
+	'[Lambert_Conformal_Conic_2SP]'
+
+	>>> cvg.supportedFormats
+	['GeoTIFF', 'GeoTIFF_Float', 'NetCDF3']
+	
+#Now we have enough information to build a GetCoverage request: 	
+	>>> covID='Temperature'
+	>>> timeRange=['2009-01-08T06:00:00',  '2009-01-08T12:00:00']  #Okay, you should be able to select a range of times, but the server doesn't seem to like it. 
+	>>> timeRange=[cvg.timepositions[10]] #So for now I'll just  choose one timestep (from cvg.timepositions)
+	>>> bb=(-140, -15, 30, 55) # chosen from cvg.boundingBoxWGS84
+	>>> formatType='NetCDF3' # chosen from cvg.supportedFormats
+	
+#Make the actual GetCoverage request.
+	>>> output=wcs.get_coverage(identifier=covID,time=timeRange,bbox=bb, format=formatType)
+
+#Then write this to a netcdf file.
+	>>> from tests.utils import scratch_file
+	>>> filename = scratch_file('threddstest.nc')
+	>>> f = open(filename, 'wb')
+	>>> f.write(output.read())
+	>>> f.close() 	

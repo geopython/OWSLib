@@ -1,0 +1,106 @@
+
+Imports
+
+    >>> from owslib.wfs import WebFeatureService
+    >>> from tests.utils import resource_file
+    
+Fake a request to a WFS Server using saved doc from.
+
+    >>> xml = open(resource_file('wfs_mapserver_getcapabilities.xml'), 'r').read() 
+    >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
+    
+Test capabilities
+
+Service Identification:
+
+    >>> wfs.identification.type
+    'MapServer WFS'
+
+    >>> wfs.identification.version
+    '1.0'
+    
+    >>> wfs.identification.title
+    'Bird Studies Canada WMS/WFS Server'
+    
+    >>> wfs.identification.abstract
+    'Bird Studies Canada WMS/WFS Server for bird distribution and abundance data, and related information.  Bird Studies Canada gratefully acknowledges the support of Environment Canada - Canadian Information System for the Environment in developing this service.'
+    
+    >>> wfs.identification.keywords
+    ['birds', 'distribution', 'abundance', 'conservation', 'sites', 'monitoring', 'populations', 'canada']
+
+    >>> wfs.identification.accessconstraints
+    'None'
+
+    >>> wfs.identification.fees
+    'None'
+
+
+Service Provider:
+	#Commenting out the line below since the name field doesn't seem to exist, unsure if this is a legitimate bug or just bad test 
+    >>> #wfs.provider.name
+
+    >>> wfs.provider.url
+    'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3920&entryLang=en&portal=gdp'
+    
+    #TODO: test contact info:
+    #>>> wfs.provider.contact.name
+
+    
+Test available content layers
+
+    >>> wfs.contents.keys()
+    ['CBC_PT', 'OBBA_REGION', 'IBA', 'MMP', 'CBC_PY', 'OBBA_SQUARE', 'BBS_PT', 'OWLS', 'OBBA_BLOCK', 'CLLS']
+    
+    >>> [wfs[layer].title for layer in wfs.contents]
+    ['Canadian Christmas Bird Count Locations', 'Ontario Breeding Bird Atlas Administrative Regions', 'Canadian Important Bird Areas', 'Marsh Monitoring Program Route Locations', 'Canadian Christmas Bird Count Locations', 'Ontario Breeding Bird Atlas 10 km Squares', 'Breeding Bird Survey Route Start Points', 'Nocturnal Owl Survey Locations', 'Ontario Breeding Bird Atlas 100 km Blocks', 'Canadian Lakes Loon Survey Locations']
+    
+Test single item accessor
+
+    >>> wfs['IBA'].title
+    'Canadian Important Bird Areas'
+    
+    >>> wfs['IBA'].boundingBox
+    
+    >>> wfs['IBA'].boundingBoxWGS84
+    (-141.238, 41.6718, -52.667, 78.1059)
+    
+	#Another object that wasn't an object before, test needs to adapt
+    >>> #wfs['IBA'].crsOptions
+    #['EPSG:4326']
+	>>> wfs['IBA'].crsOptions[0].id
+	'EPSG:4326'
+    
+    >>> wfs['IBA'].verbOptions
+    ['{http://www.opengis.net/wfs}Query']
+    
+Expect a KeyError for invalid names
+
+    >>> wfs['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wfs.operations]
+    ['{http://www.opengis.net/wfs}GetCapabilities', '{http://www.opengis.net/wfs}DescribeFeatureType', '{http://www.opengis.net/wfs}GetFeature']
+    
+    >>> wfs.get_operation_by_name('{http://www.opengis.net/wfs}GetFeature').methods
+    {'{http://www.opengis.net/wfs}Get': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}, '{http://www.opengis.net/wfs}Post': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}}
+    
+    >>> wfs.get_operation_by_name('{http://www.opengis.net/wfs}GetFeature').formatOptions
+    ['{http://www.opengis.net/wfs}GML2', '{http://www.opengis.net/wfs}GML3']
+
+
+Test exceptions
+
+    >>> wfs.exceptions
+    []
+
+Lastly, test the getcapabilities method
+
+    >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0')
+    >>> xml = wfs.getcapabilities().read()
+    >>> xml.find('<WFS_Capabilities') > 0
+    True
+

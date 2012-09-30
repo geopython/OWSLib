@@ -1,0 +1,42 @@
+NOAA WCS 1.0.0  - testing rectifiedgrid representation
+==========
+    >>> from owslib.wcs import WebCoverageService
+    >>> wcs=WebCoverageService('http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/GFS/CONUS_80km/NCEP-GFS-CONUS_80km_best.ncd', version='1.0.0')
+    >>> wcs.url
+    'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/GFS/CONUS_80km/NCEP-GFS-CONUS_80km_best.ncd'
+    >>> wcs.version
+    '1.0.0'
+    >>> wcs.identification.service
+    >>> wcs.identification.version
+    '1.0.0'
+    >>> wcs.identification.title
+    >>> wcs.identification.abstract
+    >>> wcs.identification.keywords
+    []
+    >>> wcs.identification.fees
+    'NONE'
+    >>> wcs.identification.accessConstraints
+    'NONE'
+    >>> type(wcs.items())
+    <type 'list'>
+    >>> #vars(wcs)
+    >>> #dir(wcs)
+    #{'operations': [<owslib.coverage.wcs100.OperationMetadata object at 0x00000000045D4780>, <owslib.coverage.wcs100.OperationMetadata object at 0x00000000045D47B8>, <owslib.coverage.wcs100.OperationMetadata object at 0x00000000045D4828>], 'cookies': None, 'url': 'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/GFS/CONUS_80km/NCEP-GFS-CONUS_80km_best.ncd', '_capabilities': <Element '{http://www.opengis.net/wcs}WCS_Capabilities' at 0x400ad30>, 'version': '1.0.0', 'identification': <owslib.coverage.wcs100.ServiceIdentification object at 0x000000000400A898>, 'provider': <owslib.coverage.wcs100.ServiceProvider object at 0x000000000400ACC0>, 'exceptions': [], 'contents': {'Vertical_speed_shear': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D49E8>, 'u_wind_layer_between_two_pressure_difference_from_ground': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4A90>, 'Temperature_tropopause': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4DD8>, 'Temperature_layer_between_two_pressure_difference_from_ground': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4C50>, 'Pressure_tropopause': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4EB8>, 'Relative_humidity': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4A58>, 'Convective_Avail_Pot_Energy_surface': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4860>, 'Total_precipitation': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D49B0>, 'v_wind': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4B00>, 'u_wind_height_above_ground': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4898>, 'Temperature': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4C88>, 'Absolute_vorticity': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4E48>, 'Pressure_reduced_to_MSL': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4BA8>, 'Relative_humidity_layer_between_two_sigmas': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4E10>, 'v_wind_layer_between_two_pressure_difference_from_ground': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4C18>, 'v_wind_tropopause': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4B70>, 'Pressure': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4AC8>, 'Convective_Avail_Pot_Energy': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4CF8>, 'Surface_lifted_index': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4D68>, 'u_wind': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4D30>, 'Relative_humidity_height_above_ground': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4E80>, 'Convective_inhibition': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4CC0>, 'Precipitable_water': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4978>, 'v_wind_height_above_ground': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4940>, 'Convective_inhibition_surface': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4BE0>, 'Relative_humidity_layer_between_two_pressure_difference_from_ground': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4DA0>, 'Pressure_vertical_velocity': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D48D0>, 'Geopotential_height_surface': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4908>, 'Temperature_height_above_ground': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4A20>, 'u_wind_tropopause': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4EF0>, 'Geopotential_height': <owslib.coverage.wcs100.ContentMetadata object at 0x00000000045D4B38>}}
+    >>> cvg=wcs.contents['Temperature']
+    >>> #dir(cvg)
+    >>> cvg.title
+    'Temperature @ isobaric'
+    >>> cvg.grid.axislabels
+    ['x', 'y', 'z']
+    >>> cvg.grid.dimension
+    3
+    >>> cvg.grid.lowlimits
+    ['0', '0', '0']
+    >>> cvg.grid.highlimits
+    ['92', '64', '28']
+    >>> cvg.grid.origin
+    ['-4226.106971141345', '-832.6983183345455', '1000.0']
+    >>> cvg.grid.offsetvectors
+    [['81.271', '0.0', '0.0'], ['0.0', '81.271', '0.0'], ['0.0', '0.0', '-32.142857142857146']]
+    >>> cvg.boundingBoxWGS84
+    (-153.61631473720482, 11.737408043119824, -48.63314276802535, 57.48709721710864)

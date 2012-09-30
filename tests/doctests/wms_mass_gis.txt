@@ -1,0 +1,109 @@
+
+Imports
+
+    >>> from owslib.wms import WebMapService
+    >>> from tests.utils import resource_file, scratch_file
+    >>> import os
+    
+Fake a request to a GeoServer WMS Server using saved doc from 
+http://giswebservices.massgis.state.ma.us/geoserver/wms
+
+    >>> xml = open(resource_file('wms_mass_gis.xml'), 'r').read()
+    >>> wms = WebMapService('url', version='1.1.1', xml=xml)
+    
+Test capabilities
+-----------------
+
+    >>> wms.identification.type
+    'OGC:WMS'
+    >>> wms.identification.version
+    '1.1.1'
+    >>> wms.identification.title
+    'Massachusetts Data from MassGIS (GeoServer)'
+    >>> wms.identification.abstract
+    'Statewide Massachusetts data served by MassGIS via GeoServer.'
+    >>> wms.identification.keywords
+    ['WMS', 'GEOSERVER', 'Massachusetts', 'MassGIS']
+    >>> wms.identification.accessconstraints
+    'NONE'
+    >>> wms.identification.fees
+    'NONE'
+    >>> wms.provider.url
+    'http://giswebservices.massgis.state.ma.us/geoserver/wms'
+
+
+Check contact info (some of it is missing)
+    >>> wms.provider.contact.name
+    'Aleda Freeman'
+    >>> wms.provider.contact.email
+    'aleda.freeman@state.ma.us'
+    >>> wms.provider.contact.address
+    '1 Ashburton Pl, Room 1601'
+    >>> wms.provider.contact.city
+    'Boston'
+    >>> wms.provider.contact.country
+    'USA'
+    >>> wms.provider.contact.region
+    'MA'
+    >>> wms.provider.contact.postcode
+    '02114'
+    >>> wms.provider.contact.organization
+    'MassGIS - Information Technology Division'
+    >>> wms.provider.contact.position
+    'GIS Programmer'
+
+Test available content layers
+    >>> type(wms.items())
+    <type 'list'>
+    >>> type(wms.contents)
+    <type 'dict'>
+
+ 
+Test single item accessor
+    
+    >>> wms['massgis:GISDATA.SHORELINES_ARC'].title
+    'Shoreline Change'
+
+    >>> wms['massgis:GISDATA.SHORELINES_ARC'].keywords
+    ['MassgisMetadataUrl=http://maps.massgis.state.ma.us/czm/moris/metadata/moris_shorelines_arc.htm', 'Change', 'GISDATA.SHORELINES_ARC', 'Shoreline', 'massgis_sde']
+
+    >>> wms['massgis:GISDATA.SHORELINES_ARC'].boundingBox
+    (231474.73433409492, 777443.124893673, 331004.5312907933, 958511.9376063161, 'EPSG:26986')
+
+    >>> wms['massgis:GISDATA.SHORELINES_ARC'].boundingBoxWGS84
+    (-71.12453776314456, 41.2362712765796, -69.8968224409519, 42.876590440959234)
+    
+    >>> wms['massgis:GISDATA.SHORELINES_ARC'].styles
+    {'GISDATA.SHORELINES_ARC::Default': {'legend': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GISDATA.SHORELINES_ARC', 'title': None}}
+    
+Expect a KeyError for invalid names
+
+    >>> wms['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wms.operations]
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
+    
+    >>> wms.get_operation_by_name('GetMap').methods
+    {'Get': {'url': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?SERVICE=WMS&'}}
+    
+    >>> len(wms.get_operation_by_name('GetMap').formatOptions)
+    29
+
+Test exceptions
+
+    >>> wms.exceptions
+    ['application/vnd.ogc.se_xml', 'application/vnd.ogc.se_inimage']
+
+
+Lastly, test the getcapabilities and getmap methods
+
+    >>> wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
+    >>> img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'], styles=[''], srs='EPSG:4326', bbox=(-70.8, 42, -70, 42.8), size=(300, 300), format='image/jpeg', transparent=True)
+    >>> out = open(scratch_file('massgis_shoreline.jpg'), 'wb')
+    >>> out.write(img.read())
+    >>> out.close()

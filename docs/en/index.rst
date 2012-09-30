@@ -148,9 +148,9 @@ Available methods, their URLs, and available formats:
 
   >>> [op.name for op in wms.operations]
   ['GetCapabilities', 'GetMap']
-  >>> wms.getOperationByName('GetMap').methods
+  >>> wms.get_operation_by_name('GetMap').methods
   {'Get': {'url': 'http://wms.jpl.nasa.gov/wms.cgi?'}}
-  >>> wms.getOperationByName('GetMap').formatOptions
+  >>> wms.get_operation_by_name('GetMap').formatOptions
   ['image/jpeg', 'image/png', 'image/geotiff', 'image/tiff']
 
 That's everything needed to make a request for imagery:
@@ -496,6 +496,15 @@ You can also submit a pre-made request encoded as WPS XML:
 SOS
 ---
 
+GetCapabilities
+
+.. include:: ../../tests/doctests/sos_ndbc_getcapabilities.txt
+
+DescribeSensor / GetObservation
+
+.. include:: ../../tests/doctests/sos_ndbc_getobservation.txt
+
+
 ISO
 ---
 
@@ -509,12 +518,12 @@ ISO
 
 ISO Codelists:
 
-.. include:: ../../tests/iso_codelist.txt
+.. include:: ../../tests/doctests/iso_codelist.txt
 
 CRS Handling
 ------------
 
-.. include:: ../../tests/crs.txt
+.. include:: ../../tests/doctests/crs.txt
 
 Dublin Core
 -----------
@@ -606,6 +615,8 @@ Credits
  * Tom Kralidis <tomkralidis@hotmail.com>
  * Jachym Cepicky <jachym.cepicky@gmail.com>
  * Luca Cinquini <luca.cinquini@jpl.nasa.gov>
+ * Sean Cowan <scowan@asascience.com>
+ * Kyle Wilcox <kwilcox@asascience.com>
 
 .. _`Open Geospatial Consortium`: http://www.opengeospatial.org/
 .. _`OGC WMS`: http://www.opengeospatial.org/standards/wms

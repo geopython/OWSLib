@@ -16,21 +16,14 @@ Currently supports version 1.1.0 (04-095).
 """
 
 from owslib.etree import etree
-from owslib import util
+from owslib.util import nspath_eval
+from owslib.namespaces import OWSLibNamespaces
 
 # default variables
-
 schema = 'http://schemas.opengis.net/filter/1.1.0/filter.xsd'
 
-namespaces = {
-    None : 'http://www.opengis.net/ogc',
-    'gml': 'http://www.opengis.net/gml',
-    'ogc': 'http://www.opengis.net/ogc',
-    'xs' : 'http://www.w3.org/2001/XMLSchema',
-    'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
-}
-
-schema_location = '%s %s' % (namespaces['ogc'], schema)
+ns = OWSLibNamespaces()
+schema_location = '%s %s' % (ns.get_namespace('ogc'), schema)
 
 class FilterRequest(object):
     """ filter class """
@@ -66,9 +59,9 @@ class FilterRequest(object):
         """
 
         # construct
-        node0 = etree.Element(util.nspath_eval('ogc:Filter', namespaces))
+        node0 = etree.Element(nspath_eval('ogc:Filter'))
         if parent is True:
-            node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+            node0.set(nspath_eval('xsi:schemaLocation'), schema_location)
 
         if identifier is not None:
             self._setpropertyisequalto(node0, 'dc:identifier', identifier)
@@ -83,8 +76,8 @@ class FilterRequest(object):
         if bbox is not None:
             pcount += 1
 
-        if pcount > 1: # Filter should be And-ed
-            node1 = etree.SubElement(node0, util.nspath_eval('ogc:And', namespaces))
+        if pcount > 1: # Filter should be And-ed===
+            node1 = etree.SubElement(node0, nspath_eval('ogc:And'))
         else: 
             node1 = None
     
@@ -107,9 +100,9 @@ class FilterRequest(object):
         if len(keywords) > 0:
             if len(keywords) > 1: # loop multiple keywords into an Or
                 if node1 is not None:
-                    node3 = etree.SubElement(node1, util.nspath_eval('ogc:Or', namespaces))
+                    node3 = etree.SubElement(node1, nspath_eval('ogc:Or'))
                 else:
-                    node3 = etree.SubElement(node0, util.nspath_eval('ogc:Or', namespaces))
+                    node3 = etree.SubElement(node0, nspath_eval('ogc:Or'))
     
                 for i in keywords:
                     self._setpropertyislike(node3, propertyname, '%%%s%%' % i)
@@ -137,11 +130,11 @@ class FilterRequest(object):
 
         """
 
-        tmp = etree.SubElement(parent, util.nspath_eval('ogc:PropertyIsEqualTo', namespaces))
+        tmp = etree.SubElement(parent, nspath_eval('ogc:PropertyIsEqualTo'))
         if matchcase is False:
             tmp.set('matchCase', 'false')
-        etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
-        etree.SubElement(tmp, util.nspath_eval('ogc:Literal', namespaces)).text = literal
+        etree.SubElement(tmp, nspath_eval('ogc:PropertyName')).text = propertyname
+        etree.SubElement(tmp, nspath_eval('ogc:Literal')).text = literal
     
     def _setbbox(self, parent, bbox):
         """
@@ -156,11 +149,11 @@ class FilterRequest(object):
 
         """
 
-        tmp = etree.SubElement(parent, util.nspath_eval('ogc:BBOX', namespaces))
-        etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = 'ows:BoundingBox'
-        tmp2 = etree.SubElement(tmp, util.nspath_eval('gml:Envelope', namespaces))
-        etree.SubElement(tmp2, util.nspath_eval('gml:lowerCorner', namespaces)).text = '%s %s' % (bbox[0], bbox[1])
-        etree.SubElement(tmp2, util.nspath_eval('gml:upperCorner', namespaces)).text = '%s %s' % (bbox[2], bbox[3])
+        tmp = etree.SubElement(parent, nspath_eval('ogc:BBOX'))
+        etree.SubElement(tmp, nspath_eval('ogc:PropertyName')).text = 'ows:BoundingBox'
+        tmp2 = etree.SubElement(tmp, nspath_eval('gml:Envelope'))
+        etree.SubElement(tmp2, nspath_eval('gml:lowerCorner')).text = '%s %s' % (bbox[0], bbox[1])
+        etree.SubElement(tmp2, nspath_eval('gml:upperCorner')).text = '%s %s' % (bbox[2], bbox[3])
 
     def _setpropertyislike(self, parent, propertyname, literal, wildcard='%', singlechar='_', escapechar='\\'):  
         """
@@ -179,30 +172,31 @@ class FilterRequest(object):
 
         """
 
-        tmp = etree.SubElement(parent, util.nspath_eval('ogc:PropertyIsLike', namespaces))
+        tmp = etree.SubElement(parent, nspath_eval('ogc:PropertyIsLike'))
         tmp.set('wildCard', wildcard)
         tmp.set('singleChar', singlechar)
         tmp.set('escapeChar', escapechar)
-        etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
-        etree.SubElement(tmp, util.nspath_eval('ogc:Literal', namespaces)).text = literal
+        etree.SubElement(tmp, nspath_eval('ogc:PropertyName')).text = propertyname
+        etree.SubElement(tmp, nspath_eval('ogc:Literal')).text = literal
+
 
 class FilterCapabilities(object):
     """ Abstraction for Filter_Capabilities """
     def __init__(self, elem):
         # Spatial_Capabilities
-        self.spatial_operands = [f.text for f in elem.findall(util.nspath_eval('ogc:Spatial_Capabilities/ogc:GeometryOperands/ogc:GeometryOperand', namespaces))]
+        self.spatial_operands = [f.text for f in elem.findall(nspath_eval('ogc:Spatial_Capabilities/ogc:GeometryOperands/ogc:GeometryOperand'))]
         self.spatial_operators = []
-        for f in elem.findall(util.nspath_eval('ogc:Spatial_Capabilities/ogc:SpatialOperators/ogc:SpatialOperator', namespaces)):
+        for f in elem.findall(nspath_eval('ogc:Spatial_Capabilities/ogc:SpatialOperators/ogc:SpatialOperator')):
             self.spatial_operators.append(f.attrib['name'])
 
         # Temporal_Capabilities
-        self.temporal_operands = [f.text for f in elem.findall(util.nspath_eval('ogc:Temporal_Capabilities/ogc:TemporalOperands/ogc:TemporalOperand', namespaces))]
+        self.temporal_operands = [f.text for f in elem.findall(nspath_eval('ogc:Temporal_Capabilities/ogc:TemporalOperands/ogc:TemporalOperand'))]
         self.temporal_operators = []
-        for f in elem.findall(util.nspath_eval('ogc:Temporal_Capabilities/ogc:TemporalOperators/ogc:TemporalOperator', namespaces)):
+        for f in elem.findall(nspath_eval('ogc:Temporal_Capabilities/ogc:TemporalOperators/ogc:TemporalOperator')):
             self.temporal_operators.append(f.attrib['name'])
 
         # Scalar_Capabilities
-        self.scalar_comparison_operators = [f.text for f in elem.findall(util.nspath_eval('ogc:Scalar_Capabilities/ogc:ComparisonOperators/ogc:ComparisonOperator', namespaces))]
+        self.scalar_comparison_operators = [f.text for f in elem.findall(nspath_eval('ogc:Scalar_Capabilities/ogc:ComparisonOperators/ogc:ComparisonOperator'))]
 
 def setsortby(parent, propertyname, order='ASC'):
     """
@@ -218,7 +212,7 @@ def setsortby(parent, propertyname, order='ASC'):
 
     """
 
-    tmp = etree.SubElement(parent, util.nspath_eval('ogc:SortBy', namespaces))
-    tmp2 = etree.SubElement(tmp, util.nspath_eval('ogc:SortProperty', namespaces))
-    etree.SubElement(tmp2, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
-    etree.SubElement(tmp2, util.nspath_eval('ogc:SortOrder', namespaces)).text = order
+    tmp = etree.SubElement(parent, nspath_eval('ogc:SortBy'))
+    tmp2 = etree.SubElement(tmp, nspath_eval('ogc:SortProperty'))
+    etree.SubElement(tmp2, nspath_eval('ogc:PropertyName')).text = propertyname
+    etree.SubElement(tmp2, nspath_eval('ogc:SortOrder')).text = order

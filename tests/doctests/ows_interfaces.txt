@@ -1,0 +1,122 @@
+#This test checks that the OWSLib service interfaces are the same across all service type:
+#Author: Dominic Lowe, 17th September 2009    
+#Part of OWSLib package.
+
+    >>> from owslib.csw import CatalogueServiceWeb
+    >>> from owslib.wms import WebMapService
+    >>> from owslib.wcs import WebCoverageService
+    >>> from owslib.wfs import WebFeatureService
+    >>> from tests.utils import resource_file
+
+
+#TODO, we should run all these from local XML documents (as per the WMS and WFS services)
+
+    >>> wmsxml = open(resource_file('wms_JPLCapabilities.xml'), 'r').read() 
+    >>> wfsxml = open(resource_file('wfs_mapserver_getcapabilities.xml'), 'r').read()
+    >>> wms = WebMapService('url', version='1.1.1', xml=wmsxml)
+    >>> wfs = WebFeatureService('url', version='1.0', xml=wfsxml)
+    >>> wcs=WebCoverageService('http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd', version='1.0.0')
+    >>> csw= CatalogueServiceWeb('http://www.ngdc.noaa.gov/geoportal/csw')
+
+#Check each service instance conforms to OWSLib interface
+    >>> csw.alias, wms.alias, wcs.alias, wfs.alias='CSW', 'WMS', 'WCS', 'WFS' 
+    >>> services=[csw, wms, wcs, wfs]
+    >>> for service in services:
+    ...     type(service)
+    <type 'instance'>
+    <class 'owslib.wms.WebMapService'>
+    <class 'owslib.coverage.wcs100.WebCoverageService_1_0_0'>
+    <class 'owslib.feature.wfs100.WebFeatureService_1_0_0'>
+
+#URL attribute
+#no longer cciw.ca, switching to different hosting service
+    >>> for service in services:
+    ...     service.url
+    'http://www.ngdc.noaa.gov/geoportal/csw'
+    'url'
+    'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd'
+    'url'
+
+#version attribute
+    >>> for service in services:
+    ...     service.version
+    '2.0.2'
+    '1.1.1'
+    '1.0.0'
+    '1.0'
+    
+#Identification object:
+    >>> for service in services:
+    ...     hasattr(service, 'identification')
+    True
+    True
+    True
+    True
+
+
+#Check all ServiceIdentification attributes
+    >>> for service in services:
+    ...     service.identification.type
+    ...     [[attribute, hasattr(service.identification, attribute)] for attribute in ['type', 'version', 'title', 'abstract', 'keywords', 'accessconstraints', 'fees']] 
+    'CSW'
+    [['type', True], ['version', True], ['title', True], ['abstract', True], ['keywords', True], ['accessconstraints', True], ['fees', True]]
+    'OGC:WMS'
+    [['type', True], ['version', True], ['title', True], ['abstract', True], ['keywords', True], ['accessconstraints', True], ['fees', True]]
+    'OGC:WCS'
+    [['type', True], ['version', True], ['title', True], ['abstract', True], ['keywords', True], ['accessconstraints', False], ['fees', True]]
+    'MapServer WFS'
+    [['type', True], ['version', True], ['title', True], ['abstract', True], ['keywords', True], ['accessconstraints', True], ['fees', True]]
+
+#Check all ServiceProvider attributes
+    >>> for service in services:
+    ...     service.identification.type
+    ...     [[attribute, hasattr(service.provider, attribute)] for attribute in ['name','url','contact']] 
+    'CSW'
+    [['name', True], ['url', True], ['contact', True]]
+    'OGC:WMS'
+    [['name', True], ['url', True], ['contact', True]]
+    'OGC:WCS'
+    [['name', True], ['url', True], ['contact', True]]
+    'MapServer WFS'
+    [['name', False], ['url', True], ['contact', False]]
+
+
+TODO: Until we settle all of the services to use the dict instead of lists, this will fail
+
+#Check all operations implement IOperationMetadata
+
+#Check all contents implement IContentMetadata as a dictionary
+#CSW does not work in this way so use dummy
+    >>> csw.contents={'dummy':'1'}
+    >>> for service in services:
+    ...     service.identification.type
+    ...     type(service.contents)
+    'CSW'
+    <type 'dict'>
+    'OGC:WMS'
+    <type 'dict'>
+    'OGC:WCS'
+    <type 'dict'>
+    'MapServer WFS'
+    <type 'dict'>
+
+
+#Check any item (WCS coverage, WMS layer etc) from the contents of each service
+#Check it conforms to IContentMetadata interface
+#CSW does not conform to this
+#WCS boundingbox handling is also different (has multiple boundingboxes). TODO: needs harmonising.
+
+    
+    >>> for service in services:
+    ...	    if type(service.contents) is dict:
+    ...         service.identification.type
+    ...         content=service.contents[service.contents.iterkeys().next()] #get random item from contents dictionary -has to be a nicer way to do this!
+    ...         [[attribute, hasattr(content, attribute)] for attribute in ['id','title','boundingBox', 'boundingBoxWGS84', 'crsOptions', 'styles', 'timepositions']]
+    'CSW'
+    [['id', False], ['title', True], ['boundingBox', False], ['boundingBoxWGS84', False], ['crsOptions', False], ['styles', False], ['timepositions', False]]
+    'OGC:WMS'
+    [['id', True], ['title', True], ['boundingBox', True], ['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
+    'OGC:WCS'
+    [['id', True], ['title', True], ['boundingBox', True], ['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]
+    'MapServer WFS'
+    [['id', True], ['title', True], ['boundingBox', True], ['boundingBoxWGS84', True], ['crsOptions', True], ['styles', True], ['timepositions', True]]

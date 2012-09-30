@@ -113,7 +113,7 @@ class ISensorObservationService(IService):
         """Make a request to the SOS, returns an XML document wrapped in a 
         Python file object."""
 
-class iSensorObservationServiceContentMetadata(IContentMetadata):
+class ISensorObservationServiceContentMetadata(IServiceContents):
     """Extension class for SOS specifics"""
     pass
 

@@ -16,152 +16,120 @@ Currently supports version 1.1.0 (06-121r3).
 """
 
 from owslib.etree import etree
-from owslib import crs, util
+from owslib import crs
+from owslib.util import testXMLValue, testXMLAttribute, nspath_eval, nspath, xmltag_split, dict_union, extract_xml_list
+from owslib.namespaces import OWSLibNamespaces
 
-OWS_NAMESPACE_1_0_0 = 'http://www.opengis.net/ows'
-OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
-OWS_NAMESPACE_2_0 = 'http://www.opengis.net/ows/2.0'
-XSI_NAMESPACE       = 'http://www.w3.org/2001/XMLSchema-instance'
-XLINK_NAMESPACE     = 'http://www.w3.org/1999/xlink'
+_ows_version = '1.0.0'
 
-DEFAULT_OWS_NAMESPACE=OWS_NAMESPACE_1_1_0     #Use this as default for OWSCommon objects
+ns = OWSLibNamespaces()
 
-class OwsCommon(object):
-    """Initialize OWS Common object"""
-    def __init__(self,version):
-        self.version = version
-        if version == '1.0.0':
-            self.namespace = OWS_NAMESPACE_1_0_0
-        else:
-            self.namespace = OWS_NAMESPACE_1_1_0
+def nsp(element_tag, namespace=None):
+    if namespace is None:
+        namespace = ns.get_versioned_namespace('ows', _ows_version)
+    return nspath(element_tag, namespace=namespace)
     
 class ServiceIdentification(object):
     """Initialize an OWS Common ServiceIdentification construct"""
-    def __init__(self,infoset,namespace=DEFAULT_OWS_NAMESPACE): 
-        self._root = infoset
+    def __init__(self, element, namespace=None):
+        self._root = element
 
-        val = self._root.find(util.nspath('Title', namespace))
-        self.title = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('Abstract', namespace))
-        self.abstract = util.testXMLValue(val)
-
-        self.keywords = [f.text for f in self._root.findall(util.nspath('Keywords/Keyword', namespace))]
-
-        val = self._root.find(util.nspath('AccessConstraints', namespace))
-        self.accessconstraints = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('Fees', namespace))
-        self.fees = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('ServiceType', namespace))
-        self.type = util.testXMLValue(val)
-        self.service=self.type #alternative? keep both?discuss
-
-        val = self._root.find(util.nspath('ServiceTypeVersion', namespace))
-        self.version = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('Profile', namespace))
-        self.profile = util.testXMLValue(val)
+        self.title    = testXMLValue(self._root.find(nsp('Title', namespace)))
+        self.abstract = testXMLValue(self._root.find(nsp('Abstract', namespace)))
+        self.keywords = extract_xml_list(self._root.findall(nsp('Keywords/Keyword', namespace)))
+        self.accessconstraints = testXMLValue(self._root.find(nsp('AccessConstraints', namespace)))
+        self.fees = testXMLValue(self._root.find(nsp('Fees', namespace)))
+        self.type = testXMLValue(self._root.find(nsp('ServiceType', namespace)))
+        self.service = self.type # LOOK: duplicate type as service here
+        self.version = testXMLValue(self._root.find(nsp('ServiceTypeVersion', namespace)))
+        self.profile = testXMLValue(self._root.find(nsp('Profile', namespace)))
 
 class ServiceProvider(object):
     """Initialize an OWS Common ServiceProvider construct"""
-    def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
-        self._root = infoset
-        val = self._root.find(util.nspath('ProviderName', namespace))
-        self.name = util.testXMLValue(val)
-        self.contact = ServiceContact(infoset, namespace)
-        val = self._root.find(util.nspath('ProviderSite', namespace))
-        if val is not None:
-            urlattrib=val.attrib[util.nspath('href', XLINK_NAMESPACE)]
-            self.url = util.testXMLValue(urlattrib, True)
-        else:
-            self.url =None
+    def __init__(self, element, namespace=None):
+        self._root = element
+
+        self.name = testXMLValue(self._root.find(nsp('ProviderName', namespace)))
+        self.url = testXMLAttribute(self._root.find(nsp("ProviderSite", namespace)),nspath_eval('xlink:href'))
+        self.contact = ServiceContact(self._root.find(nsp("ServiceContact", namespace)), namespace)
 
 class ServiceContact(object):
     """Initialize an OWS Common ServiceContact construct"""
-    def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
-        self._root = infoset
-        val = self._root.find(util.nspath('ProviderName', namespace))
-        self.name = util.testXMLValue(val)
+    def __init__(self, element, namespace=None):
+        self._root = element
         
-        self.organization=util.testXMLValue(self._root.find(util.nspath('ContactPersonPrimary/ContactOrganization', namespace)))
-        
-        val = self._root.find(util.nspath('ProviderSite', namespace))
-        if val is not None:
-            self.site = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
-        else:
-            self.site = None
+        self.name = testXMLValue(self._root.find(nsp('IndividualName', namespace)))
+        self.role = testXMLValue(self._root.find(nsp('Role', namespace)))
+        self.position = testXMLValue(self._root.find(nsp('PositionName', namespace)))
+        self.email = testXMLValue(self._root.find(nsp('ContactInfo/Address/ElectronicMailAddress', namespace)))
+        self.address = testXMLValue(self._root.find(nsp('ContactInfo/Address/DeliveryPoint', namespace)))
+        self.city = testXMLValue(self._root.find(nsp('ContactInfo/Address/City', namespace)))
+        self.region = testXMLValue(self._root.find(nsp('ContactInfo/Address/AdministrativeArea', namespace)))
+        self.postcode = testXMLValue(self._root.find(nsp('ContactInfo/Address/PostalCode', namespace)))
+        self.country = testXMLValue(self._root.find(nsp('ContactInfo/Address/Country', namespace)))
+        self.city = testXMLValue(self._root.find(nsp('ContactInfo/Address/City', namespace)))
+        self.phone = testXMLValue(self._root.find(nsp('ContactInfo/Phone/Voice', namespace)))
+        self.fax = testXMLValue(self._root.find(nsp('ContactInfo/Phone/Facsimile', namespace)))
+        self.hours = testXMLValue(self._root.find(nsp('ContactInfo/HoursOfService', namespace)))
+        self.instructions = testXMLValue(self._root.find(nsp('ContactInfo/ContactInstructions', namespace)))
+        self.organization = testXMLValue(self._root.find(nsp('ContactPersonPrimary/ContactOrganization', namespace)))
+        self.url = testXMLAttribute(self._root.find(nsp("ContactInfo/OnlineResource", namespace)),nspath_eval('xlink:href'))
 
-        val = self._root.find(util.nspath('ServiceContact/Role', namespace))
-        self.role = util.testXMLValue(val)
+class Operation(object):
+    """Initialize an OWS Operation construct"""
+    def __init__(self, element, namespace=None):
+        self._root = element
 
-        val = self._root.find(util.nspath('ServiceContact/IndividualName', namespace))
-        self.name = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/PositionName', namespace))
-        self.position = util.testXMLValue(val)
- 
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Phone/Voice', namespace))
-        self.phone = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Phone/Facsimile', namespace))
-        self.fax = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/DeliveryPoint', namespace))
-        self.address = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/City', namespace))
-        self.city = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/AdministrativeArea', namespace))
-        self.region = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/PostalCode', namespace))
-        self.postcode = util.testXMLValue(val)
+        self.name = testXMLAttribute(self._root,'name')
 
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/Country', namespace))
-        self.country = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/Address/ElectronicMailAddress', namespace))
-        self.email = util.testXMLValue(val)
-
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/OnlineResource', namespace))
-        if val is not None:
-            self.url = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
-        else:
-            self.url = None
-
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/HoursOfService', namespace))
-        self.hours = util.testXMLValue(val)
-    
-        val = self._root.find(util.nspath('ServiceContact/ContactInfo/ContactInstructions', namespace))
-        self.instructions = util.testXMLValue(val)
-   
-class OperationsMetadata(object):
-    """Initialize an OWS OperationMetadata construct"""
-    def __init__(self,elem,namespace=DEFAULT_OWS_NAMESPACE):
-        self.name = elem.attrib['name']
-        self.formatOptions = ['text/xml']
         methods = []
-        parameters = []
-        constraints = []
-
-        for verb in elem.findall(util.nspath('DCP/HTTP/*', namespace)):
-            methods.append((util.xmltag_split(verb.tag), {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
+        for verb in self._root.findall(nsp('DCP/HTTP/*', namespace)):
+            url = testXMLAttribute(verb, nspath_eval('xlink:href'))
+            methods.append((xmltag_split(verb.tag), {'url': url}))
         self.methods = dict(methods)
 
-        for parameter in elem.findall(util.nspath('Parameter', namespace)):
-            parameters.append((parameter.attrib['name'], {'values': [i.text for i in parameter.findall(util.nspath('Value', namespace))]}))
+        parameters = []
+        for parameter in self._root.findall(nsp('Parameter', namespace)):
+            parameters.append((testXMLAttribute(parameter,'name'), {'values': [i.text for i in parameter.findall('.//' + nsp('Value', namespace))]}))
         self.parameters = dict(parameters)
 
-        for constraint in elem.findall(util.nspath('Constraint', namespace)):
-            constraints.append((constraint.attrib['name'], {'values': [i.text for i in constraint.findall(util.nspath('Value', namespace))]}))
+        constraints = []
+        for constraint in self._root.findall(nsp('Constraint', namespace)):
+            constraints.append((testXMLAttribute(constraint,'name'), {'values': [i.text for i in constraint.findall('.//' + nsp('Value', namespace))]}))
         self.constraints = dict(constraints)
+
+
+class OperationsMetadata(object):
+    """Initialize an OWS OperationMetadata construct"""
+    def __init__(self, element, namespace=None):
+        self._root = element
+
+        self.operations = {}
+
+        # There can be parent parameters and constraints
+
+        parameters = []
+        for parameter in self._root.findall(nsp('Parameter', namespace)):
+            parameters.append((testXMLAttribute(parameter,'name'), {'values': [i.text for i in parameter.findall('.//' + nsp('Value', namespace))]}))
+        parameters = dict(parameters)
+
+        constraints = []
+        for constraint in self._root.findall(nsp('Constraint', namespace)):
+            constraints.append((testXMLAttribute(constraint,'name'), {'values': [i.text for i in constraint.findall('.//' + nsp('Value', namespace))]}))
+        constraints = dict(constraints)
+
+        for op in self._root.findall(nsp('Operation', namespace)):
+            co = Operation(op, namespace)
+            # Parent objects get overriden by children elements
+            co.parameters = dict_union(parameters, co.parameters)
+            co.constraints = dict_union(constraints, co.constraints)
+            self.operations[co.name] = co
+
+
 
 class BoundingBox(object):
     """Initialize an OWS BoundingBox construct"""
-    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE): 
+    def __init__(self, elem, namespace=None): 
         self.minx = None
         self.miny = None
         self.maxx = None
@@ -175,12 +143,12 @@ class BoundingBox(object):
 
         val = elem.attrib.get('dimensions')
         if val is not None:
-            self.dimensions = int(util.testXMLValue(val, True))
+            self.dimensions = int(testXMLValue(val, True))
         else:  # assume 2
             self.dimensions = 2
 
-        val = elem.find(util.nspath('LowerCorner', namespace))
-        tmp = util.testXMLValue(val)
+        val = elem.find(nsp('LowerCorner', namespace))
+        tmp = testXMLValue(val)
         if tmp is not None:
             xy = tmp.split()
             if len(xy) > 1:
@@ -189,8 +157,8 @@ class BoundingBox(object):
                 else:
                     self.minx, self.miny = xy[0], xy[1]
 
-        val = elem.find(util.nspath('UpperCorner', namespace))
-        tmp = util.testXMLValue(val)
+        val = elem.find(nspath('UpperCorner', namespace))
+        tmp = testXMLValue(val)
         if tmp is not None:
             xy = tmp.split()
             if len(xy) > 1:
@@ -202,23 +170,24 @@ class BoundingBox(object):
 class ExceptionReport(Exception):
     """OWS ExceptionReport"""
 
-    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
+    def __init__(self, elem, namespace=None):
         self.exceptions = []
-        for i in elem.findall(util.nspath('Exception', namespace)):
+
+        for i in elem.findall(nsp('Exception', namespace)):
             tmp = {}
             val = i.attrib.get('exceptionCode')
-            tmp['exceptionCode'] = util.testXMLValue(val, True)
+            tmp['exceptionCode'] = testXMLValue(val, True)
             val = i.attrib.get('locator')
-            tmp['locator'] = util.testXMLValue(val, True)
-            val = i.find(util.nspath('ExceptionText', namespace))
-            tmp['ExceptionText'] = util.testXMLValue(val)
+            tmp['locator'] = testXMLValue(val, True)
+            val = i.find(nsp('ExceptionText', namespace))
+            tmp['ExceptionText'] = testXMLValue(val)
             self.exceptions.append(tmp)
 
         # set topmost stacktrace as return message
         self.code = self.exceptions[0]['exceptionCode']
         self.locator = self.exceptions[0]['locator']
-        self.msg = self.exceptions[0]['ExceptionText']
-        self.xml = etree.tostring(elem)
+        self.msg = ','.join(map(lambda x: "%s - %s / %s" % (x['exceptionCode'], x['locator'], x['ExceptionText']), self.exceptions))
+        self.xml = etree.tostring(elem.getroot())
 
     def __str__(self):
         return repr(self.msg)

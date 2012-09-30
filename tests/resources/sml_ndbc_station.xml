@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML/1.0.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:swe="http://www.opengis.net/swe/1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sensorML/1.0.1 http://schemas.opengis.net/sensorML/1.0.1/sensorML.xsd" version="1.0.1">
+<!-- You have reached the NDBC TEST DIF SOS Server.  The production server is located at http://sdf.ndbc.noaa.gov/sos/. -->
+  <sml:member>
+    <sml:System gml:id="station-41012">
+      <gml:description>Station metadata for 41012 - 40NM ENE of St Augustine, FL</gml:description>
+      <sml:identification>
+        <sml:IdentifierList>
+          <sml:identifier name="StationId">
+            <sml:Term definition="urn:ioos:def:identifier:NOAA:stationID">
+              <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+              <sml:value>urn:ioos:station:wmo:41012</sml:value>
+            </sml:Term>
+          </sml:identifier>
+          <sml:identifier name="Short Name">
+            <sml:Term definition="urn:ogc:def:identifier:OGC:shortName">
+              <sml:value>41012</sml:value>
+            </sml:Term>
+          </sml:identifier>
+          <sml:identifier name="Long Name">
+            <sml:Term definition="urn:ogc:def:identifier:OGC:longName">
+              <sml:value>40NM ENE of St Augustine, FL</sml:value>
+            </sml:Term>
+          </sml:identifier>
+<!-- Where does water depth (38.4 m) go? -->
+        </sml:IdentifierList>
+      </sml:identification>
+      <sml:classification>
+        <sml:ClassifierList>
+          <sml:classifier name="Platform Type">
+            <sml:Term definition="urn:ioos:def:classifier:NOAA:platformType">
+              <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+              <sml:value>MOORED BUOY</sml:value>
+            </sml:Term>
+          </sml:classifier>
+        </sml:ClassifierList>
+      </sml:classification>
+      <sml:contact xlink:role="urn:ogc:def:classifiers:OGC:contactType:operator">
+        <sml:ResponsibleParty>
+          <sml:organizationName>National Data Buoy Center</sml:organizationName>
+          <sml:contactInfo>
+            <sml:address>
+              <sml:country>US</sml:country>
+            </sml:address>
+          </sml:contactInfo>
+        </sml:ResponsibleParty>
+      </sml:contact>
+      <sml:contact xlink:role="urn:ogc:def:classifiers:OGC:contactType:publisher" xlink:href="http://sdf.ndbc.noaa.gov/">
+        <sml:ResponsibleParty>
+          <sml:organizationName>National Data Buoy Center</sml:organizationName>
+          <sml:contactInfo>
+            <sml:phone>
+              <sml:voice>228-688-2805</sml:voice>
+            </sml:phone>
+            <sml:address>
+              <sml:deliveryPoint>Bldg. 3205</sml:deliveryPoint>
+              <sml:city>Stennis Space Center</sml:city>
+              <sml:administrativeArea>MS</sml:administrativeArea>
+              <sml:postalCode>39529</sml:postalCode>
+              <sml:country>USA</sml:country>
+              <sml:electronicMailAddress>webmaster.ndbc@noaa.gov</sml:electronicMailAddress>
+            </sml:address>
+          </sml:contactInfo>
+        </sml:ResponsibleParty>
+      </sml:contact>
+      <sml:documentation xlink:arcrole="qualityControlDocument">
+        <sml:Document>
+          <gml:description>Handbook of Automated Data Quality Control Checks and Procedures, National Data Buoy Center, August 2009</gml:description>
+          <sml:format>pdf</sml:format>
+          <sml:onlineResource xlink:href="http://www.ndbc.noaa.gov/NDBCHandbookofAutomatedDataQualityControl2009.pdf"/>
+        </sml:Document>
+      </sml:documentation>
+      <sml:history>
+        <sml:EventList>
+          <sml:member name="deployment_start">
+            <sml:Event>
+              <sml:date>2010-01-12</sml:date>
+              <gml:description>Deployment start event</gml:description>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:station:wmo:41012:20100112"/>
+            </sml:Event>
+          </sml:member>
+          <sml:member name="deployment_stop">
+            <sml:Event>
+              <sml:date>2011-02-06</sml:date>
+              <gml:description>Deployment stop event</gml:description>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:station:wmo:41012:20100112"/>
+            </sml:Event>
+          </sml:member>
+          <sml:member name="deployment_start">
+            <sml:Event>
+              <sml:date>2011-02-07</sml:date>
+              <gml:description>Deployment start event</gml:description>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:station:wmo:41012:20110207"/>
+            </sml:Event>
+          </sml:member>
+        </sml:EventList>
+      </sml:history>
+      <sml:location>
+        <gml:Point gml:id="STATION-LOCATION-41012" srsName="urn:ogc:crs:epsg::4326">
+          <gml:coordinates>30.04 -80.55</gml:coordinates>
+        </gml:Point>
+      </sml:location>
+      <sml:components>
+        <sml:ComponentList>
+          <sml:component name="Sensor adcp0">
+            <sml:System gml:id="sensor-adcp0">
+              <gml:description></gml:description>
+              <sml:identification xlink:href="urn:ioos:sensor:wmo:41012::adcp0"/>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:sensor:wmo:41012::adcp0"/>
+            </sml:System>
+          </sml:component>
+          <sml:component name="Sensor watertemp1">
+            <sml:System gml:id="sensor-watertemp1">
+              <gml:description></gml:description>
+              <sml:identification xlink:href="urn:ioos:sensor:wmo:41012::watertemp1"/>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:sensor:wmo:41012::watertemp1"/>
+            </sml:System>
+          </sml:component>
+          <sml:component name="Sensor anemometer1">
+            <sml:System gml:id="sensor-anemometer1">
+              <gml:description></gml:description>
+              <sml:identification xlink:href="urn:ioos:sensor:wmo:41012::anemometer1"/>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:sensor:wmo:41012::anemometer1"/>
+            </sml:System>
+          </sml:component>
+          <sml:component name="Sensor wpm1">
+            <sml:System gml:id="sensor-wpm1">
+              <gml:description></gml:description>
+              <sml:identification xlink:href="urn:ioos:sensor:wmo:41012::wpm1"/>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:sensor:wmo:41012::wpm1"/>
+            </sml:System>
+          </sml:component>
+          <sml:component name="Sensor ct1">
+            <sml:System gml:id="sensor-ct1">
+              <gml:description></gml:description>
+              <sml:identification xlink:href="urn:ioos:sensor:wmo:41012::ct1"/>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:sensor:wmo:41012::ct1"/>
+            </sml:System>
+          </sml:component>
+          <sml:component name="Sensor baro1">
+            <sml:System gml:id="sensor-baro1">
+              <gml:description></gml:description>
+              <sml:identification xlink:href="urn:ioos:sensor:wmo:41012::baro1"/>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:sensor:wmo:41012::baro1"/>
+            </sml:System>
+          </sml:component>
+          <sml:component name="Sensor airtemp1">
+            <sml:System gml:id="sensor-airtemp1">
+              <gml:description></gml:description>
+              <sml:identification xlink:href="urn:ioos:sensor:wmo:41012::airtemp1"/>
+              <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&amp;request=DescribeSensor&amp;version=1.0.0&amp;outputformat=text/xml;subtype=&quot;sensorML/1.0.1&quot;&amp;procedure=urn:ioos:sensor:wmo:41012::airtemp1"/>
+            </sml:System>
+          </sml:component>
+        </sml:ComponentList>
+      </sml:components>
+    </sml:System>
+  </sml:member>
+</sml:SensorML>

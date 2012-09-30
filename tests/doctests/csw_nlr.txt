@@ -1,0 +1,74 @@
+    >>> from owslib.csw import CatalogueServiceWeb
+    >>> c = CatalogueServiceWeb('http://geomatics.nlr.nl/excat/csw')
+    >>> print c.request
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:GetCapabilities xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ows="http://www.opengis.net/ows" service="CSW" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:AcceptVersions><ows:Version>2.0.2</ows:Version></ows:AcceptVersions><ows:AcceptFormats><ows:OutputFormat>application/xml</ows:OutputFormat></ows:AcceptFormats></csw:GetCapabilities>
+    >>> c.identification.title
+    'NLR CSW'
+    >>> c.identification.abstract
+    'NLR CSW: XQuery based catalog service conform to the HTTP protocol binding \n of the OpenGIS Catalogue Service specification version 2.0.2/2.0.1'
+    >>> c.identification.keywords
+    ['CSW', 'geospatial', 'catalogue']
+    >>> c.identification.fees    
+    'NONE'
+    >>> c.identification.accessconstraints
+    'NONE'
+    >>> c.identification.type             
+    'CSW'
+    >>> c.identification.version
+    '2.0.2'
+    >>> c.provider.name         
+    'National Aerospace Laboratory NLR'
+    >>> c.provider.site
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    AttributeError: 'ServiceProvider' object has no attribute 'site'
+    >>> c.provider.url 
+    'http://geomatics.nlr.nl/excat'
+    >>> c.provider.uri
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    AttributeError: 'ServiceProvider' object has no attribute 'uri'
+    >>> c.provider.contact.name
+    'Rob van Swol'
+    >>> c.provider.contact.position
+    'Senior Scientist NLR-ASSP'
+    >>> c.operations.keys()
+    ['GetRecords', 'GetCapabilities', 'GetRecordById', 'DescribeRecord']
+    >>> c.describerecord()
+    >>> print c.request
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:DescribeRecord xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" outputFormat="application/xml" schemaLanguage="http://www.w3.org/XML/Schema" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:TypeName>csw:Record</csw:TypeName></csw:DescribeRecord>
+    >>> c.getdomain('GetRecords.outputSchema')
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: 'OperationNotSupported - request / Operation not supported: GetDomain'
+    >>> print c.request 
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:ParameterName>GetRecords.outputSchema</csw:ParameterName></csw:GetDomain>
+    >>> c.getrecords(keywords=['space'])
+    >>> print c.request
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:GetRecords xmlns:dif="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:ogc="http://www.opengis.net/ogc" xmlns:fgdc="http://www.opengis.net/cat/csw/csdgm" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ows="http://www.opengis.net/ows" outputSchema="http://www.opengis.net/cat/csw/2.0.2" outputFormat="application/xml" version="2.0.2" resultType="results" service="CSW" maxRecords="10" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:Query typeNames="csw:Record"><csw:ElementSetName>summary</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter><ogc:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\"><ogc:PropertyName>csw:AnyText</ogc:PropertyName><ogc:Literal>%space%</ogc:Literal></ogc:PropertyIsLike></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>
+    >>> c.results['matches']
+    80
+    >>> c.results['returned']
+    10
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
+    'CERISE: Computationally Efficient Radar Image Simulation Environment'
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].abstract  
+    'Microwave image simulation is an important tool in gaining\n   understanding in microwave imaging with air- or spaceborne sensors.\n   The package FEMIS was developed for this purpose in 1991. Its use was\n   limited due to software limitations (FORTRAN) and its being dependent\n   on a VAX computer and the IVAS image processing system. A new project\n   was proposed to upgrade FEMIS to: run on a PC, provide a user friendly\n   interface, provide links to a microwave backscatter data base, and a\n   Geographical Information System (GIS).\n\n   The new package that has now been developed is called CERISE. It is\n   programmed in C, runs on a PC in a window environment, and is able to\n   use data from a backscatter data base and a GIS (ARC-INFO) in a\n   semi-automatic manner. A start has been made with the inclusion of\n   radar image artefacts caused by varying terrain or object height and\n   the use of data from a DEM (Digital elevation model). Since the\n   project has stirred interest in the area of Defense, modifications\n   such as full DEM utilization and simulation of man-made objects are\n   being planned for the near future.\n\n   J.C.M. Kleijweg\n   M.P.G. Otten\n   TNO Physics and Electronics Laboratory'
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].type    
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].uris
+    []
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].subjects
+    ['Technical report']
+    >>> c.getrecordbyid([c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].identifier])
+    >>> print c.request
+    <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    <csw:GetRecordById xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:Id>DGFKRYMCWUZSCDRBWRXMIETZE</csw:Id><csw:ElementSetName>full</csw:ElementSetName></csw:GetRecordById>
+    >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
+    'CERISE: Computationally Efficient Radar Image Simulation Environment'
+    >>> c.getrecords(cql='AnyText like \'%space%\'')
+    >>> c.results
+    {'matches': 80, 'nextrecord': 11, 'returned': 10}

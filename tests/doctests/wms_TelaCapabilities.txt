@@ -1,0 +1,89 @@
+
+Imports
+
+    >>> from owslib.wms import WebMapService
+    >>> from tests.utils import resource_file
+    
+Fake a request to a WMS Server using saved doc from telascience.org.
+http://wms.telascience.org/cgi-bin/ngBM_wms?
+
+    >>> xml = open(resource_file('wms_Telascience.xml'), 'r').read() 
+    >>> wms = WebMapService('url', version='1.1.1', xml=xml)
+    
+Test capabilities
+
+    >>> wms.identification.type
+    'OGC:WMS'
+
+    >>> wms.identification.title
+    'BM'
+
+    >>> wms.identification.abstract
+    'Blue Marble 200409'
+    
+    >>> wms.provider.url
+    'http://wms.telascience.org/cgi-bin/ngBM_wms?'
+    
+    >>> wms.identification.keywords
+    []
+
+    >>> p = wms.provider.contact
+    >>> p.name
+    'Norman Vine'
+    >>> p.email
+    'nhv@cooa.whoi.edu'
+
+Test available content layers
+
+    >>> wms.contents.keys()
+    ['USGS_1ft_San_Diego', 'world.topo.bathy.200409', 'ngBM']
+
+    
+    >>> [wms[layer].title for layer in wms.contents]
+    ['USGS 1ft San Diego', 'world.topo.bathy.200409', 'BM']
+
+    
+Test single item accessor
+
+    >>> wms['world.topo.bathy.200409'].title
+    'world.topo.bathy.200409'
+    
+    >>> wms['world.topo.bathy.200409'].boundingBox
+    (-180.0, -90.0, 180.0, 90.0, 'EPSG:4326')
+    
+    >>> wms['world.topo.bathy.200409'].boundingBoxWGS84
+    (-180.0, -90.0, 180.0, 90.0)
+    
+    >>> wms['world.topo.bathy.200409'].crsOptions
+    ['EPSG:4326', 'init=epsg:4326']
+
+    
+    >>> wms['world.topo.bathy.200409'].styles
+    {}
+    
+Expect a KeyError for invalid names
+
+    >>> wms['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wms.operations]
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
+    
+    >>> wms.get_operation_by_name('GetMap').methods
+    {'Post': {'url': 'http://wms.telascience.org/cgi-bin/ngBM_wms?'}, 'Get': {'url': 'http://wms.telascience.org/cgi-bin/ngBM_wms?'}}
+    
+    >>> wms.get_operation_by_name('GetMap').formatOptions
+    ['image/gif', 'image/png', 'image/jpeg', 'image/wbmp', 'image/tiff', 'image/png; mode=24bit']
+
+Test exceptions
+
+    >>> wms.exceptions
+    ['application/vnd.ogc.se_xml', 'application/vnd.ogc.se_inimage', 'application/vnd.ogc.se_blank']
+
+Lastly, test the getcapabilities method
+
+    # LOOK: This WMS server no longer exists, so we are only testing the local XML file

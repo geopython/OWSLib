@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML/1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:swe="http://www.opengis.net/swe/1.0.1" xsi:schemaLocation="http://www.opengis.net/sensorML/1.0.1 http://schemas.opengis.net/sensorML/1.0.1/sensorML.xsd" version="1.0.1">
+	<sml:member>
+		<sml:System gml:id="station-52402">
+
+		<!--Station Description-->
+		<gml:description>Station metadata for 790 NM Northwest of Kwajalein 52402.</gml:description>
+		<!--Station Search Keywords-->
+		<sml:keywords>
+		<sml:KeywordList codeSpace="http://gcmd.nasa.gov/Resources/valids/archives/keyword_list.html">
+		  <sml:keyword>OCEAN PLATFORMS</sml:keyword>
+		  <sml:keyword>Oceans &gt; Ocean Waves &gt; Tsunamis</sml:keyword>
+		  <sml:keyword>DART &gt; Deep-ocean Assessment and Reporting of Tsunamis</sml:keyword>
+		</sml:KeywordList>
+		</sml:keywords>
+
+		<!--Station Identifiers-->
+		<sml:identification>
+		<sml:IdentifierList>
+		  <sml:identifier name="Station ID">
+			<sml:Term definition="urn:x-noaa:def:identifier:NOAA::stationID">
+			  <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov" />
+			  <sml:value>urn:ioos:station:wmo:52402</sml:value>
+			</sml:Term>
+
+		  </sml:identifier>
+		  <sml:identifier name="Short Name">
+			<sml:Term definition="urn:ogc:def:identifier:OGC:shortName">
+			  <sml:value>52402</sml:value>
+			</sml:Term>
+		  </sml:identifier>
+		  <sml:identifier name="Long Name">
+			<sml:Term definition="urn:ogc:def:identifier:OGC:longName">
+
+			  <sml:value>790 NM Northwest of Kwajalein</sml:value>
+			</sml:Term>
+		  </sml:identifier>
+
+		  <sml:identifier name="Hull Number">
+			<sml:Term definition="urn:x-noaa:def:identifier:NOAA::HULL">
+			  <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov" />
+			  <sml:value>2.6D28</sml:value>
+			</sml:Term>
+
+		  </sml:identifier>
+
+		  <sml:identifier name="Generation">
+			<sml:Term definition="urn:x-noaa:def:identifier:NOAA::GEN">
+			  <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov" />
+			  <sml:value>2.1</sml:value>
+			</sml:Term>
+
+		  </sml:identifier>
+
+		  <sml:identifier name="Deployment ID">
+			<sml:Term definition="urn:x-noaa:def:identifier:NOAA::deploymentID">
+			  <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov" />
+			  <sml:value>52402_20100103</sml:value>
+			</sml:Term>
+
+		  </sml:identifier>
+
+		  <sml:identifier name="Vertical Datum STND">
+
+			<sml:Term definition="urn:x-noaa:def:datum:noaa::STND">
+			  <sml:value>0.000</sml:value>
+			</sml:Term>
+		  </sml:identifier>
+
+		</sml:IdentifierList>
+		</sml:identification>
+
+
+
+
+		<!--Station Classifiers-->
+		<sml:classification>
+
+		<sml:ClassifierList>
+		  <sml:classifier name="Parent Network">
+			<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::parentNetwork">
+			  <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov" />
+			  <sml:value>urn:x-noaa:def:network:noaa.nws.ndbc::TsunamiActive</sml:value>
+			</sml:Term>
+		  </sml:classifier>
+		  <sml:classifier name="System Type Name">
+			<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::systemTypeName">
+			  <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov" />
+
+			  <sml:value>DART</sml:value>
+			</sml:Term>
+		  </sml:classifier>
+		  <sml:classifier name="System Type Identifier">
+			<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::systemTypeID">
+			  <sml:codeSpace xlink:href="http://mmisw.org/ont/mmi/platform/" />
+			  <sml:value>Platform</sml:value>
+			</sml:Term>
+
+		  </sml:classifier>
+		</sml:ClassifierList>
+		</sml:classification>
+		<!--Temporal Validity of this Description-->
+		<sml:validTime>
+		<gml:TimePeriod gml:id="MetadataApplicabilityTime">
+		  <gml:beginPosition>2010-01-03T11:28:53Z</gml:beginPosition>
+		  <gml:endPosition indeterminatePosition="now" />
+
+		</gml:TimePeriod>
+		</sml:validTime>
+		<!--Relevant Contacts-->
+		<sml:contact xlink:role="urn:ogc:def:classifiers:OGC:contactType:owner">
+		<sml:ResponsibleParty>
+		  <sml:organizationName>National Data Buoy Center</sml:organizationName>
+		  <sml:contactInfo>
+			<sml:phone>
+			  <sml:voice>228-688-2805</sml:voice>
+			</sml:phone>
+			<sml:address>
+			  <sml:deliveryPoint>1007 Balch Blvd.</sml:deliveryPoint>
+			  <sml:city>Stennis Space Center</sml:city>
+			  <sml:administrativeArea>MS</sml:administrativeArea>
+			  <sml:postalCode>39529</sml:postalCode>
+
+			  <sml:country>USA</sml:country>
+			</sml:address>
+			<sml:onlineResource xlink:href="http://sdf.ndbc.noaa.gov/" />
+		  </sml:contactInfo>
+		</sml:ResponsibleParty>
+		</sml:contact>
+		<sml:documentation xlink:arcrole="urn:ogc:def:role:webPage">
+		<sml:Document>
+
+		  <gml:description>Web page about the system described in this SensorML record</gml:description>
+		  <sml:format>text/html</sml:format>
+		  <sml:onlineResource xlink:href="http://www.ndbc.noaa.gov/station_page.php?station=52402" />
+		</sml:Document>
+		</sml:documentation>
+		<sml:documentation xlink:arcrole="urn:ogc:def:role:objectImage">
+		<sml:Document>
+		  <gml:description>Photo or diagram illustrating the system (or a representative instance) described in this SensorML record</gml:description>
+
+		  <sml:format>image/jpg</sml:format>
+		  <sml:onlineResource xlink:href="http://www.ndbc.noaa.gov/dart/dart_mooring.jpg" />
+		</sml:Document>
+		</sml:documentation>
+		<!--Station History-->
+
+			<sml:history>
+				<sml:EventList>
+					<sml:member name="deployment">
+						<sml:Event>
+							<sml:date>2010-01-03T11:28:53Z</sml:date>
+							<gml:description>Deployment event</gml:description>
+						</sml:Event>
+					</sml:member>
+
+					<sml:member name="last_service">
+						<sml:Event>
+							
+							<gml:description></gml:description>
+						</sml:Event>
+					</sml:member>
+					<sml:member name="start_of_rt_data_for_present_deployment">
+						<sml:Event>
+							<sml:date>2010-01-03T11:29:00Z</sml:date>
+						</sml:Event>
+					</sml:member>
+					<sml:member name="station_occupied">
+						<sml:Event>
+							<sml:date>2006-12-13T00:00:00Z</sml:date>
+						</sml:Event>
+					</sml:member>
+
+				</sml:EventList>
+			</sml:history>
+
+
+		<!--Station Components-->
+		<sml:components>
+
+
+
+		<sml:ComponentList>
+
+		<sml:component name="Primary Transmitter">
+			<sml:System>
+			  <gml:description>Primary Transmitter for station 52402</gml:description>
+
+
+			  <sml:classification>
+				<sml:ClassifierList>
+					<sml:classifier name="Transmitter ID">
+						<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::transmitter_id">
+						<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+						<sml:value>DD52402P</sml:value>
+						</sml:Term>
+					</sml:classifier>
+					<sml:classifier name="Iridium Payload ID">
+						<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::iridium_payload_id">
+							<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+							<sml:value>R02P</sml:value>
+						</sml:Term>
+					</sml:classifier>
+					<sml:classifier name="Water Depth">
+						<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::water_depth">
+							<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+							<sml:value>5875</sml:value>
+						</sml:Term>
+					</sml:classifier>
+					<sml:classifier name="Firmware">
+						<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::firmware">
+							<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+							<sml:value>2.39</sml:value>
+						</sml:Term>
+					</sml:classifier>
+				</sml:ClassifierList>
+			</sml:classification>
+
+			</sml:System>
+
+
+		</sml:component>
+
+		<sml:component name="Secondary Transmitter">
+			<sml:System>
+			  <gml:description>Secondary Transmitter for station 52402</gml:description>
+
+
+			  <sml:classification>
+				<sml:ClassifierList>
+					<sml:classifier name="Transmitter ID">
+						<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::transmitter_id">
+						<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+						<sml:value>DD52402S</sml:value>
+						</sml:Term>
+					</sml:classifier>
+					<sml:classifier name="Iridium Payload ID">
+						<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::iridium_payload_id">
+							<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+							<sml:value>R02S</sml:value>
+						</sml:Term>
+					</sml:classifier>
+					<sml:classifier name="Water Depth">
+						<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::water_depth">
+							<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+							<sml:value>5875</sml:value>
+						</sml:Term>
+					</sml:classifier>
+					<sml:classifier name="Firmware">
+						<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::firmware">
+							<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+							<sml:value>2.39</sml:value>
+						</sml:Term>
+					</sml:classifier>
+				</sml:ClassifierList>
+			</sml:classification>
+			</sml:System>
+		</sml:component>
+		<sml:component name="Bottom Pressure Recorder">
+			<sml:System>
+				<gml:description>Bottom Pressure Recorder for station 52402</gml:description>
+
+				<sml:classification>
+					<sml:ClassifierList>
+						<sml:classifier name="PAROS Serial Number">
+							<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::paros_serial_number">
+								<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+								<sml:value>114733</sml:value>
+							</sml:Term>
+						</sml:classifier>
+						<sml:classifier name="Water Depth">
+							<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::water_depth">
+								<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+								<sml:value>5861</sml:value>
+							</sml:Term>
+						</sml:classifier>
+						<sml:classifier name="Trigger Threshold">
+							<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::trigger_threshold">
+								<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+								<sml:value>30</sml:value>
+							</sml:Term>
+						</sml:classifier>
+						<sml:classifier name="Firmware">
+							<sml:Term definition="urn-:x-noaa:def:classifier:NOAA::firmware">
+								<sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
+								<sml:value>2.78</sml:value>
+							</sml:Term>
+						</sml:classifier>
+					</sml:ClassifierList>
+				</sml:classification>
+			</sml:System>
+		</sml:component>
+		</sml:ComponentList>
+		</sml:components>
+
+		<!-- Station Location -->
+		<sml:positions>
+			<sml:PositionList>
+				<sml:position name="stationPosition">
+					<swe:Position>
+					<swe:location>
+						<swe:Vector gml:id="STATION_LOCATION" definition="urn:ogc:def:property:OGC:location">
+							<swe:coordinate name="latitude">
+								<swe:Quantity axisID="Y">
+									<swe:uom code="deg"/>
+									<swe:value>11.74056</swe:value>
+								</swe:Quantity>
+							</swe:coordinate>
+								<swe:coordinate name="longitude">
+								<swe:Quantity axisID="X">
+									<swe:uom code="deg"/>
+									<swe:value>154.21721</swe:value>
+								</swe:Quantity>
+							</swe:coordinate>
+							<swe:coordinate name="altitude">
+								<swe:Quantity axisID="Z">
+									<swe:uom code="m"/>
+									<swe:value>0</swe:value>
+								</swe:Quantity>
+							</swe:coordinate>
+						</swe:Vector>
+					</swe:location>
+					</swe:Position>
+				</sml:position>
+				<sml:position name="bprPosition">
+					<swe:Position>
+					<swe:location>
+						<swe:Vector gml:id="BPR_LOCATION" definition="urn:ogc:def:property:OGC:location">
+							<swe:coordinate name="latitude">
+								<swe:Quantity axisID="Y">
+									<swe:uom code="deg"/>
+									<swe:value>11.88222</swe:value>
+								</swe:Quantity>
+							</swe:coordinate>
+								<swe:coordinate name="longitude">
+								<swe:Quantity axisID="X">
+									<swe:uom code="deg"/>
+									<swe:value>154.11139</swe:value>
+								</swe:Quantity>
+							</swe:coordinate>
+							<swe:coordinate name="altitude">
+								<swe:Quantity axisID="Z">
+									<swe:uom code="m"/>
+									<swe:value>-5861</swe:value>
+								</swe:Quantity>
+							</swe:coordinate>
+						</swe:Vector>
+					</swe:location>
+					</swe:Position>
+				</sml:position>
+			</sml:PositionList>
+		</sml:positions>
+		</sml:System>
+	</sml:member>
+</sml:SensorML>

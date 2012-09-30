@@ -6,6 +6,7 @@ from owslib.wps import WebProcessingService, monitorExecution
 verbose = False
 wps = WebProcessingService('http://rsg.pml.ac.uk/wps/vector.cgi', verbose=verbose, skip_caps=True)
 
+
 # 1) GetCapabilities
 wps.getcapabilities()
 print 'WPS Identification type: %s' % wps.identification.type

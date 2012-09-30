@@ -1,0 +1,38 @@
+COWS Web Coverage Service doctest
+============================
+
+WCS Version 1.0.0
+=================
+
+
+    >>> from owslib.wcs import WebCoverageService
+    >>> wcs=WebCoverageService('http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet')
+    >>> wcs.version
+    '1.0.0'
+    >>> wcs.url
+    'http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet'
+    >>> wcs.identification.service
+    'IDEE-WCS-UTM30N'
+    >>> wcs.provider.name
+    u'Instituto Geogr\xe1fico Nacional'
+    >>> wcs.contents.keys()
+    ['MDT25_peninsula_pendientes', 'MDT_peninsula_baleares_aspecto', 'MDT1000_peninsula_baleares', 'MDT500_peninsula_baleares', 'MDT_peninsula_baleares', 'MDT500_peninsula_baleares_pendientes', 'MDT1000_peninsula_baleares_pendientes', 'MDT_peninsula_baleares_pendientes', 'MDT25_peninsula_ZIP', 'MDT25_peninsula_aspecto', 'MDT500_peninsula_baleares_aspecto', 'MDT1000_peninsula_baleares_aspecto']
+    >>> cvg=wcs['MDT25_peninsula_pendientes']
+    >>> cvg.title
+    'MDT25 Pendientes Peninsula'
+    >>> cvg.boundingBoxWGS84
+    (-8.7527311628, 35.8849011171, 3.6409641687, 43.7511638541)
+    >>> cvg.timelimits
+    []
+    >>> cvg.supportedFormats
+    ['GeoTIFF', 'AsciiGrid', 'FloatGrid_Zip']
+    >>> id_list=[cvg.supportedCRS[0].id,cvg.supportedCRS[1].id,cvg.supportedCRS[2].id,cvg.supportedCRS[3].id,cvg.supportedCRS[4].id,cvg.supportedCRS[5].id,cvg.supportedCRS[6].id]
+	>>> id_list
+	['EPSG:4326', 'EPSG:4230', 'EPSG:23028', 'EPSG:23029', 'EPSG:23030', 'EPSG:23031', 'EPSG:23030']
+    >>> output=wcs.get_coverage(identifier='MDT25_peninsula_pendientes',bbox=(600000,4200000,601000,4201000),crs='EPSG:23030', format='AsciiGrid', resX=25, resY=25)
+
+    >>> from tests.utils import scratch_file
+    >>> filename = scratch_file('test_idee.grd')
+    >>> f=open(filename, 'wb')
+    >>> f.write(output.read())
+    >>> f.close()
