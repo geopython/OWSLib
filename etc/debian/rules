@@ -1,4 +1,7 @@
 #!/usr/bin/make -f
+# -*- makefile -*-
 
 %:
-	dh $@
+	dh  $@ --with python2
+
+
