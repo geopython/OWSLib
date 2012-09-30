@@ -604,6 +604,7 @@ Credits
  * Dominic Lowe <D.Lowe@rl.ac.uk>
  * Jo Walsh <jo@frot.org>
  * Tom Kralidis <tomkralidis@hotmail.com>
+ * Jachym Cepicky <jachym.cepicky@gmail.com>
  * Luca Cinquini <luca.cinquini@jpl.nasa.gov>
 
 .. _`Open Geospatial Consortium`: http://www.opengeospatial.org/
