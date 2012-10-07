@@ -97,6 +97,38 @@ Test TileMatrixSet variants
     40
     >>> wmts.tilematrixset['EPSG4326_2km'].tilematrix['5'].matrixheight
     20
+    >>> wmts.tilematrixset['EPSG4326_250m'].identifier
+    'EPSG4326_250m'
+    >>> wmts.tilematrixset['EPSG4326_250m'].crs
+    'urn:ogc:def:crs:OGC:1.3:CRS84'
+    >>> sorted(wmts.tilematrixset['EPSG4326_250m'].tilematrix.keys())
+    ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['0'].identifier
+    '0'
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['0'].topleftcorner
+    (-180.0, 90.0)
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['0'].tilewidth
+    512
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['0'].tileheight
+    512
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['0'].matrixwidth
+    2
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['0'].matrixheight
+    1
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['8'].identifier
+    '8'
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['8'].scaledenominator
+    872589.5192085233
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['8'].topleftcorner
+    (-180.0, 90.0)
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['8'].tilewidth
+    512
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['8'].tileheight
+    512
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['8'].matrixwidth
+    320
+    >>> wmts.tilematrixset['EPSG4326_250m'].tilematrix['8'].matrixheight
+    160
 
 Test single item accessor
 
