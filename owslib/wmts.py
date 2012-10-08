@@ -141,88 +141,44 @@ class WebMapTileService(object):
             items.append((item,self.contents[item]))
         return items
     
-    # TODO: implement this properly
-    def gettile(self, layers=None, styles=None, srs=None, bbox=None,
-               format=None, size=None, time=None, transparent=False,
-               bgcolor='#FFFFFF',
-               exceptions='application/vnd.ogc.se_xml',
-               method='Get',
-               **kwargs
-               ):
-        """Request and return an image from the WMS as a file-like object.
+    def buildTileRequest(self, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
+        base_url = self.getOperationByName('GetTile').methods['HTTP']['url']
+        request = {'version': self.version, 'request': 'GetTile'}
         
-        Parameters
-        ----------
-        layers : list
-            List of content layer names.
-        styles : list
-            Optional list of named styles, must be the same length as the
-            layers list.
-        srs : string
-            A spatial reference system identifier.
-        bbox : tuple
-            (left, bottom, right, top) in srs units.
-        format : string
-            Output image format such as 'image/jpeg'.
-        size : tuple
-            (width, height) in pixels.
-        transparent : bool
-            Optional. Transparent background if True.
-        bgcolor : string
-            Optional. Image background color.
-        method : string
-            Optional. HTTP DCP method name: Get or Post.
-        **kwargs : extra arguments
-            anything else e.g. vendor specific parameters
-        
-        Example
-        -------
-            >>> img = wms.getmap(layers=['global_mosaic'],
-            ...                  styles=['visual'],
-            ...                  srs='EPSG:4326', 
-            ...                  bbox=(-112,36,-106,41),
-            ...                  format='image/jpeg',
-            ...                  size=(300,250),
-            ...                  transparent=True,
-            ...                  )
-            >>> out = open('example.jpg', 'wb')
-            >>> out.write(img.read())
-            >>> out.close()
+        if (layer is None):
+	    raise ValueError("layer is mandatory (cannot be None)")
+	if style is None:
+	    style = self[layer].styles.keys()[0]
+	if format is None:
+	    format = self[layer].formats[0]
+	if tilematrixset is None:
+	    tilematrixset = self[layer].tilematrixset
+	if tilematrix is None:
+	    raise ValueError("tilematrix (zoom level) is mandatory (cannot be None)")
+	if row is None:
+    	    raise ValueError("row is mandatory (cannot be None)")
+	if column is None:
+    	    raise ValueError("column is mandatory (cannot be None)")
 
-        """        
-        base_url = self.getOperationByName('GetMap').methods[method]['url']
-        request = {'version': self.version, 'request': 'GetMap'}
-        
-        # check layers and styles
-        assert len(layers) > 0
-        request['layers'] = ','.join(layers)
-        if styles:
-            assert len(styles) == len(layers)
-            request['styles'] = ','.join(styles)
-        else:
-            request['styles'] = ''
-
-        # size
-        request['width'] = str(size[0])
-        request['height'] = str(size[1])
-        
-        request['srs'] = str(srs)
-        request['bbox'] = ','.join([repr(x) for x in bbox])
-        request['format'] = str(format)
-        request['transparent'] = str(transparent).upper()
-        request['bgcolor'] = '0x' + bgcolor[1:7]
-        request['exceptions'] = str(exceptions)
-        
-        if time is not None:
-            request['time'] = str(time)
-        
-        if kwargs:
-            for kw in kwargs:
-                request[kw]=kwargs[kw]
-
+        request['layer'] = layer
+        request['style'] = style
+        request['format'] = format
+        request['TileMatrixSet'] = tilematrixset
+	request['TileMatrix'] = tilematrix
+	request['TileRow'] = str(row)
+	request['TileCol'] = str(column)
+	
         data = urlencode(request)
+        return data
         
-        u = openURL(base_url, data, method, username = self.username, password = self.password)
+    def gettile(self, base_url=None, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
+        """Request a tile from a WMTS server
+        """        
+	data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column)
+        
+        if base_url is None:
+	    base_url = self.getOperationByName('GetTile').methods['HTTP']['url']
+        u = openURL(base_url, data, username = self.username, password = self.password)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -305,10 +261,7 @@ class TileMatrix(object):
 	    raise ValueError('%s is missing MatrixWidth and/or MatrixHeight' % (elem,))
 	self.matrixwidth = int(mw)
 	self.matrixheight = int(mh)
-	# TODO: parse the rest of this
-        #    <!-- top left point of tile matrix bounding box -->
-        #    <TopLeftCorner>-180 90</TopLeftCorner>
-        
+
 class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
     def __init__(self, infoset):

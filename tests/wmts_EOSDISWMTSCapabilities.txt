@@ -167,6 +167,15 @@ Test operations
     >>> wmts.getOperationByName('GetTile').methods
     {'HTTP': {'url': 'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?', 'encodings': ['KVP']}}
 
-Lastly, test the getcapabilities and gettile methods
+Test the gettile methods
 
-    # TODO
+    # TODO - more checks
+    >>> wmts.buildTileRequest(layer='MODIS_Aqua_SurfaceReflectance_Bands121', tilematrix='0', row=0, column=0)
+    'layer=MODIS_Aqua_SurfaceReflectance_Bands121&format=image%2Fjpeg&TileRow=0&request=GetTile&style=default&version=1.0.0&TileMatrixSet=EPSG4326_250m&TileMatrix=0&TileCol=0'
+    >>> from PIL import Image
+    >>> import cStringIO
+    >>> tile000 = wmts.gettile(layer='MODIS_Aqua_SurfaceReflectance_Bands121', tilematrix='0', row=0, column=0)
+    >>> im = cStringIO.StringIO(tile000.read())
+    >>> image = Image.open(im)
+    >>> image.size
+    (512, 512)
