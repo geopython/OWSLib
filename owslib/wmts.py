@@ -1,5 +1,8 @@
-# -*- coding: ISO-8859-15 -*-
+# -*- coding: UTF-8 -*-
 # =============================================================================
+# Copyright (C) 2012 Brad Hards <bradh@frogmouth.net>
+#
+# Based on wms.py, which has the following copyright statement:
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2005 Nuxeo SARL <http://nuxeo.com>
 #
@@ -12,7 +15,7 @@
 """
 API for Web Map Tile Service (WMTS) methods and metadata.
 
-Currently borken.
+Currently somewhat borken.
 """
 
 import cgi
@@ -235,7 +238,7 @@ class TileMatrixSet(object):
 		self.tilematrix[tm.identifier] = tm
 
 class TileMatrix(object):
-    '''Holds one TileMatrixSet'''
+    '''Holds one TileMatrix'''
     def __init__(self, elem):
         if elem.tag != '{http://www.opengis.net/wmts/1.0}TileMatrix':
             raise ValueError('%s should be a TileMatrix' % (elem,))
@@ -298,7 +301,7 @@ class ServiceProvider(object):
 
 class ContentMetadata:
     """
-    Abstraction for WMS layer metadata.
+    Abstraction for WMTS layer metadata.
 
     Implements IContentMetadata.
     """
@@ -368,7 +371,6 @@ class OperationsMetadata:
     def __init__(self, elem):
         """."""
         self.name = elem.attrib['name']
-       	# print "om:", etree.tostring(elem, pretty_print=True, encoding=unicode)
         # formatOptions
         self.formatOptions = [f.text for f in elem.findall('{http://www.opengis.net/ows/1.1}Format')]
         methods = []
@@ -453,7 +455,7 @@ class WMTSCapabilitiesReader:
         return service_url.split('?')[0] + '?' + urlqs
 
     def read(self, service_url):
-        """Get and parse a WMS capabilities document, returning an
+        """Get and parse a WMTS capabilities document, returning an
         elementtree instance
 
         service_url is the base url, to which is appended the service,
