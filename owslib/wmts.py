@@ -13,9 +13,17 @@
 # =============================================================================
 
 """
-API for Web Map Tile Service (WMTS) methods and metadata.
 
-Currently somewhat borken.
+Abstract
+--------
+The wmts module of the OWSlib package provides client-side functionality for fetching tiles from an OGC Web Map Tile Service (WMTS)
+
+
+Disclaimer
+----------
+PLEASE NOTE: the owslib wmts module should be considered in early-beta state: it has been tested against only one WMTS server (NASA EODSIS).
+More extensive testing is needed and feedback (to bradh@frogmouth.net) would be appreciated.
+
 """
 
 import cgi
@@ -269,7 +277,6 @@ class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
     def __init__(self, infoset):
         self._root=infoset
-        # TODO: fix this
         name=self._root.find('{http://www.opengis.net/ows/1.1}ProviderName')
         if name is not None:
             self.name=name.text
