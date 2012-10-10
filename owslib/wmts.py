@@ -33,7 +33,7 @@ from etree import etree
 from .util import openURL, testXMLValue
 from fgdc import Metadata
 from iso import MD_Metadata
-from ows import ServiceProvider
+from ows import ServiceProvider, ServiceIdentification, OperationsMetadata
 
 class ServiceException(Exception):
     """WMTS ServiceException
@@ -112,7 +112,7 @@ class WebMapTileService(object):
         
         #serviceIdentification metadata
         serviceident=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceIdentification')
-        self.identification=ServiceIdentification(serviceident, self.version)   
+        self.identification=ServiceIdentification(serviceident)   
         
         #serviceProvider metadata
         serviceprov=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceProvider')
@@ -154,7 +154,6 @@ class WebMapTileService(object):
         return items
     
     def buildTileRequest(self, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
-        base_url = self.getOperationByName('GetTile').methods['HTTP']['url']
         request = {'version': self.version, 'request': 'GetTile'}
         
         if (layer is None):
@@ -189,7 +188,7 @@ class WebMapTileService(object):
 	data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column)
         
         if base_url is None:
-	    base_url = self.getOperationByName('GetTile').methods['HTTP']['url']
+	    base_url = self.getOperationByName('GetTile').methods['Get']['url']
         u = openURL(base_url, data, username = self.username, password = self.password)
 
         # check for service exceptions, and return
@@ -216,23 +215,6 @@ class WebMapTileService(object):
                 return item
         raise KeyError, "No operation named %s" % name
     
-class ServiceIdentification(object):
-    ''' Implements IServiceIdentificationMetadata '''
-    
-    def __init__(self, infoset, version):
-        self._root=infoset
-        self.type = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}ServiceType'))
-        self.version = version
-        self.title = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}Title'))
-        self.abstract = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}Abstract'))
-        keywords = self._root.findall('{http://www.opengis.net/ows/1.1}Keywords/{http://www.opengis.net/ows/1.1}Keyword')
-        if keywords is None:
-	    self.keywords = []
-	else:
-	    self.keywords = [f.text for f in keywords if f.text is not None]
-        self.accessconstraints = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}AccessConstraints'))
-        self.fees = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}Fees'))
-
 class TileMatrixSet(object):
     '''Holds one TileMatrixSet'''
     def __init__(self, elem):
@@ -363,51 +345,8 @@ class OperationsMetadata:
 			encodings.append(encoding.text)
 	    if len(encodings) < 1: # KVP is only a SHOULD requirement, and SFS doesn't provide it.
 		encodings = ['KVP']
-            methods.append(('HTTP', {'url': url, 'encodings': encodings}))
+            methods.append(('Get', {'url': url, 'encodings': encodings}))
         self.methods = dict(methods)
-
-class ContactMetadata:
-    """Abstraction for contact details advertised in GetCapabilities.
-    """
-    def __init__(self, elem):
-        name = elem.find('{http://www.opengis.net/ows/1.1}IndividualName')
-        if name is not None:
-            self.name=str.strip(name.text)
-        else:
-            self.name=None
-
-        self.address = self.city = self.region = None
-        self.postcode = self.country = self.email = None
-        self.phonenumber = None
-
-        address = elem.find('{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Address')
-        if address is not None:
-            deliverypoint = address.find('{http://www.opengis.net/ows/1.1}DeliveryPoint')
-            if deliverypoint is not None: self.address = str.strip(deliverypoint.text)
-            
-            city = address.find('{http://www.opengis.net/ows/1.1}City')
-            if city is not None: self.city = str.strip(city.text)
-
-            region = address.find('{http://www.opengis.net/ows/1.1}AdministrativeArea')
-            if region is not None: self.region = str.strip(region.text)
-
-            postcode = address.find('{http://www.opengis.net/ows/1.1}PostalCode')
-            if postcode is not None: self.postcode = str.strip(postcode.text)
-
-            country = address.find('{http://www.opengis.net/ows/1.1}Country')
-            if country is not None: self.country = str.strip(country.text)
-            
-	    email = address.find('{http://www.opengis.net/ows/1.1}ElectronicMailAddress')
-	    if email is not None: self.email=str.strip(email.text)
-
-        position = elem.find('{http://www.opengis.net/ows/1.1}PositionName')
-        if position is not None: self.position = str.strip(position.text)
-        else: self.position = None
-
-        phonenumber = elem.find('{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Phone')
-        if phonenumber is not None:
-            voice = phonenumber.find('{http://www.opengis.net/ows/1.1}Voice')
-            if voice is not None: self.phonenumber = str.strip(voice.text)
       
 class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset

@@ -84,7 +84,7 @@ Test operations
     ['GetTile', 'GetFeatureInfo', 'GetCapabilities']
     
     >>> wmts.getOperationByName('GetTile').methods
-    {'HTTP': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+    {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
 
 Test the gettile methods
 

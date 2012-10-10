@@ -165,7 +165,7 @@ Test operations
     ['GetCapabilities', 'GetTile']
     
     >>> wmts.getOperationByName('GetTile').methods
-    {'HTTP': {'url': 'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?', 'encodings': ['KVP']}}
+    {'Get': {'url': 'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?', 'encodings': ['KVP']}}
 
 Test the gettile methods
 
