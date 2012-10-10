@@ -224,7 +224,11 @@ class ServiceIdentification(object):
         self.version = version
         self.title = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}Title'))
         self.abstract = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}Abstract'))
-        self.keywords = [f.text for f in self._root.findall('{http://www.opengis.net/ows/1.1}Keywords/{http://www.opengis.net/ows/1.1}Keyword')]
+        keywords = self._root.findall('{http://www.opengis.net/ows/1.1}Keywords/{http://www.opengis.net/ows/1.1}Keyword')
+        if keywords is None:
+	    self.keywords = []
+	else:
+	    self.keywords = [f.text for f in keywords if f.text is not None]
         self.accessconstraints = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}AccessConstraints'))
         self.fees = testXMLValue(self._root.find('{http://www.opengis.net/ows/1.1}Fees'))
 
@@ -283,7 +287,10 @@ class ServiceProvider(object):
         else:
             self.name=None
         # print "sp:", etree.tostring(self._root, pretty_print=True, encoding=unicode)
-        self.url=self._root.find('{http://www.opengis.net/ows/1.1}ProviderSite').attrib.get('{http://www.w3.org/1999/xlink}href', '')
+        if self._root.find('{http://www.opengis.net/ows/1.1}ProviderSite') is not None:
+	    self.url=self._root.find('{http://www.opengis.net/ows/1.1}ProviderSite').attrib.get('{http://www.w3.org/1999/xlink}href', '')
+	else:
+	    self.url = None
         #contact metadata
         contact = self._root.find('{http://www.opengis.net/ows/1.1}ServiceContact')
         ## make sure there are children to parse
@@ -389,6 +396,8 @@ class OperationsMetadata:
 		if constraint.attrib['name'] == "GetEncoding":
 		    for encoding in constraint.findall('{http://www.opengis.net/ows/1.1}AllowedValues/{http://www.opengis.net/ows/1.1}Value'):
 			encodings.append(encoding.text)
+	    if len(encodings) < 1: # KVP is only a SHOULD requirement, and SFS doesn't provide it.
+		encodings = ['KVP']
             methods.append(('HTTP', {'url': url, 'encodings': encodings}))
         self.methods = dict(methods)
 
