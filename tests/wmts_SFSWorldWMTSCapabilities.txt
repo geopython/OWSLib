@@ -1,0 +1,94 @@
+
+Imports
+
+    >>> from owslib.wmts import WebMapTileService
+    
+Fake a request to a WMTS Server using saved doc from 
+http://server.caris.com/spatialfusionserver/services/ows/wmts/World/1.0.0/WMTSCapabilities.xml
+
+    >>> xml = open('sfs-wmts-cap-world.xml', 'r').read() 
+    >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
+    
+Test capabilities
+-----------------
+    >>> wmts.identification.type
+    'WMTS'
+    >>> wmts.identification.version
+    '1.0.0'
+    >>> wmts.identification.title
+
+    >>> wmts.identification.abstract
+
+    >>> wmts.identification.keywords
+    []
+    >>> wmts.identification.accessconstraints
+    'None'
+    >>> wmts.identification.fees
+    'conditions unknown'
+
+Service Provider:
+
+    >>> wmts.provider.name
+    'CARIS'
+
+    >>> wmts.provider.url
+    
+Check contact info
+    >>> wmts.provider.contact.name
+    'Andy Hoggarth'
+    >>> wmts.provider.contact.position
+    'Marketing & Sales Manager'
+
+    # TODO: phone number
+    >>> wmts.provider.contact.address
+    '115 Waggoners Lane'
+    >>> wmts.provider.contact.region
+    'New Brunswick'
+    >>> wmts.provider.contact.email
+    'info@caris.com'
+    >>> wmts.provider.contact.city
+    'Fredericton'
+    >>> wmts.provider.contact.postcode
+    'E3B 2L4'
+    >>> wmts.provider.contact.country
+    'Canada'
+    
+Test available content layers
+
+    >>> list(wmts.contents)
+    ['World', 'Ocean']
+
+    # TODO: check the contents
+
+Test TileMatrixSet variants
+    # TODO: check individual values
+    >>> wmts.tilematrixset.keys()
+    ['GoogleMapsCompatible', 'GlobalCRS84Scale']
+
+Test single item accessor
+
+    # TODO
+
+Expect a KeyError for invalid names
+
+    >>> wmts['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wmts.operations]
+    ['GetTile', 'GetFeatureInfo', 'GetCapabilities']
+    
+    >>> wmts.getOperationByName('GetTile').methods
+    {'HTTP': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+
+Test the gettile methods
+
+    # TODO - more checks
+
+Test the GetFeatureInfo operations
+
+    #TODO - implement and check
+
