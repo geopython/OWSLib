@@ -40,6 +40,8 @@ Check contact info
     'Marketing & Sales Manager'
 
     # TODO: phone number
+    >>> wmts.provider.contact.phone
+    '1 (506) 459-3849'
     >>> wmts.provider.contact.address
     '115 Waggoners Lane'
     >>> wmts.provider.contact.region

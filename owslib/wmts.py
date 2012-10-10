@@ -33,6 +33,7 @@ from etree import etree
 from .util import openURL, testXMLValue
 from fgdc import Metadata
 from iso import MD_Metadata
+from ows import ServiceProvider
 
 class ServiceException(Exception):
     """WMTS ServiceException
@@ -277,42 +278,6 @@ class TileMatrix(object):
 	self.matrixwidth = int(mw)
 	self.matrixheight = int(mh)
 
-class ServiceProvider(object):
-    ''' Implements IServiceProviderMetatdata '''
-    def __init__(self, infoset):
-        self._root=infoset
-        name=self._root.find('{http://www.opengis.net/ows/1.1}ProviderName')
-        if name is not None:
-            self.name=name.text
-        else:
-            self.name=None
-        # print "sp:", etree.tostring(self._root, pretty_print=True, encoding=unicode)
-        if self._root.find('{http://www.opengis.net/ows/1.1}ProviderSite') is not None:
-	    self.url=self._root.find('{http://www.opengis.net/ows/1.1}ProviderSite').attrib.get('{http://www.w3.org/1999/xlink}href', '')
-	else:
-	    self.url = None
-        #contact metadata
-        contact = self._root.find('{http://www.opengis.net/ows/1.1}ServiceContact')
-        ## make sure there are children to parse
-        if contact is not None and contact[:] != []:
-            self.contact = ContactMetadata(contact)
-        else:
-            self.contact = None
-            
-    def getContentByName(self, name):
-        """Return a named content item."""
-        for item in self.contents:
-            if item.name == name:
-                return item
-        raise KeyError, "No content named %s" % name
-
-    def getOperationByName(self, name):
-        """Return a named content item."""
-        for item in self.operations:
-            if item.name == name:
-                return item
-        raise KeyError, "No operation named %s" % name
-
 class ContentMetadata:
     """
     Abstraction for WMTS layer metadata.
@@ -413,6 +378,7 @@ class ContactMetadata:
 
         self.address = self.city = self.region = None
         self.postcode = self.country = self.email = None
+        self.phonenumber = None
 
         address = elem.find('{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Address')
         if address is not None:
@@ -438,6 +404,10 @@ class ContactMetadata:
         if position is not None: self.position = str.strip(position.text)
         else: self.position = None
 
+        phonenumber = elem.find('{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Phone')
+        if phonenumber is not None:
+            voice = phonenumber.find('{http://www.opengis.net/ows/1.1}Voice')
+            if voice is not None: self.phonenumber = str.strip(voice.text)
       
 class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
