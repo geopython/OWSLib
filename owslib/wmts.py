@@ -138,13 +138,13 @@ class WebMapTileService(object):
                 gather_layers(elem, cm)
         gather_layers(caps, None)
         
-        self.tilematrixset = {}
+        self.tilematrixsets = {}
         for elem in caps.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSet'):
 	    tms = TileMatrixSet(elem)
             if tms.identifier:
-		if tms.identifier in self.tilematrixset:
+		if tms.identifier in self.tilematrixsets:
 		    raise KeyError('TileMatrixSet with identifier "%s" already exists' % tms.identifier)
-		self.tilematrixset[tms.identifier] = tms
+		self.tilematrixsets[tms.identifier] = tms
 
     def items(self):
         '''supports dict-like items() access'''
@@ -163,7 +163,7 @@ class WebMapTileService(object):
 	if format is None:
 	    format = self[layer].formats[0]
 	if tilematrixset is None:
-	    tilematrixset = self[layer].tilematrixset
+	    tilematrixset = self[layer].tilematrixsets[0]
 	if tilematrix is None:
 	    raise ValueError("tilematrix (zoom level) is mandatory (cannot be None)")
 	if row is None:
@@ -296,9 +296,8 @@ class ContentMetadata:
             self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
         # TODO: there is probably some more logic here, and it should probably be shared code
 
-	self.tilematrixset = elem.find('{http://www.opengis.net/wmts/1.0}TileMatrixSetLink/{http://www.opengis.net/wmts/1.0}TileMatrixSet').text.strip()
-        if self.tilematrixset is None:
-                raise ValueError('%s missing TileMatrixSet' % (s,))
+	self.tilematrixsets = [f.text.strip() for f in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSetLink/{http://www.opengis.net/wmts/1.0}TileMatrixSet')]
+	
 	    
         #Styles
         self.styles = {}
@@ -315,7 +314,9 @@ class ContentMetadata:
 	    self.styles[identifier.text] = style
 
         self.formats = [f.text for f in elem.findall('{http://www.opengis.net/wmts/1.0}Format')]
-                
+
+        self.infoformats = [f.text for f in elem.findall('{http://www.opengis.net/wmts/1.0}InfoFormat')]
+        
         self.layers = []
         for child in elem.findall('{http://www.opengis.net/wmts/1.0}Layer'):
             self.layers.append(ContentMetadata(child, self))

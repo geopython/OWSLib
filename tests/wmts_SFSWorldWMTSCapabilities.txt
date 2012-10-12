@@ -60,16 +60,98 @@ Test available content layers
     >>> list(wmts.contents)
     ['World', 'Ocean']
 
-    # TODO: check the contents
-
 Test TileMatrixSet variants
-    # TODO: check individual values
-    >>> wmts.tilematrixset.keys()
+
+    >>> wmts.tilematrixsets.keys()
     ['GoogleMapsCompatible', 'GlobalCRS84Scale']
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].identifier
+    'GoogleMapsCompatible'
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].crs
+    'urn:ogc:def:crs:EPSG:6.18:3:3857'
+    >>> sorted(wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix.keys())
+    ['0', '1', '10', '11', '12', '13', '14', '15', '16', '17', '2', '3', '4', '5', '6', '7', '8', '9']
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['0'].identifier
+    '0'
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['0'].scaledenominator
+    559082264.0287178
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['0'].topleftcorner
+    (-20037508.342789244, -20037508.342789244)
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['0'].tilewidth
+    256
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['0'].tileheight
+    256
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['0'].matrixwidth
+    1
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['0'].matrixheight
+    1
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].identifier
+    '17'
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].scaledenominator
+    4265.459167699568
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].topleftcorner
+    (-20037508.342789244, -20037508.342789244)
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].tilewidth
+    256
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].tileheight
+    256
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].matrixwidth
+    131072
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].matrixheight
+    131072
+
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].identifier
+    'GlobalCRS84Scale'
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].crs
+    'urn:ogc:def:crs:OGC:1.3:CRS84'
+    >>> sorted(wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix.keys())
+    ['0', '1', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '2', '20', '3', '4', '5', '6', '7', '8', '9']
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['0'].identifier
+    '0'
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['0'].scaledenominator
+    500000000.0
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['0'].topleftcorner
+    (90.0, -180.0)
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['0'].tilewidth
+    256
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['0'].tileheight
+    256
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['0'].matrixwidth
+    2
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['0'].matrixheight
+    1
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['20'].identifier
+    '20'
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['20'].scaledenominator
+    100.0
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['20'].topleftcorner
+    (90.0, -180.0)
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['20'].tilewidth
+    256
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['20'].tileheight
+    256
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['20'].matrixwidth
+    2097152
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['20'].matrixheight
+    1048576
 
 Test single item accessor
 
-    # TODO
+    >>> wmts['World'].title
+    'World'
+    >>> wmts['World'].boundingBoxWGS84
+    (-179.99999999999997, -90.0, 179.296876953125, 83.62700000000001)
+    >>> wmts['World'].id
+    'World'
+    >>> wmts['World'].styles
+    {'default': {'isDefault': True}}
+    >>> wmts['World'].formats
+    ['image/png']
+    >>> wmts['World'].tilematrixsets
+    ['GlobalCRS84Scale', 'GoogleMapsCompatible']
+    >>> wmts['World'].infoformats
+    ['application/gml+xml; version=3.1']
+    #            <ResourceURL format="image/png" resourceType="tile" template="http://server.caris.com/spatialfusionserver/services/ows/wmts/World/World/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}.png"/>
+    #            <ResourceURL format="application/gml+xml; version=3.1" resourceType="FeatureInfo" template="http://server.caris.com/spatialfusionserver/services/ows/wmts/World/World/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}/{j}/{i}.xml"/>
 
 Expect a KeyError for invalid names
 
@@ -82,9 +164,16 @@ Test operations
 
     >>> [op.name for op in wmts.operations]
     ['GetTile', 'GetFeatureInfo', 'GetCapabilities']
+
+    >>> wmts.getOperationByName('GetFeatureInfo').methods
+    {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
     
     >>> wmts.getOperationByName('GetTile').methods
     {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+
+    >>> wmts.getOperationByName('GetCapabilities').methods
+    {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+
 
 Test the gettile methods
 
