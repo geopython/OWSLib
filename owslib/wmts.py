@@ -145,7 +145,21 @@ class WebMapTileService(object):
 		if tms.identifier in self.tilematrixsets:
 		    raise KeyError('TileMatrixSet with identifier "%s" already exists' % tms.identifier)
 		self.tilematrixsets[tms.identifier] = tms
+	
+	self.themes = {}
+	for elem in self._capabilities.findall('{http://www.opengis.net/wmts/1.0}Themes/{http://www.opengis.net/wmts/1.0}Theme'):
+	    theme = Theme(elem)
+	    if theme.identifier:
+		if theme.identifier in self.themes:
+		    raise KeyError('Theme with identifier "%s" already exists' % theme.identifier)
+		self.themes[theme.identifier] = theme
 
+	serviceMetadataURL = self._capabilities.find('{http://www.opengis.net/wmts/1.0}ServiceMetadataURL')
+	if serviceMetadataURL is not None:
+	    self.serviceMetadataURL = serviceMetadataURL.attrib['{http://www.w3.org/1999/xlink}href']
+	else:
+	    self.serviceMetadataURL = None
+	
     def items(self):
         '''supports dict-like items() access'''
         items=[]
@@ -260,6 +274,31 @@ class TileMatrix(object):
 	self.matrixwidth = int(mw)
 	self.matrixheight = int(mh)
 
+class Theme:
+    """
+    Abstraction for a WMTS theme
+    """
+    def __init__(self, elem):
+	if elem.tag != '{http://www.opengis.net/wmts/1.0}Theme':
+            raise ValueError('%s should be a Theme' % (elem,))
+        self.identifier = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Identifier')).strip()
+	title = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Title'))
+	if title is not None:
+	    self.title = title.strip()
+	else:
+	    self.title = None
+	abstract = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Abstract'))
+	if abstract is not None:
+	    self.abstract = abstract.strip()
+	else:
+	    self.abstract = None
+	    
+	self.layerRefs = []
+	layerRefs = elem.findall('{http://www.opengis.net/wmts/1.0}LayerRef')
+	for layerRef in layerRefs:
+	    if layerRef.text is not None:
+		self.layerRefs.append(layerRef.text)
+
 class ContentMetadata:
     """
     Abstraction for WMTS layer metadata.
@@ -297,7 +336,13 @@ class ContentMetadata:
         # TODO: there is probably some more logic here, and it should probably be shared code
 
 	self.tilematrixsets = [f.text.strip() for f in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSetLink/{http://www.opengis.net/wmts/1.0}TileMatrixSet')]
-	
+
+	self.resourceURLs = []
+	for resourceURL in elem.findall('{http://www.opengis.net/wmts/1.0}ResourceURL'):
+	    resource = {}
+	    for attrib in ['format', 'resourceType', 'template']:
+		resource[attrib] = resourceURL.attrib[attrib]
+	    self.resourceURLs.append(resource)
 	    
         #Styles
         self.styles = {}

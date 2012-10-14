@@ -26,6 +26,10 @@ Test capabilities
     >>> wmts.identification.fees
     'conditions unknown'
 
+Test service metadata URL (RESTful API)
+    >>> wmts.serviceMetadataURL
+    'http://server.caris.com/spatialfusionserver/services/ows/wmts/World/1.0.0/WMTSCapabilities.xml'
+
 Service Provider:
 
     >>> wmts.provider.name
@@ -148,10 +152,39 @@ Test single item accessor
     ['GlobalCRS84Scale', 'GoogleMapsCompatible']
     >>> wmts['World'].infoformats
     ['application/gml+xml; version=3.1']
+    >>> wmts['World'].resourceURLs
+    [{'resourceType': 'tile', 'template': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World/World/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}.png', 'format': 'image/png'}, {'resourceType': 'FeatureInfo', 'template': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World/World/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}/{j}/{i}.xml', 'format': 'application/gml+xml; version=3.1'}]
 
-   # TODO:
-    #            <ResourceURL format="image/png" resourceType="tile" template="http://server.caris.com/spatialfusionserver/services/ows/wmts/World/World/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}.png"/>
-    #            <ResourceURL format="application/gml+xml; version=3.1" resourceType="FeatureInfo" template="http://server.caris.com/spatialfusionserver/services/ows/wmts/World/World/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}/{j}/{i}.xml"/>
+    >>> wmts['Ocean'].title
+    'Ocean'
+    >>> wmts['Ocean'].boundingBoxWGS84
+    (-179.99999999999997, -85.583, 179.296876953125, 89.946)
+    >>> wmts['Ocean'].id
+    'Ocean'
+    >>> wmts['Ocean'].styles
+    {'default': {'isDefault': True}}
+    >>> wmts['Ocean'].formats
+    ['image/png']
+    >>> wmts['Ocean'].tilematrixsets
+    ['GlobalCRS84Scale', 'GoogleMapsCompatible']
+    >>> wmts['Ocean'].infoformats
+    ['application/gml+xml; version=3.1']
+    >>> wmts['Ocean'].resourceURLs
+    [{'resourceType': 'tile', 'template': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World/Ocean/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}.png', 'format': 'image/png'}, {'resourceType': 'FeatureInfo', 'template': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World/Ocean/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}/{j}/{i}.xml', 'format': 'application/gml+xml; version=3.1'}]
+
+Test themes
+    >>> wmts.themes.keys()
+    ['Earth']
+    >>> wmts.themes['Earth'].title
+    'Earth'
+    >>> wmts.themes['Earth'].identifier
+    'Earth'
+    >>> wmts.themes['Earth'].abstract
+
+    >>> wmts.themes['Earth'].layerRefs
+    ['World', 'Ocean']
+
+
 
 Expect a KeyError for invalid names
 
