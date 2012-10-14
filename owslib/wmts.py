@@ -185,6 +185,9 @@ class WebMapTileService(object):
 	if column is None:
     	    raise ValueError("column is mandatory (cannot be None)")
 
+	request['Service'] = 'WMTS'
+	request['Request'] = 'GetTile'
+	request['Version'] = '1.0.0'
         request['layer'] = layer
         request['style'] = style
         request['format'] = format

@@ -171,7 +171,7 @@ Test the gettile methods
 
     # TODO - more checks
     >>> wmts.buildTileRequest(layer='MODIS_Aqua_SurfaceReflectance_Bands121', tilematrix='0', row=0, column=0)
-    'layer=MODIS_Aqua_SurfaceReflectance_Bands121&format=image%2Fjpeg&TileRow=0&request=GetTile&style=default&version=1.0.0&TileMatrixSet=EPSG4326_250m&TileMatrix=0&TileCol=0'
+    'layer=MODIS_Aqua_SurfaceReflectance_Bands121&Version=1.0.0&Service=WMTS&format=image%2Fjpeg&request=GetTile&TileRow=0&Request=GetTile&style=default&version=1.0.0&TileMatrixSet=EPSG4326_250m&TileMatrix=0&TileCol=0'
     >>> from PIL import Image
     >>> import cStringIO
     >>> tile000 = wmts.gettile(layer='MODIS_Aqua_SurfaceReflectance_Bands121', tilematrix='0', row=0, column=0)
