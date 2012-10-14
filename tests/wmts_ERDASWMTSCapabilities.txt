@@ -52,7 +52,11 @@ Check contact info
     '30092-2500'
     >>> wmts.provider.contact.country
     'USA'
-    
+    >>> wmts.provider.contact.phone
+    '+1 770 776 3400'
+    >>> wmts.provider.contact.fax
+    '+1 770 776 3500'
+
 Test available content layers
 
     >>> list(wmts.contents)
