@@ -1,2 +1,3 @@
 *.pyc
 docs/build
+OWSLib.egg-info
