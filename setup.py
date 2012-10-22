@@ -1,9 +1,10 @@
 from setuptools import setup, find_packages
+import owslib
 
 readme = open('README.txt', 'rb').read()
 
 setup(name          = 'OWSLib',
-      version       = '0.5-dev',
+      version       = owslib.__version__,
       description   = 'OGC Web Service utility library',
       long_description = readme,
       license       = 'BSD',
