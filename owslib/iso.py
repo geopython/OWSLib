@@ -84,12 +84,12 @@ class MD_Metadata(object):
             self.referencesystem = None
 
         # TODO: merge .identificationinfo into .identification
-        warnings.warn(
-            'the .identification and .serviceidentification properties will merge into '
-            '.identification being a list of properties.  This is currently implemented '
-            'in .identificationinfo.  '
-            'Please see https://github.com/geopython/OWSLib/issues/38 for more information',
-            FutureWarning)
+        #warnings.warn(
+        #    'the .identification and .serviceidentification properties will merge into '
+        #    '.identification being a list of properties.  This is currently implemented '
+        #    'in .identificationinfo.  '
+        #    'Please see https://github.com/geopython/OWSLib/issues/38 for more information',
+        #    FutureWarning)
 
         val = md.find(util.nspath_eval('gmd:identificationInfo/gmd:MD_DataIdentification', namespaces))
         val2 = md.find(util.nspath_eval('gmd:identificationInfo/srv:SV_ServiceIdentification', namespaces))
@@ -333,7 +333,11 @@ class MD_DataIdentification(object):
         # from the one containing either an EX_GeographicBoundingBox or EX_BoundingPolygon.
         # The schema also specifies an EX_GeographicDescription. This is not implemented yet.
         val = None
-        for e in md.findall(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:geographicElement', namespaces)):
+        extent = md.find(util.nspath_eval('gmd:extent', namespaces))
+        if extent is None:
+            extent = md.find(util.nspath_eval('srv:extent', namespaces))
+
+        for e in extent.findall(util.nspath_eval('gmd:EX_Extent/gmd:geographicElement', namespaces)):
             if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None or e.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces)) is not None:
                 val = e
                 break
