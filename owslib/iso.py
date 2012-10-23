@@ -82,6 +82,14 @@ class MD_Metadata(object):
         else:
             self.referencesystem = None
 
+        # TODO: merge .identificationinfo into .identification
+        #warnings.warn(
+        #    'the .identification and .serviceidentification properties will merge into '
+        #    '.identification being a list of properties.  This is currently implemented '
+        #    'in .identificationinfo.  '
+        #    'Please see https://github.com/geopython/OWSLib/issues/38 for more information',
+        #    FutureWarning)
+
         val = md.find(util.nspath_eval('gmd:identificationInfo/gmd:MD_DataIdentification', namespaces))
         val2 = md.find(util.nspath_eval('gmd:identificationInfo/srv:SV_ServiceIdentification', namespaces))
 
@@ -95,7 +103,19 @@ class MD_Metadata(object):
             self.identification = None
             self.serviceidentification = None
 
+        self.identificationinfo = []
+        for idinfo in md.findall(util.nspath_eval('gmd:identificationInfo', namespaces)):
+            val = list(idinfo)[0]
+            tagval = util.xmltag_split(val.tag)
+            if tagval == 'MD_DataIdentification': 
+                self.identificationinfo.append(MD_DataIdentification(val, 'dataset'))
+            elif tagval == 'MD_ServiceIdentification': 
+                self.identificationinfo.append(MD_DataIdentification(val, 'service'))
+            elif tagval == 'SV_ServiceIdentification': 
+                self.identificationinfo.append(SV_ServiceIdentification(val))
+
         val = md.find(util.nspath_eval('gmd:distributionInfo/gmd:MD_Distribution', namespaces))
+
         if val is not None:
             self.distribution = MD_Distribution(val)
         else:
@@ -312,7 +332,11 @@ class MD_DataIdentification(object):
         # from the one containing either an EX_GeographicBoundingBox or EX_BoundingPolygon.
         # The schema also specifies an EX_GeographicDescription. This is not implemented yet.
         val = None
-        for e in md.findall(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:geographicElement', namespaces)):
+        extent = md.find(util.nspath_eval('gmd:extent', namespaces))
+        if extent is None:
+            extent = md.find(util.nspath_eval('srv:extent', namespaces))
+
+        for e in extent.findall(util.nspath_eval('gmd:EX_Extent/gmd:geographicElement', namespaces)):
             if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None or e.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces)) is not None:
                 val = e
                 break
@@ -325,7 +349,20 @@ class MD_DataIdentification(object):
         self.temporalextent_end = []
         val = md.find(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition', namespaces))
         self.temporalextent_end = util.testXMLValue(val)
-        
+
+class MD_Distributor(object):        
+    """ process MD_Distributor """
+    def __init__(self, md):
+        self.contact = None
+        val = md.find(util.nspath_eval('gmd:MD_Distributor/gmd:distributorContact/gmd:CI_ResponsibleParty', namespaces))
+        if val is not None:
+            self.contact = CI_ResponsibleParty(val)
+
+        self.online = []
+
+        for ol in md.findall(util.nspath_eval('gmd:MD_Distributor/gmd:distributorTransferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource', namespaces)):
+            self.online.append(CI_OnlineResource(ol))
+
 class MD_Distribution(object):
     """ process MD_Distribution """
     def __init__(self, md):
@@ -335,10 +372,15 @@ class MD_Distribution(object):
         val = md.find(util.nspath_eval('gmd:distributionFormat/gmd:MD_Format/gmd:version/gco:CharacterString', namespaces))
         self.version = util.testXMLValue(val)
 
+        self.distributor = []
+        for dist in md.findall(util.nspath_eval('gmd:distributor', namespaces)):
+            self.distributor.append(MD_Distributor(dist))
+
         self.online = []
 
         for ol in md.findall(util.nspath_eval('gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource', namespaces)):
             self.online.append(CI_OnlineResource(ol))
+
         
 class DQ_DataQuality(object):
     ''' process DQ_DataQuality'''
@@ -383,6 +425,7 @@ class DQ_DataQuality(object):
 class SV_ServiceIdentification(object):
     """ process SV_ServiceIdentification """
     def __init__(self, md):
+        self.identtype = 'service'
         val = md.find(util.nspath_eval('srv:serviceType/gco:LocalName', namespaces))
         self.type = util.testXMLValue(val)
       
