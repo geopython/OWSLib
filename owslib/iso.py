@@ -537,16 +537,18 @@ class EX_Extent(object):
     def __init__(self, md):
         self.boundingBox = None
         self.boundingPolygon = None
-        bboxElement = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces))
-        if bboxElement is not None:
-            self.boundingBox = EX_GeographicBoundingBox(bboxElement)
+
+        if md is not None:
+            bboxElement = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces))
+            if bboxElement is not None:
+                self.boundingBox = EX_GeographicBoundingBox(bboxElement)
         
-        polygonElement = md.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces))
-        if polygonElement is not None:
-            self.boundingPolygon = EX_GeographicBoundingPolygon(polygonElement)
+            polygonElement = md.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces))
+            if polygonElement is not None:
+                self.boundingPolygon = EX_GeographicBoundingPolygon(polygonElement)
  
-        val = md.find(util.nspath_eval('gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString', namespaces))
-        self.description_code = util.testXMLValue(val)
+            val = md.find(util.nspath_eval('gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString', namespaces))
+            self.description_code = util.testXMLValue(val)
 
 class MD_ReferenceSystem(object):
     """ process MD_ReferenceSystem """
