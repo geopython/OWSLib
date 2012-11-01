@@ -335,20 +335,21 @@ class MD_DataIdentification(object):
         extent = md.find(util.nspath_eval('gmd:extent', namespaces))
         if extent is None:
             extent = md.find(util.nspath_eval('srv:extent', namespaces))
+        
+        if extent is not None:
+            for e in extent.findall(util.nspath_eval('gmd:EX_Extent/gmd:geographicElement', namespaces)):
+                if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None or e.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces)) is not None:
+                    val = e
+                    break
+            self.extent = EX_Extent(val)
+            self.bbox = self.extent.boundingBox  # for backwards compatibility
 
-        for e in extent.findall(util.nspath_eval('gmd:EX_Extent/gmd:geographicElement', namespaces)):
-            if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None or e.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces)) is not None:
-                val = e
-                break
-        self.extent = EX_Extent(val)
-        self.bbox = self.extent.boundingBox  # for backwards compatibility
-        
-        val = md.find(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:beginPosition', namespaces))
-        self.temporalextent_start = util.testXMLValue(val)
-        
-        self.temporalextent_end = []
-        val = md.find(util.nspath_eval('gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition', namespaces))
-        self.temporalextent_end = util.testXMLValue(val)
+            val = extent.find(util.nspath_eval('gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:beginPosition', namespaces))
+            self.temporalextent_start = util.testXMLValue(val)
+
+            self.temporalextent_end = []
+            val = extent.find(util.nspath_eval('gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition', namespaces))
+            self.temporalextent_end = util.testXMLValue(val)
 
 class MD_Distributor(object):        
     """ process MD_Distributor """
