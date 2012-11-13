@@ -31,7 +31,7 @@ Service Provider:
     'IWS Sample Server'
 
     >>> wmts.provider.url
-    'http://iws.erdas.com'
+    'http://iws2.erdas.com'
     
 Check contact info
     >>> wmts.provider.contact.name
@@ -60,7 +60,7 @@ Check contact info
 Test available content layers
 
     >>> list(wmts.contents)
-    ['franklin.ecw', 'landsat742.ecw', 'sampleiws_images_geodetic_worldgeodemo.ecw', 'images_edinburgh_edinburgh.ecw', 'images_charlestoncosids-mosaic.ecw', 'cherokee.ecw', 'sampleiws_images_geodetic_usademo.ecw', 'atlanta2005.ecw']
+    ['franklin.ecw', 'images_edinburgh_edinburgh.ecw', 'landsat742.ecw', 'images_charlestoncosids-mosaic.ecw']
 
 Test TileMatrixSet variants
     # TODO: check individual values
@@ -154,10 +154,10 @@ Test single item accessor
     >>> wmts['images_edinburgh_edinburgh.ecw'].tilematrixsets
     ['epsg:27700:images_edinburgh_edinburgh.ecw', 'ogc:1.0:globalcrs84pixel', 'ogc:1.0:globalcrs84scale', 'ogc:1.0:googlecrs84quad', 'ogc:1.0:googlemapscompatible']
 
-    >>> wmts['atlanta2005.ecw'].id
-    'atlanta2005.ecw'
-    >>> wmts['atlanta2005.ecw'].title
-    'Atlanta2005'
+    >>> wmts['images_charlestoncosids-mosaic.ecw'].id
+    'images_charlestoncosids-mosaic.ecw'
+    >>> wmts['images_charlestoncosids-mosaic.ecw'].title
+    'CharlestonCoSIDS-mosaic'
 
 Expect a KeyError for invalid names
 
@@ -172,7 +172,7 @@ Test operations
     ['GetCapabilities', 'GetTile']
     
     >>> wmts.getOperationByName('GetTile').methods
-    {'Get': {'url': 'http://iws.erdas.com/ImageX/ecw_wmts.dll?', 'encodings': ['KVP']}}
+    {'Get': {'url': 'http://iws2.erdas.com/ImageX/ecw_wmts.dll?', 'encodings': ['KVP']}}
 
 Test the gettile methods
 
