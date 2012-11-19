@@ -210,7 +210,6 @@ Test operations
 
 Test the gettile methods
 
-    # TODO - check this against real server - appears broken as of 2012-10-14
     >>> wmts.buildTileRequest(layer='World', tilematrix='0', row=0, column=0)
     'layer=World&Version=1.0.0&Service=WMTS&format=image%2Fpng&request=GetTile&TileRow=0&Request=GetTile&style=default&version=1.0.0&TileMatrixSet=GlobalCRS84Scale&TileMatrix=0&TileCol=0'
     >>> from PIL import Image
@@ -220,8 +219,4 @@ Test the gettile methods
     >>> image = Image.open(im)
     >>> image.size
     (256, 256)
-
-Test the GetFeatureInfo operations
-
-    #TODO - implement and check
 

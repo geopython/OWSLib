@@ -198,7 +198,8 @@ class WebMapTileService(object):
 	
         data = urlencode(request)
         return data
-        
+
+
     def gettile(self, base_url=None, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
         """Request a tile from a WMTS server
         """        
