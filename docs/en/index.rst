@@ -134,6 +134,10 @@ Details of a layer:
 
   >>> wms['global_mosaic'].title
   'WMS Global Mosaic, pan sharpened'
+  >>> wms['global_mosaic'].queryable
+  0
+  >>> wms['global_mosaic'].opaque
+  0
   >>> wms['global_mosaic'].boundingBox
   >>> wms['global_mosaic'].boundingBoxWGS84
   (-180.0, -60.0, 180.0, 84.0)
