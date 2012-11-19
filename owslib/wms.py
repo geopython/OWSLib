@@ -322,6 +322,15 @@ class ContentMetadata:
             self.index = str(index)
         
         self.id = self.name = testXMLValue(elem.find('Name'))
+
+        # layer attributes
+        self.queryable = int(elem.attrib.get('queryable', 0))
+        self.cascaded = int(elem.attrib.get('cascaded', 0))
+        self.opaque = int(elem.attrib.get('opaque', 0))
+        self.noSubsets = int(elem.attrib.get('noSubsets', 0))
+        self.fixedWidth = int(elem.attrib.get('fixedWidth', 0))
+        self.fixedHeight = int(elem.attrib.get('fixedHeight', 0))
+
         # title is mandatory property
         self.title = None
         title = testXMLValue(elem.find('Title'))
