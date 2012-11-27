@@ -178,7 +178,7 @@ Test the gettile methods
 
     # TODO - more checks
     >>> wmts.buildTileRequest(layer='images_surdec-matched.ecw', tilematrix='0', row=0, column=0)
-    'layer=images_surdec-matched.ecw&Version=1.0.0&Service=WMTS&format=image%2Fpng&request=GetTile&TileRow=0&Request=GetTile&style=default&version=1.0.0&TileMatrixSet=ogc%3A1.0%3Aglobalcrs84pixel&TileMatrix=0&TileCol=0'
+    'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=images_surdec-matched.ecw&STYLE=default&TILEMATRIXSET=ogc%3A1.0%3Aglobalcrs84pixel&TILEMATRIX=0&TILEROW=0&TILECOL=0&FORMAT=image%2Fpng'
     >>> from PIL import Image
     >>> import cStringIO
     >>> tile000 = wmts.gettile(layer='images_surdec-matched.ecw', tilematrix='0', row=0, column=0)

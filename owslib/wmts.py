@@ -88,12 +88,12 @@ class WebMapTileService(object):
             self._capabilities = reader.readString(xml)
         else:  # read from server
             self._capabilities = reader.read(self.url)
-
+        
         # avoid building capabilities metadata if the response is a ServiceExceptionReport
         # TODO: check if this needs a namespace
         se = self._capabilities.find('ServiceException') 
         if se is not None: 
-         err_message = str(se.text).strip() 
+            err_message = str(se.text).strip() 
             raise ServiceException(err_message, xml) 
 
         # build metadata objects
@@ -140,26 +140,26 @@ class WebMapTileService(object):
         
         self.tilematrixsets = {}
         for elem in caps.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSet'):
-        tms = TileMatrixSet(elem)
+            tms = TileMatrixSet(elem)
             if tms.identifier:
-        if tms.identifier in self.tilematrixsets:
-            raise KeyError('TileMatrixSet with identifier "%s" already exists' % tms.identifier)
-        self.tilematrixsets[tms.identifier] = tms
-    
-    self.themes = {}
-    for elem in self._capabilities.findall('{http://www.opengis.net/wmts/1.0}Themes/{http://www.opengis.net/wmts/1.0}Theme'):
-        theme = Theme(elem)
-        if theme.identifier:
-        if theme.identifier in self.themes:
-            raise KeyError('Theme with identifier "%s" already exists' % theme.identifier)
-        self.themes[theme.identifier] = theme
+                if tms.identifier in self.tilematrixsets:
+                    raise KeyError('TileMatrixSet with identifier "%s" already exists' % tms.identifier)
+                self.tilematrixsets[tms.identifier] = tms
+        
+        self.themes = {}
+        for elem in self._capabilities.findall('{http://www.opengis.net/wmts/1.0}Themes/{http://www.opengis.net/wmts/1.0}Theme'):
+            theme = Theme(elem)
+            if theme.identifier:
+                if theme.identifier in self.themes:
+                    raise KeyError('Theme with identifier "%s" already exists' % theme.identifier)
+                self.themes[theme.identifier] = theme
 
-    serviceMetadataURL = self._capabilities.find('{http://www.opengis.net/wmts/1.0}ServiceMetadataURL')
-    if serviceMetadataURL is not None:
-        self.serviceMetadataURL = serviceMetadataURL.attrib['{http://www.w3.org/1999/xlink}href']
-    else:
-        self.serviceMetadataURL = None
-    
+        serviceMetadataURL = self._capabilities.find('{http://www.opengis.net/wmts/1.0}ServiceMetadataURL')
+        if serviceMetadataURL is not None:
+            self.serviceMetadataURL = serviceMetadataURL.attrib['{http://www.w3.org/1999/xlink}href']
+        else:
+            self.serviceMetadataURL = None
+        
     def items(self):
         '''supports dict-like items() access'''
         items=[]
@@ -171,32 +171,30 @@ class WebMapTileService(object):
         request = {'version': self.version, 'request': 'GetTile'}
         
         if (layer is None):
-        raise ValueError("layer is mandatory (cannot be None)")
-    if style is None:
-        style = self[layer].styles.keys()[0]
-    if style == "default":
-        style = ""
-    if format is None:
-        format = self[layer].formats[0]
-    if tilematrixset is None:
-        tilematrixset = self[layer].tilematrixsets[0]
-    if tilematrix is None:
-        raise ValueError("tilematrix (zoom level) is mandatory (cannot be None)")
-    if row is None:
-            raise ValueError("row is mandatory (cannot be None)")
-    if column is None:
-            raise ValueError("column is mandatory (cannot be None)")
+            raise ValueError("layer is mandatory (cannot be None)")
+        if style is None:
+            style = self[layer].styles.keys()[0]
+        if format is None:
+            format = self[layer].formats[0]
+        if tilematrixset is None:
+            tilematrixset = self[layer].tilematrixsets[0]
+        if tilematrix is None:
+            raise ValueError("tilematrix (zoom level) is mandatory (cannot be None)")
+        if row is None:
+                raise ValueError("row is mandatory (cannot be None)")
+        if column is None:
+                raise ValueError("column is mandatory (cannot be None)")
 
-    request = list()
-    request.append(('SERVICE', 'WMTS'))
-    request.append(('REQUEST', 'GetTile'))
-    request.append(('VERSION', '1.0.0'))
+        request = list()
+        request.append(('SERVICE', 'WMTS'))
+        request.append(('REQUEST', 'GetTile'))
+        request.append(('VERSION', '1.0.0'))
         request.append(('LAYER', layer))
         request.append(('STYLE', style))
         request.append(('TILEMATRIXSET', tilematrixset))
-    request.append(('TILEMATRIX', tilematrix))
-    request.append(('TILEROW', str(row)))
-    request.append(('TILECOL', str(column)))
+        request.append(('TILEMATRIX', tilematrix))
+        request.append(('TILEROW', str(row)))
+        request.append(('TILECOL', str(column)))
         request.append(('FORMAT', format))
 
         data = urlencode(request, True)
@@ -206,10 +204,10 @@ class WebMapTileService(object):
     def gettile(self, base_url=None, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
         """Request a tile from a WMTS server
         """        
-    data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column)
+        data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column)
         
         if base_url is None:
-        base_url = self.getOperationByName('GetTile').methods['Get']['url']
+            base_url = self.getOperationByName('GetTile').methods['Get']['url']
         u = openURL(base_url, data, username = self.username, password = self.password)
 
         # check for service exceptions, and return
@@ -244,14 +242,14 @@ class TileMatrixSet(object):
         self.identifier = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Identifier')).strip()
         self.crs = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}SupportedCRS')).strip()
         if (self.crs == None) or (self.identifier == None):
-        raise ValueError('%s incomplete TileMatrixSet' % (elem,))
-    self.tilematrix = {}
-    for tilematrix in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrix'):
-        tm = TileMatrix(tilematrix)
+            raise ValueError('%s incomplete TileMatrixSet' % (elem,))
+        self.tilematrix = {}
+        for tilematrix in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrix'):
+            tm = TileMatrix(tilematrix)
             if tm.identifier:
-        if tm.identifier in self.tilematrix:
-            raise KeyError('TileMatrix with identifier "%s" already exists' % tm.identifier)
-        self.tilematrix[tm.identifier] = tm
+                if tm.identifier in self.tilematrix:
+                    raise KeyError('TileMatrix with identifier "%s" already exists' % tm.identifier)
+                self.tilematrix[tm.identifier] = tm
 
 class TileMatrix(object):
     '''Holds one TileMatrix'''
@@ -261,50 +259,50 @@ class TileMatrix(object):
         self.identifier = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Identifier')).strip()
         sd = testXMLValue(elem.find('{http://www.opengis.net/wmts/1.0}ScaleDenominator'))
         if sd is None:
-        raise ValueError('%s is missing ScaleDenominator' % (elem,))
+            raise ValueError('%s is missing ScaleDenominator' % (elem,))
         self.scaledenominator = float(sd)
         tl = testXMLValue(elem.find('{http://www.opengis.net/wmts/1.0}TopLeftCorner'))
         if tl is None:
-        raise ValueError('%s is missing TopLeftCorner' % (elem,))
-    (lon, lat) = tl.split(" ")
+            raise ValueError('%s is missing TopLeftCorner' % (elem,))
+        (lon, lat) = tl.split(" ")
         self.topleftcorner = (float(lon), float(lat))
         width = testXMLValue(elem.find('{http://www.opengis.net/wmts/1.0}TileWidth'))
         height = testXMLValue(elem.find('{http://www.opengis.net/wmts/1.0}TileHeight'))
         if (width is None) or (height is None):
-        raise ValueError('%s is missing TileWidth and/or TileHeight' % (elem,))
+            raise ValueError('%s is missing TileWidth and/or TileHeight' % (elem,))
         self.tilewidth = int(width)
         self.tileheight = int(height)
         mw = testXMLValue(elem.find('{http://www.opengis.net/wmts/1.0}MatrixWidth'))
         mh = testXMLValue(elem.find('{http://www.opengis.net/wmts/1.0}MatrixHeight'))
         if (mw is None) or (mh is None):
-        raise ValueError('%s is missing MatrixWidth and/or MatrixHeight' % (elem,))
-    self.matrixwidth = int(mw)
-    self.matrixheight = int(mh)
+            raise ValueError('%s is missing MatrixWidth and/or MatrixHeight' % (elem,))
+        self.matrixwidth = int(mw)
+        self.matrixheight = int(mh)
 
 class Theme:
     """
     Abstraction for a WMTS theme
     """
     def __init__(self, elem):
-    if elem.tag != '{http://www.opengis.net/wmts/1.0}Theme':
+        if elem.tag != '{http://www.opengis.net/wmts/1.0}Theme':
             raise ValueError('%s should be a Theme' % (elem,))
         self.identifier = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Identifier')).strip()
-    title = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Title'))
-    if title is not None:
-        self.title = title.strip()
-    else:
-        self.title = None
-    abstract = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Abstract'))
-    if abstract is not None:
-        self.abstract = abstract.strip()
-    else:
-        self.abstract = None
-        
-    self.layerRefs = []
-    layerRefs = elem.findall('{http://www.opengis.net/wmts/1.0}LayerRef')
-    for layerRef in layerRefs:
-        if layerRef.text is not None:
-        self.layerRefs.append(layerRef.text)
+        title = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Title'))
+        if title is not None:
+            self.title = title.strip()
+        else:
+            self.title = None
+        abstract = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Abstract'))
+        if abstract is not None:
+            self.abstract = abstract.strip()
+        else:
+            self.abstract = None
+            
+        self.layerRefs = []
+        layerRefs = elem.findall('{http://www.opengis.net/wmts/1.0}LayerRef')
+        for layerRef in layerRefs:
+            if layerRef.text is not None:
+                self.layerRefs.append(layerRef.text)
 
 class ContentMetadata:
     """
@@ -342,28 +340,28 @@ class ContentMetadata:
             self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
         # TODO: there is probably some more logic here, and it should probably be shared code
 
-    self.tilematrixsets = [f.text.strip() for f in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSetLink/{http://www.opengis.net/wmts/1.0}TileMatrixSet')]
+        self.tilematrixsets = [f.text.strip() for f in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSetLink/{http://www.opengis.net/wmts/1.0}TileMatrixSet')]
 
-    self.resourceURLs = []
-    for resourceURL in elem.findall('{http://www.opengis.net/wmts/1.0}ResourceURL'):
-        resource = {}
-        for attrib in ['format', 'resourceType', 'template']:
-        resource[attrib] = resourceURL.attrib[attrib]
-        self.resourceURLs.append(resource)
-        
+        self.resourceURLs = []
+        for resourceURL in elem.findall('{http://www.opengis.net/wmts/1.0}ResourceURL'):
+            resource = {}
+            for attrib in ['format', 'resourceType', 'template']:
+                resource[attrib] = resourceURL.attrib[attrib]
+            self.resourceURLs.append(resource)
+            
         #Styles
         self.styles = {}
         for s in elem.findall('{http://www.opengis.net/wmts/1.0}Style'):
-        style = {}
-        isdefaulttext = s.attrib['isDefault']
-        style['isDefault'] = (isdefaulttext == "true")
+            style = {}
+            isdefaulttext = s.attrib['isDefault']
+            style['isDefault'] = (isdefaulttext == "true")
             identifier = s.find('{http://www.opengis.net/ows/1.1}Identifier')
             if identifier is None:
                 raise ValueError('%s missing identifier' % (s,))
             title = s.find('{http://www.opengis.net/ows/1.1}Title')
             if title is not None:
                 style['title'] = title.text
-        self.styles[identifier.text] = style
+            self.styles[identifier.text] = style
 
         self.formats = [f.text for f in elem.findall('{http://www.opengis.net/wmts/1.0}Format')]
 
@@ -391,13 +389,13 @@ class OperationsMetadata:
         for verb in elem.findall('{http://www.opengis.net/ows/1.1}DCP/{http://www.opengis.net/ows/1.1}HTTP'):
             url = verb.find('{http://www.opengis.net/ows/1.1}Get').attrib['{http://www.w3.org/1999/xlink}href']
             encodings = []
-        constraints = verb.findall('{http://www.opengis.net/ows/1.1}Get/{http://www.opengis.net/ows/1.1}Constraint')
-        for constraint in constraints:
-        if constraint.attrib['name'] == "GetEncoding":
-            for encoding in constraint.findall('{http://www.opengis.net/ows/1.1}AllowedValues/{http://www.opengis.net/ows/1.1}Value'):
-            encodings.append(encoding.text)
-        if len(encodings) < 1: # KVP is only a SHOULD requirement, and SFS doesn't provide it.
-        encodings = ['KVP']
+            constraints = verb.findall('{http://www.opengis.net/ows/1.1}Get/{http://www.opengis.net/ows/1.1}Constraint')
+            for constraint in constraints:
+                if constraint.attrib['name'] == "GetEncoding":
+                    for encoding in constraint.findall('{http://www.opengis.net/ows/1.1}AllowedValues/{http://www.opengis.net/ows/1.1}Value'):
+                        encodings.append(encoding.text)
+            if len(encodings) < 1: # KVP is only a SHOULD requirement, and SFS doesn't provide it.
+                encodings = ['KVP']
             methods.append(('Get', {'url': url, 'encodings': encodings}))
         self.methods = dict(methods)
       
