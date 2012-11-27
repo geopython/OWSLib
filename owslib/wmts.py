@@ -174,6 +174,8 @@ class WebMapTileService(object):
 	    raise ValueError("layer is mandatory (cannot be None)")
 	if style is None:
 	    style = self[layer].styles.keys()[0]
+	if style == "default":
+	    style = ""
 	if format is None:
 	    format = self[layer].formats[0]
 	if tilematrixset is None:
@@ -185,18 +187,19 @@ class WebMapTileService(object):
 	if column is None:
     	    raise ValueError("column is mandatory (cannot be None)")
 
-	request['Service'] = 'WMTS'
-	request['Request'] = 'GetTile'
-	request['Version'] = '1.0.0'
-        request['layer'] = layer
-        request['style'] = style
-        request['format'] = format
-        request['TileMatrixSet'] = tilematrixset
-	request['TileMatrix'] = tilematrix
-	request['TileRow'] = str(row)
-	request['TileCol'] = str(column)
-	
-        data = urlencode(request)
+	request = list()
+	request.append(('SERVICE', 'WMTS'))
+	request.append(('REQUEST', 'GetTile'))
+	request.append(('VERSION', '1.0.0'))
+        request.append(('LAYER', layer))
+        request.append(('STYLE', style))
+        request.append(('TILEMATRIXSET', tilematrixset))
+	request.append(('TILEMATRIX', tilematrix))
+	request.append(('TILEROW', str(row)))
+	request.append(('TILECOL', str(column)))
+        request.append(('FORMAT', format))
+
+        data = urlencode(request, True)
         return data
 
 
