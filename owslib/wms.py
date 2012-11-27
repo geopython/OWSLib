@@ -78,8 +78,8 @@ class WebMapService(object):
 
         # avoid building capabilities metadata if the response is a ServiceExceptionReport
         se = self._capabilities.find('ServiceException') 
- 	if se is not None: 
- 	    err_message = str(se.text).strip() 
+        if se is not None: 
+            err_message = str(se.text).strip() 
             raise ServiceException(err_message, xml) 
 
         # build metadata objects
@@ -359,10 +359,10 @@ class ContentMetadata:
                 self.boundingBox = self.parent.boundingBox
 
         # ScaleHint 
- 	sh = elem.find('ScaleHint') 
- 	self.scaleHint = None 
- 	if sh is not None: 
- 	    self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
+        sh = elem.find('ScaleHint') 
+        self.scaleHint = None 
+        if sh is not None: 
+            self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
 
         attribution = elem.find('Attribution')
         if attribution is not None:
