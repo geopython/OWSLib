@@ -211,7 +211,7 @@ Test operations
 Test the gettile methods
 
     >>> wmts.buildTileRequest(layer='World', tilematrix='0', row=0, column=0)
-    'layer=World&Version=1.0.0&Service=WMTS&format=image%2Fpng&request=GetTile&TileRow=0&Request=GetTile&style=default&version=1.0.0&TileMatrixSet=GlobalCRS84Scale&TileMatrix=0&TileCol=0'
+    'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=World&STYLE=default&TILEMATRIXSET=GlobalCRS84Scale&TILEMATRIX=0&TILEROW=0&TILECOL=0&FORMAT=image%2Fpng'
     >>> from PIL import Image
     >>> import cStringIO
     >>> tile000 = wmts.gettile(layer='World', tilematrix='0', row=0, column=0)
