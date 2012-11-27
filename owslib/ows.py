@@ -47,9 +47,9 @@ class ServiceIdentification(object):
         self.abstract = util.testXMLValue(val)
 
         self.keywords = []
-	for f in self._root.findall(util.nspath('Keywords/Keyword', namespace)):
-	    if f.text is not None:
-		self.keywords.append(f.text)
+        for f in self._root.findall(util.nspath('Keywords/Keyword', namespace)):
+            if f.text is not None:
+                self.keywords.append(f.text)
     
 
         val = self._root.find(util.nspath('AccessConstraints', namespace))
