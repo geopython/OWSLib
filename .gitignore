@@ -1,4 +1,3 @@
 *.pyc
 docs/build
-.project
-.pydevproject
+OWSLib.egg-info

@@ -78,8 +78,8 @@ class WebMapService(object):
 
         # avoid building capabilities metadata if the response is a ServiceExceptionReport
         se = self._capabilities.find('ServiceException') 
- 	if se is not None: 
- 	    err_message = str(se.text).strip() 
+        if se is not None: 
+            err_message = str(se.text).strip() 
             raise ServiceException(err_message, xml) 
 
         # build metadata objects
@@ -322,6 +322,15 @@ class ContentMetadata:
             self.index = str(index)
         
         self.id = self.name = testXMLValue(elem.find('Name'))
+
+        # layer attributes
+        self.queryable = int(elem.attrib.get('queryable', 0))
+        self.cascaded = int(elem.attrib.get('cascaded', 0))
+        self.opaque = int(elem.attrib.get('opaque', 0))
+        self.noSubsets = int(elem.attrib.get('noSubsets', 0))
+        self.fixedWidth = int(elem.attrib.get('fixedWidth', 0))
+        self.fixedHeight = int(elem.attrib.get('fixedHeight', 0))
+
         # title is mandatory property
         self.title = None
         title = testXMLValue(elem.find('Title'))
@@ -350,10 +359,10 @@ class ContentMetadata:
                 self.boundingBox = self.parent.boundingBox
 
         # ScaleHint 
- 	sh = elem.find('ScaleHint') 
- 	self.scaleHint = None 
- 	if sh is not None: 
- 	    self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
+        sh = elem.find('ScaleHint') 
+        self.scaleHint = None 
+        if sh is not None: 
+            self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
 
         attribution = elem.find('Attribution')
         if attribution is not None:

@@ -85,6 +85,10 @@ That's everything needed to make a request for imagery::
 A very similar API exists for WebFeatureService. See
 tests/wfs_MapServerWFSCapabilities.txt for details.
 
+There is also support for Web Coverage Service (WCS), Catalogue
+Service for the Web (CSW), Web Processing Service (WPS), and Web
+Map Tile Service (WMTS). Some of those are beta quality.
+
 Support
 -------
 
