@@ -181,7 +181,8 @@ class WebFeatureService_1_0_0(object):
         assert len(typename) > 0
         request['typename'] = ','.join(typename)
         
-        request['propertyname'] = ','.join(propertyname)
+        if propertyname:
+            request['propertyname'] = ','.join(propertyname)
         if featureversion: request['featureversion'] = str(featureversion)
         if maxfeatures: request['maxfeatures'] = str(maxfeatures)
 
