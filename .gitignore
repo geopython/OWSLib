@@ -1,2 +1,4 @@
 *.pyc
 docs/build
+.project
+.pydevproject
