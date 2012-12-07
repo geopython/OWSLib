@@ -144,8 +144,10 @@ def testXMLValue(val, attrib=False):
     if val is not None:
         if attrib == True:
             return val.strip()
-        else:
+        elif val.text:  
             return val.text.strip()
+        else:
+            return None	
     else:
         return None
 
