@@ -46,7 +46,7 @@ class ServiceException(Exception):
     def __init__(self, message, xml):
         self.message = message
         self.xml = xml
-        
+
     def __str__(self):
         return repr(self.message)
 
@@ -60,7 +60,7 @@ class WebMapTileService(object):
 
     Implements IWebMapService.
     """
-    
+
     def __getitem__(self,name):
         ''' check contents dictionary to allow dict like access to service layers'''
         if name in self.__getattribute__('contents').keys():
@@ -68,8 +68,8 @@ class WebMapTileService(object):
         else:
             raise KeyError, "No content named %s" % name
 
-    
-    def __init__(self, url, version='1.0.0', xml=None, 
+
+    def __init__(self, url, version='1.0.0', xml=None,
                 username=None, password=None, parse_remote_metadata=False
                 ):
         """Initialize."""
@@ -78,23 +78,23 @@ class WebMapTileService(object):
         self.password = password
         self.version = version
         self._capabilities = None
-        
+
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
                 )
-               
+
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
             self._capabilities = reader.read(self.url)
-        
+
         # avoid building capabilities metadata if the response is a ServiceExceptionReport
         # TODO: check if this needs a namespace
-        se = self._capabilities.find('ServiceException') 
-        if se is not None: 
-            err_message = str(se.text).strip() 
-            raise ServiceException(err_message, xml) 
+        se = self._capabilities.find('ServiceException')
+        if se is not None:
+            err_message = str(se.text).strip()
+            raise ServiceException(err_message, xml)
 
         # build metadata objects
         self._buildMetadata(parse_remote_metadata)
@@ -109,25 +109,25 @@ class WebMapTileService(object):
 
     def _buildMetadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
-        
+
         #serviceIdentification metadata
         serviceident=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceIdentification')
-        self.identification=ServiceIdentification(serviceident)   
-        
+        self.identification=ServiceIdentification(serviceident)
+
         #serviceProvider metadata
         serviceprov=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceProvider')
-        self.provider=ServiceProvider(serviceprov)   
-            
-        #serviceOperations metadata 
+        self.provider=ServiceProvider(serviceprov)
+
+        #serviceOperations metadata
         self.operations=[]
         for elem in self._capabilities.find('{http://www.opengis.net/ows/1.1}OperationsMetadata')[:]:
             self.operations.append(OperationsMetadata(elem))
-          
-        #serviceContents metadata: our assumption is that services use a top-level 
+
+        #serviceContents metadata: our assumption is that services use a top-level
         #layer as a metadata organizer, nothing more.
         self.contents={}
         caps = self._capabilities.find('{http://www.opengis.net/wmts/1.0}Contents')
-      
+
         def gather_layers(parent_elem, parent_metadata):
             for index, elem in enumerate(parent_elem.findall('{http://www.opengis.net/wmts/1.0}Layer')):
                 cm = ContentMetadata(elem, parent=parent_metadata, index=index+1, parse_remote_metadata=parse_remote_metadata)
@@ -137,7 +137,7 @@ class WebMapTileService(object):
                     self.contents[cm.id] = cm
                 gather_layers(elem, cm)
         gather_layers(caps, None)
-        
+
         self.tilematrixsets = {}
         for elem in caps.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSet'):
             tms = TileMatrixSet(elem)
@@ -145,7 +145,7 @@ class WebMapTileService(object):
                 if tms.identifier in self.tilematrixsets:
                     raise KeyError('TileMatrixSet with identifier "%s" already exists' % tms.identifier)
                 self.tilematrixsets[tms.identifier] = tms
-        
+
         self.themes = {}
         for elem in self._capabilities.findall('{http://www.opengis.net/wmts/1.0}Themes/{http://www.opengis.net/wmts/1.0}Theme'):
             theme = Theme(elem)
@@ -159,17 +159,17 @@ class WebMapTileService(object):
             self.serviceMetadataURL = serviceMetadataURL.attrib['{http://www.w3.org/1999/xlink}href']
         else:
             self.serviceMetadataURL = None
-        
+
     def items(self):
         '''supports dict-like items() access'''
         items=[]
         for item in self.contents:
             items.append((item,self.contents[item]))
         return items
-    
+
     def buildTileRequest(self, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
         request = {'version': self.version, 'request': 'GetTile'}
-        
+
         if (layer is None):
             raise ValueError("layer is mandatory (cannot be None)")
         if style is None:
@@ -203,9 +203,9 @@ class WebMapTileService(object):
 
     def gettile(self, base_url=None, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
         """Request a tile from a WMTS server
-        """        
+        """
         data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column)
-        
+
         if base_url is None:
             base_url = self.getOperationByName('GetTile').methods['Get']['url']
         u = openURL(base_url, data, username = self.username, password = self.password)
@@ -217,7 +217,7 @@ class WebMapTileService(object):
             err_message = unicode(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
-        
+
     def getServiceXML(self):
         xml = None
         if self._capabilities is not None:
@@ -226,14 +226,14 @@ class WebMapTileService(object):
 
     def getfeatureinfo(self):
         raise NotImplementedError
-    
-    def getOperationByName(self, name): 
+
+    def getOperationByName(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
                 return item
         raise KeyError, "No operation named %s" % name
-    
+
 class TileMatrixSet(object):
     '''Holds one TileMatrixSet'''
     def __init__(self, elem):
@@ -297,7 +297,7 @@ class Theme:
             self.abstract = abstract.strip()
         else:
             self.abstract = None
-            
+
         self.layerRefs = []
         layerRefs = elem.findall('{http://www.opengis.net/wmts/1.0}LayerRef')
         for layerRef in layerRefs:
@@ -313,13 +313,13 @@ class ContentMetadata:
     def __init__(self, elem, parent=None, index=0, parse_remote_metadata=False):
         if elem.tag != '{http://www.opengis.net/wmts/1.0}Layer':
             raise ValueError('%s should be a Layer' % (elem,))
-        
+
         self.parent = parent
         if parent:
             self.index = "%s.%d" % (parent.index, index)
         else:
             self.index = str(index)
-        
+
         self.id = self.name = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Identifier'))
         # title is mandatory property
         self.title = None
@@ -328,7 +328,7 @@ class ContentMetadata:
             self.title = title.strip()
 
         self.abstract = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Abstract'))
-        
+
         # bboxes
         b = elem.find('{http://www.opengis.net/ows/1.1}WGS84BoundingBox')
         self.boundingBox = None
@@ -348,12 +348,12 @@ class ContentMetadata:
             for attrib in ['format', 'resourceType', 'template']:
                 resource[attrib] = resourceURL.attrib[attrib]
             self.resourceURLs.append(resource)
-            
+
         #Styles
         self.styles = {}
         for s in elem.findall('{http://www.opengis.net/wmts/1.0}Style'):
             style = {}
-            isdefaulttext = s.attrib['isDefault']
+            isdefaulttext = s.attrib.get('isDefault')
             style['isDefault'] = (isdefaulttext == "true")
             identifier = s.find('{http://www.opengis.net/ows/1.1}Identifier')
             if identifier is None:
@@ -366,7 +366,7 @@ class ContentMetadata:
         self.formats = [f.text for f in elem.findall('{http://www.opengis.net/wmts/1.0}Format')]
 
         self.infoformats = [f.text for f in elem.findall('{http://www.opengis.net/wmts/1.0}InfoFormat')]
-        
+
         self.layers = []
         for child in elem.findall('{http://www.opengis.net/wmts/1.0}Layer'):
             self.layers.append(ContentMetadata(child, self))
@@ -377,7 +377,7 @@ class ContentMetadata:
 
 class OperationsMetadata:
     """Abstraction for WMTS OperationsMetadata.
-    
+
     Implements IOperationMetadata.
     """
     def __init__(self, elem):
@@ -398,7 +398,7 @@ class OperationsMetadata:
                 encodings = ['KVP']
             methods.append(('Get', {'url': url, 'encodings': encodings}))
         self.methods = dict(methods)
-      
+
 class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
