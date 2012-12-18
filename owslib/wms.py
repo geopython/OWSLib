@@ -78,8 +78,8 @@ class WebMapService(object):
 
         # avoid building capabilities metadata if the response is a ServiceExceptionReport
         se = self._capabilities.find('ServiceException') 
- 	if se is not None: 
- 	    err_message = str(se.text).strip() 
+        if se is not None: 
+            err_message = str(se.text).strip() 
             raise ServiceException(err_message, xml) 
 
         # build metadata objects
@@ -245,7 +245,7 @@ class WebMapService(object):
         
     def getServiceXML(self):
         xml = None
-        if self._capabilities:
+        if self._capabilities is not None:
             xml = etree.tostring(self._capabilities)
         return xml
 
@@ -322,8 +322,21 @@ class ContentMetadata:
             self.index = str(index)
         
         self.id = self.name = testXMLValue(elem.find('Name'))
+
+        # layer attributes
+        self.queryable = int(elem.attrib.get('queryable', 0))
+        self.cascaded = int(elem.attrib.get('cascaded', 0))
+        self.opaque = int(elem.attrib.get('opaque', 0))
+        self.noSubsets = int(elem.attrib.get('noSubsets', 0))
+        self.fixedWidth = int(elem.attrib.get('fixedWidth', 0))
+        self.fixedHeight = int(elem.attrib.get('fixedHeight', 0))
+
         # title is mandatory property
-        self.title = testXMLValue(elem.find('Title')).strip()
+        self.title = None
+        title = testXMLValue(elem.find('Title'))
+        if title is not None:
+            self.title = title.strip()
+
         self.abstract = testXMLValue(elem.find('Abstract'))
         
         # bboxes
@@ -346,10 +359,10 @@ class ContentMetadata:
                 self.boundingBox = self.parent.boundingBox
 
         # ScaleHint 
- 	sh = elem.find('ScaleHint') 
- 	self.scaleHint = None 
- 	if sh is not None: 
- 	    self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
+        sh = elem.find('ScaleHint') 
+        self.scaleHint = None 
+        if sh is not None: 
+            self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
 
         attribution = elem.find('Attribution')
         if attribution is not None:
@@ -403,7 +416,10 @@ class ContentMetadata:
             #raise ValueError('%s no SRS available!?' % (elem,))
             #Comment by D Lowe.
             #Do not raise ValueError as it is possible that a layer is purely a parent layer and does not have SRS specified. Instead set crsOptions to None
-            self.crsOptions=None
+            # Comment by Jachym:
+            # Do not set it to None, but to [], which will make the code
+            # work further. Fixed by anthonybaxter
+            self.crsOptions=[]
             
         #Styles
         self.styles = {}

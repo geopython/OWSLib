@@ -19,6 +19,21 @@ from StringIO import StringIO
 
 import logging
 
+class ServiceException(Exception):
+    """WCS ServiceException
+
+    Attributes:
+        message -- short error message
+        xml  -- full xml error message from server
+    """
+
+    def __init__(self, message, xml):
+        self.message = message
+        self.xml = xml
+
+    def __str__(self):
+        return repr(self.message)
+
 class WCSBase(object):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
     def __new__(self,url, xml, cookies):

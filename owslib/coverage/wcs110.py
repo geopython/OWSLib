@@ -11,7 +11,7 @@
 
 ##########NOTE: Does not conform to new interfaces yet #################
 
-from wcsBase import WCSBase, WCSCapabilitiesReader
+from wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
 from owslib.util import openURL, testXMLValue
 from urllib import urlencode
 from urllib2 import urlopen
@@ -22,9 +22,6 @@ from owslib.crs import Crs
 
 def ns(tag):
     return '{http://www.opengis.net/wcs/1.1}'+tag
-
-class ServiceException(Exception):
-    pass
 
 class WebCoverageService_1_1_0(WCSBase):
     """Abstraction for OGC Web Coverage Service (WCS), version 1.1.0
@@ -48,17 +45,24 @@ class WebCoverageService_1_1_0(WCSBase):
             self._capabilities = reader.readString(xml)
         else:
             self._capabilities = reader.read(self.url)
-            
+
+        # check for exceptions
+        se = self._capabilities.find('{http://www.opengis.net/ows/1.1}Exception')
+
+        if se is not None:
+            err_message = str(se.text).strip()
+            raise ServiceException(err_message, xml)
+
         #build metadata objects:
         
         #serviceIdentification metadata
         elem=self._capabilities.find('{http://www.opengis.net/wcs/1.1/ows}ServiceIdentification')
         if elem is None:
-            elem=self._capabilities.find('{http://www.opengis.net/ows}ServiceIdentification')
+            elem=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceIdentification')
         self.identification=ServiceIdentification(elem)
         
         #serviceProvider
-        elem=self._capabilities.find('{http://www.opengis.net/ows}ServiceProvider')
+        elem=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceProvider')
         self.provider=ServiceProvider(elem)
                 
         #serviceOperations

@@ -9,7 +9,7 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from wcsBase import WCSBase, WCSCapabilitiesReader
+from wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
 from urllib import urlencode
 from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
@@ -19,10 +19,6 @@ import os, errno
 #  function to save writing out WCS namespace in full each time
 def ns(tag):
     return '{http://www.opengis.net/wcs}'+tag
-
-class ServiceException(Exception):
-    pass
-
 
 class WebCoverageService_1_0_0(WCSBase):
     """Abstraction for OGC Web Coverage Service (WCS), version 1.0.0
@@ -45,6 +41,13 @@ class WebCoverageService_1_0_0(WCSBase):
             self._capabilities = reader.readString(xml)
         else:
             self._capabilities = reader.read(self.url)
+
+        # check for exceptions
+        se = self._capabilities.find('ServiceException')
+
+        if se is not None:
+            err_message = str(se.text).strip()  
+            raise ServiceException(err_message, xml) 
 
         #serviceIdentification metadata
         subelem=self._capabilities.find(ns('Service'))
