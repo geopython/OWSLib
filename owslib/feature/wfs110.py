@@ -181,7 +181,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         # bbox
         elif bbox and typename:
 
-            request["bbox"] == self.getBBOXKVP(bbox)
+            request["bbox"] = self.getBBOXKVP(bbox,typename)
 
         # or filter
         elif filter and typename:
