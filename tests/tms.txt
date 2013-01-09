@@ -1,0 +1,14 @@
+Find out what a TMS has to offer. Service metadata:
+
+    >>> from owslib import tms
+    >>> service = tms.TileMapService('http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0')
+    >>> service.identification.title
+    'Tile Map Service'
+    >>> service.identification.abstract
+    'A Tile Map Service served by GeoWebCache'
+    >>> service.identification.keywords
+    []
+    >>> service.identification.version
+    '1.0.0'
+    >>> service.identification.url
+    'http://geonode.iwlearn.org/geoserver/gwc'
