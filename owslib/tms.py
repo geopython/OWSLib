@@ -12,6 +12,11 @@
 # Contact email: sgillies@frii.com
 # =============================================================================
 
+
+# http://osgeo-org.1560.n6.nabble.com/OSGEO-code-td3852851.html
+# "EPSG:900913" = ["OSGEO:41001", "EPSG:3785", "EPSG:3857", "EPSG:54004"]
+
+
 from etree import etree
 from .util import openURL, testXMLValue
 
