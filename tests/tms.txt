@@ -1,3 +1,6 @@
+You can find a list of servers at
+http://svn.osgeo.org/gdal/trunk/gdal/frmts/wms/WMSServerList.txt
+
 Find out what a TMS has to offer. Service metadata:
 
     >>> from owslib import tms
@@ -12,3 +15,55 @@ Find out what a TMS has to offer. Service metadata:
     '1.0.0'
     >>> service.identification.url
     'http://geonode.iwlearn.org/geoserver/gwc'
+    >>> len(service.contents) >0
+    True
+    >>> tm = service.contents['http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0/geonode%3AGH_Manglares4326@EPSG%3A900913@jpeg']
+    >>> tm.title
+    'GOH Ecosistemas Maritimos Manglares'
+
+The details of the TileMap are fetched on demand
+    >>> tm._tile_map == None
+    True
+    >>> tm.abstract
+    'No abstract provided'
+    >>> tm._tile_map
+    {'extension': 'jpeg', 'width': '256', 'abstract': 'No abstract provided', 'title': 'GOH Ecosistemas Maritimos Manglares', 'mime-type': 'image/jpeg', 'height': '256', 'srs': 'EPSG:900913'}
+    >>> tm.srs
+    'EPSG:900913'
+    >>> tm.extension
+    'jpeg'
+    >>> tm.height
+    '256'
+    >>> tm.width
+    '256'
+    >>> tm.mimetype
+    'image/jpeg'
+    >>> tm.boundingBox
+    ('-1.001875417E7', '1252344.2712499984', '-8766409.89875', '2504688.5425000004')
+    >>> tm.origin
+    ('-1.001875417E7', '1252344.2712499984')
+
+test with:
+
+from owslib import tms
+servers = [#'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0',
+    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0',
+    'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0',
+    'http://osm.omniscale.net/proxy/tms/1.0.0',
+    'http://apps.esdi-humboldt.cz/mapproxy/tms/1.0.0',
+    'http://apps.esdi-humboldt.cz/cgi-bin/tilecache/tilecache.cgi/1.0.0',
+    ]
+for server in servers:
+    service = tms.TileMapService(server)
+    for  tm in service.contents.values():
+        tm.title
+        tm._tile_map == None
+        tm.abstract
+        tm._tile_map
+        tm.srs
+        tm.extension
+        tm.boundingBox
+        tm.origin
+
+
+
