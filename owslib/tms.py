@@ -18,11 +18,13 @@
 from etree import etree
 from .util import openURL, testXMLValue
 
+FORCE900913 = False
 
 def force900913(epsg):
 # http://osgeo-org.1560.n6.nabble.com/OSGEO-code-td3852851.html
 # "EPSG:900913" = ["OSGEO:41001", "EPSG:3785", "EPSG:3857", "EPSG:54004"]
-    if epsg.upper() in ["OSGEO:41001", "EPSG:3785", "EPSG:3857", "EPSG:54004"]:
+    if  FORCE900913 and epsg.upper() in ["OSGEO:41001", "EPSG:3785",
+                                        "EPSG:3857", "EPSG:54004"]:
         return "EPSG:900913"
     else:
         return epsg
@@ -125,63 +127,100 @@ class ContentMetadata(object):
         self.password = pw
         self.username = pw
         self._tile_map = None
-        self._tm_elem = None
+        self.type = elem.attrib.get('type')
 
     def _get_tilemap(self):
         if self._tile_map is None:
-            u = openURL(self.id, '', method='Get', username = self.username, password = self.password)
-            elem = etree.fromstring(u.read())
-            self._tm_elem = elem
-            if elem.tag != 'TileMap':
-                raise ValueError('%s should be a TileMap' % (elem,))
-            self._tile_map ={}
-            self._tile_map['title'] = testXMLValue(elem.find('Title'))
-            self._tile_map['abstract'] = testXMLValue(elem.find('Abstract'))
-            self._tile_map['srs'] = force900913(testXMLValue(elem.find('SRS')))
-            assert(self._tile_map['srs'] == self.srs)
-            bbox = elem.find('BoundingBox')
-            self._tile_map['boundingBox'] = (bbox.attrib['minx'],
-                                            bbox.attrib['miny'],
-                                            bbox.attrib['maxx'],
-                                            bbox.attrib['maxy'])
-            origin = elem.find('Origin')
-            self._tile_map['origin'] = (origin.attrib['x'], origin.attrib['y'])
-            tf = elem.find('TileFormat')
-            self._tile_map['width'] = tf.attrib['width']
-            self._tile_map['height'] = tf.attrib['height']
-            self._tile_map['mime-type'] = tf.attrib['mime-type']
-            self._tile_map['extension'] = tf.attrib['extension']
+            self._tile_map = TileMap(self.id, un=self.username, pw=self.password)
+            assert(self._tile_map.srs == self.srs)
         return self._tile_map
 
 
     @property
     def abstract(self):
-        return self._get_tilemap()['abstract']
+        return self._get_tilemap().abstract
 
     @property
     def width(self):
-        return self._get_tilemap()['width']
+        return self._get_tilemap().width
 
     @property
     def height(self):
-        return self._get_tilemap()['height']
+        return self._get_tilemap().height
 
     @property
     def mimetype(self):
-        return self._get_tilemap()['mime-type']
+        return self._get_tilemap().mimetype
 
     @property
     def extension(self):
-        return self._get_tilemap()['extension']
+        return self._get_tilemap().extension
 
     @property
     def boundingBox(self):
-        return self._get_tilemap()['boundingBox']
+        return self._get_tilemap().boundingBox
 
     @property
     def origin(self):
-        return self._get_tilemap()['origin']
+        return self._get_tilemap().origin
 
+
+class TileMap(object):
+
+    title = None
+    abstract = None
+    srs = None
+    boundingBox = None
+    origin = None
+    width = None
+    height = None
+    mimetype = None
+    extension = None
+    _element = None
+    version = None
+    tilemapservice = None
+
+    def __init__(self, url=None, xml=None, un=None, pw=None):
+        self.url = url
+        self.username = un
+        self.password = pw
+        if xml and not url:
+            self.readString(xml)
+        elif url:
+            self.read(url)
+
+
+    def _parse(self, elem):
+        if elem.tag != 'TileMap':
+            raise ValueError('%s should be a TileMap' % (elem,))
+        self.version = elem.atrib.get('version')
+        self.tilemapservice = elem.attrib.get('tilemapservice')
+        self.title = testXMLValue(elem.find('Title'))
+        self.abstract = testXMLValue(elem.find('Abstract'))
+        self.srs = force900913(testXMLValue(elem.find('SRS')))
+
+        bbox = elem.find('BoundingBox')
+        self.boundingBox = (bbox.attrib['minx'],
+                                        bbox.attrib['miny'],
+                                        bbox.attrib['maxx'],
+                                        bbox.attrib['maxy'])
+        origin = elem.find('Origin')
+        self.origin = (origin.attrib['x'], origin.attrib['y'])
+        tf = elem.find('TileFormat')
+        self.width = tf.attrib['width']
+        self.height = tf.attrib['height']
+        self.mimetype = tf.attrib['mime-type']
+        self.extension = tf.attrib['extension']
+        self._element = elem
+
+    def read(self, url):
+        u = openURL(url, '', method='Get', username = self.username, password = self.password)
+        self._parse(etree.fromstring(u.read()))
+
+    def readString(self, st):
+        if not isinstance(st, str):
+            raise ValueError("String must be of type string, not %s" % type(st))
+        self._parse(etree.fromstring(st))
 
 
 

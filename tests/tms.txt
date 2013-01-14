@@ -52,6 +52,8 @@ servers = [#'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0',
     'http://osm.omniscale.net/proxy/tms/1.0.0',
     'http://apps.esdi-humboldt.cz/mapproxy/tms/1.0.0',
     'http://apps.esdi-humboldt.cz/cgi-bin/tilecache/tilecache.cgi/1.0.0',
+    'http://tilecache.osgeo.org/wms-c/tilecache.py/1.0.0/',
+    'http://tileserver.maptiler.com/tms',
     ]
 for server in servers:
     service = tms.TileMapService(server)
@@ -61,9 +63,12 @@ for server in servers:
         tm.abstract
         tm._tile_map
         tm.srs
+        tm.mimetype
         tm.extension
         tm.boundingBox
         tm.origin
+        tm.type
+
 
 
 
