@@ -15,11 +15,30 @@ Find out what a TMS has to offer. Service metadata:
     '1.0.0'
     >>> service.identification.url
     'http://geonode.iwlearn.org/geoserver/gwc'
-    >>> len(service.contents) >0
+    >>> len(service.contents) > 0
     True
     >>> tm = service.contents['http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0/geonode%3AGH_Manglares4326@EPSG%3A900913@jpeg']
     >>> tm.title
     'GOH Ecosistemas Maritimos Manglares'
+
+you can filter the contents by profile and srs:
+    >>> len(service.items())
+    234
+    >>> len(service.items('EPSG:900913'))
+    117
+    >>> len(service.items(profile='global-mercator'))
+    117
+    >>> len(service.items('EPSG:900913', profile='global-mercator'))
+    117
+    >>> len(service.items('EPSG:4326', profile='global-mercator'))
+    0
+    >>> len(service.items('EPSG:4326'))
+    117
+    >>> service.items('EPSG:4326')[0]
+    ('http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0/geonode%3Amapa_geologico4326@EPSG%3A4326@png', <owslib.tms.ContentMetadata object at 0xb745d58c>)
+
+
+
 
 The details of the TileMap are fetched on demand
     >>> tm._tile_map == None
@@ -43,10 +62,25 @@ The details of the TileMap are fetched on demand
     >>> tm.origin
     ('-1.001875417E7', '1252344.2712499984')
 
+You can get tiles by their x,y,z indices, the title of the tilemap, projection and mime-type
+    >>> service.gettile(10,10,0, title='Asfalto', srs='EPSG:900913', mimetype='image/jpeg').geturl()
+    'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0/geonode%3Aasfalto@EPSG%3A900913@jpeg/0/10/10.jpeg?'
+    >>> service.gettile(10,10,0, title='Asfalto', srs='EPSG:900913', mimetype='image/png').geturl()
+    'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0/geonode%3Aasfalto@EPSG%3A900913@png/0/10/10.png?'
+
+if mimetype is ommited the tile is fetched from the first TileMap found:
+    >>> service.gettile(10,10,0, title='Asfalto', srs='EPSG:900913').geturl()
+    'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0/geonode%3Aasfalto@EPSG%3A900913@jpeg/0/10/10.jpeg?'
+
+You can also specify the Tilemap by id:
+    >>> service.gettile(10,10,0, 'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0/geonode%3Aasfalto@EPSG%3A900913@png', mimetype='image/jpeg').geturl()
+    'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0/geonode%3Aasfalto@EPSG%3A900913@png/0/10/10.png?'
+
+
 test with:
 
 from owslib import tms
-servers = [#'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0',
+servers = [
     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0',
     'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0',
     'http://osm.omniscale.net/proxy/tms/1.0.0',
@@ -54,9 +88,16 @@ servers = [#'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0',
     'http://apps.esdi-humboldt.cz/cgi-bin/tilecache/tilecache.cgi/1.0.0',
     'http://tilecache.osgeo.org/wms-c/tilecache.py/1.0.0/',
     'http://tileserver.maptiler.com/tms',
+    'http://geonode.iwlearn.org/geoserver/gwc/service/tms/1.0.0',
     ]
 for server in servers:
     service = tms.TileMapService(server)
+    service.identification.title
+    service.identification.version
+    len(service.items())
+    len(service.items('EPSG:900913'))
+    len(service.items(profile='global-mercator'))
+    len(service.items('EPSG:4326'))
     for  tm in service.contents.values():
         tm.title
         tm._tile_map == None
@@ -68,6 +109,7 @@ for server in servers:
         tm.boundingBox
         tm.origin
         tm.type
+
 
 
 

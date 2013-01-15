@@ -30,8 +30,6 @@ def force900913(epsg):
         return epsg
 
 
-class ServiceException(Exception):
-    pass
 
 class TileMapService(object):
     """Abstraction for OGC Tile Map Service (TMS).
@@ -49,6 +47,7 @@ class TileMapService(object):
         self.version = version
         self.services = None
         self._capabilities = None
+        self.contents={}
 
         # Authentication handled by Reader
         reader = TMSCapabilitiesReader(
@@ -94,6 +93,66 @@ class TileMapService(object):
             xml = etree.tostring(self._capabilities)
         return xml
 
+    def items(self, srs=None, profile=None):
+        '''supports dict-like items() access'''
+        items=[]
+        if not srs and not profile:
+            for item in self.contents:
+                items.append((item,self.contents[item]))
+        elif srs and profile:
+            for item in self.contents:
+                if (self.contents[item].srs == srs and
+                    self.contents[item].profile == profile):
+                    items.append((item,self.contents[item]))
+        elif srs:
+            for item in self.contents:
+                if self.contents[item].srs == srs:
+                    items.append((item,self.contents[item]))
+        elif profile:
+             for item in self.contents:
+                if self.contents[item].profile == profile:
+                    items.append((item,self.contents[item]))
+        return items
+
+    def _gettilefromset(self, tilesets, x, y,z, ext):
+        for tileset in tilesets:
+            if tileset['order'] == z:
+                url = tileset['href'] + '/' + str(x) +'/' + str(y) + '.' + ext
+                u = openURL(url, '', username = self.username,
+                            password = self.password)
+                return u
+        else:
+            raise ValueError('cannot find zoomlevel %i for TileMap' % z)
+
+    def gettile(self, x,y,z, id=None, title=None, srs=None, mimetype=None):
+        if not id and not title and not srs:
+            raise ValueError('either id or title and srs must be specified')
+        if id:
+            return self._gettilefromset(self.contents[id].tilemap.tilesets,
+                x, y, z, self.contents[id].tilemap.extension)
+
+        elif title and srs:
+            for tm in self.contents.values():
+                if tm.title == title and tm.srs == srs:
+                    if mimetype:
+                        if tm.tilemap.mimetype == mimetype:
+                            return self._gettilefromset(tm.tilemap.tilesets,
+                                x, y, z, tm.tilemap.extension)
+                    else:
+                        #if no format is given we return the tile from the
+                        # first tilemap that matches name and srs
+                        return self._gettilefromset(tm.tilemap.tilesets,
+                            x, y,z, tm.tilemap.extension)
+            else:
+                raise ValueError('cannot find %s with projection %s for zoomlevel %i'
+                        %(title, srs, z) )
+        elif title or srs:
+            ValueError('both title and srs must be specified')
+        raise ValueError('''Specified Tile with id %s, title %s
+                projection %s format %s at zoomlevel %i cannot be found'''
+                %(id, title, srs, format, z))
+
+
 class ServiceIdentification(object):
 
     def __init__(self, infoset, version):
@@ -135,6 +194,10 @@ class ContentMetadata(object):
             assert(self._tile_map.srs == self.srs)
         return self._tile_map
 
+
+    @property
+    def tilemap(self):
+        return self._get_tilemap()
 
     @property
     def abstract(self):
@@ -179,11 +242,14 @@ class TileMap(object):
     _element = None
     version = None
     tilemapservice = None
+    tilesets = None
+    profile = None
 
     def __init__(self, url=None, xml=None, un=None, pw=None):
         self.url = url
         self.username = un
         self.password = pw
+        self.tilesets = []
         if xml and not url:
             self.readString(xml)
         elif url:
@@ -193,25 +259,37 @@ class TileMap(object):
     def _parse(self, elem):
         if elem.tag != 'TileMap':
             raise ValueError('%s should be a TileMap' % (elem,))
-        self.version = elem.atrib.get('version')
+        self._element = elem
+        self.version = elem.attrib.get('version')
         self.tilemapservice = elem.attrib.get('tilemapservice')
         self.title = testXMLValue(elem.find('Title'))
         self.abstract = testXMLValue(elem.find('Abstract'))
         self.srs = force900913(testXMLValue(elem.find('SRS')))
 
         bbox = elem.find('BoundingBox')
-        self.boundingBox = (bbox.attrib['minx'],
-                                        bbox.attrib['miny'],
-                                        bbox.attrib['maxx'],
-                                        bbox.attrib['maxy'])
+        self.boundingBox = (float(bbox.attrib['minx']),
+                            float(bbox.attrib['miny']),
+                            float(bbox.attrib['maxx']),
+                            float(bbox.attrib['maxy']))
         origin = elem.find('Origin')
-        self.origin = (origin.attrib['x'], origin.attrib['y'])
+        self.origin = (float(origin.attrib['x']), float(origin.attrib['y']))
         tf = elem.find('TileFormat')
-        self.width = tf.attrib['width']
-        self.height = tf.attrib['height']
+        self.width = int(tf.attrib['width'])
+        self.height = int(tf.attrib['height'])
         self.mimetype = tf.attrib['mime-type']
         self.extension = tf.attrib['extension']
-        self._element = elem
+        ts = elem.find('TileSets')
+        if ts is not None:
+            self.profile = ts.attrib['profile']
+            tilesets = ts.findall('TileSet')
+            for tileset in tilesets:
+                href = tileset.attrib['href']
+                upp = float(tileset.attrib['units-per-pixel'])
+                order = int(tileset.attrib['order'])
+                self.tilesets.append({
+                    'href': href,
+                    'units-per-pixel': upp,
+                    'order': order})
 
     def read(self, url):
         u = openURL(url, '', method='Get', username = self.username, password = self.password)
