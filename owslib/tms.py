@@ -280,7 +280,7 @@ class TileMap(object):
         self.extension = tf.attrib['extension']
         ts = elem.find('TileSets')
         if ts is not None:
-            self.profile = ts.attrib['profile']
+            self.profile = ts.attrib.get('profile')
             tilesets = ts.findall('TileSet')
             for tileset in tilesets:
                 href = tileset.attrib['href']
