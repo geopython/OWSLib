@@ -25,6 +25,7 @@ outputformat = 'application/xml'
 schema = 'http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd'
 
 namespaces = {
+    'atom': 'http://www.w3.org/2005/Atom',
     'csw': 'http://www.opengis.net/cat/csw/2.0.2',
     'dc' : 'http://purl.org/dc/elements/1.1/',
     'dct': 'http://purl.org/dc/terms/',
@@ -36,6 +37,7 @@ namespaces = {
     'ogc': 'http://www.opengis.net/ogc',
     'ows': 'http://www.opengis.net/ows',
     'rim': 'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0',
+    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
     'xs' : 'http://www.w3.org/2001/XMLSchema',
     'xs2': 'http://www.w3.org/XML/Schema',
     'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
@@ -503,6 +505,15 @@ class CswRecord(object):
             self.xml = etree.tostring(record.getroot())
         else:  # part of a larger document
             self.xml = etree.tostring(record)
+
+        # check to see if Dublin Core record comes from
+        # rdf:RDF/rdf:Description container
+        # (child content model is identical)
+        self.rdf = False
+        rdf = record.find(util.nspath_eval('rdf:Description', namespaces))
+        if rdf is not None:
+            self.rdf = True
+            record = rdf
 
         # some CSWs return records with multiple identifiers based on 
         # different schemes.  Use the first dc:identifier value to set
