@@ -31,7 +31,9 @@ setup(name          = 'OWSLib',
       maintainer_email  = 'sgillies@frii.com',
       url           = 'https://geopython.github.com/OWSLib',
       packages      = find_packages(),
-      test_suite    = 'tests.test_suite',
+    #test_suite    = 'tests.test_suite',
+    #XXX rewwrite tests so they can be called simply with
+    # python setup.py test
       classifiers   = [
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
