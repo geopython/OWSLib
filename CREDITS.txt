@@ -8,3 +8,5 @@ Jachym Cepicky <jachym.cepicky@gmail.com>
 Luca Cinquini <luca.cinquini@jpl.nasa.gov>
 Brad Hards <bradh@frogmouth.net>
 Christian Ledermann <christian.ledermann@gmail.com>
+Sean Cowan <scowan@asascience.com>
+Kyle Wilcox <kwilcox@asascience.com>

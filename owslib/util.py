@@ -8,6 +8,9 @@
 # =============================================================================
 
 import sys
+from dateutil import parser
+from datetime import datetime
+import pytz
 from owslib.etree import etree
 import urlparse, urllib2
 from urllib2 import urlopen, HTTPError, Request
@@ -142,7 +145,7 @@ def testXMLValue(val, attrib=False):
     """
 
     if val is not None:
-        if attrib == True:
+        if attrib:
             return val.strip()
         elif val.text:  
             return val.text.strip()
@@ -279,3 +282,47 @@ def getTypedValue(type, value):
         return str(value)
     else:
         return value # no type casting
+
+
+def extract_time(element):
+    ''' return a datetime object based on a gml text string
+
+ex:
+<gml:beginPosition>2006-07-27T21:10:00Z</gml:beginPosition>
+<gml:endPosition indeterminatePosition="now"/>
+
+If there happens to be a strange element with both attributes and text,
+use the text.
+ex: <gml:beginPosition indeterminatePosition="now">2006-07-27T21:10:00Z</gml:beginPosition>
+Would be 2006-07-27T21:10:00Z, not 'now'
+
+'''
+    if element is None:
+        return None
+
+    try:
+        dt = parser.parse(element.text)
+    except Exception:
+        att = testXMLValue(element.attrib.get('indeterminatePosition'), True)
+        if att and att == 'now':
+            dt = datetime.utcnow()
+            dt.replace(tzinfo=pytz.utc)
+        else:
+            dt = None
+    return dt
+
+# http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
+dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
+  isinstance(d2.get(x),dict) else d2.get(x,d1.get(x)))) for x in
+  set(d1.keys()+d2.keys()))
+
+
+def extract_xml_list(elements):
+    """
+Some people don't have seperate tags for their keywords and seperate them with
+a newline. This will extract out all of the keywords correctly.
+"""
+    keywords = [re.split(r'[\n\r]+',f.text) for f in elements if f.text]
+    flattened = [item.strip() for sublist in keywords for item in sublist]
+    remove_blank = filter(None, flattened)
+    return remove_blank

@@ -156,7 +156,10 @@ class OperationsMetadata(object):
         self.methods = dict(methods)
 
         for parameter in elem.findall(util.nspath('Parameter', namespace)):
-            parameters.append((parameter.attrib['name'], {'values': [i.text for i in parameter.findall(util.nspath('Value', namespace))]}))
+            if namespace == OWS_NAMESPACE_1_1_0:
+                parameters.append((parameter.attrib['name'], {'values': [i.text for i in parameter.findall(util.nspath('AllowedValues/Value', namespace))]}))
+            else:
+                parameters.append((parameter.attrib['name'], {'values': [i.text for i in parameter.findall(util.nspath('Value', namespace))]}))
         self.parameters = dict(parameters)
 
         for constraint in elem.findall(util.nspath('Constraint', namespace)):
