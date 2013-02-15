@@ -1,4 +1,5 @@
 *.pyc
+build/
 dist
 docs/build
 OWSLib.egg-info
