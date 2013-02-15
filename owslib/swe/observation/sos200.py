@@ -79,7 +79,7 @@ class SensorObservationService_2_0_0(object):
         self.provider = ows.ServiceProvider(service_provider_element)
             
         # ows:OperationsMetadata metadata
-        self.operations=[]
+        self.operations= []
         for elem in self._capabilities.findall(nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
             self.operations.append(ows.OperationsMetadata(elem))
 
@@ -93,7 +93,7 @@ class SensorObservationService_2_0_0(object):
         # sos:Contents metadata
         self.contents = {}
         self.offerings = []
-        for offering in self._capabilities.findall(nspath_eval('sos:Contents/sos:ObservationOfferingList/sos:ObservationOffering', namespaces)):
+        for offering in self._capabilities.findall(nspath_eval('sos:contents/sos:Contents/swes:offering/sos:ObservationOffering', namespaces)):
             off = SosObservationOffering(offering)
             self.contents[off.id] = off
             self.offerings.append(off)
@@ -103,7 +103,10 @@ class SensorObservationService_2_0_0(object):
                                 method='Get',
                                 **kwargs):
 
-        base_url = self.get_operation_by_name('DescribeSensor').methods[method]['url']        
+        try:
+            base_url = self.get_operation_by_name('DescribeSensor').methods[method]['url']        
+        except:
+            base_url = self.url
         request = {'service': 'SOS', 'version': self.version, 'request': 'DescribeSensor'}
 
         # Required Fields
@@ -145,7 +148,11 @@ class SensorObservationService_2_0_0(object):
             anything else e.g. vendor specific parameters
         """
 
-        base_url = self.get_operation_by_name('GetObservation').methods[method]['url']        
+        try:
+            base_url = self.get_operation_by_name('GetObservation').methods[method]['url']        
+        except:
+            base_url = self.url
+
         request = {'service': 'SOS', 'version': self.version, 'request': 'GetObservation'}
 
         # Required Fields
@@ -155,9 +162,8 @@ class SensorObservationService_2_0_0(object):
         assert isinstance(observedProperties, list) and len(observedProperties) > 0
         request['observedproperty'] = ','.join(observedProperties)
 
-        assert isinstance(responseFormat, str)
-        request['responseFormat'] = responseFormat
-
+        if responseFormat is not None:
+            request['responseFormat'] = responseFormat
 
         # Optional Fields
         if eventTime is not None:
@@ -191,6 +197,8 @@ class SosObservationOffering(object):
         self._root = element
 
         self.id = testXMLValue(self._root.find(nspath_eval('swes:identifier', namespaces)))
+        if self.id is None:
+            self.id = testXMLValue(self._root.attrib.get(nspath_eval('swes:id', namespaces)), True)
         self.description = testXMLValue(self._root.find(nspath_eval('swes:description', namespaces)))
         self.name = testXMLValue(self._root.find(nspath_eval('swes:name', namespaces)))
 
@@ -214,17 +222,19 @@ class SosObservationOffering(object):
         end_position_element = self._root.find(nspath_eval('sos:phenomenonTime/gml:TimePeriod/gml:endPosition', namespaces))
         self.end_position = extract_time(end_position_element)
 
-        self.result_model = testXMLValue(self._root.find(nspath_eval('sos:resultModel', namespaces)))
-
         self.procedures = []
         for proc in self._root.findall(nspath_eval('swes:procedure', namespaces)):
-            self.procedures.append(testXMLValue(proc, True))
+            self.procedures.append(testXMLValue(proc))
+
+        self.procedure_description_formats = []
+        for proc in self._root.findall(nspath_eval('swes:procedureDescriptionFormat', namespaces)):
+            self.procedure_description_formats.append(testXMLValue(proc))
 
         # LOOK: Support swe:Phenomenon here
         # this includes compound properties
         self.observed_properties = []
         for op in self._root.findall(nspath_eval('swes:observableProperty', namespaces)):
-            self.observed_properties.append(testXMLValue(op, True))
+            self.observed_properties.append(testXMLValue(op))
 
         self.features_of_interest = []
         for fot in self._root.findall(nspath_eval('sos:featureOfInterest', namespaces)):
@@ -234,9 +244,9 @@ class SosObservationOffering(object):
         for rf in self._root.findall(nspath_eval('sos:responseFormat', namespaces)):
             self.response_formats.append(testXMLValue(rf))
 
-        self.response_modes = []
-        for rm in self._root.findall(nspath_eval('sos:responseMode', namespaces)):
-            self.response_modes.append(testXMLValue(rm))
+        self.observation_models = []
+        for om in self._root.findall(nspath_eval('sos:observationType', namespaces)):
+            self.observation_models.append(testXMLValue(om))
 
     def __str__(self):
         return 'Offering id: %s, name: %s' % (self.id, self.name)
