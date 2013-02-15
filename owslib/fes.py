@@ -24,6 +24,7 @@ schema = 'http://schemas.opengis.net/filter/1.1.0/filter.xsd'
 
 namespaces = {
     None : 'http://www.opengis.net/ogc',
+    'fes': 'http://www.opengis.net/fes/2.0',
     'gml': 'http://www.opengis.net/gml',
     'ogc': 'http://www.opengis.net/ogc',
     'xs' : 'http://www.w3.org/2001/XMLSchema',
@@ -203,6 +204,31 @@ class FilterCapabilities(object):
 
         # Scalar_Capabilities
         self.scalar_comparison_operators = [f.text for f in elem.findall(util.nspath_eval('ogc:Scalar_Capabilities/ogc:ComparisonOperators/ogc:ComparisonOperator', namespaces))]
+
+class FilterCapabilities200(object):
+    """Abstraction for Filter_Capabilities 2.0"""
+    def __init__(self, elem):
+        # Spatial_Capabilities
+        self.spatial_operands = [f.attrib.get('name') for f in elem.findall(util.nspath_eval('fes:Spatial_Capabilities/fes:GeometryOperands/fes:GeometryOperand', namespaces))]
+        self.spatial_operators = []
+        for f in elem.findall(util.nspath_eval('fes:Spatial_Capabilities/fes:SpatialOperators/fes:SpatialOperator', namespaces)):
+            self.spatial_operators.append(f.attrib['name'])
+
+        # Temporal_Capabilities
+        self.temporal_operands = [f.attrib.get('name') for f in elem.findall(util.nspath_eval('fes:Temporal_Capabilities/fes:TemporalOperands/fes:TemporalOperand', namespaces))]
+        self.temporal_operators = []
+        for f in elem.findall(util.nspath_eval('fes:Temporal_Capabilities/fes:TemporalOperators/fes:TemporalOperator', namespaces)):
+            self.temporal_operators.append(f.attrib['name'])
+
+        # Scalar_Capabilities
+        self.scalar_comparison_operators = [f.text for f in elem.findall(util.nspath_eval('fes:Scalar_Capabilities/fes:ComparisonOperators/fes:ComparisonOperator', namespaces))]
+
+        # Conformance
+        self.conformance = []
+        for f in elem.findall(util.nspath_eval('fes:Conformance/fes:Constraint', namespaces)):
+           self.conformance[f.attrib.get('name')] = f.find(util.nspath_eval('fes:DefaultValue', namespaces)).text
+
+
 
 def setsortby(parent, propertyname, order='ASC'):
     """
