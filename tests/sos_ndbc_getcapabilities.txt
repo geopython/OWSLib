@@ -1,6 +1,6 @@
 Imports
 
-    >>> from owslib.swe.sos import SensorObservationService as sos
+    >>> from owslib.sos import SensorObservationService
     >>> from owslib.fes import FilterCapabilities
     >>> from owslib.ows import OperationsMetadata
     >>> from owslib.crs import Crs
@@ -9,7 +9,7 @@ Imports
 Initialize
 
     >>> xml = open('sos_ndbc_getcapabilities.xml').read()
-    >>> ndbc = sos(None, xml=xml)
+    >>> ndbc = SensorObservationService(None, xml=xml)
 
 ServiceIdentification
 
