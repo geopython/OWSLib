@@ -1,6 +1,6 @@
 Imports
 
-    >>> from owslib.swe.sos import SensorObservationService
+    >>> from owslib.sos import SensorObservationService
     >>> from owslib.ows import OperationsMetadata
     >>> from owslib.fes import FilterCapabilities
     >>> from owslib.crs import Crs
