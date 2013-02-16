@@ -9,7 +9,7 @@ Imports
 
 Initialize
 
-    >>> xml = open('tests/sos_ngwd.xml').read()
+    >>> xml = open('sos_ngwd.xml').read()
     >>> ngwd = SensorObservationService(None, xml=xml, version='2.0.0')
 
 ServiceIdentification
@@ -207,31 +207,3 @@ Contents
 
     >>> network.observation_models
     []
-
-
-GetObservation
-
-#    # bad offering
-#    >>> offerings = ['bad']
-#    >>> observedProperties = ['bad2']
-#    >>> eventTime = "This is not a valid eventTime!"
-#    >>> response = ngwd.get_observation(offerings=offerings, observedProperties=observedProperties, eventTime=eventTime)
-#    Traceback (most recent call last):
-#      File "<stdin>", line 1, in <module>
-#    ExceptionReport: 'null'
-
-
-DescribeSensor
-
-    # Send a funky procedure
-    >>> procedure = "foobar"
-    >>> outputFormat = ngwd.get_operation_by_name('DescribeSensor').parameters['procedureDescriptionFormat']['values'][0]
-    >>> response = ngwd.describe_sensor(procedure=procedure, outputFormat=outputFormat)
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ExceptionReport: 'foobar'
-
-    # Valid request
-    >>> procedure = ngwd.offerings[1].procedures[0]
-    >>> outputFormat = ngwd.get_operation_by_name('DescribeSensor').parameters['outputFormat']['values'][0]
-    >>> response = ngwd.describe_sensor(procedure=procedure, outputFormat=outputFormat)
