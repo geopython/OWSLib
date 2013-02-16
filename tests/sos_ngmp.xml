@@ -1,0 +1,898 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sos:Capabilities xmlns:sos="http://www.opengis.net/sos/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:swes="http://www.opengis.net/swes/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" version="2.0.0" xsi:schemaLocation="http://www.opengis.net/sos/2.0 http://schemas.opengis.net/sos/2.0/sos.xsd">
+  <ows:ServiceIdentification>
+    <ows:Title>GNS Science New Zealand, NGMP SOS timeseries</ows:Title>
+    <ows:Abstract>GNS Hydrogeology Section, serving NGMP groundwater level through customised 52N SOS, data quality cannot be represented yet, there is no liability regarding this service, for more information go to http://ggw.gns.cri.nz/ggwdata/ (SVN: 0 @ 2013-01-12 19:55:25)</ows:Abstract>
+    <ows:Keywords>
+      <ows:Keyword>water level</ows:Keyword>
+      <ows:Keyword>groundwater</ows:Keyword>
+      <ows:Keyword>hydrogeology</ows:Keyword>
+      <ows:Keyword>ngmp</ows:Keyword>
+    </ows:Keywords>
+    <ows:ServiceType codeSpace="http://opengeospatial.net">OGC:SOS</ows:ServiceType>
+    <ows:ServiceTypeVersion>2.0.0</ows:ServiceTypeVersion>
+    <ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+    <ows:Profile>http://www.opengis.net/spec/OMXML/2.0/conf/samplingPoint</ows:Profile>
+    <ows:Profile>http://www.opengis.net/spec/SOS/2.0/conf/soap</ows:Profile>
+    <ows:Profile>http://www.opengis.net/spec/OMXML/2.0/req/SWEArrayObservation</ows:Profile>
+    <ows:Fees>NONE</ows:Fees>
+    <ows:AccessConstraints>SERVICE IS IN TEST MODE, NOT RELIABLE, DATA QUALITY NOT YET VISIBLE</ows:AccessConstraints>
+  </ows:ServiceIdentification>
+  <ows:ServiceProvider>
+    <ows:ProviderName>GNS Science</ows:ProviderName>
+    <ows:ProviderSite xlink:href="http://ggw.gns.cri.nz/ggwdata/"/>
+    <ows:ServiceContact>
+      <ows:IndividualName>Alex Kmoch</ows:IndividualName>
+      <ows:PositionName>STU</ows:PositionName>
+      <ows:ContactInfo>
+        <ows:Phone>
+          <ows:Voice>+647374 8211</ows:Voice>
+        </ows:Phone>
+        <ows:Address>
+          <ows:DeliveryPoint>114 Karetoto Road</ows:DeliveryPoint>
+          <ows:City>Wairakei</ows:City>
+          <ows:AdministrativeArea>Waikato</ows:AdministrativeArea>
+          <ows:PostalCode>3377</ows:PostalCode>
+          <ows:Country>New Zealand</ows:Country>
+          <ows:ElectronicMailAddress>a.kmoch@gns.cri.nz</ows:ElectronicMailAddress>
+        </ows:Address>
+      </ows:ContactInfo>
+      <ows:Role/>
+    </ows:ServiceContact>
+  </ows:ServiceProvider>
+  <ows:OperationsMetadata>
+    <ows:Operation name="GetCapabilities">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?"/>
+          <ows:Post xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos"/>
+        </ows:HTTP>
+      </ows:DCP>
+      <ows:Parameter name="updateSequence">
+        <ows:AnyValue/>
+      </ows:Parameter>
+      <ows:Parameter name="AcceptVersions">
+        <ows:AllowedValues>
+          <ows:Value>1.0.0</ows:Value>
+          <ows:Value>2.0.0</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="Sections">
+        <ows:AllowedValues>
+          <ows:Value>ServiceIdentification</ows:Value>
+          <ows:Value>ServiceProvider</ows:Value>
+          <ows:Value>OperationsMetadata</ows:Value>
+          <ows:Value>FilterCapabilities</ows:Value>
+          <ows:Value>Contents</ows:Value>
+          <ows:Value>All</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="AcceptFormats">
+        <ows:AllowedValues>
+          <ows:Value>text/xml</ows:Value>
+          <ows:Value>application/zip</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+    </ows:Operation>
+    <ows:Operation name="DescribeSensor">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?"/>
+          <ows:Post xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos"/>
+        </ows:HTTP>
+      </ows:DCP>
+      <ows:Parameter name="procedure">
+        <ows:AllowedValues>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/acidity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/chloride_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/conductivity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/groundwaterlevel_sensor</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/hydraulic_conductivity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/iron_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/manganese_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/nitrate_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/temperature_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/tritium_sampling</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="procedureDescriptionFormat">
+        <ows:AllowedValues>
+          <ows:Value>http://www.opengis.net/sensorML/1.0.1</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+    </ows:Operation>
+    <ows:Operation name="GetObservation">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?"/>
+          <ows:Post xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos"/>
+        </ows:HTTP>
+      </ows:DCP>
+      <ows:Parameter name="srsName">
+        <ows:NoValues/>
+      </ows:Parameter>
+      <ows:Parameter name="offering">
+        <ows:AllowedValues>
+          <ows:Value>NGMP_HYDRAULIC_CONDUCTIVITY</ows:Value>
+          <ows:Value>NGMP_TRITIUM_ALL_FORMS</ows:Value>
+          <ows:Value>NGMP_DISSOLVED_MANGANESE</ows:Value>
+          <ows:Value>NGMP_TEMPERATURE</ows:Value>
+          <ows:Value>NGMP_DISSOLVED_IRON</ows:Value>
+          <ows:Value>NGMP_CONDUCTIVITY</ows:Value>
+          <ows:Value>NGMP_ACIDITY</ows:Value>
+          <ows:Value>NGMP_GROUNDWATER_LEVEL</ows:Value>
+          <ows:Value>NGMP_DISSOLVED_NITRATE_NO3_AS_N</ows:Value>
+          <ows:Value>NGMP_DISSOLVED_CHLORIDE</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="temporalFilter">
+        <ows:AllowedValues>
+          <ows:Range>
+            <ows:MinimumValue>0012-01-23T09:05:56.000+12:00</ows:MinimumValue>
+            <ows:MaximumValue>2012-12-19T13:30:00.000+12:00</ows:MaximumValue>
+          </ows:Range>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="procedure">
+        <ows:AllowedValues>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/acidity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/chloride_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/conductivity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/groundwaterlevel_sensor</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/hydraulic_conductivity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/iron_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/manganese_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/nitrate_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/temperature_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/tritium_sampling</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="observedProperty">
+        <ows:AllowedValues>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/hydraulic_conductivity</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/tritium_all_forms</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_manganese</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/temperature</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_iron</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/conductivity</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/acidity</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/groundwaterlevel</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_nitrate_no3_as_n</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_chloride</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="featureOfInterest">
+        <ows:AllowedValues>
+          <ows:Value>10</ows:Value>
+          <ows:Value>11</ows:Value>
+          <ows:Value>12</ows:Value>
+          <ows:Value>13</ows:Value>
+          <ows:Value>139</ows:Value>
+          <ows:Value>14</ows:Value>
+          <ows:Value>140</ows:Value>
+          <ows:Value>15</ows:Value>
+          <ows:Value>16</ows:Value>
+          <ows:Value>17</ows:Value>
+          <ows:Value>18</ows:Value>
+          <ows:Value>19</ows:Value>
+          <ows:Value>1993</ows:Value>
+          <ows:Value>20</ows:Value>
+          <ows:Value>2013</ows:Value>
+          <ows:Value>2015</ows:Value>
+          <ows:Value>2016</ows:Value>
+          <ows:Value>2039</ows:Value>
+          <ows:Value>2069</ows:Value>
+          <ows:Value>2080</ows:Value>
+          <ows:Value>21</ows:Value>
+          <ows:Value>2103</ows:Value>
+          <ows:Value>22</ows:Value>
+          <ows:Value>23</ows:Value>
+          <ows:Value>24</ows:Value>
+          <ows:Value>2466</ows:Value>
+          <ows:Value>2470</ows:Value>
+          <ows:Value>2479</ows:Value>
+          <ows:Value>25</ows:Value>
+          <ows:Value>26</ows:Value>
+          <ows:Value>27</ows:Value>
+          <ows:Value>28</ows:Value>
+          <ows:Value>29</ows:Value>
+          <ows:Value>3</ows:Value>
+          <ows:Value>30</ows:Value>
+          <ows:Value>31</ows:Value>
+          <ows:Value>32</ows:Value>
+          <ows:Value>3200</ows:Value>
+          <ows:Value>3258</ows:Value>
+          <ows:Value>3280</ows:Value>
+          <ows:Value>3281</ows:Value>
+          <ows:Value>33</ows:Value>
+          <ows:Value>3325</ows:Value>
+          <ows:Value>3327</ows:Value>
+          <ows:Value>3336</ows:Value>
+          <ows:Value>338</ows:Value>
+          <ows:Value>339</ows:Value>
+          <ows:Value>34</ows:Value>
+          <ows:Value>340</ows:Value>
+          <ows:Value>346</ows:Value>
+          <ows:Value>347</ows:Value>
+          <ows:Value>348</ows:Value>
+          <ows:Value>349</ows:Value>
+          <ows:Value>35</ows:Value>
+          <ows:Value>350</ows:Value>
+          <ows:Value>351</ows:Value>
+          <ows:Value>352</ows:Value>
+          <ows:Value>353</ows:Value>
+          <ows:Value>354</ows:Value>
+          <ows:Value>355</ows:Value>
+          <ows:Value>356</ows:Value>
+          <ows:Value>358</ows:Value>
+          <ows:Value>359</ows:Value>
+          <ows:Value>36</ows:Value>
+          <ows:Value>360</ows:Value>
+          <ows:Value>361</ows:Value>
+          <ows:Value>362</ows:Value>
+          <ows:Value>363</ows:Value>
+          <ows:Value>364</ows:Value>
+          <ows:Value>37</ows:Value>
+          <ows:Value>3705</ows:Value>
+          <ows:Value>3706</ows:Value>
+          <ows:Value>3707</ows:Value>
+          <ows:Value>3708</ows:Value>
+          <ows:Value>3709</ows:Value>
+          <ows:Value>3710</ows:Value>
+          <ows:Value>3711</ows:Value>
+          <ows:Value>3712</ows:Value>
+          <ows:Value>378</ows:Value>
+          <ows:Value>379</ows:Value>
+          <ows:Value>38</ows:Value>
+          <ows:Value>380</ows:Value>
+          <ows:Value>381</ows:Value>
+          <ows:Value>382</ows:Value>
+          <ows:Value>383</ows:Value>
+          <ows:Value>384</ows:Value>
+          <ows:Value>386</ows:Value>
+          <ows:Value>387</ows:Value>
+          <ows:Value>388</ows:Value>
+          <ows:Value>389</ows:Value>
+          <ows:Value>39</ows:Value>
+          <ows:Value>390</ows:Value>
+          <ows:Value>391</ows:Value>
+          <ows:Value>392</ows:Value>
+          <ows:Value>393</ows:Value>
+          <ows:Value>394</ows:Value>
+          <ows:Value>395</ows:Value>
+          <ows:Value>4</ows:Value>
+          <ows:Value>40</ows:Value>
+          <ows:Value>401</ows:Value>
+          <ows:Value>402</ows:Value>
+          <ows:Value>403</ows:Value>
+          <ows:Value>404</ows:Value>
+          <ows:Value>405</ows:Value>
+          <ows:Value>406</ows:Value>
+          <ows:Value>407</ows:Value>
+          <ows:Value>408</ows:Value>
+          <ows:Value>409</ows:Value>
+          <ows:Value>41</ows:Value>
+          <ows:Value>410</ows:Value>
+          <ows:Value>411</ows:Value>
+          <ows:Value>412</ows:Value>
+          <ows:Value>413</ows:Value>
+          <ows:Value>414</ows:Value>
+          <ows:Value>415</ows:Value>
+          <ows:Value>416</ows:Value>
+          <ows:Value>417</ows:Value>
+          <ows:Value>418</ows:Value>
+          <ows:Value>419</ows:Value>
+          <ows:Value>42</ows:Value>
+          <ows:Value>420</ows:Value>
+          <ows:Value>421</ows:Value>
+          <ows:Value>422</ows:Value>
+          <ows:Value>423</ows:Value>
+          <ows:Value>43</ows:Value>
+          <ows:Value>437</ows:Value>
+          <ows:Value>44</ows:Value>
+          <ows:Value>443</ows:Value>
+          <ows:Value>444</ows:Value>
+          <ows:Value>445</ows:Value>
+          <ows:Value>446</ows:Value>
+          <ows:Value>447</ows:Value>
+          <ows:Value>448</ows:Value>
+          <ows:Value>449</ows:Value>
+          <ows:Value>45</ows:Value>
+          <ows:Value>451</ows:Value>
+          <ows:Value>452</ows:Value>
+          <ows:Value>453</ows:Value>
+          <ows:Value>454</ows:Value>
+          <ows:Value>455</ows:Value>
+          <ows:Value>456</ows:Value>
+          <ows:Value>458</ows:Value>
+          <ows:Value>46</ows:Value>
+          <ows:Value>464</ows:Value>
+          <ows:Value>465</ows:Value>
+          <ows:Value>466</ows:Value>
+          <ows:Value>467</ows:Value>
+          <ows:Value>468</ows:Value>
+          <ows:Value>469</ows:Value>
+          <ows:Value>47</ows:Value>
+          <ows:Value>48</ows:Value>
+          <ows:Value>49</ows:Value>
+          <ows:Value>5</ows:Value>
+          <ows:Value>50</ows:Value>
+          <ows:Value>51</ows:Value>
+          <ows:Value>511</ows:Value>
+          <ows:Value>512</ows:Value>
+          <ows:Value>52</ows:Value>
+          <ows:Value>53</ows:Value>
+          <ows:Value>54</ows:Value>
+          <ows:Value>55</ows:Value>
+          <ows:Value>552</ows:Value>
+          <ows:Value>553</ows:Value>
+          <ows:Value>56</ows:Value>
+          <ows:Value>57</ows:Value>
+          <ows:Value>58</ows:Value>
+          <ows:Value>59</ows:Value>
+          <ows:Value>6</ows:Value>
+          <ows:Value>60</ows:Value>
+          <ows:Value>61</ows:Value>
+          <ows:Value>62</ows:Value>
+          <ows:Value>63</ows:Value>
+          <ows:Value>64</ows:Value>
+          <ows:Value>65</ows:Value>
+          <ows:Value>66</ows:Value>
+          <ows:Value>67</ows:Value>
+          <ows:Value>68</ows:Value>
+          <ows:Value>69</ows:Value>
+          <ows:Value>7</ows:Value>
+          <ows:Value>70</ows:Value>
+          <ows:Value>71</ows:Value>
+          <ows:Value>72</ows:Value>
+          <ows:Value>73</ows:Value>
+          <ows:Value>74</ows:Value>
+          <ows:Value>75</ows:Value>
+          <ows:Value>76</ows:Value>
+          <ows:Value>77</ows:Value>
+          <ows:Value>78</ows:Value>
+          <ows:Value>79</ows:Value>
+          <ows:Value>8</ows:Value>
+          <ows:Value>80</ows:Value>
+          <ows:Value>81</ows:Value>
+          <ows:Value>82</ows:Value>
+          <ows:Value>83</ows:Value>
+          <ows:Value>9</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="result">
+        <ows:AnyValue/>
+      </ows:Parameter>
+      <ows:Parameter name="responseFormat">
+        <ows:AllowedValues>
+          <ows:Value>http://www.ioos.gov/dif/csv/0.9</ows:Value>
+          <ows:Value>http://www.opengis.net/waterml/2.0</ows:Value>
+          <ows:Value>http://www.opengis.net/om/2.0</ows:Value>
+          <ows:Value>application/zip</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+    </ows:Operation>
+    <ows:Operation name="GetFeatureOfInterest">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?"/>
+          <ows:Post xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos"/>
+        </ows:HTTP>
+      </ows:DCP>
+      <ows:Parameter name="featureOfInterest">
+        <ows:NoValues/>
+      </ows:Parameter>
+      <ows:Parameter name="observableProperty">
+        <ows:AllowedValues>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/hydraulic_conductivity</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/tritium_all_forms</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_manganese</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/temperature</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_iron</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/conductivity</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/acidity</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/groundwaterlevel</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_nitrate_no3_as_n</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_chloride</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="procedure">
+        <ows:AllowedValues>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/acidity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/chloride_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/conductivity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/groundwaterlevel_sensor</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/hydraulic_conductivity_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/iron_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/manganese_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/nitrate_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/temperature_sampling</ows:Value>
+          <ows:Value>http://resources.smart-project.info/ggwdata/procedure/tritium_sampling</ows:Value>
+        </ows:AllowedValues>
+      </ows:Parameter>
+      <ows:Parameter name="spatialFilter">
+        <ows:AnyValue/>
+      </ows:Parameter>
+    </ows:Operation>
+    <ows:Parameter name="service">
+      <ows:AllowedValues>
+        <ows:Value>SOS</ows:Value>
+      </ows:AllowedValues>
+    </ows:Parameter>
+    <ows:Parameter name="version">
+      <ows:AllowedValues>
+        <ows:Value>2.0.0</ows:Value>
+      </ows:AllowedValues>
+    </ows:Parameter>
+  </ows:OperationsMetadata>
+  <sos:filterCapabilities>
+    <fes:Filter_Capabilities>
+      <fes:Conformance>
+        <fes:Constraint name="ImplementsQuery">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsAdHocQuery">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsFunctions">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsResourceld">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsMinStandardFilter">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsStandardFilter">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsMinSpatialFilter">
+          <ows:NoValues/>
+          <ows:DefaultValue>true</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsSpatialFilter">
+          <ows:NoValues/>
+          <ows:DefaultValue>true</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsMinTemporalFilter">
+          <ows:NoValues/>
+          <ows:DefaultValue>true</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsTemporalFilter">
+          <ows:NoValues/>
+          <ows:DefaultValue>true</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsVersionNav">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsSorting">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsExtendedOperators">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsMinimumXPath">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+        <fes:Constraint name="ImplementsSchemaElementFunc">
+          <ows:NoValues/>
+          <ows:DefaultValue>false</ows:DefaultValue>
+        </fes:Constraint>
+      </fes:Conformance>
+      <fes:Spatial_Capabilities>
+        <fes:GeometryOperands>
+          <fes:GeometryOperand xmlns:gml="http://www.opengis.net/gml" name="gml:Envelope"/>
+        </fes:GeometryOperands>
+        <fes:SpatialOperators>
+          <fes:SpatialOperator name="BBOX">
+            <fes:GeometryOperands>
+              <fes:GeometryOperand xmlns:gml="http://www.opengis.net/gml" name="gml:Envelope"/>
+            </fes:GeometryOperands>
+          </fes:SpatialOperator>
+        </fes:SpatialOperators>
+      </fes:Spatial_Capabilities>
+      <fes:Temporal_Capabilities>
+        <fes:TemporalOperands>
+          <fes:TemporalOperand xmlns:gml="http://www.opengis.net/gml" name="gml:TimePeriod"/>
+          <fes:TemporalOperand xmlns:gml="http://www.opengis.net/gml" name="gml:TimeInstant"/>
+        </fes:TemporalOperands>
+        <fes:TemporalOperators>
+          <fes:TemporalOperator name="Before">
+            <fes:TemporalOperands>
+              <fes:TemporalOperand xmlns:gml="http://www.opengis.net/gml" name="gml:TimeInstant"/>
+            </fes:TemporalOperands>
+          </fes:TemporalOperator>
+          <fes:TemporalOperator name="TEquals">
+            <fes:TemporalOperands>
+              <fes:TemporalOperand xmlns:gml="http://www.opengis.net/gml" name="gml:TimeInstant"/>
+            </fes:TemporalOperands>
+          </fes:TemporalOperator>
+          <fes:TemporalOperator name="After">
+            <fes:TemporalOperands>
+              <fes:TemporalOperand xmlns:gml="http://www.opengis.net/gml" name="gml:TimeInstant"/>
+            </fes:TemporalOperands>
+          </fes:TemporalOperator>
+          <fes:TemporalOperator name="During">
+            <fes:TemporalOperands>
+              <fes:TemporalOperand xmlns:gml="http://www.opengis.net/gml" name="gml:TimePeriod"/>
+            </fes:TemporalOperands>
+          </fes:TemporalOperator>
+        </fes:TemporalOperators>
+      </fes:Temporal_Capabilities>
+    </fes:Filter_Capabilities>
+  </sos:filterCapabilities>
+  <sos:contents>
+    <sos:Contents>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_HYDRAULIC_CONDUCTIVITY</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/hydraulic_conductivity_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/hydraulic_conductivity</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_HYDRAULIC_CONDUCTIVITY"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-43.49087689429214 172.54255929701253</gml:lowerCorner>
+              <gml:upperCorner>-37.530998397034715 176.92673919793086</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_HYDRAULIC_CONDUCTIVITY">
+              <gml:beginPosition>1900-01-01T00:30:00.000+12:00</gml:beginPosition>
+              <gml:endPosition>1999-03-26T12:00:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_TRITIUM_ALL_FORMS</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/tritium_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/tritium_all_forms</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_TRITIUM_ALL_FORMS"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_TRITIUM_ALL_FORMS">
+              <gml:beginPosition>1972-07-29T00:00:00.000+12:00</gml:beginPosition>
+              <gml:endPosition>2011-06-13T00:00:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_DISSOLVED_MANGANESE</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/manganese_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_manganese</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_DISSOLVED_MANGANESE"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_DISSOLVED_MANGANESE">
+              <gml:beginPosition>0012-01-23T09:05:56.000+12:00</gml:beginPosition>
+              <gml:endPosition>2012-09-12T16:30:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_TEMPERATURE</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/temperature_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/temperature</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_TEMPERATURE"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_TEMPERATURE">
+              <gml:beginPosition>0012-01-23T09:05:56.000+12:00</gml:beginPosition>
+              <gml:endPosition>2012-12-19T13:30:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_DISSOLVED_IRON</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/iron_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_iron</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_DISSOLVED_IRON"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_DISSOLVED_IRON">
+              <gml:beginPosition>0012-01-23T09:05:56.000+12:00</gml:beginPosition>
+              <gml:endPosition>2012-09-12T16:30:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_CONDUCTIVITY</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/conductivity_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/conductivity</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_CONDUCTIVITY"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_CONDUCTIVITY">
+              <gml:beginPosition>0012-01-23T09:05:56.000+12:00</gml:beginPosition>
+              <gml:endPosition>2012-12-19T13:30:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_ACIDITY</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/acidity_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/acidity</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_ACIDITY"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_ACIDITY">
+              <gml:beginPosition>0012-01-23T09:05:56.000+12:00</gml:beginPosition>
+              <gml:endPosition>2012-12-19T13:30:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_GROUNDWATER_LEVEL</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/groundwaterlevel_sensor</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/groundwaterlevel</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_GROUNDWATER_LEVEL"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_GROUNDWATER_LEVEL">
+              <gml:beginPosition>1994-03-16T12:08:00.000+12:00</gml:beginPosition>
+              <gml:endPosition>2012-12-19T13:30:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_DISSOLVED_NITRATE_NO3_AS_N</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/nitrate_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_nitrate_no3_as_n</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_DISSOLVED_NITRATE_NO3_AS_N"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_DISSOLVED_NITRATE_NO3_AS_N">
+              <gml:beginPosition>0012-01-23T09:05:56.000+12:00</gml:beginPosition>
+              <gml:endPosition>2012-09-12T16:30:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+      <swes:offering xsi:type="sos:ObservationOfferingType">
+        <sos:ObservationOffering xmlns:ns="http://www.opengis.net/sos/2.0">
+          <swes:identifier>NGMP_DISSOLVED_CHLORIDE</swes:identifier>
+          <swes:procedure>http://resources.smart-project.info/ggwdata/procedure/chloride_sampling</swes:procedure>
+          <swes:observableProperty>http://resources.smart-project.info/ggwdata/phenomenon/dissolved_chloride</swes:observableProperty>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures_._NGMP_DISSOLVED_CHLORIDE"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <swes:relatedFeature>
+            <swes:FeatureRelationship>
+              <swes:role>relatedFeature</swes:role>
+              <swes:target xlink:href="https://geier.gns.cri.nz/ngmp-sos/sos?REQUEST=GetFeatureOfInterest&amp;service=SOS&amp;version=2.0.0&amp;featureOfInterest=allFeatures"/>
+            </swes:FeatureRelationship>
+          </swes:relatedFeature>
+          <ns:observedArea>
+            <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4272">
+              <gml:lowerCorner>-46.31316456339313 168.06194851332876</gml:lowerCorner>
+              <gml:upperCorner>-34.85029852837112 177.9834379122022</gml:upperCorner>
+            </gml:Envelope>
+          </ns:observedArea>
+          <ns:phenomenonTime>
+            <gml:TimePeriod gml:id="pt_NGMP_DISSOLVED_CHLORIDE">
+              <gml:beginPosition>0012-01-23T09:05:56.000+12:00</gml:beginPosition>
+              <gml:endPosition>2012-09-12T16:30:00.000+12:00</gml:endPosition>
+            </gml:TimePeriod>
+          </ns:phenomenonTime>
+          <ns:responseFormat>http://www.ioos.gov/dif/csv/0.9</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/waterml/2.0</ns:responseFormat>
+          <ns:responseFormat>http://www.opengis.net/om/2.0</ns:responseFormat>
+          <ns:responseFormat>application/zip</ns:responseFormat>
+          <ns:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</ns:observationType>
+        </sos:ObservationOffering>
+      </swes:offering>
+    </sos:Contents>
+  </sos:contents>
+</sos:Capabilities>

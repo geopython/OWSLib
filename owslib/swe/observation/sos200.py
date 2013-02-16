@@ -98,10 +98,10 @@ class SensorObservationService_2_0_0(object):
             self.contents[off.id] = off
             self.offerings.append(off)
 
-    def describe_sensor(self,   outputFormat=None,
-                                procedure=None,
-                                method='Get',
-                                **kwargs):
+    def describe_sensor(self, outputFormat=None,
+                              procedure=None,
+                              method='Get',
+                              **kwargs):
 
         try:
             base_url = self.get_operation_by_name('DescribeSensor').methods[method]['url']        
@@ -111,7 +111,7 @@ class SensorObservationService_2_0_0(object):
 
         # Required Fields
         assert isinstance(outputFormat, str)
-        request['outputFormat'] = outputFormat
+        request['procedureDescriptionFormat'] = outputFormat
 
         assert isinstance(procedure, str)
         request['procedure'] = procedure
@@ -131,12 +131,12 @@ class SensorObservationService_2_0_0(object):
 
         return response
 
-    def get_observation(self,   responseFormat=None,
-                                offerings=None,
-                                observedProperties=None,
-                                eventTime=None,
-                                method='Get',
-                                **kwargs):
+    def get_observation(self, responseFormat=None,
+                              offerings=None,
+                              observedProperties=None,
+                              eventTime=None,
+                              method='Get',
+                              **kwargs):
         """
         Parameters
         ----------
@@ -148,10 +148,7 @@ class SensorObservationService_2_0_0(object):
             anything else e.g. vendor specific parameters
         """
 
-        try:
-            base_url = self.get_operation_by_name('GetObservation').methods[method]['url']        
-        except:
-            base_url = self.url
+        base_url = self.get_operation_by_name('GetObservation').methods[method]['url']        
 
         request = {'service': 'SOS', 'version': self.version, 'request': 'GetObservation'}
 
@@ -167,7 +164,7 @@ class SensorObservationService_2_0_0(object):
 
         # Optional Fields
         if eventTime is not None:
-            request['eventTime'] = eventTime
+            request['temporalFilter'] = eventTime
 
         if kwargs:
             for kw in kwargs:
@@ -272,8 +269,8 @@ class SosCapabilitiesReader(object):
             qs.append(('service', 'SOS'))
         if 'request' not in params:
             qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
-            qs.append(('version', self.version))
+        if 'acceptversions' not in params:
+            qs.append(('acceptversions', self.version))
 
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
