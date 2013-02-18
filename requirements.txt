@@ -1,3 +1,0 @@
-python-dateutil
-pytz
-lxml==2.2.8
