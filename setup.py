@@ -30,6 +30,7 @@ setup(name          = 'OWSLib',
       maintainer        = 'Sean Gillies',
       maintainer_email  = 'sgillies@frii.com',
       url           = 'https://geopython.github.com/OWSLib',
+      install_requires = ['python-dateutil==2.1', 'pytz==2012j'],
       packages      = find_packages(),
     #test_suite    = 'tests.test_suite',
     #XXX rewwrite tests so they can be called simply with
