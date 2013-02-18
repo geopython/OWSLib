@@ -1,6 +1,13 @@
 Changes
 =======
 
+0.7 (2013-02-18)
+---------------
+
+- Support for SOS 1.0.0, SOS 2.0.0, SensorML (thanks @kwilcox)
+- Support for TMS (thanks @cleder)
+- numerous bug fixes
+
 0.6 (2012-12-22)
 ----------------
 
