@@ -16,6 +16,7 @@ Initialize
 GetObservation
 
     # Send a funky eventTime
+
     >>> off = ndbc.offerings[1]
     >>> offerings = [off.name]
     >>> responseFormat = off.response_formats[0]
@@ -28,6 +29,7 @@ GetObservation
     ExceptionReport: 'This is not a valid eventTime!'
 
     # NDBC only supports one offering and one observedProperty at a time
+
     >>> off = ndbc.offerings[1]
     >>> offerings = [off.name]
     >>> responseFormat = off.response_formats[0]
@@ -41,6 +43,7 @@ GetObservation
 DescribeSensor
 
     # Send a funky procedure
+
     >>> procedure = "foobar"
     >>> outputFormat = ndbc.get_operation_by_name('DescribeSensor').parameters['outputFormat']['values'][0]
     >>> response = ndbc.describe_sensor(procedure=procedure, outputFormat=outputFormat)
@@ -49,6 +52,7 @@ DescribeSensor
     ExceptionReport: 'foobar'
 
     # Valid request
+
     >>> procedure = ndbc.offerings[1].procedures[0]
     >>> outputFormat = ndbc.get_operation_by_name('DescribeSensor').parameters['outputFormat']['values'][0]
     >>> response = ndbc.describe_sensor(procedure=procedure, outputFormat=outputFormat)

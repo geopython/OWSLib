@@ -40,7 +40,9 @@ Standards Support
 +-------------------+---------------------+
 | `OGC WMC`_        | 1.1.0               |
 +-------------------+---------------------+
-| `OGC SOS`_        | 1.0.0               |
+| `OGC SOS`_        | 1.0.0, 2.0.0        |
++-------------------+---------------------+
+| `OGC SensorML`_   | 1.0.1               |
 +-------------------+---------------------+
 | `OGC CSW`_        | 2.0.2               |
 +-------------------+---------------------+
@@ -502,6 +504,18 @@ You can also submit a pre-made request encoded as WPS XML:
 SOS
 ---
 
+GetCapabilities
+
+.. include:: ../../tests/sos_ndbc_getcapabilities.txt
+
+GetObservation
+
+.. include:: ../../tests/sos_ndbc_getobservation.txt
+
+SensorML
+--------
+.. include:: ../../tests/sml_ndbc_station.txt
+
 ISO
 ---
 
@@ -633,6 +647,7 @@ Credits
 .. _`OGC WMC`: http://www.opengeospatial.org/standards/wmc
 .. _`OGC WPS`: http://www.opengeospatial.org/standards/wps
 .. _`OGC SOS`: http://www.opengeospatial.org/standards/sos
+.. _`OGC SensorML`: http://www.opengeospatial.org/standards/sensorml
 .. _`OGC CSW`: http://www.opengeospatial.org/standards/cat
 .. _`OGC WMTS`: http://www.opengeospatial.org/standards/wmts
 .. _`OGC Filter`: http://www.opengeospatial.org/standards/filter
