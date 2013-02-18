@@ -502,6 +502,10 @@ You can also submit a pre-made request encoded as WPS XML:
 SOS
 ---
 
+.. include:: ../../tests/sos_ndbc_getcapabilities.txt
+.. include:: ../../tests/sos_ndbc_getobservation.txt
+.. include:: ../../tests/sml_ndbc_station.txt
+
 ISO
 ---
 
