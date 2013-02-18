@@ -40,7 +40,7 @@ Standards Support
 +-------------------+---------------------+
 | `OGC WMC`_        | 1.1.0               |
 +-------------------+---------------------+
-| `OGC SOS`_        | 1.0.0               |
+| `OGC SOS`_        | 1.0.0, 2.0.0        |
 +-------------------+---------------------+
 | `OGC CSW`_        | 2.0.2               |
 +-------------------+---------------------+
@@ -502,8 +502,15 @@ You can also submit a pre-made request encoded as WPS XML:
 SOS
 ---
 
+GetCapabilities
 .. include:: ../../tests/sos_ndbc_getcapabilities.txt
+
+GetObservation
+
 .. include:: ../../tests/sos_ndbc_getobservation.txt
+
+SensorML
+--------
 .. include:: ../../tests/sml_ndbc_station.txt
 
 ISO

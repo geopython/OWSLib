@@ -117,7 +117,7 @@
 <td>1.1.0</td>
 </tr>
 <tr class="row-even"><td><a class="reference external" href="http://www.opengeospatial.org/standards/sos">OGC SOS</a></td>
-<td>1.0.0</td>
+<td>1.0.0, 2.0.0</td>
 </tr>
 <tr class="row-odd"><td><a class="reference external" href="http://www.opengeospatial.org/standards/cat">OGC CSW</a></td>
 <td>2.0.2</td>
@@ -526,340 +526,9 @@
 </div>
 <div class="section" id="sos">
 <h3>SOS<a class="headerlink" href="#sos" title="Permalink to this headline">¶</a></h3>
-<p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="kn">import</span> <span class="n">SensorObservationService</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.fes</span> <span class="kn">import</span> <span class="n">FilterCapabilities</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ows</span> <span class="kn">import</span> <span class="n">OperationsMetadata</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.crs</span> <span class="kn">import</span> <span class="n">Crs</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-</pre></div>
-</div>
-<p>Initialize</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ndbc</span> <span class="o">=</span> <span class="n">SensorObservationService</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xml</span><span class="o">=</span><span class="n">xml</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>ServiceIdentification</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">identification</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">.</span><span class="n">service</span>
-<span class="go">&#39;OGC:SOS&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">.</span><span class="n">version</span>
-<span class="go">&#39;1.0.0&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">.</span><span class="n">title</span>
-<span class="go">&#39;National Data Buoy Center SOS&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">.</span><span class="n">abstract</span>
-<span class="go">&#39;National Data Buoy Center SOS&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">.</span><span class="n">keywords</span>
-<span class="go">[&#39;Weather&#39;, &#39;Ocean Currents&#39;, &#39;Air Temperature&#39;, &#39;Water Temperature&#39;, &#39;Conductivity&#39;, &#39;Salinity&#39;, &#39;Barometric Pressure&#39;, &#39;Water Level&#39;, &#39;Waves&#39;, &#39;Winds&#39;, &#39;NDBC&#39;]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">.</span><span class="n">fees</span>
-<span class="go">&#39;NONE&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">.</span><span class="n">accessconstraints</span>
-<span class="go">&#39;NONE&#39;</span>
-</pre></div>
-</div>
-<p>ServiceProvider</p>
-<blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">provider</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;National Data Buoy Center&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">url</span>
-<span class="go">&#39;http://sdf.ndbc.noaa.gov/&#39;</span>
-</pre></div>
-</div>
-<p>ServiceContact</p>
-<blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">contact</span>
-</pre></div>
-</div>
-<p>Unused fields should return nothing
-&gt;&gt;&gt; sc.role
-&gt;&gt;&gt; sc.position
-&gt;&gt;&gt; sc.instructions
-&gt;&gt;&gt; sc.organization
-&gt;&gt;&gt; sc.fax
-&gt;&gt;&gt; sc.hours</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;Webmaster&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span><span class="o">.</span><span class="n">phone</span>
-<span class="go">&#39;228-688-2805&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span><span class="o">.</span><span class="n">address</span>
-<span class="go">&#39;Bldg. 3205&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span><span class="o">.</span><span class="n">city</span>
-<span class="go">&#39;Stennis Space Center&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span><span class="o">.</span><span class="n">region</span>
-<span class="go">&#39;MS&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span><span class="o">.</span><span class="n">postcode</span>
-<span class="go">&#39;39529&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span><span class="o">.</span><span class="n">country</span>
-<span class="go">&#39;USA&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span><span class="o">.</span><span class="n">email</span>
-<span class="go">&#39;webmaster.ndbc@noaa.gov&#39;</span>
-</pre></div>
-</div>
-</div></blockquote>
-</div></blockquote>
-<p>OperationsMetadata</p>
-<blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">o</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">operations</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-<span class="go">3</span>
-</pre></div>
-</div>
-<p>Name
-&gt;&gt;&gt; len(o)
-3</p>
-<p>Get by name
-&gt;&gt;&gt; getcap = ndbc.get_operation_by_name(&#8216;GetCapabilities&#8217;)
-&gt;&gt;&gt; isinstance(getcap, OperationsMetadata)
-True</p>
-<p>Get by name (case insensitive)
-&gt;&gt;&gt; getcap = ndbc.get_operation_by_name(&#8216;getcapabilities&#8217;)
-&gt;&gt;&gt; isinstance(getcap, OperationsMetadata)
-True</p>
-<p># GetCapabilities
-&gt;&gt;&gt; getcap.constraints
-{}</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">getcap</span><span class="o">.</span><span class="n">parameters</span>
-<span class="go">{&#39;Sections&#39;: {&#39;values&#39;: [&#39;ServiceIdentification&#39;, &#39;ServiceProvider&#39;, &#39;OperationsMetadata&#39;, &#39;Contents&#39;, &#39;All&#39;]}}</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">getcap</span><span class="o">.</span><span class="n">methods</span>
-<span class="go">{&#39;Post&#39;: {&#39;url&#39;: &#39;http://sdf.ndbc.noaa.gov/sos/server.php&#39;}, &#39;Get&#39;: {&#39;url&#39;: &#39;http://sdf.ndbc.noaa.gov/sos/server.php&#39;}}</span>
-</pre></div>
-</div>
-<p># DescribeSensor
-&gt;&gt;&gt; descsen = ndbc.get_operation_by_name(&#8216;describesensor&#8217;)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">descsen</span><span class="o">.</span><span class="n">constraints</span>
-<span class="go">{}</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">descsen</span><span class="o">.</span><span class="n">parameters</span>
-<span class="go">{&#39;outputFormat&#39;: {&#39;values&#39;: [&#39;text/xml;subtype=&quot;sensorML/1.0.1&quot;&#39;]}}</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">descsen</span><span class="o">.</span><span class="n">methods</span>
-<span class="go">{&#39;Post&#39;: {&#39;url&#39;: &#39;http://sdf.ndbc.noaa.gov/sos/server.php&#39;}, &#39;Get&#39;: {&#39;url&#39;: &#39;http://sdf.ndbc.noaa.gov/sos/server.php&#39;}}</span>
-</pre></div>
-</div>
-<p># GetObservation
-&gt;&gt;&gt; getob = ndbc.get_operation_by_name(&#8216;getobservation&#8217;)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">getob</span><span class="o">.</span><span class="n">constraints</span>
-<span class="go">{}</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">getob</span><span class="o">.</span><span class="n">parameters</span>
-<span class="go">{&#39;observedProperty&#39;: {&#39;values&#39;: [&#39;air_temperature&#39;, &#39;air_pressure_at_sea_level&#39;, &#39;sea_water_electrical_conductivity&#39;, &#39;currents&#39;, &#39;sea_water_salinity&#39;, &#39;sea_floor_depth_below_sea_surface&#39;, &#39;sea_water_temperature&#39;, &#39;waves&#39;, &#39;winds&#39;]}}</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">getob</span><span class="o">.</span><span class="n">methods</span>
-<span class="go">{&#39;Post&#39;: {&#39;url&#39;: &#39;http://sdf.ndbc.noaa.gov/sos/server.php&#39;}, &#39;Get&#39;: {&#39;url&#39;: &#39;http://sdf.ndbc.noaa.gov/sos/server.php&#39;}}</span>
-</pre></div>
-</div>
-</div></blockquote>
-<p>Filter_Capabilities</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">filter</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">filters</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">FilterCapabilities</span><span class="p">)</span>
-<span class="go">False</span>
-</pre></div>
-</div>
-<dl class="docutils">
-<dt>Contents</dt>
-<dd><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">contents</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">contents</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
-<span class="go">848</span>
-</pre></div>
-</div>
-<dl class="docutils">
-<dt>Network</dt>
-<dd><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">contents</span><span class="p">[</span><span class="s">&#39;network-all&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">id</span>
-<span class="go">&#39;network-all&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;urn:ioos:network:noaa.nws.ndbc:all&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">description</span>
-<span class="go">&#39;All stations on the NDBC SOS server&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">srs</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">srs</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">srs</span><span class="p">,</span> <span class="n">Crs</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">srs</span><span class="o">.</span><span class="n">getcodeurn</span><span class="p">()</span>
-<span class="go">&#39;urn:ogc:def:crs:EPSG::4326&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">srs</span><span class="o">.</span><span class="n">getcode</span><span class="p">()</span>
-<span class="go">&#39;EPSG:4326&#39;</span>
-</pre></div>
-</div>
-<p># (left, bottom, right, top)
-&gt;&gt;&gt; network.bbox
-(-179.995, -77.465999999999994, 180.0, 80.810000000000002)
-&gt;&gt;&gt; bbsrs = network.bbox_srs
-&gt;&gt;&gt; isinstance(bbsrs, Crs)
-True
-&gt;&gt;&gt; bbsrs.getcodeurn()
-&#8216;<a class="reference external" href="urn:ogc:def:crs:EPSG::4326">urn:ogc:def:crs:EPSG::4326</a>&#8216;
-&gt;&gt;&gt; bbsrs.getcode()
-&#8216;EPSG:4326&#8217;</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bp</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">begin_position</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ep</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">end_position</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">result_model</span>
-<span class="go">&#39;om:Observation&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">procs</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">procedures</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">procs</span><span class="p">)</span>
-<span class="go">847</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">observed_properties</span>
-<span class="go">[&#39;http://mmisw.org/ont/cf/parameter/air_temperature&#39;, &#39;http://mmisw.org/ont/cf/parameter/air_pressure_at_sea_level&#39;, &#39;http://mmisw.org/ont/cf/parameter/sea_water_electrical_conductivity&#39;, &#39;http://mmisw.org/ont/cf/parameter/currents&#39;, &#39;http://mmisw.org/ont/cf/parameter/sea_water_salinity&#39;, &#39;http://mmisw.org/ont/cf/parameter/sea_floor_depth_below_sea_surface&#39;, &#39;http://mmisw.org/ont/cf/parameter/sea_water_temperature&#39;, &#39;http://mmisw.org/ont/cf/parameter/waves&#39;, &#39;http://mmisw.org/ont/cf/parameter/winds&#39;]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">foi</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">features_of_interest</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">foi</span><span class="p">)</span>
-<span class="go">1082</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rfs</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">response_formats</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">rfs</span><span class="p">)</span>
-<span class="go">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rfs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="go">&#39;application/vnd.google-earth.kml+xml&#39;</span>
-</pre></div>
-</div>
-<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rms</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">response_modes</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">rms</span><span class="p">)</span>
-<span class="go">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">&#39;inline&#39;</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-<p>Station</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">station</span> <span class="o">=</span> <span class="n">contents</span><span class="p">[</span><span class="s">&#39;station-zbqn7&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">station</span><span class="o">.</span><span class="n">id</span>
-<span class="go">&#39;station-zbqn7&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">station</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;urn:ioos:station:wmo:zbqn7&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">station</span><span class="o">.</span><span class="n">description</span>
-<span class="go">&quot;Zeke&#39;s Basin, North Carolina&quot;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">srs</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">srs</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">srs</span><span class="p">,</span> <span class="n">Crs</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">srs</span><span class="o">.</span><span class="n">getcodeurn</span><span class="p">()</span>
-<span class="go">&#39;urn:ogc:def:crs:EPSG::4326&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">srs</span><span class="o">.</span><span class="n">getcode</span><span class="p">()</span>
-<span class="go">&#39;EPSG:4326&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">station</span><span class="o">.</span><span class="n">bbox</span>
-<span class="go">(-77.935000000000002, 33.954999999999998, -77.935000000000002, 33.954999999999998)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bbsrs</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">bbox_srs</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">bbsrs</span><span class="p">,</span> <span class="n">Crs</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bbsrs</span><span class="o">.</span><span class="n">getcodeurn</span><span class="p">()</span>
-<span class="go">&#39;urn:ogc:def:crs:EPSG::4326&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bbsrs</span><span class="o">.</span><span class="n">getcode</span><span class="p">()</span>
-<span class="go">&#39;EPSG:4326&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bp</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">begin_position</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ep</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">end_position</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">station</span><span class="o">.</span><span class="n">result_model</span>
-<span class="go">&#39;om:Observation&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">procs</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">procedures</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">procs</span><span class="p">)</span>
-<span class="go">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">procs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">&#39;urn:ioos:station:wmo:zbqn7&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ops</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">observed_properties</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span>
-<span class="go">3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">&#39;http://mmisw.org/ont/cf/parameter/sea_water_electrical_conductivity&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">foi</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">features_of_interest</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">foi</span><span class="p">)</span>
-<span class="go">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">foi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">&#39;urn:cgi:Feature:CGI:EarthOcean&#39;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rfs</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">response_formats</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">rfs</span><span class="p">)</span>
-<span class="go">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">&#39;text/xml;schema=&quot;ioos/0.6.1&quot;&#39;</span>
-</pre></div>
-</div>
-<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">response_modes</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">rm</span><span class="p">)</span>
-<span class="go">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">&#39;inline&#39;</span>
-</pre></div>
-</div>
-</dd>
-</dl>
+<p>GetCapabilities
+.. include:: ../../tests/sos_ndbc_getcapabilities.txt</p>
+<p>GetObservation</p>
 <p>Imports</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="kn">import</span> <span class="n">SensorObservationService</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ows</span> <span class="kn">import</span> <span class="n">OperationsMetadata</span>
@@ -913,6 +582,9 @@ Traceback (most recent call last):</p>
 &gt;&gt;&gt; outputFormat = ndbc.get_operation_by_name(&#8216;DescribeSensor&#8217;).parameters[&#8216;outputFormat&#8217;][&#8216;values&#8217;][0]
 &gt;&gt;&gt; response = ndbc.describe_sensor(procedure=procedure, outputFormat=outputFormat)</p>
 </div></blockquote>
+</div>
+<div class="section" id="sensorml">
+<h3>SensorML<a class="headerlink" href="#sensorml" title="Permalink to this headline">¶</a></h3>
 <p>Imports</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.swe.sensor.sml</span> <span class="kn">import</span> <span class="n">SensorML</span><span class="p">,</span> <span class="n">EventMetadata</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">parser</span>
@@ -1250,6 +922,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
 <li><a class="reference internal" href="#wmc">WMC</a></li>
 <li><a class="reference internal" href="#wps">WPS</a></li>
 <li><a class="reference internal" href="#sos">SOS</a></li>
+<li><a class="reference internal" href="#sensorml">SensorML</a></li>
 <li><a class="reference internal" href="#iso">ISO</a></li>
 <li><a class="reference internal" href="#crs-handling">CRS Handling</a></li>
 <li><a class="reference internal" href="#dublin-core">Dublin Core</a></li>
@@ -1309,7 +982,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2013-02-18T09:56:45Z.
+      Last updated on 2013-02-18T10:02:32Z.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
