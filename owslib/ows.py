@@ -207,6 +207,15 @@ class BoundingBox(object):
                 else:
                     self.maxx, self.maxy = xy[0], xy[1]
 
+class WGS84BoundingBox(BoundingBox):
+    """WGS84 bbox, axis order xy"""
+    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
+        BoundingBox.__init__(self, elem, namespace)
+        self.dimensions = 2
+        self.crs = crs.Crs('urn:ogc:def:crs:OGC:2:84')
+
+
+
 class ExceptionReport(Exception):
     """OWS ExceptionReport"""
 
