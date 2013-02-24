@@ -625,3 +625,9 @@ class CswRecord(object):
             self.bbox = ows.BoundingBox(val, namespaces['ows'])
         else:
             self.bbox = None
+
+        val = record.find(util.nspath_eval('ows:WGS84BoundingBox', namespaces))
+        if val is not None:
+            self.bbox_wgs84 = ows.WGS84BoundingBox(val, namespaces['ows'])
+        else:
+            self.bbox_wgs84 = None
