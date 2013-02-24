@@ -591,7 +591,7 @@ All Community archives are located in http://lists.osgeo.org/pipermail/owslib-us
 Metrics
 -------
 
-You can find out about software metrics at the pycsw `ohloh`_ page.  pycsw is also registered on `CIA.vc`_.
+You can find out about software metrics at the OWSLib `ohloh`_ page.
 
 IRC
 ---
