@@ -3,6 +3,7 @@
 # this script publishes Sphinx outputs to github pages
 THIS_DIR=`pwd`
 
+make clean && make html
 git clone git@github.com:geopython/OWSLib.git /tmp/OWSLib
 cd /tmp/OWSLib
 git checkout gh-pages
