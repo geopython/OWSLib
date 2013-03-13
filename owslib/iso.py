@@ -45,7 +45,7 @@ class MD_Metadata(object):
         val = md.find(util.nspath_eval('gmd:language/gco:CharacterString', namespaces))
         self.language = util.testXMLValue(val)
         
-        val = md.find(util.nspath_eval('gmd:datasetURI/gco:CharacterString', namespaces))
+        val = md.find(util.nspath_eval('gmd:dataSetURI/gco:CharacterString', namespaces))
         self.dataseturi = util.testXMLValue(val)
 
         val = md.find(util.nspath_eval('gmd:language/gmd:LanguageCode', namespaces))
