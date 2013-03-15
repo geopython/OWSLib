@@ -282,7 +282,7 @@ class MD_DataIdentification(object):
         self.abstract = util.testXMLValue(val)
 
         val = md.find(util.nspath_eval('gmd:purpose/gco:CharacterString', namespaces))
-        self.purpose = util.testXMLValue(val, True)
+        self.purpose = util.testXMLValue(val)
 
         self.status = _testCodeListValue(md.find(util.nspath_eval('gmd:status/gmd:MD_ProgressCode', namespaces)))
 
