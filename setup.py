@@ -17,7 +17,7 @@ class PyTest(TestCommand):
 
 
 
-readme = open('README.txt', 'rb').read()
+readme = open('README.txt', 'r').read()
 
 setup(name          = 'OWSLib',
       version       = owslib.__version__,
@@ -26,9 +26,9 @@ setup(name          = 'OWSLib',
       license       = 'BSD',
       keywords      = 'gis ogc iso 19115 fgdc dif ows wfs wms sos csw wps wcs capabilities metadata wmts',
       author        = 'Sean Gillies',
-      author_email  = 'sgillies@frii.com',
-      maintainer        = 'Sean Gillies',
-      maintainer_email  = 'sgillies@frii.com',
+      author_email  = 'sean.gillies@gmail.com',
+      maintainer        = 'Tom.Kralidis@ec.gc.ca',
+      maintainer_email  = 'Tom.Kralidis@ec.gc.ca',
       url           = 'https://geopython.github.com/OWSLib',
       install_requires = ['python-dateutil==2.1', 'pytz==2012j'],
       packages      = find_packages(),
