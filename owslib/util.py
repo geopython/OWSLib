@@ -173,7 +173,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
     if url is not None:
         u = urlparse.urlsplit(url)
         r = urllib2.Request(url, request)
-        r.add_header('User-Agent', 'OWSLib (https://geopython.github.com/OWSLib)')
+        r.add_header('User-Agent', 'OWSLib (https://geopython.github.io/OWSLib)')
         r.add_header('Content-type', 'text/xml')
         r.add_header('Content-length', '%d' % len(request))
         r.add_header('Accept', 'text/xml')

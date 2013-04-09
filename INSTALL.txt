@@ -1,1 +1,1 @@
-See http://geopython.github.com/OWSLib/#installation
+See http://geopython.github.io/OWSLib/#installation
