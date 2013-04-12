@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<sitesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cuahsi.org/waterML/1.1/">
+  <queryInfo>
+    <creationTime>2009-06-12T10:47:54.53125-07:00</creationTime>
+    <criteria MethodCalled="GetSites" />
+    <note>ALL Sites(empty request)</note>
+  </queryInfo>
+  <site>
+    <siteInfo>
+      <siteName>Little Bear River at Mendon Road near Mendon, Utah</siteName>
+      <siteCode network="LBR" siteID="1">USU-LBR-Mendon</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.718473</latitude>
+          <longitude>-111.946402</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>421276.323</X>
+          <Y>4618952.04</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1345</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Located below county road bridge at Mendon Road crossing</siteProperty>
+      <siteProperty name="PosAccuracy_m">1</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Little Bear River at McMurdy Hollow near Paradise, Utah</siteName>
+      <siteCode network="LBR" siteID="2">USU-LBR-Paradise</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.575552</latitude>
+          <longitude>-111.855217</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>428703.917</X>
+          <Y>4603005.09</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1445</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Located below bridge at 8700 South (McMurdy Hollow)</siteProperty>
+      <siteProperty name="PosAccuracy_m">2</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Utah State University Experimental Farm near Wellsville, Utah</siteName>
+      <siteCode network="LBR" siteID="3">USU-LBR-ExpFarm</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.666993</latitude>
+          <longitude>-111.890567</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>425861.714</X>
+          <Y>4613186.929</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1369</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">This is a continuous weather station.</siteProperty>
+      <siteProperty name="PosAccuracy_m">3</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>South Fork Little Bear River below Davenport Creek near Avon, Utah</siteName>
+      <siteCode network="LBR" siteID="4">USU-LBR-SFLower</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.506518</latitude>
+          <longitude>-111.815079</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>431977.822</X>
+          <Y>4595308.471</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1564</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Located under a private road bridge just below the confluence with Davenport Creek.</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>East Fork Little Bear River at Paradise Canal Diversion near Avon, Utah</siteName>
+      <siteCode network="LBR" siteID="5">USU-LBR-EFLower</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.529212</latitude>
+          <longitude>-111.799324</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>433315.887</X>
+          <Y>4597815.707</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1528</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Located on the Paradise Canal diversion structure.</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Little Bear River Upper Weather Station near Avon, Utah</siteName>
+      <siteCode network="LBR" siteID="6">USU-LBR-EFWeather</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.535543</latitude>
+          <longitude>-111.805946</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>432770.027</X>
+          <Y>4598523.785</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1538</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">This is a continuous weather station.</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>South Fork Little Bear River above Davenport Creek near Avon, Utah</siteName>
+      <siteCode network="LBR" siteID="7">USU-LBR-SFUpper</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.495409</latitude>
+          <longitude>-111.817993</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>431977.822</X>
+          <Y>4595308.471</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1573</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Located on the downstream side of a private footbridge on the Selman Ranch.</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Radio Repeater near Paradise, Utah</siteName>
+      <siteCode network="LBR" siteID="8">USU-LBR-ParadiseRepeater</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.556736</latitude>
+          <longitude>-111.854455</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>428746.734</X>
+          <Y>4600915.466</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1693</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Located on high ridge overlooking the Little Bear River.</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>East Fork Little Bear River Radio Repeater near Avon, Utah</siteName>
+      <siteCode network="LBR" siteID="9">USU-LBR-EFRepeater</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.536</latitude>
+          <longitude>-111.806</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>432770.027</X>
+          <Y>4598523.785</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1538</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Co-located with the Little Bear River upper weather station in the East Fork.</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Little Bear River near Wellsville, Utah</siteName>
+      <siteCode network="LBR" siteID="10">USU-LBR-Wellsville</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.643457</latitude>
+          <longitude>-111.917649</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>423579.317</X>
+          <Y>4610597.583</Y>
+        </localSiteXY>
+      </geoLocation>
+      <elevation_m>1365</elevation_m>
+      <verticalDatum>NGVD29</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Located on the upstream side of State Highway 101 bridge.</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Little Bear River below Confluence of South and East Forks near Avon, Utah</siteName>
+      <siteCode network="LBR" siteID="11">USU-LBR-Confluence</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.536088</latitude>
+          <longitude>-111.830455</longitude>
+        </geogLocation>
+        <localSiteXY projectionInformation=" NAD83 / UTM zone 12N">
+          <X>430726.09724</X>
+          <Y>4598603.64519</Y>
+        </localSiteXY>
+      </geoLocation>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">Located on the downstream side of the county bridge over the Little Bear River.</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Little Bear River at Paradise, Utah</siteName>
+      <siteCode network="LBR" siteID="12">10105900</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType" srs="EPSG:4269">
+          <latitude>41.5756</latitude>
+          <longitude>-111.8544</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>1445</elevation_m>
+      <verticalDatum>Unknown</verticalDatum>
+      <siteProperty name="County">Cache</siteProperty>
+      <siteProperty name="State">Utah</siteProperty>
+      <siteProperty name="Site Comments">This is a real time USGS streamflow gage.</siteProperty>
+    </siteInfo>
+  </site>
+</sitesResponse>

@@ -19,6 +19,8 @@ from urllib2 import HTTPBasicAuthHandler
 from StringIO import StringIO
 import cgi
 from urllib import urlencode
+import re
+
 
 """
 Utility functions and classes
@@ -37,6 +39,63 @@ class RereadableURL(StringIO,object):
 class ServiceException(Exception):
     #TODO: this should go in ows common module when refactored.  
     pass
+
+# http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
+dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
+  isinstance(d2.get(x),dict) else d2.get(x,d1.get(x)))) for x in
+  set(d1.keys()+d2.keys()))
+
+
+first_cap_re = re.compile('(.)([A-Z][a-z]+)')
+all_cap_re = re.compile('([a-z0-9])([A-Z])')
+def format_string(prop_string):
+    """
+        Formats a property string to remove spaces and go from CamelCase to pep8
+        from: http://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-camel-case
+    """
+    if prop_string is None:
+        return ''
+    st_r = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', prop_string)
+    st_r = st_r.replace(' ','')
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', st_r).lower()
+
+def xml_to_dict(root, prefix=None, depth=1, diction=None):
+    """
+        Recursively iterates through an xml element to convert each element in the tree to a (key,val). Where key is the element
+        tag and val is the inner-text of the element. Note that this recursively go through the tree until the depth specified.
+
+        Parameters
+        ===========
+        :root - root xml element, starting point of iteration
+        :prefix - a string to prepend to the resulting key (optional)
+        :depth - the number of depths to process in the tree (optional)
+        :diction - the dictionary to insert the (tag,text) pairs into (optional)
+
+        Return
+        =======
+        Dictionary of (key,value); where key is the element tag stripped of namespace and cleaned up to be pep8 and
+        value is the inner-text of the element. Note that duplicate elements will be replaced by the last element of the 
+        same tag in the tree.
+    """
+    ret = diction if diction is not None else dict()
+    for child in root:
+        val = testXMLValue(child)
+        # skip values that are empty or None
+        if val is None or val == '':
+            if depth > 1:
+                ret = xml_to_dict(child,prefix=prefix,depth=(depth-1),diction=ret)
+            continue
+
+        key = format_string(child.tag.split('}')[-1])
+
+        if prefix is not None:
+            key = prefix + key
+
+        ret[key] = val
+        if depth > 1:
+            ret = xml_to_dict(child,prefix=prefix,depth=(depth-1),diction=ret)
+
+    return ret
 
 def openURL(url_base, data, method='Get', cookies=None, username=None, password=None):
     ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
@@ -310,11 +369,6 @@ Would be 2006-07-27T21:10:00Z, not 'now'
         else:
             dt = None
     return dt
-
-# http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
-dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
-  isinstance(d2.get(x),dict) else d2.get(x,d1.get(x)))) for x in
-  set(d1.keys()+d2.keys()))
 
 
 def extract_xml_list(elements):
