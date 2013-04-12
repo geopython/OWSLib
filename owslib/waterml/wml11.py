@@ -1,6 +1,5 @@
-from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse
+from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse, namespaces
 from owslib.etree import etree
-from owslib.util import namespaces
 
 def ns(namespace):
     return namespaces.get(namespace)

@@ -1,11 +1,46 @@
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue, openURL, XMLParser, namespaces
+from owslib.util import nspath, testXMLValue, openURL
 from owslib.util import xml_to_dict as _xml_to_dict
 from datetime import datetime
 from dateutil import parser
 
+namespaces = {
+    'wml1.1':'{http://www.cuahsi.org/waterML/1.1/}',
+    'wml1.0':'{http://www.cuahsi.org/waterML/1.0/}',
+    'xsi':'{http://www.w3.org/2001/XMLSchema-instance',
+    'xsd':'{http://www.w3.org/2001/XMLSchema'
+}
+
 def ns(namespace):
     return namespaces.get(namespace)
+
+class XMLParser(object):
+    """
+        Convienence class; provides some useful shortcut methods to make retrieving xml elements from etree
+        a little easier.
+    """
+    def __init__(self,xml_root,namespace):
+        try:
+            self._root = etree.parse(xml_root)
+        except:
+            self._root = xml_root
+
+        if not namespace in namespaces:
+            raise ValueError('Unsupported namespace passed in to parser!')
+
+        self._ns = namespace
+
+    def _find(self,tofind):
+        try:
+            return self._root.find(namespaces.get(self._ns) + tofind)
+        except:
+            return None
+
+    def _findall(self,tofind):
+        try:
+            return self._root.findall(namespaces.get(self._ns) + tofind)
+        except:
+            return None
 
 class SitesResponse(XMLParser):
     """

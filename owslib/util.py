@@ -26,41 +26,6 @@ import re
 Utility functions and classes
 """
 
-namespaces = {
-    'wml1.1':'{http://www.cuahsi.org/waterML/1.1/}',
-    'wml1.0':'{http://www.cuahsi.org/waterML/1.0/}',
-    'xsi':'{http://www.w3.org/2001/XMLSchema-instance',
-    'xsd':'{http://www.w3.org/2001/XMLSchema'
-}
-
-class XMLParser(object):
-    """
-        Convienence class; provides some useful shortcut methods to make retrieving xml elements from etree
-        a little easier.
-    """
-    def __init__(self,xml_root,namespace):
-        try:
-            self._root = etree.parse(xml_root)
-        except:
-            self._root = xml_root
-
-        if not namespace in namespaces:
-            raise ValueError('Unsupported namespace passed in to parser!')
-
-        self._ns = namespace
-
-    def _find(self,tofind):
-        try:
-            return self._root.find(namespaces.get(self._ns) + tofind)
-        except:
-            return None
-
-    def _findall(self,tofind):
-        try:
-            return self._root.findall(namespaces.get(self._ns) + tofind)
-        except:
-            return None
-
 class RereadableURL(StringIO,object):
     """ Class that acts like a combination of StringIO and url - has seek method and url headers etc """
     def __init__(self, u):
@@ -404,11 +369,6 @@ Would be 2006-07-27T21:10:00Z, not 'now'
         else:
             dt = None
     return dt
-
-# http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
-dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
-  isinstance(d2.get(x),dict) else d2.get(x,d1.get(x)))) for x in
-  set(d1.keys()+d2.keys()))
 
 
 def extract_xml_list(elements):

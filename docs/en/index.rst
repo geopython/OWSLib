@@ -666,4 +666,4 @@ Credits
 .. _`freenode`: http://freenode.net/
 .. _`ohloh`: http://www.ohloh.net/p/OWSLib
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
-
+.. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
