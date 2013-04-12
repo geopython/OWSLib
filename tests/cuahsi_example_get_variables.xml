@@ -1,0 +1,1072 @@
+<?xml version="1.0"?>
+<variablesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cuahsi.org/waterML/1.1/">
+  <queryInfo>
+    <creationTime>2009-06-12T10:47:52.078125-07:00</creationTime>
+    <criteria MethodCalled="GetVariableInfo">
+      <parameter name="variable" />
+    </criteria>
+    <note>OD Web Service</note>
+  </queryInfo>
+  <variables>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="3">USU3</variableCode>
+      <variableName>Battery voltage</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Minimum</dataType>
+      <generalCategory>Instrumentation</generalCategory>
+      <sampleMedium>Other</sampleMedium>
+      <unit>
+        <unitName>volts</unitName>
+        <unitType>Potential Difference</unitType>
+        <unitAbbreviation>V</unitAbbreviation>
+        <unitCode>168</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="4">USU4</variableCode>
+      <variableName>Turbidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>nephelometric turbidity units</unitName>
+        <unitType>Turbidity</unitType>
+        <unitAbbreviation>NTU</unitAbbreviation>
+        <unitCode>221</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>5</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="5">USU5</variableCode>
+      <variableName>Turbidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Variance</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>nephelometric turbidity units</unitName>
+        <unitType>Turbidity</unitType>
+        <unitAbbreviation>NTU</unitAbbreviation>
+        <unitCode>221</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>5</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="6">USU6</variableCode>
+      <variableName>Turbidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Median</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>nephelometric turbidity units</unitName>
+        <unitType>Turbidity</unitType>
+        <unitAbbreviation>NTU</unitAbbreviation>
+        <unitCode>221</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>5</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="7">USU7</variableCode>
+      <variableName>Turbidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Best Easy Systematic Estimator</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>nephelometric turbidity units</unitName>
+        <unitType>Turbidity</unitType>
+        <unitAbbreviation>NTU</unitAbbreviation>
+        <unitCode>221</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>5</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="8">USU8</variableCode>
+      <variableName>Turbidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Minimum</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>nephelometric turbidity units</unitName>
+        <unitType>Turbidity</unitType>
+        <unitAbbreviation>NTU</unitAbbreviation>
+        <unitCode>221</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>5</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="9">USU9</variableCode>
+      <variableName>Turbidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Maximum</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>nephelometric turbidity units</unitName>
+        <unitType>Turbidity</unitType>
+        <unitAbbreviation>NTU</unitAbbreviation>
+        <unitCode>221</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>5</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="10">USU10</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Continuous</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>degree celcius</unitName>
+        <unitType>Temperature</unitType>
+        <unitAbbreviation>degC</unitAbbreviation>
+        <unitCode>96</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>0</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="11">USU11</variableCode>
+      <variableName>Gage height</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Minimum</dataType>
+      <generalCategory>Hydrology</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>international foot</unitName>
+        <unitType>Length</unitType>
+        <unitAbbreviation>ft</unitAbbreviation>
+        <unitCode>48</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="12">USU12</variableCode>
+      <variableName>Gage height</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Maximum</dataType>
+      <generalCategory>Hydrology</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>international foot</unitName>
+        <unitType>Length</unitType>
+        <unitAbbreviation>ft</unitAbbreviation>
+        <unitCode>48</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="13">USU13</variableCode>
+      <variableName>Gage height</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Hydrology</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>international foot</unitName>
+        <unitType>Length</unitType>
+        <unitAbbreviation>ft</unitAbbreviation>
+        <unitCode>48</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="14">USU14</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>degree celcius</unitName>
+        <unitType>Temperature</unitType>
+        <unitAbbreviation>degC</unitAbbreviation>
+        <unitCode>96</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>hour</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>hr</unitAbbreviation>
+          <unitCode>103</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="15">USU15</variableCode>
+      <variableName>Relative humidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>percent</unitName>
+        <unitType>Dimensionless</unitType>
+        <unitAbbreviation>%</unitAbbreviation>
+        <unitCode>1</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>hour</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>hr</unitAbbreviation>
+          <unitCode>103</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="16">USU16</variableCode>
+      <variableName>Precipitation</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Incremental</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Precipitation</sampleMedium>
+      <unit>
+        <unitName>millimeter</unitName>
+        <unitType>Length</unitType>
+        <unitAbbreviation>mm</unitAbbreviation>
+        <unitCode>54</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>hour</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>hr</unitAbbreviation>
+          <unitCode>103</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="17">USU17</variableCode>
+      <variableName>Battery voltage</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Minimum</dataType>
+      <generalCategory>Instrumentation</generalCategory>
+      <sampleMedium>Other</sampleMedium>
+      <unit>
+        <unitName>volts</unitName>
+        <unitType>Potential Difference</unitType>
+        <unitAbbreviation>V</unitAbbreviation>
+        <unitCode>168</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>hour</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>hr</unitAbbreviation>
+          <unitCode>103</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="18">USU18</variableCode>
+      <variableName>Wind speed</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>meters per second</unitName>
+        <unitType>Velocity</unitType>
+        <unitAbbreviation>m/s</unitAbbreviation>
+        <unitCode>119</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>hour</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>hr</unitAbbreviation>
+          <unitCode>103</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="19">USU19</variableCode>
+      <variableName>Wind direction</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>degree</unitName>
+        <unitType>Angle</unitType>
+        <unitAbbreviation>deg</unitAbbreviation>
+        <unitCode>2</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>hour</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>hr</unitAbbreviation>
+          <unitCode>103</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="20">USU20</variableCode>
+      <variableName>Wind direction</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>StandardDeviation</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>degree</unitName>
+        <unitType>Angle</unitType>
+        <unitAbbreviation>deg</unitAbbreviation>
+        <unitCode>2</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>hour</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>hr</unitAbbreviation>
+          <unitCode>103</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="21">USU21</variableCode>
+      <variableName>Barometric pressure</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Continuous</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>millimeter of mercury</unitName>
+        <unitType>Pressure/Stress</unitType>
+        <unitAbbreviation>mm Hg</unitAbbreviation>
+        <unitCode>86</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>0</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="22">USU22</variableCode>
+      <variableName>Radiation, incoming shortwave</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Other</sampleMedium>
+      <unit>
+        <unitName>watts per square meter</unitName>
+        <unitType>Energy Flux</unitType>
+        <unitAbbreviation>W/m2</unitAbbreviation>
+        <unitCode>33</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>hour</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>hr</unitAbbreviation>
+          <unitCode>103</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="23">USU23</variableCode>
+      <variableName>Battery voltage</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Minimum</dataType>
+      <generalCategory>Instrumentation</generalCategory>
+      <sampleMedium>Other</sampleMedium>
+      <unit>
+        <unitName>volts</unitName>
+        <unitType>Potential Difference</unitType>
+        <unitAbbreviation>V</unitAbbreviation>
+        <unitCode>168</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="24">USU24</variableCode>
+      <variableName>Wind speed</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>meters per second</unitName>
+        <unitType>Velocity</unitType>
+        <unitAbbreviation>m/s</unitAbbreviation>
+        <unitCode>119</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="25">USU25</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Minimum</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>degree celcius</unitName>
+        <unitType>Temperature</unitType>
+        <unitAbbreviation>degC</unitAbbreviation>
+        <unitCode>96</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="26">USU26</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Maximum</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>degree celcius</unitName>
+        <unitType>Temperature</unitType>
+        <unitAbbreviation>degC</unitAbbreviation>
+        <unitCode>96</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="27">USU27</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>degree celcius</unitName>
+        <unitType>Temperature</unitType>
+        <unitAbbreviation>degC</unitAbbreviation>
+        <unitCode>96</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="28">USU28</variableCode>
+      <variableName>Relative humidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>percent</unitName>
+        <unitType>Dimensionless</unitType>
+        <unitAbbreviation>%</unitAbbreviation>
+        <unitCode>1</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="29">USU29</variableCode>
+      <variableName>Barometric pressure</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Air</sampleMedium>
+      <unit>
+        <unitName>millimeter of mercury</unitName>
+        <unitType>Pressure/Stress</unitType>
+        <unitAbbreviation>mm Hg</unitAbbreviation>
+        <unitCode>86</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="30">USU30</variableCode>
+      <variableName>Precipitation</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Incremental</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Precipitation</sampleMedium>
+      <unit>
+        <unitName>millimeter</unitName>
+        <unitType>Length</unitType>
+        <unitAbbreviation>mm</unitAbbreviation>
+        <unitCode>54</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="31">USU31</variableCode>
+      <variableName>Radiation, incoming shortwave</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Incremental</dataType>
+      <generalCategory>Climate</generalCategory>
+      <sampleMedium>Other</sampleMedium>
+      <unit>
+        <unitName>megajoules per square meter</unitName>
+        <unitType>Energy per Area</unitType>
+        <unitAbbreviation>MJ/m2</unitAbbreviation>
+        <unitCode>144</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>day</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>d</unitAbbreviation>
+          <unitCode>104</unitCode>
+        </unit>
+        <timeSupport>1</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="32">USU32</variableCode>
+      <variableName>Oxygen, dissolved</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>milligrams per liter</unitName>
+        <unitType>Concentration</unitType>
+        <unitAbbreviation>mg/L</unitAbbreviation>
+        <unitCode>199</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="33">USU33</variableCode>
+      <variableName>Oxygen, dissolved percent of saturation</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>percent</unitName>
+        <unitType>Dimensionless</unitType>
+        <unitAbbreviation>%</unitAbbreviation>
+        <unitCode>1</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="34">USU34</variableCode>
+      <variableName>Specific conductance, unfiltered</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>microsiemens per centimeter</unitName>
+        <unitType>Electrical Conductivity</unitType>
+        <unitAbbreviation>uS/cm</unitAbbreviation>
+        <unitCode>192</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="35">USU35</variableCode>
+      <variableName>pH, unfiltered</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>dimensionless</unitName>
+        <unitType>Dimensionless</unitType>
+        <unitAbbreviation>-</unitAbbreviation>
+        <unitCode>137</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="36">USU36</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>degree celcius</unitName>
+        <unitType>Temperature</unitType>
+        <unitAbbreviation>degC</unitAbbreviation>
+        <unitCode>96</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="37">USU37</variableCode>
+      <variableName>Turbidity</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>nephelometric turbidity units</unitName>
+        <unitType>Turbidity</unitType>
+        <unitAbbreviation>NTU</unitAbbreviation>
+        <unitCode>221</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="38">USU38</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Instrumentation</generalCategory>
+      <sampleMedium>Other</sampleMedium>
+      <unit>
+        <unitName>degree celcius</unitName>
+        <unitType>Temperature</unitType>
+        <unitAbbreviation>degC</unitAbbreviation>
+        <unitCode>96</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="39">USU39</variableCode>
+      <variableName>Phosphorus, total as P</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>milligrams per liter</unitName>
+        <unitType>Concentration</unitType>
+        <unitAbbreviation>mg/L</unitAbbreviation>
+        <unitCode>199</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale>
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>0</timeSupport>
+      </timeScale>
+      <speciation>P</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="40">USU40</variableCode>
+      <variableName>Phosphorus, total as P, filtered</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>milligrams per liter</unitName>
+        <unitType>Concentration</unitType>
+        <unitAbbreviation>mg/L</unitAbbreviation>
+        <unitCode>199</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale>
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>0</timeSupport>
+      </timeScale>
+      <speciation>P</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="41">USU41</variableCode>
+      <variableName>Solids, total Suspended</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>milligrams per liter</unitName>
+        <unitType>Concentration</unitType>
+        <unitAbbreviation>mg/L</unitAbbreviation>
+        <unitCode>199</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale>
+        <unit>
+          <unitName>second</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>s</unitAbbreviation>
+          <unitCode>100</unitCode>
+        </unit>
+        <timeSupport>0</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="42">USU42</variableCode>
+      <variableName>Gage height</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Hydrology</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>international foot</unitName>
+        <unitType>Length</unitType>
+        <unitAbbreviation>ft</unitAbbreviation>
+        <unitCode>48</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>15</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="43">USU43</variableCode>
+      <variableName>Discharge</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Average</dataType>
+      <generalCategory>Hydrology</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>cubic feet per second</unitName>
+        <unitType>Flow</unitType>
+        <unitAbbreviation>cfs</unitAbbreviation>
+        <unitCode>35</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>15</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="LBR" default="true" variableID="45">SDSC45</variableCode>
+      <variableName>Battery Voltage</variableName>
+      <valueType>Field Observation</valueType>
+      <dataType>Categorical</dataType>
+      <generalCategory>Unknown</generalCategory>
+      <sampleMedium>Other</sampleMedium>
+      <unit>
+        <unitName>dimensionless</unitName>
+        <unitType>Dimensionless</unitType>
+        <unitAbbreviation>-</unitAbbreviation>
+        <unitCode>137</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>minute</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>min</unitAbbreviation>
+          <unitCode>102</unitCode>
+        </unit>
+        <timeSupport>30</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+      <categories>
+        <category>
+          <dataValue>1</dataValue>
+          <description>Test 1</description>
+        </category>
+        <category>
+          <dataValue>0</dataValue>
+          <description>test 0</description>
+        </category>
+      </categories>
+    </variable>
+  </variables>
+</variablesResponse>

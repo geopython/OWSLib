@@ -1,0 +1,40 @@
+	>>> from owslib.waterml.wml10 import WaterML_1_0 as wml
+
+Test GetSiteInfo
+
+	>>> f = open('tests/cuahsi_example_get_siteinfo_10.xml')
+	>>> response = wml(f).response
+
+	>>> response.site_names
+	['Little Bear River at Mendon Road near Mendon, Utah']
+	>>> site = response.sites[0]
+	>>> site.variable_names
+	['Battery voltage', 'Oxygen, dissolved percent of saturation', 'Oxygen, dissolved', 'Specific conductance, unfiltered', 'Phosphorus, total as P', 'pH, unfiltered', 'Phosphorus, total as P, filtered', 'Turbidity', 'Solids, total Suspended', 'Gage height', 'Temperature']
+	>>> codes = site.variable_codes
+	>>> codes
+	['USU7', 'USU6', 'USU5', 'USU4', 'USU3', 'USU34', 'USU37', 'USU9', 'USU8', 'USU13', 'USU12', 'USU11', 'USU10', 'USU41', 'USU33', 'USU32', 'USU35', 'USU40', 'USU39', 'USU36']
+	>>> var = site[codes[7]]
+	>>> var.unit.name
+	'nephelometric turbidity units'
+	>>> var.unit.id
+	>>> var.notes
+	{}
+	>>> var.no_data_value
+	'-9999'
+
+Test GetValues
+
+	>>> f.close()
+	>>> f = open('tests/cuahsi_example_get_values_10.xml')
+	>>> response = wml(f).response
+
+	>>> response.variable_names
+	['Phosphorus, total as P']
+	>>> response.variable_codes
+	['USU39']
+	>>> series = response.get_series_by_variable('Phosphorus, total as P')
+	>>> series = series[0]
+	>>> values = series.values[0]
+	>>> values.get_date_values()
+	[(datetime.datetime(2008, 4, 14, 13, 0), '0.1192'), (datetime.datetime(2008, 4, 14, 13, 0), '0.114'), (datetime.datetime(2008, 4, 14, 14, 0), '0.1424'), (datetime.datetime(2008, 4, 14, 15, 0), '0.1814'), (datetime.datetime(2008, 4, 14, 16, 0), '0.3841'), (datetime.datetime(2008, 4, 14, 18, 0), '0.9124'), (datetime.datetime(2008, 4, 14, 20, 0), '0.0655'), (datetime.datetime(2008, 4, 14, 21, 0), '0.4342'), (datetime.datetime(2008, 4, 14, 22, 0), '0.9543'), (datetime.datetime(2008, 4, 14, 23, 0), '0.7308'), (datetime.datetime(2008, 4, 14, 23, 0), '0.7004'), (datetime.datetime(2008, 4, 15, 0, 0), '0.6097'), (datetime.datetime(2008, 4, 15, 1, 0), '0.5544'), (datetime.datetime(2008, 4, 15, 1, 0), '0.6182'), (datetime.datetime(2008, 4, 15, 1, 0), '0.5476'), (datetime.datetime(2008, 4, 15, 2, 0), '0.5728'), (datetime.datetime(2008, 4, 15, 2, 0), '0.369'), (datetime.datetime(2008, 4, 15, 2, 0), '0.3664'), (datetime.datetime(2008, 4, 15, 2, 0), '0.4767'), (datetime.datetime(2008, 4, 15, 3, 0), '0.3144'), (datetime.datetime(2008, 4, 15, 4, 0), '0.4517'), (datetime.datetime(2008, 4, 15, 5, 0), '0.3838'), (datetime.datetime(2008, 4, 15, 6, 0), '0.4702'), (datetime.datetime(2008, 4, 15, 7, 0), '0.389'), (datetime.datetime(2008, 4, 15, 8, 0), '0.4949'), (datetime.datetime(2008, 4, 15, 9, 0), '0.2778'), (datetime.datetime(2008, 4, 15, 10, 0), '0.3576'), (datetime.datetime(2008, 4, 15, 11, 0), '0.3618'), (datetime.datetime(2008, 4, 15, 12, 0), '0.2803')]
+	
