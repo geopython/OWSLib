@@ -202,7 +202,7 @@ class SiteInfo(XMLParser):
         self.elevation = xml_dict.get('elevation_m')
         self.vertical_datum = xml_dict.get('vertical_datum')
         self.site_types = [testXMLValue(typ) for typ in self._findall('siteType')]
-        self.site_properties = dict([(prop.attrib.get('name'),prop.attrib.get('value')) for prop in self._findall('siteProperty')])
+        self.site_properties = dict([(prop.attrib.get('name'),testXMLValue(prop)) for prop in self._findall('siteProperty')])
         self.altname = xml_dict.get('altname')
         self.notes = [testXMLValue(note) for note in self._findall('note')]
         # sub-objects
@@ -378,7 +378,7 @@ class Series(XMLParser):
             self.quality_control_level_id = None
 
         # properties
-        self.properties = dict([(prop.attrib.get('name'),prop.attrib.get('value')) for prop in self._findall('seriesProperty')])
+        self.properties = dict([(prop.attrib.get('name'),testXMLValue(prop)) for prop in self._findall('seriesProperty')])
         # sub-objects
         self.variable = Variable(self._find('variable'),self._ns)
         # except:
@@ -415,7 +415,7 @@ class Variable(XMLParser):
         if len(none_notes) > 0:
             self.notes['none'] = none_notes
 
-        self.properties = dict([(prop.attrib.get('name'),prop.attrib.get('value')) for prop in self._findall('variableProperty')])
+        self.properties = dict([(prop.attrib.get('name'),testXMLValue(prop)) for prop in self._findall('variableProperty')])
         # related
         related = self._find('related')
         if related is not None:
