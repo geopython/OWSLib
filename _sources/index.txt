@@ -637,14 +637,7 @@ POSSIBILITY OF SUCH DAMAGE.
 Credits
 =======
 
- * Sean Gillies <sgillies@frii.com>
- * Julien Anguenot <ja@nuxeo.com>
- * Kai Lautaportti <kai.lautaportti@hexagonit.fi>
- * Dominic Lowe <D.Lowe@rl.ac.uk>
- * Jo Walsh <jo@frot.org>
- * Tom Kralidis <tomkralidis@hotmail.com>
- * Jachym Cepicky <jachym.cepicky@gmail.com>
- * Luca Cinquini <luca.cinquini@jpl.nasa.gov>
+.. include:: ../../CREDITS.txt
 
 .. _`Open Geospatial Consortium`: http://www.opengeospatial.org/
 .. _`OGC WMS`: http://www.opengeospatial.org/standards/wms
