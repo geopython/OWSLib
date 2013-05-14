@@ -17,7 +17,7 @@ class PyTest(TestCommand):
 
 
 
-readme = open('README.txt', 'r').read()
+readme = open('README.txt').read()
 
 setup(name          = 'OWSLib',
       version       = owslib.__version__,
