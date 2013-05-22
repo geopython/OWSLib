@@ -88,10 +88,10 @@ Test operations
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
     
-    >>> wms.get_operation_by_name('GetMap').methods
+    >>> wms.getOperationByName('GetMap').methods
     {'Get': {'url': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?SERVICE=WMS&'}}
     
-    >>> len(wms.get_operation_by_name('GetMap').formatOptions)
+    >>> len(wms.getOperationByName('GetMap').formatOptions)
     29
 
 Test exceptions

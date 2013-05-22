@@ -201,7 +201,7 @@ class WebMapService(object):
             >>> out.close()
 
         """        
-        base_url = self.get_operation_by_name('GetMap').methods[method]['url']
+        base_url = self.getOperationByName('GetMap').methods[method]['url']
         request = {'version': self.version, 'request': 'GetMap'}
         
         # check layers and styles
@@ -251,8 +251,8 @@ class WebMapService(object):
 
     def getfeatureinfo(self):
         raise NotImplementedError
-    
-    def get_operation_by_name(self, name): 
+
+    def getOperationByName(self, name): 
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
@@ -298,7 +298,7 @@ class ServiceProvider(object):
                 return item
         raise KeyError, "No content named %s" % name
 
-    def get_operation_by_name(self, name):
+    def getOperationByName(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
