@@ -11,7 +11,7 @@ from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
 import logging
-from owslib.util import openURL, testXMLValue
+from owslib.util import openURL, testXMLValue, extract_xml_list
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -238,8 +238,10 @@ class ServiceIdentification(object):
 class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
     def __init__(self, infoset):
-        self._root=infoset
+        self._root = infoset
+        self.name = testXMLValue(self._root.find(nspath('Name')))
         self.url = testXMLValue(self._root.find(nspath('OnlineResource')))
+        self.keywords = extract_xml_list(self._root.find(nspath('Keywords')))
 
 class ContentMetadata:
     """Abstraction for WFS metadata.
