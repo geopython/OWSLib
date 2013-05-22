@@ -37,6 +37,7 @@ Service Identification:
 Service Provider:
 
     >>> wfs.provider.name
+    'MapServer WFS'
 
     >>> wfs.provider.url
     'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3920&entryLang=en&portal=gdp'
