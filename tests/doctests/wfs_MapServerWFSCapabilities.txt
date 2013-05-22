@@ -6,7 +6,7 @@ Imports
     
 Fake a request to a WFS Server using saved doc from.
 
-    >>> xml = open_file(resource_file('mapserver-wfs-cap.xml'), 'r').read() 
+    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read() 
     >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
     
 Test capabilities
@@ -62,9 +62,9 @@ Test single item accessor
     >>> wfs['IBA'].boundingBox
     
     >>> wfs['IBA'].boundingBoxWGS84
-    (-141.238, 41.671799999999998, -52.667000000000002, 78.105900000000005)
+    (-141.238, 41.6718, -52.667, 78.1059)
     
-    >>> wfs['IBA'].crsOptions
+    >>> map(lambda x: x.getcode(), wfs['IBA'].crsOptions)
     ['EPSG:4326']
     
     >>> wfs['IBA'].verbOptions
