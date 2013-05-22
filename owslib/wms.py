@@ -19,7 +19,7 @@ import cgi
 import urllib2
 from urllib import urlencode
 from etree import etree
-from .util import openURL, testXMLValue
+from .util import openURL, testXMLValue, extract_xml_list
 from fgdc import Metadata
 from iso import MD_Metadata
 
@@ -268,7 +268,7 @@ class ServiceIdentification(object):
         self.version = version
         self.title = testXMLValue(self._root.find('Title'))
         self.abstract = testXMLValue(self._root.find('Abstract'))
-        self.keywords = [f.text for f in self._root.findall('KeywordList/Keyword')]
+        self.keywords = extract_xml_list(self._root.findall('KeywordList/Keyword'))
         self.accessconstraints = testXMLValue(self._root.find('AccessConstraints'))
         self.fees = testXMLValue(self._root.find('Fees'))
 
