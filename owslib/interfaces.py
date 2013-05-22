@@ -113,10 +113,6 @@ class ISensorObservationService(IService):
         """Make a request to the SOS, returns an XML document wrapped in a 
         Python file object."""
 
-class iSensorObservationServiceContentMetadata(IContentMetadata):
-    """Extension class for SOS specifics"""
-    pass
-
 # Second level metadata interfaces
 
 class IOperationMetadata:
@@ -135,7 +131,6 @@ class IMethodMetadata:
     url = property("""Method endpoint URL (string).""")
     # TODO: constraint
 
-
 class IContentMetadata:
     """OO-interface to content metadata.
     """
@@ -147,6 +142,10 @@ class IContentMetadata:
     crsOptions = property("""List of available coordinate/spatial reference systems (list).""")
     styles = property("""List of style dicts (list).""")
     timepositions=property("""List of times for which data is available""")
+
+class iSensorObservationServiceContentMetadata(IContentMetadata):
+    """Extension class for SOS specifics"""
+    pass
 
 # XXX: needed?
 
