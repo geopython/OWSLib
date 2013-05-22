@@ -1,0 +1,157 @@
+Using WaterML 1.1 for examples
+
+Imports
+
+	>>> from tests.utils import resource_file
+	>>> from owslib.waterml.wml11 import WaterML_1_1 as wml
+
+An example GetSites response (from cuahsi)
+	>>> f = open(resource_file('cuahsi_example_all_sites.xml'), 'r')
+	>>> sites = wml(f).response
+
+Can view the queryInfo structure for information about the query
+	>>> sites.query_info.creation_time
+	datetime.datetime(2009, 6, 12, 10, 47, 54, 531250, tzinfo=tzoffset(None, -25200))
+	>>> sites.query_info.notes
+	['ALL Sites(empty request)']
+	>>> sites.query_info.criteria.method_called
+	'GetSites'
+
+Get a list of codes for the sites returned
+	>>> codes = sites.site_codes
+	>>> codes
+	[['USU-LBR-Mendon'], ['USU-LBR-Paradise'], ['USU-LBR-ExpFarm'], ['USU-LBR-SFLower'], ['USU-LBR-EFLower'], ['USU-LBR-EFWeather'], ['USU-LBR-SFUpper'], ['USU-LBR-ParadiseRepeater'], ['USU-LBR-EFRepeater'], ['USU-LBR-Wellsville'], ['USU-LBR-Confluence'], ['10105900']]
+
+Get the names ofthe sites
+	>>> sites.site_names
+	['Little Bear River at Mendon Road near Mendon, Utah', 'Little Bear River at McMurdy Hollow near Paradise, Utah', 'Utah State University Experimental Farm near Wellsville, Utah', 'South Fork Little Bear River below Davenport Creek near Avon, Utah', 'East Fork Little Bear River at Paradise Canal Diversion near Avon, Utah', 'Little Bear River Upper Weather Station near Avon, Utah', 'South Fork Little Bear River above Davenport Creek near Avon, Utah', 'Radio Repeater near Paradise, Utah', 'East Fork Little Bear River Radio Repeater near Avon, Utah', 'Little Bear River near Wellsville, Utah', 'Little Bear River below Confluence of South and East Forks near Avon, Utah', 'Little Bear River at Paradise, Utah']
+
+Get a site to view it in more detail
+	>>> site = sites[codes[0][0]]
+	>>> site.geo_coords
+	[('-111.946402', '41.718473')]
+	>>> site.latitudes
+	['41.718473']
+	>>> site.longitudes
+	['-111.946402']
+	>>> info = site.site_info
+	>>> info.notes
+	[]
+	>>> info.site_properties
+	{'County': 'Cache', 'PosAccuracy_m': '1', 'State': 'Utah', 'Site Comments': 'Located below county road bridge at Mendon Road crossing'}
+	>>> info.altname
+	>>> info.elevation
+	'1345'
+
+An example GetSiteInfo response
+	>>> f.close()
+	>>> f = open(resource_file('cuahsi_example_siteinfo_multiple.xml'))
+	>>> sites = wml(f).response
+
+	>>> sites.query_info.criteria.method_called
+	'GetSiteInfo'
+
+List codes and names of the sites
+	>>> codes = sites.site_codes
+	>>> codes
+	[['USU-LBR-Mendon'], ['USU-LBR-Wellsville']]
+	>>> sites.site_names
+	['Little Bear River at Mendon Road near Mendon, Utah', 'Little Bear River near Wellsville, Utah']
+
+Get a site for a closer look
+	>>> site = sites[codes[1][0]]
+	>>> site.geo_coords
+	[('-111.917649', '41.643457')]
+
+Get the (first) catalog of series for the site
+	>>> catalog = site[0]
+
+Get a series from the catalog for a closer look
+	>>> series = catalog[3]
+	>>> series.properties
+	{}
+	>>> series.begin_date_time
+	datetime.datetime(2007, 11, 5, 14, 30)
+	>>> series.end_date_time
+	datetime.datetime(2008, 4, 5, 20, 30)
+	>>> series.method_id
+	'23'
+	>>> series.source_id
+	'2'
+	>>> series.value_count
+	'7309'
+	>>> series.value_type
+	'Field Observation'
+	>>> series.name
+	'Turbidity'
+	>>> series.organization
+	'Utah State University Utah Water Research Laboratory'
+
+List variable names and codes
+	>>> site.variable_names
+	['Battery voltage', 'Oxygen, dissolved percent of saturation', 'Oxygen, dissolved', 'Specific conductance, unfiltered', 'Phosphorus, total as P', 'pH, unfiltered', 'Phosphorus, total as P, filtered', 'Turbidity', 'Solids, total Suspended', 'Gage height', 'Temperature']
+	>>> site.variable_codes
+	['USU7', 'USU6', 'USU5', 'USU4', 'USU3', 'USU41', 'USU9', 'USU8', 'USU13', 'USU34', 'USU36', 'USU10', 'USU33', 'USU32', 'USU35', 'USU40', 'USU39']
+
+Get a variable by its code
+	>>> variable = site['USU7']
+	>>> variable.variable_name
+	'Turbidity'
+	>>> variable.properties
+	{}
+	>>> variable.speciation
+	'Not Applicable'
+	>>> variable.unit.name
+	'nephelometric turbidity units'
+	>>> variable.time_scale.unit.name
+	'second'
+
+Example GetValues response
+	>>> f.close()
+	>>> f = open(resource_file('cuahsi_example_get_values.xml'))
+	>>> series = wml(f).response
+
+	>>> series.query_info.criteria.method_called
+	'GetValuesForASite'
+
+List the names of the series returned (usually None)
+	>>> series.series_names
+	[None, None, None, None, None, None, None, None, None, None, None, None]
+
+List the variables and their codes
+	>>> series.variable_names
+	['Battery voltage', 'Turbidity', 'Temperature', 'Gage height', 'Battery Voltage']
+	>>> codes = series.variable_codes
+	>>> codes
+	['USU7', 'USU6', 'USU5', 'USU4', 'USU3', 'USU9', 'USU8', 'USU13', 'USU12', 'USU11', 'USU10', 'SDSC45']
+
+Get variables by code
+	>>> var = series.get_series_by_variable(var_code=codes[3])
+
+Get the first values set from the first variable retrieved from the code
+	>>> vals = var[0].values[0]
+
+List (in tuple) the dates and their corresponding measurements
+	>>> vals.get_date_values()
+	[(datetime.datetime(2005, 8, 5, 0, 0), '34.53'), (datetime.datetime(2005, 8, 5, 0, 30), '37.12'), (datetime.datetime(2005, 8, 5, 1, 0), '35.97'), (datetime.datetime(2005, 8, 5, 1, 30), '35.78'), (datetime.datetime(2005, 8, 5, 2, 0), '35.68'), (datetime.datetime(2005, 8, 5, 2, 30), '36.08'), (datetime.datetime(2005, 8, 5, 3, 0), '37.8'), (datetime.datetime(2005, 8, 5, 3, 30), '37.93'), (datetime.datetime(2005, 8, 5, 4, 0), '38.88'), (datetime.datetime(2005, 8, 5, 4, 30), '37.34'), (datetime.datetime(2005, 8, 5, 5, 0), '35.15'), (datetime.datetime(2005, 8, 5, 5, 30), '35.96'), (datetime.datetime(2005, 8, 5, 6, 0), '35.62'), (datetime.datetime(2005, 8, 5, 6, 30), '34.72'), (datetime.datetime(2005, 8, 5, 7, 0), '34.7'), (datetime.datetime(2005, 8, 5, 7, 30), '33.54'), (datetime.datetime(2005, 8, 5, 8, 0), '34.98'), (datetime.datetime(2005, 8, 5, 8, 30), '31.65'), (datetime.datetime(2005, 8, 5, 9, 0), '32.49'), (datetime.datetime(2005, 8, 5, 9, 30), '32.78'), (datetime.datetime(2005, 8, 5, 10, 0), '30.58'), (datetime.datetime(2005, 8, 5, 10, 30), '32.8'), (datetime.datetime(2005, 8, 5, 11, 0), '31.83'), (datetime.datetime(2005, 8, 5, 11, 30), '30.71'), (datetime.datetime(2005, 8, 5, 12, 0), '30.82'), (datetime.datetime(2005, 8, 5, 12, 30), '29.72'), (datetime.datetime(2005, 8, 5, 13, 0), '27.05'), (datetime.datetime(2005, 8, 5, 13, 30), '25.5'), (datetime.datetime(2005, 8, 5, 14, 0), '24.69'), (datetime.datetime(2005, 8, 5, 14, 30), '26.03'), (datetime.datetime(2005, 8, 5, 15, 0), '25.55'), (datetime.datetime(2005, 8, 5, 15, 30), '25.96'), (datetime.datetime(2005, 8, 5, 16, 0), '24.72'), (datetime.datetime(2005, 8, 5, 16, 30), '23.36'), (datetime.datetime(2005, 8, 5, 17, 0), '24.21'), (datetime.datetime(2005, 8, 5, 17, 30), '25.61'), (datetime.datetime(2005, 8, 5, 18, 0), '24.73'), (datetime.datetime(2005, 8, 5, 18, 30), '25.73'), (datetime.datetime(2005, 8, 5, 19, 0), '24.76'), (datetime.datetime(2005, 8, 5, 19, 30), '24.96'), (datetime.datetime(2005, 8, 5, 20, 0), '25.69'), (datetime.datetime(2005, 8, 5, 20, 30), '27.34'), (datetime.datetime(2005, 8, 5, 21, 0), '27.14'), (datetime.datetime(2005, 8, 5, 21, 30), '27.7'), (datetime.datetime(2005, 8, 5, 22, 0), '28.88'), (datetime.datetime(2005, 8, 5, 22, 30), '30.44'), (datetime.datetime(2005, 8, 5, 23, 0), '32.14'), (datetime.datetime(2005, 8, 5, 23, 30), '34.02'), (datetime.datetime(2005, 8, 6, 0, 0), '33.61')]
+
+Example GetVariables response
+	>>> f.close()
+	>>> f = open(resource_file('cuahsi_example_get_variables.xml'))
+	>>> varis = wml(f).response
+
+Just a list of variables
+	>>> codes = varis.variable_codes
+	>>> codes
+	['USU3', 'USU4', 'USU5', 'USU6', 'USU7', 'USU8', 'USU9', 'USU10', 'USU11', 'USU12', 'USU13', 'USU14', 'USU15', 'USU16', 'USU17', 'USU18', 'USU19', 'USU20', 'USU21', 'USU22', 'USU23', 'USU24', 'USU25', 'USU26', 'USU27', 'USU28', 'USU29', 'USU30', 'USU31', 'USU32', 'USU33', 'USU34', 'USU35', 'USU36', 'USU37', 'USU38', 'USU39', 'USU40', 'USU41', 'USU42', 'USU43', 'SDSC45']
+	>>> varis.variable_names
+	['Battery voltage', 'Temperature', 'Gage height', 'Solids, total Suspended', 'Specific conductance, unfiltered', 'Oxygen, dissolved', 'Wind direction', 'Oxygen, dissolved percent of saturation', 'Radiation, incoming shortwave', 'Relative humidity', 'Phosphorus, total as P', 'pH, unfiltered', 'Battery Voltage', 'Phosphorus, total as P, filtered', 'Barometric pressure', 'Discharge', 'Turbidity', 'Precipitation', 'Wind speed']
+	>>> var = varis[codes[10]]
+	>>> var.variable_name
+	'Gage height'
+	>>> var.no_data_value
+	'-9999'
+	>>> var.properties
+	{}
+	>>> var.unit.name
+	'international foot'

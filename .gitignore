@@ -3,3 +3,7 @@ build/
 dist
 docs/build
 OWSLib.egg-info
+.coverage
+!.gitkeep
+tests/scratch/*
+
