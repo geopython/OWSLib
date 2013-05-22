@@ -6,4 +6,6 @@ OWSLib.egg-info
 .coverage
 !.gitkeep
 tests/scratch/*
+pytest-*
+pytest_cov-*
 
