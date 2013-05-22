@@ -1,0 +1,54 @@
+Imports and initialize
+
+    >>> from owslib.wfs import WebFeatureService
+    >>> from lxml import etree
+    >>> from tests.utils import resource_file
+
+    >>> getcapsin = open(resource_file("wfs_HSRS_GetCapabilities_1_1_0.xml")).read()
+    >>> wfs = WebFeatureService('http://gis.bnhelp.cz/ows/crwfs', xml=getcapsin, version='1.1.0')
+
+Test the capabilities info
+    >>> wfs.identification.service
+    'OGC WFS'
+    >>> wfs.identification.version
+    '1.1.0'
+    >>> wfs.identification.title
+    'Help Service Gazeteer'
+    >>> wfs.identification.abstract
+    'Vyhledavani sidel WFS'
+    >>> wfs.identification.keywords
+    ['Czech republic', 'gazeeteer']
+    >>> wfs.identification.fees
+    'none'
+    >>> wfs.identification.accessconstraints
+    'for non profit use'
+    >>> wfs.provider.name
+    'Help Service Remote Sensing, ltd.'
+    >>> wfs.provider.url
+    'http://www.hsrs.cz'
+    >>> wfs.provider.contact.email
+    >>> wfs.provider.contact.phone
+    >>> wfs.provider.contact.name
+    u'Stanislav Hol\xfd'
+    >>> wfs.provider.contact.organization
+    >>> wfs.provider.contact.city
+    >>> wfs.provider.contact.region
+    >>> wfs.provider.contact.postcode
+    >>> wfs.provider.contact.country
+
+Test the getfeature method
+
+    >>> wfs.contents.keys()
+    ['kraje', 'okresy', 'nuts1', 'orp', 'nuts2', 'states', 'sidla', 'nuts3']
+
+    >>> wfs.contents['okresy'].crsOptions[0].getcodeurn()
+    'urn:ogc:def:crs:EPSG::4326'
+
+    >>> wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2)
+    'http://gis.bnhelp.cz/ows/crwfs?maxfeatures=2&typename=okresy&version=1.1.0&request=GetFeature&service=WFS'
+
+    >>> wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2, bbox=[15,49,16,51,'urn:ogc:def:crs:EPSG:4326'])
+    'http://gis.bnhelp.cz/ows/crwfs?service=WFS&maxfeatures=2&request=GetFeature&typename=okresy&version=1.1.0&bbox=49%2C15%2C51%2C16%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326'
+
+    >>> wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2, bbox=[-685336,-993518,-684996,-993285])
+    'http://gis.bnhelp.cz/ows/crwfs?service=WFS&maxfeatures=2&request=GetFeature&typename=okresy&version=1.1.0&bbox=-993518%2C-685336%2C-993285%2C-684996%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326'

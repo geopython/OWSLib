@@ -1,0 +1,143 @@
+
+Imports
+
+    >>> from tests.utils import resource_file
+    >>> from owslib.wmts import WebMapTileService
+    
+Fake a request to a WMTS Server using saved doc from 
+http://geonode.iwlearn.org/geoserver/gwc/service/wmts?REQUEST=GetCapabilities
+
+    >>> xml = open(resource_file('geoserver21-wmts-cap.xml'), 'r').read() 
+    >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
+    
+Test capabilities
+-----------------
+    >>> wmts.identification.type
+    'OGC WMTS'
+    >>> wmts.identification.version
+    '1.0.0'
+    >>> wmts.identification.title
+    'Web Map Tile Service - GeoWebCache'
+    >>> wmts.identification.abstract
+
+    >>> wmts.identification.keywords
+    []
+    >>> wmts.identification.accessconstraints
+
+    >>> wmts.identification.fees
+
+
+Service Provider:
+
+    >>> wmts.provider.name
+    'http://geonode.iwlearn.org/geoserver/gwc/service/wmts'
+    >>> wmts.provider.url
+    'http://geonode.iwlearn.org/geoserver/gwc/service/wmts'
+    
+Check contact info
+    >>> wmts.provider.contact.name
+    'GeoWebCache User'
+    >>> wmts.provider.contact.position
+
+
+Test available content layers
+    >>> list(wmts.contents)
+    ['geonode:GH_Areas_Protegidas4326', 'geonode:GH_Manglares4326', 'geonode:GH_Sitios_Prioritarios_TNC4326', 'geonode:asfalto', 'geonode:GH_Anidamiento_de_Tortugas_Marinas4326', 'geonode:abril', 'geonode:bcp_wgs84_0511', 'geonode:GH_Est_muestreo_propuestas4326', 'geonode:red_hidrografica', 'geonode:TB_Aquifers_New', 'geonode:FEOWv1_TNC', 'geonode:MANGROVES', 'geonode:GH_Pastos_Marinos4326', 'geonode:GH_Departamentos4326', 'geonode:GH_Est_muestreo4326', 'geonode:GIS_OTHER_VEC_ISOLINES', 'geonode:SEAGRASSES', 'geonode:GH_Descargas4326', 'geonode:XYSudan', 'geonode:GH_Otras_enfermedades_Corales4326', 'geonode:XYDjibouti', 'geonode:GH_Distribucion_de_Manati4326', 'geonode:GH_Playas_arenosas4326', 'geonode:mapa_geologico_provincias4326', 'geonode:GIS_OTHER_VEC_CASP_PIPELIN', 'geonode:Longhurst_world_v4_2010', 'geonode:Diktas_Project_Area_1', 'geonode:mapa_geologico_fallas4326', 'geonode:area_de_estudio_1', 'geonode:LMEs_64', 'geonode:GH_Blanqueamiento_Corales4326', 'geonode:XYYemen', 'geonode:giwa_lme', 'geonode:undersea_features_2008', 'geonode:meow_ecos', 'geonode:World_Maritime_Boundaries_v6_1_20110512', 'geonode:GH_Arrecifes_Coralinos4326', 'geonode:GIS_OTHER_VEC_CASP_OIL_PNT', 'geonode:igrac_tba_WL_201105_projected', 'geonode:World_Fao_Zones', 'geonode:GH_Desove_Peces4326', 'geonode:abc1', 'geonode:GH_Estuarios_y_Lagunas4326', 'geonode:glwd_1', 'geonode:GH_Anidamiento_de_aves4326', 'geonode:GH_Descargas_2007_4326', 'geonode:GH_Usos_suelo_SOTERLAC4326', 'geonode:mapa_geologico4326', 'geonode:seaVoX_sea_area_polygons', 'geonode:hotspots_revisited_2004_polygons', 'geonode:Basins', 'geonode:GH_Limites_Administrativos_Pol4326', 'geonode:GH_Paises_Pol4326', 'geonode:GH_ecosistemas_terrestres4326', 'geonode:wribasin', 'geonode:ContinentalMargins', 'geonode:World_Seas', 'geonode:GH_Paises_Region_Pol4326']
+
+Test TileMatrixSet variants
+    >>> wmts.tilematrixsets.keys()
+    ['GoogleMapsCompatible', 'EPSG:4326', 'GlobalCRS84Scale', 'EPSG:900913', 'GoogleCRS84Quad', 'GlobalCRS84Pixel']
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].identifier
+    'GoogleMapsCompatible'
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].crs
+    'urn:ogc:def:crs:EPSG::900913'
+    >>> sorted(wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix.keys())
+    ['GoogleMapsCompatible:0', 'GoogleMapsCompatible:1', 'GoogleMapsCompatible:10', 'GoogleMapsCompatible:11', 'GoogleMapsCompatible:12', 'GoogleMapsCompatible:13', 'GoogleMapsCompatible:14', 'GoogleMapsCompatible:15', 'GoogleMapsCompatible:16', 'GoogleMapsCompatible:17', 'GoogleMapsCompatible:18', 'GoogleMapsCompatible:19', 'GoogleMapsCompatible:2', 'GoogleMapsCompatible:20', 'GoogleMapsCompatible:3', 'GoogleMapsCompatible:4', 'GoogleMapsCompatible:5', 'GoogleMapsCompatible:6', 'GoogleMapsCompatible:7', 'GoogleMapsCompatible:8', 'GoogleMapsCompatible:9']
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].identifier
+    'GoogleMapsCompatible:0'
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].scaledenominator
+    559082264.0287179
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].topleftcorner
+    (-20037508.34, 20037508.0)
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].tilewidth
+    256
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].tileheight
+    256
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].matrixwidth
+    1
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].matrixheight
+    1
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].identifier
+    'GoogleMapsCompatible:17'
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].scaledenominator
+    4265.459167699568
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].topleftcorner
+    (-20037508.34, 20037508.0)
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].tilewidth
+    256
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].tileheight
+    256
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].matrixwidth
+    131072
+    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].matrixheight
+    131072
+
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].identifier
+    'GlobalCRS84Scale'
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].crs
+    'urn:ogc:def:crs:EPSG::4326'
+    >>> sorted(wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix.keys())
+    ['GlobalCRS84Scale:0', 'GlobalCRS84Scale:1', 'GlobalCRS84Scale:10', 'GlobalCRS84Scale:11', 'GlobalCRS84Scale:12', 'GlobalCRS84Scale:13', 'GlobalCRS84Scale:14', 'GlobalCRS84Scale:15', 'GlobalCRS84Scale:16', 'GlobalCRS84Scale:17', 'GlobalCRS84Scale:18', 'GlobalCRS84Scale:19', 'GlobalCRS84Scale:2', 'GlobalCRS84Scale:20', 'GlobalCRS84Scale:3', 'GlobalCRS84Scale:4', 'GlobalCRS84Scale:5', 'GlobalCRS84Scale:6', 'GlobalCRS84Scale:7', 'GlobalCRS84Scale:8', 'GlobalCRS84Scale:9']
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:0'].identifier
+    'GlobalCRS84Scale:0'
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:0'].scaledenominator
+    500000000.0
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:0'].topleftcorner
+    (90.0, -180.0)
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:0'].tilewidth
+    256
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:0'].tileheight
+    256
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:0'].matrixwidth
+    2
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:0'].matrixheight
+    1
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:20'].identifier
+    'GlobalCRS84Scale:20'
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:20'].scaledenominator
+    100.0
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:20'].topleftcorner
+    (90.0, -180.0)
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:20'].tilewidth
+    256
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:20'].tileheight
+    256
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:20'].matrixwidth
+    5590823
+    >>> wmts.tilematrixsets['GlobalCRS84Scale'].tilematrix['GlobalCRS84Scale:20'].matrixheight
+    2795412
+
+Test single item accessor
+
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].title
+    'GOH Areas Protegidas'
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].boundingBoxWGS84
+    (-92.1708755499344, 12.9867324851599, -84.2739865773823, 18.4886492579626)
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].id
+    'geonode:GH_Areas_Protegidas4326'
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].styles
+    {'GH_Areas_Protegidas4326': {'isDefault': True}}
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].formats
+    ['image/png', 'image/jpeg']
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].tilematrixsets
+    ['EPSG:4326', 'EPSG:900913']
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].infoformats
+    ['text/plain', 'text/html', 'application/vnd.ogc.gml']
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].resourceURLs
+    []
+
+Test operations
+    # TODO
+
+Test the gettile methods
+    # TODO

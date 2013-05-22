@@ -11,6 +11,7 @@ from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadat
 from owslib.etree import etree
 from owslib.util import nspath, testXMLValue
 from owslib.crs import Crs
+from owslib.feature import WebFeatureService_
 
 #other imports
 import cgi
@@ -45,7 +46,7 @@ class ServiceException(Exception):
     pass
 
 
-class WebFeatureService_2_0_0(object):
+class WebFeatureService_2_0_0(WebFeatureService_):
     """Abstraction for OGC Web Feature Service (WFS).
 
     Implements IWebFeatureService.
@@ -175,41 +176,23 @@ class WebFeatureService_2_0_0(object):
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
         """
-        #log.debug(self.getOperationByName('GetFeature'))
-        base_url = self.getOperationByName('GetFeature').methods[method]['url']
 
+        url = data = None
+        if typename and type(typename) == type(""):
+            typename = [typename]
         if method.upper() == "GET":
-            base_url = base_url if base_url.endswith("?") else base_url+"?"
-        request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
-        
-        # check featureid
-        if featureid:
-            request['featureid'] = ','.join(featureid)
-        elif bbox:
-#            request['bbox'] = ','.join([str(x) for x in bbox])
-            request['query'] ='<Query xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" xmlns:csml="http://ndg.nerc.ac.uk/csml"><ogc:Filter><ogc:BBOX><gml:Envelope srsName="WGS84"><gml:lowerCorner>%s %s</gml:lowerCorner><gml:upperCorner>%s %s</gml:upperCorner></gml:Envelope></ogc:BBOX></ogc:Filter></Query>'%(bbox[1],bbox[0],bbox[3],bbox[2])
-        elif filter:
-            request['query'] = str(filter)
-        if typename:
-            typename = [typename] if type(typename) == type("") else typename
-            request['typename'] = ','.join(typename)
-        if propertyname: 
-            request['propertyname'] = ','.join(propertyname)
-        if featureversion: 
-            request['featureversion'] = str(featureversion)
-        if maxfeatures: 
-            request['maxfeatures'] = str(maxfeatures)
-        if storedQueryID: 
-            request['storedQuery_id']=str(storedQueryID)
-            for param in storedQueryParams:
-                request[param]=storedQueryParams[param]
-                
-        data = urlencode(request)
+            (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid, 
+                    featureversion, propertyname, maxfeatures,storedQueryID, storedQueryParams)
+            log.debug('GetFeature WFS GET url %s'% url)
+        else:
+            (url,data) = self.getPOSTGetFeatureRequest()
+
+
 
         if method == 'Post':
             u = urlopen(base_url, data=data)
         else:
-            u = urlopen(base_url + data)
+            u = urlopen(url)
         
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -235,6 +218,7 @@ class WebFeatureService_2_0_0(object):
             if have_read:
                 return StringIO(data)
             return u
+
 
     def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get'),**kwargs):
         ''' the WFS GetPropertyValue method'''         
@@ -367,7 +351,8 @@ class ContentMetadata:
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('OtherCRS',ns=WFS_NAMESPACE))]
         defaultCrs =  elem.findall(nspath('DefaultCRS',ns=WFS_NAMESPACE))
         if len(defaultCrs) > 0:
-            self.crsOptions.insert(-1,Crs(defaultCrs[0].text))
+            self.crsOptions.insert(0,Crs(defaultCrs[0].text))
+
 
         # verbs
         self.verbOptions = [op.tag for op \

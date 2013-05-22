@@ -1,0 +1,2 @@
+python-dateutil==2.1
+pytz==2012j

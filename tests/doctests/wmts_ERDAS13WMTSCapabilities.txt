@@ -1,0 +1,189 @@
+
+Imports
+
+    >>> from tests.utils import resource_file
+    >>> from owslib.wmts import WebMapTileService
+    
+Fake a request to a WMTS Server using saved doc
+
+    >>> xml = open(resource_file('erdas-iws13-wmts-cap.xml'), 'r').read() 
+    >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
+    
+Test capabilities
+-----------------
+    >>> wmts.identification.type
+    'OGC WMTS'
+    >>> wmts.identification.version
+    '1.0.0'
+    >>> wmts.identification.title
+    'Service powered by ERDAS APOLLO Essentials 2013'
+    >>> str.strip(wmts.identification.abstract)
+    'Service powered by ERDAS APOLLO Essentials 2013, the fastest most efficient image server available'
+    >>> wmts.identification.keywords
+    ['ECW', 'ECWP', 'ODTF', 'JPEG 2000']
+    >>> wmts.identification.accessconstraints
+    'None'
+    >>> wmts.identification.fees
+    'None'
+
+Service Provider:
+
+    >>> wmts.provider.name
+    'Intergraph Geospatial Server'
+
+    >>> wmts.provider.url
+    'http://geospatial.intergraph.com/'
+    
+Check contact info
+    >>> wmts.provider.contact.name
+    'Chris Tweedie'
+    >>> wmts.provider.contact.position
+    'APOLLO Essentials Product Owner'
+
+    # TODO: check if address can be duplicated
+    >>> wmts.provider.contact.address
+    'Norcross, GA 30092-2500 USA'
+    >>> wmts.provider.contact.region
+    'GA'
+    >>> wmts.provider.contact.email
+    'erdasinfo@intergraph.com'
+    >>> wmts.provider.contact.city
+    'Norcross'
+    >>> wmts.provider.contact.postcode
+    '30092-2500'
+    >>> wmts.provider.contact.country
+    'USA'
+    >>> wmts.provider.contact.phone
+    '+1 770 776 3400'
+    >>> wmts.provider.contact.fax
+    '+1 770 776 3500'
+
+Test available content layers
+
+    >>> list(wmts.contents)
+    ['images_surdec-matched.ecw', 'sampleiws_images_geodetic_worldgeodemo.ecw', 'images_vegas_las_vegas_mosaic_epsg_32107.ecw', 'images_world_Landsat742.ecw', 'images_CharlestonCoSIDS-mosaic.ecw']
+
+Test TileMatrixSet variants
+    # TODO: check individual values
+    >>> wmts.tilematrixsets.keys()
+    ['ogc:1.0:googlemapscompatible', 'ogc:1.0:googlecrs84quad', 'googlemapscompatibleext2:epsg:3857', 'ogc:1.0:globalcrs84scale', 'ogc:1.0:globalcrs84pixel']
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].identifier
+    'ogc:1.0:googlemapscompatible'
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].crs
+    'urn:ogc:def:crs:EPSG:6.18:3:3857'
+    >>> sorted(wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix.keys())
+    ['0', '1', '10', '11', '12', '13', '14', '15', '16', '17', '18', '2', '3', '4', '5', '6', '7', '8', '9']
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['0'].identifier
+    '0'
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['0'].scaledenominator
+    559082264.0287178
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['0'].topleftcorner
+    (20037508.34279, -20037508.34279)
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['0'].tilewidth
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['0'].tileheight
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['0'].matrixwidth
+    1
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['0'].matrixheight
+    1
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['5'].identifier
+    '5'
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['5'].scaledenominator
+    17471320.75089743
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['5'].topleftcorner
+    (20037508.34279, -20037508.34279)
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['5'].tilewidth
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['5'].tileheight
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['5'].matrixwidth
+    32
+    >>> wmts.tilematrixsets['ogc:1.0:googlemapscompatible'].tilematrix['5'].matrixheight
+    32
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].identifier
+    'ogc:1.0:googlecrs84quad'
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].crs
+    'urn:ogc:def:crs:OGC:1.3:CRS84'
+    >>> sorted(wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix.keys())
+    ['0', '1', '10', '11', '12', '13', '14', '15', '16', '17', '18', '2', '3', '4', '5', '6', '7', '8', '9']
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['0'].identifier
+    '0'
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['0'].topleftcorner
+    (-180.0, 180.0)
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['0'].tilewidth
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['0'].tileheight
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['0'].matrixwidth
+    1
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['0'].matrixheight
+    1
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['8'].identifier
+    '8'
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['8'].scaledenominator
+    2183915.093862179
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['8'].topleftcorner
+    (-180.0, 90.0)
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['8'].tilewidth
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['8'].tileheight
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['8'].matrixwidth
+    256
+    >>> wmts.tilematrixsets['ogc:1.0:googlecrs84quad'].tilematrix['8'].matrixheight
+    256
+
+Test single item accessor
+
+    >>> wmts['images_surdec-matched.ecw'].id
+    'images_surdec-matched.ecw'
+    >>> wmts['images_surdec-matched.ecw'].title
+    'surdec-matched.ecw'
+
+    # check something in the middle
+    >>> wmts['images_vegas_las_vegas_mosaic_epsg_32107.ecw'].title
+    'las_vegas_mosaic_epsg_32107.ecw'
+    >>> wmts['images_vegas_las_vegas_mosaic_epsg_32107.ecw'].boundingBoxWGS84
+    (-115.33166278778, 36.089104325775, -115.145379425753, 36.276758064006)
+    >>> wmts['images_vegas_las_vegas_mosaic_epsg_32107.ecw'].id
+    'images_vegas_las_vegas_mosaic_epsg_32107.ecw'
+    >>> wmts['images_vegas_las_vegas_mosaic_epsg_32107.ecw'].styles
+    {'default': {'isDefault': True}}
+    >>> wmts['images_vegas_las_vegas_mosaic_epsg_32107.ecw'].formats
+    ['image/png', 'image/jpeg', 'image/png8', 'image/jpegxr', 'image/webp']
+    >>> wmts['images_vegas_las_vegas_mosaic_epsg_32107.ecw'].tilematrixsets
+    ['ogc:1.0:globalcrs84pixel', 'ogc:1.0:globalcrs84scale', 'ogc:1.0:googlemapscompatible']
+
+    >>> wmts['images_CharlestonCoSIDS-mosaic.ecw'].id
+    'images_CharlestonCoSIDS-mosaic.ecw'
+    >>> wmts['images_CharlestonCoSIDS-mosaic.ecw'].title
+    'CharlestonCoSIDS-mosaic.ecw'
+
+Expect a KeyError for invalid names
+
+    >>> wmts['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wmts.operations]
+    ['GetCapabilities', 'GetTile']
+    
+    >>> wmts.getOperationByName('GetTile').methods
+    {'Get': {'url': 'http://209.156.31.30/erdas-iws/ogc/wmts/?', 'encodings': ['KVP']}}
+
+Test the gettile methods
+
+    # TODO - more checks
+    >>> wmts.buildTileRequest(layer='images_surdec-matched.ecw', tilematrix='0', row=0, column=0)
+    'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=images_surdec-matched.ecw&STYLE=default&TILEMATRIXSET=ogc%3A1.0%3Aglobalcrs84pixel&TILEMATRIX=0&TILEROW=0&TILECOL=0&FORMAT=image%2Fpng'
+    >>> from PIL import Image
+    >>> import cStringIO
+    >>> tile000 = wmts.gettile(layer='images_surdec-matched.ecw', tilematrix='0', row=0, column=0)
+    >>> im = cStringIO.StringIO(tile000.read())
+    >>> image = Image.open(im)
+    >>> image.size
+    (256, 256)

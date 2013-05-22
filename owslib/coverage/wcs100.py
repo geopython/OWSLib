@@ -255,8 +255,8 @@ class ContentMetadata(object):
         self._elem=elem
         self._service=service
         self.id=elem.find(ns('name')).text
-        self.title =elem.find(ns('label')).text       
-        self.abstract=elem.find(ns('description')).text       
+        self.title = testXMLValue(elem.find(ns('label')))
+        self.abstract= testXMLValue(elem.find(ns('description')))
         self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]        
         self.boundingBox=None #needed for iContentMetadata harmonisation
         self.boundingBoxWGS84 = None        
