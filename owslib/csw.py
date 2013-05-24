@@ -208,7 +208,7 @@ class CatalogueServiceWeb:
         
             etree.SubElement(node1, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
     
-            self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql)
+            self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql, None)
     
             if sortby is not None:
                 fes.setsortby(node1, sortby)
@@ -265,6 +265,70 @@ class CatalogueServiceWeb:
         if self.exceptionreport is None:
             self.results = {}
             self.records = {}
+            self._parserecords(outputschema, esn)
+
+    def getrecordsbyfilter(self, constrains=[], typenames='csw:Record', esn='full', outputschema=namespaces['csw'], format=outputformat, maxrecords=10, resulttype='results'):
+        """
+
+        Construct and process a  GetRecordByFilter request
+
+        Parameters
+        ----------
+
+        - constrains: the list of constrains
+        - typenames: the typeNames to query against (default is csw:Record)
+        - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'full')
+        - outputschema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
+        - format: the outputFormat (default is 'application/xml')
+        - maxrecords: the maximum number of records to return. No records are returned if 0 (default is 10)
+        - resulttype: the resultType 'hits', 'results', 'validate' (default is 'results')
+
+        """
+
+        # construct request
+        node0 = self._setrootelement('csw:GetRecords')
+        if etree.__name__ != 'lxml.etree':  # apply nsmap manually
+            node0.set('xmlns:ows', namespaces['ows'])
+            node0.set('xmlns:gmd', namespaces['gmd'])
+            node0.set('xmlns:dif', namespaces['dif'])
+            node0.set('xmlns:fgdc', namespaces['fgdc'])
+        node0.set('outputSchema', outputschema)
+        node0.set('outputFormat', format)
+        node0.set('version', self.version)
+        node0.set('service', self.service)
+        node0.set('resultType', resulttype)
+        node0.set('maxRecords', str(maxrecords))        
+        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+
+        node1 = etree.SubElement(node0, util.nspath_eval('csw:Query', namespaces))
+        node1.set('typeNames', typenames)
+    
+        etree.SubElement(node1, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
+        node2 = etree.SubElement(node1, util.nspath_eval('csw:Constraint', namespaces))
+        node2.set('version', '1.1.0')        
+        
+        if len(constrains) > 0: 
+            flt = fes.FilterRequest()
+            node2.append(flt.setConstrain(constrains))
+            
+        self.request = util.xml2string(etree.tostring(node0))
+
+        self._invoke()
+ 
+        if self.exceptionreport is None:
+            self.results = {}
+    
+            # process search results attributes
+            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsMatched')
+            self.results['matches'] = int(util.testXMLValue(val, True))
+            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsReturned')
+            self.results['returned'] = int(util.testXMLValue(val, True))
+            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('nextRecord')
+            self.results['nextrecord'] = int(util.testXMLValue(val, True))
+    
+            # process list of matching records
+            self.records = {}
+
             self._parserecords(outputschema, esn)
 
     def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None, bbox=None, keywords=[], cql=None, identifier=None):
@@ -376,6 +440,27 @@ class CatalogueServiceWeb:
                 self._parsetransactionsummary()
                 self._parseinsertresult()
 
+    def getService_urls(self, service_string=None):
+        """
+
+        Return easily identifiable URLs for all service types
+
+        Parameters
+        ----------
+
+        - service_string: a URI to lookup
+
+        """
+        
+        urls=[]
+        for key,rec in self.records.iteritems():
+            #create a generator object, and iterate through it until the match is found
+            #if not found, gets the default value (here "none")
+            url = next((d['url'] for d in rec.references if d['scheme'] == service_string), None)
+            if url is not None:
+                urls.append(url)
+        return urls
+
     def _parseinsertresult(self):
         self.results['insertresults'] = []
         for i in self._exml.findall(util.nspath_eval('csw:InsertResult', namespaces)):
@@ -452,7 +537,7 @@ class CatalogueServiceWeb:
             else:  # construct a Filter request
                 flt = fes.FilterRequest()
                 node0.append(flt.set(qtype=qtype, keywords=keywords, propertyname=propertyname,bbox=bbox))
-
+    
     def _invoke(self):
         # do HTTP request
         self.response = util.http_post(self.url, self.request, self.lang, self.timeout)

@@ -118,6 +118,52 @@ class FilterRequest(object):
                     self._setpropertyislike(node0, propertyname, '%%%s%%' % keywords[0])
     
         return node0
+        
+    def setConstrain(self, constrain):
+        """
+
+        Construct and process a  GetRecords request
+    
+        Parameters
+        ----------
+
+        - constrain: a csw.CswConstrains object, which hold a list of different object like bbox
+
+        """
+
+        # construct
+        node0 = etree.Element(util.nspath_eval('ogc:Filter', namespaces))
+        if len(constrain) == 1:
+            node1 = None
+        else:
+            node1 = etree.SubElement(node0, util.nspath_eval('ogc:Or', namespaces)) # in this constrains array, the relationship is OR
+            
+        for subList in constrain: # iterate all the constrain objects.
+            # set a keyword query if passed
+            if isinstance(subList, PropertyParent) or isinstance(subList, PropertyIsLike) or isinstance(subList, PropertyIsNull) or isinstance(subList, PropertyIsBetween) or isinstance(subList, BBox):
+                if node1 is not None:
+                    node1.append(subList.toXML())
+                else:
+                    node0.append(subList.toXML())  
+            elif len(subList) > 0:
+                if len(subList) == 1: # sublist only have 1 element
+                    node2 = None
+                else: # sublist only have multiple element
+                    if node1 is not None:
+                        node2 = etree.SubElement(node1, util.nspath_eval('ogc:And', namespaces)) # in this constrains array, the relationship is OR
+                    else:
+                        node2 = etree.SubElement(node0, util.nspath_eval('ogc:And', namespaces)) # in this constrains array, the relationship is OR
+                    
+                for i in subList:
+                    if node2 is not None:
+                        node2.append(i.toXML())
+                    else:
+                        if node1 is not None:
+                            node1.append(i.toXML())
+                        else:
+                            node0.append(i.toXML())
+                 
+        return node0
 
     def _setpropertyisequalto(self, parent, propertyname, literal, matchcase=True):
         """
@@ -182,6 +228,22 @@ class FilterRequest(object):
         tmp.set('escapeChar', escapechar)
         etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
         etree.SubElement(tmp, util.nspath_eval('ogc:Literal', namespaces)).text = literal
+        
+    def _getStartAndEndDate(self, startAndEndD=""):
+        """
+
+        get a array with 2 elements: startDate, endDate
+
+        Parameters
+        ----------
+
+        - startAndEndD: a date string like [2009-02-01 TO 2100-01-01]
+
+        """
+        dateArray = []
+        dateArray = startAndEndD.split()
+        return dateArray
+
 
 class FilterCapabilities(object):
     """ Abstraction for Filter_Capabilities """
@@ -244,3 +306,102 @@ def setsortby(parent, propertyname, order='ASC'):
     tmp2 = etree.SubElement(tmp, util.nspath_eval('ogc:SortProperty', namespaces))
     etree.SubElement(tmp2, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
     etree.SubElement(tmp2, util.nspath_eval('ogc:SortOrder', namespaces)).text = order
+    
+    
+class PropertyParent(object):
+    """ Super class of all the property operation classes"""
+    def __init__(self, propertyoperator, propertyname, literal, matchcase=True):
+        self.propertyoperator = propertyoperator
+        self.propertyname = propertyname
+        self.literal = literal
+        self.matchcase = matchcase
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval(self.propertyoperator, namespaces))
+        if self.matchcase is False:
+            node0.set('matchCase', 'false')
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        etree.SubElement(node0, util.nspath_eval('ogc:Literal', namespaces)).text = self.literal
+        return node0
+    
+class PropertyIsEqualTo(PropertyParent):
+    """ PropertyIsEqualTo class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        PropertyParent.__init__(self, 'ogc:PropertyIsEqualTo',  propertyname, literal, matchcase)
+
+class PropertyIsNotEqualTo(PropertyParent):
+    """ PropertyIsNotEqualTo class """
+    def __init__(self, propertyname, literal, matchcase=True):
+        PropertyParent.__init__(self, 'ogc:PropertyIsNotEqualTo',  propertyname, literal, matchcase)
+        
+class PropertyIsLessThan(PropertyParent):
+    """PropertyIsLessThan class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        PropertyParent.__init__(self, 'ogc:PropertyIsNotEqualTo',  propertyname, literal, matchcase)
+
+class PropertyIsGreaterThan(PropertyParent):
+    """PropertyIsGreaterThan class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        PropertyParent.__init__(self, 'ogc:PropertyIsGreaterThan',  propertyname, literal, matchcase)
+
+class PropertyIsLessThanOrEqualTo(PropertyParent):
+    """PropertyIsLessThanOrEqualTo class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        PropertyParent.__init__(self, 'ogc:PropertyIsLessThanOrEqualTo',  propertyname, literal, matchcase)
+
+class PropertyIsGreaterThanOrEqualTo(PropertyParent):
+    """PropertyIsGreaterThanOrEqualTo class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        PropertyParent.__init__(self, 'ogc:PropertyIsGreaterThanOrEqualTo',  propertyname, literal, matchcase)
+
+class PropertyIsLike(object):
+    """PropertyIsLike class"""
+    def __init__(self, propertyname, literal, escapeChar='\\', singleChar='_', wildCard='%'):
+        self.propertyname = propertyname
+        self.literal = literal
+        self.escapeChar = escapeChar
+        self.singleChar = singleChar
+        self.wildCard = wildCard
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval('ogc:PropertyIsLike', namespaces))
+        node0.set('wildCard', self.wildCard)
+        node0.set('singleChar', self.singleChar)
+        node0.set('escapeChar', self.escapeChar)
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        etree.SubElement(node0, util.nspath_eval('ogc:Literal', namespaces)).text = '%s%s%s' %(self.wildCard, self.literal, self.wildCard)
+        return node0
+
+class PropertyIsNull(object):
+    """PropertyIsNull class"""
+    def __init__(self, propertyname):
+        self.propertyname = propertyname
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval('ogc:PropertyIsNull', namespaces))
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        return node0
+        
+class PropertyIsBetween(object):
+    """PropertyIsBetween class"""
+    def __init__(self, propertyname, lower, upper):
+        self.propertyname = propertyname
+        self.lower = lower
+        self.lower = lower
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval('ogc:PropertyIsBetween', namespaces))
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        node1 = etree.SubElement(node0, util.nspath_eval('ogc:LowerBoundary', namespaces))
+        etree.SubElement(node1, util.nspath_eval('ogc:Literal', namespaces)).text = '%s' %self.lower
+        node2 = etree.SubElement(node0, util.nspath_eval('ogc:UpperBoundary', namespaces))
+        etree.SubElement(node2, util.nspath_eval('ogc:Literal', namespaces)).text = '%s' %self.upper
+        return node0
+        
+class BBox(object):
+    """Construct a BBox, two pairs of coordinates (west-south and east-north)"""
+    def __init__(self, bbox):
+        self.bbox = bbox
+    def toXML(self):
+        tmp = etree.Element(util.nspath_eval('ogc:BBOX', namespaces))
+        etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = 'ows:BoundingBox'
+        tmp2 = etree.SubElement(tmp, util.nspath_eval('gml:Envelope', namespaces))
+        etree.SubElement(tmp2, util.nspath_eval('gml:lowerCorner', namespaces)).text = '%s %s' % (self.bbox[0], self.bbox[1])
+        etree.SubElement(tmp2, util.nspath_eval('gml:upperCorner', namespaces)).text = '%s %s' % (self.bbox[2], self.bbox[3])
+        return tmp
