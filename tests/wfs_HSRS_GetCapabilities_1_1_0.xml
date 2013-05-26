@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<wfs:WFS_Capabilities xmlns:gml="http://www.opengis.net/gml" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ogc="http://www.opengis.net/ogc" xmlns="http://www.opengis.net/wfs" version="1.1.0" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+  <ows:ServiceIdentification>
+    <ows:Title>Help Service Gazeteer</ows:Title>
+    <ows:Abstract>Vyhledavani sidel WFS</ows:Abstract>
+    <ows:Keywords>
+      <ows:Keyword>Czech republic</ows:Keyword>
+      <ows:Keyword>gazeeteer</ows:Keyword>
+    </ows:Keywords>
+    <ows:ServiceType codeSpace="OGC">OGC WFS</ows:ServiceType>
+    <ows:ServiceTypeVersion>1.1.0</ows:ServiceTypeVersion>
+    <ows:Fees>none</ows:Fees>
+    <ows:AccessConstraints>for non profit use</ows:AccessConstraints>
+  </ows:ServiceIdentification>
+  <ows:ServiceProvider>
+    <ows:ProviderName>Help Service Remote Sensing, ltd.</ows:ProviderName>
+    <ows:ProviderSite xlink:type="simple" xlink:href="http://www.hsrs.cz"/>
+    <ows:ServiceContact>
+      <ows:IndividualName>Stanislav Holý</ows:IndividualName>
+      <ows:PositionName/>
+      <!--WARNING: Optional metadata "ows_contactposition" was missing for ows:PositionName-->
+      <ows:ContactInfo>
+        <ows:Phone>
+          <ows:Voice/>
+          <!--WARNING: Optional metadata "ows_contactvoicetelephone" was missing for ows:Voice-->
+          <ows:Facsimile/>
+          <!--WARNING: Optional metadata "ows_contactfacsimiletelephone" was missing for ows:Facsimile-->
+        </ows:Phone>
+        <ows:Address>
+          <ows:DeliveryPoint/>
+          <!--WARNING: Optional metadata "ows_address" was missing for ows:DeliveryPoint-->
+          <ows:City/>
+          <!--WARNING: Optional metadata "ows_city" was missing for ows:City-->
+          <ows:AdministrativeArea/>
+          <!--WARNING: Optional metadata "ows_stateorprovince" was missing for ows:AdministrativeArea-->
+          <ows:PostalCode/>
+          <!--WARNING: Optional metadata "ows_postcode" was missing for ows:PostalCode-->
+          <ows:Country/>
+          <!--WARNING: Optional metadata "ows_country" was missing for ows:Country-->
+          <ows:ElectronicMailAddress/>
+          <!--WARNING: Optional metadata "ows_contactelectronicmailaddress" was missing for ows:ElectronicMailAddress-->
+        </ows:Address>
+        <ows:OnlineResource xlink:type="simple" xlink:href="http://www.hsrs.cz"/>
+        <ows:HoursOfService/>
+        <!--WARNING: Optional metadata "ows_hoursofservice" was missing for ows:HoursOfService-->
+        <ows:ContactInstructions/>
+        <!--WARNING: Optional metadata "ows_contactinstructions" was missing for ows:ContactInstructions-->
+      </ows:ContactInfo>
+      <ows:Role/>
+      <!--WARNING: Optional metadata "ows_role" was missing for ows:Role-->
+    </ows:ServiceContact>
+  </ows:ServiceProvider>
+  <ows:OperationsMetadata>
+    <ows:Operation name="GetCapabilities">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:type="simple" xlink:href="http://gis.bnhelp.cz/ows/crwfs?"/>
+          <ows:Post xlink:type="simple" xlink:href="http://gis.bnhelp.cz/ows/crwfs?"/>
+        </ows:HTTP>
+      </ows:DCP>
+      <ows:Parameter name="service">
+        <ows:Value>WFS</ows:Value>
+      </ows:Parameter>
+      <ows:Parameter name="AcceptVersions">
+        <ows:Value>1.0.0</ows:Value>
+        <ows:Value>1.1.0</ows:Value>
+      </ows:Parameter>
+      <ows:Parameter name="AcceptFormats">
+        <ows:Value>text/xml</ows:Value>
+      </ows:Parameter>
+    </ows:Operation>
+    <ows:Operation name="DescribeFeatureType">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:type="simple" xlink:href="http://gis.bnhelp.cz/ows/crwfs?"/>
+          <ows:Post xlink:type="simple" xlink:href="http://gis.bnhelp.cz/ows/crwfs?"/>
+        </ows:HTTP>
+      </ows:DCP>
+      <ows:Parameter name="outputFormat">
+        <ows:Value>XMLSCHEMA</ows:Value>
+        <ows:Value>text/xml; subtype=gml/2.1.2</ows:Value>
+        <ows:Value>text/xml; subtype=gml/3.1.1</ows:Value>
+      </ows:Parameter>
+    </ows:Operation>
+    <ows:Operation name="GetFeature">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:type="simple" xlink:href="http://gis.bnhelp.cz/ows/crwfs?"/>
+          <ows:Post xlink:type="simple" xlink:href="http://gis.bnhelp.cz/ows/crwfs?"/>
+        </ows:HTTP>
+      </ows:DCP>
+      <ows:Parameter name="resultType">
+        <ows:Value>results</ows:Value>
+        <ows:Value>hits</ows:Value>
+      </ows:Parameter>
+      <ows:Parameter name="outputFormat">
+        <ows:Value>text/xml; subtype=gml/3.1.1</ows:Value>
+      </ows:Parameter>
+    </ows:Operation>
+    <ows:Constraint name="DefaultMaxFeatures">
+      <ows:Value>512</ows:Value>
+    </ows:Constraint>
+  </ows:OperationsMetadata>
+  <FeatureTypeList>
+    <Operations>
+      <Operation>Query</Operation>
+    </Operations>
+    <FeatureType>
+      <Name>nuts1</Name>
+      <Title>NUTS1</Title>
+      <DefaultSRS>urn:ogc:def:crs:EPSG::4326</DefaultSRS>
+      <OtherSRS>urn:ogc:def:crs:EPSG::2065</OtherSRS>
+      <OutputFormats>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+      </OutputFormats>
+      <ows:WGS84BoundingBox dimensions="2">
+        <ows:LowerCorner>-73.2634725607418 -21.3428428333117</ows:LowerCorner>
+        <ows:UpperCorner>120.131330581725 83.6274190882078</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType>
+      <Name>states</Name>
+      <Title>states</Title>
+      <DefaultSRS>urn:ogc:def:crs:EPSG::4326</DefaultSRS>
+      <OtherSRS>urn:ogc:def:crs:EPSG::2065</OtherSRS>
+      <OutputFormats>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+      </OutputFormats>
+      <ows:WGS84BoundingBox dimensions="2">
+        <ows:LowerCorner>-180 -89.9</ows:LowerCorner>
+        <ows:UpperCorner>180 83.674733</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType>
+      <Name>nuts2</Name>
+      <Title>NUTS2</Title>
+      <DefaultSRS>urn:ogc:def:crs:EPSG::4326</DefaultSRS>
+      <OtherSRS>urn:ogc:def:crs:EPSG::2065</OtherSRS>
+      <OutputFormats>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+      </OutputFormats>
+      <ows:WGS84BoundingBox dimensions="2">
+        <ows:LowerCorner>-73.2634725607418 -21.3428428333117</ows:LowerCorner>
+        <ows:UpperCorner>120.131330581725 83.6274190882078</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType>
+      <Name>nuts3</Name>
+      <Title>NUTS2</Title>
+      <DefaultSRS>urn:ogc:def:crs:EPSG::4326</DefaultSRS>
+      <OtherSRS>urn:ogc:def:crs:EPSG::2065</OtherSRS>
+      <OutputFormats>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+      </OutputFormats>
+      <ows:WGS84BoundingBox dimensions="2">
+        <ows:LowerCorner>-73.2634725607418 -21.3428428333117</ows:LowerCorner>
+        <ows:UpperCorner>120.131330581725 83.6274190882078</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType>
+      <Name>orp</Name>
+      <Title>Obce s rozsirenou pusobnosti</Title>
+      <DefaultSRS>urn:ogc:def:crs:EPSG::4326</DefaultSRS>
+      <OtherSRS>urn:ogc:def:crs:EPSG::2065</OtherSRS>
+      <OutputFormats>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+      </OutputFormats>
+      <ows:WGS84BoundingBox dimensions="2">
+        <ows:LowerCorner>12.0971913568792 48.5542371331248</ows:LowerCorner>
+        <ows:UpperCorner>18.858466675767 51.055771864485</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType>
+      <Name>okresy</Name>
+      <Title>Okresy CR</Title>
+      <DefaultSRS>urn:ogc:def:crs:EPSG::4326</DefaultSRS>
+      <OtherSRS>urn:ogc:def:crs:EPSG::2065</OtherSRS>
+      <OutputFormats>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+      </OutputFormats>
+      <ows:WGS84BoundingBox dimensions="2">
+        <ows:LowerCorner>12.0971913568792 48.5542371331248</ows:LowerCorner>
+        <ows:UpperCorner>18.858297034807 51.055771864485</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType>
+      <Name>sidla</Name>
+      <Title>Sidla CR</Title>
+      <DefaultSRS>urn:ogc:def:crs:EPSG::4326</DefaultSRS>
+      <OtherSRS>urn:ogc:def:crs:EPSG::2065</OtherSRS>
+      <OutputFormats>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+      </OutputFormats>
+      <ows:WGS84BoundingBox dimensions="2">
+        <ows:LowerCorner>12.0696013961853 48.529730261414</ows:LowerCorner>
+        <ows:UpperCorner>18.973334328945 51.0387911057136</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType>
+      <Name>kraje</Name>
+      <Title>Kraje CR</Title>
+      <DefaultSRS>urn:ogc:def:crs:EPSG::4326</DefaultSRS>
+      <OtherSRS>urn:ogc:def:crs:EPSG::2065</OtherSRS>
+      <OutputFormats>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+      </OutputFormats>
+      <ows:WGS84BoundingBox dimensions="2">
+        <ows:LowerCorner>12.0977321962419 48.5542371331248</ows:LowerCorner>
+        <ows:UpperCorner>18.8505002447346 51.0551785667194</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+  </FeatureTypeList>
+  <ogc:Filter_Capabilities>
+    <ogc:Spatial_Capabilities>
+      <ogc:GeometryOperands>
+        <ogc:GeometryOperand>gml:Point</ogc:GeometryOperand>
+        <ogc:GeometryOperand>gml:LineString</ogc:GeometryOperand>
+        <ogc:GeometryOperand>gml:Polygon</ogc:GeometryOperand>
+        <ogc:GeometryOperand>gml:Envelope</ogc:GeometryOperand>
+      </ogc:GeometryOperands>
+      <ogc:SpatialOperators>
+        <ogc:SpatialOperator name="Equals"/>
+        <ogc:SpatialOperator name="Disjoint"/>
+        <ogc:SpatialOperator name="Touches"/>
+        <ogc:SpatialOperator name="Within"/>
+        <ogc:SpatialOperator name="Overlaps"/>
+        <ogc:SpatialOperator name="Crosses"/>
+        <ogc:SpatialOperator name="Intersects"/>
+        <ogc:SpatialOperator name="Contains"/>
+        <ogc:SpatialOperator name="DWithin"/>
+        <ogc:SpatialOperator name="Beyond"/>
+        <ogc:SpatialOperator name="BBOX"/>
+      </ogc:SpatialOperators>
+    </ogc:Spatial_Capabilities>
+    <ogc:Scalar_Capabilities>
+      <ogc:LogicalOperators/>
+      <ogc:ComparisonOperators>
+        <ogc:ComparisonOperator>LessThan</ogc:ComparisonOperator>
+        <ogc:ComparisonOperator>GreaterThan</ogc:ComparisonOperator>
+        <ogc:ComparisonOperator>LessThanEqualTo</ogc:ComparisonOperator>
+        <ogc:ComparisonOperator>GreaterThanEqualTo</ogc:ComparisonOperator>
+        <ogc:ComparisonOperator>EqualTo</ogc:ComparisonOperator>
+        <ogc:ComparisonOperator>NotEqualTo</ogc:ComparisonOperator>
+        <ogc:ComparisonOperator>Like</ogc:ComparisonOperator>
+        <ogc:ComparisonOperator>Between</ogc:ComparisonOperator>
+      </ogc:ComparisonOperators>
+    </ogc:Scalar_Capabilities>
+    <ogc:Id_Capabilities>
+      <ogc:EID/>
+      <ogc:FID/>
+    </ogc:Id_Capabilities>
+  </ogc:Filter_Capabilities>
+</wfs:WFS_Capabilities>
