@@ -14,7 +14,6 @@ install:
   - pip install pytest pytest-cov
 script:
   - python -m pytest -s
-# uncomment when merged
-#notifications:
-#  email:
-#    - owslib-devel@lists.sourceforge.net
+notifications:
+  email:
+    - owslib-devel@lists.sourceforge.net
