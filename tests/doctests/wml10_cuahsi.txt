@@ -6,7 +6,7 @@ Imports
 
 Test GetSiteInfo
 
-	>>> f = open(resource_file('cuahsi_example_get_siteinfo_10.xml'), 'r')
+	>>> f = open(resource_file('cuahsi_example_get_siteinfo_10.xml'), 'r').read()
 	>>> response = wml(f).response
 
 	>>> response.site_names
@@ -28,8 +28,7 @@ Test GetSiteInfo
 
 Test GetValues
 
-	>>> f.close()
-	>>> f = open(resource_file('cuahsi_example_get_values_10.xml'))
+	>>> f = open(resource_file('cuahsi_example_get_values_10.xml')).read()
 	>>> response = wml(f).response
 
 	>>> response.variable_names

@@ -85,38 +85,35 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 """
 
 from etree import etree
-from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE, \
-                       OWS_NAMESPACE_1_0_0, ServiceIdentification, ServiceProvider, OperationsMetadata
+from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
 from util import (testXMLValue, build_get_url, dump, getTypedValue, 
                   getNamespace, xml2string, nspath, openURL, nspath_eval)
 from xml.dom.minidom import parseString
+from owslib.namespaces import Namespaces
 
 # namespace definition
-WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
+n = Namespaces()
+
+# These static namespaces are DEPRECIATED.  Please don't use them.
+# No great way of printing a message since there are at the file level
+WPS_DEFAULT_NAMESPACE = n.get_namespace("wps")
+WFS_NAMESPACE = n.get_namespace("wfs")
+OGC_NAMESPACE = n.get_namespace("ogc")
+GML_NAMESPACE = n.get_namespace("gml")
+DRAW_NAMESPACE = n.get_namespace("draw")
+
+GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
+DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd'
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
 
-WFS_NAMESPACE = 'http://www.opengis.net/wfs'
-OGC_NAMESPACE = 'http://www.opengis.net/ogc'
-
-GML_NAMESPACE = 'http://www.opengis.net/gml'
-GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
-
-DRAW_NAMESPACE = 'gov.usgs.cida.gdp.draw'
-DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd'
-
-# list of namespaces used by this module
-namespaces = {
-     None  : WPS_DEFAULT_NAMESPACE,
-    'wps'  : WPS_DEFAULT_NAMESPACE,
-    'ows'  : DEFAULT_OWS_NAMESPACE,
-    'xlink': XLINK_NAMESPACE,
-    'xsi'  : XSI_NAMESPACE,
-    'wfs'  : WFS_NAMESPACE,
-    'ogc'  : OGC_NAMESPACE,
-    'gml'  : GML_NAMESPACE,
-}
+def get_namespaces():
+    ns = n.get_namespaces(["ogc","wfs","wps","gml","xsi","xlink"])
+    ns[None]  = n.get_namespace("wps")
+    ns["ows"] = DEFAULT_OWS_NAMESPACE
+    return ns
+namespaces = get_namespaces()
 
 class IWebProcessingService():
     """

@@ -3,7 +3,7 @@ The specific request involves a FeatureWeightedGridStatisticsAlgorithm process o
 
 Import python modules
 
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import resource_file, compare_xml
     >>> from owslib.wps import GMLMultiPolygonFeatureCollection, WebProcessingService, WPSExecution
     >>> from owslib.etree import etree
 
@@ -41,6 +41,6 @@ Supply process input arguments
 Compare to cached XML request
 
     >>> _request = open(resource_file('wps_USGSExecuteRequest3.xml'), 'r').read()
-    >>> request==_request
+    >>> compare_xml(request, _request)
     True
     

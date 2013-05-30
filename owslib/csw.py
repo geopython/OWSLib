@@ -18,31 +18,16 @@ from owslib import ows
 from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
+from owslib.namespaces import Namespaces
 
 # default variables
-
 outputformat = 'application/xml'
+
+def get_namespaces():
+    n = Namespaces()
+    return n.get_namespaces()
+namespaces = get_namespaces()
 schema = 'http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd'
-
-namespaces = {
-    'atom': 'http://www.w3.org/2005/Atom',
-    'csw': 'http://www.opengis.net/cat/csw/2.0.2',
-    'dc' : 'http://purl.org/dc/elements/1.1/',
-    'dct': 'http://purl.org/dc/terms/',
-    'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
-    'fgdc': 'http://www.opengis.net/cat/csw/csdgm',
-    'gco': 'http://www.isotc211.org/2005/gco',
-    'gmd': 'http://www.isotc211.org/2005/gmd',
-    'gml': 'http://www.opengis.net/gml',
-    'ogc': 'http://www.opengis.net/ogc',
-    'ows': 'http://www.opengis.net/ows',
-    'rim': 'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0',
-    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-    'xs' : 'http://www.w3.org/2001/XMLSchema',
-    'xs2': 'http://www.w3.org/XML/Schema',
-    'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
-}
-
 schema_location = '%s %s' % (namespaces['csw'], schema)
 
 class CatalogueServiceWeb:

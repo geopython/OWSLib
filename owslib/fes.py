@@ -17,20 +17,16 @@ Currently supports version 1.1.0 (04-095).
 
 from owslib.etree import etree
 from owslib import util
+from owslib.namespaces import Namespaces
 
 # default variables
-
+def get_namespaces():
+    n = Namespaces()
+    ns = n.get_namespaces(["dif","fes","gml","ogc","xs","xsi"])
+    ns[None] = n.get_namespace("ogc")
+    return ns
+namespaces = get_namespaces()
 schema = 'http://schemas.opengis.net/filter/1.1.0/filter.xsd'
-
-namespaces = {
-    None : 'http://www.opengis.net/ogc',
-    'fes': 'http://www.opengis.net/fes/2.0',
-    'gml': 'http://www.opengis.net/gml',
-    'ogc': 'http://www.opengis.net/ogc',
-    'xs' : 'http://www.w3.org/2001/XMLSchema',
-    'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
-}
-
 schema_location = '%s %s' % (namespaces['ogc'], schema)
 
 class FilterRequest(object):

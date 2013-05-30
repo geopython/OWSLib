@@ -12,6 +12,7 @@ from owslib.etree import etree
 from owslib.util import nspath, testXMLValue
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
+from owslib.namespaces import Namespaces
 
 #other imports
 import cgi
@@ -34,12 +35,12 @@ hdlr.setFormatter(formatter)
 log.addHandler(hdlr)
 log.setLevel(logging.DEBUG)
 
-WFS_NAMESPACE = 'http://www.opengis.net/wfs/2.0'
-OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
-OGC_NAMESPACE = 'http://www.opengis.net/ogc'
-GML_NAMESPACE = 'http://www.opengis.net/gml'
-FES_NAMESPACE = 'http://www.opengis.net/fes/2.0'
-
+n = Namespaces()
+WFS_NAMESPACE = n.get_namespace("wfs20")
+OWS_NAMESPACE = n.get_namespace("ows110")
+OGC_NAMESPACE = n.get_namespace("ogc")
+GML_NAMESPACE = n.get_namespace("gml")
+FES_NAMESPACE = n.get_namespace("fes")
 
 
 class ServiceException(Exception):

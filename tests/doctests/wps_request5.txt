@@ -3,7 +3,7 @@ The specific request involves a "reprojectCoords" process submitted to the PML W
 
 Imports
 
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import resource_file, compare_xml
     >>> from owslib.wps import WebProcessingService, WPSExecution
     >>> from owslib.etree import etree
 
@@ -22,5 +22,5 @@ Process input/ouutput arguments
 Compare to cached XML request
 
     >>> _request = open(resource_file('wps_PMLExecuteRequest5.xml'), 'r').read()
-    >>> request==_request
+    >>> compare_xml(request, _request)
     True

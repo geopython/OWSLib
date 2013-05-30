@@ -6,19 +6,14 @@ from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities
 from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
+from owslib.namespaces import Namespaces
 
-namespaces = {
-    'gml': 'http://www.opengis.net/gml',
-    'ogc': 'http://www.opengis.net/ogc',
-    'om': 'http://www.opengis.net/om/1.0',
-    'ows': 'http://www.opengis.net/ows/1.1',
-    'sml': 'http://www.opengis.net/sensorML/1.0.1',
-    'sos': 'http://www.opengis.net/sos/1.0',
-    'swe': 'http://www.opengis.net/swe/1.0.1',
-    'tml': 'http://www.opengis.net/tml',
-    'xlink': 'http://www.w3.org/1999/xlink',
-}
-
+def get_namespaces():
+    n = Namespaces()
+    ns = n.get_namespaces(["ogc","sml","gml","sos","swe","xlink"])
+    ns["ows"] = n.get_namespace("ows110")
+    return ns
+namespaces = get_namespaces()
 
 class SensorObservationService_1_0_0(object):
     """

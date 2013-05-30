@@ -12,20 +12,16 @@
 
 from owslib.etree import etree
 from owslib import util
+from owslib.namespaces import Namespaces
 
 # default variables
+def get_namespaces():
+    n = Namespaces()
+    ns = n.get_namespaces(["gco","gmd","gml","gml32","gmx","gts","srv","xlink"])
+    ns[None] = n.get_namespace("gmd")
+    return ns
+namespaces = get_namespaces()
 
-namespaces = {
-    None : 'http://www.isotc211.org/2005/gmd',
-    'gco': 'http://www.isotc211.org/2005/gco',
-    'gmd': 'http://www.isotc211.org/2005/gmd',
-    'gml': 'http://www.opengis.net/gml',
-    'gml32': 'http://www.opengis.net/gml/3.2',
-    'gmx': 'http://www.isotc211.org/2005/gmx',
-    'gts': 'http://www.isotc211.org/2005/gts',
-    'srv': 'http://www.isotc211.org/2005/srv',
-    'xlink': 'http://www.w3.org/1999/xlink'
-}
 
 class MD_Metadata(object):
     """ Process gmd:MD_Metadata """

@@ -6,19 +6,15 @@ from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200
 from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
+from owslib.namespaces import Namespaces
 
-namespaces = {
-    'fes': 'http://www.opengis.net/fes/2.0',
-    'gml': 'http://www.opengis.net/gml/3.2',
-    'ogc': 'http://www.opengis.net/ogc',
-    'om': 'http://www.opengis.net/om/1.0',
-    'ows': 'http://www.opengis.net/ows/1.1',
-    'sml': 'http://www.opengis.net/sensorML/1.0.1',
-    'sos': 'http://www.opengis.net/sos/2.0',
-    'swe': 'http://www.opengis.net/swe/2.0',
-    'swes': 'http://www.opengis.net/swes/2.0',
-    'xlink': 'http://www.w3.org/1999/xlink',
-}
+def get_namespaces():
+    n = Namespaces()
+    ns = n.get_namespaces(["fes","ogc","om","gml32","sml","swe20","swes","xlink"])
+    ns["ows"] = n.get_namespace("ows110")
+    ns["sos"] = n.get_namespace("sos20")
+    return ns
+namespaces = get_namespaces()
 
 
 class SensorObservationService_2_0_0(object):
@@ -201,22 +197,22 @@ class SosObservationOffering(object):
 
         # sos:observedArea
         try:
-            envelope = self._root.find(nspath_eval('sos:observedArea/gml:Envelope', namespaces))
-            lower_left_corner = testXMLValue(envelope.find(nspath_eval('gml:lowerCorner', namespaces))).split()
-            upper_right_corner = testXMLValue(envelope.find(nspath_eval('gml:upperCorner', namespaces))).split()
+            envelope = self._root.find(nspath_eval('sos:observedArea/gml32:Envelope', namespaces))
+            lower_left_corner = testXMLValue(envelope.find(nspath_eval('gml32:lowerCorner', namespaces))).split()
+            upper_right_corner = testXMLValue(envelope.find(nspath_eval('gml32:upperCorner', namespaces))).split()
             # (left, bottom, right, top) in self.bbox_srs units
             self.bbox = (float(lower_left_corner[1]), float(lower_left_corner[0]), float(upper_right_corner[1]), float(upper_right_corner[0]))
             self.bbox_srs = Crs(testXMLValue(envelope.attrib.get('srsName'), True))
         except Exception, err:
             self.bbox = None
-            self.bbox_srs = None
+            self.bbox_srs = Nongml
 
         # LOOK: Support all gml:TimeGeometricPrimitivePropertyType
         # Right now we are just supporting gml:TimePeriod
         # sos:Time
-        begin_position_element = self._root.find(nspath_eval('sos:phenomenonTime/gml:TimePeriod/gml:beginPosition', namespaces))
+        begin_position_element = self._root.find(nspath_eval('sos:phenomenonTime/gml32:TimePeriod/gml32:beginPosition', namespaces))
         self.begin_position = extract_time(begin_position_element)
-        end_position_element = self._root.find(nspath_eval('sos:phenomenonTime/gml:TimePeriod/gml:endPosition', namespaces))
+        end_position_element = self._root.find(nspath_eval('sos:phenomenonTime/gml32:TimePeriod/gml32:endPosition', namespaces))
         self.end_position = extract_time(end_position_element)
 
         self.procedures = []

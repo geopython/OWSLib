@@ -213,6 +213,24 @@ def testXMLValue(val, attrib=False):
     else:
         return None
 
+def testXMLAttribute(element, attribute):
+    """
+
+    Test that the XML element and attribute exist, return attribute's value, else return None
+
+    Parameters
+    ----------
+
+    - element: the element containing the attribute
+    - attribute: the attribute name
+
+    """
+    if element is not None:
+        attrib = element.get(attribute)
+        if attrib is not None:
+            return attrib.strip()
+
+    return None
 
 def http_post(url=None, request=None, lang='en-US', timeout=10):
     """
