@@ -11,13 +11,15 @@
 
 from owslib.etree import etree
 from owslib import util
+from owslib.namespaces import Namespaces
 
 # default variables
-
-namespaces = {
-    None : 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
-    'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/'
-}
+def get_namespaces():
+    n = Namespaces()
+    ns = n.get_namespaces("dif")
+    ns[None] = n.get_namespace("dif")
+    return ns
+namespaces = get_namespaces()
 
 class DIF(object):
     """ Process DIF """

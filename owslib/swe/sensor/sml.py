@@ -3,12 +3,12 @@
 from owslib.etree import etree
 from owslib import crs, util
 from owslib.util import testXMLValue, nspath_eval, xmltag_split, dict_union, extract_xml_list
+from owslib.namespaces import Namespaces
 
-namespaces =  {
-    'sml': 'http://www.opengis.net/sensorML/1.0.1',
-    'gml': 'http://www.opengis.net/gml',
-    'xlink': 'http://www.w3.org/1999/xlink'
-}
+def get_namespaces():
+    n = Namespaces()
+    return n.get_namespaces(["sml","gml","xlink"])
+namespaces = get_namespaces()
 
 class SensorML(object):
     def __init__(self, element):
