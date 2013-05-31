@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/OGCMetOceanDWG/WorldWeatherSymbols.png?branch=master)](https://travis-ci.org/OGCMetOceanDWG/WorldWeatherSymbols)
-
 OWSLib
 ======
 
