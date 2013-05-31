@@ -205,7 +205,7 @@ class SosObservationOffering(object):
             self.bbox_srs = Crs(testXMLValue(envelope.attrib.get('srsName'), True))
         except Exception, err:
             self.bbox = None
-            self.bbox_srs = Nongml
+            self.bbox_srs = None
 
         # LOOK: Support all gml:TimeGeometricPrimitivePropertyType
         # Right now we are just supporting gml:TimePeriod
