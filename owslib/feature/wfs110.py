@@ -20,13 +20,12 @@ from owslib.ows import *
 from owslib.fes import *
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
+from owslib.namespaces import Namespaces
 
-namespaces = {
-    'gml': 'http://www.opengis.net/gml',
-    'ogc': 'http://www.opengis.net/ogc',
-    'ows': 'http://www.opengis.net/ows',
-    'wfs': 'http://www.opengis.net/wfs'
-}
+def get_namespaces():
+    n = Namespaces()
+    return n.get_namespaces(["gml","ogc","ows","wfs"])
+namespaces = get_namespaces()
 
 class WebFeatureService_1_1_0(WebFeatureService_):
     """Abstraction for OGC Web Feature Service (WFS).

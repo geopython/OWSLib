@@ -16,9 +16,11 @@ from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
+from owslib.namespaces import Namespaces
 
-WFS_NAMESPACE = 'http://www.opengis.net/wfs'
-OGC_NAMESPACE = 'http://www.opengis.net/ogc'
+n = Namespaces()
+WFS_NAMESPACE = n.get_namespace("wfs")
+OGC_NAMESPACE = n.get_namespace("ogc")
 
 
 #TODO: use nspath in util.py

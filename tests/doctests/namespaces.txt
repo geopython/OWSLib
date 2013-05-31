@@ -1,0 +1,52 @@
+Imports
+
+    >>> from owslib.namespaces import Namespaces
+
+
+Correct Usage Tests
+
+    >>> ns = Namespaces()
+    >>> ns.get_namespace('csw')
+    'http://www.opengis.net/cat/csw/2.0.2'
+
+    >>> ns.get_namespaces(['csw','gmd','fes'])
+    {'csw': 'http://www.opengis.net/cat/csw/2.0.2', 'fes': 'http://www.opengis.net/fes/2.0', 'gmd': 'http://www.isotc211.org/2005/gmd'}
+    >>> ns.get_namespaces()
+    {...}
+
+    >>> ns.get_versioned_namespace('ows')
+    'http://www.opengis.net/ows'
+
+    >>> ns.get_versioned_namespace('ows','1.0.0')
+    'http://www.opengis.net/ows'
+
+    >>> ns.get_versioned_namespace('ows','1.1.0')
+    'http://www.opengis.net/ows/1.1'
+
+    >>> ns.get_versioned_namespace('ows','2.0.0')
+    'http://www.opengis.net/ows/2.0'
+
+    >>> ns.get_namespaces('csw')
+    {'csw': 'http://www.opengis.net/cat/csw/2.0.2'}
+
+    >>> ns.get_namespace('csw')
+    'http://www.opengis.net/cat/csw/2.0.2'
+
+    # 'om300' does not exist as a namespace, so the below will return nothing
+    >>> ns.get_namespace('om300')
+
+    # CSW 3.1.1 doesn't exist, so the below will return nothing
+    >>> ns.get_versioned_namespace('csw','3.1.1')
+
+
+Invalid Usage Tests
+
+    >>> ns.get_namespace()
+    Traceback (most recent call last):
+    ...
+    TypeError: get_namespace() takes exactly 2 arguments (1 given)
+
+    >>> ns.get_versioned_namespace()
+    Traceback (most recent call last):
+    ...
+    TypeError: get_versioned_namespace() takes at least 2 arguments (1 given)

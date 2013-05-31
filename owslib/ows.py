@@ -17,12 +17,14 @@ Currently supports version 1.1.0 (06-121r3).
 
 from owslib.etree import etree
 from owslib import crs, util
+from owslib.namespaces import Namespaces
+n = Namespaces()
 
-OWS_NAMESPACE_1_0_0 = 'http://www.opengis.net/ows'
-OWS_NAMESPACE_1_1_0 = 'http://www.opengis.net/ows/1.1'
-OWS_NAMESPACE_2_0 = 'http://www.opengis.net/ows/2.0'
-XSI_NAMESPACE       = 'http://www.w3.org/2001/XMLSchema-instance'
-XLINK_NAMESPACE     = 'http://www.w3.org/1999/xlink'
+OWS_NAMESPACE_1_0_0 = n.get_namespace("ows")
+OWS_NAMESPACE_1_1_0 = n.get_namespace("ows110")
+OWS_NAMESPACE_2_0   = n.get_namespace("ows200")
+XSI_NAMESPACE       = n.get_namespace("xsi")
+XLINK_NAMESPACE     = n.get_namespace("xlink")
 
 DEFAULT_OWS_NAMESPACE=OWS_NAMESPACE_1_1_0     #Use this as default for OWSCommon objects
 

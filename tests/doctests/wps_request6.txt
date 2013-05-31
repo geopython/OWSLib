@@ -3,7 +3,7 @@ The specific request involves a "v.net.path" process submitted to the PML WPS se
 
 Imports
 
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import resource_file, compare_xml
     >>> from owslib.wps import WebProcessingService, WPSExecution
     >>> from owslib.etree import etree
 
@@ -22,5 +22,5 @@ Build XML request for WPS process execution
 Compare to cached XML request
 
     >>> _request = open(resource_file('wps_PMLExecuteRequest6.xml'), 'r').read()
-    >>> request==_request
+    >>> compare_xml(request, _request)
     True

@@ -6,7 +6,7 @@ Imports
 	>>> from owslib.waterml.wml11 import WaterML_1_1 as wml
 
 An example GetSites response (from cuahsi)
-	>>> f = open(resource_file('cuahsi_example_all_sites.xml'), 'r')
+	>>> f = open(resource_file('cuahsi_example_all_sites.xml'), 'r').read()
 	>>> sites = wml(f).response
 
 Can view the queryInfo structure for information about the query
@@ -44,8 +44,7 @@ Get a site to view it in more detail
 	'1345'
 
 An example GetSiteInfo response
-	>>> f.close()
-	>>> f = open(resource_file('cuahsi_example_siteinfo_multiple.xml'))
+	>>> f = open(resource_file('cuahsi_example_siteinfo_multiple.xml')).read()
 	>>> sites = wml(f).response
 
 	>>> sites.query_info.criteria.method_called
@@ -107,8 +106,7 @@ Get a variable by its code
 	'second'
 
 Example GetValues response
-	>>> f.close()
-	>>> f = open(resource_file('cuahsi_example_get_values.xml'))
+	>>> f = open(resource_file('cuahsi_example_get_values.xml')).read()
 	>>> series = wml(f).response
 
 	>>> series.query_info.criteria.method_called
@@ -136,8 +134,7 @@ List (in tuple) the dates and their corresponding measurements
 	[(datetime.datetime(2005, 8, 5, 0, 0), '34.53'), (datetime.datetime(2005, 8, 5, 0, 30), '37.12'), (datetime.datetime(2005, 8, 5, 1, 0), '35.97'), (datetime.datetime(2005, 8, 5, 1, 30), '35.78'), (datetime.datetime(2005, 8, 5, 2, 0), '35.68'), (datetime.datetime(2005, 8, 5, 2, 30), '36.08'), (datetime.datetime(2005, 8, 5, 3, 0), '37.8'), (datetime.datetime(2005, 8, 5, 3, 30), '37.93'), (datetime.datetime(2005, 8, 5, 4, 0), '38.88'), (datetime.datetime(2005, 8, 5, 4, 30), '37.34'), (datetime.datetime(2005, 8, 5, 5, 0), '35.15'), (datetime.datetime(2005, 8, 5, 5, 30), '35.96'), (datetime.datetime(2005, 8, 5, 6, 0), '35.62'), (datetime.datetime(2005, 8, 5, 6, 30), '34.72'), (datetime.datetime(2005, 8, 5, 7, 0), '34.7'), (datetime.datetime(2005, 8, 5, 7, 30), '33.54'), (datetime.datetime(2005, 8, 5, 8, 0), '34.98'), (datetime.datetime(2005, 8, 5, 8, 30), '31.65'), (datetime.datetime(2005, 8, 5, 9, 0), '32.49'), (datetime.datetime(2005, 8, 5, 9, 30), '32.78'), (datetime.datetime(2005, 8, 5, 10, 0), '30.58'), (datetime.datetime(2005, 8, 5, 10, 30), '32.8'), (datetime.datetime(2005, 8, 5, 11, 0), '31.83'), (datetime.datetime(2005, 8, 5, 11, 30), '30.71'), (datetime.datetime(2005, 8, 5, 12, 0), '30.82'), (datetime.datetime(2005, 8, 5, 12, 30), '29.72'), (datetime.datetime(2005, 8, 5, 13, 0), '27.05'), (datetime.datetime(2005, 8, 5, 13, 30), '25.5'), (datetime.datetime(2005, 8, 5, 14, 0), '24.69'), (datetime.datetime(2005, 8, 5, 14, 30), '26.03'), (datetime.datetime(2005, 8, 5, 15, 0), '25.55'), (datetime.datetime(2005, 8, 5, 15, 30), '25.96'), (datetime.datetime(2005, 8, 5, 16, 0), '24.72'), (datetime.datetime(2005, 8, 5, 16, 30), '23.36'), (datetime.datetime(2005, 8, 5, 17, 0), '24.21'), (datetime.datetime(2005, 8, 5, 17, 30), '25.61'), (datetime.datetime(2005, 8, 5, 18, 0), '24.73'), (datetime.datetime(2005, 8, 5, 18, 30), '25.73'), (datetime.datetime(2005, 8, 5, 19, 0), '24.76'), (datetime.datetime(2005, 8, 5, 19, 30), '24.96'), (datetime.datetime(2005, 8, 5, 20, 0), '25.69'), (datetime.datetime(2005, 8, 5, 20, 30), '27.34'), (datetime.datetime(2005, 8, 5, 21, 0), '27.14'), (datetime.datetime(2005, 8, 5, 21, 30), '27.7'), (datetime.datetime(2005, 8, 5, 22, 0), '28.88'), (datetime.datetime(2005, 8, 5, 22, 30), '30.44'), (datetime.datetime(2005, 8, 5, 23, 0), '32.14'), (datetime.datetime(2005, 8, 5, 23, 30), '34.02'), (datetime.datetime(2005, 8, 6, 0, 0), '33.61')]
 
 Example GetVariables response
-	>>> f.close()
-	>>> f = open(resource_file('cuahsi_example_get_variables.xml'))
+	>>> f = open(resource_file('cuahsi_example_get_variables.xml')).read()
 	>>> varis = wml(f).response
 
 Just a list of variables
