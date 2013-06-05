@@ -15,8 +15,8 @@
     >>> wfsxml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read()
     >>> wms = WebMapService('url', version='1.1.1', xml=wmsxml)
     >>> wfs = WebFeatureService('url', version='1.0', xml=wfsxml)
-    >>> wcs=WebCoverageService('http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd', version='1.0.0')
-    >>> csw= CatalogueServiceWeb('http://devgeo.cciw.ca/geonetwork/srv/en/csw')
+    >>> wcs=WebCoverageService('http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best', version='1.0.0')
+    >>> csw= CatalogueServiceWeb('http://data.nodc.noaa.gov/geoportal/csw')
 
 #Check each service instance conforms to OWSLib interface
     >>> csw.alias, wms.alias, wcs.alias, wfs.alias='CSW', 'WMS', 'WCS', 'WFS' 
@@ -31,9 +31,9 @@
 #URL attribute
     >>> for service in services:
     ...     service.url
-    'http://devgeo.cciw.ca/geonetwork/srv/en/csw'
+    'http://data.nodc.noaa.gov/geoportal/csw'
     'url'
-    'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd'
+    'http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best'
     'url'
 
 #version attribute
@@ -77,7 +77,7 @@
     'OGC:WCS'
     [['name', True], ['url', True], ['contact', True]]
     'MapServer WFS'
-    [['name', True], ['url', True], ['contact', True]]
+    [['name', True], ['url', True], ['contact', False]]
 
 #Check all operations implement IOperationMetadata
     >>> for service in services:
@@ -90,8 +90,8 @@
     [['name', True], ['formatOptions', True], ['methods', True]]
     [['name', True], ['formatOptions', True], ['methods', True]]
     [['name', True], ['formatOptions', True], ['methods', True]]
-    [['name', True], ['formatOptions', True], ['methods', True]]
     'OGC:WMS'
+    [['name', True], ['formatOptions', True], ['methods', True]]
     [['name', True], ['formatOptions', True], ['methods', True]]
     [['name', True], ['formatOptions', True], ['methods', True]]
     'OGC:WCS'
