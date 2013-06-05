@@ -1,9 +1,8 @@
 Imports
     >>> from owslib.csw import CatalogueServiceWeb as cs
-    >>> from xml.dom import minidom as md  
-    >>> from owslib import fes   
-    >>> from owslib import csw   
-
+    >>> from xml.dom import minidom as md
+    >>> from owslib import fes, csw
+    >>> from tests.utils import compare_xml
     
 Initialize CSW client
 
@@ -17,156 +16,94 @@ Initialize CSW client
     >>> endpoint = 'http://www.ngdc.noaa.gov/geoportal/csw' # NGDC Geoportal
     >>> c = cs(endpoint, timeout=30)
 
-    
-
     # define some var
     >>> AOOS = '78C0463E-2FCE-4AB2-A9C9-6A34BF261F52'
-    >>> bbox=[-141,42,-52,84]
-
-    # Test old function getrecords()
+    >>> bbox = [-141,42,-52,84]
     
-    # Test new function getrecordsbyfilter()
-    >>> uuid = fes.PropertyIsEqualTo(propertyname='sys.siteuuid', literal='{%s}' %AOOS)
+    # Test new function get_filtered_records()
+    >>> uuid = fes.PropertyIsEqualTo(propertyname='sys.siteuuid', literal='{%s}' % AOOS)
     >>> timeRange = fes.PropertyIsBetween(propertyname='apiso:modified', lower='2009-02-01', upper='2012-02-01')
-    >>> word = fes.PropertyIsLike(propertyname='csw:AnyText', literal='sea_water_salinity', escapeChar='\\', singleChar='?', wildCard='*')
+    >>> word = fes.PropertyIsLike(propertyname='csw:AnyText', literal='*salinity*', escapeChar='\\', singleChar='?', wildCard='*')
     >>> box = fes.BBox(bbox)
 
-    >>> groupList1 = [] # a list of constrain objects
-    >>> groupList1.append(uuid)
-    >>> groupList1.append(box)
-
     ##########################################################
-    # Test 0_1.
-    # Passing a list of list [[a,b],[c],[d],[e]]
-    # it means (a && b) || c || d || e
+    # Test 1
+    # Passing a list of list [[a,c,d],[b,c,d]]
+    # Translates to (a && c && d) || (b && c && d)
     ##########################################################
-    >>> groupList2 = []
-    >>> groupList2.append(timeRange)
-
-    >>> groupList3 = []
-    >>> groupList3.append(word)
-    
-    >>> finalList = []
-    >>> finalList.append(groupList1)
-    >>> finalList.append(groupList2)
-    >>> finalList.append(groupList3)
-    >>> c.getrecordsbyfilter(finalList)
-    >>> xml = c.request
-    >>> print md.parseString(xml).toprettyxml()
+    >>> filter_list = [[uuid, word, timeRange], [bbox, word, timeRange]]
+    >>> c.get_filtered_records(filter_list)
     >>> c.results
-    {'matches': 336, 'nextrecord': 11, 'returned': 10}
+    {'matches': 15, 'nextrecord': 11, 'returned': 10}
 
     ##########################################################
-    # Test 0_2.
-    # Passing a list of list [c,[a,b],d,e]
-    # it means c|| (a && b) || d || e
+    # Test 2
+    # Passing a list of list [a, b]
+    # it means a || b
     ##########################################################
-    >>> finalList2 = []
-    >>> finalList2.append(word)
-    >>> finalList2.append(groupList1)
-    >>> finalList2.append(timeRange)
-    >>> c.getrecordsbyfilter(finalList2)
-    >>> xml = c.request
-    >>> print md.parseString(xml).toprettyxml()
+    >>> filter_list = [uuid, box]
+    >>> c.get_filtered_records(filter_list)
     >>> c.results
-    {'matches': 336, 'nextrecord': 11, 'returned': 10}
+    {'matches': 4895, 'nextrecord': 11, 'returned': 10}
 
     ##########################################################
-    # Test 0_3.
-    # Passing a list [c,d,e]
-    # it means c || d || e
+    # Test 3
+    # Passing a list of list [[a,b]]
+    # it means a && b
     ##########################################################
-    >>> finalList3 = []
-    >>> finalList3.append(timeRange)
-    >>> finalList3.append(word)
-    >>> c.getrecordsbyfilter(finalList3)
-    >>> xml = c.request
-    >>> print md.parseString(xml).toprettyxml()
+    >>> filter_list = [[uuid, box]]
+    >>> c.get_filtered_records(filter_list)
     >>> c.results
-    {'matches': 336, 'nextrecord': 11, 'returned': 10}
+    {'matches': 0, 'nextrecord': 0, 'returned': 0}
 
     ##########################################################
-    # Test 0_4.
+    # Test 4
     # Null Check: sys.siteuuid is null
     # Passing a list [c]
     ##########################################################
-    >>> nullCheck = fes.PropertyIsNull(propertyname='sys.siteuuid')
-
-    >>> finalList4 = []
-    >>> finalList4.append(nullCheck)
-    >>> c.getrecordsbyfilter(finalList4)
-    >>> xml = c.request
-    >>> print md.parseString(xml).toprettyxml()
+    >>> filter = fes.PropertyIsNull(propertyname='sys.siteuuid')
+    >>> c.get_filtered_records([filter])
     >>> c.results
     {'matches': 16, 'nextrecord': 11, 'returned': 10}
 
 
+    ##########################################################
+    # Test 5
+    # construct a request by send the xml string
+    ##########################################################
     >>> sos_search='''<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     ... <csw:GetRecords xmlns:xs2="http://www.w3.org/XML/Schema" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:gml="http://www.opengis.net/gml" xmlns:dif="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" xmlns:ows="http://www.opengis.net/ows" xmlns:fgdc="http://www.opengis.net/cat/csw/csdgm" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dct="http://purl.org/dc/terms/" xmlns:ogc="http://www.opengis.net/ogc" outputSchema="http://www.opengis.net/cat/csw/2.0.2" outputFormat="application/xml" version="2.0.2" resultType="results" service="CSW" maxRecords="10" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
     ... <csw:Query typeNames="csw:Record">
-    ...	<csw:ElementSetName>full</csw:ElementSetName>
-    ...	<csw:Constraint version="1.1.0">
-    ...	  <ogc:Filter>
-    ...		<ogc:And>
-    ...		  <ogc:PropertyIsEqualTo>
-    ...			<ogc:PropertyName>sys.siteuuid</ogc:PropertyName>
-    ...			<ogc:Literal>{78C0463E-2FCE-4AB2-A9C9-6A34BF261F52}</ogc:Literal>
-    ...		   </ogc:PropertyIsEqualTo>
-    ...		   <ogc:PropertyIsLike wildCard="*" escape="\" singleChar="?"> 
-    ...			 <ogc:PropertyName>apiso:ServiceType</ogc:PropertyName>
-    ...			 <ogc:Literal>*opendap*</ogc:Literal>
-    ...		   </ogc:PropertyIsLike>
-    ...		</ogc:And> 
-    ...	   </ogc:Filter>
-    ...	</csw:Constraint>
+    ... <csw:ElementSetName>full</csw:ElementSetName>
+    ... <csw:Constraint version="1.1.0">
+    ...   <ogc:Filter>
+    ...     <ogc:And>
+    ...       <ogc:PropertyIsEqualTo>
+    ...         <ogc:PropertyName>sys.siteuuid</ogc:PropertyName>
+    ...         <ogc:Literal>{78C0463E-2FCE-4AB2-A9C9-6A34BF261F52}</ogc:Literal>
+    ...        </ogc:PropertyIsEqualTo>
+    ...        <ogc:PropertyIsLike wildCard="*" escape="\" singleChar="?"> 
+    ...          <ogc:PropertyName>apiso:ServiceType</ogc:PropertyName>
+    ...          <ogc:Literal>*opendap*</ogc:Literal>
+    ...        </ogc:PropertyIsLike>
+    ...     </ogc:And> 
+    ...    </ogc:Filter>
+    ... </csw:Constraint>
     ...  </csw:Query>
     ... </csw:GetRecords>
     ... '''
-
-    ##########################################################
-    # Test 1.
-    # construct a request by send the xml string
-    ##########################################################
     >>> c.getrecords(xml=sos_search)   # in about XML it has constraint: maxrecords=10
-    >>> service_str ='urn:x-esri:specification:ServiceType:odp:url'
-    >>> for key,rec in c.records.iteritems():
-    ...	  for d in rec.references:
-    ...		if d['scheme'] == service_str:
-    ...		  print d['scheme']
-    ...		  print d['url']
-
-    >>> print(c.results)
+    >>> c.results
     {'matches': 46, 'nextrecord': 11, 'returned': 10}
 
     ##########################################################
-    # Test 2.
+    # Test 6
     # construct a request by setting SAME constraint with Test 1
     # Passing a list of list [[a,b]]
     # it means a && b
     ##########################################################
-    >>> word2 = fes.PropertyIsLike(propertyname='apiso:ServiceType',literal='opendap', escapeChar='\\', singleChar='?', wildCard='*')
-    >>> groupList5 = []
-    >>> groupList5.append(uuid)
-    >>> groupList5.append(word2)
-    >>> finalList = []
-    >>> finalList.append(groupList5)
-
-    >>> c.getrecordsbyfilter(finalList)
-    >>> xml = c.request
-    >>> print md.parseString(xml).toprettyxml()
-    >>> c.getrecords(xml=xml, maxrecords=10)
-    >>> service_str ='urn:x-esri:specification:ServiceType:odp:url'
-    >>> for key,rec in c.records.iteritems():
-    ...	  for d in rec.references:
-    ...		if d['scheme'] == service_str:
-    ...		  print d['scheme']
-    ...		  print d['url']
-
-    >>> print(c.results)
+    >>> dap_filter = fes.PropertyIsLike(propertyname='apiso:ServiceType', literal='*opendap*', escapeChar='\\', singleChar='?', wildCard='*')
+    >>> filter_list = [[uuid,dap_filter]]
+    >>> c.get_filtered_records(filter_list)
+    >>> c.results
     {'matches': 46, 'nextrecord': 11, 'returned': 10}
-
-    ##########################################################
-    # Another test for the getService_urls() function, return urls
-    ##########################################################
-    >>> recds = c.records
-    >>> c.getService_urls(service_str) 

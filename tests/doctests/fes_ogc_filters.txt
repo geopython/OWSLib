@@ -1,0 +1,102 @@
+Imports
+    >>> from owslib import fes
+    >>> from owslib.etree import etree
+    >>> from tests.utils import compare_xml
+
+PropertyIsEqualTo
+    >>> filter = fes.PropertyIsEqualTo("property", "value")
+    >>> should_return = '<ns0:PropertyIsEqualTo xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsEqualTo>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+PropertyIsNotEqualTo
+    >>> filter = fes.PropertyIsNotEqualTo("property", "value")
+    >>> should_return = '<ns0:PropertyIsNotEqualTo xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsNotEqualTo>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+PropertyIsLessThan
+    >>> filter = fes.PropertyIsLessThan("property", "value")
+    >>> should_return = '<ns0:PropertyIsLessThan xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsLessThan>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+PropertyIsGreaterThan
+    >>> filter = fes.PropertyIsGreaterThan("property", "value")
+    >>> should_return = '<ns0:PropertyIsGreaterThan xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsGreaterThan>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+PropertyIsLessThanOrEqualTo
+    >>> filter = fes.PropertyIsLessThanOrEqualTo("property", "value")
+    >>> should_return = '<ns0:PropertyIsLessThanOrEqualTo xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsLessThanOrEqualTo>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+PropertyIsGreaterThanOrEqualTo
+    >>> filter = fes.PropertyIsGreaterThanOrEqualTo("property", "value")
+    >>> should_return = '<ns0:PropertyIsGreaterThanOrEqualTo xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsGreaterThanOrEqualTo>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+PropertyIsLike
+    # Defaults
+    >>> filter = fes.PropertyIsLike("property", "value")
+    >>> should_return = '<ns0:PropertyIsLike xmlns:ns0="http://www.opengis.net/ogc" wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsLike>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+    # Setting characters
+    >>> filter = fes.PropertyIsLike("property", "value", wildCard="*", singleChar="#", escapeChar="!")
+    >>> should_return = '<ns0:PropertyIsLike xmlns:ns0="http://www.opengis.net/ogc" wildCard="*" singleChar="#" escapeChar="!"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsLike>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+Or
+    >>> filter1 = fes.PropertyIsLike("property", "like")
+    >>> filter2 = fes.PropertyIsEqualTo("property", "equal")
+    >>> filter3 = fes.PropertyIsLessThan("property", "less")
+
+    >>> filter = fes.Or([filter1, filter2, filter3])
+    >>> should_return = '<ns0:Or xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike><ns0:PropertyIsEqualTo><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>equal</ns0:Literal></ns0:PropertyIsEqualTo><ns0:PropertyIsLessThan><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>less</ns0:Literal></ns0:PropertyIsLessThan></ns0:Or>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+    >>> fes.Or([filter1])
+    Traceback (most recent call last):
+    ...
+    ValueError: Binary operations (And / Or) require a minimum of two operations to operate against
+
+And
+    >>> filter = fes.And([filter1, filter2, filter3])
+    >>> should_return = '<ns0:And xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike><ns0:PropertyIsEqualTo><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>equal</ns0:Literal></ns0:PropertyIsEqualTo><ns0:PropertyIsLessThan><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>less</ns0:Literal></ns0:PropertyIsLessThan></ns0:And>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+    >>> fes.And([filter1])
+    Traceback (most recent call last):
+    ...
+    ValueError: Binary operations (And / Or) require a minimum of two operations to operate against
+
+Not
+    >>> filter = fes.Not([filter1])
+    >>> should_return = '<ns0:Not xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike></ns0:Not>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+setConstraintList
+    >>> fr = fes.FilterRequest()
+    >>> filter = fr.setConstraintList([filter1, filter2, filter3])
+    >>> should_return = '<ns0:Filter xmlns:ns0="http://www.opengis.net/ogc"><ns0:Or><ns0:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike><ns0:PropertyIsEqualTo><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>equal</ns0:Literal></ns0:PropertyIsEqualTo><ns0:PropertyIsLessThan><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>less</ns0:Literal></ns0:PropertyIsLessThan></ns0:Or></ns0:Filter>'
+    >>> compare_xml(should_return, filter)
+    True
+
+setConstraint
+    >>> fr = fes.FilterRequest()
+    >>> filter = fr.setConstraint(filter1)
+    >>> should_return = '<ns0:Filter xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike></ns0:Filter>'
+    >>> compare_xml(should_return, filter)
+    True
+
+
+

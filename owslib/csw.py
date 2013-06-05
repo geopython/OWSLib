@@ -65,7 +65,8 @@ class CatalogueServiceWeb:
             etree.SubElement(tmp, util.nspath_eval('ows:Version', namespaces)).text = self.version
             tmp2 = etree.SubElement(node0, util.nspath_eval('ows:AcceptFormats', namespaces))
             etree.SubElement(tmp2, util.nspath_eval('ows:OutputFormat', namespaces)).text = outputformat
-            self.request = util.xml2string(etree.tostring(node0))
+
+            self.request = node0
     
             self._invoke()
     
@@ -106,7 +107,8 @@ class CatalogueServiceWeb:
         node0.set('schemaLanguage', namespaces['xs2'])
         node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
         etree.SubElement(node0, util.nspath_eval('csw:TypeName', namespaces)).text = typename
-        self.request = util.xml2string(etree.tostring(node0))
+
+        self.request = node0
 
         self._invoke()
 
@@ -135,7 +137,8 @@ class CatalogueServiceWeb:
         if dtype == 'property':
             dtypename = 'PropertyName'
         etree.SubElement(node0, util.nspath_eval('csw:%s' % dtypename, namespaces)).text = dname
-        self.request = util.xml2string(etree.tostring(node0))
+
+        self.request = node0
 
         self._invoke()
 
@@ -180,9 +183,8 @@ class CatalogueServiceWeb:
         """
 
         if xml is not None:
-            self.request = xml
-            e=etree.fromstring(xml)
-            val = e.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
+            self.request = etree.fromstring(xml)
+            val = self.request.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
             if val is not None:
                 esn = util.testXMLValue(val)
         else:
@@ -213,7 +215,7 @@ class CatalogueServiceWeb:
             if sortby is not None:
                 fes.setsortby(node1, sortby)
     
-            self.request = util.xml2string(etree.tostring(node0))
+            self.request = node0
 
         self._invoke()
  
@@ -258,7 +260,7 @@ class CatalogueServiceWeb:
         for i in id:
             etree.SubElement(node0, util.nspath_eval('csw:Id', namespaces)).text = i
         etree.SubElement(node0, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
-        self.request = util.xml2string(etree.tostring(node0))
+        self.request = node0
 
         self._invoke()
  
@@ -267,7 +269,7 @@ class CatalogueServiceWeb:
             self.records = {}
             self._parserecords(outputschema, esn)
 
-    def getrecordsbyfilter(self, constrains=[], typenames='csw:Record', esn='full', outputschema=namespaces['csw'], format=outputformat, maxrecords=10, resulttype='results'):
+    def get_filtered_records(self, constraints=[], typenames='csw:Record', esn='full', outputschema=namespaces['csw'], format=outputformat, maxrecords=10, resulttype='results'):
         """
 
         Construct and process a  GetRecordByFilter request
@@ -275,7 +277,7 @@ class CatalogueServiceWeb:
         Parameters
         ----------
 
-        - constrains: the list of constrains
+        - constraints: the list of constraints (OgcExpressions)
         - typenames: the typeNames to query against (default is csw:Record)
         - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'full')
         - outputschema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
@@ -307,11 +309,11 @@ class CatalogueServiceWeb:
         node2 = etree.SubElement(node1, util.nspath_eval('csw:Constraint', namespaces))
         node2.set('version', '1.1.0')        
         
-        if len(constrains) > 0: 
+        if len(constraints) > 0: 
             flt = fes.FilterRequest()
-            node2.append(flt.setConstrain(constrains))
+            node2.append(flt.setConstraintList(constraints))
             
-        self.request = util.xml2string(etree.tostring(node0))
+        self.request = node0
 
         self._invoke()
  
@@ -385,7 +387,7 @@ class CatalogueServiceWeb:
         if ttype == 'delete':
             self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
 
-        self.request = util.xml2string(etree.tostring(node0))
+        self.request = node0
 
         self._invoke()
         self.results = {}
@@ -424,7 +426,7 @@ class CatalogueServiceWeb:
         if responsehandler is not None:
             etree.SubElement(node0, util.nspath_eval('csw:ResponseHandler', namespaces)).text = responsehandler
        
-        self.request = util.xml2string(etree.tostring(node0))
+        self.request = node0
 
         self._invoke()
         self.results = {}
@@ -540,6 +542,10 @@ class CatalogueServiceWeb:
     
     def _invoke(self):
         # do HTTP request
+
+        etree.cleanup_namespaces(self.request)
+        self.request = util.xml2string(etree.tostring(self.request))
+
         self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
