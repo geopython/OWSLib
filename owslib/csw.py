@@ -19,6 +19,7 @@ from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.namespaces import Namespaces
+from owslib.util import cleanup_namespaces
 
 # default variables
 outputformat = 'application/xml'
@@ -543,7 +544,7 @@ class CatalogueServiceWeb:
     def _invoke(self):
         # do HTTP request
 
-        etree.cleanup_namespaces(self.request)
+        self.request = cleanup_namespaces(self.request)
         self.request = util.xml2string(etree.tostring(self.request))
 
         self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
