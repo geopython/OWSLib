@@ -1,3 +1,9 @@
+owslib (0.7.2-0) oneiric; urgency=low
+
+  * Update to 0.7.2.
+
+ -- Angelos Tzotsos <gcpp.kalxas@gmail.com>  Sat, 08 Jun 2013 20:11:00 +0300
+
 owslib (0.7.1-0) oneiric; urgency=low
 
   * Update to 0.7.1.
