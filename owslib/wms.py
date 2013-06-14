@@ -451,6 +451,14 @@ class ContentMetadata:
                 if extent.text:
                     self.timepositions=extent.text.split(',')
                     break
+                
+        # Elevations - available vertical levels
+        self.elevations=None
+        for extent in elem.findall('Extent'):
+            if extent.attrib.get("name").lower() =='elevation':
+                if extent.text:
+                    self.elevations=extent.text.split(',')
+                    break                
 
         # MetadataURLs
         self.metadataUrls = []
