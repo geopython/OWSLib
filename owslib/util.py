@@ -191,6 +191,14 @@ def nspath_eval(xpath, namespaces):
         out.append('{%s}%s' % (namespaces[namespace], element))
     return '/'.join(out)
 
+def cleanup_namespaces(element):
+    """ Remove unused namespaces from an element """
+    if etree.__name__ == 'lxml.etree':
+        etree.cleanup_namespaces(element)
+        return element
+    else:
+        return etree.fromstring(etree.tostring(element))
+
 def testXMLValue(val, attrib=False):
     """
 
