@@ -164,12 +164,14 @@ class SensorObservationService_1_0_0(object):
         data = urlencode(request)        
 
         response = openURL(base_url, data, method, username=self.username, password=self.password).read()
-        tr = etree.fromstring(response)
-
-        if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
-            raise ows.ExceptionReport(tr)
-
-        return response
+        try:
+            tr = etree.fromstring(response)
+            if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
+                raise ows.ExceptionReport(tr)
+        except ows.ExceptionReport:
+            raise
+        except BaseException:
+            return response
 
     def get_operation_by_name(self, name): 
         """
