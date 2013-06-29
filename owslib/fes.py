@@ -31,7 +31,7 @@ schema_location = '%s %s' % (namespaces['ogc'], schema)
 
 class FilterRequest(object):
     """ filter class """
-    def __init__(self, version='1.1.0'):
+    def __init__(self, parent=None, version='1.1.0'):
         """
 
         filter Constructor
@@ -45,6 +45,9 @@ class FilterRequest(object):
         """
 
         self.version = version
+        self._root = etree.Element(util.nspath_eval('ogc:Filter', namespaces))
+        if parent is not None:
+            self._root.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
 
     def set(self, parent=False, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, identifier=None):
         """
@@ -59,129 +62,105 @@ class FilterRequest(object):
         - keywords: list of keywords
         - propertyname: the PropertyName to Filter against 
         - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
+        - identifier: the dc:identifier to query against with a PropertyIsEqualTo.  Ignores all other inputs.
 
         """
 
-        # construct
-        node0 = etree.Element(util.nspath_eval('ogc:Filter', namespaces))
-        if parent is True:
-            node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-
+        # Set the identifier if passed.  Ignore other parameters
+        dc_identifier_equals_filter = None
         if identifier is not None:
-            self._setpropertyisequalto(node0, 'dc:identifier', identifier)
-            return node0
-
-        # decipher number of query parameters ( > 1 sets an 'And' Filter)
-        pcount = 0
+            dc_identifier_equals_filter = PropertyIsEqualTo('dc:identifier', identifier)
+            self._root.append(dc_identifier_equals_filter.toXML())
+            return self._root
+   
+        # Set the query type if passed
+        dc_type_equals_filter = None
         if qtype is not None:
-            pcount += 1
-        if keywords:
-            pcount += 1
-        if bbox is not None:
-            pcount += 1
+            dc_type_equals_filter = PropertyIsEqualTo('dc:type', qtype)
 
-        if pcount > 1: # Filter should be And-ed
-            node1 = etree.SubElement(node0, util.nspath_eval('ogc:And', namespaces))
-        else: 
-            node1 = None
-    
-        # set the query type if passed
-        # TODO: need a smarter way to figure these out
-        if qtype is not None:
-            if node1 is not None:
-                self._setpropertyisequalto(node1, 'dc:type', qtype)
-            else:
-                self._setpropertyisequalto(node0, 'dc:type', qtype)
-    
-        # set a bbox query if passed
+        # Set a bbox query if passed
+        bbox_filter = None
         if bbox is not None:
-            if node1 is not None:
-                self._setbbox(node1, bbox)
-            else:
-                self._setbbox(node0, bbox)
+            bbox_filter = BBox(bbox)
     
-        # set a keyword query if passed
+        # Set a keyword query if passed
+        keyword_filter = None
         if len(keywords) > 0:
             if len(keywords) > 1: # loop multiple keywords into an Or
-                if node1 is not None:
-                    node3 = etree.SubElement(node1, util.nspath_eval('ogc:Or', namespaces))
-                else:
-                    node3 = etree.SubElement(node0, util.nspath_eval('ogc:Or', namespaces))
-    
+                ks = []    
                 for i in keywords:
-                    self._setpropertyislike(node3, propertyname, '%%%s%%' % i)
+                    ks.append(PropertyIsLike(propertyname, "*%s*" % i, wildCard="*"))
+                keyword_filter = Or(operations=ks)
+            elif len(keywords) == 1: # one keyword
+                keyword_filter = PropertyIsLike(propertyname, "*%s*" % keywords[0], wildCard="*")
     
-            else: # one keyword
-                if node1 is not None:
-                    self._setpropertyislike(node1, propertyname, '%%%s%%' % keywords[0])
-                else:
-                    self._setpropertyislike(node0, propertyname, '%%%s%%' % keywords[0])
-    
-        return node0
 
-    def _setpropertyisequalto(self, parent, propertyname, literal, matchcase=True):
+        # And together filters if more than one exists
+        filters = filter(None,[keyword_filter, bbox_filter, dc_type_equals_filter])
+        if len(filters) == 1:
+            self._root.append(filters[0].toXML())
+        elif len(filters) > 1:
+            self._root.append(And(operations=filters).toXML())
+
+        return self._root
+       
+    def setConstraint(self, constraint):
         """
-
-        construct a PropertyIsEqualTo
-
+        Construct and process a  GetRecords request
+    
         Parameters
         ----------
 
-        - parent: parent etree.Element object
-        - propertyname: the PropertyName
-        - literal: the Literal value
-        - matchcase: whether to perform a case insensitve query (default is True)
+        - constraint: An OgcExpression object
 
         """
+        self._root.append(constraint.toXML())
+        return self._root
 
-        tmp = etree.SubElement(parent, util.nspath_eval('ogc:PropertyIsEqualTo', namespaces))
-        if matchcase is False:
-            tmp.set('matchCase', 'false')
-        etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
-        etree.SubElement(tmp, util.nspath_eval('ogc:Literal', namespaces)).text = literal
+    def setConstraintList(self, constraints):
+        """
+        Construct and process a  GetRecords request
     
-    def _setbbox(self, parent, bbox):
-        """
-
-        construct a BBOX search predicate
-
         Parameters
         ----------
 
-        - parent: parent etree.Element object
-        - bbox: the bounding box in the form [minx,miny,maxx,maxy]
+        - constraints: A list of OgcExpression objects
+                       The list is interpretted like so:
+
+                       [a,b,c]
+                       a || b || c
+
+                       [[a,b,c]]
+                       a && b && c
+
+                       [[a,b],[c],[d],[e]] or [[a,b],c,d,e]
+                       (a && b) || c || d || e
 
         """
+        ors = []
+        if len(constraints) == 1:
+            if isinstance(constraints[0], OgcExpression):
+                return self.setConstraint(constraints[0])
+            else:
+                self._root.append(And(operations=constraints[0]).toXML())
+                return self._root
 
-        tmp = etree.SubElement(parent, util.nspath_eval('ogc:BBOX', namespaces))
-        etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = 'ows:BoundingBox'
-        tmp2 = etree.SubElement(tmp, util.nspath_eval('gml:Envelope', namespaces))
-        etree.SubElement(tmp2, util.nspath_eval('gml:lowerCorner', namespaces)).text = '%s %s' % (bbox[0], bbox[1])
-        etree.SubElement(tmp2, util.nspath_eval('gml:upperCorner', namespaces)).text = '%s %s' % (bbox[2], bbox[3])
+        for c in constraints:
+            if isinstance(c, OgcExpression):
+                ors.append(c)
+            elif isinstance(c, list) or isinstance(c, tuple):
+                if len(c) == 1:
+                    ors.append(c[0])
+                elif len(c) >= 2:
+                    ands = []
+                    for sub in c:
+                        if isinstance(sub, OgcExpression):
+                            ands.append(sub)
+                    ors.append(And(operations=ands))
 
-    def _setpropertyislike(self, parent, propertyname, literal, wildcard='%', singlechar='_', escapechar='\\'):  
-        """
+        self._root.append(Or(operations=ors).toXML())
+        return self._root
 
-        construct a PropertyIsLike
-
-        Parameters
-        ----------
-
-        - parent: parent etree.Element object
-        - propertyname: the PropertyName
-        - literal: the Literal value
-        - wildcard: the wildCard character (default is '%')
-        - singlechar: the singleChar character (default is '_')
-        - escapechar: the escapeChar character (default is '\')
-
-        """
-
-        tmp = etree.SubElement(parent, util.nspath_eval('ogc:PropertyIsLike', namespaces))
-        tmp.set('wildCard', wildcard)
-        tmp.set('singleChar', singlechar)
-        tmp.set('escapeChar', escapechar)
-        etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
-        etree.SubElement(tmp, util.nspath_eval('ogc:Literal', namespaces)).text = literal
 
 class FilterCapabilities(object):
     """ Abstraction for Filter_Capabilities """
@@ -244,3 +223,146 @@ def setsortby(parent, propertyname, order='ASC'):
     tmp2 = etree.SubElement(tmp, util.nspath_eval('ogc:SortProperty', namespaces))
     etree.SubElement(tmp2, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
     etree.SubElement(tmp2, util.nspath_eval('ogc:SortOrder', namespaces)).text = order
+    
+class OgcExpression(object):
+    def __init__(self):
+        pass
+
+class BinaryComparisonOpType(OgcExpression):
+    """ Super class of all the property operation classes"""
+    def __init__(self, propertyoperator, propertyname, literal, matchcase=True):
+        self.propertyoperator = propertyoperator
+        self.propertyname = propertyname
+        self.literal = literal
+        self.matchcase = matchcase
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval(self.propertyoperator, namespaces))
+        if self.matchcase is False:
+            node0.set('matchCase', 'false')
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        etree.SubElement(node0, util.nspath_eval('ogc:Literal', namespaces)).text = self.literal
+        return node0
+    
+class PropertyIsEqualTo(BinaryComparisonOpType):
+    """ PropertyIsEqualTo class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        BinaryComparisonOpType.__init__(self, 'ogc:PropertyIsEqualTo',  propertyname, literal, matchcase)
+
+class PropertyIsNotEqualTo(BinaryComparisonOpType):
+    """ PropertyIsNotEqualTo class """
+    def __init__(self, propertyname, literal, matchcase=True):
+        BinaryComparisonOpType.__init__(self, 'ogc:PropertyIsNotEqualTo',  propertyname, literal, matchcase)
+        
+class PropertyIsLessThan(BinaryComparisonOpType):
+    """PropertyIsLessThan class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        BinaryComparisonOpType.__init__(self, 'ogc:PropertyIsLessThan',  propertyname, literal, matchcase)
+
+class PropertyIsGreaterThan(BinaryComparisonOpType):
+    """PropertyIsGreaterThan class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        BinaryComparisonOpType.__init__(self, 'ogc:PropertyIsGreaterThan',  propertyname, literal, matchcase)
+
+class PropertyIsLessThanOrEqualTo(BinaryComparisonOpType):
+    """PropertyIsLessThanOrEqualTo class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        BinaryComparisonOpType.__init__(self, 'ogc:PropertyIsLessThanOrEqualTo',  propertyname, literal, matchcase)
+
+class PropertyIsGreaterThanOrEqualTo(BinaryComparisonOpType):
+    """PropertyIsGreaterThanOrEqualTo class"""
+    def __init__(self, propertyname, literal, matchcase=True):
+        BinaryComparisonOpType.__init__(self, 'ogc:PropertyIsGreaterThanOrEqualTo',  propertyname, literal, matchcase)
+
+class PropertyIsLike(OgcExpression):
+    """PropertyIsLike class"""
+    def __init__(self, propertyname, literal, escapeChar='\\', singleChar='_', wildCard='%'):
+        self.propertyname = propertyname
+        self.literal = literal
+        self.escapeChar = escapeChar
+        self.singleChar = singleChar
+        self.wildCard = wildCard
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval('ogc:PropertyIsLike', namespaces))
+        node0.set('wildCard', self.wildCard)
+        node0.set('singleChar', self.singleChar)
+        node0.set('escapeChar', self.escapeChar)
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        etree.SubElement(node0, util.nspath_eval('ogc:Literal', namespaces)).text = self.literal
+        return node0
+
+class PropertyIsNull(OgcExpression):
+    """PropertyIsNull class"""
+    def __init__(self, propertyname):
+        self.propertyname = propertyname
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval('ogc:PropertyIsNull', namespaces))
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        return node0
+        
+class PropertyIsBetween(OgcExpression):
+    """PropertyIsBetween class"""
+    def __init__(self, propertyname, lower, upper):
+        self.propertyname = propertyname
+        self.lower = lower
+        self.upper = upper
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval('ogc:PropertyIsBetween', namespaces))
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        node1 = etree.SubElement(node0, util.nspath_eval('ogc:LowerBoundary', namespaces))
+        etree.SubElement(node1, util.nspath_eval('ogc:Literal', namespaces)).text = '%s' % self.lower
+        node2 = etree.SubElement(node0, util.nspath_eval('ogc:UpperBoundary', namespaces))
+        etree.SubElement(node2, util.nspath_eval('ogc:Literal', namespaces)).text = '%s' % self.upper
+        return node0
+        
+class BBox(OgcExpression):
+    """Construct a BBox, two pairs of coordinates (west-south and east-north)"""
+    def __init__(self, bbox):
+        self.bbox = bbox
+    def toXML(self):
+        tmp = etree.Element(util.nspath_eval('ogc:BBOX', namespaces))
+        etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = 'ows:BoundingBox'
+        tmp2 = etree.SubElement(tmp, util.nspath_eval('gml:Envelope', namespaces))
+        etree.SubElement(tmp2, util.nspath_eval('gml:lowerCorner', namespaces)).text = '%s %s' % (self.bbox[0], self.bbox[1])
+        etree.SubElement(tmp2, util.nspath_eval('gml:upperCorner', namespaces)).text = '%s %s' % (self.bbox[2], self.bbox[3])
+        return tmp
+
+# BINARY
+class BinaryLogicOpType(OgcExpression):
+    """ Binary Operators: And / Or """
+    def __init__(self, binary_operator, operations):
+        self.binary_operator = binary_operator
+        try:
+            assert len(operations) >= 2
+            self.operations = operations
+        except:
+            raise ValueError("Binary operations (And / Or) require a minimum of two operations to operate against")
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval(self.binary_operator, namespaces))
+        for op in self.operations:
+            node0.append(op.toXML())
+        return node0
+
+class And(BinaryLogicOpType):
+    def __init__(self, operations):
+        super(And,self).__init__('ogc:And', operations)
+
+class Or(BinaryLogicOpType):
+    def __init__(self, operations):
+        super(Or,self).__init__('ogc:Or', operations)
+
+# UNARY
+class UnaryLogicOpType(OgcExpression):
+    """ Unary Operator: Not """
+    def __init__(self, urary_operator, operations):
+        self.urary_operator = urary_operator
+        self.operations = operations
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval(self.urary_operator, namespaces))
+        for op in self.operations:
+            node0.append(op.toXML())
+        return node0
+
+class Not(UnaryLogicOpType):
+    def __init__(self, operations):
+        super(Not,self).__init__('ogc:Not', operations)
+

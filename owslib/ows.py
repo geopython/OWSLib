@@ -223,6 +223,10 @@ class ExceptionReport(Exception):
 
     def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
         self.exceptions = []
+
+        if hasattr(elem, 'getroot'):
+            elem = elem.getroot()
+            
         for i in elem.findall(util.nspath('Exception', namespace)):
             tmp = {}
             val = i.attrib.get('exceptionCode')

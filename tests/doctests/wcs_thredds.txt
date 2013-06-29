@@ -9,9 +9,9 @@ Imports
     >>> from owslib.wcs import WebCoverageService
     >>> from tests.utils import scratch_file
 
-    >>> wcs=WebCoverageService('http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd', version='1.0.0')
+    >>> wcs=WebCoverageService('http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best', version='1.0.0')
     >>> wcs.url
-    'http://motherlode.ucar.edu:8080/thredds/wcs/fmrc/NCEP/NAM/CONUS_40km/conduit/NCEP-NAM-CONUS_40km-conduit_best.ncd'
+    'http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best'
     >>> wcs.version
     '1.0.0'
     >>> wcs.identification.service
@@ -37,41 +37,59 @@ Imports
 
 Print the ids of all layers (actually just the first 3):
    >>> wcs.contents.keys()[:3]
-   ['Total_Column-Integrated_Cloud_Ice', 'Categorical_Snow', 'Exchange_Coefficient']
-	
+   ['Geopotential_height_zeroDegC_isotherm', 'Temperature_tropopause', 'Temperature_layer_between_two_pressure_difference_from_ground_layer']
+    
 
 #To further interrogate a single "coverage" get the coverageMetadata object
 #You can either do:
-	>>> cvg= wcs.contents['Temperature'] #to get it from the dictonary
-	
-#or even simpler you can do:
-	>>> cvg=wcs['Temperature'] 
-
-	>>> cvg.boundingBoxWGS84
-	(-153.21273081043725, 11.968943066973155, -49.02974146394894, 57.381664838271625)
-
+    >>> cvg= wcs.contents['Temperature_tropopause'] #to get it from the dictonary
     
-	>>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
-	True
+#or even simpler you can do:
+    >>> cvg=wcs['Temperature_tropopause'] 
 
-	>>> filter(None, map(lambda x: x.getcode(), cvg.supportedCRS))
-	['EPSG:9802']
+    >>> cvg.boundingBoxWGS84
+    (-153.58891112103777, 11.747698396806157, -48.598408556239576, 57.484319872365305)
 
-	>>> cvg.supportedFormats
-	['GeoTIFF', 'GeoTIFF_Float', 'NetCDF3']
-	
-#Now we have enough information to build a getCoverage request: 	
-	>>> covID='Temperature'
-	>>> timeRange=['2009-01-08T06:00:00',  '2009-01-08T12:00:00']  #Okay, you should be able to select a range of times, but the server doesn't seem to like it. 
-	>>> timeRange=[cvg.timepositions[10]] #So for now I'll just  choose one timestep (from cvg.timepositions)
-	>>> bb=(-140, -15, 30, 55) # chosen from cvg.boundingBoxWGS84
-	>>> formatType='NetCDF3' # chosen from cvg.supportedFormats
-	
+    >>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
+    True
+
+    >>> filter(None, map(lambda x: x.getcode(), cvg.supportedCRS))
+    ['EPSG:9802']
+
+    >>> cvg.supportedFormats
+    ['GeoTIFF', 'GeoTIFF_Float', 'NetCDF3']
+
+    >>> cvg.grid.axislabels
+    ['x', 'y']
+
+    >>> cvg.grid.dimension
+    2
+
+    >>> cvg.grid.lowlimits
+    ['0', '0']
+
+    >>> cvg.grid.highlimits
+    ['92', '64']
+
+    >>> cvg.grid.origin
+    ['-4223.61279296875', '-832.2073364257812']
+
+    >>> cvg.grid.offsetvectors
+    [['81.27100405485734', '0.0'], ['0.0', '81.27100086212158']]
+
+
+#Now we have enough information to build a getCoverage request:     
+    >>> covID='Temperature_tropopause'
+    >>> timeRange=['2009-01-08T06:00:00',  '2009-01-08T12:00:00']  #Okay, you should be able to select a range of times, but the server doesn't seem to like it. 
+    >>> timeRange=[cvg.timepositions[10]] #So for now I'll just  choose one timestep (from cvg.timepositions)
+    >>> bb=(-140, -15, 30, 55) # chosen from cvg.boundingBoxWGS84
+    >>> formatType='NetCDF3' # chosen from cvg.supportedFormats
+    
 #Make the actual getCoverage request.
-	>>> output=wcs.getCoverage(identifier=covID,time=timeRange,bbox=bb, format=formatType)
+    >>> output=wcs.getCoverage(identifier=covID,time=timeRange,bbox=bb, format=formatType)
 
 #Then write this to a netcdf file.
-	>>> filename = scratch_file('threddstest.nc')
-	>>> f=open(filename, 'wb')
-	>>> f.write(output.read())
-	>>> f.close() 	
+    >>> filename = scratch_file('threddstest.nc')
+    >>> f=open(filename, 'wb')
+    >>> f.write(output.read())
+    >>> f.close()   

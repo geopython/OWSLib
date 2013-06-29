@@ -84,10 +84,10 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 
 """
 
-from etree import etree
+from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
-from util import (testXMLValue, build_get_url, dump, getTypedValue, 
+from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue, 
                   getNamespace, xml2string, nspath, openURL, nspath_eval)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
@@ -487,7 +487,7 @@ class WPSExecution():
         #             service="WPS" 
         #             version="1.0.0" 
         #             xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">       
-        root = etree.Element(nspath_eval('wps:Execute', namespaces), nsmap=namespaces)
+        root = etree.Element(nspath_eval('wps:Execute', namespaces))
         root.set('service', 'WPS')
         root.set('version', WPS_DEFAULT_VERSION)
         root.set(nspath_eval('xsi:schemaLocation', namespaces), '%s %s' % (namespaces['wps'], WPS_DEFAULT_SCHEMA_LOCATION) )
@@ -499,10 +499,8 @@ class WPSExecution():
         # <wps:DataInputs>
         dataInputsElement = etree.SubElement(root, nspath_eval('wps:DataInputs', namespaces))
         
-        for input in inputs:
-            key = input[0]
-            val = input[1]
-            
+        for (key,val) in inputs:
+
             inputElement = etree.SubElement(dataInputsElement, nspath_eval('wps:Input', namespaces))
             identifierElement = etree.SubElement(inputElement, nspath_eval('ows:Identifier', namespaces))
             identifierElement.text = key
@@ -537,7 +535,7 @@ class WPSExecution():
             #   </wps:Reference>
             # </wps:Input>
             else:
-               inputElement.append( val.getXml() )
+                inputElement.append( val.getXml() )
         
         # <wps:ResponseForm>
         #   <wps:ResponseDocument storeExecuteResponse="true" status="true">
@@ -553,7 +551,8 @@ class WPSExecution():
             outputElement = etree.SubElement(responseDocumentElement, nspath_eval('wps:Output', namespaces), 
                                                        attrib={'asReference':'true'} )
             outputIdentifierElement = etree.SubElement(outputElement, nspath_eval('ows:Identifier', namespaces)).text = output
-                    
+                  
+
         return root
                 
     # wait for 60 seconds by default
@@ -1134,8 +1133,7 @@ class WFSFeatureCollection(FeatureCollection):
     #   </wps:Reference>
     def getXml(self):
         
-        root = etree.Element(nspath_eval('wps:Reference', namespaces), nsmap=namespaces,
-                             attrib = { nspath_eval("xlink:href",namespaces) : self.url} )
+        root = etree.Element(nspath_eval('wps:Reference', namespaces), attrib = { nspath_eval("xlink:href",namespaces) : self.url} )
         bodyElement = etree.SubElement(root, nspath_eval('wps:Body', namespaces))
         getFeatureElement = etree.SubElement(bodyElement, nspath_eval('wfs:GetFeature', namespaces),
                                              attrib = { "service":"WFS",
@@ -1176,7 +1174,7 @@ class WFSQuery():
         #                </ogc:Filter>
         #            </wfs:Query>
    
-        queryElement = etree.Element(nspath_eval('wfs:Query', namespaces), attrib = { "typeName":self.typeName }, nsmap=namespaces)
+        queryElement = etree.Element(nspath_eval('wfs:Query', namespaces), attrib = { "typeName":self.typeName })
         for propertyName in self.propertyNames:
             propertyNameElement = etree.SubElement(queryElement, nspath_eval('wfs:PropertyName', namespaces))
             propertyNameElement.text = propertyName
@@ -1231,7 +1229,7 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
                 </wps:ComplexData>
             </wps:Data>
         '''
-        dataElement = etree.Element(nspath_eval('wps:Data', namespaces), nsmap=namespaces)
+        dataElement = etree.Element(nspath_eval('wps:Data', namespaces))
         complexDataElement = etree.SubElement(dataElement, nspath_eval('wps:ComplexData', namespaces),
                                               attrib={"mimeType":"text/xml", "encoding":"UTF-8", "schema":GML_SCHEMA_LOCATION} )
         featureMembersElement = etree.SubElement(complexDataElement, nspath_eval('gml:featureMembers', namespaces),

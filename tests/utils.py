@@ -17,8 +17,12 @@ def scratch_file(filename):
     return os.path.join(scratch_directory(), filename)
 
 def compare_xml(a,b):
-    ea,eb = etree.fromstring(a), etree.fromstring(b)
-    return compare_elements(ea,eb)
+    if not isinstance(a, etree._Element):
+        a = etree.fromstring(a)
+    if not isinstance(b, etree._Element):
+        b = etree.fromstring(b)
+
+    return compare_elements(a,b)
 
 def compare_elements(a,b):
     # Tag

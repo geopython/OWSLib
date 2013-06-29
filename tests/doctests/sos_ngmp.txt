@@ -196,30 +196,3 @@ Contents
 
     >>> network.observation_models
     ['http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation']
-
-
-DescribeSensor
-
-    # bad procedure
-    >>> procedure = "foobar"
-    >>> outputFormat = ngmp.get_operation_by_name('DescribeSensor').parameters['procedureDescriptionFormat']['values'][0]
-    >>> response = ngmp.describe_sensor(procedure=procedure, outputFormat=outputFormat)
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ExceptionReport: 'The value of the sensorID parameter is incorrect. Please check the capabilities response document for valid sensor Ids!'
-
-    # good procedure
-    >>> procedure = ngmp.offerings[1].procedures[0]
-    >>> outputFormat = ngmp.get_operation_by_name('DescribeSensor').parameters['procedureDescriptionFormat']['values'][0]
-    >>> response = ngmp.describe_sensor(procedure=procedure, outputFormat=outputFormat)
-
-GetObservation
-
-    # bad offering
-    >>> offerings = ['bad']
-    >>> observedProperties = ['bad2']
-    >>> response = ngmp.get_observation(offerings=offerings, observedProperties=observedProperties, responseformat='http://www.opengis.net/om/2.0')
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ExceptionReport: "The value (bad) of the parameter 'offering' is invalid"
-
