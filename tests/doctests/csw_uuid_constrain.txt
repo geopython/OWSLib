@@ -20,7 +20,7 @@ Initialize CSW client
     >>> AOOS = '78C0463E-2FCE-4AB2-A9C9-6A34BF261F52'
     >>> bbox = [-141,42,-52,84]
     
-    # Test new function get_filtered_records()
+    # Test new function getrecords2()
     >>> uuid = fes.PropertyIsEqualTo(propertyname='sys.siteuuid', literal='{%s}' % AOOS)
     >>> timeRange = fes.PropertyIsBetween(propertyname='apiso:modified', lower='2009-02-01', upper='2012-02-01')
     >>> word = fes.PropertyIsLike(propertyname='csw:AnyText', literal='*salinity*', escapeChar='\\', singleChar='?', wildCard='*')
@@ -32,7 +32,7 @@ Initialize CSW client
     # Translates to (a && c && d) || (b && c && d)
     ##########################################################
     >>> filter_list = [[uuid, word, timeRange], [bbox, word, timeRange]]
-    >>> c.get_filtered_records(filter_list)
+    >>> c.getrecords2(filter_list)
     >>> c.results
     {'matches': 15, 'nextrecord': 11, 'returned': 10}
 
@@ -42,7 +42,7 @@ Initialize CSW client
     # it means a || b
     ##########################################################
     >>> filter_list = [uuid, box]
-    >>> c.get_filtered_records(filter_list)
+    >>> c.getrecords2(filter_list)
     >>> c.results
     {'matches': 4895, 'nextrecord': 11, 'returned': 10}
 
@@ -52,7 +52,7 @@ Initialize CSW client
     # it means a && b
     ##########################################################
     >>> filter_list = [[uuid, box]]
-    >>> c.get_filtered_records(filter_list)
+    >>> c.getrecords2(filter_list)
     >>> c.results
     {'matches': 0, 'nextrecord': 0, 'returned': 0}
 
@@ -62,7 +62,7 @@ Initialize CSW client
     # Passing a list [c]
     ##########################################################
     >>> filter = fes.PropertyIsNull(propertyname='sys.siteuuid')
-    >>> c.get_filtered_records([filter])
+    >>> c.getrecords2([filter])
     >>> c.results
     {'matches': 16, 'nextrecord': 11, 'returned': 10}
 
@@ -104,6 +104,6 @@ Initialize CSW client
     ##########################################################
     >>> dap_filter = fes.PropertyIsLike(propertyname='apiso:ServiceType', literal='*opendap*', escapeChar='\\', singleChar='?', wildCard='*')
     >>> filter_list = [[uuid,dap_filter]]
-    >>> c.get_filtered_records(filter_list)
+    >>> c.getrecords2(filter_list)
     >>> c.results
     {'matches': 46, 'nextrecord': 11, 'returned': 10}

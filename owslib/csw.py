@@ -270,7 +270,7 @@ class CatalogueServiceWeb:
             self.records = {}
             self._parserecords(outputschema, esn)
 
-    def get_filtered_records(self, constraints=[], typenames='csw:Record', esn='full', outputschema=namespaces['csw'], format=outputformat, maxrecords=10, resulttype='results'):
+    def getrecords2(self, constraints=[], typenames='csw:Record', esn='full', outputschema=namespaces['csw'], format=outputformat, maxrecords=10, resulttype='results'):
         """
 
         Construct and process a  GetRecordByFilter request
