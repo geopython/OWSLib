@@ -11,9 +11,9 @@
     >>> c.getdomain('GetRecords.typeNames')
     >>> c.results
     {'values': ['csw:Record', 'gmd:MD_Metadata'], 'parameter': 'GetRecords.typeNames', 'type': 'csw:Record'}
-    >>> c.getrecords()
+    >>> c.getrecords2()
     >>> c.results
-    {'matches': 206, 'nextrecord': 11, 'returned': 10}
+    {'matches': 203, 'nextrecord': 11, 'returned': 10}
     >>> c.results['matches'] < 10
     False
     >>> c.getdomain('GetRecords.typeNamesFOO')

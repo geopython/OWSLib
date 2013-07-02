@@ -41,10 +41,11 @@ Initialize CSW client
     # Passing a list of list [a, b]
     # it means a || b
     ##########################################################
-    >>> filter_list = [uuid, box]
-    >>> c.getrecords2(filter_list)
-    >>> c.results
-    {'matches': 4895, 'nextrecord': 11, 'returned': 10}
+    # The response of this query is chaning to often to be a reliable test.
+    # >>> filter_list = [uuid, box]
+    # >>> c.getrecords2(filter_list)
+    # >>> c.results
+    # {'matches': 4895, 'nextrecord': 11, 'returned': 10}
 
     ##########################################################
     # Test 3
@@ -92,7 +93,7 @@ Initialize CSW client
     ...  </csw:Query>
     ... </csw:GetRecords>
     ... '''
-    >>> c.getrecords(xml=sos_search)   # in about XML it has constraint: maxrecords=10
+    >>> c.getrecords2(xml=sos_search)   # in about XML it has constraint: maxrecords=10
     >>> c.results
     {'matches': 46, 'nextrecord': 11, 'returned': 10}
 
