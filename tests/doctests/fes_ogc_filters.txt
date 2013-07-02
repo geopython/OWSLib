@@ -3,6 +3,19 @@ Imports
     >>> from owslib.etree import etree
     >>> from tests.utils import compare_xml
 
+SortProperty
+    >>> sort = fes.SortProperty("property", "ASC")
+    >>> should_return = '<ns0:SortProperty xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:SortOrder>ASC</ns0:SortOrder></ns0:SortProperty>'
+    >>> compare_xml(should_return, sort.toXML())
+    True
+
+SortBy
+    >>> sort2 = fes.SortProperty("another_property", "DESC")
+    >>> sortby = fes.SortBy([sort,sort2])
+    >>> should_return = '<ns0:SortBy xmlns:ns0="http://www.opengis.net/ogc"><ns0:SortProperty xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:SortOrder>ASC</ns0:SortOrder></ns0:SortProperty><ns0:SortProperty xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>another_property</ns0:PropertyName><ns0:SortOrder>DESC</ns0:SortOrder></ns0:SortProperty></ns0:SortBy>'
+    >>> compare_xml(should_return, sortby.toXML())
+    True
+
 PropertyIsEqualTo
     >>> filter = fes.PropertyIsEqualTo("property", "value")
     >>> should_return = '<ns0:PropertyIsEqualTo xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsEqualTo>'

@@ -172,7 +172,7 @@ class CatalogueServiceWeb:
         - propertyname: the PropertyName to Filter against 
         - bbox: the bounding box of the spatial query in the form [minx,miny,maxx,maxy]
         - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'summary')
-        - sortby: property to sort results on (default is 'dc:title')
+        - sortby: property to sort results on
         - outputschema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
         - format: the outputFormat (default is 'application/xml')
         - startposition: requests a slice of the result set, starting at this position (default is 0)
@@ -182,6 +182,10 @@ class CatalogueServiceWeb:
         - resulttype: the resultType 'hits', 'results', 'validate' (default is 'results')
 
         """
+
+        raise DeprecationWarning("""Please use the updated 'getrecords2' method instead of 'getrecords'.  
+        The 'getrecords' method will be upgraded to use the 'getrecords2' parameters
+        in a future version of OWSLib.""")
 
         if xml is not None:
             self.request = etree.fromstring(xml)
@@ -270,51 +274,70 @@ class CatalogueServiceWeb:
             self.records = {}
             self._parserecords(outputschema, esn)
 
-    def getrecords2(self, constraints=[], typenames='csw:Record', esn='full', outputschema=namespaces['csw'], format=outputformat, maxrecords=10, resulttype='results'):
+    def getrecords2(self, constraints=[], sortby=None, typenames='csw:Record', esn='summary', outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None, resulttype='results'):
         """
 
-        Construct and process a  GetRecordByFilter request
+        Construct and process a  GetRecords request
 
         Parameters
         ----------
 
-        - constraints: the list of constraints (OgcExpressions)
+        - constraints: the list of constraints (OgcExpression from owslib.fes module)
+        - sortby: an OGC SortBy object (SortBy from owslib.fes module)
         - typenames: the typeNames to query against (default is csw:Record)
-        - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'full')
+        - esn: the ElementSetName 'full', 'brief' or 'summary' (default is 'summary')        
         - outputschema: the outputSchema (default is 'http://www.opengis.net/cat/csw/2.0.2')
         - format: the outputFormat (default is 'application/xml')
+        - startposition: requests a slice of the result set, starting at this position (default is 0)
         - maxrecords: the maximum number of records to return. No records are returned if 0 (default is 10)
+        - cql: common query language text.  Note this overrides bbox, qtype, keywords
+        - xml: raw XML request.  Note this overrides all other options
         - resulttype: the resultType 'hits', 'results', 'validate' (default is 'results')
 
         """
 
-        # construct request
-        node0 = self._setrootelement('csw:GetRecords')
-        if etree.__name__ != 'lxml.etree':  # apply nsmap manually
-            node0.set('xmlns:ows', namespaces['ows'])
-            node0.set('xmlns:gmd', namespaces['gmd'])
-            node0.set('xmlns:dif', namespaces['dif'])
-            node0.set('xmlns:fgdc', namespaces['fgdc'])
-        node0.set('outputSchema', outputschema)
-        node0.set('outputFormat', format)
-        node0.set('version', self.version)
-        node0.set('service', self.service)
-        node0.set('resultType', resulttype)
-        node0.set('maxRecords', str(maxrecords))        
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+        if xml is not None:
+            self.request = etree.fromstring(xml)
+            val = self.request.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
+            if val is not None:
+                esn = util.testXMLValue(val)
+        else:
+            # construct request
+            node0 = self._setrootelement('csw:GetRecords')
+            if etree.__name__ != 'lxml.etree':  # apply nsmap manually
+                node0.set('xmlns:ows', namespaces['ows'])
+                node0.set('xmlns:gmd', namespaces['gmd'])
+                node0.set('xmlns:dif', namespaces['dif'])
+                node0.set('xmlns:fgdc', namespaces['fgdc'])
+            node0.set('outputSchema', outputschema)
+            node0.set('outputFormat', format)
+            node0.set('version', self.version)
+            node0.set('service', self.service)
+            node0.set('resultType', resulttype)
+            if startposition > 0:
+                node0.set('startPosition', str(startposition))
+            node0.set('maxRecords', str(maxrecords))        
+            node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
 
-        node1 = etree.SubElement(node0, util.nspath_eval('csw:Query', namespaces))
-        node1.set('typeNames', typenames)
-    
-        etree.SubElement(node1, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
-        node2 = etree.SubElement(node1, util.nspath_eval('csw:Constraint', namespaces))
-        node2.set('version', '1.1.0')        
+            node1 = etree.SubElement(node0, util.nspath_eval('csw:Query', namespaces))
+            node1.set('typeNames', typenames)
         
-        if len(constraints) > 0: 
-            flt = fes.FilterRequest()
-            node2.append(flt.setConstraintList(constraints))
-            
-        self.request = node0
+            etree.SubElement(node1, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
+
+            if len(constraints) > 0: 
+                node2 = etree.SubElement(node1, util.nspath_eval('csw:Constraint', namespaces))
+                node2.set('version', '1.1.0')
+                flt = fes.FilterRequest()
+                node2.append(flt.setConstraintList(constraints))
+
+            # Now add a CQL filter if passed in
+            if cql is not None:
+                etree.SubElement(node2, util.nspath_eval('csw:CqlText', namespaces)).text = cql
+                
+            if sortby is not None and isinstance(sortby, fes.SortBy):
+                node1.append(sortby)
+
+            self.request = node0
 
         self._invoke()
  

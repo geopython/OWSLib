@@ -1,4 +1,8 @@
+Imports
+
+    >>> from owslib import fes    
     >>> from owslib.csw import CatalogueServiceWeb as cs
+
     >>> c=cs('http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw',timeout=30)
     >>> c.identification.title
     'Compusult CSW'
@@ -12,7 +16,9 @@
     ExceptionReport: 'Internal Error'
     >>> c.response
     '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator=""><ows:ExceptionText>Internal Error</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
-    >>> c.getrecords(keywords=['birds'])
+
+    >>> prop = fes.PropertyIsLike("csw:AnyText", "birds")
+    >>> c.getrecords2([prop])
     >>> c.results['matches']
     99
     >>> c.results['returned']
@@ -22,11 +28,16 @@
     >>> c.records['9250AA67-F3AC-6C12-0CB9-0662231AA181'].abstract
     '272 Categorized Initiatives: Initiatives are referenced to a Category, Sub-Category and Subject Term index, through the cititzen science web site at http://www.citizenscience.ca'
     >>> c.getrecordbyid(['9250AA67-F3AC-6C12-0CB9-0662231AA181'])
-    >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd')
+
+    >>> prop = fes.PropertyIsLike("csw:AnyText", "hydrology")
+    >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd')
     >>> c.exceptionreport
-    >>> c.getrecords(keywords=['hydrology'],outputschema='http://www.isotc211.org/2005/gmd',maxrecords=2)
+
+    >>> prop = fes.PropertyIsLike("csw:AnyText", "hydrology")
+    >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd', maxrecords=2)
     >>> c.results['returned']
     2
+
     >>> c.records['World Glaciology Data, Geological Survey of Canada.xml'].identification.title
     'World Glaciology Data, Geological Survey of Canada'
     >>> c.records['World Glaciology Data, Geological Survey of Canada.xml'].identifier
@@ -41,9 +52,12 @@
     ExceptionReport: 'Access to Harvest denied'
     >>> c.response
     '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator="Access"><ows:ExceptionText>Access to Harvest denied</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
-    >>> c.getrecords(keywords=['glacial'],outputschema='http://www.fgdc.gov')
-    >>> c.results['matches']>370
-    True
-    >>> c.getrecords(keywords=['glacial'],outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2)
-    >>> len(c.records)
-    2
+
+    >>> prop = fes.PropertyIsLike("csw:AnyText", "glacial")
+    >>> c.getrecords2([prop], outputschema='http://www.fgdc.gov')
+    >>> c.results
+    {'matches': 369, 'nextrecord': 11, 'returned': 10}
+
+    >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2)
+    >>> c.results
+    {'matches': 369, 'nextrecord': 3, 'returned': 2}
