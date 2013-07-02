@@ -1,6 +1,7 @@
 
 >>> from tests.utils import compare_xml
 >>> from owslib.csw import CatalogueServiceWeb
+>>> from owslib import fes
 
 >>> c = CatalogueServiceWeb('http://geomatics.nlr.nl/excat/csw')
 >>> should_return = """<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
@@ -70,7 +71,8 @@ ExceptionReport: 'Operation not supported: GetDomain'
 >>> compare_xml(should_return, c.request)
 True
 
->>> c.getrecords(keywords=['space'])
+>>> keywords = fes.PropertyIsLike("csw:AnyText", "space", wildCard="*")
+>>> c.getrecords2([keywords])
 >>> should_return = """<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 ... <csw:GetRecords xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" outputSchema="http://www.opengis.net/cat/csw/2.0.2" outputFormat="application/xml" version="2.0.2" resultType="results" service="CSW" maxRecords="10" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><csw:Query typeNames="csw:Record"><csw:ElementSetName>summary</csw:ElementSetName><csw:Constraint version="1.1.0"><ogc:Filter><ogc:PropertyIsLike wildCard="*" singleChar="_" escapeChar="\\"><ogc:PropertyName>csw:AnyText</ogc:PropertyName><ogc:Literal>*space*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>"""
 >>> compare_xml(should_return, c.request)
@@ -104,6 +106,6 @@ True
 >>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
 'CERISE: Computationally Efficient Radar Image Simulation Environment'
 
->>> c.getrecords(cql='AnyText like \'%space%\'')
+>>> c.getrecords2(cql='AnyText like \'%space%\'')
 >>> c.results
 {'matches': 80, 'nextrecord': 11, 'returned': 10}

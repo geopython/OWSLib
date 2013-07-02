@@ -224,6 +224,27 @@ def setsortby(parent, propertyname, order='ASC'):
     etree.SubElement(tmp2, util.nspath_eval('ogc:PropertyName', namespaces)).text = propertyname
     etree.SubElement(tmp2, util.nspath_eval('ogc:SortOrder', namespaces)).text = order
     
+class SortProperty(object):
+    def __init__(self, propertyname, order='ASC'):
+        self.propertyname   = propertyname
+        self.order          = order.upper()
+        if self.order not in ['DESC','ASC']:
+            raise ValueError("SortOrder can only be 'ASC' or 'DESC'")
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval("ogc:SortProperty", namespaces))
+        etree.SubElement(node0, util.nspath_eval('ogc:PropertyName', namespaces)).text = self.propertyname
+        etree.SubElement(node0, util.nspath_eval('ogc:SortOrder', namespaces)).text = self.order
+        return node0
+
+class SortBy(object):
+    def __init__(self, properties):
+        self.properties = properties
+    def toXML(self):
+        node0 = etree.Element(util.nspath_eval("ogc:SortBy", namespaces))
+        for prop in self.properties:
+            node0.append(prop.toXML())
+        return node0
+
 class OgcExpression(object):
     def __init__(self):
         pass
