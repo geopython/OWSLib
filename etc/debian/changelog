@@ -1,3 +1,9 @@
+owslib (0.7.2-1~precise1) precise; urgency=low
+
+  * Remove tests to avoid conflict in pyshared.
+
+ -- Angelos Tzotsos <gcpp.kalxas@gmail.com>  Sat, 06 Jul 2013 01:28:00 +0300
+
 owslib (0.7.2-0) oneiric; urgency=low
 
   * Update to 0.7.2.
