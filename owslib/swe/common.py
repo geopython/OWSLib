@@ -1,10 +1,6 @@
 from owslib.util import nspath_eval
 from owslib.namespaces import Namespaces
 from owslib.util import testXMLAttribute, testXMLValue, InfiniteDateTime, NegativeInfiniteDateTime
-from owslib.crs import Crs
-import csv
-import StringIO
-import copy
 
 from dateutil import parser
 from datetime import timedelta
