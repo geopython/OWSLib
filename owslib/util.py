@@ -46,6 +46,23 @@ dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
   set(d1.keys()+d2.keys()))
 
 
+# Infinite DateTimes for Python.  Used in SWE 2.0 and other OGC specs as "INF" and "-INF"
+class InfiniteDateTime(object):
+    def __lt__(self, other):
+        return False
+    def __gt__(self, other):
+        return True
+    def timetuple(self):
+        return tuple()
+class NegativeInfiniteDateTime(object):
+    def __lt__(self, other):
+        return True
+    def __gt__(self, other):
+        return False
+    def timetuple(self):
+        return tuple()
+
+
 first_cap_re = re.compile('(.)([A-Z][a-z]+)')
 all_cap_re = re.compile('([a-z0-9])([A-Z])')
 def format_string(prop_string):
