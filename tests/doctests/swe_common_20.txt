@@ -1,0 +1,88 @@
+Imports
+
+    >>> from tests.utils import resource_file
+    >>> from owslib.swe.common import Time, DataChoice, DataRecord, AbstractSimpleComponent
+    >>> from owslib.etree import etree
+
+Initialize
+
+    >>> swexml  = open(resource_file('swe_ioos_multistation_timeseries.xml'), 'r').read()
+    >>> dr      = etree.fromstring(swexml)
+    >>> if hasattr(dr, 'getroot'):
+    ...     dr = dr.getroot()
+    >>> swe_dr = DataRecord(dr)
+
+Test
+
+    # two fields, 'stations' and 'observationData'
+    >>> len(swe_dr.field)
+    2
+    >>> swe_dr.definition
+    'http://mmisw.org/ont/ioos/definition/observationRecord'
+
+    >>> stations_field              = swe_dr.get_by_name("stations")
+    >>> stations_field.name
+    'stations'
+
+    # Single station
+    >>> single_station_field        = stations_field.content.get_by_name("wmo_41001")
+    >>> single_station_field.name
+    'wmo_41001'
+
+    >>> single_station_dr           = single_station_field.content
+    >>> single_station_dr.id
+    'wmo_41001'
+
+    # three fields: "stationID", "platformLocation", and "sensors"
+    >>> len(single_station_dr.field)
+    3
+    >>> single_station_dr.definition
+    'http://mmisw.org/ont/ioos/definition/station'
+
+
+    >>> single_station_dr.get_by_name("stationID").content.definition
+    'http://mmisw.org/ont/ioos/definition/stationID'
+    >>> single_station_dr.get_by_name("stationID").content.value
+    'urn:ioos:station:wmo:41001'
+
+    >>> vector = single_station_dr.get_by_name("platformLocation").content
+    >>> len(vector.coordinate)
+    3
+    >>> vector.get_by_name("latitude").content.value
+    32.382
+    >>> vector.get_by_name("longitude").content.value
+    -75.415
+    >>> vector.get_by_name("height").content.value
+    0.5
+
+
+    >>> data_field              = swe_dr.get_by_name("observationData")
+    >>> data_field.name
+    'observationData'
+    >>> data_et                 = data_field.content.elementType
+    >>> data_et.name
+    'observations'
+
+    >>> data_choice             = data_et.content.get_by_name("sensor").content
+
+    # 5 sensor choices for the csv block
+    >>> len(data_choice.item)
+    5
+    >>> sensor_dr               = data_choice.get_by_name("wmo_41001_sensor1").content
+
+    >>> sensor_dr.get_by_name("air_temperature").content.uom
+    'Celsius'
+    >>> sensor_dr.get_by_name("wind_speed").content.uom
+    'm/s'
+    >>> sensor_dr.get_by_name("wind_to_direction").content.uom
+    'degrees'
+
+    >>> encoding                        = data_field.content.encoding
+    >>> encoding.tokenSeparator
+    ','
+    >>> encoding.blockSeparator
+    'HIHI'
+    >>> encoding.decimalSeparator
+    '.'
+    >>> encoding.collapseWhiteSpaces
+    True
