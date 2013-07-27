@@ -14,6 +14,7 @@ execution = wps.execute(processid, inputs, output=outputs)
 print execution.status
 # show status
 print 'percent complete', execution.percentCompleted
+print 'status message', execution.statusMessage
 
 monitorExecution(execution)
 
