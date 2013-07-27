@@ -463,6 +463,7 @@ class WPSExecution():
         self.process = None
         self.serviceInstance = None
         self.status = None
+        self.percentCompleted = 0
         self.errors = []
         self.statusLocation = None
         self.dataInputs=[]
@@ -713,6 +714,7 @@ class WPSExecution():
             
         # print status, errors
         print 'Execution status=%s' % self.status
+        print 'Percent Completed=%s' % self.percentCompleted
         for error in self.errors:
             dump(error)
 
@@ -755,11 +757,17 @@ class WPSExecution():
         # </ns0:Status>
         statusEl = root.find( nspath('Status/*', ns=wpsns) )
         self.status = statusEl.tag.split('}')[1]
+        # get progress info
+        try:
+            percentCompleted = int(statusEl.get('percentCompleted'))
+            self.percentCompleted = percentCompleted
+        except:
+            pass
         # exceptions ?
         for element in statusEl:
             if element.tag.endswith('ExceptionReport'):
                 self._parseExceptionReport(element)
-        
+
         self.process = Process(root.find(nspath('Process', ns=wpsns)), verbose=self.verbose)
         
         #<wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"

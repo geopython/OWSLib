@@ -1,6 +1,6 @@
 from owslib.wps import WebProcessingService, monitorExecution
 
-verbose = False
+verbose = True
 
 # get multiple outputs
 wps = WebProcessingService('http://rsg.pml.ac.uk/wps/generic.cgi', verbose=verbose)
@@ -12,6 +12,8 @@ outputs = [("output1",True), ("output2",False)]
 
 execution = wps.execute(processid, inputs, output=outputs)
 print execution.status
+# show status
+print 'percent complete', execution.percentCompleted
 
 monitorExecution(execution)
 
@@ -25,5 +27,7 @@ monitorExecution(execution)
 print execution.status
 for error in execution.errors:
 	print error.code, error.locator, error.text
+
+
 
 
