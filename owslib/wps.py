@@ -725,7 +725,7 @@ class WPSExecution():
         if self.status is None:
             self.status = "Exception"
             
-        for exceptionEl in root.findall( nspath('Exception', ns=getNamespace(root)) ):
+        for exceptionEl in root.findall( nspath('Exception', ns=namespaces['ows']) ):
             self.errors.append( WPSException(exceptionEl) )
 
 
