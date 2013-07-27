@@ -464,6 +464,7 @@ class WPSExecution():
         self.serviceInstance = None
         self.status = None
         self.percentCompleted = 0
+        self.statusMessage = None
         self.errors = []
         self.statusLocation = None
         self.dataInputs=[]
@@ -714,7 +715,8 @@ class WPSExecution():
             
         # print status, errors
         print 'Execution status=%s' % self.status
-        print 'Percent Completed=%s' % self.percentCompleted
+        print 'Percent completed=%s' % self.percentCompleted
+        print 'Status message=%s' % self.statusMessage
         for error in self.errors:
             dump(error)
 
@@ -763,6 +765,8 @@ class WPSExecution():
             self.percentCompleted = percentCompleted
         except:
             pass
+        # get status message
+        self.statusMessage = statusEl.text
         # exceptions ?
         for element in statusEl:
             if element.tag.endswith('ExceptionReport'):
