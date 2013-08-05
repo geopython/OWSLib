@@ -9,6 +9,7 @@
 
 """ CSW request and response processor """
 
+import warnings
 import StringIO
 import random
 from owslib.etree import etree
@@ -183,7 +184,7 @@ class CatalogueServiceWeb:
 
         """
 
-        raise DeprecationWarning("""Please use the updated 'getrecords2' method instead of 'getrecords'.  
+        warnings.warn("""Please use the updated 'getrecords2' method instead of 'getrecords'.  
         The 'getrecords' method will be upgraded to use the 'getrecords2' parameters
         in a future version of OWSLib.""")
 
