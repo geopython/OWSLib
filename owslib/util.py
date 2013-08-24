@@ -423,3 +423,24 @@ a newline. This will extract out all of the keywords correctly.
     flattened = [item.strip() for sublist in keywords for item in sublist]
     remove_blank = filter(None, flattened)
     return remove_blank
+
+
+def bind_url(url):
+    """binds an HTTP GET query string endpiont"""
+    if url.find('?') == -1: # like http://host/wms
+        binder = '?'
+
+    # if like http://host/wms?foo=bar& or http://host/wms?foo=bar
+    if url.find('=') != -1:
+        if url.find('&', -1) != -1: # like http://host/wms?foo=bar&
+            binder = ''
+        else: # like http://host/wms?foo=bar
+            binder = '&'
+
+    # if like http://host/wms?foo
+    if url.find('?') != -1:
+        if url.find('?', -1) != -1: # like http://host/wms?
+            binder = ''
+        elif url.find('&', -1) == -1: # like http://host/wms?foo=bar
+            binder = '&'
+    return '%s%s' % (url, binder)

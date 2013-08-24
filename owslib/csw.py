@@ -12,6 +12,8 @@
 import warnings
 import StringIO
 import random
+from urllib import urlencode
+from urllib2 import urlopen
 from owslib.etree import etree
 from owslib import fes
 from owslib import util
@@ -20,7 +22,7 @@ from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.namespaces import Namespaces
-from owslib.util import cleanup_namespaces
+from owslib.util import cleanup_namespaces, bind_url
 
 # default variables
 outputformat = 'application/xml'
@@ -60,15 +62,10 @@ class CatalogueServiceWeb:
 
         if not skip_caps:  # process GetCapabilities
             # construct request
-            node0 = self._setrootelement('csw:GetCapabilities')
-            node0.set('service', self.service)
-            node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-            tmp = etree.SubElement(node0, util.nspath_eval('ows:AcceptVersions', namespaces))
-            etree.SubElement(tmp, util.nspath_eval('ows:Version', namespaces)).text = self.version
-            tmp2 = etree.SubElement(node0, util.nspath_eval('ows:AcceptFormats', namespaces))
-            etree.SubElement(tmp2, util.nspath_eval('ows:OutputFormat', namespaces)).text = outputformat
 
-            self.request = node0
+            data = {'service': self.service, 'version': self.version, 'request': 'GetCapabilities'}
+
+            self.request = '%s%s' % (bind_url(self.url), urlencode(data))
     
             self._invoke()
     
@@ -568,10 +565,13 @@ class CatalogueServiceWeb:
     def _invoke(self):
         # do HTTP request
 
-        self.request = cleanup_namespaces(self.request)
-        self.request = util.xml2string(etree.tostring(self.request))
+        if isinstance(self.request, str):  # GET KVP
+            self.response = urlopen(self.request, timeout=self.timeout).read()
+        else:
+            self.request = cleanup_namespaces(self.request)
+            self.request = util.xml2string(etree.tostring(self.request))
 
-        self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
+            self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
         self._exml = etree.parse(StringIO.StringIO(self.response))
