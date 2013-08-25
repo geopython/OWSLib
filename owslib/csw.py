@@ -254,16 +254,17 @@ class CatalogueServiceWeb:
         """
 
         # construct request 
-        node0 = self._setrootelement('csw:GetRecordById')
-        node0.set('outputSchema', outputschema)
-        node0.set('outputFormat', format)
-        node0.set('version', self.version)
-        node0.set('service', self.service)
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-        for i in id:
-            etree.SubElement(node0, util.nspath_eval('csw:Id', namespaces)).text = i
-        etree.SubElement(node0, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
-        self.request = node0
+        data = {
+            'service': self.service,
+            'version': self.version,
+            'request': 'GetRecordById',
+            'outputFormat': format,
+            'outputSchema': outputschema,
+            'elementsetname': esn,
+            'id': '',
+        }
+
+        self.request = '%s%s%s' % (bind_url(self.url), urlencode(data), ','.join(id))
 
         self._invoke()
  
