@@ -345,7 +345,6 @@ class MD_DataIdentification(object):
             val = extent.find(util.nspath_eval('gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition', namespaces))
             self.temporalextent_end = util.testXMLValue(val)
 
-
 class MD_Distributor(object):        
     """ process MD_Distributor """
     def __init__(self, md):
