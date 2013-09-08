@@ -328,11 +328,9 @@ class MD_DataIdentification(object):
         # from the one containing either an EX_GeographicBoundingBox or EX_BoundingPolygon.
         # The schema also specifies an EX_GeographicDescription. This is not implemented yet.
         val = None
-        extent = md.find(util.nspath_eval('gmd:extent', namespaces))
-        if extent is None:
-            extent = md.find(util.nspath_eval('srv:extent', namespaces))
-        
-        if extent is not None:
+        extents = md.findall(util.nspath_eval('gmd:extent', namespaces))
+        extents.extend(md.findall(util.nspath_eval('srv:extent', namespaces)))
+        for extent in extents:
             for e in extent.findall(util.nspath_eval('gmd:EX_Extent/gmd:geographicElement', namespaces)):
                 if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None or e.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces)) is not None:
                     val = e
