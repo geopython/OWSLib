@@ -1,0 +1,30 @@
+-------------------------------------------------------------------
+Tue Sep 10 14:01:29 UTC 2013 - Angelos Tzotsos <tzotsos@opensuse.org>
+
+- added python-dateutil as required
+
+-------------------------------------------------------------------
+Thu Jun  6 19:23:49 UTC 2013 - Angelos Tzotsos <tzotsos@opensuse.org>
+
+- updated to 0.7.2
+
+-------------------------------------------------------------------
+Sat Mar 30 16:41:09 UTC 2013 - Angelos Tzotsos <tzotsos@opensuse.org>
+
+- updated to 0.7.1
+
+-------------------------------------------------------------------
+Wed Sep  5 21:00:22 UTC 2012 - Angelos Tzotsos <tzotsos@opensuse.org>
+
+- updated to 0.5.1
+
+-------------------------------------------------------------------
+Thu Jun 21 20:35:28 UTC 2012 - Angelos Tzotsos <tzotsos@opensuse.org>
+
+- fixed CentOS, RedHat and Scientific Linux builds
+
+-------------------------------------------------------------------
+Thu Jun 21 19:34:53 UTC 2012 - Angelos Tzotsos <tzotsos@opensuse.org>
+
+- initial release 0.5.0
+
