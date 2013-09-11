@@ -14,7 +14,7 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 readme = open('README.txt').read()
-reqs = ['python-dateutil==1.5', 'pytz']
+reqs = [line.strip() for line in open('requirements.txt')]
 
 setup(name              = 'OWSLib',
       version           = owslib.__version__,
