@@ -491,7 +491,7 @@ You can also submit a pre-made request encoded as WPS XML:
 
 .. code-block:: python
 
-	>>> request = open('/Users/cinquini/Documents/workspace-cog/wps/tests/wps_USGSExecuteRequest1.xml','r').read()
+	>>> request = open('/Users/cinquini/Documents/workspace-cog/wps/tests/resources/wps_USGSExecuteRequest1.xml','r').read()
 	>>> execution = wps.execute(None, [], request=request)
 	Executing WPS request...
 	Execution status=ProcessStarted
@@ -508,15 +508,15 @@ SOS
 
 GetCapabilities
 
-.. include:: ../../tests/sos_ndbc_getcapabilities.txt
+.. include:: ../../tests/doctests/sos_ndbc_getcapabilities.txt
 
 GetObservation
 
-.. include:: ../../tests/sos_ndbc_getobservation.txt
+.. include:: ../../tests/doctests/sos_ndbc_getobservation.txt
 
 SensorML
 --------
-.. include:: ../../tests/sml_ndbc_station.txt
+.. include:: ../../tests/doctests/sml_ndbc_station.txt
 
 ISO
 ---
@@ -524,19 +524,19 @@ ISO
 .. code-block:: python
 
   >>> from owslib.iso import *
-  >>> m=MD_Metadata(etree.parse('tests/data/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml')
+  >>> m=MD_Metadata(etree.parse('tests/resources/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml')
   >>> m.identification.topiccategory
   'farming'
   >>> 
 
 ISO Codelists:
 
-.. include:: ../../tests/iso_codelist.txt
+.. include:: ../../tests/doctests/iso_codelist.txt
 
 CRS Handling
 ------------
 
-.. include:: ../../tests/crs.txt
+.. include:: ../../tests/doctests/crs.txt
 
 Dublin Core
 -----------
@@ -550,7 +550,7 @@ FGDC
 WMTS
 ----
 
-.. include:: ../../tests/wmts.txt
+.. include:: ../../tests/doctests/wmts.txt
 
 Result:
 
@@ -562,7 +562,7 @@ Result:
 WaterML
 -------
 
-.. include:: ../../tests/wml11_cuahsi.txt
+.. include:: ../../tests/doctests/wml11_cuahsi.txt
 
 Development
 ===========

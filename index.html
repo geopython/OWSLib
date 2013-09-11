@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.7-dev documentation &mdash; OWSLib 0.7-dev documentation</title>
+    <title>OWSLib 0.8-dev documentation &mdash; OWSLib 0.8-dev documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7-dev',
+        VERSION:     '0.8-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="OWSLib 0.7-dev documentation" href="#" />
+    <link rel="top" title="OWSLib 0.8-dev documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -53,7 +53,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">OWSLib 0.7-dev documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.8-dev documentation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -64,7 +64,7 @@
           <div class="body">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.7-dev documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.8-dev documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
@@ -78,9 +78,9 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at hotmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.7-dev</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.8-dev</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2013-04-12</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2013-09-11</td>
 </tr>
 </tbody>
 </table>
@@ -517,7 +517,7 @@
 </pre></div>
 </div>
 <p>You can also submit a pre-made request encoded as WPS XML:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">request</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;/Users/cinquini/Documents/workspace-cog/wps/tests/wps_USGSExecuteRequest1.xml&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">request</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;/Users/cinquini/Documents/workspace-cog/wps/tests/resources/wps_USGSExecuteRequest1.xml&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">execution</span> <span class="o">=</span> <span class="n">wps</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">[],</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)</span>
 <span class="go">Executing WPS request...</span>
 <span class="go">Execution status=ProcessStarted</span>
@@ -534,7 +534,8 @@
 <h3>SOS<a class="headerlink" href="#sos" title="Permalink to this headline">¶</a></h3>
 <p>GetCapabilities</p>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="kn">import</span> <span class="n">SensorObservationService</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="kn">import</span> <span class="n">SensorObservationService</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.fes</span> <span class="kn">import</span> <span class="n">FilterCapabilities</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ows</span> <span class="kn">import</span> <span class="n">OperationsMetadata</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.crs</span> <span class="kn">import</span> <span class="n">Crs</span>
@@ -542,7 +543,7 @@
 </pre></div>
 </div>
 <p>Initialize</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ndbc</span> <span class="o">=</span> <span class="n">SensorObservationService</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xml</span><span class="o">=</span><span class="n">xml</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -746,7 +747,7 @@
 </div>
 <p># (left, bottom, right, top)</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">bbox</span>
-<span class="go">(-179.995, -77.465999999999994, 180.0, 80.810000000000002)</span>
+<span class="go">(-179.995, -77.466, 180.0, 80.81)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bbsrs</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">bbox_srs</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">bbsrs</span><span class="p">,</span> <span class="n">Crs</span><span class="p">)</span>
 <span class="go">True</span>
@@ -820,7 +821,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">srs</span><span class="o">.</span><span class="n">getcode</span><span class="p">()</span>
 <span class="go">&#39;EPSG:4326&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">station</span><span class="o">.</span><span class="n">bbox</span>
-<span class="go">(-77.935000000000002, 33.954999999999998, -77.935000000000002, 33.954999999999998)</span>
+<span class="go">(-77.935, 33.955, -77.935, 33.955)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bbsrs</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">bbox_srs</span>
@@ -881,7 +882,8 @@
 </div>
 <p>GetObservation</p>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="kn">import</span> <span class="n">SensorObservationService</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="kn">import</span> <span class="n">SensorObservationService</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ows</span> <span class="kn">import</span> <span class="n">OperationsMetadata</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.fes</span> <span class="kn">import</span> <span class="n">FilterCapabilities</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.crs</span> <span class="kn">import</span> <span class="n">Crs</span>
@@ -889,7 +891,7 @@
 </pre></div>
 </div>
 <p>Initialize</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">),</span><span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ndbc</span> <span class="o">=</span> <span class="n">SensorObservationService</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xml</span><span class="o">=</span><span class="n">xml</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -904,8 +906,8 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eventTime</span> <span class="o">=</span> <span class="s">&quot;This is not a valid eventTime!&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span><span class="n">offerings</span><span class="o">=</span><span class="n">offerings</span><span class="p">,</span> <span class="n">responseFormat</span><span class="o">=</span><span class="n">responseFormat</span><span class="p">,</span> <span class="n">observedProperties</span><span class="o">=</span><span class="n">observedProperties</span><span class="p">,</span> <span class="n">eventTime</span><span class="o">=</span><span class="n">eventTime</span><span class="p">)</span>
 <span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">&lt;module&gt;</span>
-<span class="nc">ExceptionReport</span>: <span class="n-Identifier">&#39;This is not a valid eventTime!&#39;</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ExceptionReport</span>: <span class="n">&#39;This is not a valid eventTime!&#39;</span>
 </pre></div>
 </div>
 <p># NDBC only supports one offering and one observedProperty at a time</p>
@@ -928,8 +930,8 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputFormat</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">get_operation_by_name</span><span class="p">(</span><span class="s">&#39;DescribeSensor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;outputFormat&#39;</span><span class="p">][</span><span class="s">&#39;values&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">describe_sensor</span><span class="p">(</span><span class="n">procedure</span><span class="o">=</span><span class="n">procedure</span><span class="p">,</span> <span class="n">outputFormat</span><span class="o">=</span><span class="n">outputFormat</span><span class="p">)</span>
 <span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">&lt;module&gt;</span>
-<span class="nc">ExceptionReport</span>: <span class="n-Identifier">&#39;foobar&#39;</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ExceptionReport</span>: <span class="n">&#39;foobar&#39;</span>
 </pre></div>
 </div>
 <p># Valid request</p>
@@ -943,13 +945,14 @@
 <div class="section" id="sensorml">
 <h3>SensorML<a class="headerlink" href="#sensorml" title="Permalink to this headline">¶</a></h3>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.swe.sensor.sml</span> <span class="kn">import</span> <span class="n">SensorML</span><span class="p">,</span> <span class="n">EventMetadata</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.swe.sensor.sml</span> <span class="kn">import</span> <span class="n">SensorML</span><span class="p">,</span> <span class="n">EventMetadata</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">parser</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pytz</span>
 </pre></div>
 </div>
 <p>Initialize</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;sml_ndbc_station.xml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sml_ndbc_station.xml&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">SensorML</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">system</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">systems</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
@@ -1070,21 +1073,28 @@
 <div class="section" id="iso">
 <h3>ISO<a class="headerlink" href="#iso" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.iso</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">=</span><span class="n">MD_Metadata</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;tests/data/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">=</span><span class="n">MD_Metadata</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;tests/resources/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">topiccategory</span>
 <span class="go">&#39;farming&#39;</span>
 <span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
 <p>ISO Codelists:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib2</span>
+<p>Imports</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.etree</span> <span class="kn">import</span> <span class="n">etree</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.iso</span> <span class="kn">import</span> <span class="n">CodelistCatalogue</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">=</span><span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;gmxCodelists.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Print testing the code lists</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">=</span><span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;gmxCodelists.xml&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">CodelistCatalogue</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">getcodelistdictionaries</span><span class="p">()</span>
 <span class="go">[&#39;MD_RestrictionCode&#39;, &#39;CI_OnLineFunctionCode&#39;, &#39;DQ_EvaluationMethodTypeCode&#39;, &#39;DS_InitiativeTypeCode&#39;, &#39;MD_MaintenanceFrequencyCode&#39;, &#39;MD_SpatialRepresentationTypeCode&#39;, &#39;MD_ImagingConditionCode&#39;, &#39;MD_ObligationCode&#39;, &#39;MD_GeometricObjectTypeCode&#39;, &#39;MD_ScopeCode&#39;, &#39;MD_KeywordTypeCode&#39;, &#39;MD_CharacterSetCode&#39;, &#39;CI_PresentationFormCode&#39;, &#39;MX_ScopeCode&#39;, &#39;CI_DateTypeCode&#39;, &#39;MD_TopicCategoryCode&#39;, &#39;MD_DatatypeCode&#39;, &#39;MD_ProgressCode&#39;, &#39;MD_MediumNameCode&#39;, &#39;MD_ClassificationCode&#39;, &#39;DS_AssociationTypeCode&#39;, &#39;CI_RoleCode&#39;, &#39;MD_TopologyLevelCode&#39;, &#39;MD_DimensionNameTypeCode&#39;, &#39;MD_CoverageContentTypeCode&#39;, &#39;MD_MediumFormatCode&#39;, &#39;MD_PixelOrientationCode&#39;, &#39;MD_CellGeometryCode&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">getcodedefinitionidentifiers</span><span class="p">(</span><span class="s">&#39;CI_RoleCode&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">getcodedefinitionidentifiers</span><span class="p">(</span><span class="s">&#39;CI_RoleCode&#39;</span><span class="p">)</span>
 <span class="go">[&#39;author&#39;, &#39;processor&#39;, &#39;publisher&#39;, &#39;custodian&#39;, &#39;pointOfContact&#39;, &#39;distributor&#39;, &#39;user&#39;, &#39;resourceProvider&#39;, &#39;originator&#39;, &#39;owner&#39;, &#39;principalInvestigator&#39;]</span>
 </pre></div>
 </div>
@@ -1104,7 +1114,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">code</span>
 <span class="go">4326</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">axisorder</span>
-<span class="go">&#39;xy&#39;</span>
+<span class="go">&#39;yx&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s">&#39;urn:x-ogc:def:crs:EPSG:6.11:2192&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">axisorder</span>
 <span class="go">&#39;xy&#39;</span>
@@ -1133,6 +1143,10 @@
 </div>
 <div class="section" id="wmts">
 <h3>WMTS<a class="headerlink" href="#wmts" title="Permalink to this headline">¶</a></h3>
+<p>Imports</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">scratch_file</span>
+</pre></div>
+</div>
 <p>Find out what a WMTS has to offer. Service metadata:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wmts</span> <span class="kn">import</span> <span class="n">WebMapTileService</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wmts</span> <span class="o">=</span> <span class="n">WebMapTileService</span><span class="p">(</span><span class="s">&quot;http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi&quot;</span><span class="p">)</span>
@@ -1164,7 +1178,7 @@
 </div>
 <p>Fetch a tile (using some defaults):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tile</span> <span class="o">=</span> <span class="n">wmts</span><span class="o">.</span><span class="n">gettile</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="s">&#39;MODIS_Terra_CorrectedReflectance_TrueColor&#39;</span><span class="p">,</span> <span class="n">tilematrixset</span><span class="o">=</span><span class="s">&#39;EPSG4326_250m&#39;</span><span class="p">,</span> <span class="n">tilematrix</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&quot;image/jpeg&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;nasa_modis_terra_truecolour.jpg&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">scratch_file</span><span class="p">(</span><span class="s">&#39;nasa_modis_terra_truecolour.jpg&#39;</span><span class="p">),</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -1175,12 +1189,14 @@
 <div class="section" id="waterml">
 <h3>WaterML<a class="headerlink" href="#waterml" title="Permalink to this headline">¶</a></h3>
 <p>Using WaterML 1.1 for examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.waterml.wml11</span> <span class="kn">import</span> <span class="n">WaterML_1_1</span> <span class="k">as</span> <span class="n">wml</span>
+<p>Imports</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.waterml.wml11</span> <span class="kn">import</span> <span class="n">WaterML_1_1</span> <span class="k">as</span> <span class="n">wml</span>
 </pre></div>
 </div>
 <dl class="docutils">
 <dt>An example GetSites response (from cuahsi)</dt>
-<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tests/cuahsi_example_all_sites.xml&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;cuahsi_example_all_sites.xml&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sites</span> <span class="o">=</span> <span class="n">wml</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">response</span>
 </pre></div>
 </div>
@@ -1228,8 +1244,7 @@
 </div>
 </dd>
 <dt>An example GetSiteInfo response</dt>
-<dd><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tests/cuahsi_example_siteinfo_multiple.xml&#39;</span><span class="p">)</span>
+<dd><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;cuahsi_example_siteinfo_multiple.xml&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sites</span> <span class="o">=</span> <span class="n">wml</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">response</span>
 </pre></div>
 </div>
@@ -1306,8 +1321,7 @@
 </div>
 </dd>
 <dt>Example GetValues response</dt>
-<dd><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tests/cuahsi_example_get_values.xml&#39;</span><span class="p">)</span>
+<dd><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;cuahsi_example_get_values.xml&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="n">wml</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">response</span>
 </pre></div>
 </div>
@@ -1348,8 +1362,7 @@
 </div>
 </dd>
 <dt>Example GetVariables response</dt>
-<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tests/cuahsi_example_get_variables.xml&#39;</span><span class="p">)</span>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;cuahsi_example_get_variables.xml&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">varis</span> <span class="o">=</span> <span class="n">wml</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">response</span>
 </pre></div>
 </div>
@@ -1466,7 +1479,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.7-dev documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.8-dev documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1541,12 +1554,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">OWSLib 0.7-dev documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.8-dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2013-04-12T21:06:39Z.
+      Last updated on 2013-09-11T08:14:16Z.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
