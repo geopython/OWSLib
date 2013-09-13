@@ -566,7 +566,7 @@ class CatalogueServiceWeb:
     def _invoke(self):
         # do HTTP request
 
-        if isinstance(self.request, str) or isinstance(self.request, unicode):  # GET KVP
+        if isinstance(self.request, basestring):  # GET KVP
             self.response = urlopen(self.request, timeout=self.timeout).read()
         else:
             self.request = cleanup_namespaces(self.request)
