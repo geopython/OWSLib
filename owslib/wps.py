@@ -971,8 +971,8 @@ class Output(InputOutput):
             self.reference = referenceElement.get('href')
             self.mimeType = referenceElement.get('mimeType')
        
-        # <LiteralData>
-        self._parseLiteralData(outputElement, 'LiteralData')
+        # <LiteralOutput>
+        self._parseLiteralData(outputElement, 'LiteralOutput')
         
         # <ComplexData> or <ComplexOutput>
         self._parseComplexData(outputElement, 'ComplexOutput')
