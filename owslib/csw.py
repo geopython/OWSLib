@@ -323,15 +323,15 @@ class CatalogueServiceWeb:
         
             etree.SubElement(node1, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
 
-            if len(constraints) > 0: 
+            if any([len(constraints) > 0, cql is not None]): 
                 node2 = etree.SubElement(node1, util.nspath_eval('csw:Constraint', namespaces))
                 node2.set('version', '1.1.0')
                 flt = fes.FilterRequest()
-                node2.append(flt.setConstraintList(constraints))
-
-            # Now add a CQL filter if passed in
-            if cql is not None:
-                etree.SubElement(node2, util.nspath_eval('csw:CqlText', namespaces)).text = cql
+                if len(constraints) > 0:
+                    node2.append(flt.setConstraintList(constraints))
+                # Now add a CQL filter if passed in
+                elif cql is not None:
+                    etree.SubElement(node2, util.nspath_eval('csw:CqlText', namespaces)).text = cql
                 
             if sortby is not None and isinstance(sortby, fes.SortBy):
                 node1.append(sortby)
