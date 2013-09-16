@@ -16,7 +16,7 @@ Test GetSiteInfo
 	['Battery voltage', 'Oxygen, dissolved percent of saturation', 'Oxygen, dissolved', 'Specific conductance, unfiltered', 'Phosphorus, total as P', 'pH, unfiltered', 'Phosphorus, total as P, filtered', 'Turbidity', 'Solids, total Suspended', 'Gage height', 'Temperature']
 	>>> codes = site.variable_codes
 	>>> codes
-	['USU7', 'USU6', 'USU5', 'USU4', 'USU3', 'USU34', 'USU37', 'USU9', 'USU8', 'USU13', 'USU12', 'USU11', 'USU10', 'USU41', 'USU33', 'USU32', 'USU35', 'USU40', 'USU39', 'USU36']
+        ['USU7', 'USU6', 'USU5', 'USU4', 'USU3', 'USU34', 'USU37', 'USU9', 'USU8', 'USU13', 'USU12', 'USU11', 'USU10', 'USU36', 'USU33', 'USU32', 'USU35', 'USU40', 'USU39', 'USU41']
 	>>> var = site[codes[7]]
 	>>> var.unit.name
 	'nephelometric turbidity units'
