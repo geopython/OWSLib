@@ -1,7 +1,6 @@
 Imports and initialize
 
     >>> from owslib.wfs import WebFeatureService
-    >>> from lxml import etree
     >>> from tests.utils import resource_file
 
     >>> getcapsin = open(resource_file("wfs_HSRS_GetCapabilities_1_1_0.xml")).read()
