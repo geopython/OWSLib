@@ -43,3 +43,12 @@ def compare_elements(a,b):
             return False
 
     return True
+
+def cast_tuple_int_list(tup):
+    """Set tuple float values to int for more predictable test results"""
+    return [int(a) for a in tup]
+
+def cast_tuple_int_list_srs(tup):
+    tup2 = cast_tuple_int_list(tup[:4])
+    tup2.append(tup[-1])
+    return tup2

@@ -55,8 +55,8 @@ Test TileMatrixSet variants
     ['GoogleMapsCompatible:0', 'GoogleMapsCompatible:1', 'GoogleMapsCompatible:10', 'GoogleMapsCompatible:11', 'GoogleMapsCompatible:12', 'GoogleMapsCompatible:13', 'GoogleMapsCompatible:14', 'GoogleMapsCompatible:15', 'GoogleMapsCompatible:16', 'GoogleMapsCompatible:17', 'GoogleMapsCompatible:18', 'GoogleMapsCompatible:19', 'GoogleMapsCompatible:2', 'GoogleMapsCompatible:20', 'GoogleMapsCompatible:3', 'GoogleMapsCompatible:4', 'GoogleMapsCompatible:5', 'GoogleMapsCompatible:6', 'GoogleMapsCompatible:7', 'GoogleMapsCompatible:8', 'GoogleMapsCompatible:9']
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].identifier
     'GoogleMapsCompatible:0'
-    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].scaledenominator
-    559082264.0287179
+    >>> int(wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].scaledenominator)
+    559082264
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].topleftcorner
     (-20037508.34, 20037508.0)
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].tilewidth

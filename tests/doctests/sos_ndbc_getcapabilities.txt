@@ -1,6 +1,6 @@
 Imports
 
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import cast_tuple_int_list, resource_file
     >>> from owslib.sos import SensorObservationService
     >>> from owslib.fes import FilterCapabilities
     >>> from owslib.ows import OperationsMetadata
@@ -177,8 +177,8 @@ Network
 
     # (left, bottom, right, top)
 
-    >>> network.bbox 
-    (-179.995, -77.466, 180.0, 80.81)
+    >>> cast_tuple_int_list(network.bbox)
+    [-179, -77, 180, 80]
     >>> bbsrs = network.bbox_srs
     >>> isinstance(bbsrs, Crs)
     True

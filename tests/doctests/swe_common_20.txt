@@ -48,12 +48,12 @@ Test
     >>> vector = single_station_dr.get_by_name("platformLocation").content
     >>> len(vector.coordinate)
     3
-    >>> vector.get_by_name("latitude").content.value
-    32.382
-    >>> vector.get_by_name("longitude").content.value
-    -75.415
-    >>> vector.get_by_name("height").content.value
-    0.5
+    >>> int(vector.get_by_name("latitude").content.value)
+    32
+    >>> int(vector.get_by_name("longitude").content.value)
+    -75
+    >>> int(vector.get_by_name("height").content.value)
+    0
 
 
     >>> data_field              = swe_dr.get_by_name("observationData")
