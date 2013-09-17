@@ -241,8 +241,8 @@ Station
     'urn:ogc:def:crs:EPSG::4326'
     >>> srs.getcode()
     'EPSG:4326'
-    >>> station.bbox
-    (-77.935, 33.955, -77.935, 33.955)
+    >>> cast_tuple_int_list(station.bbox)
+    [-77, 33, -77, 33]
     
     >>> bbsrs = station.bbox_srs
     >>> isinstance(bbsrs, Crs)

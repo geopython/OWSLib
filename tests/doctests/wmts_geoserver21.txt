@@ -69,8 +69,8 @@ Test TileMatrixSet variants
     1
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].identifier
     'GoogleMapsCompatible:17'
-    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].scaledenominator
-    4265.459167699568
+    >>> int(wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].scaledenominator)
+    4265
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].topleftcorner
     (-20037508.34, 20037508.0)
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].tilewidth

@@ -118,8 +118,8 @@ Test TileMatrixSet variants
     1
     >>> wmts.tilematrixsets['EPSG4326_250m'].tilematrix['8'].identifier
     '8'
-    >>> wmts.tilematrixsets['EPSG4326_250m'].tilematrix['8'].scaledenominator
-    872589.5192085233
+    >>> int(wmts.tilematrixsets['EPSG4326_250m'].tilematrix['8'].scaledenominator)
+    872589
     >>> wmts.tilematrixsets['EPSG4326_250m'].tilematrix['8'].topleftcorner
     (-180.0, 90.0)
     >>> wmts.tilematrixsets['EPSG4326_250m'].tilematrix['8'].tilewidth

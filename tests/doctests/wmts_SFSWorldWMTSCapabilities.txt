@@ -89,8 +89,8 @@ Test TileMatrixSet variants
     1
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].identifier
     '17'
-    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].scaledenominator
-    4265.459167699568
+    >>> int(wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].scaledenominator)
+    4265
     >>> cast_tuple_int_list(wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].topleftcorner)
     [-20037508, -20037508]
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['17'].tilewidth
@@ -141,8 +141,8 @@ Test single item accessor
 
     >>> wmts['World'].title
     'World'
-    >>> wmts['World'].boundingBoxWGS84
-    (-179.99999999999997, -90.0, 179.296876953125, 83.62700000000001)
+    >>> cast_tuple_int_list(wmts['World'].boundingBoxWGS84)
+    [-179, -90, 179, 83]
     >>> wmts['World'].id
     'World'
     >>> wmts['World'].styles
@@ -158,8 +158,8 @@ Test single item accessor
 
     >>> wmts['Ocean'].title
     'Ocean'
-    >>> wmts['Ocean'].boundingBoxWGS84
-    (-179.99999999999997, -85.583, 179.296876953125, 89.946)
+    >>> cast_tuple_int_list(wmts['Ocean'].boundingBoxWGS84)
+    [-179, -85, 179, 89]
     >>> wmts['Ocean'].id
     'Ocean'
     >>> wmts['Ocean'].styles
