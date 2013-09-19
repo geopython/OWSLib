@@ -48,6 +48,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.log = logging.getLogger()
         consoleh  = logging.StreamHandler()
         self.log.addHandler(consoleh)    
+        self.log.addHandler(consoleh)
         return obj
     
     def __getitem__(self,name):
@@ -291,6 +292,7 @@ class ContentMetadata:
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.timepositions=None
+        self.defaulttimeposition=None
 
 class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
