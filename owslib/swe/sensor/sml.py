@@ -2,13 +2,17 @@
 
 from owslib.etree import etree
 from owslib import crs, util
-from owslib.util import testXMLValue, nspath_eval, xmltag_split, dict_union, extract_xml_list
+from owslib.util import testXMLValue, testXMLAttribute, nspath_eval, xmltag_split, dict_union, extract_xml_list
 from owslib.namespaces import Namespaces
+from owslib.swe.common import DataRecord
 
 def get_namespaces():
     n = Namespaces()
     return n.get_namespaces(["sml","gml","xlink"])
 namespaces = get_namespaces()
+
+def nsp(path):
+    return nspath_eval(path, namespaces)
 
 class SensorML(object):
     def __init__(self, element):
@@ -20,259 +24,242 @@ class SensorML(object):
         if hasattr(self._root, 'getroot'):
             self._root = self._root.getroot()
 
-        self.systems = []
-        for system in self._root.findall(nspath_eval('sml:member/sml:System', namespaces)):
-            self.systems.append(SystemMetadata(system))
+        self.members = [Member(x) for x in self._root.findall(nsp('sml:member'))]
 
-class SystemMetadata(object):
-    """
-    <sml:System gml:id="station-52402">
-        <gml:description>...</gml:description>
-        <sml:keywords>...</sml:keywords>
-        <sml:identification>...</sml:identification>
-        <sml:classification>...</sml:classification>
-        <sml:validTime>...</sml:validTime>
-        <sml:timePosition>...</sml:timePosition>
-        <sml:contact xlink:role="urn:ogc:def:classifiers:OGC:contactType:owner">...</sml:contact>
-        <sml:documentation xlink:arcrole="urn:ogc:def:role:webPage">...</sml:documentation>
-        <sml:documentation xlink:arcrole="urn:ogc:def:role:objectImage">...</sml:documentation>
-        <sml:history>...</sml:history>
-        <sml:components>...</sml:components>
-        <sml:positions>...</sml:positions>
-        <sml:position>...</sml:position>
-        <sml:location>...</sml:location>
-    </sml:System>
-    """
+class Member(object):
+    def __new__(cls, element):
+        t = element[-1].tag.split("}")[-1]
+        if t == "System":
+            return System(element.find(nsp("sml:System")))
+        elif t == "ProcessChain":
+            return ProcessChain(element.find(nsp("sml:ProcessChain")))
+        elif t == "ProcessModel":
+            return ProcessModel(element.find(nsp("sml:ProcessModel")))
+        elif t == "Component":
+            return Component(element.find(nsp("sml:Component")))
+
+class PropertyGroup(object):
     def __init__(self, element):
-        self._root = element
+        # Both capabilities and characteristics contain a single swe:DataRecord element
+        self.capabilities = {}
+        for cap in element.findall(nsp('sml:capabilities')):
+            name = testXMLAttribute(cap, "name")
+            dr = DataRecord(cap[0])
+            self.capabilities[name] = dr
 
-        self.id = testXMLValue(self._root.attrib.get(nspath_eval('gml:id', namespaces)), True)
-        self.description = testXMLValue(self._root.find(nspath_eval('gml:description', namespaces)))
-        self.keywords = extract_xml_list(self._root.findall(nspath_eval('sml:keywords/sml:KeywordList/sml:keyword', namespaces)))
+        self.characteristics = {}
+        for cha in element.findall(nsp('sml:characteristics')):
+            name = testXMLAttribute(cha, "name")
+            dr = DataRecord(cha[0])
+            self.characteristics[name] = dr
 
-        self.documents = []
-        for document in self._root.findall(nspath_eval('sml:documentation', namespaces)):
-            self.documents.append(DocumentationMetadata(document))
+class ConstraintGroup(object):
+    def __init__(self, element):
+        # ism:SecutiryAtrtibutesOptionsGroup
+        self.securityConstraints = element.find(nsp("sml:securityConstraint"))
+        # gml:TimeInstant or gml:TimePeriod inside of validTime
+        self.validTime           = element.find(nsp("sml:validTime"))
+        self.rights              = [Right(x) for x in element.findall(nsp("sml:legalConstraint/sml:Rights"))]
 
-        self.identifiers = {}
-        for identifier in self._root.findall(nspath_eval('sml:identification/sml:IdentifierList/sml:identifier', namespaces)):
-            ident = IdentifierMetadata(identifier)
-            self.identifiers[ident.name] = ident
+class Documentation(object):
+    def __init__(self, element):
+        self.arcrole   = testXMLAttribute(element, nsp("xlink:arcrole"))
+        self.url       = testXMLAttribute(element, nsp("xlink:href"))
+        self.documents = [Document(d) for d in element.findall(nsp("sml:Document"))]
 
+class Document(object):
+    def __init__(self, element):
+        self.id          = testXMLAttribute(element, nsp("gml:id"))
+        self.version     = testXMLValue(element.find(nsp("sml:version")))
+        self.description = testXMLValue(element.find(nsp("gml:description")))
+        self.date        = testXMLValue(element.find(nsp("sml:date")))
+        try:
+            self.contact     = Contact(element.find(nsp("sml:contact")))
+        except AttributeError:
+            self.contact     = None
+        self.format      = testXMLValue(element.find(nsp('sml:format')))
+        self.url         = testXMLAttribute(element.find(nsp('sml:onlineResource')), nsp('xlink:href'))
+
+class Right(object):
+    def __init__(self, element):
+        self.id                         = testXMLAttribute(element, 'id')
+        self.privacyAct                 = testXMLAttribute(element, nsp('sml:privacyAct'))
+        self.intellectualPropertyRights = testXMLAttribute(element, nsp('sml:intellectualPropertyRights'))
+        self.copyRights                 = testXMLAttribute(element, nsp('sml:copyRights'))
+        self.documentation              = [Documentation(x) for x in element.findall(nsp("sml:documentation"))]
+
+class ReferenceGroup(object):
+    def __init__(self, element):
         self.contacts = {}
-        for contact in self._root.findall(nspath_eval('sml:contact', namespaces)):
-            cont = ContactMetadata(contact)
+        for contact in element.findall(nsp('sml:contact')):
+            cont                     = Contact(contact)
             self.contacts[cont.role] = cont
 
+        self.documentation = [Documentation(x) for x in element.findall(nsp("sml:documentation"))]
+
+    def get_contacts_by_role(self, role):
+        """
+            Return a Contact by role, case insensitive
+        """
+        return [self.contacts[contact] for contact in self.contacts.keys() if contact.lower() == role.lower()]
+
+class GeneralInfoGroup(object):
+    def __init__(self, element):
+        self.keywords    = extract_xml_list(element.findall(nsp('sml:keywords/sml:KeywordList/sml:keyword')))
+
+        self.identifiers = {}
+        for identifier in element.findall(nsp('sml:identification/sml:IdentifierList/sml:identifier')):
+            ident = Identifier(identifier)
+            self.identifiers[ident.name] = ident
+
         self.classifiers = {}
-        for classifier in self._root.findall(nspath_eval('sml:classification/sml:ClassifierList/sml:classifier', namespaces)):
-            classi = ClassifierMetadata(classifier)
+        for classifier in element.findall(nsp('sml:classification/sml:ClassifierList/sml:classifier')):
+            classi = Classifier(classifier)
             self.classifiers[classi.name] = classi
 
+    def get_identifiers_by_name(self, name):
+        """
+            Return list of Identifier objects by name, case insensitive
+        """
+        return [self.identifiers[identifier] for identifier in self.identifiers.keys() if identifier.lower() == name.lower()]
+
+    def get_classifiers_by_name(self, name):
+        """
+            Return list of Classifier objects by name, case insensitive
+        """
+        return [self.classifiers[classi] for classi in self.classifiers.keys() if classi.lower() == name.lower()]
+
+class Contact(object):
+    def __init__(self, element):
+        self.role         = testXMLAttribute(element, nsp("xlink:role"))
+        self.href         = testXMLAttribute(element, nsp("xlink:href"))
+        self.organization = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:organizationName')))
+        self.phone        = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:contactInfo/sml:phone/sml:voice')))
+        self.address      = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:deliveryPoint')))
+        self.city         = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:city')))
+        self.region       = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:administrativeArea')))
+        self.postcode     = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:postalCode')))
+        self.country      = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:country')))
+        self.email        = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:electronicMailAddress')))
+        self.url          = testXMLAttribute(element.find(nsp('sml:ResponsibleParty/sml:contactInfo/sml:onlineResource')), nsp("xlink:href"))
+
+class HistoryGroup(object):
+    def __init__(self, element):
         self.history = {}
-        for event_member in self._root.findall(nspath_eval('sml:history/sml:EventList/sml:member', namespaces)):
-            emm = EventMemberMetadata(event_member)
-            if self.history.get(emm.name) is None:
-                self.history[emm.name] = []
-            self.history[emm.name] += emm.events
-    
-        self.components = {}
-
-        #TODO: Components, timePosition, validTime, positiion/location/positions, 
-
-    def get_identifier_by_name(self, name):
-        """
-            Return a IdentifierMetadata by name, case insensitive
-        """
-        for identifier in self.identifiers.keys():
-            if identifier.lower() == name.lower():
-                return self.identifiers[identifier]
-        raise KeyError, "No Identifier with name: %s" % name
-
-    def get_contact_by_role(self, role):
-        """
-            Return a ContactMetadata by role, case insensitive
-        """
-        for contact in self.contacts.keys():
-            if contact.lower() == role.lower():
-                return self.contacts[contact]
-        raise KeyError, "No Contasct with role: %s" % role
-
-    def get_classifier_by_name(self, name):
-        """
-            Return a ClassifierMetadata by name, case insensitive
-        """
-        for classi in self.classifiers.keys():
-            if classi.lower() == name.lower():
-                return self.classifiers[classi]
-        raise KeyError, "No Classifier with name: %s" % name
+        for event_member in element.findall(nsp('sml:history/sml:EventList/sml:member')):
+            name = testXMLAttribute(event_member, "name")
+            if self.history.get(name) is None:
+                self.history[name] = []
+            for e in event_member.findall(nsp("sml:Event")):
+                self.history[name].append(Event(e))
 
     def get_history_by_name(self, name):
         """
-            Return a EventMemberMetadata by name, case insensitive
+            Return Events list by members name
         """
-        for his in self.history.keys():
-            if his.lower() == name.lower():
-                return self.history[his]
-        raise KeyError, "No Classifier with name: %s" % name
+        return self.history.get(name.lower(), [])
 
-
-class EventMemberMetadata(object):
-    """
-    <sml:member name="deployment_start">
-        <sml:Event>
-            <sml:date>2010-01-12</sml:date>
-            <gml:description>Deployment start event</gml:description>
-            <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&request=DescribeSensor&version=1.0.0&outputformat=text/xml;subtype="sensorML/1.0.1"&procedure=urn:ioos:station:wmo:48900:20100112"/>
-        </sml:Event>
-        <sml:Event>
-            <sml:date>2010-01-13</sml:date>
-            <gml:description>Deployment end event</gml:description>
-            <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&request=DescribeSensor&version=1.0.0&outputformat=text/xml;subtype="sensorML/1.0.1"&procedure=urn:ioos:station:wmo:48900:20100113"/>
-        </sml:Event>
-    </sml:member>
-    """
+class Event(ReferenceGroup, GeneralInfoGroup):
     def __init__(self, element):
-        self._root = element
+        ReferenceGroup.__init__(self, element)
+        GeneralInfoGroup.__init__(self, element)
+        self.id            = testXMLAttribute(element, nsp("gml:id"))
+        self.date          = testXMLValue(element.find(nsp('sml:date')))
+        self.description   = testXMLValue(element.find(nsp('gml:description')))
 
-        self.name = testXMLValue(self._root.attrib.get('name'), True)
-
-        self.events = []
-        for event in self._root.findall(nspath_eval('sml:Event', namespaces)):
-            self.events.append(EventMetadata(event, self.name))
-
-class EventMetadata(object):
-    """
-    <sml:Event>
-        <sml:date>2010-01-12</sml:date>
-        <gml:description>Deployment start event</gml:description>
-        <sml:documentation xlink:href="http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&request=DescribeSensor&version=1.0.0&outputformat=text/xml;subtype="sensorML/1.0.1"&procedure=urn:ioos:station:wmo:48900:20100112"/>
-    </sml:Event>
-    """
-    def __init__(self, element, name):
-        self._root = element
-
-        self.name = name
-        # All dates are UTC
-        self.date = testXMLValue(self._root.find(nspath_eval('sml:date', namespaces)))
-        self.description = testXMLValue(self._root.find(nspath_eval('gml:description', namespaces)))
-        documentation = self._root.find(nspath_eval('sml:documentation', namespaces))
-        if documentation is not None:
-            self.documentation_url = testXMLValue(documentation.attrib.get(nspath_eval('xlink:href', namespaces)), True)
-        else:
-            self.documentation_url = None
-
-class ClassifierMetadata(object):
-    """
-    <sml:classifier name="Parent Network">
-        <sml:Term definition="urn-:x-noaa:def:classifier:NOAA::parentNetwork">
-            <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
-            <sml:value>
-                urn:x-noaa:def:network:noaa.nws.ndbc::TsunamiActive
-            </sml:value>
-        </sml:Term>
-    </sml:classifier>
-    """
+class MetadataGroup(GeneralInfoGroup, PropertyGroup, ConstraintGroup, ReferenceGroup, HistoryGroup):
     def __init__(self, element):
-        self._root = element
-        self.name = testXMLValue(self._root.attrib.get('name'), True)
-        self.definition = testXMLValue(self._root.find(nspath_eval('sml:Term', namespaces)).attrib.get('definition'), True)
-        self.codespace = testXMLValue(self._root.find(nspath_eval('sml:Term/sml:codeSpace', namespaces)).attrib.get(nspath_eval('xlink:href', namespaces)), True)
-        self.value = testXMLValue(self._root.find(nspath_eval('sml:Term/sml:value', namespaces)))
+        GeneralInfoGroup.__init__(self, element)
+        PropertyGroup.__init__(self, element)
+        ConstraintGroup.__init__(self, element)
+        ReferenceGroup.__init__(self, element)
+        HistoryGroup.__init__(self, element)
 
-class DocumentationMetadata(object):
-    """
-    <sml:documentation xlink:arcrole="qualityControlDocument">
-        <sml:Document>
-            <gml:description>
-                Handbook of Automated Data Quality Control Checks and Procedures, National Data Buoy Center, August 2009
-            </gml:description>
-            <sml:format>pdf</sml:format>
-            <sml:onlineResource xlink:href="http://www.ndbc.noaa.gov/NDBCHandbookofAutomatedDataQualityControl2009.pdf"/>
-        </sml:Document>
-    </sml:documentation>
-    """
+class AbstractFeature(object):
     def __init__(self, element):
-        self._root = element
-        self.arcrole = testXMLValue(self._root.attrib.get(nspath_eval('xlink:arcrole', namespaces)), True)
-        self.description = testXMLValue(self._root.find(nspath_eval('sml:Document/gml:description', namespaces)))
-        self.format = testXMLValue(self._root.find(nspath_eval('sml:Document/sml:format', namespaces)))
-        self.url = testXMLValue(self._root.find(nspath_eval('sml:Document/sml:onlineResource', namespaces)).attrib.get(nspath_eval('xlink:href', namespaces)), True)
+        self.name        = testXMLValue(element.find(nsp("gml:name")))
+        self.description = testXMLValue(element.find(nsp("gml:description")))
 
-class IdentifierMetadata(object):
-    """
-    <sml:identifier name="Short Name">
-        <sml:Term definition="urn:ogc:def:identifier:OGC:shortName">
-            <sml:codeSpace xlink:href="http://sdf.ndbc.noaa.gov"/>
-            <sml:value>adcp0</sml:value>
-        </sml:Term>
-    </sml:identifier>
-    """
+class AbstractProcess(AbstractFeature, MetadataGroup):
     def __init__(self, element):
-        self._root = element
-        self.name = testXMLValue(self._root.attrib.get('name'), True)
+        AbstractFeature.__init__(self, element)
+        MetadataGroup.__init__(self, element)
+        self.inputs     = element.findall(nsp("sml:input"))
+        self.outputs    = element.findall(nsp("sml:output"))
+        self.parameters = element.findall(nsp("sml:parameter"))
 
-        term = self._root.find(nspath_eval('sml:Term', namespaces))
-        self.definition = testXMLValue(term.attrib.get('definition'), True)
-
-        val = term.find(nspath_eval('sml:codeSpace', namespaces))
-        if val is not None:
-            self.codespace = testXMLValue(val.attrib.get(nspath_eval('xlink:href', namespaces)), True)
-
-        self.value = testXMLValue(self._root.find(nspath_eval('sml:Term/sml:value', namespaces)))
-
-class ContactMetadata(object):
-    """
-    <sml:contact xlink:role="urn:ogc:def:classifiers:OGC:contactType:publisher" xlink:href="http://sdf.ndbc.noaa.gov/">
-        <sml:ResponsibleParty>
-            <sml:organizationName>National Data Buoy Center</sml:organizationName>
-            <sml:contactInfo>
-                <sml:phone>
-                    <sml:voice>228-688-2805</sml:voice>
-                </sml:phone>
-                <sml:address>
-                    <sml:deliveryPoint>Bldg. 3205</sml:deliveryPoint>
-                    <sml:city>Stennis Space Center</sml:city>
-                    <sml:administrativeArea>MS</sml:administrativeArea>
-                    <sml:postalCode>39529</sml:postalCode>
-                    <sml:country>USA</sml:country>
-                    <sml:electronicMailAddress>webmaster.ndbc@noaa.gov</sml:electronicMailAddress>
-                </sml:address>
-            </sml:contactInfo>
-        </sml:ResponsibleParty>
-    </sml:contact>
-    """
+class ProcessModel(AbstractProcess):
     def __init__(self, element):
-        self._root = element
-        
-        self.role = testXMLValue(self._root.attrib.get(nspath_eval('xlink:role', namespaces)), True)
-        self.url = testXMLValue(self._root.attrib.get(nspath_eval('xlink:href', namespaces)), True)
-        self.organization = testXMLValue(self._root.find(nspath_eval('sml:ResponsibleParty/sml:organizationName', namespaces)))
-        self.phone = testXMLValue(self._root.find(nspath_eval('sml:ResponsibleParty/sml:contactInfo/sml:phone/sml:voice', namespaces)))
-        self.address = testXMLValue(self._root.find(nspath_eval('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:deliveryPoint', namespaces)))
-        self.city = testXMLValue(self._root.find(nspath_eval('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:city', namespaces)))
-        self.region = testXMLValue(self._root.find(nspath_eval('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:administrativeArea', namespaces)))
-        self.postcode = testXMLValue(self._root.find(nspath_eval('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:postalCode', namespaces)))
-        self.country = testXMLValue(self._root.find(nspath_eval('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:country', namespaces)))
-        self.email = testXMLValue(self._root.find(nspath_eval('sml:ResponsibleParty/sml:contactInfo/sml:address/sml:electronicMailAddress', namespaces)))
+        super(ProcessModel, self).__init__(element)
+        self.method = ProcessMethod(element.find("method"))
 
-        """
-        For reference, here is the OWS contact element (ows:ServiceContact)
+class CompositePropertiesGroup(object):
+    def __init__(self, element):
+        # All components should be of instance AbstractProcess
+        self.components  = element.findall(nsp("sml:components/sml:ComponentList/sml:component"))
+        self.connections = element.findall(nsp("sml:connections/sml:ConnectionList/sml:connection"))
 
-        self.name = testXMLValue(self._root.find(ns_ows('ows:IndividualName')))
-        self.role = testXMLValue(self._root.find(ns_ows('ows:Role')))
-        self.position = testXMLValue(self._root.find(ns_ows('ows:PositionName')))
-        self.email = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:ElectronicMailAddress')))
-        self.address = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:DeliveryPoint')))
-        self.city = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:City')))
-        self.region = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:AdministrativeArea')))
-        self.postcode = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:PostalCode')))
-        self.country = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:Country')))
-        self.city = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Address/ows:City')))
-        self.phone = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Phone/ows:Voice')))
-        self.fax = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:Phone/ows:Facsimile')))
-        self.hours = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:HoursOfService')))
-        self.instructions = testXMLValue(self._root.find(ns_ows('ows:ContactInfo/ows:ContactInstructions')))
-        self.organization = testXMLValue(self._root.find(ns_ows('ows:ContactPersonPrimary/ows:ContactOrganization')))
-        self.url = testXMLValue(self._root.find(nspath_eval('ows:ContactInfo/ows:nlineResource', namespaces)).attrib.get(nspath_eval('xlink:href', namespaces), True))
-        """
+class PhysicalPropertiesGroup(object):
+    def __init__(self, element):
+        # gml:EngieeringCRS element
+        self.spatialReferenceFrame  = element.find(nsp("sml:spatialReferenceFrame"))
+        # gml:TemporalCRS element
+        self.temporalReferenceFrame = element.find(nsp("sml:temporalReferenceFrame"))
+        # gml:Envelope element
+        self.boundedBy              = element.find(nsp("sml:boundedBy"))
+        # swe:Position, swe:Vector, or sml:_Process element
+        self.positions = []
+        self.positions.append(element.findall(nsp("sml:position")))
+        self.positions.append(element.findall(nsp("sml:timePosition")))
+        self.positions = filter(None, self.positions)
+        try:
+            self.interface = Interface(element.find(nsp("sml:interface")))
+        except AttributeError:
+            self.interface = None
+
+class ProcessChain(AbstractProcess, CompositePropertiesGroup):
+    def __init__(self, element):
+        super(ProcessChain, self).__init__(element)
+
+class System(AbstractProcess, PhysicalPropertiesGroup, CompositePropertiesGroup):
+    def __init__(self, element):
+        AbstractProcess.__init__(self, element)
+        PhysicalPropertiesGroup.__init__(self, element)
+        CompositePropertiesGroup.__init__(self, element)
+
+class Component(AbstractProcess, PhysicalPropertiesGroup):
+    def __init__(self, element):
+        super(Component, self).__init__(element)
+        self.method = ProcessMethod(element.find("method"))
+
+class Term(object):
+    def __init__(self, element):
+        self.codeSpace  = testXMLAttribute(element.find(nsp('sml:Term/sml:codeSpace')), nsp("xlink:href"))
+        self.definition = testXMLAttribute(element.find(nsp('sml:Term')), "definition")
+        self.value      = testXMLValue(element.find(nsp('sml:Term/sml:value')))
+
+class Classifier(Term):
+    def __init__(self, element):
+        super(Classifier, self).__init__(element)
+        self.name      = testXMLAttribute(element, "name")
+
+class Identifier(Term):
+    def __init__(self, element):
+        super(Identifier, self).__init__(element)
+        self.name      = testXMLAttribute(element, "name")
+
+class ProcessMethod(MetadataGroup):
+    def __init__(self, element):
+        super(ProcessMethod, self).__init__(element)
+        self.ioStructure     = element.find(nsp("sml:IOStructureDefinition"))
+        self.algorithm       = element.find(nsp("sml:algorithm"))
+        self.implementations = list(element.findall(nsp("sml:implementation")))
+
+class Interface(object):
+    def __init__(self, element):
+        self.name                 = testXMLAttribute(element, "name")
+        self.interface_definition = InterfaceDefinition(element.find(nsp("sml:InterfaceDefinition")))
+
+class InterfaceDefinition(object):
+    def __init__(self, element):
+        raise NotImplementedError("InterfaceDefinition is not implemented in OWSLib (yet)")

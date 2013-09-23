@@ -381,7 +381,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-19T17:00:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T12:30:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T12:40:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:network:glos:all"/>
@@ -875,7 +875,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-19T23:30:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T11:30:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T12:00:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45013"/>
@@ -959,7 +959,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-19T19:00:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T11:30:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T11:30:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45014"/>
@@ -1043,7 +1043,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-21T22:10:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T11:50:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T11:40:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45022"/>
@@ -1205,7 +1205,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-19T17:00:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-05T17:00:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T11:50:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45024"/>
@@ -1283,7 +1283,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-21T22:10:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T12:00:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T12:10:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45025"/>
@@ -1367,7 +1367,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-21T22:20:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T12:30:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T12:40:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45026"/>
@@ -1449,7 +1449,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-21T21:10:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T11:00:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T11:10:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45027"/>
@@ -1479,7 +1479,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-21T21:20:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T11:00:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T11:20:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45028"/>
@@ -1510,7 +1510,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-21T22:20:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T12:10:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T12:30:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45029"/>
@@ -1593,7 +1593,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-19T19:55:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T10:55:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T10:55:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45161"/>
@@ -1622,7 +1622,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-20T04:55:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T11:55:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T11:55:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:45163"/>
@@ -1651,7 +1651,7 @@
         <sos:time>
           <gml:TimePeriod xsi:type="gml:TimePeriodType">
             <gml:beginPosition>2013-08-21T04:00:00.000Z</gml:beginPosition>
-            <gml:endPosition>2013-09-11T12:00:00.000Z</gml:endPosition>
+            <gml:endPosition>2013-09-19T12:00:00.000Z</gml:endPosition>
           </gml:TimePeriod>
         </sos:time>
         <sos:procedure xlink:href="urn:ioos:station:us.glos:GVSU1"/>
