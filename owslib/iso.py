@@ -2,10 +2,10 @@
 # ============================================================================= 
 # Copyright (c) 2009 Tom Kralidis
 #
-# Authors : Tom Kralidis <tomkralidis@hotmail.com>
+# Authors : Tom Kralidis <tomkralidis@gmail.com>
 #           Angelos Tzotsos <tzotsos@gmail.com>
 #
-# Contact email: tomkralidis@hotmail.com
+# Contact email: tomkralidis@gmail.com
 # =============================================================================
 
 """ ISO metadata parser """

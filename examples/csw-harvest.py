@@ -3,9 +3,9 @@
 # =============================================================================
 # Copyright (c) 2010 Tom Kralidis
 #
-# Authors : Tom Kralidis <tomkralidis@hotmail.com>
+# Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
-# Contact email: tomkralidis@hotmail.com
+# Contact email: tomkralidis@gmail.com
 # =============================================================================
 
 # simple process to harvest CSW catalogues via Harvest operations
