@@ -8,7 +8,9 @@ from owslib.swe.common import DataRecord
 
 def get_namespaces():
     n = Namespaces()
-    return n.get_namespaces(["sml","gml","xlink"])
+    namespaces = n.get_namespaces(["sml","gml","xlink"])
+    namespaces["ism"] = "urn:us:gov:ic:ism:v2"
+    return namespaces
 namespaces = get_namespaces()
 
 def nsp(path):
@@ -55,9 +57,9 @@ class PropertyGroup(object):
 
 class ConstraintGroup(object):
     def __init__(self, element):
-        # ism:SecutiryAtrtibutesOptionsGroup
-        self.securityConstraints = element.find(nsp("sml:securityConstraint"))
-        # gml:TimeInstant or gml:TimePeriod inside of validTime
+        # ism:SecurityAttributesOptionsGroup
+        self.security            = element.findall(nsp("sml:securityConstraint/sml:Security/ism:SecurityAttributesOptionGroup"))
+        # gml:TimeInstant or gml:TimePeriod element
         self.validTime           = element.find(nsp("sml:validTime"))
         self.rights              = [Right(x) for x in element.findall(nsp("sml:legalConstraint/sml:Rights"))]
 
@@ -82,7 +84,7 @@ class Document(object):
 
 class Right(object):
     def __init__(self, element):
-        self.id                         = testXMLAttribute(element, 'id')
+        self.id                         = testXMLAttribute(element, nsp('gml:id'))
         self.privacyAct                 = testXMLAttribute(element, nsp('sml:privacyAct'))
         self.intellectualPropertyRights = testXMLAttribute(element, nsp('sml:intellectualPropertyRights'))
         self.copyRights                 = testXMLAttribute(element, nsp('sml:copyRights'))
@@ -131,6 +133,8 @@ class GeneralInfoGroup(object):
 
 class Contact(object):
     def __init__(self, element):
+        # TODO: This only supports the sml:contact/sml:ResponsibleParty elements, but there are numerous ways to store
+        # contact information here.
         self.role         = testXMLAttribute(element, nsp("xlink:role"))
         self.href         = testXMLAttribute(element, nsp("xlink:href"))
         self.organization = testXMLValue(element.find(nsp('sml:ResponsibleParty/sml:organizationName')))
@@ -177,49 +181,77 @@ class MetadataGroup(GeneralInfoGroup, PropertyGroup, ConstraintGroup, ReferenceG
 
 class AbstractFeature(object):
     def __init__(self, element):
-        self.name        = testXMLValue(element.find(nsp("gml:name")))
-        self.description = testXMLValue(element.find(nsp("gml:description")))
+        self.name         = testXMLValue(element.find(nsp("gml:name")))
+        self.description  = testXMLValue(element.find(nsp("gml:description")))
+        self.gmlBoundedBy = testXMLValue(element.find(nsp("gml:boundedBy")))
 
 class AbstractProcess(AbstractFeature, MetadataGroup):
     def __init__(self, element):
         AbstractFeature.__init__(self, element)
         MetadataGroup.__init__(self, element)
+        # sml:IoComponentPropertyType
         self.inputs     = element.findall(nsp("sml:input"))
+        # sml:IoComponentPropertyType
         self.outputs    = element.findall(nsp("sml:output"))
+        # swe:DataComponentPropertyType
         self.parameters = element.findall(nsp("sml:parameter"))
 
-class ProcessModel(AbstractProcess):
+class AbstractRestrictedProcess(AbstractFeature):
+    """ Removes ('restricts' in xml schema language) gml:name, gml:description, and sml:metadataGroup from an AbstractProcess """
     def __init__(self, element):
-        super(ProcessModel, self).__init__(element)
+        AbstractFeature.__init__(self, element)
+        self.name        = None
+        self.description = None
+
+class AbstractPureProcess(AbstractRestrictedProcess):
+    def __init__(self, element):
+        AbstractRestrictedProcess.__init__(self, element)
+
+        # sml:IoComponentPropertyType
+        self.inputs      = element.findall(nsp("sml:input"))
+        # sml:IoComponentPropertyType
+        self.outputs     = element.findall(nsp("sml:output"))
+        # swe:DataComponentPropertyType
+        self.parameters  = element.findall(nsp("sml:parameter"))
+
+class ProcessModel(AbstractPureProcess):
+    def __init__(self, element):
+        AbstractPureProcess.__init__(self, element)
         self.method = ProcessMethod(element.find("method"))
 
 class CompositePropertiesGroup(object):
     def __init__(self, element):
-        # All components should be of instance AbstractProcess
+        # All components should be of instance AbstractProcess (sml:_Process)
         self.components  = element.findall(nsp("sml:components/sml:ComponentList/sml:component"))
+        # sml:Link or sml:ArrayLink element
         self.connections = element.findall(nsp("sml:connections/sml:ConnectionList/sml:connection"))
 
 class PhysicalPropertiesGroup(object):
     def __init__(self, element):
         # gml:EngieeringCRS element
-        self.spatialReferenceFrame  = element.find(nsp("sml:spatialReferenceFrame"))
+        self.spatialReferenceFrame  = element.find(nsp("sml:spatialReferenceFrame/gml:EngineeringCRS"))
         # gml:TemporalCRS element
-        self.temporalReferenceFrame = element.find(nsp("sml:temporalReferenceFrame"))
+        self.temporalReferenceFrame = element.find(nsp("sml:temporalReferenceFrame/gml:TemporalCRS"))
         # gml:Envelope element
-        self.boundedBy              = element.find(nsp("sml:boundedBy"))
+        self.smlBoundedBy           = element.find(nsp("sml:boundedBy"))
+        # swe:Time or sml:_Process element
+        self.timePosition           = element.find(nsp("sml:timePosition"))
+
+        # It is either a sml:position OR and sml:location element here.  Process both.
         # swe:Position, swe:Vector, or sml:_Process element
-        self.positions = []
-        self.positions.append(element.findall(nsp("sml:position")))
-        self.positions.append(element.findall(nsp("sml:timePosition")))
-        self.positions = filter(None, self.positions)
+        self.positions              = element.findall(nsp("sml:position"))
+        # gml:Point of gml:_Curve
+        self.location               = element.find(nsp("sml:location"))
+
         try:
             self.interface = Interface(element.find(nsp("sml:interface")))
         except AttributeError:
             self.interface = None
 
-class ProcessChain(AbstractProcess, CompositePropertiesGroup):
+class ProcessChain(AbstractPureProcess, CompositePropertiesGroup):
     def __init__(self, element):
-        super(ProcessChain, self).__init__(element)
+        AbstractPureProcess.__init__(self, element)
+        CompositePropertiesGroup.__init__(self, element)
 
 class System(AbstractProcess, PhysicalPropertiesGroup, CompositePropertiesGroup):
     def __init__(self, element):
@@ -229,7 +261,8 @@ class System(AbstractProcess, PhysicalPropertiesGroup, CompositePropertiesGroup)
 
 class Component(AbstractProcess, PhysicalPropertiesGroup):
     def __init__(self, element):
-        super(Component, self).__init__(element)
+        AbstractProcess.__init__(self, element)
+        PhysicalPropertiesGroup.__init__(self, element)
         self.method = ProcessMethod(element.find("method"))
 
 class Term(object):
@@ -240,20 +273,22 @@ class Term(object):
 
 class Classifier(Term):
     def __init__(self, element):
-        super(Classifier, self).__init__(element)
+        Term.__init__(self, element)
         self.name      = testXMLAttribute(element, "name")
 
 class Identifier(Term):
     def __init__(self, element):
-        super(Identifier, self).__init__(element)
+        Term.__init__(self, element)
         self.name      = testXMLAttribute(element, "name")
 
 class ProcessMethod(MetadataGroup):
+    """ Inherits from gml:AbstractGMLType """
     def __init__(self, element):
-        super(ProcessMethod, self).__init__(element)
+        MetadataGroup.__init__(self, element)
+        self.rules           = element.find(nsp("sml:rules"))
         self.ioStructure     = element.find(nsp("sml:IOStructureDefinition"))
         self.algorithm       = element.find(nsp("sml:algorithm"))
-        self.implementations = list(element.findall(nsp("sml:implementation")))
+        self.implementations = element.findall(nsp("sml:implementation"))
 
 class Interface(object):
     def __init__(self, element):
@@ -263,3 +298,11 @@ class Interface(object):
 class InterfaceDefinition(object):
     def __init__(self, element):
         raise NotImplementedError("InterfaceDefinition is not implemented in OWSLib (yet)")
+
+class Link(object):
+    def __init__(self, element):
+        raise NotImplementedError("Link is not implemented in OWSLib (yet)")
+
+class ArrayLink(object):
+    def __init__(self, element):
+        raise NotImplementedError("ArrayLink is not implemented in OWSLib (yet)")
