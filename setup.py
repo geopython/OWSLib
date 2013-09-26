@@ -15,6 +15,7 @@ class PyTest(TestCommand):
 
 readme = open('README.txt').read()
 reqs = [line.strip() for line in open('requirements.txt')]
+reqs.append('pytz>=2013d')
 
 setup(name              = 'OWSLib',
       version           = owslib.__version__,
