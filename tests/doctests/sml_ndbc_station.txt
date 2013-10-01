@@ -1,7 +1,7 @@
 Imports
 
     >>> from tests.utils import resource_file
-    >>> from owslib.swe.sensor.sml import SensorML, EventMetadata
+    >>> from owslib.swe.sensor.sml import SensorML
     >>> from dateutil import parser
     >>> import pytz
 
@@ -9,10 +9,7 @@ Initialize
 
     >>> xml = open(resource_file('sml_ndbc_station.xml'), 'r').read()
     >>> root = SensorML(xml)
-    >>> system = root.systems[0]
-
-    >>> system.id
-    'station-41012'
+    >>> system = root.members[0]
 
     >>> system.description
     'Station metadata for 41012 - 40NM ENE of St Augustine, FL'
@@ -22,49 +19,47 @@ Contacts
     >>> system.contacts.keys()
     ['urn:ogc:def:classifiers:OGC:contactType:operator', 'urn:ogc:def:classifiers:OGC:contactType:publisher']
 
-    >>> operator = system.get_contact_by_role('urn:ogc:def:classifiers:OGC:contactType:operator')
-    >>> operator.role
+    >>> operators = system.get_contacts_by_role('urn:ogc:def:classifiers:OGC:contactType:operator')
+    >>> operators[0].role
     'urn:ogc:def:classifiers:OGC:contactType:operator'
-    >>> operator.organization
+    >>> operators[0].organization
     'National Data Buoy Center'
-    >>> operator.country
+    >>> operators[0].country
     'US'
 
-    >>> publisher = system.get_contact_by_role('urn:ogc:def:classifiers:OGC:contactType:publisher')
-    >>> publisher.role
+    >>> publishers = system.get_contacts_by_role('urn:ogc:def:classifiers:OGC:contactType:publisher')
+    >>> publishers[0].role
     'urn:ogc:def:classifiers:OGC:contactType:publisher'
-    >>> publisher.organization
+    >>> publishers[0].organization
     'National Data Buoy Center'
-    >>> publisher.country
+    >>> publishers[0].country
     'USA'
-    >>> publisher.phone
+    >>> publishers[0].phone
     '228-688-2805'
-    >>> publisher.address
+    >>> publishers[0].address
     'Bldg. 3205'
-    >>> publisher.city
+    >>> publishers[0].city
     'Stennis Space Center'
-    >>> publisher.postcode
+    >>> publishers[0].postcode
     '39529'
-    >>> publisher.email
+    >>> publishers[0].email
     'webmaster.ndbc@noaa.gov'
-    >>> publisher.region
+    >>> publishers[0].region
     'MS'
-    >>> publisher.url
-    'http://sdf.ndbc.noaa.gov/'
 
 Identification
 
     >>> system.identifiers.keys()
     ['StationId', 'Long Name', 'Short Name']
 
-    >>> sid = system.get_identifier_by_name('StationId')
-    >>> sid.name
+    >>> sid = system.get_identifiers_by_name('StationId')
+    >>> sid[0].name
     'StationId'
-    >>> sid.definition
+    >>> sid[0].definition
     'urn:ioos:def:identifier:NOAA:stationID'
-    >>> sid.codespace
+    >>> sid[0].codeSpace
     'http://sdf.ndbc.noaa.gov'
-    >>> sid.value
+    >>> sid[0].value
     'urn:ioos:station:wmo:41012'
 
 
@@ -72,23 +67,23 @@ Classifiers
 
     >>> system.classifiers.keys()
     ['Platform Type']
-    >>> classi = system.get_classifier_by_name('Platform type')
-    >>> classi.name
+    >>> classi = system.get_classifiers_by_name('Platform type')
+    >>> classi[0].name
     'Platform Type'
-    >>> classi.definition
+    >>> classi[0].definition
     'urn:ioos:def:classifier:NOAA:platformType'
-    >>> classi.codespace
+    >>> classi[0].codeSpace
     'http://sdf.ndbc.noaa.gov'
-    >>> classi.value
+    >>> classi[0].value
     'MOORED BUOY'
 
 
 Documents
 
-    >>> system.documents # doctest: +ELLIPSIS
-    [<owslib.swe.sensor.sml.DocumentationMetadata ...>]
+    >>> system.documentation # doctest: +ELLIPSIS
+    [<owslib.swe.sensor.sml.Documentation ...>]
 
-    >>> doc = system.documents[0]
+    >>> doc = system.documentation[0].documents[0]
     >>> doc.description
     'Handbook of Automated Data Quality Control Checks and Procedures, National Data Buoy Center, August 2009'
     >>> doc.format
@@ -103,17 +98,15 @@ History
     ['deployment_start', 'deployment_stop']
 
     >>> his = system.get_history_by_name('deployment_start')
-    >>> his # doctest: +ELLIPSIS
-    [<owslib.swe.sensor.sml.EventMetadata ...>]
+    >>> his
+    [<owslib.swe.sensor.sml.Event ...>]
     >>> len(his)
     2
 
     >>> event = his[0]
-    >>> event.name
-    'deployment_start'
     >>> parser.parse(event.date).replace(tzinfo=pytz.utc).isoformat()
     '2010-01-12T00:00:00+00:00'
     >>> event.description
     'Deployment start event'
-    >>> event.documentation_url
+    >>> event.documentation[0].url
     'http://sdftest.ndbc.noaa.gov/sos/server.php?service=SOS&request=DescribeSensor&version=1.0.0&outputformat=text/xml;subtype="sensorML/1.0.1"&procedure=urn:ioos:station:wmo:41012:20100112'

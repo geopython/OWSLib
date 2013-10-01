@@ -262,8 +262,8 @@ class SosCapabilitiesReader(object):
             qs.append(('service', 'SOS'))
         if 'request' not in params:
             qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
-            qs.append(('version', self.version))
+        if 'acceptVersions' not in params:
+            qs.append(('acceptVersions', self.version))
 
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
@@ -274,7 +274,7 @@ class SosCapabilitiesReader(object):
             elementtree instance
 
             service_url is the base url, to which is appended the service,
-            version, and request parameters
+            acceptVersions, and request parameters
         """
         getcaprequest = self.capabilities_url(service_url)
         spliturl=getcaprequest.split('?')
