@@ -185,7 +185,7 @@ class Text(AbstractSimpleComponent):
             self.constraint     = AllowedTokens(element.find(nspv("swe20:constraint/swe20:AllowedTokens"))) # AllowedTokens, min=0, max=1
         except:
             self.constraint     = None
-        
+
 
 class Category(AbstractSimpleComponent):
     def __init__(self, element):
@@ -198,7 +198,7 @@ class Category(AbstractSimpleComponent):
             self.constraint     = AllowedTokens(element.find(nspv("swe20:constraint/swe20:AllowedTokens"))) # AllowedTokens, min=0, max=1
         except:
             self.constraint     = None
-                                  
+
 
 class CategoryRange(Category):
     def __init__(self, element):
@@ -217,7 +217,7 @@ class Count(AbstractSimpleComponent):
             self.constraint = AllowedValues(element.find(nspv("swe20:constraint/swe20:AllowedValues"))) # AllowedValues, min=0, max=1
         except:
             self.constraint = None
-        
+
 
 class CountRange(Count):
     def __init__(self, element):
@@ -237,7 +237,6 @@ class Quantity(AbstractSimpleComponent):
             self.constraint = AllowedValues(element.find(nspv("swe20:constraint/swe20:AllowedValues")))   # AllowedValues, min=0, max=1
         except:
             self.constraint = None
-        
 
 class QuantityRange(Quantity):
     def __init__(self, element):
@@ -260,7 +259,7 @@ def get_time(value, referenceTime, uom):
                 value  = referenceTime + timedelta(hours=float(value))
             elif uom.lower() == "d":
                 value  = referenceTime + timedelta(days=float(value))
-        
+
         except (AttributeError, ValueError):
             pass
 
@@ -282,7 +281,7 @@ class Time(AbstractSimpleComponent):
             self.constraint     = AllowedTimes(element.find(nspv("swe20:constraint/swe20:AllowedTimes"))) # AllowedTimes, min=0, max=1
         except:
             self.constraint     = None
-        
+
         # Attributes
         self.localFrame         = testXMLAttribute(element,"localFrame")                                    # anyURI, optional
         try:
