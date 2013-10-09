@@ -10,8 +10,6 @@ inputs = [("input1", '1'), ("input2", '2')]
 # list of tuple (output identifier, asReference attribute)
 outputs = [("output1",True), ("output2",False)]
 
-wps.
-
 execution = wps.execute(processid, inputs, output=outputs)
 print execution.status
 # show status
