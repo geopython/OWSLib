@@ -142,6 +142,7 @@ class IContentMetadata:
     crsOptions = property("""List of available coordinate/spatial reference systems (list).""")
     styles = property("""List of style dicts (list).""")
     timepositions=property("""List of times for which data is available""")
+    defaulttimeposition=property("""Default time position""")
 
 class iSensorObservationServiceContentMetadata(IContentMetadata):
     """Extension class for SOS specifics"""

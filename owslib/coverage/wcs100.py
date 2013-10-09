@@ -272,6 +272,7 @@ class ContentMetadata(object):
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.crsOptions=None
+        self.defaulttimeposition=None
 
     #grid is either a gml:Grid or a gml:RectifiedGrid if supplied as part of the DescribeCoverage response.
     def _getGrid(self):

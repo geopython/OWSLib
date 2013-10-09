@@ -285,6 +285,7 @@ class ContentMetadata:
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.timepositions=None
+        self.defaulttimeposition=None
 
         # MetadataURLs
         self.metadataUrls = []

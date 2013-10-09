@@ -446,10 +446,12 @@ class ContentMetadata:
 
         # timepositions - times for which data is available.
         self.timepositions=None
+        self.defaulttimeposition = None
         for extent in elem.findall('Extent'):
             if extent.attrib.get("name").lower() =='time':
                 if extent.text:
                     self.timepositions=extent.text.split(',')
+                    self.defaulttimeposition = extent.attrib.get("default")
                     break
                 
         # Elevations - available vertical levels
