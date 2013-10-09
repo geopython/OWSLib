@@ -47,7 +47,6 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         obj.__init__(url, version, xml, parse_remote_metadata)
         self.log = logging.getLogger()
         consoleh  = logging.StreamHandler()
-        self.log.addHandler(consoleh)    
         self.log.addHandler(consoleh)
         return obj
     
