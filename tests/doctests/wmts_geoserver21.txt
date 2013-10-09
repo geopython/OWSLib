@@ -1,7 +1,7 @@
 
 Imports
 
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import cast_tuple_int_list, resource_file
     >>> from owslib.wmts import WebMapTileService
     
 Fake a request to a WMTS Server using saved doc from 
@@ -55,8 +55,8 @@ Test TileMatrixSet variants
     ['GoogleMapsCompatible:0', 'GoogleMapsCompatible:1', 'GoogleMapsCompatible:10', 'GoogleMapsCompatible:11', 'GoogleMapsCompatible:12', 'GoogleMapsCompatible:13', 'GoogleMapsCompatible:14', 'GoogleMapsCompatible:15', 'GoogleMapsCompatible:16', 'GoogleMapsCompatible:17', 'GoogleMapsCompatible:18', 'GoogleMapsCompatible:19', 'GoogleMapsCompatible:2', 'GoogleMapsCompatible:20', 'GoogleMapsCompatible:3', 'GoogleMapsCompatible:4', 'GoogleMapsCompatible:5', 'GoogleMapsCompatible:6', 'GoogleMapsCompatible:7', 'GoogleMapsCompatible:8', 'GoogleMapsCompatible:9']
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].identifier
     'GoogleMapsCompatible:0'
-    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].scaledenominator
-    559082264.0287179
+    >>> int(wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].scaledenominator)
+    559082264
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].topleftcorner
     (-20037508.34, 20037508.0)
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:0'].tilewidth
@@ -69,8 +69,8 @@ Test TileMatrixSet variants
     1
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].identifier
     'GoogleMapsCompatible:17'
-    >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].scaledenominator
-    4265.459167699568
+    >>> int(wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].scaledenominator)
+    4265
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].topleftcorner
     (-20037508.34, 20037508.0)
     >>> wmts.tilematrixsets['GoogleMapsCompatible'].tilematrix['GoogleMapsCompatible:17'].tilewidth
@@ -121,8 +121,8 @@ Test single item accessor
 
     >>> wmts['geonode:GH_Areas_Protegidas4326'].title
     'GOH Areas Protegidas'
-    >>> wmts['geonode:GH_Areas_Protegidas4326'].boundingBoxWGS84
-    (-92.1708755499344, 12.9867324851599, -84.2739865773823, 18.4886492579626)
+    >>> cast_tuple_int_list(wmts['geonode:GH_Areas_Protegidas4326'].boundingBoxWGS84)
+    [-92, 12, -84, 18]
     >>> wmts['geonode:GH_Areas_Protegidas4326'].id
     'geonode:GH_Areas_Protegidas4326'
     >>> wmts['geonode:GH_Areas_Protegidas4326'].styles

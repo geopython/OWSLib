@@ -1,6 +1,6 @@
 Imports
 
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import cast_tuple_int_list, cast_tuple_int_list_srs, resource_file
     >>> from owslib.wms import WebMapService
     
 Fake a request to a WMS Server using saved doc from GeoServer, using a subset
@@ -45,11 +45,11 @@ Test single item accessor
     >>> wms['opengeo:poi'].title
     'Points of Interest'
     
-    >>> wms['opengeo:poi'].boundingBox
-    (-74.012, 40.708, -74.002, 40.72, 'EPSG:4326')
+    >>> cast_tuple_int_list_srs(wms['opengeo:poi'].boundingBox)
+    [-74, 40, -74, 40, 'EPSG:4326']
     
-    >>> wms['opengeo:poi'].boundingBoxWGS84
-    (-74.012, 40.708, -74.002, 40.72)
+    >>> cast_tuple_int_list(wms['opengeo:poi'].boundingBoxWGS84)
+    [-74, 40, -74, 40]
     
     >>> wms['opengeo:poi'].crsOptions
     ['EPSG:4326']

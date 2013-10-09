@@ -1,5 +1,5 @@
 #
-# spec file for package OWSLib (0.5.1)
+# spec file for package OWSLib (0.7.2)
 #
 # Copyright (c) 2011 Angelos Tzotsos <tzotsos@opensuse.org>
 #
@@ -12,7 +12,7 @@
 %define pyname owslib
 
 Name:           python-%{pyname}
-Version:        0.5.1
+Version:        0.7.2
 Release:        0
 Summary:        Python interface to OGC Web Services
 License:        MIT
@@ -21,9 +21,11 @@ Group:          Productivity/Scientific/Other
 Source0:        %{pyname}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
-BuildRequires:  python-devel python-setuptools
+BuildRequires:  python-devel 
+BuildRequires:  python-setuptools
 BuildRequires:  fdupes
 Requires:	python
+Requires:       python-dateutil python-pytz
 
 %description
 OWSLib is a Python package for client programming with Open Geospatial Consortium (OGC) web service (hence OWS) interface standards, and their related content models.

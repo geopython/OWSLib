@@ -2,7 +2,7 @@
 Imports
 
     >>> from owslib.wms import WebMapService
-    >>> from tests.utils import resource_file, scratch_file
+    >>> from tests.utils import cast_tuple_int_list, cast_tuple_int_list_srs, resource_file, scratch_file
     >>> import os
     
 Fake a request to a GeoServer WMS Server using saved doc from 
@@ -67,11 +67,11 @@ Test single item accessor
     >>> wms['massgis:GISDATA.SHORELINES_ARC'].keywords
     ['MassgisMetadataUrl=http://maps.massgis.state.ma.us/czm/moris/metadata/moris_shorelines_arc.htm', 'Change', 'GISDATA.SHORELINES_ARC', 'Shoreline', 'massgis_sde']
 
-    >>> wms['massgis:GISDATA.SHORELINES_ARC'].boundingBox
-    (231474.73433409492, 777443.124893673, 331004.5312907933, 958511.9376063161, 'EPSG:26986')
+    >>> cast_tuple_int_list_srs(wms['massgis:GISDATA.SHORELINES_ARC'].boundingBox)
+    [231474, 777443, 331004, 958511, 'EPSG:26986']
 
-    >>> wms['massgis:GISDATA.SHORELINES_ARC'].boundingBoxWGS84
-    (-71.12453776314456, 41.2362712765796, -69.8968224409519, 42.876590440959234)
+    >>> cast_tuple_int_list(wms['massgis:GISDATA.SHORELINES_ARC'].boundingBoxWGS84)
+    [-71, 41, -69, 42]
     
     >>> wms['massgis:GISDATA.SHORELINES_ARC'].styles
     {'GISDATA.SHORELINES_ARC::Default': {'legend': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GISDATA.SHORELINES_ARC', 'title': None}}

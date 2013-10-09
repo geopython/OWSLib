@@ -8,7 +8,7 @@ Imports
 
 Initialize WPS client
 
-    >>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService')
+    >>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService',skip_caps=True)
 
 Execute fake invocation of DescribeProcess operation by parsing cached response from USGS service
 

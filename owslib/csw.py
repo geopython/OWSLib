@@ -2,15 +2,18 @@
 # =============================================================================
 # Copyright (c) 2009 Tom Kralidis
 #
-# Authors : Tom Kralidis <tomkralidis@hotmail.com>
+# Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
-# Contact email: tomkralidis@hotmail.com
+# Contact email: tomkralidis@gmail.com
 # =============================================================================
 
 """ CSW request and response processor """
 
+import warnings
 import StringIO
 import random
+from urllib import urlencode
+from urllib2 import urlopen
 from owslib.etree import etree
 from owslib import fes
 from owslib import util
@@ -19,7 +22,7 @@ from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.namespaces import Namespaces
-from owslib.util import cleanup_namespaces
+from owslib.util import cleanup_namespaces, bind_url
 
 # default variables
 outputformat = 'application/xml'
@@ -59,15 +62,10 @@ class CatalogueServiceWeb:
 
         if not skip_caps:  # process GetCapabilities
             # construct request
-            node0 = self._setrootelement('csw:GetCapabilities')
-            node0.set('service', self.service)
-            node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-            tmp = etree.SubElement(node0, util.nspath_eval('ows:AcceptVersions', namespaces))
-            etree.SubElement(tmp, util.nspath_eval('ows:Version', namespaces)).text = self.version
-            tmp2 = etree.SubElement(node0, util.nspath_eval('ows:AcceptFormats', namespaces))
-            etree.SubElement(tmp2, util.nspath_eval('ows:OutputFormat', namespaces)).text = outputformat
 
-            self.request = node0
+            data = {'service': self.service, 'version': self.version, 'request': 'GetCapabilities'}
+
+            self.request = '%s%s' % (bind_url(self.url), urlencode(data))
     
             self._invoke()
     
@@ -183,7 +181,7 @@ class CatalogueServiceWeb:
 
         """
 
-        raise DeprecationWarning("""Please use the updated 'getrecords2' method instead of 'getrecords'.  
+        warnings.warn("""Please use the updated 'getrecords2' method instead of 'getrecords'.  
         The 'getrecords' method will be upgraded to use the 'getrecords2' parameters
         in a future version of OWSLib.""")
 
@@ -256,16 +254,17 @@ class CatalogueServiceWeb:
         """
 
         # construct request 
-        node0 = self._setrootelement('csw:GetRecordById')
-        node0.set('outputSchema', outputschema)
-        node0.set('outputFormat', format)
-        node0.set('version', self.version)
-        node0.set('service', self.service)
-        node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
-        for i in id:
-            etree.SubElement(node0, util.nspath_eval('csw:Id', namespaces)).text = i
-        etree.SubElement(node0, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
-        self.request = node0
+        data = {
+            'service': self.service,
+            'version': self.version,
+            'request': 'GetRecordById',
+            'outputFormat': format,
+            'outputSchema': outputschema,
+            'elementsetname': esn,
+            'id': '',
+        }
+
+        self.request = '%s%s%s' % (bind_url(self.url), urlencode(data), ','.join(id))
 
         self._invoke()
  
@@ -324,15 +323,15 @@ class CatalogueServiceWeb:
         
             etree.SubElement(node1, util.nspath_eval('csw:ElementSetName', namespaces)).text = esn
 
-            if len(constraints) > 0: 
+            if any([len(constraints) > 0, cql is not None]): 
                 node2 = etree.SubElement(node1, util.nspath_eval('csw:Constraint', namespaces))
                 node2.set('version', '1.1.0')
                 flt = fes.FilterRequest()
-                node2.append(flt.setConstraintList(constraints))
-
-            # Now add a CQL filter if passed in
-            if cql is not None:
-                etree.SubElement(node2, util.nspath_eval('csw:CqlText', namespaces)).text = cql
+                if len(constraints) > 0:
+                    node2.append(flt.setConstraintList(constraints))
+                # Now add a CQL filter if passed in
+                elif cql is not None:
+                    etree.SubElement(node2, util.nspath_eval('csw:CqlText', namespaces)).text = cql
                 
             if sortby is not None and isinstance(sortby, fes.SortBy):
                 node1.append(sortby)
@@ -567,10 +566,13 @@ class CatalogueServiceWeb:
     def _invoke(self):
         # do HTTP request
 
-        self.request = cleanup_namespaces(self.request)
-        self.request = util.xml2string(etree.tostring(self.request))
+        if isinstance(self.request, basestring):  # GET KVP
+            self.response = urlopen(self.request, timeout=self.timeout).read()
+        else:
+            self.request = cleanup_namespaces(self.request)
+            self.request = util.xml2string(etree.tostring(self.request))
 
-        self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
+            self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
         self._exml = etree.parse(StringIO.StringIO(self.response))

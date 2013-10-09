@@ -55,7 +55,7 @@ Initialize CSW client
     >>> filter_list = [[uuid, box]]
     >>> c.getrecords2(filter_list)
     >>> c.results
-    {'matches': 0, 'nextrecord': 0, 'returned': 0}
+    {'matches': 15, 'nextrecord': 11, 'returned': 10}
 
     ##########################################################
     # Test 4
@@ -65,7 +65,7 @@ Initialize CSW client
     >>> filter = fes.PropertyIsNull(propertyname='sys.siteuuid')
     >>> c.getrecords2([filter])
     >>> c.results
-    {'matches': 16, 'nextrecord': 11, 'returned': 10}
+    {'matches': 5, 'nextrecord': 0, 'returned': 5}
 
 
     ##########################################################
@@ -95,7 +95,7 @@ Initialize CSW client
     ... '''
     >>> c.getrecords2(xml=sos_search)   # in about XML it has constraint: maxrecords=10
     >>> c.results
-    {'matches': 46, 'nextrecord': 11, 'returned': 10}
+    {'matches': 148, 'nextrecord': 11, 'returned': 10}
 
     ##########################################################
     # Test 6
@@ -107,4 +107,4 @@ Initialize CSW client
     >>> filter_list = [[uuid,dap_filter]]
     >>> c.getrecords2(filter_list)
     >>> c.results
-    {'matches': 46, 'nextrecord': 11, 'returned': 10}
+    {'matches': 148, 'nextrecord': 11, 'returned': 10}

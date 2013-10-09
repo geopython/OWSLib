@@ -4,7 +4,7 @@ COWS Web Coverage Service doctest
 WCS Version 1.0.0
 =================
 
-    >>> from tests.utils import scratch_file
+    >>> from tests.utils import cast_tuple_int_list, scratch_file
     >>> from owslib.wcs import WebCoverageService
     
     >>> wcs=WebCoverageService('http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet')
@@ -21,8 +21,8 @@ WCS Version 1.0.0
     >>> cvg=wcs['MDT25_peninsula_pendientes']
     >>> cvg.title
     'MDT25 Pendientes Peninsula'
-    >>> cvg.boundingBoxWGS84
-    (-8.7527311628, 35.8849011171, 3.6409641687, 43.7511638541)
+    >>> cast_tuple_int_list(cvg.boundingBoxWGS84)
+    [-8, 35, 3, 43]
     >>> cvg.timelimits
     []
     >>> cvg.supportedFormats

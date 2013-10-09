@@ -2,9 +2,9 @@
 # =============================================================================
 # Copyright (c) 2008 Tom Kralidis
 #
-# Authors : Tom Kralidis <tomkralidis@hotmail.com>
+# Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
-# Contact email: tomkralidis@hotmail.com
+# Contact email: tomkralidis@gmail.com
 # =============================================================================
 
 import sys
@@ -44,6 +44,23 @@ class ServiceException(Exception):
 dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
   isinstance(d2.get(x),dict) else d2.get(x,d1.get(x)))) for x in
   set(d1.keys()+d2.keys()))
+
+
+# Infinite DateTimes for Python.  Used in SWE 2.0 and other OGC specs as "INF" and "-INF"
+class InfiniteDateTime(object):
+    def __lt__(self, other):
+        return False
+    def __gt__(self, other):
+        return True
+    def timetuple(self):
+        return tuple()
+class NegativeInfiniteDateTime(object):
+    def __lt__(self, other):
+        return True
+    def __gt__(self, other):
+        return False
+    def timetuple(self):
+        return tuple()
 
 
 first_cap_re = re.compile('(.)([A-Z][a-z]+)')
@@ -406,3 +423,24 @@ a newline. This will extract out all of the keywords correctly.
     flattened = [item.strip() for sublist in keywords for item in sublist]
     remove_blank = filter(None, flattened)
     return remove_blank
+
+
+def bind_url(url):
+    """binds an HTTP GET query string endpiont"""
+    if url.find('?') == -1: # like http://host/wms
+        binder = '?'
+
+    # if like http://host/wms?foo=bar& or http://host/wms?foo=bar
+    if url.find('=') != -1:
+        if url.find('&', -1) != -1: # like http://host/wms?foo=bar&
+            binder = ''
+        else: # like http://host/wms?foo=bar
+            binder = '&'
+
+    # if like http://host/wms?foo
+    if url.find('?') != -1:
+        if url.find('?', -1) != -1: # like http://host/wms?
+            binder = ''
+        elif url.find('&', -1) == -1: # like http://host/wms?foo=bar
+            binder = '&'
+    return '%s%s' % (url, binder)

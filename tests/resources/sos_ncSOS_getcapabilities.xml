@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sos:Capabilities version="1.0.0" xmlns:gml="http://www.opengis.net/gml"
+    xmlns:om="http://www.opengis.net/om/1.0"
+    xmlns:ows="http://www.opengis.net/ows/1.1"
+    xmlns:sos="http://www.opengis.net/sos/1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sos/1.0      http://schemas.opengis.net/sos/1.0.0/sosAll.xsd">
+    <ows:ServiceIdentification>
+        <ows:Title>Slocum Glider Dataset</ows:Title>
+        <ows:Abstract>Institute of Marine &amp; Coastal Sciences, Rutgers University</ows:Abstract>
+        <ows:Keywords>
+            <ows:Keyword/>
+        </ows:Keywords>
+        <ows:ServiceType codeSpace="http://opengeospatial.net">OGC:SOS</ows:ServiceType>
+        <ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+        <ows:Fees>NONE</ows:Fees>
+        <ows:AccessConstraints>This data may be redistributed and used without restriction.</ows:AccessConstraints>
+    </ows:ServiceIdentification>
+    <ows:ServiceProvider>
+        <ows:ProviderName>Observational data from a profiling glider</ows:ProviderName>
+        <ows:ProviderSite xlink:href="http://marine.rutgers.edu/cool/auvs"/>
+        <ows:ServiceContact>
+            <ows:IndividualName/>
+            <ows:ContactInfo>
+                <ows:Phone>
+                    <ows:Voice/>
+                </ows:Phone>
+                <ows:Address>
+                    <ows:DeliveryPoint/>
+                    <ows:City/>
+                    <ows:AdministrativeArea/>
+                    <ows:PostalCode/>
+                    <ows:Country/>
+                    <ows:ElectronicMailAddress/>
+                </ows:Address>
+            </ows:ContactInfo>
+        </ows:ServiceContact>
+    </ows:ServiceProvider>
+    <ows:OperationsMetadata>
+        <ows:Operation name="GetCapabilities">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Get xlink:href="http://tds.gliders.ioos.us/thredds/sos/rutgers_otn200-20130910T1551_TimeUV.ncml"/>
+                </ows:HTTP>
+            </ows:DCP>
+            <ows:Parameter name="Sections">
+                <ows:AllowedValues>
+                    <ows:Value>ServiceIdentification</ows:Value>
+                    <ows:Value>ServiceProvider</ows:Value>
+                    <ows:Value>OperationsMetadata</ows:Value>
+                    <ows:Value>Contents</ows:Value>
+                    <ows:Value>All</ows:Value>
+                </ows:AllowedValues>
+            </ows:Parameter>
+        </ows:Operation>
+        <ows:Operation name="GetObservation">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Get xlink:href="http://tds.gliders.ioos.us/thredds/sos/rutgers_otn200-20130910T1551_TimeUV.ncml"/>
+                </ows:HTTP>
+            </ows:DCP>
+            <ows:Parameter name="offering" use="optional"/>
+            <ows:Parameter name="observedProperty" use="required">
+                <ows:AllowedValues>
+                    <ows:Value>u</ows:Value>
+                    <ows:Value>u_qc</ows:Value>
+                    <ows:Value>v</ows:Value>
+                    <ows:Value>v_qc</ows:Value>
+                </ows:AllowedValues>
+            </ows:Parameter>
+        </ows:Operation>
+        <ows:Operation name="DescribeSensor">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Get xlink:href="http://tds.gliders.ioos.us/thredds/sos/rutgers_otn200-20130910T1551_TimeUV.ncml"/>
+                </ows:HTTP>
+            </ows:DCP>
+            <ows:Parameter name="outputFormat">
+                <ows:AllowedValues>
+                    <!-- Specify the flavor of SML described by these templates -->
+                    <ows:Value>text/xml;subtype="sensorML/1.0.1/profiles/ioos_sos/1.0"</ows:Value>
+                </ows:AllowedValues>
+            </ows:Parameter>
+            <ows:Parameter name="procedure" use="required">
+                <ows:AllowedValues>
+                    <ows:Value>urn:ioos:network:edu.rutgers.marine:all</ows:Value>
+                    <ows:Value>urn:ioos:station:edu.rutgers.marine:unknown</ows:Value>
+                    <ows:Value>urn:ioos:sensor:edu.rutgers.marine:unknown:u</ows:Value>
+                    <ows:Value>urn:ioos:sensor:edu.rutgers.marine:unknown:u_qc</ows:Value>
+                    <ows:Value>urn:ioos:sensor:edu.rutgers.marine:unknown:v</ows:Value>
+                    <ows:Value>urn:ioos:sensor:edu.rutgers.marine:unknown:v_qc</ows:Value>
+                </ows:AllowedValues>
+            </ows:Parameter>
+        </ows:Operation>
+        <ows:Parameter name="service" use="required">
+            <ows:AllowedValues>
+                <ows:Value>SOS</ows:Value>
+            </ows:AllowedValues>
+        </ows:Parameter>
+        <ows:Parameter name="version" use="required">
+            <ows:AllowedValues>
+                <ows:Value>1.0.0</ows:Value>
+            </ows:AllowedValues>
+        </ows:Parameter>
+    </ows:OperationsMetadata>
+    <sos:Contents>
+        <sos:ObservationOfferingList>
+            <sos:ObservationOffering gml:id="network-all">
+                <gml:description>All stations in the netCDF dataset.</gml:description>
+                <gml:name>urn:ioos:network:edu.rutgers.marine:all</gml:name>
+                <gml:srsName>EPSG:4326</gml:srsName>
+                <gml:boundedBy>
+                    <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4326">
+                        <gml:lowerCorner>-90.0 NaN</gml:lowerCorner>
+                        <gml:upperCorner>90.0 128.0</gml:upperCorner>
+                    </gml:Envelope>
+                </gml:boundedBy>
+                <sos:procedure xlink:href="urn:ioos:network:edu.rutgers.marine:all"/>
+                <sos:procedure xlink:href="urn:ioos:station:edu.rutgers.marine:unknown"/>
+                <sos:observedProperty xlink:href="u"/>
+                <sos:observedProperty xlink:href="u_qc"/>
+                <sos:observedProperty xlink:href="v"/>
+                <sos:observedProperty xlink:href="v_qc"/>
+                <sos:featureOfInterest xlink:href="urn:ioos:station:edu.rutgers.marine:unknown"/>
+                <sos:responseFormat>text/xml; subtype="om/1.0.0"</sos:responseFormat>
+                <sos:resultModel>om:ObservationCollection</sos:resultModel>
+                <sos:responseMode>inline</sos:responseMode>
+            </sos:ObservationOffering>
+            <sos:ObservationOffering gml:id="unknown">
+                <gml:name>urn:ioos:station:edu.rutgers.marine:unknown</gml:name>
+                <gml:srsName>EPSG:4326</gml:srsName>
+                <gml:boundedBy/>
+                <sos:Time/>
+                <sos:featureOfInterest xlink:href="urn:ioos:station:edu.rutgers.marine:unknown"/>
+                <sos:observedProperty xlink:href="u"/>
+                <sos:observedProperty xlink:href="u_qc"/>
+                <sos:observedProperty xlink:href="v"/>
+                <sos:observedProperty xlink:href="v_qc"/>
+                <sos:procedure xlink:href="urn:ioos:station:edu.rutgers.marine:unknown"/>
+                <sos:responseFormat>text/xml;subtype="om/1.0.0"</sos:responseFormat>
+                <sos:resultModel>om:ObservationCollection</sos:resultModel>
+                <sos:responseMode>inline</sos:responseMode>
+            </sos:ObservationOffering>
+        </sos:ObservationOfferingList>
+    </sos:Contents>
+</sos:Capabilities>
