@@ -153,7 +153,7 @@ class SensorObservationService_2_0_0(object):
         request['offering'] = ','.join(offerings)
 
         assert isinstance(observedProperties, list) and len(observedProperties) > 0
-        request['observedproperty'] = ','.join(observedProperties)
+        request['observedProperty'] = ','.join(observedProperties)
 
         if responseFormat is not None:
             request['responseFormat'] = responseFormat

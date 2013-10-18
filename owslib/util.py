@@ -159,7 +159,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         else:
             raise e
     # check for service exceptions without the http header set
-    if u.info()['Content-Type'] in ['text/xml', 'application/xml']:          
+    if u.info()['Content-Type'].split(';')[0] in ['text/xml', 'application/xml']:          
         #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
         #wrap the url stram in a extended StringIO object so it's re-readable
         u=RereadableURL(u)      
