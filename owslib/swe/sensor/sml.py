@@ -4,7 +4,6 @@ from owslib.etree import etree
 from owslib import crs, util
 from owslib.util import testXMLValue, testXMLAttribute, nspath_eval, xmltag_split, dict_union, extract_xml_list
 from owslib.namespaces import Namespaces
-from owslib.swe.common import DataRecord
 
 def get_namespaces():
     n = Namespaces()
@@ -46,14 +45,24 @@ class PropertyGroup(object):
         self.capabilities = {}
         for cap in element.findall(nsp('sml:capabilities')):
             name = testXMLAttribute(cap, "name")
-            dr = DataRecord(cap[0])
-            self.capabilities[name] = dr
+            self.capabilities[name] = cap[0]
 
         self.characteristics = {}
         for cha in element.findall(nsp('sml:characteristics')):
             name = testXMLAttribute(cha, "name")
-            dr = DataRecord(cha[0])
-            self.characteristics[name] = dr
+            self.characteristics[name] = cha[0]
+
+    def get_capabilities_by_name(self, name):
+        """
+            Return list of element by name, case insensitive
+        """
+        return [self.capabilities[capab] for capab in self.capabilities.keys() if capab.lower() == name.lower()]
+
+    def get_characteristics_by_name(self, name):
+        """
+            Return list of element objects by name, case insensitive
+        """
+        return [self.characteristics[charac] for charac in self.characteristics.keys() if charac.lower() == name.lower()]
 
 class ConstraintGroup(object):
     def __init__(self, element):
