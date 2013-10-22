@@ -349,8 +349,15 @@ class CatalogueServiceWeb:
             val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsReturned')
             self.results['returned'] = int(util.testXMLValue(val, True))
             val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('nextRecord')
-            self.results['nextrecord'] = int(util.testXMLValue(val, True))
-    
+            if val is not None:
+                 self.results['nextrecord'] = int(util.testXMLValue(val, True))
+            else:
+                warnings.warn("""CSW Server did not supply a nextRecord value (it is optional), so the client
+                should page through the results in another way.""")
+                # For more info, see:
+                # https://github.com/geopython/OWSLib/issues/100
+                self.results['nextrecord'] = None
+
             # process list of matching records
             self.records = {}
 
