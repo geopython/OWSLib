@@ -104,7 +104,7 @@ GML_NAMESPACE = n.get_namespace("gml")
 DRAW_NAMESPACE = n.get_namespace("draw")
 
 GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
-DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd'
+DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/climate/derivative/xsd/draw.xsd'
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
 
@@ -1207,7 +1207,7 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
                         xmlns:draw="gov.usgs.cida.gdp.draw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                         xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
                         xmlns:xlink="http://www.w3.org/1999/xlink"
-                        xsi:schemaLocation="gov.usgs.cida.gdp.draw http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd">
+                        xsi:schemaLocation="gov.usgs.cida.gdp.draw http://cida.usgs.gov/climate/derivative/xsd/draw.xsd">
                         <gml:box gml:id="box.1">
                             <gml:the_geom>
                                 <gml:MultiPolygon srsDimension="2"
