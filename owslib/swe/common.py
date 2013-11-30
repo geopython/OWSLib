@@ -73,12 +73,9 @@ class NamedObject(object):
         except BaseException:
             raise
 
-    # Revert to the type if attribute does not exists
+    # Revert to the content if attribute does not exists
     def __getattr__(self, name):
-        if hasattr(self, name):
-            return getattr(self, name)
-        else:
-            return getattr(self.content, name)
+        return getattr(self.content, name)
 
 class AbstractSWE(object):
     def __init__(self, element):
