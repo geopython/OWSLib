@@ -109,7 +109,7 @@ class AbstractSimpleComponent(AbstractDataComponent):
         self.axisID         = testXMLAttribute(element,"axisID")            # string, optional
 
         # Elements
-        self.quality        = filter(None, [Quality(e) for e in element.findall(nspv("swe20:quality"))])
+        self.quality        = filter(None, [Quality(q) for q in [e.find('*') for e in element.findall(nspv("swe20:quality"))] if q is not None])
         try:
             self.nilValues  = NilValues(element.find(nspv("swe20:nilValues")))
         except:
@@ -119,13 +119,13 @@ class Quality(object):
     def __new__(cls, element):
         t = element.tag.split("}")[-1]
         if t == "Quantity":
-            return Quantity.__new__(element)
+            return Quantity(element)
         elif t == "QuantityRange":
-            return QuantityRange.__new__(element)
+            return QuantityRange(element)
         elif t == "Category":
-            return Category.__new__(element)
+            return Category(element)
         elif t == "Text":
-            return Text.__new__(element)
+            return Text(element)
         else:
             return None
 
