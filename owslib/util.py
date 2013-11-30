@@ -253,7 +253,7 @@ def testXMLAttribute(element, attribute):
     if element is not None:
         attrib = element.get(attribute)
         if attrib is not None:
-            return attrib.strip()
+            return attrib.strip(' \t')
 
     return None
 
