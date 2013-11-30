@@ -359,8 +359,11 @@ class DataArray(AbstractDataComponent):
         super(DataArray, self).__init__(element)
         self.elementCount   = element.find(nspv("swe20:elementCount/swe20:Count"))      # required
         self.elementType    = ElementType(element.find(nspv("swe20:elementType")))      # required
-        self.encoding       = AbstractEncoding(element.find(nspv("swe20:encoding")))
         self.values         = testXMLValue(element.find(nspv("swe20:values")))
+        try:
+            self.encoding   = AbstractEncoding(element.find(nspv("swe20:encoding")))
+        except:
+            self.encoding   = None
 
 class Matrix(AbstractDataComponent):
     def __init__(self, element):
