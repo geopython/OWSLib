@@ -73,12 +73,9 @@ class NamedObject(object):
         except BaseException:
             raise
 
-    # Revert to the type if attribute does not exists
+    # Revert to the content if attribute does not exists
     def __getattr__(self, name):
-        if hasattr(self, name):
-            return getattr(self, name)
-        else:
-            return getattr(self.content, name)
+        return getattr(self.content, name)
 
 class AbstractSWE(object):
     def __init__(self, element):
@@ -112,7 +109,7 @@ class AbstractSimpleComponent(AbstractDataComponent):
         self.axisID         = testXMLAttribute(element,"axisID")            # string, optional
 
         # Elements
-        self.quality        = filter(None, [Quality(e) for e in element.findall(nspv("swe20:quality"))])
+        self.quality        = filter(None, [Quality(q) for q in [e.find('*') for e in element.findall(nspv("swe20:quality"))] if q is not None])
         try:
             self.nilValues  = NilValues(element.find(nspv("swe20:nilValues")))
         except:
@@ -122,13 +119,13 @@ class Quality(object):
     def __new__(cls, element):
         t = element.tag.split("}")[-1]
         if t == "Quantity":
-            return Quantity.__new__(element)
+            return Quantity(element)
         elif t == "QuantityRange":
-            return QuantityRange.__new__(element)
+            return QuantityRange(element)
         elif t == "Category":
-            return Category.__new__(element)
+            return Category(element)
         elif t == "Text":
-            return Text.__new__(element)
+            return Text(element)
         else:
             return None
 
@@ -359,8 +356,11 @@ class DataArray(AbstractDataComponent):
         super(DataArray, self).__init__(element)
         self.elementCount   = element.find(nspv("swe20:elementCount/swe20:Count"))      # required
         self.elementType    = ElementType(element.find(nspv("swe20:elementType")))      # required
-        self.encoding       = AbstractEncoding(element.find(nspv("swe20:encoding")))
         self.values         = testXMLValue(element.find(nspv("swe20:values")))
+        try:
+            self.encoding   = AbstractEncoding(element.find(nspv("swe20:encoding")))
+        except:
+            self.encoding   = None
 
 class Matrix(AbstractDataComponent):
     def __init__(self, element):
