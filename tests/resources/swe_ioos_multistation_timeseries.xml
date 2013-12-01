@@ -469,21 +469,21 @@
         <swe2:TextEncoding
           decimalSeparator="."
           tokenSeparator=","
-          blockSeparator="HIHI" />
+          blockSeparator="&#10;" />
       </swe2:encoding>
       <swe2:values>
-        2009-05-23T00:00:00Z,wmo_41001_sensor1,15.4,2.0,280HIHI
-        2009-05-23T01:00:00Z,wmo_41001_sensor1,15.8,1.8,121HIHI
-        2009-05-23T02:00:00Z,wmo_41001_sensor1,15.6,1.0,142HIHI
-        2009-05-23T00:00:00Z,wmo_41001_sensor2,5.6,8.0HIHI
-        2009-05-23T01:00:00Z,wmo_41001_sensor2,5.8,8.2HIHI
-        2009-05-23T02:00:00Z,wmo_41001_sensor2,5.7,8.5HIHI
-        2009-05-23T00:00:00Z,wmo_41002_sensor1,16.2HIHI
-        2009-05-23T01:00:00Z,wmo_41002_sensor1,16.4HIHI
-        2009-05-23T02:00:00Z,wmo_41002_sensor1,16.5HIHI
-        2009-05-23T00:00:00Z,wmo_41002_sensor2,6.1HIHI
-        2009-05-23T01:00:00Z,wmo_41002_sensor2,6.3HIHI
-        2009-05-23T02:00:00Z,wmo_41002_sensor2,6.5HIHI
+        2009-05-23T00:00:00Z,wmo_41001_sensor1,15.4,2.0,280
+        2009-05-23T01:00:00Z,wmo_41001_sensor1,15.8,1.8,121
+        2009-05-23T02:00:00Z,wmo_41001_sensor1,15.6,1.0,142
+        2009-05-23T00:00:00Z,wmo_41001_sensor2,5.6,8.0
+        2009-05-23T01:00:00Z,wmo_41001_sensor2,5.8,8.2
+        2009-05-23T02:00:00Z,wmo_41001_sensor2,5.7,8.5
+        2009-05-23T00:00:00Z,wmo_41002_sensor1,16.2
+        2009-05-23T01:00:00Z,wmo_41002_sensor1,16.4
+        2009-05-23T02:00:00Z,wmo_41002_sensor1,16.5
+        2009-05-23T00:00:00Z,wmo_41002_sensor2,6.1
+        2009-05-23T01:00:00Z,wmo_41002_sensor2,6.3
+        2009-05-23T02:00:00Z,wmo_41002_sensor2,6.5
         2009-05-23T01:00:00Z,wmo_41003_sensor1,15.8
       </swe2:values>
     </swe2:DataArray>

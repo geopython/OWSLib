@@ -81,7 +81,7 @@ Test
     >>> encoding.tokenSeparator
     ','
     >>> encoding.blockSeparator
-    'HIHI'
+    '\n'
     >>> encoding.decimalSeparator
     '.'
     >>> encoding.collapseWhiteSpaces
