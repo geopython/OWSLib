@@ -251,9 +251,7 @@ def testXMLAttribute(element, attribute):
 
     """
     if element is not None:
-        attrib = element.get(attribute)
-        if attrib is not None:
-            return attrib.strip()
+        return element.get(attribute)
 
     return None
 
