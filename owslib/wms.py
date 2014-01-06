@@ -18,6 +18,7 @@ Currently supports only version 1.1.1 of the WMS protocol.
 import cgi
 import urllib2
 from urllib import urlencode
+import warnings
 from etree import etree
 from .util import openURL, testXMLValue, extract_xml_list
 from fgdc import Metadata
@@ -120,7 +121,7 @@ class WebMapService(object):
                 cm = ContentMetadata(elem, parent=parent_metadata, index=index+1, parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
-                        raise KeyError('Content metadata for layer "%s" already exists' % cm.id)
+                        warnings.warn('Content metadata for layer "%s" already exists. Using child layer' % cm.id)
                     self.contents[cm.id] = cm
                 gather_layers(elem, cm)
         gather_layers(caps, None)
