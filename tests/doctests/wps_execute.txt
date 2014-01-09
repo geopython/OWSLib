@@ -29,6 +29,8 @@ Simulate end of process
     >>> response = open(resource_file('wps_USGSExecuteResponse1b.xml'), 'r').read()
     >>> execution.checkStatus(sleepSecs=0, response=response)
     Execution status=ProcessSucceeded
+    Percent completed=0
+    Status message=Process successful
     >>> execution.status
     'ProcessSucceeded'
     >>> execution.isComplete()

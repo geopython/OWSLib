@@ -55,8 +55,10 @@ Imports
 
     >>> prop = fes.PropertyIsLike("csw:AnyText", "glacial")
     >>> c.getrecords2([prop], outputschema='http://www.fgdc.gov')
-    >>> c.results
-    {'matches': 369, 'nextrecord': 11, 'returned': 10}
+    >>> c.results['matches'] > 300
+    True
+    >>> c.results['nextrecord']
+    11
 
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2)
     >>> c.results
