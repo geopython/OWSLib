@@ -12,6 +12,8 @@ Execute face WPS invocation
     >>> execution = wps.execute(None, [], request=request, response=response)
     Executing WPS request...
     Execution status=ProcessSucceeded
+    Percent completed=0
+    Status message=PyWPS Process v.net.path successfully calculated    
 
 Check execution result
     >>> execution.status
