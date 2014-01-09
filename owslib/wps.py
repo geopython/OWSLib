@@ -463,6 +463,8 @@ class WPSExecution():
         self.process = None
         self.serviceInstance = None
         self.status = None
+        self.percentCompleted = 0
+        self.statusMessage = None
         self.errors = []
         self.statusLocation = None
         self.dataInputs=[]
@@ -548,12 +550,20 @@ class WPSExecution():
             responseFormElement = etree.SubElement(root, nspath_eval('wps:ResponseForm', namespaces))
             responseDocumentElement = etree.SubElement(responseFormElement, nspath_eval('wps:ResponseDocument', namespaces), 
                                                        attrib={'storeExecuteResponse':'true', 'status':'true'} )
-            outputElement = etree.SubElement(responseDocumentElement, nspath_eval('wps:Output', namespaces), 
-                                                       attrib={'asReference':'true'} )
-            outputIdentifierElement = etree.SubElement(outputElement, nspath_eval('ows:Identifier', namespaces)).text = output
-                  
-
+            if isinstance(output, str):
+                self._add_output(responseDocumentElement, output, asReference=True)
+            elif isinstance(output, list):
+                for (identifier,as_reference) in output:
+                    self._add_output(responseDocumentElement, identifier, asReference=as_reference)
+            else:
+                raise Exception('output parameter is neither string nor list. output=%s' % output)
         return root
+
+    def _add_output(self, element, identifier, asReference=False):
+        outputElement = etree.SubElement(element, nspath_eval('wps:Output', namespaces), 
+                                                       attrib={'asReference':str(asReference).lower()} )
+        outputIdentifierElement = etree.SubElement(outputElement, nspath_eval('ows:Identifier', namespaces)).text = identifier
+                  
                 
     # wait for 60 seconds by default
     def checkStatus(self, url=None, response=None, sleepSecs=60):
@@ -705,6 +715,8 @@ class WPSExecution():
             
         # print status, errors
         print 'Execution status=%s' % self.status
+        print 'Percent completed=%s' % self.percentCompleted
+        print 'Status message=%s' % self.statusMessage
         for error in self.errors:
             dump(error)
 
@@ -717,7 +729,7 @@ class WPSExecution():
         if self.status is None:
             self.status = "Exception"
             
-        for exceptionEl in root.findall( nspath('Exception', ns=getNamespace(root)) ):
+        for exceptionEl in root.findall( nspath('Exception', ns=namespaces['ows']) ):
             self.errors.append( WPSException(exceptionEl) )
 
 
@@ -747,11 +759,19 @@ class WPSExecution():
         # </ns0:Status>
         statusEl = root.find( nspath('Status/*', ns=wpsns) )
         self.status = statusEl.tag.split('}')[1]
+        # get progress info
+        try:
+            percentCompleted = int(statusEl.get('percentCompleted'))
+            self.percentCompleted = percentCompleted
+        except:
+            pass
+        # get status message
+        self.statusMessage = statusEl.text
         # exceptions ?
         for element in statusEl:
             if element.tag.endswith('ExceptionReport'):
                 self._parseExceptionReport(element)
-        
+
         self.process = Process(root.find(nspath('Process', ns=wpsns)), verbose=self.verbose)
         
         #<wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
@@ -1020,6 +1040,11 @@ class Output(InputOutput):
                     self.data.append(complexDataElement.text.strip())
                 for child in complexDataElement:
                     self.data.append(etree.tostring(child))
+            literalDataElement = dataElement.find( nspath('LiteralData', ns=wpsns) )
+            if literalDataElement is not None:
+                self.dataType = literalDataElement.get('dataType')
+                if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
+                    self.data.append(literalDataElement.text.strip())
                 
                     
 class WPSException:
