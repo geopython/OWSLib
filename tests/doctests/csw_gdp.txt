@@ -20,7 +20,7 @@ Imports
     >>> prop = fes.PropertyIsLike("csw:AnyText", "birds")
     >>> c.getrecords2([prop])
     >>> c.results['matches']
-    99
+    100
     >>> c.results['returned']
     10
     >>> c.records['9250AA67-F3AC-6C12-0CB9-0662231AA181'].title
