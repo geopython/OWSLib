@@ -61,5 +61,7 @@ Imports
     11
 
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2)
-    >>> c.results
-    {'matches': 369, 'nextrecord': 3, 'returned': 2}
+    >>> c.results['returned']
+    2
+    >>> c.results['nextrecord']
+    3
