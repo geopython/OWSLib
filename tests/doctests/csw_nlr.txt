@@ -61,7 +61,3 @@ ExceptionReport: 'Operation not supported: GetDomain'
 
 #>>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
 #'CERISE: Computationally Efficient Radar Image Simulation Environment'
-
->>> c.getrecords2(cql='AnyText like \'%space%\'')
->>> c.results
-{'matches': 80, 'nextrecord': 11, 'returned': 10}
