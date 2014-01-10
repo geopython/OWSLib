@@ -17,7 +17,7 @@ Initialize CSW client
     >>> c = cs(endpoint, timeout=30)
 
     # define some var
-    >>> AOOS = '78C0463E-2FCE-4AB2-A9C9-6A34BF261F52'
+    >>> AOOS = '1706F520-2647-4A33-B7BF-592FAFDE4B45'
     >>> bbox = [-141,42,-52,84]
     
     # Test new function getrecords2()
@@ -34,7 +34,7 @@ Initialize CSW client
     >>> filter_list = [[uuid, word, timeRange], [bbox, word, timeRange]]
     >>> c.getrecords2(filter_list)
     >>> c.results
-    {'matches': 15, 'nextrecord': 11, 'returned': 10}
+    {'matches': 1, 'nextrecord': 0, 'returned': 1}
 
     ##########################################################
     # Test 2
@@ -55,7 +55,7 @@ Initialize CSW client
     >>> filter_list = [[uuid, box]]
     >>> c.getrecords2(filter_list)
     >>> c.results
-    {'matches': 15, 'nextrecord': 11, 'returned': 10}
+    {'matches': 7, 'nextrecord': 0, 'returned': 7}
 
     ##########################################################
     # Test 4
@@ -65,7 +65,7 @@ Initialize CSW client
     >>> filter = fes.PropertyIsNull(propertyname='sys.siteuuid')
     >>> c.getrecords2([filter])
     >>> c.results
-    {'matches': 5, 'nextrecord': 0, 'returned': 5}
+    {'matches': 1, 'nextrecord': 0, 'returned': 1}
 
 
     ##########################################################
@@ -79,10 +79,6 @@ Initialize CSW client
     ... <csw:Constraint version="1.1.0">
     ...   <ogc:Filter>
     ...     <ogc:And>
-    ...       <ogc:PropertyIsEqualTo>
-    ...         <ogc:PropertyName>sys.siteuuid</ogc:PropertyName>
-    ...         <ogc:Literal>{78C0463E-2FCE-4AB2-A9C9-6A34BF261F52}</ogc:Literal>
-    ...        </ogc:PropertyIsEqualTo>
     ...        <ogc:PropertyIsLike wildCard="*" escape="\" singleChar="?"> 
     ...          <ogc:PropertyName>apiso:ServiceType</ogc:PropertyName>
     ...          <ogc:Literal>*opendap*</ogc:Literal>
@@ -95,7 +91,7 @@ Initialize CSW client
     ... '''
     >>> c.getrecords2(xml=sos_search)   # in about XML it has constraint: maxrecords=10
     >>> c.results
-    {'matches': 148, 'nextrecord': 11, 'returned': 10}
+    {'matches': 521, 'nextrecord': 11, 'returned': 10}
 
     ##########################################################
     # Test 6
@@ -107,4 +103,4 @@ Initialize CSW client
     >>> filter_list = [[uuid,dap_filter]]
     >>> c.getrecords2(filter_list)
     >>> c.results
-    {'matches': 148, 'nextrecord': 11, 'returned': 10}
+    {'matches': 29, 'nextrecord': 11, 'returned': 10}
