@@ -15,7 +15,6 @@ def patch_well_known_namespaces(etree_module):
 # try to find lxml or elementtree
 try:
     from lxml import etree
-    patch_well_known_namespaces(etree)
 except ImportError:
     try:
         # Python 2.5 with ElementTree included
