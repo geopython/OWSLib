@@ -57,32 +57,10 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 ExceptionReport: 'Operation not supported: GetDomain'
 
->>> keywords = fes.PropertyIsLike("csw:AnyText", "*space*", wildCard="*")
->>> c.getrecords2([keywords])
+>>> c.getrecordbyid(['DGFKRYMCWUZSCDRBWRXMIETZE'])
 
->>> c.results['matches']
-80
-
->>> c.results['returned']
-10
-
->>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
-'CERISE: Computationally Efficient Radar Image Simulation Environment'
-
->>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].abstract  
-'Microwave image simulation is an important tool in gaining\n   understanding in microwave imaging with air- or spaceborne sensors.\n   The package FEMIS was developed for this purpose in 1991. Its use was\n   limited due to software limitations (FORTRAN) and its being dependent\n   on a VAX computer and the IVAS image processing system. A new project\n   was proposed to upgrade FEMIS to: run on a PC, provide a user friendly\n   interface, provide links to a microwave backscatter data base, and a\n   Geographical Information System (GIS).\n\n   The new package that has now been developed is called CERISE. It is\n   programmed in C, runs on a PC in a window environment, and is able to\n   use data from a backscatter data base and a GIS (ARC-INFO) in a\n   semi-automatic manner. A start has been made with the inclusion of\n   radar image artefacts caused by varying terrain or object height and\n   the use of data from a DEM (Digital elevation model). Since the\n   project has stirred interest in the area of Defense, modifications\n   such as full DEM utilization and simulation of man-made objects are\n   being planned for the near future.\n\n   J.C.M. Kleijweg\n   M.P.G. Otten\n   TNO Physics and Electronics Laboratory'
-
->>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].type    
->>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].uris
-[]
-
->>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].subjects
-['Technical report']
-
->>> c.getrecordbyid([c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].identifier])
-
->>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
-'CERISE: Computationally Efficient Radar Image Simulation Environment'
+#>>> c.records['DGFKRYMCWUZSCDRBWRXMIETZE'].title
+#'CERISE: Computationally Efficient Radar Image Simulation Environment'
 
 >>> c.getrecords2(cql='AnyText like \'%space%\'')
 >>> c.results
