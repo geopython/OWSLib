@@ -10,13 +10,11 @@ def patch_well_known_namespaces(etree_module):
     ns = Namespaces()
 
     """Monkey patches the etree module to add some well-known namespaces."""
-    for k,v in ns.get_namespaces().iteritems():
-        etree_module.register_namespace(k, v)
+    etree_module._namespace_map.update(ns.get_namespaces())
 
 # try to find lxml or elementtree
 try:
     from lxml import etree
-    patch_well_known_namespaces(etree)
 except ImportError:
     try:
         # Python 2.5 with ElementTree included
