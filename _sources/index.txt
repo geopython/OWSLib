@@ -12,7 +12,7 @@ OWSLib |release| documentation
    :target: http://www.ohloh.net/p/owslib?ref=WidgetProjectPartnerBadge
 
 :Author: Tom Kralidis
-:Contact: tomkralidis at hotmail.com
+:Contact: tomkralidis at gmail.com
 :Release: |release|
 :Date: |today|
 
