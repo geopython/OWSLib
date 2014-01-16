@@ -15,7 +15,7 @@ class PyTest(TestCommand):
 
 readme = open('README.txt').read()
 reqs = [line.strip() for line in open('requirements.txt')]
-reqs-dev = [line.strip() for line in open('requirements-dev.txt')]
+reqs_dev = [line.strip() for line in open('requirements-dev.txt')]
 
 setup(name              = 'OWSLib',
       version           = owslib.__version__,
@@ -29,7 +29,7 @@ setup(name              = 'OWSLib',
       maintainer_email  = 'tomkralidis@gmail.com',
       url               = 'https://geopython.github.io/OWSLib',
       install_requires  = reqs,
-      tests_require     = reqs-dev,
+      tests_require     = reqs_dev,
       cmdclass          = {'test': PyTest},
       packages          = find_packages(),
       classifiers       = [
