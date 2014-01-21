@@ -3,7 +3,7 @@ Imports
     >>> from owslib import fes    
     >>> from owslib.dif import namespaces 
     >>> from owslib.csw import CatalogueServiceWeb as cs
-    >>> from lxml import etree
+    >>> from owslib.etree import etree
 
     >>> c=cs('http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw',timeout=30)
     >>> c.identification.title
@@ -69,11 +69,11 @@ Imports
     3
     >>> sortBy=fes.SortBy([fes.SortProperty("dc:title", "ASC")])
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sortBy)
-    >>> xml=etree.XML(c.response)
+    >>> xml=etree.fromstring(c.response)
     >>> xml.findtext(".//dif:Entry_Title",namespaces=namespaces)
     'Agu Bay and Easter Cape (Surficial AS1959)'
     >>> sortBy=fes.SortBy([fes.SortProperty("dc:title", "DESC")])
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sortBy)
-    >>> xml=etree.XML(c.response)
+    >>> xml=etree.fromstring(c.response)
     >>> xml.findtext(".//dif:Entry_Title",namespaces=namespaces)
     'Young Inlet (Surficial OF3450)'
