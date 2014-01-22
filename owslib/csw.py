@@ -334,7 +334,7 @@ class CatalogueServiceWeb:
                     etree.SubElement(node2, util.nspath_eval('csw:CqlText', namespaces)).text = cql
                 
             if sortby is not None and isinstance(sortby, fes.SortBy):
-                node1.append(sortby)
+                node1.append(sortby.toXML())
 
             self.request = node0
 
