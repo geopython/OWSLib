@@ -70,10 +70,10 @@ Imports
     >>> sortBy=fes.SortBy([fes.SortProperty("dc:title", "ASC")])
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sortBy)
     >>> xml=etree.fromstring(c.response)
-    >>> xml.findtext(".//dif:Entry_Title",namespaces=namespaces)
+    >>> xml.findtext(".//{http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/}Entry_Title")
     'Agu Bay and Easter Cape (Surficial AS1959)'
     >>> sortBy=fes.SortBy([fes.SortProperty("dc:title", "DESC")])
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sortBy)
     >>> xml=etree.fromstring(c.response)
-    >>> xml.findtext(".//dif:Entry_Title",namespaces=namespaces)
+    >>> xml.findtext(".//{http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/}Entry_Title")
     'Young Inlet (Surficial OF3450)'
