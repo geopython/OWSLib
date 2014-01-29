@@ -54,8 +54,10 @@ Initialize CSW client
     ##########################################################
     >>> filter_list = [[uuid, box]]
     >>> c.getrecords2(filter_list)
-    >>> c.results
-    {'matches': 7, 'nextrecord': 0, 'returned': 7}
+    >>> c.results['matches'] > 0
+    True
+    >>> c.results['returned'] < 11
+    True
 
     ##########################################################
     # Test 4
