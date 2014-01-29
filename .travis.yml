@@ -9,6 +9,7 @@ env:
   - LXML=true
   - LXML=false
 install:
+  - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
   - if [ "$LXML" == "true" ]; then pip install lxml; fi
 script:
