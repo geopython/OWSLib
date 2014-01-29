@@ -92,9 +92,13 @@ Initialize CSW client
     ... </csw:GetRecords>
     ... '''
     >>> c.getrecords2(xml=sos_search)   # in about XML it has constraint: maxrecords=10
-    >>> c.results
-    {'matches': 521, 'nextrecord': 11, 'returned': 10}
-
+    >>> c.results['matches'] > 0
+    True
+    >>> c.results['returned'] < 11
+    True
+    >>> c.results['nextrecord'] == 11
+    True
+    
     ##########################################################
     # Test 6
     # construct a request by setting SAME constraint with Test 1
@@ -104,5 +108,10 @@ Initialize CSW client
     >>> dap_filter = fes.PropertyIsLike(propertyname='apiso:ServiceType', literal='*opendap*', escapeChar='\\', singleChar='?', wildCard='*')
     >>> filter_list = [[uuid,dap_filter]]
     >>> c.getrecords2(filter_list)
-    >>> c.results
-    {'matches': 29, 'nextrecord': 11, 'returned': 10}
+    >>> c.results['matches'] > 0
+    True
+    >>> c.results['returned'] < 11
+    True
+    >>> c.results['nextrecord'] == 11
+    True
+    
