@@ -9,8 +9,10 @@
     >>> c.identification.title
     'Centre for Ecology and Hydrology Information Gateway CSW Service'
     >>> c.getrecords2()
-    >>> c.results
-    {'matches': 291, 'nextrecord': None, 'returned': 10}
+    >>> c.results['returned'] == 10
+    True
+    >>> c.results['nextrecord'] is not None
+    False
     >>> c.results['matches'] < 10
     False
     >>> c.filters.spatial_operators
