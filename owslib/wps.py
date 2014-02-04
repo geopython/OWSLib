@@ -980,6 +980,7 @@ class Output(InputOutput):
         self.reference = None
         self.mimeType = None
         self.data = []
+        self.filePath = None
         
         # extract wps namespace from outputElement itself
         wpsns = getNamespace(outputElement)
@@ -1045,6 +1046,41 @@ class Output(InputOutput):
                 self.dataType = literalDataElement.get('dataType')
                 if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
                     self.data.append(literalDataElement.text.strip())
+                    
+    def writeToDisk(self, path=None, username=None, password=None):
+        
+        url = self.reference
+        fileName = "";
+        
+        if url is not None:
+            # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
+            # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
+            print 'Output URL=%s' % url
+            if '?' in url:
+                spliturl=url.split('?')
+                u = openURL(spliturl[0], spliturl[1], method='Get', username=username, password=password)
+                # extract output filepath from URL query string
+                fileName = spliturl[1].split('=')[1]
+            else:
+                u = openURL(url, '', method='Get', username=username, password=password)
+                # extract output filepath from base URL
+                fileName = url.split('/')[-1]
+                    
+            content = u.read()
+         
+        # ExecuteResponse contain embedded output   
+        elif len(self.data)>0:
+            fileName = self.identifier
+            for data in self.data:
+                content = content + data
+                    
+        # write out content
+        if content is not '':
+            self.filePath = path + fileName
+            out = open(self.filePath, 'wb')
+            out.write(content)
+            out.close()
+            print 'Output written to file: %s' %self.filePath
                 
                     
 class WPSException:
