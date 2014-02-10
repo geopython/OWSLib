@@ -472,6 +472,13 @@ class CatalogueServiceWeb:
                 self._parsetransactionsummary()
                 self._parseinsertresult()
 
+    def get_operation_by_name(self, name):
+        """Return a named operation"""
+        for item in self.operations:
+            if item.name == name:
+                return item
+        raise KeyError, "No operation named %s" % name
+
     def getService_urls(self, service_string=None):
         """
 

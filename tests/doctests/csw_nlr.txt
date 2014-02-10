@@ -50,6 +50,15 @@ AttributeError: 'ServiceProvider' object has no attribute 'uri'
 >>> [op.name for op in c.operations]
 ['GetCapabilities', 'DescribeRecord', 'GetRecords', 'GetRecordById']
 
+>>> grop = c.get_operation_by_name('GetRecords')
+>>> grop.name
+'GetRecords'
+
+>>> c.get_operation_by_name('GetRecords-bad')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+KeyError: 'No operation named GetRecords-bad'
+
 >>> c.describerecord()
 
 >>> c.getdomain('GetRecords.outputSchema')
