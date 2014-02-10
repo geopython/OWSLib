@@ -475,7 +475,7 @@ class CatalogueServiceWeb:
     def get_operation_by_name(self, name):
         """Return a named operation"""
         for item in self.operations:
-            if item.name == name:
+            if item.name.lower() == name.lower():
                 return item
         raise KeyError, "No operation named %s" % name
 
