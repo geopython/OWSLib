@@ -671,7 +671,7 @@ class CswRecord(object):
         val = record.find(util.nspath_eval('dc:relation', namespaces))
         self.relation = util.testXMLValue(val)
 
-        val = record.find(util.nspath_eval('dc:temporal', namespaces))
+        val = record.find(util.nspath_eval('dct:temporal', namespaces))
         self.temporal = util.testXMLValue(val)
 
         self.uris = []  # list of dicts
