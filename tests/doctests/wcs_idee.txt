@@ -12,6 +12,8 @@ WCS Version 1.0.0
     '1.0.0'
     >>> wcs.url
     'http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet'
+    >>> wcs.identification.title
+    'WCS UTM30N - MDT Peninsula y Baleares'
     >>> wcs.identification.service
     'IDEE-WCS-UTM30N'
     >>> wcs.provider.name

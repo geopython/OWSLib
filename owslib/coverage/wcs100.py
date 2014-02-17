@@ -186,7 +186,7 @@ class ServiceIdentification(object):
         self.version='1.0.0'
         self.service = testXMLValue(elem.find(ns('name')))
         self.abstract = testXMLValue(elem.find(ns('description')))
-        self.title = testXMLValue(elem.find(ns('name')))     
+        self.title = testXMLValue(elem.find(ns('label')))     
         self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]
         #note: differs from 'rights' in interface
         self.fees=elem.find(ns('fees')).text
