@@ -9,7 +9,7 @@ cd /tmp/OWSLib
 git checkout gh-pages
 /bin/cp -rp $THIS_DIR/build/html/en/* .
 git add .
-git commit -am "Update docs"
+git commit -am "update live docs [ci skip]"
 git push origin gh-pages
 
 cd $THIS_DIR
