@@ -623,8 +623,8 @@ class WPSExecution():
         
     def getOutput(self, filepath=None):
         """
-        Method to write the output of a WPS process to a file: 
-        either retrieve the referenced file from the server, or write out the content of response embedded output.
+        Method to write the outputs of a WPS process to a file: 
+        either retrieves the referenced files from the server, or writes out the content of response embedded output.
         
         filepath: optional path to the output file, otherwise a file will be created in the local directory with the name assigned by the server, 
                   or default name 'wps.out' for embedded output.
@@ -634,25 +634,14 @@ class WPSExecution():
             content = ''
             for output in self.processOutputs:
                 
+                output_content = output.retrieveData(self.username, self.password)
+                
                 # ExecuteResponse contains reference to server-side output
-                if output.reference is not None:
-                    # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
-                    # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
-                    url = output.reference
-                    print 'Output URL=%s' % url
-                    if '?' in url:
-                        spliturl=url.split('?')
-                        u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
-                        # extract output filepath from URL query string
-                        if filepath is None:
-                            filepath = spliturl[1].split('=')[1]
-                    else:
-                        u = openURL(url, '', method='Get', username = self.username, password = self.password)
-                        # extract output filepath from base URL
-                        if filepath is None:
-                            filepath = url.split('/')[-1]
-                    content = content + u.read()
-                 
+                if output_content is not "":
+                    content = content + output_content
+                    if filepath is None:
+                        filepath = output.fileName
+                    
                 # ExecuteResponse contain embedded output   
                 if len(output.data)>0:
                     if filepath is None:
@@ -980,6 +969,8 @@ class Output(InputOutput):
         self.reference = None
         self.mimeType = None
         self.data = []
+        self.fileName = None
+        self.filePath = None
         
         # extract wps namespace from outputElement itself
         wpsns = getNamespace(outputElement)
@@ -1045,6 +1036,62 @@ class Output(InputOutput):
                 self.dataType = literalDataElement.get('dataType')
                 if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
                     self.data.append(literalDataElement.text.strip())
+                    
+    def retrieveData(self, username=None, password=None):
+        """
+        Method to retrieve data from server-side reference: 
+        returns "" if the reference is not known.
+        
+        username, password: credentials to access the remote WPS server 
+        """
+        
+        url = self.reference
+        if url is None: 
+            return ""
+        
+        # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
+        # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
+        print 'Output URL=%s' % url
+        if '?' in url:
+            spliturl=url.split('?')
+            u = openURL(spliturl[0], spliturl[1], method='Get', username = username, password = password)
+            # extract output filepath from URL query string
+            self.fileName = spliturl[1].split('=')[1]
+        else:
+            u = openURL(url, '', method='Get', username = username, password = password)
+            # extract output filepath from base URL
+            self.fileName = url.split('/')[-1]
+                
+        return u.read()      
+
+                    
+    def writeToDisk(self, path=None, username=None, password=None):
+        """
+        Method to write an output of a WPS process to disk: 
+        it either retrieves the referenced file from the server, or write out the content of response embedded output.
+        
+        filepath: optional path to the output file, otherwise a file will be created in the local directory with the name assigned by the server,
+        username, password: credentials to access the remote WPS server
+        """ 
+        
+        # Check if ExecuteResponse contains reference to server-side output    
+        content = self.retrieveData(username, password)
+         
+        # ExecuteResponse contain embedded output   
+        if content is "" and len(self.data)>0:
+            self.fileName = self.identifier
+            for data in self.data:
+                content = content + data
+                    
+        # write out content
+        if content is not "":
+            if self.fileName == "":
+                self.fileName = self.identifier
+            self.filePath = path + self.fileName
+            out = open(self.filePath, 'wb')
+            out.write(content)
+            out.close()
+            print 'Output written to file: %s' %self.filePath
                 
                     
 class WPSException:
