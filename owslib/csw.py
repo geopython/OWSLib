@@ -14,6 +14,12 @@ import StringIO
 import random
 from urllib import urlencode
 from urllib2 import urlopen
+
+try:  # 2.7
+    from collections import OrderedDict
+except:  # 2.6
+    from ordereddict import OrderedDict
+
 from owslib.etree import etree
 from owslib import fes
 from owslib import util
@@ -234,7 +240,7 @@ class CatalogueServiceWeb:
             self.results['nextrecord'] = int(util.testXMLValue(val, True))
     
             # process list of matching records
-            self.records = {}
+            self.records = OrderedDict()
 
             self._parserecords(outputschema, esn)
 
@@ -270,7 +276,7 @@ class CatalogueServiceWeb:
  
         if self.exceptionreport is None:
             self.results = {}
-            self.records = {}
+            self.records = OrderedDict()
             self._parserecords(outputschema, esn)
 
     def getrecords2(self, constraints=[], sortby=None, typenames='csw:Record', esn='summary', outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None, resulttype='results'):
@@ -359,7 +365,7 @@ class CatalogueServiceWeb:
                 self.results['nextrecord'] = None
 
             # process list of matching records
-            self.records = {}
+            self.records = OrderedDict()
 
             self._parserecords(outputschema, esn)
 
