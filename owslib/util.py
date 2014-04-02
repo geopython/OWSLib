@@ -114,7 +114,7 @@ def xml_to_dict(root, prefix=None, depth=1, diction=None):
 
     return ret
 
-def openURL(url_base, data, method='Get', cookies=None, username=None, password=None):
+def openURL(url_base, data, method='Get', cookies=None, username=None, password=None, timeout=30):
     ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
     url_base.strip() 
     lastchar = url_base[-1]
@@ -152,7 +152,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
             req=Request(url_base + data)
         if cookies is not None:
             req.add_header('Cookie', cookies)
-        u = openit(req)
+        u = openit(req, timeout=timeout)
     except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
         if e.code in [400, 401]:
             raise ServiceException, e.read()

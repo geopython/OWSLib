@@ -355,7 +355,7 @@ class WFSCapabilitiesReader(object):
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
 
-    def read(self, url):
+    def read(self, url, timeout=30):
         """Get and parse a WFS capabilities document, returning an
         instance of WFSCapabilitiesInfoset
 
@@ -363,9 +363,11 @@ class WFSCapabilitiesReader(object):
         ----------
         url : string
             The URL to the WFS capabilities document.
+        timeout : number
+            A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = urlopen(request)
+        u = urlopen(request, timeout=timeout)
         return etree.fromstring(u.read())
 
     def readString(self, st):

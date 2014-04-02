@@ -133,12 +133,12 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
       
-    def getcapabilities(self):
+    def getcapabilities(self, timeout=30):
         """Request and return capabilities document from the WFS as a 
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url))
+        return urlopen(reader.capabilities_url(self.url), timeout=timeout)
     
     def items(self):
         '''supports dict-like items() access'''
@@ -149,7 +149,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   method='Get'):
+                   method='Get', timeout=30):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
         Parameters
@@ -170,6 +170,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             Maximum number of features to be returned.
         method : string
             Qualified name of the HTTP DCP method to use.
+        timeout : number
+            A timeout value (in seconds) for the request.
 
         There are 3 different modes of use
 
@@ -189,11 +191,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (url,data) = self.getPOSTGetFeatureRequest()
 
 
-
-        if method == 'Post':
-            u = urlopen(base_url, data=data)
-        else:
-            u = urlopen(url)
+        # If method is 'Post', data will be None here
+        u = urlopen(base_url, data, timeout)
         
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -236,12 +235,12 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         if kwargs:
             for kw in kwargs.keys():
                 request[kw]=str(kwargs[kw])
-        data=urlencode(request)
-        u = urlopen(base_url + data)
+        encoded_request=urlencode(request)
+        u = urlopen(base_url + encoded_request)
         return u.read()
         
         
-    def _getStoredQueries(self):
+    def _getStoredQueries(self, timeout=30):
         ''' gets descriptions of the stored queries available on the server '''
         sqs=[]
         #This method makes two calls to the WFS - one ListStoredQueries, and one DescribeStoredQueries. The information is then
@@ -251,8 +250,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         #first make the ListStoredQueries response and save the results in a dictionary if form {storedqueryid:(title, returnfeaturetype)}
         base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
-        data = urlencode(request)
-        u = urlopen(base_url + data)
+        encoded_request = urlencode(request)
+        u = urlopen(base_url + encoded_request, timeout=timeout)
         tree=etree.fromstring(u.read())
         base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
         tempdict={}       
@@ -269,8 +268,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         #then make the DescribeStoredQueries request and get the rest of the information about the stored queries 
         base_url = self.getOperationByName('DescribeStoredQueries').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
-        data = urlencode(request)
-        u = urlopen(base_url + data)
+        encoded_request = urlencode(request)
+        u = urlopen(base_url + encoded_request, timeout=timeout)
         tree=etree.fromstring(u.read())
         tempdict2={} 
         for sqelem in tree[:]:
@@ -418,7 +417,7 @@ class WFSCapabilitiesReader(object):
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
 
-    def read(self, url):
+    def read(self, url, timeout=30):
         """Get and parse a WFS capabilities document, returning an
         instance of WFSCapabilitiesInfoset
 
@@ -426,9 +425,11 @@ class WFSCapabilitiesReader(object):
         ----------
         url : string
             The URL to the WFS capabilities document.
+        timeout : number
+            A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = urlopen(request)
+        u = urlopen(request, timeout=timeout)
         return etree.fromstring(u.read())
 
     def readString(self, st):
