@@ -192,7 +192,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
         # If method is 'Post', data will be None here
-        u = urlopen(base_url, data, timeout)
+        u = urlopen(url, data, timeout)
         
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -319,7 +319,7 @@ class ContentMetadata:
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parent, parse_remote_metadata=False):
+    def __init__(self, elem, parent, parse_remote_metadata=False, timeout=30):
         """."""
         self.id = elem.find(nspath('Name',ns=WFS_NAMESPACE)).text
         self.title = elem.find(nspath('Title',ns=WFS_NAMESPACE)).text
@@ -377,7 +377,7 @@ class ContentMetadata:
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urllib2.urlopen(metadataUrl['url'])
+                    content = urllib2.urlopen(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     try:  # FGDC
                         metadataUrl['metadata'] = Metadata(doc)
