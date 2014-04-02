@@ -102,12 +102,12 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
       
-    def getcapabilities(self):
+    def getcapabilities(self, timeout=30):
         """Request and return capabilities document from the WFS as a 
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url))
+        return urlopen(reader.capabilities_url(self.url), timeout=timeout)
     
     def items(self):
         '''supports dict-like items() access'''
