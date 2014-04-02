@@ -120,12 +120,12 @@ class WebFeatureService_1_0_0(object):
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
       
-    def getcapabilities(self):
+    def getcapabilities(self, timeout=30):
         """Request and return capabilities document from the WFS as a 
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url))
+        return urlopen(reader.capabilities_url(self.url), timeout=timeout)
     
     def items(self):
         '''supports dict-like items() access'''
@@ -251,7 +251,7 @@ class ContentMetadata:
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parent, parse_remote_metadata=False):
+    def __init__(self, elem, parent, parse_remote_metadata=False, timeout=30):
         """."""
         self.id = testXMLValue(elem.find(nspath('Name')))
         self.title = testXMLValue(elem.find(nspath('Title')))
@@ -298,7 +298,7 @@ class ContentMetadata:
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urlopen(metadataUrl['url'])
+                    content = urlopen(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':
