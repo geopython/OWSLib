@@ -238,7 +238,7 @@ class ContentMetadata:
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parse_remote_metadata=False):
+    def __init__(self, elem, parse_remote_metadata=False, timeout=30):
         """."""
         self.id = testXMLValue(elem.find(nspath_eval('wfs:Name', namespaces)))
         self.title = testXMLValue(elem.find(nspath_eval('wfs:Title', namespaces)))
@@ -276,7 +276,7 @@ class ContentMetadata:
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urlopen(metadataUrl['url'])
+                    content = urlopen(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':
@@ -321,7 +321,7 @@ class WFSCapabilitiesReader(object):
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
 
-    def read(self, url):
+    def read(self, url, timeout=30):
         """Get and parse a WFS capabilities document, returning an
         instance of WFSCapabilitiesInfoset
 
@@ -329,9 +329,11 @@ class WFSCapabilitiesReader(object):
         ----------
         url : string
             The URL to the WFS capabilities document.
+        timeout : number
+            A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = urlopen(request)
+        u = urlopen(request, timeout=timeout)
         return etree.fromstring(u.read())
 
     def readString(self, st):
