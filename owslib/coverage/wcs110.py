@@ -235,7 +235,7 @@ class ServiceProvider(object):
     """ Abstraction for ServiceProvider metadata 
     implements IServiceProviderMetadata """
     def __init__(self,elem):
-        name=elem.find('{http://www.opengis.net/ows}ProviderName')
+        name=elem.find('{http://www.opengis.net/ows}ProviderName') or elem.find('{http://www.opengis.net/ows/1.1}ProviderName')
         if name is not None:
             self.name=name.text
         else:
@@ -282,7 +282,7 @@ class ContactMetadata(object):
             self.country = None
         
         try:
-            self.email =            elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}ElectronicMailAddress').text
+            self.email = elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}ElectronicMailAddress').text
         except AttributeError:
             self.email = None
 
@@ -299,27 +299,28 @@ class ContentMetadata(object):
         self._parent=parent
         self.id=self._checkChildAndParent('{http://www.opengis.net/wcs/1.1}Identifier')
         self.description =self._checkChildAndParent('{http://www.opengis.net/wcs/1.1}Description')           
-        self.title =self._checkChildAndParent('{http://www.opengis.net/ows}Title')
-        self.abstract =self._checkChildAndParent('{http://www.opengis.net/ows}Abstract')
+        self.title =self._checkChildAndParent('{http://www.opengis.net/ows}Title') or self._checkChildAndParent('{http://www.opengis.net/ows/1.1}Title')
+        self.abstract =self._checkChildAndParent('{http://www.opengis.net/ows}Abstract') or self._checkChildAndParent('{http://www.opengis.net/ows/1.1}Abstract')
         
         #keywords.
         self.keywords=[]
-        for kw in elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword'):
+        for kw in elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword') or elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows/1.1}Keyword'):
             if kw is not None:
                 self.keywords.append(kw.text)
         
         #also inherit any keywords from parent coverage summary (if there is one)
         if parent is not None:
-            for kw in parent.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword'):
+            for kw in parent.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword') or parent.findall('{http://www.opengis.net/ows/1.1}Keywords/{http://www.opengis.net/ows/1.1}Keyword'):
                 if kw is not None:
                     self.keywords.append(kw.text)
             
         self.boundingBox=None #needed for iContentMetadata harmonisation
         self.boundingBoxWGS84 = None
-        b = elem.find('{http://www.opengis.net/ows}WGS84BoundingBox')
+        b = elem.find('{http://www.opengis.net/ows}WGS84BoundingBox') or elem.find('{http://www.opengis.net/ows/1.1}WGS84BoundingBox')
+        
         if b is not None:
-            lc=b.find('{http://www.opengis.net/ows}LowerCorner').text
-            uc=b.find('{http://www.opengis.net/ows}UpperCorner').text
+            lc=(b.find('{http://www.opengis.net/ows}LowerCorner') or b.find('{http://www.opengis.net/ows/1.1}LowerCorner')).text
+            uc=(b.find('{http://www.opengis.net/ows}UpperCorner') or b.find('{http://www.opengis.net/ows/1.1}UpperCorner')).text
             self.boundingBoxWGS84 = (
                     float(lc.split()[0]),float(lc.split()[1]),
                     float(uc.split()[0]), float(uc.split()[1]),
@@ -327,11 +328,11 @@ class ContentMetadata(object):
                 
         # bboxes - other CRS 
         self.boundingboxes = []
-        for bbox in elem.findall('{http://www.opengis.net/ows}BoundingBox'):
+        for bbox in elem.findall('{http://www.opengis.net/ows}BoundingBox') or elem.findall('{http://www.opengis.net/ows/1.1}BoundingBox'):
             if bbox is not None:
                 try:
-                    lc=b.find('{http://www.opengis.net/ows}LowerCorner').text
-                    uc=b.find('{http://www.opengis.net/ows}UpperCorner').text
+                    lc=(b.find('{http://www.opengis.net/ows}LowerCorner') or b.find('{http://www.opengis.net/ows/1.1}LowerCorner')).text
+                    uc=(b.find('{http://www.opengis.net/ows}UpperCorner') or b.find('{http://www.opengis.net/ows/1.1}UpperCorner')).text
                     boundingBox =  (
                             float(lc.split()[0]),float(lc.split()[1]),
                             float(uc.split()[0]), float(uc.split()[1]),
@@ -396,3 +397,4 @@ class ContentMetadata(object):
             except:
                 value = None
         return value  
+
