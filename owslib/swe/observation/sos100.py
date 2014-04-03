@@ -53,9 +53,8 @@ class SensorObservationService_1_0_0(object):
             self._capabilities = reader.read(self.url)
 
         # Avoid building metadata if the response is an Exception
-        se = self._capabilities.find(nspath_eval('ows:ExceptionReport', namespaces))
-        if se is not None: 
-            raise ows.ExceptionReport(se) 
+        if self._capabilities.tag == nspath_eval("ows:ExceptionReport", namespaces):
+            raise ows.ExceptionReport(self._capabilities)
 
         # build metadata objects
         self._build_metadata()
