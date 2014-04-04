@@ -114,7 +114,7 @@ class WCSCapabilitiesReader(object):
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
 
-    def read(self, service_url):
+    def read(self, service_url, timeout=30):
         """Get and parse a WCS capabilities document, returning an
         elementtree tree
 
@@ -128,7 +128,7 @@ class WCSCapabilitiesReader(object):
         req = Request(request)
         if self.cookies is not None:
             req.add_header('Cookie', self.cookies)   
-        u = urlopen(req)
+        u = urlopen(req, timeout=timeout)
         return etree.fromstring(u.read())
     
     def readString(self, st):
@@ -187,7 +187,7 @@ class DescribeCoverageReader(object):
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
 
-    def read(self, service_url):
+    def read(self, service_url, timeout=30):
         """Get and parse a Describe Coverage document, returning an
         elementtree tree
 
@@ -201,7 +201,7 @@ class DescribeCoverageReader(object):
         req = Request(request)
         if self.cookies is not None:
             req.add_header('Cookie', self.cookies)   
-        u = urlopen(req)
+        u = urlopen(req, timeout=timeout)
         return etree.fromstring(u.read())
     
        
