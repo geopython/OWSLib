@@ -1,19 +1,20 @@
     >>> from owslib.csw import CatalogueServiceWeb as cs
-    >>> c=cs('http://data.glos.us/metadata/srv/en/csw')
+    >>> c = cs('http://slrfvm.glos.us/geonetwork/srv/eng/csw')
     >>> c.version
     '2.0.2'
-    
-    #no longer inspire, files name is probably misleading at this point
-    >>> #c.identification.title
-    #'INSPIRE Geoportal Discovery Service'
+
     >>> c.identification.title
-    'Great Lakes Metadata Catalog'
+    'GEOSS Testbed Great Lakes Metadata Catalog'
     >>> c.getdomain('GetRecords.typeNames')
     >>> c.results
     {'values': ['csw:Record', 'gmd:MD_Metadata'], 'parameter': 'GetRecords.typeNames', 'type': 'csw:Record'}
     >>> c.getrecords2()
-    >>> c.results
-    {'matches': 204, 'nextrecord': 11, 'returned': 10}
+    >>> c.results.get('returned')
+    10
+    >>> c.results.get('nextrecord')
+    11
+    >>> c.results['matches'] > 10
+    True
     >>> c.results['matches'] < 10
     False
     >>> c.getdomain('GetRecords.typeNamesFOO')
