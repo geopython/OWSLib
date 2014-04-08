@@ -10,7 +10,6 @@ import cgi
 from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
-import logging
 from owslib.util import openURL, testXMLValue, extract_xml_list
 from owslib.etree import etree
 from owslib.fgdc import Metadata
@@ -66,9 +65,6 @@ class WebFeatureService_1_0_0(object):
         """
         obj=object.__new__(self)
         obj.__init__(url, version, xml, parse_remote_metadata)
-        self.log = logging.getLogger()
-        consoleh  = logging.StreamHandler()
-        self.log.addHandler(consoleh)    
         return obj
     
     def __getitem__(self,name):

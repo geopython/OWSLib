@@ -21,19 +21,7 @@ from urllib import urlencode
 from urllib2 import urlopen
 
 import logging
-
-try:
-    hdlr = logging.FileHandler('/tmp/owslibwfs.log')
-except:
-    import tempfile
-    f=tempfile.NamedTemporaryFile(prefix='owslib.wfs-', delete=False)
-    hdlr = logging.FileHandler(f.name)
-
-log = logging.getLogger(__name__)
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-log.addHandler(hdlr)
-log.setLevel(logging.DEBUG)
+from owslib.util import log
 
 n = Namespaces()
 WFS_NAMESPACE = n.get_namespace("wfs20")
@@ -65,9 +53,6 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """
         obj=object.__new__(self)
         obj.__init__(url, version, xml, parse_remote_metadata)
-        self.log = logging.getLogger()
-        consoleh  = logging.StreamHandler()
-        self.log.addHandler(consoleh)    
         return obj
     
     def __getitem__(self,name):
@@ -80,7 +65,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     
     def __init__(self, url,  version, xml=None, parse_remote_metadata=False):
         """Initialize."""
-        log.debug('building WFS %s'%url)
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug('building WFS %s'%url)
         self.url = url
         self.version = version
         self._capabilities = None
@@ -184,9 +170,12 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         if typename and type(typename) == type(""):
             typename = [typename]
         if method.upper() == "GET":
-            (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid, 
-                    featureversion, propertyname, maxfeatures,storedQueryID, storedQueryParams)
-            log.debug('GetFeature WFS GET url %s'% url)
+            (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid,
+                                                 featureversion, propertyname,
+                                                 maxfeatures, storedQueryID,
+                                                 storedQueryParams, outputFormat)
+            if log.isEnabledFor(logging.DEBUG):
+                log.debug('GetFeature WFS GET url %s'% url)
         else:
             (url,data) = self.getPOSTGetFeatureRequest()
 
