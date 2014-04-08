@@ -135,7 +135,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   method='Get', timeout=30):
+                   method='Get', timeout=30, outputFormat=None):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
         Parameters
@@ -158,6 +158,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             Qualified name of the HTTP DCP method to use.
         timeout : number
             A timeout value (in seconds) for the request.
+        outputFormat: string (optional)
+            Requested response format of the request.
 
         There are 3 different modes of use
 
@@ -197,12 +199,18 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         if length < 32000:
             if not have_read:
                 data = u.read()
-            tree = etree.fromstring(data)
-            if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
-                se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
-                raise ServiceException, str(se.text).strip()
 
-            return StringIO(data)
+            try:
+                tree = etree.fromstring(data)
+            except BaseException:
+                # Not XML
+                return StringIO(data)
+            else:
+                if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
+                    se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
+                    raise ServiceException(str(se.text).strip())
+                else:
+                    return StringIO(data)
         else:
             if have_read:
                 return StringIO(data)

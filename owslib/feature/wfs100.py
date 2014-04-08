@@ -128,7 +128,7 @@ class WebFeatureService_1_0_0(object):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
-                   srsname=None, method='{http://www.opengis.net/wfs}Get'):
+                   srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get'):
         """Request and return feature data as a file-like object.
         
         Parameters
@@ -151,6 +151,9 @@ class WebFeatureService_1_0_0(object):
             Qualified name of the HTTP DCP method to use.
         srsname: string
             EPSG code to request the data in
+        outputFormat: string (optional)
+            Requested response format of the request.
+
             
         There are 3 different modes of use
 
@@ -161,6 +164,7 @@ class WebFeatureService_1_0_0(object):
         base_url = self.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
         
+
         # check featureid
         if featureid:
             request['featureid'] = ','.join(featureid)
@@ -180,13 +184,18 @@ class WebFeatureService_1_0_0(object):
         if featureversion: request['featureversion'] = str(featureversion)
         if maxfeatures: request['maxfeatures'] = str(maxfeatures)
 
+        if outputFormat is not None:
+            request["outputFormat"] = outputFormat
+
         data = urlencode(request)
+
         u = openURL(base_url, data, method)
         
         
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
         # is data. We'll check anything smaller.
+
         try:
             length = int(u.info()['Content-Length'])
             have_read = False
@@ -198,12 +207,18 @@ class WebFeatureService_1_0_0(object):
         if length < 32000:
             if not have_read:
                 data = u.read()
-            tree = etree.fromstring(data)
-            if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
-                se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
-                raise ServiceException, str(se.text).strip()
 
-            return StringIO(data)
+            try:
+                tree = etree.fromstring(data)
+            except BaseException:
+                # Not XML
+                return StringIO(data)
+            else:
+                if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
+                    se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
+                    raise ServiceException(str(se.text).strip())
+                else:
+                    return StringIO(data)
         else:
             if have_read:
                 return StringIO(data)
