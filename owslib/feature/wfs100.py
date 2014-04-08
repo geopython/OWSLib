@@ -10,7 +10,7 @@ import cgi
 from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
-from owslib.util import openURL, testXMLValue, extract_xml_list
+from owslib.util import openURL, testXMLValue, extract_xml_list, ServiceException
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -41,10 +41,6 @@ def nspath(path, ns=WFS_NAMESPACE):
             component = "{%s}%s" % (ns, component)
         components.append(component)
     return "/".join(components)
-
-
-class ServiceException(Exception):
-    pass
 
 
 class WebFeatureService_1_0_0(object):
