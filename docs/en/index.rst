@@ -508,11 +508,11 @@ SOS
 
 GetCapabilities
 
-.. include:: ../../tests/doctests/sos_ndbc_getcapabilities.txt
+.. include:: ../../tests/doctests/sos_10_getcapabilities.txt
 
 GetObservation
 
-.. include:: ../../tests/doctests/sos_ndbc_getobservation.txt
+.. include:: ../../tests/doctests/sos_10_ndbc_getobservation.txt
 
 SensorML
 --------
