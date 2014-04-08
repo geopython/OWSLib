@@ -51,3 +51,13 @@ Test the getfeature method
 
     >>> wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2, bbox=[-685336,-993518,-684996,-993285])
     'http://gis.bnhelp.cz/ows/crwfs?service=WFS&maxfeatures=2&request=GetFeature&typename=okresy&version=1.1.0&bbox=-993518%2C-685336%2C-993285%2C-684996%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326'
+
+
+Test custom outputFormat
+
+    >>> import json
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288')
+    >>> shapefiles = wfs.contents.keys()
+    >>> feature = wfs.getfeature(typename=[shapefiles[0]], maxfeatures=1, propertyname=None, outputFormat='application/json')
+    >>> json.dumps(json.loads(feature.read()))
+    '{...}'

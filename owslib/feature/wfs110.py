@@ -137,7 +137,9 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             Qualified name of the HTTP DCP method to use.
         srsname: string
             EPSG code to request the data in
-            
+        outputFormat: string (optional)
+            Requested response format of the request.
+
         There are 3 different modes of use
 
         1) typename and bbox (simple spatial query). It is assumed, that
@@ -191,6 +193,9 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         if featureversion: request['featureversion'] = str(featureversion)
         if maxfeatures: request['maxfeatures'] = str(maxfeatures)
 
+        if outputFormat is not None:
+            request["outputFormat"] = outputFormat
+
         data = urlencode(request)
         u = openURL(base_url, data, method)
         
@@ -208,12 +213,18 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         if length < 32000:
             if not have_read:
                 data = u.read()
-            tree = etree.fromstring(data)
-            if tree.tag == "{%s}ServiceExceptionReport" % namespaces["ogc"]:
-                se = tree.find(nspath_eval('ServiceException', namespaces["ogc"]))
-                raise util.ServiceException, str(se.text).strip()
 
-            return StringIO(data)
+            try:
+                tree = etree.fromstring(data)
+            except BaseException:
+                # Not XML
+                return StringIO(data)
+            else:
+                if tree.tag == "{%s}ServiceExceptionReport" % namespaces["ogc"]:
+                    se = tree.find(nspath_eval('ServiceException', namespaces["ogc"]))
+                    raise ServiceException(str(se.text).strip())
+                else:
+                    return StringIO(data)
         else:
             if have_read:
                 return StringIO(data)

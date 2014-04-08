@@ -81,7 +81,7 @@ class WebFeatureService_:
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   method='Get'):
+                   outputFormat=None, method='Get'):
         """Formulate proper GetFeature request using KVP encoding
         ----------
         typename : list
@@ -100,6 +100,8 @@ class WebFeatureService_:
             Maximum number of features to be returned.
         method : string
             Qualified name of the HTTP DCP method to use.
+        outputFormat: string (optional)
+            Requested response format of the request.
 
         There are 3 different modes of use
 
@@ -133,7 +135,9 @@ class WebFeatureService_:
             request['storedQuery_id']=str(storedQueryID)
             for param in storedQueryParams:
                 request[param]=storedQueryParams[param]
-                
+        if outputFormat is not None:
+            request["outputFormat"] = outputFormat
+
         data = urlencode(request)
 
         return base_url+data
