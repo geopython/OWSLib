@@ -165,7 +165,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
                     request['srsname'] = srsnameobj.encoding == "urn" and\
                                         srsnameobj.getcodeurn() or srsnameobj.getcode()
                 else:
-                    raise util.ServiceException, "SRSNAME %s not supported" % srsname
+                    raise ServiceException, "SRSNAME %s not supported" % srsname
             else:
                 request['srsname'] = str(srsname)
 
