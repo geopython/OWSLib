@@ -26,7 +26,7 @@ More extensive testing is needed and feedback (to bradh@frogmouth.net) would be 
 
 """
 
-import cgi
+import urlparse
 import urllib2
 from urllib import urlencode
 from etree import etree
@@ -416,7 +416,7 @@ class WMTSCapabilitiesReader:
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
+            qs = urlparse.parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 

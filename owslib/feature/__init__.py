@@ -9,19 +9,7 @@ from owslib.crs import Crs
 
 from urllib import urlencode
 import logging
-
-try:
-    hdlr = logging.FileHandler('/tmp/owslibwfs.log')
-except:
-    import tempfile
-    f=tempfile.NamedTemporaryFile(prefix='owslib.wfs-', delete=False)
-    hdlr = logging.FileHandler(f.name)
-
-log = logging.getLogger(__name__)
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-log.addHandler(hdlr)
-log.setLevel(logging.DEBUG)
+from owslib.util import log
 
 class WebFeatureService_:
     """Base class for WebFeatureService implementations"""
@@ -93,7 +81,7 @@ class WebFeatureService_:
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   method='Get'):
+                   outputFormat=None, method='Get'):
         """Formulate proper GetFeature request using KVP encoding
         ----------
         typename : list
@@ -112,6 +100,8 @@ class WebFeatureService_:
             Maximum number of features to be returned.
         method : string
             Qualified name of the HTTP DCP method to use.
+        outputFormat: string (optional)
+            Requested response format of the request.
 
         There are 3 different modes of use
 
@@ -145,7 +135,9 @@ class WebFeatureService_:
             request['storedQuery_id']=str(storedQueryID)
             for param in storedQueryParams:
                 request[param]=storedQueryParams[param]
-                
+        if outputFormat is not None:
+            request["outputFormat"] = outputFormat
+
         data = urlencode(request)
 
         return base_url+data

@@ -16,6 +16,9 @@ from owslib.etree import etree
 from owslib.crs import Crs
 import os, errno
 
+import logging
+from owslib.util import log
+
 #  function to save writing out WCS namespace in full each time
 def ns(tag):
     return '{http://www.opengis.net/wcs}'+tag
@@ -105,12 +108,13 @@ class WebCoverageService_1_0_0(WCSBase):
         http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIME=2792-06-01T00:00:00.0&FORMAT=cf-netcdf
            
         """
-        
-        self.log.debug('WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug('WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
                 
         base_url = self.getOperationByName('GetCoverage').methods[method]['url']
         
-        self.log.debug('WCS 1.0.0 DEBUG: base url of server: %s'%base_url)
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug('WCS 1.0.0 DEBUG: base url of server: %s'%base_url)
         
         #process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service':'WCS'}
@@ -144,7 +148,8 @@ class WebCoverageService_1_0_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
-        self.log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
         
         
         u=openURL(base_url, data, method, self.cookies)

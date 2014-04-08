@@ -89,6 +89,18 @@ There is also support for Web Coverage Service (WCS), Catalogue
 Service for the Web (CSW), Web Processing Service (WPS), and Web
 Map Tile Service (WMTS). Some of those are beta quality.
 
+
+Logging
+-------
+OWSLib logs messages to the 'owslib' named python logger. You may
+configure your application to use the log messages like so:
+
+    >>> import logging
+    >>> owslib_log = logging.getLogger('owslib')
+    >>> # Add formatting and handlers as needed
+    >>> owslib_log.setLevel(logging.DEBUG)
+
+
 Support
 -------
 

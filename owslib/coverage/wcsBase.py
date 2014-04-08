@@ -15,9 +15,6 @@ from owslib.etree import etree
 import cgi
 from StringIO import StringIO
 
-#!/usr/bin/env python
-
-import logging
 
 class ServiceException(Exception):
     """WCS ServiceException
@@ -48,9 +45,6 @@ class WCSBase(object):
         obj=object.__new__(self)
         obj.__init__(url, xml, cookies)
         self.cookies=cookies
-        self.log = logging.getLogger(__name__)
-        consoleh  = logging.StreamHandler()
-        self.log.addHandler(consoleh)	
         self._describeCoverage = {} #cache for DescribeCoverage responses
         return obj
     
@@ -64,19 +58,6 @@ class WCSBase(object):
             self._describeCoverage[identifier] = reader.read(self.url)
         return self._describeCoverage[identifier]
         
-                         
-    def setLogLevel(self, level='CRITICAL'):
-        #accepts level = DEBUG, INFO, WARNING, ERROR, CRITICAL
-        if level=='DEBUG':
-            self.log.setLevel(logging.DEBUG)
-        elif level=='INFO':
-            self.log.setLevel(logging.INFO)     
-        elif level=='WARNING':
-            self.log.setLevel(logging.WARNING)
-        elif level=='ERROR':
-            self.log.setLevel(logging.ERROR)
-        elif level=='CRITICAL':
-            self.log.setLevel(logging.CRITICAL)
         
 class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
