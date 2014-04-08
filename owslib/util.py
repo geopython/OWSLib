@@ -442,3 +442,17 @@ def bind_url(url):
         elif url.find('&', -1) == -1: # like http://host/wms?foo=bar
             binder = '&'
     return '%s%s' % (url, binder)
+
+# Null logging handler
+try:
+    # Python 2.7
+    import logging
+    NullHandler = logging.NullHandler
+except ImportError:
+    # Python < 2.7
+    import logging
+    class NullHandler(logging.Handler):
+        def emit(self, record):
+            pass
+log = logging.getLogger('owslib')
+log.addHandler(NullHandler)
