@@ -443,14 +443,13 @@ def bind_url(url):
             binder = '&'
     return '%s%s' % (url, binder)
 
+import logging
 # Null logging handler
 try:
     # Python 2.7
-    import logging
     NullHandler = logging.NullHandler
-except ImportError:
+except AttributeError:
     # Python < 2.7
-    import logging
     class NullHandler(logging.Handler):
         def emit(self, record):
             pass
