@@ -343,11 +343,14 @@ class MD_DataIdentification(object):
 
             if val2 is None:
                 val2 = extent.find(util.nspath_eval('gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:beginPosition', namespaces))
+                if val2 is None:
+                    val2 = extent.find(util.nspath_eval('gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml32:TimePeriod/gml32:beginPosition', namespaces))
                 self.temporalextent_start = util.testXMLValue(val2)
 
             if val3 is None:
-                self.temporalextent_end = []
                 val3 = extent.find(util.nspath_eval('gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition', namespaces))
+                if val3 is None:
+                    val3 = extent.find(util.nspath_eval('gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml32:TimePeriod/gml32:endPosition', namespaces))
                 self.temporalextent_end = util.testXMLValue(val3)
 
 class MD_Distributor(object):        
