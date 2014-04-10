@@ -270,7 +270,7 @@ class ContentMetadata:
         self.verbOptions = [op.text for op in elem.findall(nspath_eval('wfs:Operations/wfs:Operation', namespaces))]
 
         # output formats
-        self.verbOptions = [op.text for op in elem.findall(nspath_eval('wfs:OutputFormats/wfs:Format', namespaces))]
+        self.outputFormats = [op.text for op in elem.findall(nspath_eval('wfs:OutputFormats/wfs:Format', namespaces))]
 
         # MetadataURLs
         self.metadataUrls = []
