@@ -114,7 +114,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
-                   srsname=None, method='Get'):
+                   srsname=None, outputFormat=None, method='Get'):
         """Request and return feature data as a file-like object.
         
         Parameters
