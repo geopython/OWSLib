@@ -454,4 +454,4 @@ except AttributeError:
         def emit(self, record):
             pass
 log = logging.getLogger('owslib')
-log.addHandler(NullHandler)
+log.addHandler(NullHandler())
