@@ -149,25 +149,20 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         """
         base_url = self.getOperationByName('GetFeature').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
-        srs_func = None
 
-        if type(typename) == type(""):
-            typename=[typename]
-        
-        if srsname:
-            # check, if desired SRS is supported by the service
-            if typename:
+        if not isinstance(typename, list):
+            typename = [typename]
 
-                # convert srsname string to Crs object
-                srsnameobj = self.getSRS(srsname,typename[0])
-
-                if srsname:
-                    # set the srsname string with propper function
-                    # (getcode or getcodeurn)
-                    request['srsname'] = srsnameobj.encoding == "urn" and\
-                                        srsnameobj.getcodeurn() or srsnameobj.getcode()
+        if srsname is not None:
+            # check, if desired SRS is supported by the service for this typename
+            if typename is not None:
+                # convert srsname string to Crs object found in GetCaps
+                srsnameobj = self.getSRS(srsname, typename[0])
+                if srsnameobj is not None:
+                    request['srsname'] = srsnameobj.id
                 else:
-                    raise ServiceException, "SRSNAME %s not supported" % srsname
+                    options = ", ".join(map(lambda x: x.id, self.contents[typename[0]].crsOptions))
+                    raise ServiceException("SRSNAME %s not supported.  Options: %s" % (srsname, options))
             else:
                 request['srsname'] = str(srsname)
 
