@@ -16,6 +16,7 @@ from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
+from owslib.util import log
 
 n = Namespaces()
 WFS_NAMESPACE = n.get_namespace("wfs")
@@ -188,7 +189,7 @@ class WebFeatureService_1_0_0(object):
             request["outputFormat"] = outputFormat
 
         data = urlencode(request)
-
+        log.debug("Making request: %s?%s" % (base_url, data))
         u = openURL(base_url, data, method)
         
         

@@ -20,6 +20,7 @@ from owslib.fes import *
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
+from owslib.util import log
 
 def get_namespaces():
     n = Namespaces()
@@ -194,6 +195,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             request["outputFormat"] = outputFormat
 
         data = urlencode(request)
+        log.debug("Making request: %s?%s" % (base_url, data))
         u = openURL(base_url, data, method)
 
         # check for service exceptions, rewrap, and return
