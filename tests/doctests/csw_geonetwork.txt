@@ -6,8 +6,8 @@
     >>> c.identification.title
     'GEOSS Testbed Great Lakes Metadata Catalog'
     >>> c.getdomain('GetRecords.typeNames')
-    >>> c.results
-    {'values': ['csw:Record', 'gmd:MD_Metadata'], 'parameter': 'GetRecords.typeNames', 'type': 'csw:Record'}
+    >>> c.results == {'values': ['csw:Record', 'gmd:MD_Metadata'], 'parameter': 'GetRecords.typeNames', 'type': 'csw:Record'}
+    True
     >>> c.getrecords2()
     >>> c.results.get('returned')
     10
@@ -18,12 +18,12 @@
     >>> c.results['matches'] < 10
     False
     >>> c.getdomain('GetRecords.typeNamesFOO')
-    >>> c.results
-    {'values': [], 'parameter': 'GetRecords.typeNamesFOO', 'type': 'csw:Record'}
+    >>> c.results == {'values': [], 'parameter': 'GetRecords.typeNamesFOO', 'type': 'csw:Record'}
+    True
     >>> c.exceptionreport
-    >>> c.filters.spatial_operators
-    ['BBOX', 'Equals', 'Overlaps', 'Disjoint', 'Intersects', 'Touches', 'Crosses', 'Within', 'Contains']
+    >>> sorted(c.filters.spatial_operators)
+    ['BBOX', 'Contains', 'Crosses', 'Disjoint', 'Equals', 'Intersects', 'Overlaps', 'Touches', 'Within']
     >>> c.filters.temporal_operators
     []
-    >>> c.filters.scalar_comparison_operators
-    ['EqualTo', 'Like', 'LessThan', 'GreaterThan', 'LessThanEqualTo', 'LessThanOrEqualTo', 'GreaterThanEqualTo', 'GreaterThanOrEqualTo', 'NotEqualTo', 'Between', 'NullCheck']
+    >>> sorted(c.filters.scalar_comparison_operators)
+    ['Between', 'EqualTo', 'GreaterThan', 'GreaterThanEqualTo', 'GreaterThanOrEqualTo', 'LessThan', 'LessThanEqualTo', 'LessThanOrEqualTo', 'Like', 'NotEqualTo', 'NullCheck']

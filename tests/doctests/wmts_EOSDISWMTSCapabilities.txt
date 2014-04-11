@@ -3,13 +3,13 @@ Imports
 
     >>> from tests.utils import resource_file
     >>> from owslib.wmts import WebMapTileService
-    
-Fake a request to a WMTS Server using saved doc from 
+
+Fake a request to a WMTS Server using saved doc from
 http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi
 
-    >>> xml = open(resource_file('eosdis-wmts-cap.xml'), 'r').read() 
+    >>> xml = open(resource_file('eosdis-wmts-cap.xml'), 'r').read()
     >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
-    
+
 Test capabilities
 -----------------
     >>> wmts.identification.type
@@ -20,8 +20,8 @@ Test capabilities
     'NASA Global Image Browse Services for EOSDIS'
     >>> str.strip(wmts.identification.abstract)
     'Near real time imagery from multiple NASA instruments'
-    >>> wmts.identification.keywords
-    ['World', 'Global']
+    >>> sorted(wmts.identification.keywords)
+    ['Global', 'World']
     >>> wmts.identification.accessconstraints
     'none'
     >>> wmts.identification.fees
@@ -34,7 +34,7 @@ Service Provider:
 
     >>> wmts.provider.url
     'http://earthdata.nasa.gov/'
-    
+
 Check contact info
     >>> wmts.provider.contact.name
     'Jeff Schmaltz'
@@ -54,16 +54,16 @@ Check contact info
     '20771'
     >>> wmts.provider.contact.country
     'United States of America'
-    
+
 Test available content layers
 
-    >>> list(wmts.contents)
-    ['MODIS_Aqua_SurfaceReflectance_Bands121', 'MODIS_Aqua_Cloud_Top_Temp_Night', 'MODIS_Aqua_Sea_Ice', 'MODIS_Aqua_SurfaceReflectance_Bands721', 'MODIS_Terra_SurfaceReflectance_Bands143', 'MODIS_Aqua_Snow_Cover', 'MODIS_Terra_CorrectedReflectance_Bands721', 'MODIS_Terra_Cloud_Top_Pressure_Day', 'AIRS_Dust_Score', 'MODIS_Aqua_Cloud_Top_Pressure_Night', 'MODIS_Aqua_Brightness_Temp_Band31_Day', 'MODIS_Land_Water_Mask', 'OMI_Aerosol_Index', 'MODIS_Aqua_Land_Surface_Temp_Day', 'MODIS_Aqua_Aerosol', 'OMI_Absorbing_Aerosol_Optical_Depth', 'MODIS_Terra_Cloud_Top_Pressure_Night', 'AIRS_Prata_SO2_Index_Day', 'MODIS_Terra_Sea_Ice', 'OMI_Cloud_Pressure', 'MODIS_Aqua_CorrectedReflectance_TrueColor', 'MODIS_Terra_Water_Vapor_5km_Day', 'OMI_Aerosol_Optical_Depth', 'MODIS_Aqua_Water_Vapor_5km_Day', 'MODIS_Terra_SurfaceReflectance_Bands121', 'MODIS_Terra_CorrectedReflectance_Bands367', 'OMI_SO2_Planetary_Boundary_Layer', 'AIRS_CO_Total_Column_Night', 'MODIS_Aqua_Cloud_Top_Pressure_Day', 'AIRS_Precipitation_Day', 'MODIS_Terra_Data_No_Data', 'MODIS_Terra_Brightness_Temp_Band31_Day', 'AIRS_Precipitation_Night', 'MODIS_Terra_Land_Surface_Temp_Day', 'MODIS_Terra_Cloud_Top_Temp_Night', 'MODIS_Terra_Aerosol', 'MODIS_Terra_Brightness_Temp_Band31_Night', 'MODIS_Aqua_Brightness_Temp_Band31_Night', 'AIRS_CO_Total_Column_Day', 'MODIS_Terra_SurfaceReflectance_Bands721', 'MODIS_Terra_Cloud_Top_Temp_Day', 'MODIS_Terra_CorrectedReflectance_TrueColor', 'MODIS_Terra_Land_Surface_Temp_Night', 'MODIS_Aqua_Cloud_Top_Temp_Day', 'OMI_SO2_Middle_Troposphere', 'MODIS_Terra_Water_Vapor_5km_Night', 'OMI_SO2_Lower_Troposphere', 'AIRS_Prata_SO2_Index_Night', 'MODIS_Aqua_Land_Surface_Temp_Night', 'MODIS_Aqua_SurfaceReflectance_Bands143', 'MODIS_Terra_Snow_Cover', 'MODIS_Aqua_CorrectedReflectance_Bands721', 'MODIS_Aqua_Data_No_Data', 'OMI_SO2_Upper_Troposphere_and_Stratosphere', 'MODIS_Aqua_Water_Vapor_5km_Night']
+    >>> sorted(list(wmts.contents))
+    ['AIRS_CO_Total_Column_Day', 'AIRS_CO_Total_Column_Night', 'AIRS_Dust_Score', 'AIRS_Prata_SO2_Index_Day', 'AIRS_Prata_SO2_Index_Night', 'AIRS_Precipitation_Day', 'AIRS_Precipitation_Night', 'MODIS_Aqua_Aerosol', 'MODIS_Aqua_Brightness_Temp_Band31_Day', 'MODIS_Aqua_Brightness_Temp_Band31_Night', 'MODIS_Aqua_Cloud_Top_Pressure_Day', 'MODIS_Aqua_Cloud_Top_Pressure_Night', 'MODIS_Aqua_Cloud_Top_Temp_Day', 'MODIS_Aqua_Cloud_Top_Temp_Night', 'MODIS_Aqua_CorrectedReflectance_Bands721', 'MODIS_Aqua_CorrectedReflectance_TrueColor', 'MODIS_Aqua_Data_No_Data', 'MODIS_Aqua_Land_Surface_Temp_Day', 'MODIS_Aqua_Land_Surface_Temp_Night', 'MODIS_Aqua_Sea_Ice', 'MODIS_Aqua_Snow_Cover', 'MODIS_Aqua_SurfaceReflectance_Bands121', 'MODIS_Aqua_SurfaceReflectance_Bands143', 'MODIS_Aqua_SurfaceReflectance_Bands721', 'MODIS_Aqua_Water_Vapor_5km_Day', 'MODIS_Aqua_Water_Vapor_5km_Night', 'MODIS_Land_Water_Mask', 'MODIS_Terra_Aerosol', 'MODIS_Terra_Brightness_Temp_Band31_Day', 'MODIS_Terra_Brightness_Temp_Band31_Night', 'MODIS_Terra_Cloud_Top_Pressure_Day', 'MODIS_Terra_Cloud_Top_Pressure_Night', 'MODIS_Terra_Cloud_Top_Temp_Day', 'MODIS_Terra_Cloud_Top_Temp_Night', 'MODIS_Terra_CorrectedReflectance_Bands367', 'MODIS_Terra_CorrectedReflectance_Bands721', 'MODIS_Terra_CorrectedReflectance_TrueColor', 'MODIS_Terra_Data_No_Data', 'MODIS_Terra_Land_Surface_Temp_Day', 'MODIS_Terra_Land_Surface_Temp_Night', 'MODIS_Terra_Sea_Ice', 'MODIS_Terra_Snow_Cover', 'MODIS_Terra_SurfaceReflectance_Bands121', 'MODIS_Terra_SurfaceReflectance_Bands143', 'MODIS_Terra_SurfaceReflectance_Bands721', 'MODIS_Terra_Water_Vapor_5km_Day', 'MODIS_Terra_Water_Vapor_5km_Night', 'OMI_Absorbing_Aerosol_Optical_Depth', 'OMI_Aerosol_Index', 'OMI_Aerosol_Optical_Depth', 'OMI_Cloud_Pressure', 'OMI_SO2_Lower_Troposphere', 'OMI_SO2_Middle_Troposphere', 'OMI_SO2_Planetary_Boundary_Layer', 'OMI_SO2_Upper_Troposphere_and_Stratosphere']
 
 Test TileMatrixSet variants
     # TODO: check individual values
-    >>> wmts.tilematrixsets.keys()
-    ['EPSG4326_2km', 'EPSG4326_500m', 'EPSG4326_250m', 'EPSG4326_1km']
+    >>> sorted(wmts.tilematrixsets.keys())
+    ['EPSG4326_1km', 'EPSG4326_250m', 'EPSG4326_2km', 'EPSG4326_500m']
     >>> wmts.tilematrixsets['EPSG4326_2km'].identifier
     'EPSG4326_2km'
     >>> wmts.tilematrixsets['EPSG4326_2km'].crs
@@ -143,8 +143,9 @@ Test single item accessor
     (-180.0, -90.0, 180.0, 90.0)
     >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].id
     'MODIS_Aqua_Cloud_Top_Temp_Night'
-    >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].styles
-    {'default': {'isDefault': True, 'title': 'default'}}
+    >>> x = wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].styles
+    >>> x == {'default': {'isDefault': True, 'title': 'default'}}
+    True
     >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].formats
     ['image/png']
     >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsets
@@ -162,11 +163,12 @@ Expect a KeyError for invalid names
 
 Test operations
 
-    >>> [op.name for op in wmts.operations]
+    >>> sorted([op.name for op in wmts.operations])
     ['GetCapabilities', 'GetTile']
-    
-    >>> wmts.getOperationByName('GetTile').methods
-    {'Get': {'url': 'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?', 'encodings': ['KVP']}}
+
+    >>> x = wmts.getOperationByName('GetTile').methods
+    >>> x == {'Get': {'encodings': ['KVP'], 'url': 'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?'}}
+    True
 
 Test the gettile methods
 

@@ -15,10 +15,7 @@ import random
 from urllib import urlencode
 from urllib2 import urlopen
 
-try:  # 2.7
-    from collections import OrderedDict
-except:  # 2.6
-    from ordereddict import OrderedDict
+from owslib.util import OrderedDict
 
 from owslib.etree import etree
 from owslib import fes
