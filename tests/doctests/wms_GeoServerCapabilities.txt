@@ -54,11 +54,13 @@ Test single item accessor
     >>> wms['opengeo:poi'].crsOptions
     ['EPSG:4326']
 
-    >>> wms['opengeo:poi'].attribution
-    {'url': 'http://svn.codehaus.org/geoserver/trunk/data/release/data/', 'logo_size': (353, 112), 'logo_url': 'http://geoserver.org/s/1518/25/0.1/_/download/resources/com.atlassian.confluence.themes.geoserver%3Ageoserver/chrome/geoserver-logo.png', 'title': 'GeoServer Sample Data'}
+    >>> x = wms['opengeo:poi'].attribution
+    >>> x == {'url': 'http://svn.codehaus.org/geoserver/trunk/data/release/data/', 'logo_size': (353, 112), 'logo_url': 'http://geoserver.org/s/1518/25/0.1/_/download/resources/com.atlassian.confluence.themes.geoserver%3Ageoserver/chrome/geoserver-logo.png', 'title': 'GeoServer Sample Data'}
+    True
     
-    >>> wms['opengeo:poi'].styles
-    {'point': {'legend': 'http://localhost:8080/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=poi', 'title': 'A boring default style'}}
+    >>> x = wms['opengeo:poi'].styles
+    >>> x == {'point': {'legend': 'http://localhost:8080/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=poi', 'title': 'A boring default style'}}
+    True
     
 Expect a KeyError for invalid names
 
@@ -72,8 +74,9 @@ Test operations
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
     
-    >>> wms.getOperationByName('GetMap').methods
-    {'Get': {'url': 'http://localhost:8080/geoserver/wms?SERVICE=WMS&'}}
+    >>> x = wms.getOperationByName('GetMap').methods
+    >>> x == {'Get': {'url': 'http://localhost:8080/geoserver/wms?SERVICE=WMS&'}}
+    True
     
     >>> wms.getOperationByName('GetMap').formatOptions
     ['image/png', 'application/atom xml', 'application/atom+xml', 'application/openlayers', 'application/pdf', 'application/rss xml', 'application/rss+xml', 'application/vnd.google-earth.kml', 'application/vnd.google-earth.kml xml', 'application/vnd.google-earth.kml+xml', 'application/vnd.google-earth.kmz', 'application/vnd.google-earth.kmz xml', 'application/vnd.google-earth.kmz+xml', 'atom', 'image/geotiff', 'image/geotiff8', 'image/gif', 'image/jpeg', 'image/png8', 'image/svg', 'image/svg xml', 'image/svg+xml', 'image/tiff', 'image/tiff8', 'kml', 'kmz', 'openlayers', 'rss']

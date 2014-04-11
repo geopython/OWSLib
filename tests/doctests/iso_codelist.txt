@@ -10,8 +10,8 @@ Print testing the code lists
 
     >>> e=etree.parse(resource_file('gmxCodelists.xml'))
     >>> c=CodelistCatalogue(e)
-    >>> print c.getcodelistdictionaries()
-    ['MD_RestrictionCode', 'CI_OnLineFunctionCode', 'DQ_EvaluationMethodTypeCode', 'DS_InitiativeTypeCode', 'MD_MaintenanceFrequencyCode', 'MD_SpatialRepresentationTypeCode', 'MD_ImagingConditionCode', 'MD_ObligationCode', 'MD_GeometricObjectTypeCode', 'MD_ScopeCode', 'MD_KeywordTypeCode', 'MD_CharacterSetCode', 'CI_PresentationFormCode', 'MX_ScopeCode', 'CI_DateTypeCode', 'MD_TopicCategoryCode', 'MD_DatatypeCode', 'MD_ProgressCode', 'MD_MediumNameCode', 'MD_ClassificationCode', 'DS_AssociationTypeCode', 'CI_RoleCode', 'MD_TopologyLevelCode', 'MD_DimensionNameTypeCode', 'MD_CoverageContentTypeCode', 'MD_MediumFormatCode', 'MD_PixelOrientationCode', 'MD_CellGeometryCode']
+    >>> sorted(c.getcodelistdictionaries())
+    ['CI_DateTypeCode', 'CI_OnLineFunctionCode', 'CI_PresentationFormCode', 'CI_RoleCode', 'DQ_EvaluationMethodTypeCode', 'DS_AssociationTypeCode', 'DS_InitiativeTypeCode', 'MD_CellGeometryCode', 'MD_CharacterSetCode', 'MD_ClassificationCode', 'MD_CoverageContentTypeCode', 'MD_DatatypeCode', 'MD_DimensionNameTypeCode', 'MD_GeometricObjectTypeCode', 'MD_ImagingConditionCode', 'MD_KeywordTypeCode', 'MD_MaintenanceFrequencyCode', 'MD_MediumFormatCode', 'MD_MediumNameCode', 'MD_ObligationCode', 'MD_PixelOrientationCode', 'MD_ProgressCode', 'MD_RestrictionCode', 'MD_ScopeCode', 'MD_SpatialRepresentationTypeCode', 'MD_TopicCategoryCode', 'MD_TopologyLevelCode', 'MX_ScopeCode']
 
-    >>> print c.getcodedefinitionidentifiers('CI_RoleCode')
-    ['author', 'processor', 'publisher', 'custodian', 'pointOfContact', 'distributor', 'user', 'resourceProvider', 'originator', 'owner', 'principalInvestigator']
+    >>> sorted(c.getcodedefinitionidentifiers('CI_RoleCode'))
+    ['author', 'custodian', 'distributor', 'originator', 'owner', 'pointOfContact', 'principalInvestigator', 'processor', 'publisher', 'resourceProvider', 'user']

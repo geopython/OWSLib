@@ -16,7 +16,7 @@ Initialize
 
 Contacts
 
-    >>> system.contacts.keys()
+    >>> sorted(system.contacts.keys())
     ['urn:ogc:def:classifiers:OGC:contactType:operator', 'urn:ogc:def:classifiers:OGC:contactType:publisher']
 
     >>> operators = system.get_contacts_by_role('urn:ogc:def:classifiers:OGC:contactType:operator')
@@ -49,8 +49,8 @@ Contacts
 
 Identification
 
-    >>> system.identifiers.keys()
-    ['StationId', 'Long Name', 'Short Name']
+    >>> sorted(system.identifiers.keys())
+    ['Long Name', 'Short Name', 'StationId']
 
     >>> sid = system.get_identifiers_by_name('StationId')
     >>> sid[0].name
@@ -94,7 +94,7 @@ Documents
 
 History
 
-    >>> system.history.keys()
+    >>> sorted(system.history.keys())
     ['deployment_start', 'deployment_stop']
 
     >>> his = system.get_history_by_name('deployment_start')

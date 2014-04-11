@@ -123,11 +123,13 @@ OperationsMetadata
     >>> getcap.constraints
     {}
 
-    >>> getcap.parameters
-    {'Sections': {'values': ['ServiceIdentification', 'ServiceProvider', 'OperationsMetadata', 'Contents', 'All']}}
+    >>> x = getcap.parameters
+    >>> x == {'Sections': {'values': ['ServiceIdentification', 'ServiceProvider', 'OperationsMetadata', 'Contents', 'All']}}
+    True
 
-    >>> getcap.methods
-    {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    >>> x = getcap.methods
+    >>> x == {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    True
 
 
     # DescribeSensor
@@ -137,11 +139,13 @@ OperationsMetadata
     >>> descsen.constraints
     {}
 
-    >>> descsen.parameters
-    {'outputFormat': {'values': ['text/xml;subtype="sensorML/1.0.1"']}}
+    >>> x = descsen.parameters
+    >>> x == {'outputFormat': {'values': ['text/xml;subtype="sensorML/1.0.1"']}}
+    True
 
-    >>> descsen.methods
-    {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    >>> x = descsen.methods
+    >>> x == {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    True
 
     # GetObservation
 
@@ -150,11 +154,13 @@ OperationsMetadata
     >>> getob.constraints
     {}
 
-    >>> getob.parameters
-    {'observedProperty': {'values': ['air_temperature', 'air_pressure_at_sea_level', 'sea_water_electrical_conductivity', 'currents', 'sea_water_salinity', 'sea_floor_depth_below_sea_surface', 'sea_water_temperature', 'waves', 'winds']}}
+    >>> x = getob.parameters
+    >>> x == {'observedProperty': {'values': ['air_temperature', 'air_pressure_at_sea_level', 'sea_water_electrical_conductivity', 'currents', 'sea_water_salinity', 'sea_floor_depth_below_sea_surface', 'sea_water_temperature', 'waves', 'winds']}}
+    True
 
-    >>> getob.methods
-    {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    >>> x = getob.methods
+    >>> x == {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    True
 
 Filter_Capabilities
 

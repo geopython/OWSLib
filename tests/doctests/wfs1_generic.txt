@@ -1,7 +1,8 @@
 Imports and initialize
 
     >>> from owslib.wfs import WebFeatureService
-    >>> from tests.utils import resource_file
+    >>> from urlparse import urlparse
+    >>> from tests.utils import resource_file, sorted_url_query
 
     >>> getcapsin = open(resource_file("wfs_HSRS_GetCapabilities_1_1_0.xml")).read()
     >>> wfs = WebFeatureService('http://gis.bnhelp.cz/ows/crwfs', xml=getcapsin, version='1.1.0')
@@ -37,27 +38,75 @@ Test the capabilities info
 
 Test the getfeature method
 
-    >>> wfs.contents.keys()
-    ['kraje', 'okresy', 'nuts1', 'orp', 'nuts2', 'states', 'sidla', 'nuts3']
+    >>> sorted(wfs.contents.keys())
+    ['kraje', 'nuts1', 'nuts2', 'nuts3', 'okresy', 'orp', 'sidla', 'states']
 
     >>> wfs.contents['okresy'].crsOptions[0].getcodeurn()
     'urn:ogc:def:crs:EPSG::4326'
 
-    >>> wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2)
-    'http://gis.bnhelp.cz/ows/crwfs?maxfeatures=2&typename=okresy&version=1.1.0&request=GetFeature&service=WFS'
+    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2))
+    ['maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=okresy', 'version=1.1.0']
 
-    >>> wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2, bbox=[15,49,16,51,'urn:ogc:def:crs:EPSG:4326'])
-    'http://gis.bnhelp.cz/ows/crwfs?service=WFS&maxfeatures=2&request=GetFeature&typename=okresy&version=1.1.0&bbox=49%2C15%2C51%2C16%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326'
+    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2, bbox=[15,49,16,51,'urn:ogc:def:crs:EPSG:4326']))
+    ['bbox=49%2C15%2C51%2C16%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326', 'maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=okresy', 'version=1.1.0']
 
-    >>> wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2, bbox=[-685336,-993518,-684996,-993285])
-    'http://gis.bnhelp.cz/ows/crwfs?service=WFS&maxfeatures=2&request=GetFeature&typename=okresy&version=1.1.0&bbox=-993518%2C-685336%2C-993285%2C-684996%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326'
+    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['okresy'], maxfeatures=2, bbox=[-685336,-993518,-684996,-993285]))
+    ['bbox=-993518%2C-685336%2C-993285%2C-684996%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326', 'maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=okresy', 'version=1.1.0']
 
 
-Test custom outputFormat
+Test outputFormat
+
+WFS 1.0.0
+    >>> import json
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
+    >>> json.dumps(json.loads(feature.read()))
+    '{...}'
+
+WFS 1.1.0
+    >>> import json
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.1.0')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
+    >>> json.dumps(json.loads(feature.read()))
+    '{...}'
+
+WFS 2.0.0
+    >>> import json
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='2.0.0')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
+    >>> json.dumps(json.loads(feature.read()))
+    '{...}'
+
+
+Test srsName
+
+WFS 1.0.0
+    >>> import json
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname="EPSG:99999999")
+    ...
+    Traceback (most recent call last):
+    ...
+    ServiceException: Unable to support srsName: EPSG:99999999
+    ...
 
     >>> import json
-    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288')
-    >>> shapefiles = wfs.contents.keys()
-    >>> feature = wfs.getfeature(typename=[shapefiles[0]], maxfeatures=1, propertyname=None, outputFormat='application/json')
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname="urn:x-ogc:def:crs:EPSG:4326")
+    >>> json.dumps(json.loads(feature.read()))
+    '{...}'
+
+WFS 1.1.0
+    >>> import json
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.1.0')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname="EPSG:99999999")
+    ...
+    Traceback (most recent call last):
+    ...
+    ServiceException: SRSNAME EPSG:99999999 not supported.  Options: urn:x-ogc:def:crs:EPSG:102715
+
+    >>> import json
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname="urn:x-ogc:def:crs:EPSG:4326")
     >>> json.dumps(json.loads(feature.read()))
     '{...}'

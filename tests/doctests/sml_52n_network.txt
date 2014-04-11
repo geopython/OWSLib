@@ -31,8 +31,8 @@ Contacts
 
 Identification
 
-    >>> system.identifiers.keys()
-    ['networkID', 'shortName', 'longName']
+    >>> sorted(system.identifiers.keys())
+    ['longName', 'networkID', 'shortName']
 
     >>> sid = system.get_identifiers_by_name('networkID')
     >>> sid[0].name
@@ -44,8 +44,8 @@ Identification
 
 Classifiers
 
-    >>> system.classifiers.keys()
-    ['publisher', 'parentNetwork']
+    >>> sorted(system.classifiers.keys())
+    ['parentNetwork', 'publisher']
     >>> classi = system.get_classifiers_by_name('publisher')
     >>> classi[0].definition
     'http://mmisw.org/ont/ioos/definition/publisher'
@@ -54,8 +54,8 @@ Classifiers
 
 Capabilities
 
-    >>> system.capabilities.keys()
-    ['offerings', 'featuresOfInterest', 'observationTimeRange', 'observedBBOX']
+    >>> sorted(system.capabilities.keys())
+    ['featuresOfInterest', 'observationTimeRange', 'observedBBOX', 'offerings']
 
 Characteristics
 

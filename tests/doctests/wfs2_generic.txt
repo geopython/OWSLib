@@ -1,7 +1,7 @@
 Imports and initialize
 
     >>> from owslib.wfs import WebFeatureService
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import resource_file, sorted_url_query
 
     >>> getcapsin = open(resource_file("wfs_CUZK_GetCapabilities_2_0_0.xml")).read()
     >>> wfs = WebFeatureService('http://services.cuzk.cz/wfs/inspire-cp-wfs.asp', xml=getcapsin, version='2.0.0')
@@ -15,8 +15,8 @@ Test the capabilities info
     'CZE INSPIRE Download Service - Cadastral Parcels'
     >>> wfs.identification.abstract
     'Cadastral Parcels - INSPIRE themes'
-    >>> wfs.identification.keywords
-    ['Cadastral Parcel Boundaries', 'Cadastral parcel polygons', 'Cadastral Zoning polygons']
+    >>> sorted(wfs.identification.keywords)
+    ['Cadastral Parcel Boundaries', 'Cadastral Zoning polygons', 'Cadastral parcel polygons']
     >>> wfs.identification.fees
     >>> wfs.identification.accessconstraints
     >>> wfs.provider.name
@@ -35,17 +35,17 @@ Test the capabilities info
 
 Test the getfeature method
 
-    >>> wfs.contents.keys()
-    ['CP:CadastralBoundary', 'CP:CadastralZoning', 'CP:CadastralParcel']
+    >>> sorted(wfs.contents.keys())
+    ['CP:CadastralBoundary', 'CP:CadastralParcel', 'CP:CadastralZoning']
 
     >>> wfs.contents['CP:CadastralBoundary'].crsOptions[0].getcodeurn()
     'urn:ogc:def:crs:EPSG::102067'
 
-    >>> wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2)
-    'http://services.cuzk.cz/wfs/inspire-cp-wfs.asp?maxfeatures=2&typename=CP%3ACadastralBoundary&version=2.0.0&request=GetFeature&service=WFS'
+    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2))
+    ['maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=CP%3ACadastralBoundary', 'version=2.0.0']
 
-    >>> wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2, bbox=[15,49,16,51,'urn:ogc:def:crs:EPSG:4326'])
-    'http://services.cuzk.cz/wfs/inspire-cp-wfs.asp?service=WFS&maxfeatures=2&request=GetFeature&typename=CP%3ACadastralBoundary&version=2.0.0&bbox=49%2C15%2C51%2C16%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326'
+    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2, bbox=[15,49,16,51,'urn:ogc:def:crs:EPSG:4326']))
+    ['bbox=49%2C15%2C51%2C16%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326', 'maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=CP%3ACadastralBoundary', 'version=2.0.0']
 
-    >>> wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2, bbox=[-685336,-993518,-684996,-993285])
-    'http://services.cuzk.cz/wfs/inspire-cp-wfs.asp?service=WFS&maxfeatures=2&request=GetFeature&typename=CP%3ACadastralBoundary&version=2.0.0&bbox=-685336%2C-993518%2C-684996%2C-993285%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A102067'
+    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2, bbox=[-685336,-993518,-684996,-993285]))
+    ['bbox=-685336%2C-993518%2C-684996%2C-993285%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A102067', 'maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=CP%3ACadastralBoundary', 'version=2.0.0']
