@@ -114,10 +114,12 @@ class Namespaces(object):
             Example:
             --------
             >>> ns = Namespaces()
-            >>> ns.get_namespaces(['csw','gmd'])
-            {'csw': 'http://www.opengis.net/cat/csw/2.0.2', 'gmd': 'http://www.isotc211.org/2005/gmd'}
-            >>> ns.get_namespaces('csw')
-            {'csw': 'http://www.opengis.net/cat/csw/2.0.2'}
+            >>> x = ns.get_namespaces(['csw','gmd'])
+            >>> x == {'csw': 'http://www.opengis.net/cat/csw/2.0.2', 'gmd': 'http://www.isotc211.org/2005/gmd'}
+            True
+            >>> x = ns.get_namespaces('csw')
+            >>> x == {'csw': 'http://www.opengis.net/cat/csw/2.0.2'}
+            True
             >>> ns.get_namespaces()
             {...}
         """

@@ -71,12 +71,9 @@ if mimetype is ommited the tile is fetched from the first TileMap found:
     >>> service.gettile(10,10,1, title='bluemarble', srs='EPSG:900913').geturl()
     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/1/10/10.jpeg?'
 
-
-
 You can also specify the Tilemap by id:
     >>> service.gettile(10,10,0, 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg').geturl()
     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/0/10/10.jpeg?'
-
 
 An extensive test  with:
     >>> servers = [

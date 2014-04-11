@@ -52,32 +52,27 @@ class WebFeatureService_:
             return "%s,%s,%s,%s,%s" % \
                     (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcode())
 
-    def getSRS(self,srsname,typename):
+    def getSRS(self, srsname, typename):
         """Returns None or Crs object for given name
 
         @param typename:  feature name 
         @type typename: String
         """
-        if type(srsname) == type(""):
+        if not isinstance(srsname, Crs):
             srs = Crs(srsname)
         else:
             srs = srsname
 
-        srss = map(lambda crs: crs.getcodeurn(),
-                self.contents[typename].crsOptions)
-
-        for s in srss:
-            s = Crs(s)
-            if srs.authority == s.authority and\
-                    srs.code == s.code:
-                if s.version and srs.version:
-                    if s.version  == srs.version:
-                        idx = srss.index(s.getcodeurn())
-                        return self.contents[typename].crsOptions[idx]
-                else:
-                    idx = srss.index(s.getcodeurn())
-                    return self.contents[typename].crsOptions[idx]
-        return None
+        try:
+            index = self.contents[typename].crsOptions.index(srs)
+            # Return the Crs string that was pulled directly from the
+            # GetCaps document (the 'id' attribute in the Crs object).
+            return self.contents[typename].crsOptions[index]
+        except ValueError:
+            options = ", ".join(map(lambda x: x.id, self.contents[typename].crsOptions))
+            log.warning("Requested srsName '%s' not available for requested typename '%s'. \
+                         Options are: %s. " % (srs.getcode(), typename, options))
+            return None
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},

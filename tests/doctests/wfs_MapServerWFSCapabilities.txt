@@ -3,12 +3,12 @@ Imports
 
     >>> from tests.utils import cast_tuple_int_list, resource_file
     >>> from owslib.wfs import WebFeatureService
-    
+
 Fake a request to a WFS Server using saved doc from.
 
-    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read() 
+    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read()
     >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
-    
+
 Test capabilities
 
 Service Identification:
@@ -18,13 +18,13 @@ Service Identification:
 
     >>> wfs.identification.version
     '1.0'
-    
+
     >>> wfs.identification.title
     'Bird Studies Canada WMS/WFS Server'
-    
+
     >>> wfs.identification.abstract
     'Bird Studies Canada WMS/WFS Server for bird distribution and abundance data, and related information.  Bird Studies Canada gratefully acknowledges the support of Environment Canada - Canadian Information System for the Environment in developing this service.'
-    
+
     >>> wfs.identification.keywords
     ['\n    birds\n    distribution\n    abundance\n    conservation\n    sites\n    monitoring\n    populations\n    canada\n  ']
 
@@ -41,35 +41,35 @@ Service Provider:
 
     >>> wfs.provider.url
     'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3920&entryLang=en&portal=gdp'
-    
+
     #TODO: test contact info:
     #>>> wfs.provider.contact.name
 
-    
+
 Test available content layers
 
-    >>> wfs.contents.keys()
-    ['CBC_PT', 'OBBA_REGION', 'IBA', 'MMP', 'CBC_PY', 'OBBA_SQUARE', 'BBS_PT', 'OWLS', 'OBBA_BLOCK', 'CLLS']
-    
-    >>> [wfs[layer].title for layer in wfs.contents]
-    ['Canadian Christmas Bird Count Locations', 'Ontario Breeding Bird Atlas Administrative Regions', 'Canadian Important Bird Areas', 'Marsh Monitoring Program Route Locations', 'Canadian Christmas Bird Count Locations', 'Ontario Breeding Bird Atlas 10 km Squares', 'Breeding Bird Survey Route Start Points', 'Nocturnal Owl Survey Locations', 'Ontario Breeding Bird Atlas 100 km Blocks', 'Canadian Lakes Loon Survey Locations']
-    
+    >>> sorted(wfs.contents.keys())
+    ['BBS_PT', 'CBC_PT', 'CBC_PY', 'CLLS', 'IBA', 'MMP', 'OBBA_BLOCK', 'OBBA_REGION', 'OBBA_SQUARE', 'OWLS']
+
+    >>> sorted([wfs[layer].title for layer in wfs.contents])
+    ['Breeding Bird Survey Route Start Points', 'Canadian Christmas Bird Count Locations', 'Canadian Christmas Bird Count Locations', 'Canadian Important Bird Areas', 'Canadian Lakes Loon Survey Locations', 'Marsh Monitoring Program Route Locations', 'Nocturnal Owl Survey Locations', 'Ontario Breeding Bird Atlas 10 km Squares', 'Ontario Breeding Bird Atlas 100 km Blocks', 'Ontario Breeding Bird Atlas Administrative Regions']
+
 Test single item accessor
 
     >>> wfs['IBA'].title
     'Canadian Important Bird Areas'
-    
+
     >>> wfs['IBA'].boundingBox
-    
+
     >>> cast_tuple_int_list(wfs['IBA'].boundingBoxWGS84)
     [-141, 41, -52, 78]
-    
+
     >>> map(lambda x: x.getcode(), wfs['IBA'].crsOptions)
     ['EPSG:4326']
-    
+
     >>> wfs['IBA'].verbOptions
     ['{http://www.opengis.net/wfs}Query']
-    
+
 Expect a KeyError for invalid names
 
     >>> wfs['utterly bogus'].title
@@ -79,13 +79,14 @@ Expect a KeyError for invalid names
 
 Test operations
 
-    >>> [op.name for op in wfs.operations]
-    ['{http://www.opengis.net/wfs}GetCapabilities', '{http://www.opengis.net/wfs}DescribeFeatureType', '{http://www.opengis.net/wfs}GetFeature']
-    
-    >>> wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods
-    {'{http://www.opengis.net/wfs}Get': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}, '{http://www.opengis.net/wfs}Post': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}}
-    
-    >>> wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').formatOptions
+    >>> sorted([op.name for op in wfs.operations])
+    ['{http://www.opengis.net/wfs}DescribeFeatureType', '{http://www.opengis.net/wfs}GetCapabilities', '{http://www.opengis.net/wfs}GetFeature']
+
+    >>> x = wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods
+    >>> x == {'{http://www.opengis.net/wfs}Get': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}, '{http://www.opengis.net/wfs}Post': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}}
+    True
+
+    >>> sorted(wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').formatOptions)
     ['{http://www.opengis.net/wfs}GML2', '{http://www.opengis.net/wfs}GML3']
 
 
