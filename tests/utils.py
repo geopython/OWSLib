@@ -1,5 +1,6 @@
 import os
 from owslib.etree import etree
+from urlparse import urlparse
 
 def resource_file(filepath):
     return os.path.join(test_directory(), 'resources', filepath)
@@ -52,3 +53,6 @@ def cast_tuple_int_list_srs(tup):
     tup2 = cast_tuple_int_list(tup[:4])
     tup2.append(tup[-1])
     return tup2
+
+def sorted_url_query(url):
+    return sorted(urlparse(url).query.split("&"))
