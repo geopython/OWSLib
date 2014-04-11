@@ -9,8 +9,9 @@ Correct Usage Tests
     >>> ns.get_namespace('csw')
     'http://www.opengis.net/cat/csw/2.0.2'
 
-    >>> ns.get_namespaces(['csw','gmd','fes'])
-    {'csw': 'http://www.opengis.net/cat/csw/2.0.2', 'fes': 'http://www.opengis.net/fes/2.0', 'gmd': 'http://www.isotc211.org/2005/gmd'}
+    >>> x = ns.get_namespaces(['csw','gmd','fes'])
+    >>> x == {'csw': 'http://www.opengis.net/cat/csw/2.0.2', 'fes': 'http://www.opengis.net/fes/2.0', 'gmd': 'http://www.isotc211.org/2005/gmd'}
+    True
     >>> ns.get_namespaces()
     {...}
 

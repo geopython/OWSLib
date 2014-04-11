@@ -49,8 +49,8 @@ Test single item accessor
     >>> wms['time_idx'].boundingBoxWGS84
     (-126.0, 24.0, -66.0, 50.0)
     
-    >>> wms['time_idx'].crsOptions
-    ['EPSG:900913', 'EPSG:4326', 'EPSG:3857', 'EPSG:102100']
+    >>> sorted(wms['time_idx'].crsOptions)
+    ['EPSG:102100', 'EPSG:3857', 'EPSG:4326', 'EPSG:900913']
 
     >>> wms['time_idx'].styles
     {}
@@ -77,8 +77,9 @@ Test operations
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic', 'GetStyles']
 
-    >>> wms.getOperationByName('GetMap').methods
-    {'Post': {'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}, 'Get': {'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}}
+    >>> x = wms.getOperationByName('GetMap').methods
+    >>> x == {'Post': {'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}, 'Get': {'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}}
+    True
 
     >>> wms.getOperationByName('GetMap').formatOptions
     ['image/png', 'image/jpeg', 'image/gif', 'image/png; mode=8bit', 'application/x-pdf', 'image/svg+xml', 'image/tiff']

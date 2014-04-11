@@ -6,7 +6,7 @@ WCS Version 1.0.0
 
     >>> from tests.utils import cast_tuple_int_list, scratch_file
     >>> from owslib.wcs import WebCoverageService
-    
+
     >>> wcs=WebCoverageService('http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet')
     >>> wcs.version
     '1.0.0'
@@ -18,8 +18,8 @@ WCS Version 1.0.0
     'IDEE-WCS-UTM30N'
     >>> wcs.provider.name
     u'Instituto Geogr\xe1fico Nacional'
-    >>> wcs.contents.keys()
-    ['MDT25_peninsula_pendientes', 'MDT_peninsula_baleares_aspecto', 'MDT1000_peninsula_baleares', 'MDT500_peninsula_baleares', 'MDT_peninsula_baleares', 'MDT500_peninsula_baleares_pendientes', 'MDT1000_peninsula_baleares_pendientes', 'MDT_peninsula_baleares_pendientes', 'MDT25_peninsula_ZIP', 'MDT25_peninsula_aspecto', 'MDT500_peninsula_baleares_aspecto', 'MDT1000_peninsula_baleares_aspecto']
+    >>> sorted(wcs.contents.keys())
+    ['MDT1000_peninsula_baleares', 'MDT1000_peninsula_baleares_aspecto', 'MDT1000_peninsula_baleares_pendientes', 'MDT25_peninsula_ZIP', 'MDT25_peninsula_aspecto', 'MDT25_peninsula_pendientes', 'MDT500_peninsula_baleares', 'MDT500_peninsula_baleares_aspecto', 'MDT500_peninsula_baleares_pendientes', 'MDT_peninsula_baleares', 'MDT_peninsula_baleares_aspecto', 'MDT_peninsula_baleares_pendientes']
     >>> cvg=wcs['MDT25_peninsula_pendientes']
     >>> cvg.title
     'MDT25 Pendientes Peninsula'
@@ -27,10 +27,10 @@ WCS Version 1.0.0
     [-8, 35, 3, 43]
     >>> cvg.timelimits
     []
-    >>> cvg.supportedFormats
-    ['GeoTIFF', 'AsciiGrid', 'FloatGrid_Zip']
-    >>> map(lambda x: x.getcode(), cvg.supportedCRS)
-    ['EPSG:4326', 'EPSG:4230', 'EPSG:23028', 'EPSG:23029', 'EPSG:23030', 'EPSG:23031', 'EPSG:23030']
+    >>> sorted(cvg.supportedFormats)
+    ['AsciiGrid', 'FloatGrid_Zip', 'GeoTIFF']
+    >>> sorted(map(lambda x: x.getcode(), cvg.supportedCRS))
+    ['EPSG:23028', 'EPSG:23029', 'EPSG:23030', 'EPSG:23030', 'EPSG:23031', 'EPSG:4230', 'EPSG:4326']
     >>> output=wcs.getCoverage(identifier='MDT25_peninsula_pendientes',bbox=(600000,4200000,601000,4201000),crs='EPSG:23030', format='AsciiGrid', resX=25, resY=25)
     >>> f=open(scratch_file('test_idee.grd'), 'wb')
     >>> f.write(output.read())
