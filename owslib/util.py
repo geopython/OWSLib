@@ -455,3 +455,10 @@ except AttributeError:
             pass
 log = logging.getLogger('owslib')
 log.addHandler(NullHandler())
+
+# OrderedDict
+try:  # 2.7
+    from collections import OrderedDict
+except:  # 2.6
+    from ordereddict import OrderedDict
+
