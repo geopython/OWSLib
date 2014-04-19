@@ -155,7 +155,9 @@ class OperationsMetadata(object):
         constraints = []
 
         for verb in elem.findall(util.nspath('DCP/HTTP/*', namespace)):
-            methods.append((util.xmltag_split(verb.tag), {'url': verb.attrib[util.nspath('href', XLINK_NAMESPACE)]}))
+            url = util.testXMLAttribute(verb, util.nspath('href', XLINK_NAMESPACE))
+            if url is not None:
+                methods.append((util.xmltag_split(verb.tag), {'url': url}))
         self.methods = dict(methods)
 
         for parameter in elem.findall(util.nspath('Parameter', namespace)):
