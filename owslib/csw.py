@@ -591,7 +591,7 @@ class CatalogueServiceWeb:
             # csw:Query element to the query's xml namespaces.
             for query in self.request.findall(util.nspath_eval('csw:Query', namespaces)):
                 ns = query.get("typeNames", None)
-                if ns is not None and ns != "csw":
+                if ns is not None:
                     # Pull out "gmd" from something like "gmd:MD_Metadata"
                     ns = ns.split(":")[0]
                     self.request = add_namespaces(self.request, ns)
