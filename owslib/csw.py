@@ -25,7 +25,7 @@ from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.namespaces import Namespaces
-from owslib.util import cleanup_namespaces, bind_url
+from owslib.util import cleanup_namespaces, bind_url, add_namespaces
 
 # default variables
 outputformat = 'application/xml'
@@ -587,6 +587,15 @@ class CatalogueServiceWeb:
             self.response = urlopen(self.request, timeout=self.timeout).read()
         else:
             self.request = cleanup_namespaces(self.request)
+            # Add any namespaces used in the "typeNames" attribute of the
+            # csw:Query element to the query's xml namespaces.
+            for query in self.request.findall(util.nspath_eval('csw:Query', namespaces)):
+                ns = query.get("typeNames", None)
+                if ns is not None:
+                    # Pull out "gmd" from something like "gmd:MD_Metadata"
+                    ns = ns.split(":")[0]
+                    self.request = add_namespaces(self.request, ns)
+
             self.request = util.xml2string(etree.tostring(self.request))
 
             self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
