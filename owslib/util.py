@@ -12,6 +12,7 @@ from dateutil import parser
 from datetime import datetime
 import pytz
 from owslib.etree import etree
+from owslib.namespaces import Namespaces
 import urlparse, urllib2
 from urllib2 import urlopen, HTTPError, Request
 from urllib2 import HTTPPasswordMgrWithDefaultRealm
@@ -20,6 +21,7 @@ from StringIO import StringIO
 import cgi
 from urllib import urlencode
 import re
+from copy import deepcopy
 
 
 """
@@ -215,6 +217,46 @@ def cleanup_namespaces(element):
         return element
     else:
         return etree.fromstring(etree.tostring(element))
+
+
+def add_namespaces(root, ns_keys):
+    if isinstance(ns_keys, basestring):
+        ns_keys = [ns_keys]
+
+    namespaces = Namespaces()
+
+    ns_keys = map(lambda x: (x, namespaces.get_namespace(x)), ns_keys)
+
+    if etree.__name__ != 'lxml.etree':
+        # We can just add more namespaces when not using lxml.
+        # We can't re-add an existing namespaces.  Get a list of current
+        # namespaces in use
+        existing_namespaces = set()
+        for elem in root.getiterator():
+            if elem.tag[0] == "{":
+                uri, tag = elem.tag[1:].split("}")
+                existing_namespaces.add(namespaces.get_namespace_from_url(uri))
+        for key, link in ns_keys:
+            if link is not None and key not in existing_namespaces:
+                root.set("xmlns:%s" % key, link)
+        return root
+    else:
+        # lxml does not support setting xmlns attributes
+        # Update the elements nsmap with new namespaces
+        new_map = root.nsmap
+        for key, link in ns_keys:
+            if link is not None:
+                new_map[key] = link
+        # Recreate the root element with updated nsmap
+        new_root = etree.Element(root.tag, nsmap=new_map)
+        # Carry over attributes
+        for a, v in root.items():
+            new_root.set(a, v)
+        # Carry over children
+        for child in root:
+            new_root.append(deepcopy(child))
+        return new_root
+
 
 def testXMLValue(val, attrib=False):
     """
