@@ -132,7 +132,12 @@ class Namespaces(object):
 
         retval = {}
         for key in keys:
-            if key in self.namespace_dict.keys():
-                retval[key] = self.namespace_dict[key]
+            retval[key] = self.get_namespace(key)
 
         return retval
+
+    def get_namespace_from_url(self, url):
+        for k, v in self.namespace_dict.items():
+            if v == url:
+                return k
+        return None
