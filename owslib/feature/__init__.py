@@ -11,15 +11,17 @@ from urllib import urlencode
 import logging
 from owslib.util import log
 
+
 class WebFeatureService_:
+
     """Base class for WebFeatureService implementations"""
 
-    def getBBOXKVP (self,bbox,typename):
+    def getBBOXKVP(self, bbox, typename):
         """Formate bounding box for KVP request type (HTTP GET)
 
         @param bbox: (minx,miny,maxx,maxy[,srs])
         @type bbox: List
-        @param typename:  feature name 
+        @param typename:  feature name
         @type typename: String
         @returns: String properly formated according to version and
             coordinate reference system
@@ -28,34 +30,34 @@ class WebFeatureService_:
 
         # srs of the bbox is specified in the bbox as fifth paramter
         if len(bbox) == 5:
-            srs = self.getSRS(bbox[4],typename[0])
+            srs = self.getSRS(bbox[4], typename[0])
         # take default srs
         else:
             srs = self.contents[typename[0]].crsOptions[0]
 
         # 1.1.0 and 2.0.0 have same encoding
-        if self.version in ["1.1.0","2.0.0"]:
+        if self.version in ["1.1.0", "2.0.0"]:
 
             # format bbox parameter
-            if srs.encoding == "urn" :
-                    if srs.axisorder == "yx":
-                        return "%s,%s,%s,%s,%s" % \
-                            (bbox[1],bbox[0],bbox[3],bbox[2],srs.getcodeurn())
-                    else:
-                        return "%s,%s,%s,%s,%s" % \
-                        (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcodeurn())
+            if srs.encoding == "urn":
+                if srs.axisorder == "yx":
+                    return "%s,%s,%s,%s,%s" % \
+                        (bbox[1], bbox[0], bbox[3], bbox[2], srs.getcodeurn())
+                else:
+                    return "%s,%s,%s,%s,%s" % \
+                        (bbox[0], bbox[1], bbox[2], bbox[3], srs.getcodeurn())
             else:
                 return "%s,%s,%s,%s,%s" % \
-                        (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcode())
+                    (bbox[0], bbox[1], bbox[2], bbox[3], srs.getcode())
         # 1.0.0
         else:
             return "%s,%s,%s,%s,%s" % \
-                    (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcode())
+                (bbox[0], bbox[1], bbox[2], bbox[3], srs.getcode())
 
     def getSRS(self, srsname, typename):
         """Returns None or Crs object for given name
 
-        @param typename:  feature name 
+        @param typename:  feature name
         @type typename: String
         """
         if not isinstance(srsname, Crs):
@@ -75,13 +77,13 @@ class WebFeatureService_:
             return None
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
-                   featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   outputFormat=None, method='Get'):
+                                featureversion=None, propertyname=None, maxfeatures=None, storedQueryID=None, storedQueryParams={},
+                                outputFormat=None, method='Get'):
         """Formulate proper GetFeature request using KVP encoding
         ----------
         typename : list
             List of typenames (string)
-        filter : string 
+        filter : string
             XML-encoded OGC filter expression.
         bbox : tuple
             (left, bottom, right, top) in the feature type's coordinates == (minx, miny, maxx, maxy)
@@ -106,33 +108,33 @@ class WebFeatureService_:
         """
 
         base_url = self.getOperationByName('GetFeature').methods[method]['url']
-        base_url = base_url if base_url.endswith("?") else base_url+"?"
-            
+        base_url = base_url if base_url.endswith("?") else base_url + "?"
+
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
-        
+
         # check featureid
         if featureid:
             request['featureid'] = ','.join(featureid)
         elif bbox:
-            request['bbox'] = self.getBBOXKVP(bbox,typename)
+            request['bbox'] = self.getBBOXKVP(bbox, typename)
         elif filter:
             request['query'] = str(filter)
         if typename:
             typename = [typename] if type(typename) == type("") else typename
             request['typename'] = ','.join(typename)
-        if propertyname: 
+        if propertyname:
             request['propertyname'] = ','.join(propertyname)
-        if featureversion: 
+        if featureversion:
             request['featureversion'] = str(featureversion)
-        if maxfeatures: 
+        if maxfeatures:
             request['maxfeatures'] = str(maxfeatures)
-        if storedQueryID: 
-            request['storedQuery_id']=str(storedQueryID)
+        if storedQueryID:
+            request['storedQuery_id'] = str(storedQueryID)
             for param in storedQueryParams:
-                request[param]=storedQueryParams[param]
+                request[param] = storedQueryParams[param]
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
 
         data = urlencode(request)
 
-        return base_url+data
+        return base_url + data

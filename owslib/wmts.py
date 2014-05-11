@@ -35,7 +35,9 @@ from fgdc import Metadata
 from iso import MD_Metadata
 from ows import ServiceProvider, ServiceIdentification, OperationsMetadata
 
+
 class ServiceException(Exception):
+
     """WMTS ServiceException
 
     Attributes:
@@ -56,22 +58,22 @@ class CapabilitiesError(Exception):
 
 
 class WebMapTileService(object):
+
     """Abstraction for OGC Web Map Tile Service (WMTS).
 
     Implements IWebMapService.
     """
 
-    def __getitem__(self,name):
+    def __getitem__(self, name):
         ''' check contents dictionary to allow dict like access to service layers'''
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError, "No content named %s" % name
 
-
     def __init__(self, url, version='1.0.0', xml=None,
-                username=None, password=None, parse_remote_metadata=False
-                ):
+                 username=None, password=None, parse_remote_metadata=False
+                 ):
         """Initialize."""
         self.url = url
         self.username = username
@@ -81,8 +83,8 @@ class WebMapTileService(object):
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(
-                self.version, url=self.url, un=self.username, pw=self.password
-                )
+            self.version, url=self.url, un=self.username, pw=self.password
+        )
 
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
@@ -103,34 +105,34 @@ class WebMapTileService(object):
         if not self._capabilities:
             reader = WMTSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
-                )
+            )
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
 
     def _buildMetadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
 
-        #serviceIdentification metadata
-        serviceident=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceIdentification')
-        self.identification=ServiceIdentification(serviceident)
+        # serviceIdentification metadata
+        serviceident = self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceIdentification')
+        self.identification = ServiceIdentification(serviceident)
 
-        #serviceProvider metadata
-        serviceprov=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceProvider')
-        self.provider=ServiceProvider(serviceprov)
+        # serviceProvider metadata
+        serviceprov = self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceProvider')
+        self.provider = ServiceProvider(serviceprov)
 
-        #serviceOperations metadata
-        self.operations=[]
+        # serviceOperations metadata
+        self.operations = []
         for elem in self._capabilities.find('{http://www.opengis.net/ows/1.1}OperationsMetadata')[:]:
             self.operations.append(OperationsMetadata(elem))
 
-        #serviceContents metadata: our assumption is that services use a top-level
-        #layer as a metadata organizer, nothing more.
-        self.contents={}
+        # serviceContents metadata: our assumption is that services use a top-level
+        # layer as a metadata organizer, nothing more.
+        self.contents = {}
         caps = self._capabilities.find('{http://www.opengis.net/wmts/1.0}Contents')
 
         def gather_layers(parent_elem, parent_metadata):
             for index, elem in enumerate(parent_elem.findall('{http://www.opengis.net/wmts/1.0}Layer')):
-                cm = ContentMetadata(elem, parent=parent_metadata, index=index+1, parse_remote_metadata=parse_remote_metadata)
+                cm = ContentMetadata(elem, parent=parent_metadata, index=index + 1, parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
                         raise KeyError('Content metadata for layer "%s" already exists' % cm.id)
@@ -162,9 +164,9 @@ class WebMapTileService(object):
 
     def items(self):
         '''supports dict-like items() access'''
-        items=[]
+        items = []
         for item in self.contents:
-            items.append((item,self.contents[item]))
+            items.append((item, self.contents[item]))
         return items
 
     def buildTileRequest(self, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
@@ -181,9 +183,9 @@ class WebMapTileService(object):
         if tilematrix is None:
             raise ValueError("tilematrix (zoom level) is mandatory (cannot be None)")
         if row is None:
-                raise ValueError("row is mandatory (cannot be None)")
+            raise ValueError("row is mandatory (cannot be None)")
         if column is None:
-                raise ValueError("column is mandatory (cannot be None)")
+            raise ValueError("column is mandatory (cannot be None)")
 
         request = list()
         request.append(('SERVICE', 'WMTS'))
@@ -200,7 +202,6 @@ class WebMapTileService(object):
         data = urlencode(request, True)
         return data
 
-
     def gettile(self, base_url=None, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
         """Request a tile from a WMTS server
         """
@@ -208,7 +209,7 @@ class WebMapTileService(object):
 
         if base_url is None:
             base_url = self.getOperationByName('GetTile').methods['Get']['url']
-        u = openURL(base_url, data, username = self.username, password = self.password)
+        u = openURL(base_url, data, username=self.username, password=self.password)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -234,8 +235,11 @@ class WebMapTileService(object):
                 return item
         raise KeyError, "No operation named %s" % name
 
+
 class TileMatrixSet(object):
+
     '''Holds one TileMatrixSet'''
+
     def __init__(self, elem):
         if elem.tag != '{http://www.opengis.net/wmts/1.0}TileMatrixSet':
             raise ValueError('%s should be a TileMatrixSet' % (elem,))
@@ -251,8 +255,11 @@ class TileMatrixSet(object):
                     raise KeyError('TileMatrix with identifier "%s" already exists' % tm.identifier)
                 self.tilematrix[tm.identifier] = tm
 
+
 class TileMatrix(object):
+
     '''Holds one TileMatrix'''
+
     def __init__(self, elem):
         if elem.tag != '{http://www.opengis.net/wmts/1.0}TileMatrix':
             raise ValueError('%s should be a TileMatrix' % (elem,))
@@ -279,10 +286,13 @@ class TileMatrix(object):
         self.matrixwidth = int(mw)
         self.matrixheight = int(mh)
 
+
 class Theme:
+
     """
     Abstraction for a WMTS theme
     """
+
     def __init__(self, elem):
         if elem.tag != '{http://www.opengis.net/wmts/1.0}Theme':
             raise ValueError('%s should be a Theme' % (elem,))
@@ -304,12 +314,15 @@ class Theme:
             if layerRef.text is not None:
                 self.layerRefs.append(layerRef.text)
 
+
 class ContentMetadata:
+
     """
     Abstraction for WMTS layer metadata.
 
     Implements IContentMetadata.
     """
+
     def __init__(self, elem, parent=None, index=0, parse_remote_metadata=False):
         if elem.tag != '{http://www.opengis.net/wmts/1.0}Layer':
             raise ValueError('%s should be a Layer' % (elem,))
@@ -337,7 +350,7 @@ class ContentMetadata:
             uc = b.find("{http://www.opengis.net/ows/1.1}UpperCorner")
             ll = [float(s) for s in lc.text.split()]
             ur = [float(s) for s in uc.text.split()]
-            self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
+            self.boundingBoxWGS84 = (ll[0], ll[1], ur[0], ur[1])
         # TODO: there is probably some more logic here, and it should probably be shared code
 
         self.tilematrixsets = [f.text.strip() for f in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSetLink/{http://www.opengis.net/wmts/1.0}TileMatrixSet')]
@@ -349,7 +362,7 @@ class ContentMetadata:
                 resource[attrib] = resourceURL.attrib[attrib]
             self.resourceURLs.append(resource)
 
-        #Styles
+        # Styles
         self.styles = {}
         for s in elem.findall('{http://www.opengis.net/wmts/1.0}Style'):
             style = {}
@@ -376,10 +389,12 @@ class ContentMetadata:
 
 
 class OperationsMetadata:
+
     """Abstraction for WMTS OperationsMetadata.
 
     Implements IOperationMetadata.
     """
+
     def __init__(self, elem):
         """."""
         self.name = elem.attrib['name']
@@ -394,12 +409,14 @@ class OperationsMetadata:
                 if constraint.attrib['name'] == "GetEncoding":
                     for encoding in constraint.findall('{http://www.opengis.net/ows/1.1}AllowedValues/{http://www.opengis.net/ows/1.1}Value'):
                         encodings.append(encoding.text)
-            if len(encodings) < 1: # KVP is only a SHOULD requirement, and SFS doesn't provide it.
+            if len(encodings) < 1:  # KVP is only a SHOULD requirement, and SFS doesn't provide it.
                 encodings = ['KVP']
             methods.append(('Get', {'url': url, 'encodings': encodings}))
         self.methods = dict(methods)
 
+
 class WMTSCapabilitiesReader:
+
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
@@ -439,9 +456,9 @@ class WMTSCapabilitiesReader:
         """
         getcaprequest = self.capabilities_url(service_url)
 
-        #now split it up again to use the generic openURL function...
-        spliturl=getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
+        # now split it up again to use the generic openURL function...
+        spliturl = getcaprequest.split('?')
+        u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password)
         return etree.fromstring(u.read())
 
     def readString(self, st):

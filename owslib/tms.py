@@ -20,26 +20,27 @@ from .util import openURL, testXMLValue
 
 FORCE900913 = False
 
+
 def force900913(epsg):
-# http://osgeo-org.1560.n6.nabble.com/OSGEO-code-td3852851.html
-# "EPSG:900913" = ["OSGEO:41001", "EPSG:3785", "EPSG:3857", "EPSG:54004"]
-    if  FORCE900913 and epsg.upper() in ["OSGEO:41001", "EPSG:3785",
+    # http://osgeo-org.1560.n6.nabble.com/OSGEO-code-td3852851.html
+    # "EPSG:900913" = ["OSGEO:41001", "EPSG:3785", "EPSG:3857", "EPSG:54004"]
+    if FORCE900913 and epsg.upper() in ["OSGEO:41001", "EPSG:3785",
                                         "EPSG:3857", "EPSG:54004"]:
         return "EPSG:900913"
     else:
         return epsg
 
 
-
 class TileMapService(object):
+
     """Abstraction for OGC Tile Map Service (TMS).
 
     Implements IWebMapService.
     """
 
     def __init__(self, url, version='1.0.0', xml=None,
-                username=None, password=None, parse_remote_metadata=False
-                ):
+                 username=None, password=None, parse_remote_metadata=False
+                 ):
         """Initialize."""
         self.url = url
         self.username = username
@@ -47,12 +48,12 @@ class TileMapService(object):
         self.version = version
         self.services = None
         self._capabilities = None
-        self.contents={}
+        self.contents = {}
 
         # Authentication handled by Reader
         reader = TMSCapabilitiesReader(
-                self.version, url=self.url, un=self.username, pw=self.password
-                )
+            self.version, url=self.url, un=self.username, pw=self.password
+        )
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -61,23 +62,21 @@ class TileMapService(object):
         # build metadata objects
         self._buildMetadata(parse_remote_metadata)
 
-
     def _getcapproperty(self):
         if not self._capabilities:
             reader = TMSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
-                )
+            )
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
-
 
     def _buildMetadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
         if self._capabilities.attrib.get('version'):
             self.version = self._capabilities.attrib.get('version')
-        self.identification=ServiceIdentification(self._capabilities, self.version)
+        self.identification = ServiceIdentification(self._capabilities, self.version)
 
-        self.contents={}
+        self.contents = {}
         tilemaps = self._capabilities.find('TileMaps')
         if tilemaps is not None:
             for tilemap in tilemaps.findall('TileMap'):
@@ -95,41 +94,41 @@ class TileMapService(object):
 
     def items(self, srs=None, profile=None):
         '''supports dict-like items() access'''
-        items=[]
+        items = []
         if not srs and not profile:
             for item in self.contents:
-                items.append((item,self.contents[item]))
+                items.append((item, self.contents[item]))
         elif srs and profile:
             for item in self.contents:
                 if (self.contents[item].srs == srs and
-                    self.contents[item].profile == profile):
-                    items.append((item,self.contents[item]))
+                        self.contents[item].profile == profile):
+                    items.append((item, self.contents[item]))
         elif srs:
             for item in self.contents:
                 if self.contents[item].srs == srs:
-                    items.append((item,self.contents[item]))
+                    items.append((item, self.contents[item]))
         elif profile:
-             for item in self.contents:
+            for item in self.contents:
                 if self.contents[item].profile == profile:
-                    items.append((item,self.contents[item]))
+                    items.append((item, self.contents[item]))
         return items
 
-    def _gettilefromset(self, tilesets, x, y,z, ext):
+    def _gettilefromset(self, tilesets, x, y, z, ext):
         for tileset in tilesets:
             if tileset['order'] == z:
-                url = tileset['href'] + '/' + str(x) +'/' + str(y) + '.' + ext
-                u = openURL(url, '', username = self.username,
-                            password = self.password)
+                url = tileset['href'] + '/' + str(x) + '/' + str(y) + '.' + ext
+                u = openURL(url, '', username=self.username,
+                            password=self.password)
                 return u
         else:
             raise ValueError('cannot find zoomlevel %i for TileMap' % z)
 
-    def gettile(self, x,y,z, id=None, title=None, srs=None, mimetype=None):
+    def gettile(self, x, y, z, id=None, title=None, srs=None, mimetype=None):
         if not id and not title and not srs:
             raise ValueError('either id or title and srs must be specified')
         if id:
             return self._gettilefromset(self.contents[id].tilemap.tilesets,
-                x, y, z, self.contents[id].tilemap.extension)
+                                        x, y, z, self.contents[id].tilemap.extension)
 
         elif title and srs:
             for tm in self.contents.values():
@@ -137,26 +136,26 @@ class TileMapService(object):
                     if mimetype:
                         if tm.tilemap.mimetype == mimetype:
                             return self._gettilefromset(tm.tilemap.tilesets,
-                                x, y, z, tm.tilemap.extension)
+                                                        x, y, z, tm.tilemap.extension)
                     else:
-                        #if no format is given we return the tile from the
+                        # if no format is given we return the tile from the
                         # first tilemap that matches name and srs
                         return self._gettilefromset(tm.tilemap.tilesets,
-                            x, y,z, tm.tilemap.extension)
+                                                    x, y, z, tm.tilemap.extension)
             else:
                 raise ValueError('cannot find %s with projection %s for zoomlevel %i'
-                        %(title, srs, z) )
+                                 % (title, srs, z))
         elif title or srs:
             ValueError('both title and srs must be specified')
         raise ValueError('''Specified Tile with id %s, title %s
                 projection %s format %s at zoomlevel %i cannot be found'''
-                %(id, title, srs, format, z))
+                         % (id, title, srs, format, z))
 
 
 class ServiceIdentification(object):
 
     def __init__(self, infoset, version):
-        self._root=infoset
+        self._root = infoset
         if self._root.tag != 'TileMapService':
             raise ServiceException
         self.version = version
@@ -170,9 +169,11 @@ class ServiceIdentification(object):
 
 
 class ContentMetadata(object):
+
     """
     Abstraction for TMS layer metadata.
     """
+
     def __str__(self):
         return 'Layer Title: %s, URL: %s' % (self.title, self.id)
 
@@ -193,7 +194,6 @@ class ContentMetadata(object):
             self._tile_map = TileMap(self.id, un=self.username, pw=self.password)
             assert(self._tile_map.srs == self.srs)
         return self._tile_map
-
 
     @property
     def tilemap(self):
@@ -255,7 +255,6 @@ class TileMap(object):
         elif url:
             self.read(url)
 
-
     def _parse(self, elem):
         if elem.tag != 'TileMap':
             raise ValueError('%s should be a TileMap' % (elem,))
@@ -292,7 +291,7 @@ class TileMap(object):
                     'order': order})
 
     def read(self, url):
-        u = openURL(url, '', method='Get', username = self.username, password = self.password)
+        u = openURL(url, '', method='Get', username=self.username, password=self.password)
         self._parse(etree.fromstring(u.read()))
 
     def readString(self, st):
@@ -301,8 +300,8 @@ class TileMap(object):
         self._parse(etree.fromstring(st))
 
 
-
 class TMSCapabilitiesReader(object):
+
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
@@ -314,12 +313,11 @@ class TMSCapabilitiesReader(object):
         self.username = un
         self.password = pw
 
-
     def read(self, service_url):
         """Get and parse a TMS capabilities document, returning an
         elementtree instance
         """
-        u = openURL(service_url, '', method='Get', username = self.username, password = self.password)
+        u = openURL(service_url, '', method='Get', username=self.username, password=self.password)
         return etree.fromstring(u.read())
 
     def readString(self, st):

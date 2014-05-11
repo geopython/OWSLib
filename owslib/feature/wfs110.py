@@ -22,17 +22,21 @@ from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
 from owslib.util import log
 
+
 def get_namespaces():
     n = Namespaces()
-    return n.get_namespaces(["gml","ogc","ows","wfs"])
+    return n.get_namespaces(["gml", "ogc", "ows", "wfs"])
 namespaces = get_namespaces()
 
+
 class WebFeatureService_1_1_0(WebFeatureService_):
+
     """Abstraction for OGC Web Feature Service (WFS).
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, parse_remote_metadata=False):
+
+    def __new__(self, url, version, xml, parse_remote_metadata=False):
         """ overridden __new__ method
 
         @type url: string
@@ -43,17 +47,16 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         @param parse_remote_metadata: whether to fully process MetadataURL elements
         @return: initialized WebFeatureService_1_1_0 object
         """
-        obj=object.__new__(self)
+        obj = object.__new__(self)
         obj.__init__(url, version, xml, parse_remote_metadata)
         return obj
 
-    def __getitem__(self,name):
+    def __getitem__(self, name):
         ''' check contents dictionary to allow dict like access to service layers'''
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError, "No content named %s" % name
-
 
     def __init__(self, url, version, xml=None, parse_remote_metadata=False):
         """Initialize."""
@@ -73,31 +76,31 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         # ServiceIdentification
         val = self._capabilities.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
-        self.identification=ServiceIdentification(val,self.owscommon.namespace)
+        self.identification = ServiceIdentification(val, self.owscommon.namespace)
         # ServiceProvider
         val = self._capabilities.find(util.nspath_eval('ows:ServiceProvider', namespaces))
-        self.provider=ServiceProvider(val,self.owscommon.namespace)
+        self.provider = ServiceProvider(val, self.owscommon.namespace)
         # ServiceOperations metadata
-        self.operations=[]
+        self.operations = []
         for elem in self._capabilities.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
             self.operations.append(OperationsMetadata(elem, self.owscommon.namespace))
 
         # FilterCapabilities
         val = self._capabilities.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
-        self.filters=FilterCapabilities(val)
+        self.filters = FilterCapabilities(val)
 
-        #serviceContents metadata: our assumption is that services use a top-level
-        #layer as a metadata organizer, nothing more.
+        # serviceContents metadata: our assumption is that services use a top-level
+        # layer as a metadata organizer, nothing more.
 
-        self.contents={}
+        self.contents = {}
         features = self._capabilities.findall(nspath_eval('wfs:FeatureTypeList/wfs:FeatureType', namespaces))
         for feature in features:
-            cm=ContentMetadata(feature, parse_remote_metadata)
-            self.contents[cm.id]=cm
+            cm = ContentMetadata(feature, parse_remote_metadata)
+            self.contents[cm.id] = cm
 
-        #exceptions
-        self.exceptions = [f.text for f \
-                in self._capabilities.findall('Capability/Exception/Format')]
+        # exceptions
+        self.exceptions = [f.text for f
+                           in self._capabilities.findall('Capability/Exception/Format')]
 
     def getcapabilities(self, timeout=30):
         """Request and return capabilities document from the WFS as a
@@ -108,9 +111,9 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
     def items(self):
         '''supports dict-like items() access'''
-        items=[]
+        items = []
         for item in self.contents:
-            items.append((item,self.contents[item]))
+            items.append((item, self.contents[item]))
         return items
 
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
@@ -237,8 +240,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         raise KeyError, "No operation named %s" % name
 
 
-
 class ContentMetadata:
+
     """Abstraction for WFS metadata.
 
     Implements IMetadata.
@@ -256,9 +259,9 @@ class ContentMetadata:
         b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)), namespaces['ows'])
         if b is not None:
             self.boundingBoxWGS84 = (
-                    float(b.minx), float(b.miny),
-                    float(b.maxx), float(b.maxy),
-                    )
+                float(b.minx), float(b.miny),
+                float(b.maxx), float(b.maxy),
+            )
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
         dsrs = testXMLValue(elem.find(nspath_eval('wfs:DefaultSRS', namespaces)))
@@ -294,12 +297,14 @@ class ContentMetadata:
 
             self.metadataUrls.append(metadataUrl)
 
-        #others not used but needed for iContentMetadata harmonisation
-        self.styles=None
-        self.timepositions=None
-        self.defaulttimeposition=None
+        # others not used but needed for iContentMetadata harmonisation
+        self.styles = None
+        self.timepositions = None
+        self.defaulttimeposition = None
+
 
 class WFSCapabilitiesReader(object):
+
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
@@ -351,4 +356,3 @@ class WFSCapabilitiesReader(object):
         if not isinstance(st, str):
             raise ValueError("String must be of type string, not %s" % type(st))
         return etree.fromstring(st)
-

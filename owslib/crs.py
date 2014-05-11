@@ -1717,7 +1717,9 @@ axisorder_yx = frozenset([
     31700
 ])
 
+
 class Crs(object):
+
     """Initialize a CRS construct
 
         :param string crs: the Coordinate reference system. Examples:
@@ -1729,6 +1731,7 @@ class Crs(object):
           * urn:ogc:def:crs:EPSG:4326
         :param string axisorder: Force / override axisorder ('xy' or 'yx')
     """
+
     def __init__(self, crs, axisorder=None):
         self.id = crs
         self.naming_authority = None
@@ -1745,7 +1748,7 @@ class Crs(object):
 
         values = self.id.split(':')
 
-        if self.id.find('/def/crs/') != -1: # URI Style 1
+        if self.id.find('/def/crs/') != -1:  # URI Style 1
             self.encoding = "uri"
             vals = self.id.split('/')
             self.authority = vals[5].upper()
@@ -1790,7 +1793,6 @@ class Crs(object):
             if self.code in axisorder_yx:
                 self.axisorder = 'yx'
 
-
     def getcode(self):
         """Create for example "EPSG:4326" string and return back
 
@@ -1808,10 +1810,10 @@ class Crs(object):
         """
 
         return 'urn:%s:def:crs:%s:%s:%s' % (
-                    (self.naming_authority and self.naming_authority or "ogc"),
-                                    (self.authority or ""),
-                                    (self.version or ""),
-                                    (self.code or ""))
+            (self.naming_authority and self.naming_authority or "ogc"),
+            (self.authority or ""),
+            (self.version or ""),
+            (self.code or ""))
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):

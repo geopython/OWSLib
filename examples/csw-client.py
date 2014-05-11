@@ -13,6 +13,7 @@ import getopt
 
 from owslib.csw import CatalogueServiceWeb
 
+
 def usage():
     print """
     %s [options]
@@ -35,7 +36,7 @@ Request Specific Parameters
 ---------------------------
 
 DescribeRecord
-    --typename=[TypeName] the typename to describe 
+    --typename=[TypeName] the typename to describe
 
 GetDomain
     --dname=[NAME] the domain to query
@@ -108,7 +109,7 @@ for o, a in opts:
     elif o in '--dname':
         dname = a
     elif o in '--dtype':
-        dtype= a
+        dtype = a
     elif o in '--version':
         version = a
     elif o in '--lang':
@@ -125,7 +126,7 @@ if request is None or url is None:
     sys.exit(3)
 
 if schema == 'iso':
-  outputschema = 'http://www.isotc211.org/2005/gmd'
+    outputschema = 'http://www.isotc211.org/2005/gmd'
 
 # init
 c = CatalogueServiceWeb(url, lang, version)
@@ -141,10 +142,10 @@ elif request == 'GetDomain':
 elif request == 'GetRecords':
     c.getrecords(qtype, [keyword], bbox, esn, sortby, schema)
 
-if print_request is True: # print the request
+if print_request is True:  # print the request
     print c.request
 
-if validate is True: # do XML validation
+if validate is True:  # do XML validation
     print 'Validating request XML'
     if util.xmlvalid(c.request, csw.schema_location.split()[1]) is True:
         print 'request is valid XML'
@@ -153,4 +154,3 @@ if validate is True: # do XML validation
 
 # print response
 print c.response
-

@@ -15,7 +15,7 @@ for operation in wps.operations:
     print 'WPS Operation: %s' % operation.name
 for process in wps.processes:
     print 'WPS Process: identifier=%s title=%s' % (process.identifier, process.title)
-    
+
 # 2) DescribeProcess
 process = wps.describeprocess('v.net.path')
 # alternatively, read process description from XML file (no live request to WPS server)
@@ -28,11 +28,11 @@ for input in process.dataInputs:
     print 'Process input: identifier=%s, data type=%s, minOccurs=%d, maxOccurs=%d' % (input.identifier, input.dataType, input.minOccurs, input.maxOccurs)
 for output in process.processOutputs:
     print 'Process output: identifier=%s, data type=%s' % (output.identifier, output.dataType)
-    
+
 # 3) Execute
 # GET request: http://rsg.pml.ac.uk/wps/vector.cgi?request=execute&service=WPS&version=1.0.0&identifier=v.net.path&datainputs=[input=http://rsg.pml.ac.uk/wps/example/graph.gml;file=1%20-960123.1421801624%204665723.56559387%20-101288.65106088226%205108200.011823481]
 processid = "v.net.path"
-inputs = [ ("input","http://rsg.pml.ac.uk/wps/example/graph.gml"),
-           ("file","1 -960123.1421801624 4665723.56559387 -101288.65106088226 5108200.011823481")]
+inputs = [("input", "http://rsg.pml.ac.uk/wps/example/graph.gml"),
+          ("file", "1 -960123.1421801624 4665723.56559387 -101288.65106088226 5108200.011823481")]
 execution = wps.execute(processid, inputs)
 monitorExecution(execution)

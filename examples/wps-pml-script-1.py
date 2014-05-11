@@ -15,7 +15,7 @@ for operation in wps.operations:
     print 'WPS Operation: %s' % operation.name
 for process in wps.processes:
     print 'WPS Process: identifier=%s title=%s' % (process.identifier, process.title)
-    
+
 # 2) DescribeProcess
 process = wps.describeprocess('reprojectImage')
 print 'WPS Process: identifier=%s' % process.identifier
@@ -25,23 +25,23 @@ for input in process.dataInputs:
     print 'Process input: identifier=%s, data type=%s, minOccurs=%d, maxOccurs=%d' % (input.identifier, input.dataType, input.minOccurs, input.maxOccurs)
 for output in process.processOutputs:
     print 'Process output: identifier=%s, data type=%s' % (output.identifier, output.dataType)
-    
+
 # 3a) Execute
 # GET request: http://rsg.pml.ac.uk/wps/generic.cgi?request=Execute&service=wps&version=1.0.0&identifier=reprojectImage&datainputs=[inputImage=http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img;outputSRS=EPSG:4326]&responsedocument=outputImage=@asreference=true
 processid = "reprojectImage"
-inputs = [ ("inputImage","http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img"),
-           ("outputSRS", "EPSG:4326") ]
+inputs = [("inputImage", "http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img"),
+          ("outputSRS", "EPSG:4326")]
 output = "outputImage"
 execution = wps.execute(processid, inputs, output)
 
 monitorExecution(execution)
-        
+
 # 3b) Execute
 # GET request: http://rsg.pml.ac.uk/wps/generic.cgi?request=Execute&service=WPS&version=1.0.0&identifier=reprojectCoords&datainputs=[coords=http://rsg.pml.ac.uk/wps/testdata/coords.txt;outputSRS=EPSG:32630;inputSRS=EPSG:4326]
 processid = "reprojectCoords"
-inputs = [ ("coords","http://rsg.pml.ac.uk/wps/testdata/coords.txt"),
-           ("outputSRS", "EPSG:32630"),
-           ("inputSRS","EPSG:4326") ]
+inputs = [("coords", "http://rsg.pml.ac.uk/wps/testdata/coords.txt"),
+          ("outputSRS", "EPSG:32630"),
+          ("inputSRS", "EPSG:4326")]
 execution = wps.execute(processid, inputs)
 
 monitorExecution(execution)

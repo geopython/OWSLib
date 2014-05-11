@@ -20,13 +20,14 @@ if len(sys.argv) < 3:
     print 'Usage: %s <path/to/gmxCodelists.xml> <CodeListDictionary>' % sys.argv[0]
     sys.exit(1)
 
-e=etree.parse(sys.argv[1])
-c=CodelistCatalogue(e)
+e = etree.parse(sys.argv[1])
+c = CodelistCatalogue(e)
 
 clds = c.getcodelistdictionaries()
 
+
 def valid_clds():
-    return  '''
+    return '''
 Valid code list dictionaries are:
 
 %s
@@ -46,7 +47,7 @@ if cld is None:
     print '''
 Invalid code list dictionary: %s
 %s
-''' % (sys.argv[2],valid_clds())
+''' % (sys.argv[2], valid_clds())
     sys.exit(2)
 
 print '''
@@ -57,4 +58,4 @@ codeEntry's:
 
  %s
 
-''' % (sys.argv[2],'\n '.join(cld))
+''' % (sys.argv[2], '\n '.join(cld))

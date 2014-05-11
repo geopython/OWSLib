@@ -17,7 +17,7 @@ for operation in wps.operations:
     print 'WPS Operation: %s' % operation.name
 for process in wps.processes:
     print 'WPS Process: identifier=%s title=%s' % (process.identifier, process.title)
-    
+
 # 2) DescribeProcess
 # GET request: http://ceda-wps2.badc.rl.ac.uk/wps?identifier=DoubleIt&version=1.0.0&request=DescribeProcess&service=WPS
 process = wps.describeprocess('DoubleIt')
@@ -39,4 +39,4 @@ for output in process.processOutputs:
 #output = "OutputXML"
 #execution = wps.execute(processid, inputs, output)
 
-#monitorExecution(execution)
+# monitorExecution(execution)

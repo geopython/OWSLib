@@ -8,9 +8,10 @@ from owslib.fes import FilterCapabilities200
 from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
 from owslib.namespaces import Namespaces
 
+
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["fes","ogc","om","gml32","sml","swe20","swes","xlink"])
+    ns = n.get_namespaces(["fes", "ogc", "om", "gml32", "sml", "swe20", "swes", "xlink"])
     ns["ows"] = n.get_namespace("ows110")
     ns["sos"] = n.get_namespace("sos20")
     return ns
@@ -18,19 +19,20 @@ namespaces = get_namespaces()
 
 
 class SensorObservationService_2_0_0(object):
+
     """
         Abstraction for OGC Sensor Observation Service (SOS).
 
         Implements ISensorObservationService.
     """
 
-    def __new__(self,url, version, xml=None, username=None, password=None):
+    def __new__(self, url, version, xml=None, username=None, password=None):
         """overridden __new__ method"""
-        obj=object.__new__(self)
+        obj = object.__new__(self)
         obj.__init__(url, version, xml, username, password)
         return obj
 
-    def __getitem__(self,id):
+    def __getitem__(self, id):
         ''' check contents dictionary to allow dict like access to service observational offerings'''
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[id]
@@ -47,8 +49,8 @@ class SensorObservationService_2_0_0(object):
 
         # Authentication handled by Reader
         reader = SosCapabilitiesReader(
-                version=self.version, url=self.url, username=self.username, password=self.password
-                )
+            version=self.version, url=self.url, username=self.username, password=self.password
+        )
         if xml:  # read from stored xml
             self._capabilities = reader.read_string(xml)
         else:  # read from server
@@ -56,26 +58,26 @@ class SensorObservationService_2_0_0(object):
 
         # Avoid building metadata if the response is an Exception
         se = self._capabilities.find(nspath_eval('ows:ExceptionReport', namespaces))
-        if se is not None: 
-            raise ows.ExceptionReport(se) 
+        if se is not None:
+            raise ows.ExceptionReport(se)
 
         # build metadata objects
         self._build_metadata()
 
     def _build_metadata(self):
-        """ 
+        """
             Set up capabilities metadata objects
         """
         # ows:ServiceIdentification metadata
         service_id_element = self._capabilities.find(nspath_eval('ows:ServiceIdentification', namespaces))
         self.identification = ows.ServiceIdentification(service_id_element)
-        
+
         # ows:ServiceProvider metadata
         service_provider_element = self._capabilities.find(nspath_eval('ows:ServiceProvider', namespaces))
         self.provider = ows.ServiceProvider(service_provider_element)
-            
+
         # ows:OperationsMetadata metadata
-        self.operations= []
+        self.operations = []
         for elem in self._capabilities.findall(nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
             self.operations.append(ows.OperationsMetadata(elem))
 
@@ -95,12 +97,12 @@ class SensorObservationService_2_0_0(object):
             self.offerings.append(off)
 
     def describe_sensor(self, outputFormat=None,
-                              procedure=None,
-                              method='Get',
-                              **kwargs):
+                        procedure=None,
+                        method='Get',
+                        **kwargs):
 
         try:
-            base_url = self.get_operation_by_name('DescribeSensor').methods[method]['url']        
+            base_url = self.get_operation_by_name('DescribeSensor').methods[method]['url']
         except:
             base_url = self.url
         request = {'service': 'SOS', 'version': self.version, 'request': 'DescribeSensor'}
@@ -115,9 +117,9 @@ class SensorObservationService_2_0_0(object):
         # Optional Fields
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
-       
-        data = urlencode(request)        
+                request[kw] = kwargs[kw]
+
+        data = urlencode(request)
 
         response = openURL(base_url, data, method, username=self.username, password=self.password).read()
         tr = etree.fromstring(response)
@@ -128,11 +130,11 @@ class SensorObservationService_2_0_0(object):
         return response
 
     def get_observation(self, responseFormat=None,
-                              offerings=None,
-                              observedProperties=None,
-                              eventTime=None,
-                              method='Get',
-                              **kwargs):
+                        offerings=None,
+                        observedProperties=None,
+                        eventTime=None,
+                        method='Get',
+                        **kwargs):
         """
         Parameters
         ----------
@@ -144,7 +146,7 @@ class SensorObservationService_2_0_0(object):
             anything else e.g. vendor specific parameters
         """
 
-        base_url = self.get_operation_by_name('GetObservation').methods[method]['url']        
+        base_url = self.get_operation_by_name('GetObservation').methods[method]['url']
 
         request = {'service': 'SOS', 'version': self.version, 'request': 'GetObservation'}
 
@@ -164,9 +166,9 @@ class SensorObservationService_2_0_0(object):
 
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
 
-        data = urlencode(request)        
+        data = urlencode(request)
 
         response = openURL(base_url, data, method, username=self.username, password=self.password).read()
         try:
@@ -174,13 +176,13 @@ class SensorObservationService_2_0_0(object):
             if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
                 raise ows.ExceptionReport(tr)
             else:
-                return response                
+                return response
         except ows.ExceptionReport:
             raise
         except BaseException:
             return response
 
-    def get_operation_by_name(self, name): 
+    def get_operation_by_name(self, name):
         """
             Return a Operation item by name, case insensitive
         """
@@ -189,7 +191,9 @@ class SensorObservationService_2_0_0(object):
                 return item
         raise KeyError, "No Operation named %s" % name
 
+
 class SosObservationOffering(object):
+
     def __init__(self, element):
         self._root = element
 
@@ -247,8 +251,10 @@ class SosObservationOffering(object):
 
     def __str__(self):
         return 'Offering id: %s, name: %s' % (self.id, self.name)
-        
+
+
 class SosCapabilitiesReader(object):
+
     def __init__(self, version="2.0.0", url=None, username=None, password=None):
         self.version = version
         self.url = url
@@ -284,7 +290,7 @@ class SosCapabilitiesReader(object):
             version, and request parameters
         """
         getcaprequest = self.capabilities_url(service_url)
-        spliturl=getcaprequest.split('?')
+        spliturl = getcaprequest.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password)
         return etree.fromstring(u.read())
 
@@ -297,4 +303,3 @@ class SosCapabilitiesReader(object):
         if not isinstance(st, str):
             raise ValueError("String must be of type string, not %s" % type(st))
         return etree.fromstring(st)
-

@@ -1,10 +1,13 @@
 from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse, namespaces
 from owslib.etree import etree
 
+
 def ns(namespace):
     return namespaces.get(namespace)
 
+
 class WaterML_1_1(object):
+
     def __init__(self, element):
 
         if isinstance(element, str) or isinstance(element, unicode):

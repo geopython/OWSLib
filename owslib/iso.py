@@ -1,5 +1,5 @@
-# -*- coding: ISO-8859-15 -*- 
-# ============================================================================= 
+# -*- coding: ISO-8859-15 -*-
+# =============================================================================
 # Copyright (c) 2009 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@gmail.com>
@@ -15,16 +15,20 @@ from owslib import util
 from owslib.namespaces import Namespaces
 
 # default variables
+
+
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["gco","gmd","gml","gml32","gmx","gts","srv","xlink"])
+    ns = n.get_namespaces(["gco", "gmd", "gml", "gml32", "gmx", "gts", "srv", "xlink"])
     ns[None] = n.get_namespace("gmd")
     return ns
 namespaces = get_namespaces()
 
 
 class MD_Metadata(object):
+
     """ Process gmd:MD_Metadata """
+
     def __init__(self, md):
 
         if hasattr(md, 'getroot'):  # standalone document
@@ -40,13 +44,13 @@ class MD_Metadata(object):
 
         val = md.find(util.nspath_eval('gmd:language/gco:CharacterString', namespaces))
         self.language = util.testXMLValue(val)
-        
+
         val = md.find(util.nspath_eval('gmd:dataSetURI/gco:CharacterString', namespaces))
         self.dataseturi = util.testXMLValue(val)
 
         val = md.find(util.nspath_eval('gmd:language/gmd:LanguageCode', namespaces))
         self.languagecode = util.testXMLValue(val)
-        
+
         val = md.find(util.nspath_eval('gmd:dateStamp/gco:Date', namespaces))
         self.datestamp = util.testXMLValue(val)
 
@@ -55,17 +59,17 @@ class MD_Metadata(object):
             self.datestamp = util.testXMLValue(val)
 
         self.charset = _testCodeListValue(md.find(util.nspath_eval('gmd:characterSet/gmd:MD_CharacterSetCode', namespaces)))
-  
+
         self.hierarchy = _testCodeListValue(md.find(util.nspath_eval('gmd:hierarchyLevel/gmd:MD_ScopeCode', namespaces)))
 
         self.contact = []
         for i in md.findall(util.nspath_eval('gmd:contact/gmd:CI_ResponsibleParty', namespaces)):
             o = CI_ResponsibleParty(i)
             self.contact.append(o)
-        
+
         val = md.find(util.nspath_eval('gmd:dateStamp/gco:DateTime', namespaces))
         self.datetimestamp = util.testXMLValue(val)
-        
+
         val = md.find(util.nspath_eval('gmd:metadataStandardName/gco:CharacterString', namespaces))
         self.stdname = util.testXMLValue(val)
 
@@ -79,7 +83,7 @@ class MD_Metadata(object):
             self.referencesystem = None
 
         # TODO: merge .identificationinfo into .identification
-        #warnings.warn(
+        # warnings.warn(
         #    'the .identification and .serviceidentification properties will merge into '
         #    '.identification being a list of properties.  This is currently implemented '
         #    'in .identificationinfo.  '
@@ -103,11 +107,11 @@ class MD_Metadata(object):
         for idinfo in md.findall(util.nspath_eval('gmd:identificationInfo', namespaces)):
             val = list(idinfo)[0]
             tagval = util.xmltag_split(val.tag)
-            if tagval == 'MD_DataIdentification': 
+            if tagval == 'MD_DataIdentification':
                 self.identificationinfo.append(MD_DataIdentification(val, 'dataset'))
-            elif tagval == 'MD_ServiceIdentification': 
+            elif tagval == 'MD_ServiceIdentification':
                 self.identificationinfo.append(MD_DataIdentification(val, 'service'))
-            elif tagval == 'SV_ServiceIdentification': 
+            elif tagval == 'SV_ServiceIdentification':
                 self.identificationinfo.append(SV_ServiceIdentification(val))
 
         val = md.find(util.nspath_eval('gmd:distributionInfo/gmd:MD_Distribution', namespaces))
@@ -116,15 +120,18 @@ class MD_Metadata(object):
             self.distribution = MD_Distribution(val)
         else:
             self.distribution = None
-        
+
         val = md.find(util.nspath_eval('gmd:dataQualityInfo/gmd:DQ_DataQuality', namespaces))
         if val is not None:
             self.dataquality = DQ_DataQuality(val)
         else:
             self.dataquality = None
 
+
 class CI_Date(object):
+
     """ process CI_Date """
+
     def __init__(self, md):
         val = md.find(util.nspath_eval('gmd:date/gco:Date', namespaces))
         if val is not None:
@@ -139,8 +146,11 @@ class CI_Date(object):
         val = md.find(util.nspath_eval('gmd:dateType/gmd:CI_DateTypeCode', namespaces))
         self.type = _testCodeListValue(val)
 
+
 class CI_ResponsibleParty(object):
+
     """ process CI_ResponsibleParty """
+
     def __init__(self, md):
         val = md.find(util.nspath_eval('gmd:individualName/gco:CharacterString', namespaces))
         self.name = util.testXMLValue(val)
@@ -178,19 +188,22 @@ class CI_ResponsibleParty(object):
 
         val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:onlineResource/gmd:CI_OnlineResource', namespaces))
         if val is not None:
-          self.onlineresource = CI_OnlineResource(val)
+            self.onlineresource = CI_OnlineResource(val)
         else:
-          self.onlineresource = None
-      
+            self.onlineresource = None
+
         self.role = _testCodeListValue(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
 
+
 class MD_DataIdentification(object):
+
     """ process MD_DataIdentification """
+
     def __init__(self, md, identtype):
         self.identtype = identtype
         val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
         self.title = util.testXMLValue(val)
-        
+
         val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:alternateTitle/gco:CharacterString', namespaces))
         self.alternatetitle = util.testXMLValue(val)
 
@@ -199,28 +212,28 @@ class MD_DataIdentification(object):
 
         self.date = []
         self.datetype = []
-        
+
         for i in md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:date/gmd:CI_Date', namespaces)):
             self.date.append(CI_Date(i))
-        
+
         self.uselimitation = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString', namespaces)):
             val = util.testXMLValue(i)
             if val is not None:
                 self.uselimitation.append(val)
-        
+
         self.accessconstraints = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_RestrictionCode', namespaces)):
             val = _testCodeListValue(i)
             if val is not None:
                 self.accessconstraints.append(val)
-        
+
         self.classification = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_ClassificationCode', namespaces)):
             val = _testCodeListValue(i)
             if val is not None:
                 self.classification.append(val)
-        
+
         self.otherconstraints = []
         for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints/gco:CharacterString', namespaces)):
             val = util.testXMLValue(i)
@@ -238,13 +251,13 @@ class MD_DataIdentification(object):
             val = _testCodeListValue(i)
             if val is not None:
                 self.useconstraints.append(val)
-        
+
         self.denominators = []
         for i in md.findall(util.nspath_eval('gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer', namespaces)):
             val = util.testXMLValue(i)
             if val is not None:
                 self.denominators.append(val)
-        
+
         self.distance = []
         self.uom = []
         for i in md.findall(util.nspath_eval('gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance', namespaces)):
@@ -252,7 +265,7 @@ class MD_DataIdentification(object):
             if val is not None:
                 self.distance.append(val)
             self.uom.append(i.get("uom"))
-        
+
         self.resourcelanguage = []
         for i in md.findall(util.nspath_eval('gmd:language/gmd:LanguageCode', namespaces)):
             val = _testCodeListValue(i)
@@ -261,7 +274,7 @@ class MD_DataIdentification(object):
 
         val = md.find(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName', namespaces))
         if val is not None:
-            val2 = val.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)) 
+            val2 = val.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces))
             if val2 is not None:
                 clv = _testCodeListValue(val)
                 if clv == 'originator':
@@ -286,7 +299,7 @@ class MD_DataIdentification(object):
         for i in md.findall(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty', namespaces)):
             o = CI_ResponsibleParty(i)
             self.contact.append(o)
-        
+
         self.keywords = []
 
         for i in md.findall(util.nspath_eval('gmd:descriptiveKeywords', namespaces)):
@@ -309,7 +322,7 @@ class MD_DataIdentification(object):
             for k in i.findall(util.nspath_eval('gmd:MD_Keywords/gmd:keyword', namespaces)):
                 val = k.find(util.nspath_eval('gco:CharacterString', namespaces))
                 if val is not None:
-                    val2 = util.testXMLValue(val) 
+                    val2 = util.testXMLValue(val)
                     if val2 is not None:
                         mdkw['keywords'].append(val2)
 
@@ -320,10 +333,10 @@ class MD_DataIdentification(object):
             val = util.testXMLValue(i)
             if val is not None:
                 self.topiccategory.append(val)
-        
+
         val = md.find(util.nspath_eval('gmd:supplementalInformation/gco:CharacterString', namespaces))
         self.supplementalinformation = util.testXMLValue(val)
-        
+
         # There may be multiple geographicElement, create an extent
         # from the one containing either an EX_GeographicBoundingBox or EX_BoundingPolygon.
         # The schema also specifies an EX_GeographicDescription. This is not implemented yet.
@@ -353,8 +366,11 @@ class MD_DataIdentification(object):
                     val3 = extent.find(util.nspath_eval('gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml32:TimePeriod/gml32:endPosition', namespaces))
                 self.temporalextent_end = util.testXMLValue(val3)
 
-class MD_Distributor(object):        
+
+class MD_Distributor(object):
+
     """ process MD_Distributor """
+
     def __init__(self, md):
         self.contact = None
         val = md.find(util.nspath_eval('gmd:MD_Distributor/gmd:distributorContact/gmd:CI_ResponsibleParty', namespaces))
@@ -366,8 +382,11 @@ class MD_Distributor(object):
         for ol in md.findall(util.nspath_eval('gmd:MD_Distributor/gmd:distributorTransferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource', namespaces)):
             self.online.append(CI_OnlineResource(ol))
 
+
 class MD_Distribution(object):
+
     """ process MD_Distribution """
+
     def __init__(self, md):
         val = md.find(util.nspath_eval('gmd:distributionFormat/gmd:MD_Format/gmd:name/gco:CharacterString', namespaces))
         self.format = util.testXMLValue(val)
@@ -384,35 +403,37 @@ class MD_Distribution(object):
         for ol in md.findall(util.nspath_eval('gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource', namespaces)):
             self.online.append(CI_OnlineResource(ol))
 
-        
+
 class DQ_DataQuality(object):
+
     ''' process DQ_DataQuality'''
+
     def __init__(self, md):
-        
+
         self.conformancetitle = []
         for i in md.findall(util.nspath_eval('gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces)):
             val = util.testXMLValue(i)
             if val is not None:
                 self.conformancetitle.append(val)
-        
+
         self.conformancedate = []
         for i in md.findall(util.nspath_eval('gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces)):
             val = util.testXMLValue(i)
             if val is not None:
                 self.conformancedate.append(val)
-        
+
         self.conformancedatetype = []
         for i in md.findall(util.nspath_eval('gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces)):
             val = _testCodeListValue(i)
             if val is not None:
                 self.conformancedatetype.append(val)
-        
+
         self.conformancedegree = []
         for i in md.findall(util.nspath_eval('gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:pass/gco:Boolean', namespaces)):
             val = util.testXMLValue(i)
             if val is not None:
                 self.conformancedegree.append(val)
-        
+
         val = md.find(util.nspath_eval('gmd:lineage/gmd:LI_Lineage/gmd:statement/gco:CharacterString', namespaces))
         self.lineage = util.testXMLValue(val)
 
@@ -425,13 +446,16 @@ class DQ_DataQuality(object):
             if val is not None:
                 self.specificationdate.append(val)
 
+
 class SV_ServiceIdentification(object):
+
     """ process SV_ServiceIdentification """
+
     def __init__(self, md):
         self.identtype = 'service'
         val = md.find(util.nspath_eval('srv:serviceType/gco:LocalName', namespaces))
         self.type = util.testXMLValue(val)
-      
+
         val = md.find(util.nspath_eval('srv:serviceTypeVersion/gco:CharacterString', namespaces))
         self.version = util.testXMLValue(val)
 
@@ -457,16 +481,16 @@ class SV_ServiceIdentification(object):
             for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:DCP', namespaces)):
                 tmp2 = _testCodeListValue(d.find(util.nspath_eval('srv:DCPList', namespaces)))
                 tmp['dcplist'].append(tmp2)
-         
+
             tmp['connectpoint'] = []
- 
+
             for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:connectPoint', namespaces)):
                 tmp3 = d.find(util.nspath_eval('gmd:CI_OnlineResource', namespaces))
                 tmp['connectpoint'].append(CI_OnlineResource(tmp3))
             self.operations.append(tmp)
 
         self.operateson = []
-         
+
         for i in md.findall(util.nspath_eval('srv:operatesOn', namespaces)):
             tmp = {}
             tmp['uuidref'] = i.attrib.get('uuidref')
@@ -474,9 +498,12 @@ class SV_ServiceIdentification(object):
             tmp['title'] = i.attrib.get(util.nspath_eval('xlink:title', namespaces))
             self.operateson.append(tmp)
 
+
 class CI_OnlineResource(object):
+
     """ process CI_OnlineResource """
-    def __init__(self,md):
+
+    def __init__(self, md):
         val = md.find(util.nspath_eval('gmd:linkage/gmd:URL', namespaces))
         self.url = util.testXMLValue(val)
 
@@ -493,6 +520,7 @@ class CI_OnlineResource(object):
 
 
 class EX_GeographicBoundingBox(object):
+
     def __init__(self, md):
         val = md.find(util.nspath_eval('gmd:westBoundLongitude/gco:Decimal', namespaces))
         self.minx = util.testXMLValue(val)
@@ -502,19 +530,21 @@ class EX_GeographicBoundingBox(object):
         self.miny = util.testXMLValue(val)
         val = md.find(util.nspath_eval('gmd:northBoundLatitude/gco:Decimal', namespaces))
         self.maxy = util.testXMLValue(val)
-    
+
+
 class EX_Polygon(object):
+
     def __init__(self, md):
         linear_ring = md.find(util.nspath_eval('gml32:Polygon/gml32:exterior/gml32:LinearRing', namespaces))
         if linear_ring is not None:
             self.exterior_ring = self._coordinates_for_ring(linear_ring)
-                    
+
         interior_ring_elements = md.findall(util.nspath_eval('gml32:Polygon/gml32:interior', namespaces))
         self.interior_rings = []
         for iring_element in interior_ring_elements:
             linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing', namespaces))
             self.interior_rings.append(self._coordinates_for_ring(linear_ring))
-            
+
     def _coordinates_for_ring(self, linear_ring):
         coordinates = []
         positions = linear_ring.findall(util.nspath_eval('gml32:pos', namespaces))
@@ -523,20 +553,25 @@ class EX_Polygon(object):
             coords = tuple([float(t) for t in tokens])
             coordinates.append(coords)
         return coordinates
-        
+
+
 class EX_GeographicBoundingPolygon(object):
+
     def __init__(self, md):
         val = md.find(util.nspath_eval('gmd:extentTypeCode', namespaces))
         self.is_extent = util.testXMLValue(val)
-        
+
         md_polygons = md.findall(util.nspath_eval('gmd:polygon', namespaces))
-        
+
         self.polygons = []
         for val in md_polygons:
             self.polygons.append(EX_Polygon(val))
-            
+
+
 class EX_Extent(object):
+
     """ process EX_Extent """
+
     def __init__(self, md):
         self.boundingBox = None
         self.boundingPolygon = None
@@ -545,19 +580,23 @@ class EX_Extent(object):
             bboxElement = md.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces))
             if bboxElement is not None:
                 self.boundingBox = EX_GeographicBoundingBox(bboxElement)
-        
+
             polygonElement = md.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces))
             if polygonElement is not None:
                 self.boundingPolygon = EX_GeographicBoundingPolygon(polygonElement)
- 
+
             val = md.find(util.nspath_eval('gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString', namespaces))
             self.description_code = util.testXMLValue(val)
 
+
 class MD_ReferenceSystem(object):
+
     """ process MD_ReferenceSystem """
+
     def __init__(self, md):
         val = md.find(util.nspath_eval('gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
         self.code = util.testXMLValue(val)
+
 
 def _testCodeListValue(elpath):
     """ get gco:CodeListValue_Type attribute, else get text content """
@@ -570,8 +609,11 @@ def _testCodeListValue(elpath):
     else:
         return None
 
+
 class CodelistCatalogue(object):
+
     """ process CT_CodelistCatalogue """
+
     def __init__(self, ct):
         val = ct.find(util.nspath_eval('gmx:name/gco:CharacterString', namespaces))
         self.name = util.testXMLValue(val)
@@ -618,4 +660,3 @@ class CodelistCatalogue(object):
             return ids
         else:
             return None
-

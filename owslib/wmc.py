@@ -21,12 +21,15 @@ from etree import etree
 context_ns_uri = 'http://www.opengis.net/context'
 context_schemas_uri = 'http://schemas.opengis.net/context/1.0.0/context.xsd'
 
+
 def WMCElement(tag):
     """WMC based element
     """
-    return etree.Element("{%s}"%context_ns_uri + tag)
+    return etree.Element("{%s}" % context_ns_uri + tag)
+
 
 class MapContext:
+
     """ Map Context abstraction
 
     It uses a Map representation as input and export it as as map
@@ -41,9 +44,9 @@ class MapContext:
         attrs = {
             '{http://www.w3.org/2001/XMLSchema-instance}schemaLocation':
             context_ns_uri + ' ' + context_schemas_uri,
-            'id' : self._map.id,
-            'version' : '1.0.0',
-            }
+            'id': self._map.id,
+            'version': '1.0.0',
+        }
         for k, v in attrs.items():
             root.attrib[k] = v
         return root
@@ -91,8 +94,8 @@ class MapContext:
                     e_style.attrib['current'] = '1'
                     # Change namespace to wmc
                     for node in e_style.getiterator():
-                        tag_name = node.tag[node.tag.rfind('}')+1:]
-                        node.tag = "{%s}"%context_ns_uri + tag_name
+                        tag_name = node.tag[node.tag.rfind('}') + 1:]
+                        node.tag = "{%s}" % context_ns_uri + tag_name
                     stylelist.append(e_style)
                 layer.append(stylelist)
 
@@ -142,6 +145,7 @@ class MapContext:
 
 
 class AggregateMapContext(MapContext):
+
     """ Map Context abstraction
 
     It uses a Map representation as input and export it as as map
@@ -190,7 +194,7 @@ class AggregateMapContext(MapContext):
         formatlist.append(format)
         layer.append(formatlist)
         layerlist.append(layer)
-        
+
         return layerlist
 
 
@@ -204,4 +208,3 @@ def mapToWebMapContext(map, aggregate_layers=False):
         return AggregateMapContext(map)()
     else:
         return MapContext(map)()
-
