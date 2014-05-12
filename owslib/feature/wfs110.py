@@ -36,7 +36,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
     Implements IWebFeatureService.
     """
 
-    def __new__(self, url, version, xml, parse_remote_metadata=False):
+    def __new__(cls, url, version, xml, parse_remote_metadata=False):
         """ overridden __new__ method
 
         @type url: string
@@ -47,7 +47,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         @param parse_remote_metadata: whether to fully process MetadataURL elements
         @return: initialized WebFeatureService_1_1_0 object
         """
-        obj = object.__new__(self)
+        obj = object.__new__(cls)
         obj.__init__(url, version, xml, parse_remote_metadata)
         return obj
 
@@ -56,7 +56,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError('No content named %s' % name)
 
     def __init__(self, url, version, xml=None, parse_remote_metadata=False):
         """Initialize."""
@@ -165,7 +165,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
                 if srsnameobj is not None:
                     request['srsname'] = srsnameobj.id
                 else:
-                    options = ", ".join(map(lambda x: x.id, self.contents[typename[0]].crsOptions))
+                    options = ", ".join([x.id for x in self.contents[typename[0]].crsOptions])
                     raise ServiceException("SRSNAME %s not supported.  Options: %s" % (srsname, options))
             else:
                 request['srsname'] = str(srsname)
@@ -237,10 +237,10 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError('No operation named %s' % name)
 
 
-class ContentMetadata:
+class ContentMetadata(object):
 
     """Abstraction for WFS metadata.
 
@@ -292,7 +292,7 @@ class ContentMetadata:
                             metadataUrl['metadata'] = Metadata(doc)
                         if metadataUrl['type'] in ['TC211', '19115', '19139']:
                             metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception, err:
+                except Exception as err:
                     metadataUrl['metadata'] = None
 
             self.metadataUrls.append(metadataUrl)

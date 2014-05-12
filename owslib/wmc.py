@@ -28,7 +28,7 @@ def WMCElement(tag):
     return etree.Element("{%s}" % context_ns_uri + tag)
 
 
-class MapContext:
+class MapContext(object):
 
     """ Map Context abstraction
 

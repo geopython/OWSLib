@@ -18,8 +18,8 @@ flag = 0
 maxrecords = 10
 
 if len(sys.argv) < 3:
-    print 'Usage: %s <source_catalogue_url> <destination_catalogue_url> [maxrecords]' \
-        % sys.argv[0]
+    print('Usage: %s <source_catalogue_url> <destination_catalogue_url> [maxrecords]'
+          % sys.argv[0])
     sys.exit(1)
 
 src = CatalogueServiceWeb(sys.argv[1])
@@ -36,7 +36,7 @@ while stop == 0:
 
     src.getrecords(esn='brief', startposition=startposition, maxrecords=maxrecords)
 
-    print src.results
+    print(src.results)
 
     if src.results['nextrecord'] == 0 \
             or src.results['returned'] == 0 \

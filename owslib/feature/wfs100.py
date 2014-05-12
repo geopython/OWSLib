@@ -51,7 +51,7 @@ class WebFeatureService_1_0_0(object):
     Implements IWebFeatureService.
     """
 
-    def __new__(self, url, version, xml, parse_remote_metadata=False):
+    def __new__(cls, url, version, xml, parse_remote_metadata=False):
         """ overridden __new__ method
 
         @type url: string
@@ -62,7 +62,7 @@ class WebFeatureService_1_0_0(object):
         @param parse_remote_metadata: whether to fully process MetadataURL elements
         @return: initialized WebFeatureService_1_0_0 object
         """
-        obj = object.__new__(self)
+        obj = object.__new__(cls)
         obj.__init__(url, version, xml, parse_remote_metadata)
         return obj
 
@@ -71,7 +71,7 @@ class WebFeatureService_1_0_0(object):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError('No content named %s' % name)
 
     def __init__(self, url, version, xml=None, parse_remote_metadata=False):
         """Initialize."""
@@ -231,7 +231,7 @@ class WebFeatureService_1_0_0(object):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError('No operation named %s' % name)
 
 
 class ServiceIdentification(object):
@@ -260,7 +260,7 @@ class ServiceProvider(object):
         self.keywords = extract_xml_list(self._root.find(nspath('Keywords')))
 
 
-class ContentMetadata:
+class ContentMetadata(object):
 
     """Abstraction for WFS metadata.
 
@@ -321,13 +321,13 @@ class ContentMetadata:
                             metadataUrl['metadata'] = Metadata(doc)
                         if metadataUrl['type'] == 'TC211':
                             metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception, err:
+                except Exception as err:
                     metadataUrl['metadata'] = None
 
             self.metadataUrls.append(metadataUrl)
 
 
-class OperationMetadata:
+class OperationMetadata(object):
 
     """Abstraction for WFS metadata.
 

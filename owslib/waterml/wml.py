@@ -29,7 +29,7 @@ class XMLParser(object):
         except:
             self._root = xml_root
 
-        if not namespace in namespaces:
+        if namespace not in namespaces:
             raise ValueError('Unsupported namespace passed in to parser!')
 
         self._ns = namespace
@@ -82,8 +82,6 @@ class SitesResponse(XMLParser):
         raise KeyError('Unknown key ' + str(key))
 
     def parse_sites_response(self, xml=None):
-        """
-        """
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -108,9 +106,6 @@ class SitesResponse(XMLParser):
 
 class QueryInfo(XMLParser):
 
-    """
-    """
-
     def __init__(self, xml_root, version='wml1.1'):
         super(QueryInfo, self).__init__(xml_root, version)
         self.parse_query_info()
@@ -133,9 +128,6 @@ class QueryInfo(XMLParser):
 
 
 class Criteria(XMLParser):
-
-    """
-    """
 
     def __init__(self, xml_root, version='wml1.1'):
         super(Criteria, self).__init__(xml_root, version)

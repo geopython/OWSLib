@@ -117,7 +117,7 @@ def get_namespaces():
 namespaces = get_namespaces()
 
 
-class IWebProcessingService():
+class IWebProcessingService(object):
 
     """
     Abstract interface for an OGC Web Processing Service (WPS).
@@ -144,7 +144,7 @@ class IWebProcessingService():
         """
 
 
-class IComplexData():
+class IComplexData(object):
 
     """
     Abstract interface representing complex input object for a WPS request.
@@ -203,8 +203,8 @@ class WebProcessingService(object):
         else:
             self._capabilities = reader.readFromUrl(self.url, username=self.username, password=self.password)
 
-        if self.verbose == True:
-            print xml2string(etree.tostring(self._capabilities))
+        if self.verbose is True:
+            print(xml2string(etree.tostring(self._capabilities)))
 
         # populate the capabilities metadata obects from the XML tree
         self._parseCapabilitiesMetadata(self._capabilities)
@@ -224,8 +224,8 @@ class WebProcessingService(object):
             # read from server
             rootElement = reader.readFromUrl(self.url, identifier)
 
-        if self.verbose == True:
-            print xml2string(etree.tostring(rootElement))
+        if self.verbose is True:
+            print(xml2string(etree.tostring(rootElement)))
 
         # build metadata objects
         return self._parseProcessMetadata(rootElement)
@@ -243,15 +243,15 @@ class WebProcessingService(object):
         """
 
         # instantiate a WPSExecution object
-        print 'Executing WPS request...'
+        print('Executing WPS request...')
         execution = WPSExecution(version=self.version, url=self.url, username=self.username, password=self.password, verbose=self.verbose)
 
         # build XML request from parameters
         if request is None:
             requestElement = execution.buildRequest(identifier, inputs, output)
             request = etree.tostring(requestElement)
-        if self.verbose == True:
-            print request
+        if self.verbose is True:
+            print(request)
 
         # submit the request to the live server
         if response is None:
@@ -259,8 +259,8 @@ class WebProcessingService(object):
         else:
             response = etree.fromstring(response)
 
-        if self.verbose == True:
-            print etree.tostring(response)
+        if self.verbose is True:
+            print(etree.tostring(response))
 
         # parse response
         execution.parseResponse(response)
@@ -302,13 +302,13 @@ class WebProcessingService(object):
             # <ows:ServiceIdentification> metadata
             if element.tag.endswith('ServiceIdentification'):
                 self.identification = ServiceIdentification(element, namespace=ns)
-                if self.verbose == True:
+                if self.verbose is True:
                     dump(self.identification)
 
             # <ows:ServiceProvider> metadata
             elif element.tag.endswith('ServiceProvider'):
                 self.provider = ServiceProvider(element, namespace=ns)
-                if self.verbose == True:
+                if self.verbose is True:
                     dump(self.provider)
 
             # <ns0:OperationsMetadata xmlns:ns0="http://www.opengeospatial.net/ows">
@@ -324,7 +324,7 @@ class WebProcessingService(object):
             elif element.tag.endswith('OperationsMetadata'):
                 for child in element.findall(nspath('Operation', ns=ns)):
                     self.operations.append(OperationsMetadata(child, namespace=ns))
-                    if self.verbose == True:
+                    if self.verbose is True:
                         dump(self.operations[-1])
 
             # <wps:ProcessOfferings>
@@ -338,7 +338,7 @@ class WebProcessingService(object):
                 for child in element.findall(nspath('Process', ns=ns)):
                     p = Process(child, verbose=self.verbose)
                     self.processes.append(p)
-                    if self.verbose == True:
+                    if self.verbose is True:
                         dump(self.processes[-1])
 
 
@@ -363,8 +363,8 @@ class WPSReader(object):
         if method == 'Get':
             # full HTTP request url
             request_url = build_get_url(url, data)
-            if self.verbose == True:
-                print request_url
+            if self.verbose is True:
+                print(request_url)
 
             # split URL into base url and query string to use utility function
             spliturl = request_url.split('?')
@@ -449,7 +449,7 @@ class WPSExecuteReader(WPSReader):
         return self._readFromUrl(url, data, method, username=username, password=password)
 
 
-class WPSExecution():
+class WPSExecution(object):
 
     """
     Class that represents a single WPS process executed on a remote WPS service.
@@ -590,21 +590,21 @@ class WPSExecution():
             # override status location
             if url is not None:
                 self.statusLocation = url
-            print '\nChecking execution status... (location=%s)' % self.statusLocation
+            print('\nChecking execution status... (location=%s)' % self.statusLocation)
             response = reader.readFromUrl(self.statusLocation, username=self.username, password=self.password)
         else:
             response = reader.readFromString(response)
 
         # store latest response
         self.response = etree.tostring(response)
-        if self.verbose == True:
-            print self.response
+        if self.verbose is True:
+            print(self.response)
 
         self.parseResponse(response)
 
         # sleep given number of seconds
-        if self.isComplete() == False:
-            print 'Sleeping %d seconds...' % sleepSecs
+        if self.isComplete() is False:
+            print('Sleeping %d seconds...' % sleepSecs)
             sleep(sleepSecs)
 
     def getStatus(self):
@@ -662,7 +662,7 @@ class WPSExecution():
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
-                print 'Output written to file: %s' % filepath
+                print('Output written to file: %s' % filepath)
 
         else:
             raise Exception("Execution not successfully completed: status=%s" % self.status)
@@ -708,12 +708,12 @@ class WPSExecution():
             self._parseExceptionReport(response)
 
         else:
-            print 'Unknown Response'
+            print('Unknown Response')
 
         # print status, errors
-        print 'Execution status=%s' % self.status
-        print 'Percent completed=%s' % self.percentCompleted
-        print 'Status message=%s' % self.statusMessage
+        print('Execution status=%s' % self.status)
+        print('Percent completed=%s' % self.percentCompleted)
+        print('Status message=%s' % self.statusMessage)
         for error in self.errors:
             dump(error)
 
@@ -773,14 +773,14 @@ class WPSExecution():
         #                xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
         for inputElement in root.findall(nspath('DataInputs/Input', ns=wpsns)):
             self.dataInputs.append(Input(inputElement))
-            if self.verbose == True:
+            if self.verbose is True:
                 dump(self.dataInputs[-1])
 
         # <ns:ProcessOutputs>
         # xmlns:ns="http://www.opengis.net/wps/1.0.0"
         for outputElement in root.findall(nspath('ProcessOutputs/Output', ns=wpsns)):
             self.processOutputs.append(Output(outputElement))
-            if self.verbose == True:
+            if self.verbose is True:
                 dump(self.processOutputs[-1])
 
 
@@ -913,25 +913,26 @@ class InputOutput(object):
             self.dataType = "ComplexData"
 
             for supportedComlexDataElement in complexDataElement.findall('SupportedComplexData'):
-                self.supportedValues.append(ComplexData(mimeType=testXMLValue(supportedComlexDataElement.find('Format')),
-                                                        encoding=testXMLValue(supportedComlexDataElement.find('Encoding')),
-                                                        schema=testXMLValue(supportedComlexDataElement.find('Schema'))
-                                                        )
-                                            )
+                self.supportedValues.append(ComplexData(
+                    mimeType=testXMLValue(supportedComlexDataElement.find('Format')),
+                    encoding=testXMLValue(supportedComlexDataElement.find('Encoding')),
+                    schema=testXMLValue(supportedComlexDataElement.find('Schema')),
+                ))
 
             for formatElement in complexDataElement.findall('Supported/Format'):
-                self.supportedValues.append(ComplexData(mimeType=testXMLValue(formatElement.find('MimeType')),
-                                                        encoding=testXMLValue(formatElement.find('Encoding')),
-                                                        schema=testXMLValue(formatElement.find('Schema'))
-                                                        )
-                                            )
+                self.supportedValues.append(ComplexData(
+                    mimeType=testXMLValue(formatElement.find('MimeType')),
+                    encoding=testXMLValue(formatElement.find('Encoding')),
+                    schema=testXMLValue(formatElement.find('Schema')),
+                ))
 
             defaultFormatElement = complexDataElement.find('Default/Format')
             if defaultFormatElement is not None:
-                self.defaultValue = ComplexData(mimeType=testXMLValue(defaultFormatElement.find('MimeType')),
-                                                encoding=testXMLValue(defaultFormatElement.find('Encoding')),
-                                                schema=testXMLValue(defaultFormatElement.find('Schema'))
-                                                )
+                self.defaultValue = ComplexData(
+                    mimeType=testXMLValue(defaultFormatElement.find('MimeType')),
+                    encoding=testXMLValue(defaultFormatElement.find('Encoding')),
+                    schema=testXMLValue(defaultFormatElement.find('Schema')),
+                )
 
 
 class Input(InputOutput):
@@ -1062,7 +1063,7 @@ class Output(InputOutput):
 
         # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
         # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
-        print 'Output URL=%s' % url
+        print('Output URL=%s' % url)
         if '?' in url:
             spliturl = url.split('?')
             u = openURL(spliturl[0], spliturl[1], method='Get', username=username, password=password)
@@ -1101,10 +1102,10 @@ class Output(InputOutput):
             out = open(self.filePath, 'wb')
             out.write(content)
             out.close()
-            print 'Output written to file: %s' % self.filePath
+            print('Output written to file: %s' % self.filePath)
 
 
-class WPSException:
+class WPSException(object):
 
     """
     Class representing an exception raised by a WPS.
@@ -1161,25 +1162,25 @@ class Process(object):
             elif child.tag.endswith('Abstract'):
                 self.abstract = testXMLValue(child)
 
-        if self.verbose == True:
+        if self.verbose is True:
             dump(self)
 
         # <DataInputs>
         self.dataInputs = []
         for inputElement in elem.findall('DataInputs/Input'):
             self.dataInputs.append(Input(inputElement))
-            if self.verbose == True:
+            if self.verbose is True:
                 dump(self.dataInputs[-1], prefix='\tInput: ')
 
         # <ProcessOutputs>
         self.processOutputs = []
         for outputElement in elem.findall('ProcessOutputs/Output'):
             self.processOutputs.append(Output(outputElement))
-            if self.verbose == True:
+            if self.verbose is True:
                 dump(self.processOutputs[-1], prefix='\tOutput: ')
 
 
-class FeatureCollection():
+class FeatureCollection(object):
 
     '''
     Base class to represent a Feature Collection used as input to a WPS request.
@@ -1241,7 +1242,7 @@ class WFSFeatureCollection(FeatureCollection):
         return root
 
 
-class WFSQuery():
+class WFSQuery(object):
 
     '''
     Class representing a WFS query, for insertion into a WFSFeatureCollection instance.
@@ -1355,9 +1356,9 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
 
     '''
 
-    while execution.isComplete() == False:
+    while execution.isComplete() is False:
         execution.checkStatus(sleepSecs=sleepSecs)
-        print 'Execution status: %s' % execution.status
+        print('Execution status: %s' % execution.status)
 
     if execution.isSucceded():
         if download:
@@ -1365,10 +1366,10 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
         else:
             for output in execution.processOutputs:
                 if output.reference is not None:
-                    print 'Output URL=%s' % output.reference
+                    print('Output URL=%s' % output.reference)
     else:
         for ex in execution.errors:
-            print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
+            print('Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text))
 
 
 def printValue(value):
@@ -1390,19 +1391,19 @@ def printInputOutput(value, indent=''):
     '''
 
     # InputOutput fields
-    print '%s identifier=%s, title=%s, abstract=%s, data type=%s' % (indent, value.identifier, value.title, value.abstract, value.dataType)
+    print('%s identifier=%s, title=%s, abstract=%s, data type=%s' % (indent, value.identifier, value.title, value.abstract, value.dataType))
     for val in value.allowedValues:
-        print '%s Allowed Value: %s' % (indent, printValue(val))
+        print('%s Allowed Value: %s' % (indent, printValue(val)))
     for val in value.supportedValues:
-        print '%s Supported Value: %s' % (indent, printValue(val))
-    print '%s Default Value: %s ' % (indent, printValue(value.defaultValue))
+        print('%s Supported Value: %s' % (indent, printValue(val)))
+    print('%s Default Value: %s ' % (indent, printValue(value.defaultValue)))
 
     # Input fields
     if isinstance(value, Input):
-        print '%s minOccurs=%d, maxOccurs=%d' % (indent, value.minOccurs, value.maxOccurs)
+        print('%s minOccurs=%d, maxOccurs=%d' % (indent, value.minOccurs, value.maxOccurs))
 
     # Output fields
     if isinstance(value, Output):
-        print '%s reference=%s, mimeType=%s' % (indent, value.reference, value.mimeType)
+        print('%s reference=%s, mimeType=%s' % (indent, value.reference, value.mimeType))
         for datum in value.data:
-            print '%s Data Value: %s' % (indent, printValue(datum))
+            print('%s Data Value: %s' % (indent, printValue(datum)))

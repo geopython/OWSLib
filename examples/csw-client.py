@@ -15,7 +15,7 @@ from owslib.csw import CatalogueServiceWeb
 
 
 def usage():
-    print """
+    print("""
     %s [options]
 
 Required Parameters
@@ -53,7 +53,7 @@ GetRecords
 GetRecordById
     --id=[ID] the ID of the record
 
-""" % sys.argv[0]
+""" % sys.argv[0])
 
 # check args
 if len(sys.argv) == 1:
@@ -62,8 +62,8 @@ if len(sys.argv) == 1:
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], '', ['typename=', 'request=', 'lang=', 'version', 'keyword=', 'bbox=', 'schema=', 'qtype=', 'esn=', 'url=', 'print-request', 'sortby=', 'id=', 'dtype=', 'dname=', 'validate'])
-except getopt.GetoptError, err:
-    print str(err)
+except getopt.GetoptError as err:
+    print(str(err))
     usage()
     sys.exit(2)
 
@@ -143,14 +143,14 @@ elif request == 'GetRecords':
     c.getrecords(qtype, [keyword], bbox, esn, sortby, schema)
 
 if print_request is True:  # print the request
-    print c.request
+    print(c.request)
 
 if validate is True:  # do XML validation
-    print 'Validating request XML'
+    print('Validating request XML')
     if util.xmlvalid(c.request, csw.schema_location.split()[1]) is True:
-        print 'request is valid XML'
+        print('request is valid XML')
     else:
-        print 'request is NOT valid XML'
+        print('request is NOT valid XML')
 
 # print response
-print c.response
+print(c.response)

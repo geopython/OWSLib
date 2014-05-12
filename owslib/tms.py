@@ -39,8 +39,7 @@ class TileMapService(object):
     """
 
     def __init__(self, url, version='1.0.0', xml=None,
-                 username=None, password=None, parse_remote_metadata=False
-                 ):
+                 username=None, password=None, parse_remote_metadata=False):
         """Initialize."""
         self.url = url
         self.username = username
@@ -120,8 +119,7 @@ class TileMapService(object):
                 u = openURL(url, '', username=self.username,
                             password=self.password)
                 return u
-        else:
-            raise ValueError('cannot find zoomlevel %i for TileMap' % z)
+        raise ValueError('cannot find zoomlevel %i for TileMap' % z)
 
     def gettile(self, x, y, z, id=None, title=None, srs=None, mimetype=None):
         if not id and not title and not srs:
@@ -142,9 +140,8 @@ class TileMapService(object):
                         # first tilemap that matches name and srs
                         return self._gettilefromset(tm.tilemap.tilesets,
                                                     x, y, z, tm.tilemap.extension)
-            else:
-                raise ValueError('cannot find %s with projection %s for zoomlevel %i'
-                                 % (title, srs, z))
+            raise ValueError('cannot find %s with projection %s for zoomlevel %i'
+                             % (title, srs, z))
         elif title or srs:
             ValueError('both title and srs must be specified')
         raise ValueError('''Specified Tile with id %s, title %s

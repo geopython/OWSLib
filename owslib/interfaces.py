@@ -2,7 +2,7 @@
 # Follows the 4 aspects of service metadata
 
 
-class IServiceIdentificationMetadata:
+class IServiceIdentificationMetadata(object):
 
     """OO-interface to service identification metadata.
     """
@@ -16,7 +16,7 @@ class IServiceIdentificationMetadata:
     fees = property("""Explanation of fees associated with service (string).""")
 
 
-class IServiceProviderMetadata:
+class IServiceProviderMetadata(object):
 
     """OO-interface to service provider metadata.
     """
@@ -26,7 +26,7 @@ class IServiceProviderMetadata:
     contact = property("""How to contact the service provider (string).""")
 
 
-class IServiceOperations:
+class IServiceOperations(object):
 
     """OO-interface to service operations metadata.
     """
@@ -35,7 +35,7 @@ class IServiceOperations:
     exceptions = property("""List of exception formats (list).""")
 
 
-class IServiceContents:
+class IServiceContents(object):
 
     """OO-interface to service contents metadata.
     """
@@ -127,7 +127,7 @@ class ISensorObservationService(IService):
 # Second level metadata interfaces
 
 
-class IOperationMetadata:
+class IOperationMetadata(object):
 
     """OO-interface to operation metadata.
     """
@@ -137,7 +137,7 @@ class IOperationMetadata:
     methods = property("""Mapping of method descriptors, keyed to HTTP verbs. Items must implement IMethodMetadata (below).""")
 
 
-class IMethodMetadata:
+class IMethodMetadata(object):
 
     """OO-interface to method metadata.
     """
@@ -146,7 +146,7 @@ class IMethodMetadata:
     # TODO: constraint
 
 
-class IContentMetadata:
+class IContentMetadata(object):
 
     """OO-interface to content metadata.
     """
@@ -169,7 +169,7 @@ class iSensorObservationServiceContentMetadata(IContentMetadata):
 # XXX: needed?
 
 
-class IContactMetadata:
+class IContactMetadata(object):
 
     """OO-interface to OWS metadata.
 

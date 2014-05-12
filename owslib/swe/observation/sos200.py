@@ -26,9 +26,9 @@ class SensorObservationService_2_0_0(object):
         Implements ISensorObservationService.
     """
 
-    def __new__(self, url, version, xml=None, username=None, password=None):
+    def __new__(cls, url, version, xml=None, username=None, password=None):
         """overridden __new__ method"""
-        obj = object.__new__(self)
+        obj = object.__new__(cls)
         obj.__init__(url, version, xml, username, password)
         return obj
 
@@ -37,7 +37,7 @@ class SensorObservationService_2_0_0(object):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[id]
         else:
-            raise KeyError, "No Observational Offering with id: %s" % id
+            raise KeyError('No Observational Offering with id: %s' % id)
 
     def __init__(self, url, version='2.0.0', xml=None, username=None, password=None):
         """Initialize."""
@@ -189,7 +189,7 @@ class SensorObservationService_2_0_0(object):
         for item in self.operations:
             if item.name.lower() == name.lower():
                 return item
-        raise KeyError, "No Operation named %s" % name
+        raise KeyError('No Operation named %s' % name)
 
 
 class SosObservationOffering(object):
@@ -211,7 +211,7 @@ class SosObservationOffering(object):
             # (left, bottom, right, top) in self.bbox_srs units
             self.bbox = (float(lower_left_corner[1]), float(lower_left_corner[0]), float(upper_right_corner[1]), float(upper_right_corner[0]))
             self.bbox_srs = Crs(testXMLValue(envelope.attrib.get('srsName'), True))
-        except Exception, err:
+        except Exception as err:
             self.bbox = None
             self.bbox_srs = None
 

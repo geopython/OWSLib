@@ -7,6 +7,10 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+"""
+Utility functions and classes
+"""
+
 import sys
 from dateutil import parser
 from datetime import datetime
@@ -23,11 +27,6 @@ import cgi
 from urllib import urlencode
 import re
 from copy import deepcopy
-
-
-"""
-Utility functions and classes
-"""
 
 
 class RereadableURL(StringIO, object):
@@ -171,13 +170,13 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         if cookies is not None:
             req.add_header('Cookie', cookies)
         u = openit(req, timeout=timeout)
-    except HTTPError, e:  # Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
+    except HTTPError as e:  # Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
         if e.code in [400, 401]:
-            raise ServiceException, e.read()
+            raise ServiceException(e.read())
         else:
             raise e
     # check for service exceptions without the http header set
-    if ((u.info().has_key('Content-Type')) and (u.info()['Content-Type'] in ['text/xml', 'application/xml'])):
+    if (('Content-Type' in u.info()) and (u.info()['Content-Type'] in ['text/xml', 'application/xml'])):
         # just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
         # wrap the url stram in a extended StringIO object so it's re-readable
         u = RereadableURL(u)
@@ -187,8 +186,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         if serviceException is None:
             serviceException = se_tree.find('ServiceException')
         if serviceException is not None:
-            raise ServiceException, \
-                str(serviceException.text).strip()
+            raise ServiceException(str(serviceException.text).strip())
         u.seek(0)  # return cursor to start of u
     return u
 
@@ -244,7 +242,7 @@ def add_namespaces(root, ns_keys):
 
     namespaces = Namespaces()
 
-    ns_keys = map(lambda x: (x, namespaces.get_namespace(x)), ns_keys)
+    ns_keys = [(x, namespaces.get_namespace(x)) for x in ns_keys]
 
     if etree.__name__ != 'lxml.etree':
         # We can just add more namespaces when not using lxml.
@@ -356,7 +354,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
         up.close()
 
         # check if response is gzip compressed
-        if ui.has_key('Content-Encoding'):
+        if 'Content-Encoding' in ui:
             if ui['Content-Encoding'] == 'gzip':  # uncompress response
                 import gzip
                 cds = StringIO(response)
@@ -436,7 +434,7 @@ def build_get_url(base_url, params):
 def dump(obj, prefix=''):
     '''Utility function to print to standard output a generic object with all its attributes.'''
 
-    print "%s %s : %s" % (prefix, obj.__class__, obj.__dict__)
+    print("%s %s : %s" % (prefix, obj.__class__, obj.__dict__))
 
 
 def getTypedValue(type, value):
@@ -489,7 +487,7 @@ a newline. This will extract out all of the keywords correctly.
 """
     keywords = [re.split(r'[\n\r]+', f.text) for f in elements if f.text]
     flattened = [item.strip() for sublist in keywords for item in sublist]
-    remove_blank = filter(None, flattened)
+    remove_blank = [f for f in flattened if f]
     return remove_blank
 
 

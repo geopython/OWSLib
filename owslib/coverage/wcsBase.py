@@ -37,7 +37,7 @@ class WCSBase(object):
 
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
 
-    def __new__(self, url, xml, cookies):
+    def __new__(cls, url, xml, cookies):
         """ overridden __new__ method
 
         @type url: string
@@ -46,10 +46,10 @@ class WCSBase(object):
         @param xml: elementtree object
         @return: inititalised WCSBase object
         """
-        obj = object.__new__(self)
+        obj = object.__new__(cls)
         obj.__init__(url, xml, cookies)
-        self.cookies = cookies
-        self._describeCoverage = {}  # cache for DescribeCoverage responses
+        cls.cookies = cookies
+        cls._describeCoverage = {}  # cache for DescribeCoverage responses
         return obj
 
     def __init__(self):

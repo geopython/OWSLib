@@ -12,7 +12,7 @@ import logging
 from owslib.util import log
 
 
-class WebFeatureService_:
+class WebFeatureService_(object):
 
     """Base class for WebFeatureService implementations"""
 
@@ -71,7 +71,7 @@ class WebFeatureService_:
             # GetCaps document (the 'id' attribute in the Crs object).
             return self.contents[typename].crsOptions[index]
         except ValueError:
-            options = ", ".join(map(lambda x: x.id, self.contents[typename].crsOptions))
+            options = ", ".join([x.id for x in self.contents[typename].crsOptions])
             log.warning("Requested srsName '%s' not available for requested typename '%s'. \
                          Options are: %s. " % (srs.getcode(), typename, options))
             return None
@@ -120,7 +120,7 @@ class WebFeatureService_:
         elif filter:
             request['query'] = str(filter)
         if typename:
-            typename = [typename] if type(typename) == type("") else typename
+            typename = [typename] if isinstance(typename, str) else typename
             request['typename'] = ','.join(typename)
         if propertyname:
             request['propertyname'] = ','.join(propertyname)

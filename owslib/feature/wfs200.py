@@ -42,7 +42,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     Implements IWebFeatureService.
     """
 
-    def __new__(self, url, version, xml, parse_remote_metadata=False):
+    def __new__(cls, url, version, xml, parse_remote_metadata=False):
         """ overridden __new__ method
 
         @type url: string
@@ -53,7 +53,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         @param parse_remote_metadata: whether to fully process MetadataURL elements
         @return: initialized WebFeatureService_2_0_0 object
         """
-        obj = object.__new__(self)
+        obj = object.__new__(cls)
         obj.__init__(url, version, xml, parse_remote_metadata)
         return obj
 
@@ -62,7 +62,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError('No content named %s' % name)
 
     def __init__(self, url, version, xml=None, parse_remote_metadata=False):
         """Initialize."""
@@ -169,7 +169,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """
 
         url = data = None
-        if typename and type(typename) == type(""):
+        if typename and isinstance(typename, str):
             typename = [typename]
         if method.upper() == "GET":
             (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid,
@@ -290,7 +290,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError('No operation named %s' % name)
 
 
 class StoredQuery(object):
@@ -312,7 +312,7 @@ class Parameter(object):
         self.type = type
 
 
-class ContentMetadata:
+class ContentMetadata(object):
 
     """Abstraction for WFS metadata.
 
@@ -382,7 +382,7 @@ class ContentMetadata:
                         metadataUrl['metadata'] = Metadata(doc)
                     except:  # ISO
                         metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception, err:
+                except Exception as err:
                     metadataUrl['metadata'] = None
 
             self.metadataUrls.append(metadataUrl)

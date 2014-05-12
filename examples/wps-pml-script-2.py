@@ -8,26 +8,26 @@ wps = WebProcessingService('http://rsg.pml.ac.uk/wps/vector.cgi', verbose=verbos
 
 # 1) GetCapabilities
 wps.getcapabilities()
-print 'WPS Identification type: %s' % wps.identification.type
-print 'WPS Identification title: %s' % wps.identification.title
-print 'WPS Identification abstract: %s' % wps.identification.abstract
+print('WPS Identification type: %s' % wps.identification.type)
+print('WPS Identification title: %s' % wps.identification.title)
+print('WPS Identification abstract: %s' % wps.identification.abstract)
 for operation in wps.operations:
-    print 'WPS Operation: %s' % operation.name
+    print('WPS Operation: %s' % operation.name)
 for process in wps.processes:
-    print 'WPS Process: identifier=%s title=%s' % (process.identifier, process.title)
+    print('WPS Process: identifier=%s title=%s' % (process.identifier, process.title))
 
 # 2) DescribeProcess
 process = wps.describeprocess('v.net.path')
 # alternatively, read process description from XML file (no live request to WPS server)
 #xml = open('../tests/USGSDescribeProcess.xml', 'r').read()
 #process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', xml=xml)
-print 'WPS Process: identifier=%s' % process.identifier
-print 'WPS Process: title=%s' % process.title
-print 'WPS Process: abstract=%s' % process.abstract
+print('WPS Process: identifier=%s' % process.identifier)
+print('WPS Process: title=%s' % process.title)
+print('WPS Process: abstract=%s' % process.abstract)
 for input in process.dataInputs:
-    print 'Process input: identifier=%s, data type=%s, minOccurs=%d, maxOccurs=%d' % (input.identifier, input.dataType, input.minOccurs, input.maxOccurs)
+    print('Process input: identifier=%s, data type=%s, minOccurs=%d, maxOccurs=%d' % (input.identifier, input.dataType, input.minOccurs, input.maxOccurs))
 for output in process.processOutputs:
-    print 'Process output: identifier=%s, data type=%s' % (output.identifier, output.dataType)
+    print('Process output: identifier=%s, data type=%s' % (output.identifier, output.dataType))
 
 # 3) Execute
 # GET request: http://rsg.pml.ac.uk/wps/vector.cgi?request=execute&service=WPS&version=1.0.0&identifier=v.net.path&datainputs=[input=http://rsg.pml.ac.uk/wps/example/graph.gml;file=1%20-960123.1421801624%204665723.56559387%20-101288.65106088226%205108200.011823481]

@@ -69,11 +69,10 @@ class WebMapTileService(object):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError('No content named %s' % name)
 
     def __init__(self, url, version='1.0.0', xml=None,
-                 username=None, password=None, parse_remote_metadata=False
-                 ):
+                 username=None, password=None, parse_remote_metadata=False):
         """Initialize."""
         self.url = url
         self.username = username
@@ -233,7 +232,7 @@ class WebMapTileService(object):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError('No operation named %s' % name)
 
 
 class TileMatrixSet(object):
@@ -245,7 +244,7 @@ class TileMatrixSet(object):
             raise ValueError('%s should be a TileMatrixSet' % (elem,))
         self.identifier = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Identifier')).strip()
         self.crs = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}SupportedCRS')).strip()
-        if (self.crs == None) or (self.identifier == None):
+        if (self.crs is None) or (self.identifier is None):
             raise ValueError('%s incomplete TileMatrixSet' % (elem,))
         self.tilematrix = {}
         for tilematrix in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrix'):
@@ -287,7 +286,7 @@ class TileMatrix(object):
         self.matrixheight = int(mh)
 
 
-class Theme:
+class Theme(object):
 
     """
     Abstraction for a WMTS theme
@@ -315,7 +314,7 @@ class Theme:
                 self.layerRefs.append(layerRef.text)
 
 
-class ContentMetadata:
+class ContentMetadata(object):
 
     """
     Abstraction for WMTS layer metadata.
@@ -388,7 +387,7 @@ class ContentMetadata:
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
 
 
-class OperationsMetadata:
+class OperationsMetadata(object):
 
     """Abstraction for WMTS OperationsMetadata.
 
@@ -415,7 +414,7 @@ class OperationsMetadata:
         self.methods = dict(methods)
 
 
-class WMTSCapabilitiesReader:
+class WMTSCapabilitiesReader(object):
 
     """Read and parse capabilities document into a lxml.etree infoset
     """

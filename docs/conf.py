@@ -38,8 +38,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'OWSLib'
-copyright = u'2010, Tom Kralidis'
+project = 'OWSLib'
+copyright = '2010, Tom Kralidis'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -175,8 +175,8 @@ htmlhelp_basename = 'OWSLibdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'OWSLib.tex', u'OWSLib Documentation',
-     u'Tom Kralidis', 'manual'),
+    ('index', 'OWSLib.tex', 'OWSLib Documentation',
+     'Tom Kralidis', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

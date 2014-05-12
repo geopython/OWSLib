@@ -58,11 +58,10 @@ class WebMapService(object):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError('No content named %s' % name)
 
     def __init__(self, url, version='1.1.1', xml=None,
-                 username=None, password=None, parse_remote_metadata=False
-                 ):
+                 username=None, password=None, parse_remote_metadata=False):
         """Initialize."""
         self.url = url
         self.username = username
@@ -161,8 +160,7 @@ class WebMapService(object):
                bgcolor='#FFFFFF',
                exceptions='application/vnd.ogc.se_xml',
                method='Get',
-               **kwargs
-               ):
+               **kwargs):
         """Request and return an image from the WMS as a file-like object.
 
         Parameters
@@ -260,7 +258,7 @@ class WebMapService(object):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError('No operation named %s' % name)
 
 
 class ServiceIdentification(object):
@@ -304,17 +302,17 @@ class ServiceProvider(object):
         for item in self.contents:
             if item.name == name:
                 return item
-        raise KeyError, "No content named %s" % name
+        raise KeyError('No content named %s' % name)
 
     def getOperationByName(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError('No operation named %s' % name)
 
 
-class ContentMetadata:
+class ContentMetadata(object):
 
     """
     Abstraction for WMS layer metadata.
@@ -414,7 +412,7 @@ class ContentMetadata:
             # some servers found in the wild use a single SRS
             # tag containing a whitespace separated list of SRIDs
             # instead of several SRS tags. hence the inner loop
-            for srslist in map(lambda x: x.text, elem.findall('SRS')):
+            for srslist in [x.text for x in elem.findall('SRS')]:
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
@@ -491,7 +489,7 @@ class ContentMetadata:
                             metadataUrl['metadata'] = Metadata(doc)
                         if metadataUrl['type'] == 'TC211':
                             metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception, err:
+                except Exception as err:
                     metadataUrl['metadata'] = None
 
             self.metadataUrls.append(metadataUrl)
@@ -513,7 +511,7 @@ class ContentMetadata:
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
 
 
-class OperationMetadata:
+class OperationMetadata(object):
 
     """Abstraction for WMS OperationMetadata.
 
@@ -532,7 +530,7 @@ class OperationMetadata:
         self.methods = dict(methods)
 
 
-class ContactMetadata:
+class ContactMetadata(object):
 
     """Abstraction for contact details advertised in GetCapabilities.
     """
@@ -586,7 +584,7 @@ class ContactMetadata:
             self.position = None
 
 
-class WMSCapabilitiesReader:
+class WMSCapabilitiesReader(object):
 
     """Read and parse capabilities document into a lxml.etree infoset
     """

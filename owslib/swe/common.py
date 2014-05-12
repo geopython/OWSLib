@@ -25,9 +25,9 @@ def make_pair(string, cast=None):
     string = string.split(" ")
     if cast is not None:
         try:
-            string = map(lambda x: cast(x), string)
+            string = [cast(x) for x in string]
         except:
-            print "Could not cast pair to correct type.  Setting to an empty tuple!"
+            print("Could not cast pair to correct type.  Setting to an empty tuple!")
             string = ""
 
     return tuple(string)
@@ -65,9 +65,9 @@ def get_float(value):
     except:
         return None
 
-AnyScalar = map(lambda x: nspv(x), ["swe20:Boolean", "swe20:Count", "swe20:Quantity", "swe20:Time", "swe20:Category", "swe20:Text"])
-AnyNumerical = map(lambda x: nspv(x), ["swe20:Count", "swe20:Quantity", "swe20:Time"])
-AnyRange = map(lambda x: nspv(x), ["swe20:QuantityRange", "swe20:TimeRange", "swe20:CountRange", "swe20:CategoryRange"])
+AnyScalar = [nspv(x) for x in ["swe20:Boolean", "swe20:Count", "swe20:Quantity", "swe20:Time", "swe20:Category", "swe20:Text"]]
+AnyNumerical = [nspv(x) for x in ["swe20:Count", "swe20:Quantity", "swe20:Time"]]
+AnyRange = [nspv(x) for x in ["swe20:QuantityRange", "swe20:TimeRange", "swe20:CountRange", "swe20:CategoryRange"]]
 
 
 class NamedObject(object):
@@ -126,7 +126,7 @@ class AbstractSimpleComponent(AbstractDataComponent):
         self.axisID = testXMLAttribute(element, "axisID")            # string, optional
 
         # Elements
-        self.quality = filter(None, [Quality(q) for q in [e.find('*') for e in element.findall(nspv("swe20:quality"))] if q is not None])
+        self.quality = [q for q in [Quality(q) for q in [e.find('*') for e in element.findall(nspv("swe20:quality"))] if q is not None] if q]
         try:
             self.nilValues = NilValues(element.find(nspv("swe20:nilValues")))
         except:
@@ -153,7 +153,7 @@ class NilValues(AbstractSWE):
 
     def __init__(self, element):
         super(NilValues, self).__init__(element)
-        self.nilValue = filter(None, [nilValue(x) for x in element.findall(nspv("swe20:nilValue"))])  # string, min=0, max=X
+        self.nilValue = [x for x in [nilValue(x) for x in element.findall(nspv("swe20:nilValue"))] if x]  # string, min=0, max=X
 
 
 class nilValue(object):
@@ -167,7 +167,7 @@ class AllowedTokens(AbstractSWE):
 
     def __init__(self, element):
         super(AllowedTokens, self).__init__(element)
-        self.value = filter(None, [testXMLValue(x) for x in element.findall(nspv("swe20:value"))])  # string, min=0, max=X
+        self.value = [x for x in [testXMLValue(x) for x in element.findall(nspv("swe20:value"))] if x]  # string, min=0, max=X
         self.pattern = testXMLValue(element.find(nspv("swe20:pattern")))                             # string (Unicode Technical Standard #18, Version 13), min=0
 
 
@@ -175,8 +175,8 @@ class AllowedValues(AbstractSWE):
 
     def __init__(self, element):
         super(AllowedValues, self).__init__(element)
-        self.value = filter(None, map(lambda x: get_float(x), [testXMLValue(x) for x in element.findall(nspv("swe20:value"))]))
-        self.interval = filter(None, [make_pair(testXMLValue(x)) for x in element.findall(nspv("swe20:interval"))])
+        self.value = [x for x in [get_float(x) for x in [testXMLValue(x) for x in element.findall(nspv("swe20:value"))]] if x]
+        self.interval = [x for x in [make_pair(testXMLValue(x)) for x in element.findall(nspv("swe20:interval"))] if x]
         self.significantFigures = get_int(testXMLValue(element.find(nspv("swe20:significantFigures"))))                                         # integer, min=0
 
 
@@ -184,31 +184,33 @@ class AllowedTimes(AbstractSWE):
 
     def __init__(self, element):
         super(AllowedTimes, self).__init__(element)
-        self.value = filter(None, [testXMLValue(x) for x in element.findall(nspv("swe20:value"))])
-        self.interval = filter(None, [make_pair(testXMLValue(x)) for x in element.findall(nspv("swe20:interval"))])
+        self.value = [x for x in [testXMLValue(x) for x in element.findall(nspv("swe20:value"))] if x]
+        self.interval = [x for x in [make_pair(testXMLValue(x)) for x in element.findall(nspv("swe20:interval"))] if x]
         self.significantFigures = get_int(testXMLValue(element.find(nspv("swe20:significantFigures"))))                         # integer, min=0
 
 
 class Boolean(AbstractSimpleComponent):
 
+    """
+    6.2.1 Boolean
+            A Boolean representation of a proptery can take only two values that should be "true/false" or "yes/no".
+    """
+
     def __init__(self, element):
         super(Boolean, self).__init__(element)
         # Elements
-        """
-        6.2.1 Boolean
-                A Boolean representation of a proptery can take only two values that should be "true/false" or "yes/no".
-        """
         value = get_boolean(testXMLValue(element.find(nspv("swe20:value"))))   # boolean, min=0, max=1
 
 
 class Text(AbstractSimpleComponent):
 
+    """
+    Req 6. A textual representation shall at least consist of a character string.
+    """
+
     def __init__(self, element):
         super(Text, self).__init__(element)
         # Elements
-        """
-        Req 6. A textual representation shall at least consist of a character string.
-        """
         self.value = testXMLValue(element.find(nspv("swe20:value")))                               # string, min=0, max=1
 
         try:

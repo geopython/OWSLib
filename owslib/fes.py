@@ -100,7 +100,7 @@ class FilterRequest(object):
                 keyword_filter = PropertyIsLike(propertyname, "*%s*" % keywords[0], wildCard="*")
 
         # And together filters if more than one exists
-        filters = filter(None, [keyword_filter, bbox_filter, dc_type_equals_filter])
+        filters = [f for f in [keyword_filter, bbox_filter, dc_type_equals_filter] if f]
         if len(filters) == 1:
             self._root.append(filters[0].toXML())
         elif len(filters) > 1:

@@ -36,7 +36,7 @@ setup(
     url               = 'https://geopython.github.io/OWSLib',
     install_requires  = reqs,
     cmdclass          = {'test': PyTest},
-    packages          = find_packages(exclude=["docs", "etc", "examples", "tests"]),
+    packages          = find_packages(exclude=['docs', 'etc', 'examples', 'tests']),
     classifiers       = [
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
