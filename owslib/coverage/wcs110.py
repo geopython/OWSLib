@@ -206,18 +206,18 @@ class ServiceIdentification(object):
     def __init__(self,elem):        
         self.service="WCS"
         self.version="1.1.0"
-        self.title=testXMLValue(elem.find('{http://www.opengis.net/ows}Title'))
+        self.title=testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Title'))
         if self.title is None:  #may have used the wcs ows namespace:
             self.title=testXMLValue(elem.find('{http://www.opengis.net/wcs/1.1/ows}Title'))
         
-        self.abstract=testXMLValue(elem.find('{http://www.opengis.net/ows}Abstract'))
+        self.abstract=testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Abstract'))
         if self.abstract is None:#may have used the wcs ows namespace:
             self.abstract=testXMLValue(elem.find('{http://www.opengis.net/wcs/1.1/ows}Abstract'))
-        if elem.find('{http://www.opengis.net/ows}Abstract') is not None:
-            self.abstract=elem.find('{http://www.opengis.net/ows}Abstract').text
+        if elem.find('{http://www.opengis.net/ows/1.1}Abstract') is not None:
+            self.abstract=elem.find('{http://www.opengis.net/ows/1.1}Abstract').text
         else:
             self.abstract = None
-        self.keywords = [f.text for f in elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword')]
+        self.keywords = [f.text for f in elem.findall('{http://www.opengis.net/ows/1.1}Keywords/{http://www.opengis.net/ows/1.1}Keyword')]
         #self.link = elem.find('{http://www.opengis.net/wcs/1.1}Service/{http://www.opengis.net/wcs/1.1}OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
                
         if elem.find('{http://www.opengis.net/wcs/1.1/ows}Fees') is not None:            
@@ -235,12 +235,12 @@ class ServiceProvider(object):
     """ Abstraction for ServiceProvider metadata 
     implements IServiceProviderMetadata """
     def __init__(self,elem):
-        name=elem.find('{http://www.opengis.net/ows}ProviderName') or elem.find('{http://www.opengis.net/ows/1.1}ProviderName')
+        name=elem.find('{http://www.opengis.net/ows/1.1}ProviderName')
         if name is not None:
             self.name=name.text
         else:
             self.name=None
-        #self.contact=ServiceContact(elem.find('{http://www.opengis.net/ows}ServiceContact'))
+        #self.contact=ServiceContact(elem.find('{http://www.opengis.net/ows/1.1}ServiceContact'))
         self.contact =ContactMetadata(elem)
         self.url=self.name # no obvious definitive place for url in wcs, repeat provider name?
 
@@ -248,41 +248,41 @@ class ContactMetadata(object):
     ''' implements IContactMetadata'''
     def __init__(self, elem):
         try:
-            self.name = elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}IndividualName').text
+            self.name = elem.find('{http://www.opengis.net/ows/1.1}ServiceContact/{http://www.opengis.net/ows/1.1}IndividualName').text
         except AttributeError:
             self.name = None
         
         try:
-            self.organization=elem.find('{http://www.opengis.net/ows}ProviderName').text 
+            self.organization=elem.find('{http://www.opengis.net/ows/1.1}ProviderName').text 
         except AttributeError:
             self.organization = None
         
         try:
-            self.address = elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}DeliveryPoint').text
+            self.address = elem.find('{http://www.opengis.net/ows/1.1}ServiceContact/{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Address/{http://www.opengis.net/ows/1.1}DeliveryPoint').text
         except AttributeError:
             self.address = None
         try:
-            self.city=  elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}City').text
+            self.city=  elem.find('{http://www.opengis.net/ows/1.1}ServiceContact/{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Address/{http://www.opengis.net/ows/1.1}City').text
         except AttributeError:
             self.city = None
         
         try:
-            self.region= elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}AdministrativeArea').text
+            self.region= elem.find('{http://www.opengis.net/ows/1.1}ServiceContact/{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Address/{http://www.opengis.net/ows/1.1}AdministrativeArea').text
         except AttributeError:
             self.region = None
         
         try:
-            self.postcode= elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}PostalCode').text
+            self.postcode= elem.find('{http://www.opengis.net/ows/1.1}ServiceContact/{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Address/{http://www.opengis.net/ows/1.1}PostalCode').text
         except AttributeError:
             self.postcode = None
         
         try:
-            self.country= elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}Country').text
+            self.country= elem.find('{http://www.opengis.net/ows/1.1}ServiceContact/{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Address/{http://www.opengis.net/ows/1.1}Country').text
         except AttributeError:
             self.country = None
         
         try:
-            self.email = elem.find('{http://www.opengis.net/ows}ServiceContact/{http://www.opengis.net/ows}ContactInfo/{http://www.opengis.net/ows}Address/{http://www.opengis.net/ows}ElectronicMailAddress').text
+            self.email =            elem.find('{http://www.opengis.net/ows/1.1}ServiceContact/{http://www.opengis.net/ows/1.1}ContactInfo/{http://www.opengis.net/ows/1.1}Address/{http://www.opengis.net/ows/1.1}ElectronicMailAddress').text
         except AttributeError:
             self.email = None
 
@@ -293,34 +293,33 @@ class ContentMetadata(object):
     def __init__(self, elem, parent, service):
         """Initialize."""
         #TODO - examine the parent for bounding box info.
-        
+
         self._service=service
         self._elem=elem
         self._parent=parent
         self.id=self._checkChildAndParent('{http://www.opengis.net/wcs/1.1}Identifier')
         self.description =self._checkChildAndParent('{http://www.opengis.net/wcs/1.1}Description')           
-        self.title =self._checkChildAndParent('{http://www.opengis.net/ows}Title') or self._checkChildAndParent('{http://www.opengis.net/ows/1.1}Title')
-        self.abstract =self._checkChildAndParent('{http://www.opengis.net/ows}Abstract') or self._checkChildAndParent('{http://www.opengis.net/ows/1.1}Abstract')
+        self.title =self._checkChildAndParent('{http://www.opengis.net/ows/1.1}Title')
+        self.abstract =self._checkChildAndParent('{http://www.opengis.net/ows/1.1}Abstract')
         
         #keywords.
         self.keywords=[]
-        for kw in elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword') or elem.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows/1.1}Keyword'):
+        for kw in elem.findall('{http://www.opengis.net/ows/1.1}Keywords/{http://www.opengis.net/ows/1.1}Keyword'):
             if kw is not None:
                 self.keywords.append(kw.text)
         
         #also inherit any keywords from parent coverage summary (if there is one)
         if parent is not None:
-            for kw in parent.findall('{http://www.opengis.net/ows}Keywords/{http://www.opengis.net/ows}Keyword') or parent.findall('{http://www.opengis.net/ows/1.1}Keywords/{http://www.opengis.net/ows/1.1}Keyword'):
+            for kw in parent.findall('{http://www.opengis.net/ows/1.1}Keywords/{http://www.opengis.net/ows/1.1}Keyword'):
                 if kw is not None:
                     self.keywords.append(kw.text)
             
         self.boundingBox=None #needed for iContentMetadata harmonisation
         self.boundingBoxWGS84 = None
-        b = elem.find('{http://www.opengis.net/ows}WGS84BoundingBox') or elem.find('{http://www.opengis.net/ows/1.1}WGS84BoundingBox')
-        
+        b = elem.find('{http://www.opengis.net/ows/1.1}WGS84BoundingBox')
         if b is not None:
-            lc=(b.find('{http://www.opengis.net/ows}LowerCorner') or b.find('{http://www.opengis.net/ows/1.1}LowerCorner')).text
-            uc=(b.find('{http://www.opengis.net/ows}UpperCorner') or b.find('{http://www.opengis.net/ows/1.1}UpperCorner')).text
+            lc=b.find('{http://www.opengis.net/ows/1.1}LowerCorner').text
+            uc=b.find('{http://www.opengis.net/ows/1.1}UpperCorner').text
             self.boundingBoxWGS84 = (
                     float(lc.split()[0]),float(lc.split()[1]),
                     float(uc.split()[0]), float(uc.split()[1]),
@@ -328,11 +327,11 @@ class ContentMetadata(object):
                 
         # bboxes - other CRS 
         self.boundingboxes = []
-        for bbox in elem.findall('{http://www.opengis.net/ows}BoundingBox') or elem.findall('{http://www.opengis.net/ows/1.1}BoundingBox'):
+        for bbox in elem.findall('{http://www.opengis.net/ows/1.1}BoundingBox'):
             if bbox is not None:
                 try:
-                    lc=(b.find('{http://www.opengis.net/ows}LowerCorner') or b.find('{http://www.opengis.net/ows/1.1}LowerCorner')).text
-                    uc=(b.find('{http://www.opengis.net/ows}UpperCorner') or b.find('{http://www.opengis.net/ows/1.1}UpperCorner')).text
+                    lc=b.find('{http://www.opengis.net/ows/1.1}LowerCorner').text
+                    uc=b.find('{http://www.opengis.net/ows/1.1}UpperCorner').text
                     boundingBox =  (
                             float(lc.split()[0]),float(lc.split()[1]),
                             float(uc.split()[0]), float(uc.split()[1]),
@@ -397,4 +396,3 @@ class ContentMetadata(object):
             except:
                 value = None
         return value  
-
