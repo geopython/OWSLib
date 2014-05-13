@@ -259,6 +259,26 @@ def add_namespaces(root, ns_keys):
         return new_root
 
 
+def getXMLInteger(elem, tag):
+    """
+    Return the text within the named tag as an integer.
+
+    Raises an exception if the tag cannot be found or if its textual
+    value cannot be converted to an integer.
+
+    Parameters
+    ----------
+
+    - elem: the element to search within
+    - tag: the name of the tag to look for
+
+    """
+    e = elem.find(tag)
+    if e is None:
+        raise ValueError('Missing %s in %s' % (tag, elem))
+    return int(e.text.strip())
+
+
 def testXMLValue(val, attrib=False):
     """
 
