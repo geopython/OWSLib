@@ -358,23 +358,54 @@ class TileMatrixSetLink(object):
     Represents a WMTS TileMatrixSetLink element.
 
     """
-    def __init__(self, elem):
-        if elem.tag != _TILE_MATRIX_SET_LINK_TAG:
-            raise ValueError('%s should be a TileMatrixSetLink' % elem)
+    @staticmethod
+    def from_elements(link_elements):
+        """
+        Return a list of TileMatrixSetLink instances derived from the
+        given list of <TileMatrixSetLink> XML elements.
 
-        tms = elem.find(_TILE_MATRIX_SET_TAG)
-        if tms is None:
-            raise ValueError('Missing TileMatrixSet in %s' % elem)
-        self.tilematrixset = tms.text.strip()
+        """
+        # NB. The WMTS spec is contradictory re. the multiplicity
+        # relationships between Layer and TileMatrixSetLink, and
+        # TileMatrixSetLink and tileMatrixSet (URI).
+        # Try to figure out which model has been used by the server.
+        links = []
+        for link_element in link_elements:
+            matrix_set_elements = link_element.findall(_TILE_MATRIX_SET_TAG)
+            if len(matrix_set_elements) == 0:
+                raise ValueError('Missing TileMatrixSet in %s' % link_element)
+            elif len(matrix_set_elements) > 1:
+                set_limits_elements = link_element.findall(
+                    _TILE_MATRIX_SET_LIMITS_TAG)
+                if set_limits_elements:
+                   raise ValueError('Multiple instances of TileMatrixSet'
+                                    ' plus TileMatrixSetLimits in %s' %
+                                    link_element)
+                for matrix_set_element in matrix_set_elements:
+                    uri = matrix_set_element.text.strip()
+                    links.append(TileMatrixSetLink(uri))
+            else:
+                uri = matrix_set_elements[0].text.strip()
 
-        self.tilematrixlimits = {}
-        path = '%s/%s' % (_TILE_MATRIX_SET_LIMITS_TAG, _TILE_MATRIX_LIMITS_TAG)
-        for tilematrixlimits in elem.findall(path):
-            tml = TileMatrixLimits(tilematrixlimits)
-            if tml.tilematrix:
-                if tml.tilematrix in self.tilematrixlimits:
-                    raise KeyError('TileMatrixLimits with tileMatrix "%s" already exists' % tml.tilematrix)
-                self.tilematrixlimits[tml.tilematrix] = tml
+                tilematrixlimits = {}
+                path = '%s/%s' % (_TILE_MATRIX_SET_LIMITS_TAG, _TILE_MATRIX_LIMITS_TAG)
+                for limits_element in link_element.findall(path):
+                    tml = TileMatrixLimits(limits_element)
+                    if tml.tilematrix:
+                        if tml.tilematrix in tilematrixlimits:
+                            raise KeyError('TileMatrixLimits with tileMatrix "%s" already exists' % tml.tilematrix)
+                        tilematrixlimits[tml.tilematrix] = tml
+
+                links.append(TileMatrixSetLink(uri, tilematrixlimits))
+        return links
+
+    def __init__(self, tilematrixset, tilematrixlimits=None):
+        self.tilematrixset = tilematrixset
+
+        if tilematrixlimits is None:
+            self.tilematrixlimits = {}
+        else:
+            self.tilematrixlimits = tilematrixlimits
 
     def __repr__(self):
         fmt = ('<TileMatrixSetLink: {self.tilematrixset}'
@@ -418,12 +449,15 @@ class ContentMetadata:
             self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
         # TODO: there is probably some more logic here, and it should probably be shared code
 
+        link_elements = elem.findall(_TILE_MATRIX_SET_LINK_TAG)
+        tile_matrix_set_links = TileMatrixSetLink.from_elements(link_elements)
         self.tilematrixsetlinks = {}
-        for tilematrixsetlink in elem.findall(_TILE_MATRIX_SET_LINK_TAG):
-            tmsl = TileMatrixSetLink(tilematrixsetlink)
+        for tmsl in tile_matrix_set_links:
             if tmsl.tilematrixset:
                 if tmsl.tilematrixset in self.tilematrixsetlinks:
-                    raise KeyError('TileMatrixSetLink with tilematrixset "%s" already exists' % tmsl.tilematrixset)
+                    raise KeyError('TileMatrixSetLink with tilematrixset "%s"'
+                                   ' already exists' %
+                                   tmsl.tilematrixset)
                 self.tilematrixsetlinks[tmsl.tilematrixset] = tmsl
 
         self.resourceURLs = []
