@@ -592,9 +592,10 @@ class CatalogueServiceWeb:
             for query in self.request.findall(util.nspath_eval('csw:Query', namespaces)):
                 ns = query.get("typeNames", None)
                 if ns is not None:
-                    # Pull out "gmd" from something like "gmd:MD_Metadata"
-                    ns = ns.split(":")[0]
-                    self.request = add_namespaces(self.request, ns)
+                    # Pull out "gmd" from something like "gmd:MD_Metadata" from the list
+                    # of typenames
+                    ns_keys = [x.split(':')[0] for x in ns.split(' ')]
+                    self.request = add_namespaces(self.request, ns_keys)
 
             self.request = util.xml2string(etree.tostring(self.request))
 
