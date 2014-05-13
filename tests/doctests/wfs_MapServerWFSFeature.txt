@@ -2,7 +2,7 @@
 Imports
 
     >>> from owslib.wfs import WebFeatureService
-    
+
 Test the getfeature method
 
     >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0.0')
@@ -16,4 +16,3 @@ Handle service exception
     Traceback (most recent call last):
     ...
     ServiceException: msWFSGetFeature(): WFS server error. TYPENAME 'totally bogus' doesn't exist in this server.  Please check the capabilities and reformulate your request.
-

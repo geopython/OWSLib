@@ -178,7 +178,7 @@ Test single item accessor
     True
 
 Test themes
-    >>> wmts.themes.keys()
+    >>> list(wmts.themes.keys())
     ['Earth']
     >>> wmts.themes['Earth'].title
     'Earth'
@@ -188,7 +188,6 @@ Test themes
 
     >>> sorted(wmts.themes['Earth'].layerRefs)
     ['Ocean', 'World']
-
 
 
 Expect a KeyError for invalid names
@@ -229,4 +228,3 @@ Test the gettile methods
     ...     im = cStringIO.StringIO(tile000.read())
     ...     image = Image.open(im)
     ...     assert image.size == (256, 256)
-

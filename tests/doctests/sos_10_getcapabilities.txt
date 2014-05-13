@@ -111,7 +111,7 @@ OperationsMetadata
     >>> getcap = ndbc.get_operation_by_name('GetCapabilities')
     >>> isinstance(getcap, OperationsMetadata)
     True
-    
+
     Get by name (case insensitive)
 
     >>> getcap = ndbc.get_operation_by_name('getcapabilities')
@@ -130,7 +130,6 @@ OperationsMetadata
     >>> x = getcap.methods
     >>> x == {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
     True
-
 
     # DescribeSensor
 
@@ -180,10 +179,10 @@ Network
 
     >>> network.name
     'urn:ioos:network:noaa.nws.ndbc:all'
-    
+
     >>> network.description
     'All stations on the NDBC SOS server'
-    
+
     >>> srs = network.srs
     >>> isinstance(srs, Crs)
     True
@@ -203,14 +202,14 @@ Network
     'urn:ogc:def:crs:EPSG::4326'
     >>> bbsrs.getcode()
     'EPSG:4326'
-    
+
     >>> bp = network.begin_position
     >>> isinstance(bp, datetime)
     True
     >>> ep = network.end_position
     >>> isinstance(ep, datetime)
     True
-    
+
     >>> network.result_model
     'om:Observation'
 
@@ -240,7 +239,6 @@ Network
 
 Station
 
-
     >>> station = contents['station-zbqn7']
     >>> station.id
     'station-zbqn7'
@@ -250,7 +248,7 @@ Station
 
     >>> station.description
     "Zeke's Basin, North Carolina"
-    
+
     >>> srs = station.srs
     >>> isinstance(srs, Crs)
     True
@@ -260,7 +258,7 @@ Station
     'EPSG:4326'
     >>> cast_tuple_int_list(station.bbox)
     [-77, 33, -77, 33]
-    
+
     >>> bbsrs = station.bbox_srs
     >>> isinstance(bbsrs, Crs)
     True

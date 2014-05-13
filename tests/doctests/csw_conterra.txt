@@ -1,10 +1,10 @@
     >>> from owslib.csw import CatalogueServiceWeb as cs
-    >>> c=cs('https://gateway.ceh.ac.uk/soapServices/CSWStartup')
+    >>> c = cs('https://gateway.ceh.ac.uk/soapServices/CSWStartup')
     >>> c.version
     '2.0.2'
-    
-    #no longer inspire, files name is probably misleading at this point
-    >>> #c.identification.title
+
+    # no longer inspire, files name is probably misleading at this point
+    >>>  #c.identification.title
     #'INSPIRE Geoportal Discovery Service'
     >>> c.identification.title
     'Centre for Ecology and Hydrology Information Gateway CSW Service'

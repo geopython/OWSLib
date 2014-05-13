@@ -8,7 +8,7 @@ Imports
 
 Initialize WPS client
 
-    >>> wps = WebProcessingService('http://cida.usgs.gov/gdp/process/WebProcessingService',skip_caps=True)
+    >>> wps = WebProcessingService('http://cida.usgs.gov/gdp/process/WebProcessingService', skip_caps=True)
 
 Execute fake invocation of DescribeProcess operation by parsing cached response from USGS service
 
@@ -26,9 +26,9 @@ Check process description
 
 Check process inputs
     >>> for input in process.dataInputs:
-    ...     print 'Process input:'
+    ...     print('Process input:')
     ...     printInputOutput(input, indent='')
-    ... 
+    ...
     Process input:
      identifier=FEATURE_COLLECTION, title=Feature Collection, abstract=A feature collection encoded as a WFS request or one of the supported GML profiles., data type=ComplexData
      Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd
@@ -40,44 +40,44 @@ Check process inputs
      Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.1.0/base/feature.xsd
      Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.1.1/base/feature.xsd
      Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.2.1/base/feature.xsd
-     Default Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd 
+     Default Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=DATASET_URI, title=Dataset URI, abstract=The base data web service URI for the dataset of interest., data type=anyURI
      Allowed Value: AnyValue
-     Default Value: None 
+     Default Value: None
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=DATASET_ID, title=Dataset Identifier, abstract=The unique identifier for the data type or variable of interest., data type=string
      Allowed Value: AnyValue
-     Default Value: None 
+     Default Value: None
      minOccurs=1, maxOccurs=2147483647
     Process input:
      identifier=REQUIRE_FULL_COVERAGE, title=Require Full Coverage, abstract=If turned on, the service will require that the dataset of interest fully cover the polygon analysis zone data., data type=boolean
      Allowed Value: True
-     Default Value: True 
+     Default Value: True
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=TIME_START, title=Time Start, abstract=The date to begin analysis., data type=dateTime
      Allowed Value: AnyValue
-     Default Value: None 
+     Default Value: None
      minOccurs=0, maxOccurs=1
     Process input:
      identifier=TIME_END, title=Time End, abstract=The date to end analysis., data type=dateTime
      Allowed Value: AnyValue
-     Default Value: None 
+     Default Value: None
      minOccurs=0, maxOccurs=1
     Process input:
      identifier=FEATURE_ATTRIBUTE_NAME, title=Feature Attribute Name, abstract=The attribute that will be used to label column headers in processing output., data type=string
      Allowed Value: AnyValue
-     Default Value: None 
+     Default Value: None
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=DELIMITER, title=Delimiter, abstract=The delimiter that will be used to separate columns in the processing output., data type=string
      Allowed Value: COMMA
      Allowed Value: TAB
      Allowed Value: SPACE
-     Default Value: COMMA 
+     Default Value: COMMA
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=STATISTICS, title=Statistics, abstract=Statistics that will be returned for each feature in the processing output., data type=string
@@ -88,33 +88,33 @@ Check process inputs
      Allowed Value: STD_DEV
      Allowed Value: WEIGHT_SUM
      Allowed Value: COUNT
-     Default Value: None 
+     Default Value: None
      minOccurs=1, maxOccurs=7
     Process input:
      identifier=GROUP_BY, title=Group By, abstract=If multiple features and statistics are selected, this will change whether the processing output columns are sorted according to statistics or feature attributes., data type=string
      Allowed Value: STATISTIC
      Allowed Value: FEATURE_ATTRIBUTE
-     Default Value: None 
+     Default Value: None
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=SUMMARIZE_TIMESTEP, title=Summarize Timestep, abstract=If selected, processing output will include columns with summarized statistics for all feature attribute values for each timestep, data type=boolean
      Allowed Value: True
-     Default Value: True 
+     Default Value: True
      minOccurs=0, maxOccurs=1
     Process input:
      identifier=SUMMARIZE_FEATURE_ATTRIBUTE, title=Summarize Feature Attribute, abstract=If selected, processing output will include a final row of statistics summarizing all timesteps for each feature attribute value, data type=boolean
      Allowed Value: True
-     Default Value: True 
+     Default Value: True
      minOccurs=0, maxOccurs=1
 
 
 Check process outputs
     >>> for output in process.processOutputs:
-    ...     print 'Process output:'
+    ...     print('Process output:')
     ...     printInputOutput(output, indent='')
-    ... 
+    ...
     Process output:
      identifier=OUTPUT, title=Output File, abstract=A delimited text file containing requested process output., data type=ComplexData
      Supported Value: mimeType=text/csv, encoding=UTF-8, schema=None
-     Default Value: mimeType=text/csv, encoding=UTF-8, schema=None 
+     Default Value: mimeType=text/csv, encoding=UTF-8, schema=None
      reference=None, mimeType=None

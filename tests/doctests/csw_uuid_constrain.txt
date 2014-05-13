@@ -3,23 +3,23 @@ Imports
     >>> from xml.dom import minidom as md
     >>> from owslib import fes, csw
     >>> from tests.utils import compare_xml
-    
+
 Initialize CSW client
 
     # connect to CSW, explore it's properties
     #endpoint = 'http://data.nodc.noaa.gov/geoportal/csw'  # NODC Geoportal: collection level
-    #endpoint = 'http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw'  # NRCAN 
-    #endpoint = 'http://geoport.whoi.edu/gi-cat/services/cswiso' # USGS Woods Hole GI_CAT
-    #endpoint = 'http://cida.usgs.gov/gdp/geonetwork/srv/en/csw' # USGS CIDA Geonetwork
-    #endpoint = 'http://www.nodc.noaa.gov/geoportal/csw'   # NODC Geoportal: granule level
+    #endpoint = 'http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw'  # NRCAN
+    #endpoint = 'http://geoport.whoi.edu/gi-cat/services/cswiso'  # USGS Woods Hole GI_CAT
+    #endpoint = 'http://cida.usgs.gov/gdp/geonetwork/srv/en/csw'  # USGS CIDA Geonetwork
+    #endpoint = 'http://www.nodc.noaa.gov/geoportal/csw'  # NODC Geoportal: granule level
     #endpoint = 'http://cmgds.marine.usgs.gov/geonetwork/srv/en/csw'  # USGS Coastal & Marine Program Geonetwork
-    >>> endpoint = 'http://www.ngdc.noaa.gov/geoportal/csw' # NGDC Geoportal
+    >>> endpoint = 'http://www.ngdc.noaa.gov/geoportal/csw'  # NGDC Geoportal
     >>> c = cs(endpoint, timeout=30)
 
     # define some var
     >>> AOOS = '1706F520-2647-4A33-B7BF-592FAFDE4B45'
-    >>> bbox = [-141,42,-52,84]
-    
+    >>> bbox = [-141, 42, -52, 84]
+
     # Test new function getrecords2()
     >>> uuid = fes.PropertyIsEqualTo(propertyname='sys.siteuuid', literal='{%s}' % AOOS)
     >>> timeRange = fes.PropertyIsBetween(propertyname='apiso:modified', lower='2009-02-01', upper='2012-02-01')
@@ -69,23 +69,22 @@ Initialize CSW client
     >>> c.results == {'matches': 2, 'nextrecord': 0, 'returned': 2}
     True
 
-
     ##########################################################
     # Test 5
     # construct a request by send the xml string
     ##########################################################
-    >>> sos_search='''<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+    >>> sos_search = '''<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
     ... <csw:GetRecords xmlns:xs2="http://www.w3.org/XML/Schema" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:gml="http://www.opengis.net/gml" xmlns:dif="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" xmlns:ows="http://www.opengis.net/ows" xmlns:fgdc="http://www.opengis.net/cat/csw/csdgm" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dct="http://purl.org/dc/terms/" xmlns:ogc="http://www.opengis.net/ogc" outputSchema="http://www.opengis.net/cat/csw/2.0.2" outputFormat="application/xml" version="2.0.2" resultType="results" service="CSW" maxRecords="10" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
     ... <csw:Query typeNames="csw:Record">
     ... <csw:ElementSetName>full</csw:ElementSetName>
     ... <csw:Constraint version="1.1.0">
     ...   <ogc:Filter>
     ...     <ogc:And>
-    ...        <ogc:PropertyIsLike wildCard="*" escape="\" singleChar="?"> 
+    ...        <ogc:PropertyIsLike wildCard="*" escape="\" singleChar="?">
     ...          <ogc:PropertyName>apiso:ServiceType</ogc:PropertyName>
     ...          <ogc:Literal>*opendap*</ogc:Literal>
     ...        </ogc:PropertyIsLike>
-    ...     </ogc:And> 
+    ...     </ogc:And>
     ...    </ogc:Filter>
     ... </csw:Constraint>
     ...  </csw:Query>
@@ -98,7 +97,7 @@ Initialize CSW client
     True
     >>> c.results['nextrecord'] == 11
     True
-    
+
     ##########################################################
     # Test 6
     # construct a request by setting SAME constraint with Test 1
@@ -106,7 +105,7 @@ Initialize CSW client
     # it means a && b
     ##########################################################
     >>> dap_filter = fes.PropertyIsLike(propertyname='apiso:ServiceType', literal='*opendap*', escapeChar='\\', singleChar='?', wildCard='*')
-    >>> filter_list = [[uuid,dap_filter]]
+    >>> filter_list = [[uuid, dap_filter]]
     >>> c.getrecords2(filter_list)
     >>> c.results['matches'] > 0
     True
@@ -114,4 +113,3 @@ Initialize CSW client
     True
     >>> c.results['nextrecord'] == 11
     True
-    

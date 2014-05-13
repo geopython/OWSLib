@@ -10,7 +10,7 @@ Imports
 
 Initialize
 
-    >>> xml = open(resource_file('sos_ndbc_getcapabilities.xml'),'r').read()
+    >>> xml = open(resource_file('sos_ndbc_getcapabilities.xml'), 'r').read()
     >>> ndbc = SensorObservationService(None, xml=xml)
 
 
@@ -23,7 +23,8 @@ GetObservation
     >>> responseFormat = off.response_formats[0]
     >>> observedProperties = [off.observed_properties[0]]
     >>> #observedProperties = [ndbc.get_operation_by_name('GetObservation').parameters['observedProperty']['values'][0]]
-    >>> eventTime = "This is not a valid eventTime!"
+    >>>
+    >>> eventTime = 'This is not a valid eventTime!'
     >>> response = ndbc.get_observation(offerings=offerings, responseFormat=responseFormat, observedProperties=observedProperties, eventTime=eventTime)
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
@@ -36,16 +37,17 @@ GetObservation
     >>> responseFormat = off.response_formats[0]
     >>> observedProperties = [off.observed_properties[0]]
     >>> #observedProperties = [ndbc.get_operation_by_name('GetObservation').parameters['observedProperty']['values'][0]]
+    >>>
     >>> eventTime = None
 
     >>> response = ndbc.get_observation(offerings=offerings, responseFormat=responseFormat, observedProperties=observedProperties, eventTime=eventTime)
-    
+
 
 DescribeSensor
 
     # Send a funky procedure
 
-    >>> procedure = "foobar"
+    >>> procedure = 'foobar'
     >>> outputFormat = ndbc.get_operation_by_name('DescribeSensor').parameters['outputFormat']['values'][0]
     >>> response = ndbc.describe_sensor(procedure=procedure, outputFormat=outputFormat)
     Traceback (most recent call last):

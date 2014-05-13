@@ -22,7 +22,7 @@ Find out what a TMS has to offer. Service metadata:
     'bluemarble'
 
 you can filter the contents by profile and srs:
-    >>> len(service.items())
+    >>> len(list(service.items()))
     14
     >>> len(service.items('EPSG:900913'))
     7
@@ -36,12 +36,12 @@ you can filter the contents by profile and srs:
     ('http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@png', <owslib.tms.ContentMetadata object at ...>)
 
 The details of the TileMap are fetched on demand
-    >>> tm._tile_map == None
+    >>> tm._tile_map is None
     True
     >>> tm.title
     'bluemarble'
     >>> tm.abstract
-    >>> tm._tile_map == None
+    >>> tm._tile_map is None
     False
     >>> tm.srs
     'EPSG:4326'
@@ -58,24 +58,21 @@ The details of the TileMap are fetched on demand
     >>> tm.origin
     (-180.0, -90.0)
 
-
-
-
 You can get tiles by their x,y,z indices, the title of the tilemap, projection and mime-type
-    >>> service.gettile(10,10,0, title='bluemarble', srs='EPSG:4326', mimetype='image/png').geturl()
+    >>> service.gettile(10, 10, 0, title='bluemarble', srs='EPSG:4326', mimetype='image/png').geturl()
     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@png/0/10/10.png?'
-    >>> service.gettile(10,10,1, title='bluemarble', srs='EPSG:4326', mimetype='image/jpeg').geturl()
+    >>> service.gettile(10, 10, 1, title='bluemarble', srs='EPSG:4326', mimetype='image/jpeg').geturl()
     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@jpeg/1/10/10.jpeg?'
 
 if mimetype is ommited the tile is fetched from the first TileMap found:
-    >>> service.gettile(10,10,1, title='bluemarble', srs='EPSG:900913').geturl()
+    >>> service.gettile(10, 10, 1, title='bluemarble', srs='EPSG:900913').geturl()
     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/1/10/10.jpeg?'
 
 You can also specify the Tilemap by id:
-    >>> service.gettile(10,10,0, 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg').geturl()
+    >>> service.gettile(10, 10, 0, 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg').geturl()
     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/0/10/10.jpeg?'
 
-An extensive test  with:
+An extensive test with:
     >>> servers = [
     ...     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0',
     ...     'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0',
@@ -106,9 +103,3 @@ An extensive test  with:
 #    ...         tm.boundingBox
 #    ...         tm.origin
 #    ...         tm.type
-
-
-
-
-
-

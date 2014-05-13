@@ -3,13 +3,13 @@ Imports
 
     >>> from tests.utils import cast_tuple_int_list, resource_file
     >>> from owslib.wmts import WebMapTileService
-    
-Fake a request to a WMTS Server using saved doc from 
+
+Fake a request to a WMTS Server using saved doc from
 http://geonode.iwlearn.org/geoserver/gwc/service/wmts?REQUEST=GetCapabilities
 
-    >>> xml = open(resource_file('geoserver21-wmts-cap.xml'), 'r').read() 
+    >>> xml = open(resource_file('geoserver21-wmts-cap.xml'), 'r').read()
     >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
-    
+
 Test capabilities
 -----------------
     >>> wmts.identification.type
@@ -33,7 +33,7 @@ Service Provider:
     'http://geonode.iwlearn.org/geoserver/gwc/service/wmts'
     >>> wmts.provider.url
     'http://geonode.iwlearn.org/geoserver/gwc/service/wmts'
-    
+
 Check contact info
     >>> wmts.provider.contact.name
     'GeoWebCache User'

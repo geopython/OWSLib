@@ -13,19 +13,19 @@
 >>> c.identification.keywords
 ['CSW', 'geospatial', 'catalogue']
 
->>> c.identification.fees    
+>>> c.identification.fees
 'NONE'
 
 >>> c.identification.accessconstraints
 'NONE'
 
->>> c.identification.type             
+>>> c.identification.type
 'CSW'
 
 >>> c.identification.version
 '2.0.2'
 
->>> c.provider.name         
+>>> c.provider.name
 'National Aerospace Laboratory NLR'
 
 >>> c.provider.site
@@ -33,7 +33,7 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AttributeError: 'ServiceProvider' object has no attribute 'site'
 
->>> c.provider.url 
+>>> c.provider.url
 'http://geomatics.nlr.nl/excat'
 
 >>> c.provider.uri

@@ -52,7 +52,6 @@ ServiceProvider
     >>> p.url
     'http://ggw.gns.cri.nz/ggwdata/'
 
-
     ServiceContact
 
     >>> sc = p.contact
@@ -100,7 +99,7 @@ OperationsMetadata
     >>> getcap = ngmp.get_operation_by_name('GetCapabilities')
     >>> isinstance(getcap, OperationsMetadata)
     True
-    
+
     Get by name (case insensitive)
     >>> getcap = ngmp.get_operation_by_name('getcapabilities')
     >>> isinstance(getcap, OperationsMetadata)
@@ -118,7 +117,6 @@ OperationsMetadata
     >>> x == {'Post': {'url': 'https://geier.gns.cri.nz/ngmp-sos/sos'}, 'Get': {'url': 'https://geier.gns.cri.nz/ngmp-sos/sos?'}}
     True
 
-
     # DescribeSensor
     >>> descsen = ngmp.get_operation_by_name('describesensor')
 
@@ -129,11 +127,9 @@ OperationsMetadata
     >>> x == {'procedureDescriptionFormat': {'values': ['http://www.opengis.net/sensorML/1.0.1']}, 'procedure': {'values': ['http://resources.smart-project.info/ggwdata/procedure/acidity_sampling', 'http://resources.smart-project.info/ggwdata/procedure/chloride_sampling', 'http://resources.smart-project.info/ggwdata/procedure/conductivity_sampling', 'http://resources.smart-project.info/ggwdata/procedure/groundwaterlevel_sensor', 'http://resources.smart-project.info/ggwdata/procedure/hydraulic_conductivity_sampling', 'http://resources.smart-project.info/ggwdata/procedure/iron_sampling', 'http://resources.smart-project.info/ggwdata/procedure/manganese_sampling', 'http://resources.smart-project.info/ggwdata/procedure/nitrate_sampling', 'http://resources.smart-project.info/ggwdata/procedure/temperature_sampling', 'http://resources.smart-project.info/ggwdata/procedure/tritium_sampling']}}
     True
 
-
     >>> x = descsen.methods
     >>> x == {'Post': {'url': 'https://geier.gns.cri.nz/ngmp-sos/sos'}, 'Get': {'url': 'https://geier.gns.cri.nz/ngmp-sos/sos?'}}
     True
-
 
     # GetObservation
     >>> getob = ngmp.get_operation_by_name('getobservation')
@@ -162,7 +158,6 @@ Contents
     >>> len(contents)
     10
 
-
     Network
     >>> network = contents['NGMP_TEMPERATURE']
     >>> network.id
@@ -170,7 +165,7 @@ Contents
 
     >>> network.procedures
     ['http://resources.smart-project.info/ggwdata/procedure/temperature_sampling']
-    
+
     >>> srs = network.bbox_srs
     >>> isinstance(srs, Crs)
     True
@@ -186,14 +181,14 @@ Contents
     # (left, bottom, right, top)
     >>> cast_tuple_int_list(network.bbox)
     [168, -46, 177, -34]
-    
+
     >>> bp = network.begin_position
     >>> isinstance(bp, datetime)
     True
     >>> ep = network.end_position
     >>> isinstance(ep, datetime)
     True
-   
+
     >>> network.observed_properties
     ['http://resources.smart-project.info/ggwdata/phenomenon/temperature']
 

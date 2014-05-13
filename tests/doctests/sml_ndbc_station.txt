@@ -65,7 +65,7 @@ Identification
 
 Classifiers
 
-    >>> system.classifiers.keys()
+    >>> list(system.classifiers.keys())
     ['Platform Type']
     >>> classi = system.get_classifiers_by_name('Platform type')
     >>> classi[0].name
@@ -80,7 +80,7 @@ Classifiers
 
 Documents
 
-    >>> system.documentation # doctest: +ELLIPSIS
+    >>> system.documentation  # doctest: +ELLIPSIS
     [<owslib.swe.sensor.sml.Documentation ...>]
 
     >>> doc = system.documentation[0].documents[0]

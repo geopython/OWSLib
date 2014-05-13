@@ -11,22 +11,23 @@
 # get a list of entries for a given code list dictionary
 
 import sys
-import urllib2
 
 from owslib.etree import etree
 from owslib.iso import CodelistCatalogue
 
+
 if len(sys.argv) < 3:
-    print 'Usage: %s <path/to/gmxCodelists.xml> <CodeListDictionary>' % sys.argv[0]
+    print('Usage: %s <path/to/gmxCodelists.xml> <CodeListDictionary>' % sys.argv[0])
     sys.exit(1)
 
-e=etree.parse(sys.argv[1])
-c=CodelistCatalogue(e)
+e = etree.parse(sys.argv[1])
+c = CodelistCatalogue(e)
 
 clds = c.getcodelistdictionaries()
 
+
 def valid_clds():
-    return  '''
+    return '''
 Valid code list dictionaries are:
 
 %s
@@ -34,22 +35,22 @@ Valid code list dictionaries are:
 
 
 if len(sys.argv) < 2:
-    print '''
+    print('''
 Usage: %s <codelistdictionary>
 %s
-''' % (sys.argv[0], valid_clds())
+''' % (sys.argv[0], valid_clds()))
     sys.exit(1)
 
 cld = c.getcodedefinitionidentifiers(sys.argv[2])
 
 if cld is None:
-    print '''
+    print('''
 Invalid code list dictionary: %s
 %s
-''' % (sys.argv[2],valid_clds())
+''' % (sys.argv[2], valid_clds()))
     sys.exit(2)
 
-print '''
+print('''
 
 CodeListDictionary: %s
 
@@ -57,4 +58,4 @@ codeEntry's:
 
  %s
 
-''' % (sys.argv[2],'\n '.join(cld))
+''' % (sys.argv[2], '\n '.join(cld)))

@@ -3,7 +3,7 @@
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2007 STFC <http://www.stfc.ac.uk>
 #
-# Authors : 
+# Authors :
 #          Dominic Lowe <d.lowe@rl.ac.uk>
 #
 # Contact email: d.lowe@rl.ac.uk
@@ -17,6 +17,7 @@ from StringIO import StringIO
 
 
 class ServiceException(Exception):
+
     """WCS ServiceException
 
     Attributes:
@@ -31,25 +32,28 @@ class ServiceException(Exception):
     def __str__(self):
         return repr(self.message)
 
+
 class WCSBase(object):
+
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
-    def __new__(self,url, xml, cookies):
-        """ overridden __new__ method 
-        
+
+    def __new__(cls, url, xml, cookies):
+        """ overridden __new__ method
+
         @type url: string
         @param url: url of WCS capabilities document
         @type xml: string
         @param xml: elementtree object
         @return: inititalised WCSBase object
         """
-        obj=object.__new__(self)
+        obj = object.__new__(cls)
         obj.__init__(url, xml, cookies)
-        self.cookies=cookies
-        self._describeCoverage = {} #cache for DescribeCoverage responses
+        cls.cookies = cookies
+        cls._describeCoverage = {}  # cache for DescribeCoverage responses
         return obj
-    
+
     def __init__(self):
-        pass    
+        pass
 
     def getDescribeCoverage(self, identifier):
         ''' returns a describe coverage document - checks the internal cache to see if it has been fetched before '''
@@ -57,13 +61,14 @@ class WCSBase(object):
             reader = DescribeCoverageReader(self.version, identifier, self.cookies)
             self._describeCoverage[identifier] = reader.read(self.url)
         return self._describeCoverage[identifier]
-        
-        
+
+
 class WCSCapabilitiesReader(object):
+
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version=None, cookies = None):
+    def __init__(self, version=None, cookies=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -108,10 +113,10 @@ class WCSCapabilitiesReader(object):
         request = self.capabilities_url(service_url)
         req = Request(request)
         if self.cookies is not None:
-            req.add_header('Cookie', self.cookies)   
+            req.add_header('Cookie', self.cookies)
         u = urlopen(req, timeout=timeout)
         return etree.fromstring(u.read())
-    
+
     def readString(self, st):
         """Parse a WCS capabilities document, returning an
         instance of WCSCapabilitiesInfoset
@@ -121,7 +126,9 @@ class WCSCapabilitiesReader(object):
             raise ValueError("String must be of type string, not %s" % type(st))
         return etree.fromstring(st)
 
+
 class DescribeCoverageReader(object):
+
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
 
@@ -132,7 +139,7 @@ class DescribeCoverageReader(object):
         """
         self.version = version
         self._infoset = None
-        self.identifier=identifier
+        self.identifier = identifier
         self.cookies = cookies
 
     def descCov_url(self, service_url):
@@ -158,8 +165,8 @@ class DescribeCoverageReader(object):
             if 'coverage' not in params:
                 qs.append(('coverage', self.identifier))
         elif self.version == '1.1.0':
-            #NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
-            #or identifiers (see tables 9, 10 of specification)  
+            # NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
+            # or identifiers (see tables 9, 10 of specification)
             if 'identifiers' not in params:
                 qs.append(('identifiers', self.identifier))
             if 'identifier' not in params:
@@ -181,8 +188,6 @@ class DescribeCoverageReader(object):
         request = self.descCov_url(service_url)
         req = Request(request)
         if self.cookies is not None:
-            req.add_header('Cookie', self.cookies)   
+            req.add_header('Cookie', self.cookies)
         u = urlopen(req, timeout=timeout)
         return etree.fromstring(u.read())
-    
-       

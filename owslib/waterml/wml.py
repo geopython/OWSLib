@@ -5,44 +5,50 @@ from datetime import datetime
 from dateutil import parser
 
 namespaces = {
-    'wml1.1':'{http://www.cuahsi.org/waterML/1.1/}',
-    'wml1.0':'{http://www.cuahsi.org/waterML/1.0/}',
-    'xsi':'{http://www.w3.org/2001/XMLSchema-instance',
-    'xsd':'{http://www.w3.org/2001/XMLSchema'
+    'wml1.1': '{http://www.cuahsi.org/waterML/1.1/}',
+    'wml1.0': '{http://www.cuahsi.org/waterML/1.0/}',
+    'xsi': '{http://www.w3.org/2001/XMLSchema-instance',
+    'xsd': '{http://www.w3.org/2001/XMLSchema'
 }
+
 
 def ns(namespace):
     return namespaces.get(namespace)
 
+
 class XMLParser(object):
+
     """
         Convienence class; provides some useful shortcut methods to make retrieving xml elements from etree
         a little easier.
     """
-    def __init__(self,xml_root,namespace):
+
+    def __init__(self, xml_root, namespace):
         try:
             self._root = etree.parse(xml_root)
         except:
             self._root = xml_root
 
-        if not namespace in namespaces:
+        if namespace not in namespaces:
             raise ValueError('Unsupported namespace passed in to parser!')
 
         self._ns = namespace
 
-    def _find(self,tofind):
+    def _find(self, tofind):
         try:
             return self._root.find(namespaces.get(self._ns) + tofind)
         except:
             return None
 
-    def _findall(self,tofind):
+    def _findall(self, tofind):
         try:
             return self._root.findall(namespaces.get(self._ns) + tofind)
         except:
             return None
 
+
 class SitesResponse(XMLParser):
+
     """
         Parses the response from a 'GetSites' request
 
@@ -50,33 +56,32 @@ class SitesResponse(XMLParser):
         ===========
         :xmlio - A file-like object that holds the xml response from the request.
 
-        Return 
+        Return
         =======
         An object constructed from a dictionary parse of the response. The object has get access and can iterate
         over the sites returned.
     """
-    def __init__(self,xml,version='wml1.1'):
-        super(SitesResponse,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(SitesResponse, self).__init__(xml, version)
         self.parse_sites_response()
 
     def __iter__(self):
         for s in self.sites:
             yield s
 
-    def __getitem__(self,key):
-        if isinstance(key,int) and key < len(self.sites):
+    def __getitem__(self, key):
+        if isinstance(key, int) and key < len(self.sites):
             return self.sites[key]
 
-        if isinstance(key,str):
+        if isinstance(key, str):
             site = [site for site in self.sites for code in site.site_info.site_codes if code == key]
             if len(site) > 0:
                 return site[0]
 
         raise KeyError('Unknown key ' + str(key))
 
-    def parse_sites_response(self,xml=None):
-        """
-        """
+    def parse_sites_response(self, xml=None):
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -98,11 +103,11 @@ class SitesResponse(XMLParser):
     def site_names(self):
         return [site.site_info.site_name for site in self.sites]
 
+
 class QueryInfo(XMLParser):
-    """
-    """
-    def __init__(self,xml_root,version='wml1.1'):
-        super(QueryInfo, self).__init__(xml_root,version)
+
+    def __init__(self, xml_root, version='wml1.1'):
+        super(QueryInfo, self).__init__(xml_root, version)
         self.parse_query_info()
 
     def parse_query_info(self, xml=None):
@@ -121,11 +126,11 @@ class QueryInfo(XMLParser):
         # except:
         #   raise ValueError('Unable to parse queryInfo element correctly')
 
+
 class Criteria(XMLParser):
-    """
-    """
-    def __init__(self,xml_root,version='wml1.1'):
-        super(Criteria, self).__init__(xml_root,version)
+
+    def __init__(self, xml_root, version='wml1.1'):
+        super(Criteria, self).__init__(xml_root, version)
         self.parse_criteria()
 
     def parse_criteria(self, xml=None):
@@ -136,7 +141,7 @@ class Criteria(XMLParser):
                 self._root = xml
 
         # try:
-        xml_dict = _xml_to_dict(self._root,depth=4)
+        xml_dict = _xml_to_dict(self._root, depth=4)
         self.method_called = self._root.attrib.get('MethodCalled')
         self.location_param = xml_dict.get('location_param')
         self.variable_param = xml_dict.get('variable_param')
@@ -150,24 +155,26 @@ class Criteria(XMLParser):
         except:
             self.end_date_time = None
 
-        self.parameters = [(param.attrib.get('name'),param.attrib.get('value')) for param in self._findall('parameter')]
+        self.parameters = [(param.attrib.get('name'), param.attrib.get('value')) for param in self._findall('parameter')]
         # except:
         #   raise ValueError('Unable to parse xml for criteria element')
 
+
 class Site(XMLParser):
+
     def __init__(self, xml, version='wml1.1'):
-        super(Site,self).__init__(xml,version)
+        super(Site, self).__init__(xml, version)
         self.parse_site()
 
     def __iter__(self):
         for c in self.series_catalogs:
             yield c
 
-    def __getitem__(self,key):
-        if isinstance(key,int) and key < len(self.series_catalogs):
+    def __getitem__(self, key):
+        if isinstance(key, int) and key < len(self.series_catalogs):
             return self.series_catalogs[key]
 
-        if isinstance(key,str):
+        if isinstance(key, str):
             var = [series.variable for catalog in self.series_catalogs for series in catalog if series.code == key]
             if len(var) > 0:
                 return var[0]
@@ -203,7 +210,7 @@ class Site(XMLParser):
     def longitudes(self):
         return [g[0] for g in self.site_info.location.geo_coords]
 
-    def parse_site(self,xml=None):
+    def parse_site(self, xml=None):
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -213,17 +220,18 @@ class Site(XMLParser):
         # try:
         self.site_info = SiteInfo(self._find('siteInfo'), self._ns)
         self.series_catalogs = [SeriesCatalog(elm, self._ns) for elm in self._findall('seriesCatalog')]
-            # self.extension = Extension(self._find('extension'), self._ns)
+        # self.extension = Extension(self._find('extension'), self._ns)
         # except:
         #   raise ValueError('Unable to parse site element correctly')
 
 
 class SiteInfo(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(SiteInfo,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(SiteInfo, self).__init__(xml, version)
         self.parse_siteinfo()
 
-    def parse_siteinfo(self,xml=None):
+    def parse_siteinfo(self, xml=None):
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -237,7 +245,7 @@ class SiteInfo(XMLParser):
         self.elevation = xml_dict.get('elevation_m')
         self.vertical_datum = xml_dict.get('vertical_datum')
         self.site_types = [testXMLValue(typ) for typ in self._findall('siteType')]
-        self.site_properties = dict([(prop.attrib.get('name'),testXMLValue(prop)) for prop in self._findall('siteProperty')])
+        self.site_properties = dict([(prop.attrib.get('name'), testXMLValue(prop)) for prop in self._findall('siteProperty')])
         self.altname = xml_dict.get('altname')
         self.notes = [testXMLValue(note) for note in self._findall('note')]
         # sub-objects
@@ -250,12 +258,14 @@ class SiteInfo(XMLParser):
         # except:
         #   raise ValueError('Unable to parse siteInfo element')
 
+
 class Location(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Location,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Location, self).__init__(xml, version)
         self.parse_location()
 
-    def parse_location(self,xml=None):
+    def parse_location(self, xml=None):
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -268,7 +278,7 @@ class Location(XMLParser):
         self.geo_coords = list()
         self.srs = list()
         for g in geogs:
-            self.geo_coords.append((testXMLValue(g.find(ns(self._ns) + 'longitude')),testXMLValue(g.find(ns(self._ns) + 'latitude'))))
+            self.geo_coords.append((testXMLValue(g.find(ns(self._ns) + 'longitude')), testXMLValue(g.find(ns(self._ns) + 'latitude'))))
             self.srs.append(g.attrib.get('srs'))
 
         locsite = self._findall('localSiteXY')
@@ -278,9 +288,9 @@ class Location(XMLParser):
         for ls in locsite:
             z = testXMLValue(ls.find(ns(self._ns) + 'Z'))
             if z is not None:
-                self.local_sites.append((testXMLValue(ls.find(ns(self._ns) + 'X')),testXMLValue(ls.find(ns(self._ns) + 'Y')),z))
+                self.local_sites.append((testXMLValue(ls.find(ns(self._ns) + 'X')), testXMLValue(ls.find(ns(self._ns) + 'Y')), z))
             else:
-                self.local_sites.append((testXMLValue(ls.find(ns(self._ns) + 'X')),testXMLValue(ls.find(ns(self._ns) + 'Y')),'0'))
+                self.local_sites.append((testXMLValue(ls.find(ns(self._ns) + 'X')), testXMLValue(ls.find(ns(self._ns) + 'Y')), '0'))
 
             self.notes.append([testXMLValue(note) for note in ls.findall(ns(self._ns) + 'note')])
             self.projections.append(ls.attrib.get('projectionInformation'))
@@ -290,11 +300,12 @@ class Location(XMLParser):
 
 
 class TimeZoneInfo(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(TimeZoneInfo,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(TimeZoneInfo, self).__init__(xml, version)
         self.parse_timezoneinfo()
 
-    def parse_timezoneinfo(self,xml=None):
+    def parse_timezoneinfo(self, xml=None):
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -305,39 +316,40 @@ class TimeZoneInfo(XMLParser):
         xml_dict = _xml_to_dict(self._root)
         default = self._find('defaultTimeZone')
         if default is not None:
-          self.zone_offset = default.attrib.get('zoneOffset')
-          self.zone_abbreviation = default.attrib.get('zoneAbbreviation')
+            self.zone_offset = default.attrib.get('zoneOffset')
+            self.zone_abbreviation = default.attrib.get('zoneAbbreviation')
 
         daylight = self._find('daylightSavingsTimeZone')
         if daylight is not None:
-          self.daylight_zone_offset = daylight.attrib.get('zoneOffset')
-          self.daylight_zone_abbreviation = daylight.attrib.get('zoneAbbreviation')
+            self.daylight_zone_offset = daylight.attrib.get('zoneOffset')
+            self.daylight_zone_abbreviation = daylight.attrib.get('zoneAbbreviation')
 
         # except:
         #   raise ValueError('Unable to properly parset the timeZoneInfo element')
-            
+
 
 class SeriesCatalog(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(SeriesCatalog,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(SeriesCatalog, self).__init__(xml, version)
         self.parse_seriescatalog()
 
     def __iter__(self):
         for s in self.series:
             yield s
 
-    def __getitem__(self,key):
-        if isinstance(key,int) and key < len(self.series):
+    def __getitem__(self, key):
+        if isinstance(key, int) and key < len(self.series):
             return self.series[key]
 
-        if isinstance(key,str):
+        if isinstance(key, str):
             srs = [series for series in self.series if series.code == key]
             if len(srs) > 0:
                 return srs[0]
 
         raise KeyError('Unknown key ' + str(key))
 
-    def parse_seriescatalog(self,xml=None):
+    def parse_seriescatalog(self, xml=None):
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -345,14 +357,15 @@ class SeriesCatalog(XMLParser):
                 self._root = xml
 
         # try:
-        self.series = [Series(elm,self._ns) for elm in self._findall('series')]
+        self.series = [Series(elm, self._ns) for elm in self._findall('series')]
         # except:
         #   raise ValueError('Unable to properly parse the seriesCatalog element')
 
 
 class Series(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Series,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Series, self).__init__(xml, version)
         self.parse_series()
 
     """Accessor proeprties/methods"""
@@ -364,7 +377,7 @@ class Series(XMLParser):
     def code(self):
         return self.variable.variable_code
 
-    def parse_series(self,xml=None):
+    def parse_series(self, xml=None):
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -372,7 +385,7 @@ class Series(XMLParser):
                 self._root = xml
 
         # try:
-        xml_dict = _xml_to_dict(self._root,depth=3)
+        xml_dict = _xml_to_dict(self._root, depth=3)
         self.value_count = xml_dict.get('value_count')
         self.value_type = xml_dict.get('value_type')
         self.general_category = xml_dict.get('general_category')
@@ -413,19 +426,20 @@ class Series(XMLParser):
             self.quality_control_level_id = None
 
         # properties
-        self.properties = dict([(prop.attrib.get('name'),testXMLValue(prop)) for prop in self._findall('seriesProperty')])
+        self.properties = dict([(prop.attrib.get('name'), testXMLValue(prop)) for prop in self._findall('seriesProperty')])
         # sub-objects
-        self.variable = Variable(self._find('variable'),self._ns)
+        self.variable = Variable(self._find('variable'), self._ns)
         # except:
         #   raise ValueError('Unable to correctly parse Series element')
 
 
 class Variable(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Variable,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Variable, self).__init__(xml, version)
         self.parse_variable()
 
-    def parse_variable(self,xml=None):
+    def parse_variable(self, xml=None):
         if xml is not None:
             try:
                 self._root = etree.parse(xml)
@@ -444,20 +458,20 @@ class Variable(XMLParser):
         self.variable_description = xml_dict.get('variable_description')
         self.speciation = xml_dict.get('speciation')
         # notes and properties
-        notes = [(note.attrib.get('title'),testXMLValue(note)) for note in self._findall('note')]
+        notes = [(note.attrib.get('title'), testXMLValue(note)) for note in self._findall('note')]
         none_notes = [note[1] for note in notes if note[0] is None]
         self.notes = dict([note for note in notes if note[0] is not None])
         if len(none_notes) > 0:
             self.notes['none'] = none_notes
 
-        self.properties = dict([(prop.attrib.get('name'),testXMLValue(prop)) for prop in self._findall('variableProperty')])
+        self.properties = dict([(prop.attrib.get('name'), testXMLValue(prop)) for prop in self._findall('variableProperty')])
         # related
         related = self._find('related')
         if related is not None:
-            self.parent_codes = [dict([('network',code.attrib.get('network')),('vocabulary',code.attrib.get('vocabulary')),('default',code.attrib.get('default'))])
-                             for code in related.findall(ns(self._ns) + 'parentCode')]
-            self.related_codes = [dict([('network',d.get('network')),('vocabulary',d.get('vocabulary')),('default',d.get('default'))])
-                             for code in related.findall(ns(self._ns) + 'relatedCode')]
+            self.parent_codes = [dict([('network', code.attrib.get('network')), ('vocabulary', code.attrib.get('vocabulary')), ('default', code.attrib.get('default'))])
+                                 for code in related.findall(ns(self._ns) + 'parentCode')]
+            self.related_codes = [dict([('network', d.get('network')), ('vocabulary', d.get('vocabulary')), ('default', d.get('default'))])
+                                  for code in related.findall(ns(self._ns) + 'relatedCode')]
         else:
             self.parent_codes = None
             self.related_codes = None
@@ -478,7 +492,7 @@ class Variable(XMLParser):
 
         categories = self._find('categories')
         if categories is not None:
-            self.categories = [Category(cat,self._ns) for cat in categories.findall(ns(self._ns) + 'category')]
+            self.categories = [Category(cat, self._ns) for cat in categories.findall(ns(self._ns) + 'category')]
         else:
             self.categories = None
         # except:
@@ -486,8 +500,9 @@ class Variable(XMLParser):
 
 
 class TimeScale(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(TimeScale,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(TimeScale, self).__init__(xml, version)
         self.parse_timescale()
 
     def parse_timescale(self):
@@ -503,8 +518,9 @@ class TimeScale(XMLParser):
 
 
 class Unit(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Unit,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Unit, self).__init__(xml, version)
         self.parse_unit()
 
     def parse_unit(self):
@@ -521,8 +537,9 @@ class Unit(XMLParser):
 
 
 class Unit1_0(XMLParser):
-    def __init__(self,xml,version='wml1.0'):
-        super(Unit1_0,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.0'):
+        super(Unit1_0, self).__init__(xml, version)
         self.parse_unit()
 
     def parse_unit(self):
@@ -537,8 +554,9 @@ class Unit1_0(XMLParser):
 
 
 class Category(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Category,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Category, self).__init__(xml, version)
         self.parse_category()
 
     def parse_category(self):
@@ -552,6 +570,7 @@ class Category(XMLParser):
 
 
 class TimeSeriesResponse(XMLParser):
+
     """
         Parses the response from a 'GetValues' request
 
@@ -559,13 +578,14 @@ class TimeSeriesResponse(XMLParser):
         ===========
         :xmlio - A file-like object that holds the xml response from the request.
 
-        Return 
+        Return
         =======
         An object constructed from a dictionary parse of the response. The object has get access and can
         also iterate over each timeSeries element returned.
     """
-    def __init__(self,xml,version='wml1.1'):
-        super(TimeSeriesResponse,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(TimeSeriesResponse, self).__init__(xml, version)
         self.parse_timeseriesresponse()
 
     """Accessor properties/methods"""
@@ -581,7 +601,7 @@ class TimeSeriesResponse(XMLParser):
     def variable_codes(self):
         return list(set([s.variable.variable_code for s in self.time_series]))
 
-    def get_series_by_variable(self,var_name=None,var_code=None):
+    def get_series_by_variable(self, var_name=None, var_code=None):
         if var_code is not None:
             return [s for s in self.time_series if s.variable.variable_code == var_code]
 
@@ -593,29 +613,32 @@ class TimeSeriesResponse(XMLParser):
     def parse_timeseriesresponse(self):
         try:
             qi = self._find('queryInfo')
-            self.query_info = QueryInfo(qi,self._ns)
-            self.time_series = [TimeSeries(series,self._ns) for series in self._findall('timeSeries')]
+            self.query_info = QueryInfo(qi, self._ns)
+            self.time_series = [TimeSeries(series, self._ns) for series in self._findall('timeSeries')]
         except:
             raise
 
 
 class TimeSeries(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(TimeSeries,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(TimeSeries, self).__init__(xml, version)
         self.parse_timeseries()
 
     def parse_timeseries(self):
         try:
             self.variable = Variable(self._find('variable'), self._ns)
-            self.values = [Values(val,self._ns) for val in self._findall('values')]
+            self.values = [Values(val, self._ns) for val in self._findall('values')]
             self.source_info = SiteInfo(self._find('sourceInfo'), self._ns)
             self.name = self._root.attrib.get('name')
         except:
             raise
 
+
 class Values(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Values,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Values, self).__init__(xml, version)
         self.parse_values()
 
     def __iter__(self):
@@ -623,7 +646,8 @@ class Values(XMLParser):
             yield v
 
     """Accessor properties/methods"""
-    def get_date_values(self,method_id=None,source_id=None,sample_id=None,quality_level=None,utc=False):
+
+    def get_date_values(self, method_id=None, source_id=None, sample_id=None, quality_level=None, utc=False):
         varl = [v for v in self.values]
         if method_id is not None:
             varl = [v for v in varl if v.method_id == method_id]
@@ -638,26 +662,26 @@ class Values(XMLParser):
             varl = [v for v in varl if v.quality_control_level == quality_level]
 
         if not utc:
-            return [(v.date_time,v.value) for v in varl]
+            return [(v.date_time, v.value) for v in varl]
         else:
-            return [(v.date_time_utc,v.value) for v in varl]
+            return [(v.date_time_utc, v.value) for v in varl]
 
     def parse_values(self):
         xml_dict = _xml_to_dict(self._root)
         # method info
-        self.methods = [Method(method,self._ns) for method in self._findall('method')]
+        self.methods = [Method(method, self._ns) for method in self._findall('method')]
 
         # source info
-        self.sources = [Source(source,self._ns) for source in self._findall('source')]
+        self.sources = [Source(source, self._ns) for source in self._findall('source')]
 
         # quality control info
         self.qualit_control_levels = [QualityControlLevel(qal, self._ns) for qal in self._findall('qualityControlLevel')]
 
         # offset info
-        self.offsets = [Offset(os,self._ns) for os in self._findall('offset')]
+        self.offsets = [Offset(os, self._ns) for os in self._findall('offset')]
 
         # sample info
-        self.samples = [Sample(sample,self._ns) for sample in self._findall('sample')]
+        self.samples = [Sample(sample, self._ns) for sample in self._findall('sample')]
 
         # censor codes
         self.censor_codes = [CensorCode(code, self._ns) for code in self._findall('censorCode')]
@@ -676,8 +700,9 @@ class Values(XMLParser):
 
 
 class Value(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Value,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Value, self).__init__(xml, version)
         self.parse_value()
 
     def parse_value(self):
@@ -709,8 +734,9 @@ class Value(XMLParser):
 
 
 class Sample(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Sample,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Sample, self).__init__(xml, version)
         self.parse_sample()
 
     def parse_sample(self):
@@ -725,8 +751,9 @@ class Sample(XMLParser):
 
 
 class LabMethod(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(LabMethod,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(LabMethod, self).__init__(xml, version)
         self.parse_labmethod()
 
     def parse_labmethod(self):
@@ -740,20 +767,21 @@ class LabMethod(XMLParser):
             self.method_link = xml_dict.get('lab_method_link')
             # sub-objects
             source = self._find('labSourceDetails')
-            self.source_details = Source(source,self._ns) if source is not None else None
+            self.source_details = Source(source, self._ns) if source is not None else None
         except:
             raise
 
 
 class Source(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Source,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Source, self).__init__(xml, version)
         self.parse_source()
 
     def __str__(self):
         return str(self.__dict__)
 
-    def get_contact(self,name):
+    def get_contact(self, name):
         ci = [ci for ci in self.contact_info if ci.name == name]
         if len(ci) < 0:
             return ci[0]
@@ -774,14 +802,15 @@ class Source(XMLParser):
             self.profile_version = xml_dict.get('profile_version')
             self.metadata_link = xml_dict.get('metadata_link')
             # contact info
-            self.contact_info = [ContactInformation(ci,self._ns) for ci in self._findall('contactInformation')]
+            self.contact_info = [ContactInformation(ci, self._ns) for ci in self._findall('contactInformation')]
         except:
             raise
 
 
 class ContactInformation(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(ContactInformation,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(ContactInformation, self).__init__(xml, version)
         self.parse_contactinformation()
 
     def parse_contactinformation(self):
@@ -797,8 +826,9 @@ class ContactInformation(XMLParser):
 
 
 class Offset(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Offset,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Offset, self).__init__(xml, version)
         self.parse_offset()
 
     def parse_offset(self):
@@ -813,14 +843,15 @@ class Offset(XMLParser):
             if self._ns == 'wml1.0':
                 self.unit = Unit1_0(unit, self._ns) if unit is not None else None
             else:
-                self.unit = Unit(unit,self._ns) if unit is not None else None
+                self.unit = Unit(unit, self._ns) if unit is not None else None
         except:
             raise
 
 
 class Method(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(Method,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(Method, self).__init__(xml, version)
         self.parse_method()
 
     def parse_method(self):
@@ -835,8 +866,9 @@ class Method(XMLParser):
 
 
 class QualityControlLevel(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(QualityControlLevel,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(QualityControlLevel, self).__init__(xml, version)
         self.parse_qcl()
 
     def parse_qcl(self):
@@ -851,8 +883,9 @@ class QualityControlLevel(XMLParser):
 
 
 class CensorCode(XMLParser):
-    def __init__(self,xml,version='wml1.1'):
-        super(CensorCode,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(CensorCode, self).__init__(xml, version)
         self.parse_censorcode()
 
     def parse_censorcode(self):
@@ -864,7 +897,9 @@ class CensorCode(XMLParser):
         except:
             raise
 
+
 class VariablesResponse(XMLParser):
+
     """
         Parses the response from a 'GetVariableInfo' request
 
@@ -877,19 +912,20 @@ class VariablesResponse(XMLParser):
         An object constructed from a dictionary parse of the response. The object has get access to its variables and
         can also be used as an iterator.
     """
-    def __init__(self,xml,version='wml1.1'):
-        super(VariablesResponse,self).__init__(xml,version)
+
+    def __init__(self, xml, version='wml1.1'):
+        super(VariablesResponse, self).__init__(xml, version)
         self.parse_variablesresponse()
 
     def __iter__(self):
         for v in self.variables:
             yield v
 
-    def __getitem__(self,key):
-        if isinstance(key,int) and key < len(self.variables):
+    def __getitem__(self, key):
+        if isinstance(key, int) and key < len(self.variables):
             return self.variables[key]
 
-        if isinstance(key,str):
+        if isinstance(key, str):
             v = [var for var in self.variables if var.variable_code == key]
             if len(v) > 0:
                 return v[0]
@@ -907,14 +943,13 @@ class VariablesResponse(XMLParser):
 
     @property
     def variable_codes(self):
-        return  [var.variable_code for var in self.variables]
+        return [var.variable_code for var in self.variables]
 
     def parse_variablesresponse(self):
         try:
             qi = self._find('queryInfo')
             self.query_info = QueryInfo(qi, self._ns) if qi is not None else None
             varis = self._find('variables')
-            self.variables = [Variable(var,self._ns) for var in varis.findall(ns(self._ns) + 'variable')]
+            self.variables = [Variable(var, self._ns) for var in varis.findall(ns(self._ns) + 'variable')]
         except:
             raise
-

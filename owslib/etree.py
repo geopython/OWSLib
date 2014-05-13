@@ -6,12 +6,10 @@
 
 
 def patch_well_known_namespaces(etree_module):
-
+    """Monkey patches the etree module to add some well-known namespaces."""
     import warnings
     from owslib.namespaces import Namespaces
     ns = Namespaces()
-
-    """Monkey patches the etree module to add some well-known namespaces."""
 
     try:
         register_namespace = etree_module.register_namespace

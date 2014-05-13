@@ -8,7 +8,7 @@ Execute face WPS invocation
 
     >>> request = open(resource_file('wps_PMLExecuteRequest6.xml'), 'r').read()
     >>> response = open(resource_file('wps_PMLExecuteResponse6.xml'), 'r').read()
-    >>> 
+    >>>
     >>> execution = wps.execute(None, [], request=request, response=response)
     Executing WPS request...
     Execution status=ProcessSucceeded

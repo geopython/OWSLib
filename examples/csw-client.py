@@ -11,10 +11,12 @@
 import sys
 import getopt
 
-from owslib.csw import CatalogueServiceWeb
+from owslib.csw import CatalogueServiceWeb, schema_location
+from owslib.util import xmlvalid
+
 
 def usage():
-    print """
+    print('''
     %s [options]
 
 Required Parameters
@@ -35,7 +37,7 @@ Request Specific Parameters
 ---------------------------
 
 DescribeRecord
-    --typename=[TypeName] the typename to describe 
+    --typename=[TypeName] the typename to describe
 
 GetDomain
     --dname=[NAME] the domain to query
@@ -52,7 +54,7 @@ GetRecords
 GetRecordById
     --id=[ID] the ID of the record
 
-""" % sys.argv[0]
+''' % sys.argv[0])
 
 # check args
 if len(sys.argv) == 1:
@@ -61,8 +63,8 @@ if len(sys.argv) == 1:
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], '', ['typename=', 'request=', 'lang=', 'version', 'keyword=', 'bbox=', 'schema=', 'qtype=', 'esn=', 'url=', 'print-request', 'sortby=', 'id=', 'dtype=', 'dname=', 'validate'])
-except getopt.GetoptError, err:
-    print str(err)
+except getopt.GetoptError as err:
+    print(str(err))
     usage()
     sys.exit(2)
 
@@ -108,7 +110,7 @@ for o, a in opts:
     elif o in '--dname':
         dname = a
     elif o in '--dtype':
-        dtype= a
+        dtype = a
     elif o in '--version':
         version = a
     elif o in '--lang':
@@ -125,7 +127,7 @@ if request is None or url is None:
     sys.exit(3)
 
 if schema == 'iso':
-  outputschema = 'http://www.isotc211.org/2005/gmd'
+    outputschema = 'http://www.isotc211.org/2005/gmd'
 
 # init
 c = CatalogueServiceWeb(url, lang, version)
@@ -141,16 +143,15 @@ elif request == 'GetDomain':
 elif request == 'GetRecords':
     c.getrecords(qtype, [keyword], bbox, esn, sortby, schema)
 
-if print_request is True: # print the request
-    print c.request
+if print_request is True:  # print the request
+    print(c.request)
 
-if validate is True: # do XML validation
-    print 'Validating request XML'
-    if util.xmlvalid(c.request, csw.schema_location.split()[1]) is True:
-        print 'request is valid XML'
+if validate is True:  # do XML validation
+    print('Validating request XML')
+    if xmlvalid(c.request, schema_location.split()[1]) is True:
+        print('request is valid XML')
     else:
-        print 'request is NOT valid XML'
+        print('request is NOT valid XML')
 
 # print response
-print c.response
-
+print(c.response)

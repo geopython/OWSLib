@@ -9,15 +9,15 @@ Imports
 
 Process input/ouutput arguments
 
-    >>> processid = "reprojectImage"
-    >>> inputs = [ ("inputImage","http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img"),
-    ...            ("outputSRS", "EPSG:4326") ]
-    >>> output = "outputImage"
+    >>> processid = 'reprojectImage'
+    >>> inputs = [ ('inputImage', 'http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img'),
+    ...            ('outputSRS', 'EPSG:4326') ]
+    >>> output = 'outputImage'
 
     # build XML request for WPS process execution
     >>> execution = WPSExecution()
     >>> requestElement = execution.buildRequest(processid, inputs, output=output)
-    >>> request = etree.tostring( requestElement )
+    >>> request = etree.tostring(requestElement)
 
 Compare to cached XML request
 

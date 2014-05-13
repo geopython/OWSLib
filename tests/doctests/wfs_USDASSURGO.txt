@@ -3,7 +3,7 @@
 
 >>> import unittest
 >>> from owslib.wfs import WebFeatureService
->>> wfs_filter = "<Filter><BBOX><PropertyName>Geometry</PropertyName> <Box srsName='EPSG:4326'><coordinates>-76.766960,39.283611 -76.684120,39.338394</coordinates> </Box></BBOX></Filter>"
+>>> wfs_filter = '<Filter><BBOX><PropertyName>Geometry</PropertyName> <Box srsName="EPSG:4326"><coordinates>-76.766960,39.283611 -76.684120,39.338394</coordinates> </Box></BBOX></Filter>'
 >>> wfs = WebFeatureService('http://SDMDataAccess.nrcs.usda.gov/Spatial/SDMWGS84Geographic.wfs', version='1.0.0')
 >>> response = wfs.getfeature(typename=('MapunitPolyExtended',), filter=wfs_filter, propertyname=None)
 >>> response.read().find('<wfs:FeatureCollection') > 0

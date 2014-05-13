@@ -1,4 +1,5 @@
 class Namespaces(object):
+
     """
         Class for holding and maniputlating a dictionary containing the various namespaces for
         each standard.
@@ -51,7 +52,7 @@ class Namespaces(object):
         'xs'    :   'http://www.w3.org/2001/XMLSchema',
         'xs2'   :   'http://www.w3.org/XML/Schema',
         'xsi'   :   'http://www.w3.org/2001/XMLSchema-instance'
-    }    
+    }
 
     def get_namespace(self, key):
         """
@@ -71,7 +72,7 @@ class Namespaces(object):
         if key in self.namespace_dict.keys():
             retval = self.namespace_dict[key]
         return retval
-    
+
     def get_versioned_namespace(self, key, ver=None):
         """
             Retrieves a namespace from the dictionary with a specific version number
@@ -86,7 +87,7 @@ class Namespaces(object):
             >>> ns.get_versioned_namespace('ows','1.1.0')
             'http://www.opengis.net/ows/1.1'
         """
-        
+
         if ver is None:
             return self.get_namespace(key)
 
@@ -94,15 +95,15 @@ class Namespaces(object):
         # Strip the decimals out of the passed in version
         for s in ver.split('.'):
             version += s
-        
+
         key += version
 
         retval = None
         if key in self.namespace_dict.keys():
             retval = self.namespace_dict[key]
-            
+
         return retval
-    
+
     def get_namespaces(self, keys=None):
         """
             Retrieves a dict of namespaces from the namespace mapping
@@ -128,7 +129,7 @@ class Namespaces(object):
             return self.namespace_dict
 
         if isinstance(keys, unicode) or isinstance(keys, str):
-            return { keys: self.get_namespace(keys) }
+            return {keys: self.get_namespace(keys)}
 
         retval = {}
         for key in keys:
