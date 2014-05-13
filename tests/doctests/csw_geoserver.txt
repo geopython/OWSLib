@@ -1,5 +1,5 @@
 >>> from owslib.csw import CatalogueServiceWeb
->>> c=CatalogueServiceWeb('http://suite.opengeo.org/geoserver/ows')
+>>> c = CatalogueServiceWeb('http://suite.opengeo.org/geoserver/ows')
 >>> c.getrecords2(typenames='gmd:MD_Metadata')
 >>> c.results.get('returned') > 0
 True

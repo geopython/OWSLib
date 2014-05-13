@@ -4,13 +4,13 @@ Imports
     >>> from owslib.wms import WebMapService
     >>> from tests.utils import cast_tuple_int_list, cast_tuple_int_list_srs, resource_file, scratch_file
     >>> import os
-    
-Fake a request to a GeoServer WMS Server using saved doc from 
+
+Fake a request to a GeoServer WMS Server using saved doc from
 http://giswebservices.massgis.state.ma.us/geoserver/wms
 
     >>> xml = open(resource_file('wms_mass_gis-caps.xml'), 'r').read()
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
-    
+
 Test capabilities
 -----------------
 
@@ -53,14 +53,14 @@ Check contact info (some of it is missing)
     'GIS Programmer'
 
 Test available content layers
-    >>> type(wms.items())
+    >>> type(list(wms.items()))
     <type 'list'>
     >>> type(wms.contents)
     <type 'dict'>
 
- 
+
 Test single item accessor
-    
+
     >>> wms['massgis:GISDATA.SHORELINES_ARC'].title
     'Shoreline Change'
 
@@ -72,11 +72,11 @@ Test single item accessor
 
     >>> cast_tuple_int_list(wms['massgis:GISDATA.SHORELINES_ARC'].boundingBoxWGS84)
     [-71, 41, -69, 42]
-    
+
     >>> x = wms['massgis:GISDATA.SHORELINES_ARC'].styles
     >>> x == {'GISDATA.SHORELINES_ARC::Default': {'legend': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GISDATA.SHORELINES_ARC', 'title': None}}
     True
-    
+
 Expect a KeyError for invalid names
 
     >>> wms['utterly bogus'].title
@@ -88,10 +88,10 @@ Test operations
 
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
-    
+
     >>> wms.getOperationByName('GetMap').methods
     {'Get': {'url': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?SERVICE=WMS&'}}
-    
+
     >>> len(wms.getOperationByName('GetMap').formatOptions)
     29
 

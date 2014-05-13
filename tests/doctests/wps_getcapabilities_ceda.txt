@@ -25,17 +25,16 @@ Check WPS description
 
 Check available operations
     >>> for operation in wps.operations:
-    ...     print operation.name
-    ... 
+    ...     print(operation.name)
+    ...
     GetCapabilities
     DescribeProcess
     Execute
-    
 
 Check high level process descriptions
     >>> for process in wps.processes:
     ...     process.identifier, process.title
-    ... 
+    ...
     ('CDMSSubsetVariable', 'Writes a text file and returns an output.')
     ('NCDumpIt', 'Calls ncdump on the input file path and writes it to an output file.')
     ('TestDap', 'Writes a text file and returns an output.')

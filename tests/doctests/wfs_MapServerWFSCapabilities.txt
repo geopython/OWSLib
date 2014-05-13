@@ -42,7 +42,7 @@ Service Provider:
     >>> wfs.provider.url
     'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3920&entryLang=en&portal=gdp'
 
-    #TODO: test contact info:
+    # TODO: test contact info:
     #>>> wfs.provider.contact.name
 
 
@@ -64,7 +64,7 @@ Test single item accessor
     >>> cast_tuple_int_list(wfs['IBA'].boundingBoxWGS84)
     [-141, 41, -52, 78]
 
-    >>> map(lambda x: x.getcode(), wfs['IBA'].crsOptions)
+    >>> [x.getcode() for x in wfs['IBA'].crsOptions]
     ['EPSG:4326']
 
     >>> wfs['IBA'].verbOptions
@@ -101,4 +101,3 @@ Lastly, test the getcapabilities method
     >>> xml = wfs.getcapabilities().read()
     >>> xml.find('<WFS_Capabilities') > 0
     True
-

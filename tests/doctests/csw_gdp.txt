@@ -1,11 +1,11 @@
 Imports
 
-    >>> from owslib import fes    
-    >>> from owslib.dif import namespaces 
+    >>> from owslib import fes
+    >>> from owslib.dif import namespaces
     >>> from owslib.csw import CatalogueServiceWeb as cs
     >>> from owslib.etree import etree
 
-    >>> c=cs('http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw',timeout=30)
+    >>> c = cs('http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw', timeout=30)
     >>> c.identification.title
     'Compusult CSW'
     >>> c.identification.version
@@ -19,7 +19,7 @@ Imports
     >>> c.response
     '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator=""><ows:ExceptionText>Internal Error</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
 
-    >>> prop = fes.PropertyIsLike("csw:AnyText", "birds")
+    >>> prop = fes.PropertyIsLike('csw:AnyText', 'birds')
     >>> c.getrecords2([prop])
     >>> c.results['matches']
     100
@@ -31,11 +31,11 @@ Imports
     '272 Categorized Initiatives: Initiatives are referenced to a Category, Sub-Category and Subject Term index, through the cititzen science web site at http://www.citizenscience.ca'
     >>> c.getrecordbyid(['9250AA67-F3AC-6C12-0CB9-0662231AA181'])
 
-    >>> prop = fes.PropertyIsLike("csw:AnyText", "hydrology")
+    >>> prop = fes.PropertyIsLike('csw:AnyText', 'hydrology')
     >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd')
     >>> c.exceptionreport
 
-    >>> prop = fes.PropertyIsLike("csw:AnyText", "hydrology")
+    >>> prop = fes.PropertyIsLike('csw:AnyText', 'hydrology')
     >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd', maxrecords=2)
     >>> c.results['returned']
     2
@@ -48,14 +48,14 @@ Imports
     'ISO/TC 211 Geographic Information/Geomatics'
     >>> c.records['World Glaciology Data, Geological Survey of Canada.xml'].stdver
     'ISO 19115:2003'
-    >>> c.harvest('somefile','someuri')
+    >>> c.harvest('somefile', 'someuri')
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
     ExceptionReport: 'Access to Harvest denied'
     >>> c.response
     '<?xml version="1.0" encoding="ISO-8859-1"?><ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><ows:Exception exceptionCode="NoApplicableCode" locator="Access"><ows:ExceptionText>Access to Harvest denied</ows:ExceptionText></ows:Exception></ows:ExceptionReport>\r\n'
 
-    >>> prop = fes.PropertyIsLike("csw:AnyText", "glacial")
+    >>> prop = fes.PropertyIsLike('csw:AnyText', 'glacial')
     >>> c.getrecords2([prop], outputschema='http://www.fgdc.gov')
     >>> c.results['matches'] > 300
     True
@@ -67,13 +67,13 @@ Imports
     2
     >>> c.results['nextrecord']
     3
-    >>> sortBy=fes.SortBy([fes.SortProperty("dc:title", "ASC")])
+    >>> sortBy = fes.SortBy([fes.SortProperty('dc:title', 'ASC')])
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sortBy)
-    >>> xml=etree.fromstring(c.response)
-    >>> xml.findtext(".//{http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/}Entry_Title")
+    >>> xml = etree.fromstring(c.response)
+    >>> xml.findtext('.//{http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/}Entry_Title')
     'Agu Bay and Easter Cape (Surficial AS1959)'
-    >>> sortBy=fes.SortBy([fes.SortProperty("dc:title", "DESC")])
+    >>> sortBy = fes.SortBy([fes.SortProperty('dc:title', 'DESC')])
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sortBy)
-    >>> xml=etree.fromstring(c.response)
-    >>> xml.findtext(".//{http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/}Entry_Title")
+    >>> xml = etree.fromstring(c.response)
+    >>> xml.findtext('.//{http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/}Entry_Title')
     'Young Inlet (Surficial OF3450)'

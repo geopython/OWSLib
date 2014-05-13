@@ -25,8 +25,8 @@ Check WPS description
 
 Check available operations
     >>> for operation in wps.operations:
-    ...     print operation.name
-    ... 
+    ...     print(operation.name)
+    ...
     GetCapabilities
     DescribeProcess
     Execute

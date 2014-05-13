@@ -10,7 +10,7 @@ Imports
 
 Initialize
 
-    >>> xml = open(resource_file('sos_ngwd.xml'),'r').read()
+    >>> xml = open(resource_file('sos_ngwd.xml'), 'r').read()
     >>> ngwd = SensorObservationService(None, xml=xml, version='2.0.0')
 
 ServiceIdentification
@@ -51,7 +51,6 @@ ServiceProvider
 
     >>> p.url
     'http://gw-info.net'
-
 
     ServiceContact
 
@@ -119,7 +118,6 @@ OperationsMetadata
     >>> x == {'Post': {'url': 'http://ngwd-bdnes.cits.nrcan.gc.ca:8080/proxy/GinService/sos/gw'}, 'Get': {'url': 'http://ngwd-bdnes.cits.nrcan.gc.ca:8080/proxy/GinService/sos/gw?'}}
     True
 
-
     # DescribeSensor
     >>> descsen = ngwd.get_operation_by_name('describesensor')
 
@@ -130,11 +128,9 @@ OperationsMetadata
     >>> x == {'procedureDescriptionFormat': {'values': ['http://www.opengis.net/sensorML/1.0.1']}, 'procedure': {'values': ['urn:ogc:object:Sensor::GIN_GroundwaterLevelProcess']}}
     True
 
-
     >>> x = descsen.methods
     >>> x == {'Post': {'url': 'http://ngwd-bdnes.cits.nrcan.gc.ca:8080/proxy/GinService/sos/gw'}, 'Get': {'url': 'http://ngwd-bdnes.cits.nrcan.gc.ca:8080/proxy/GinService/sos/gw?'}}
     True
-
 
     # GetObservation
     >>> getob = ngwd.get_operation_by_name('getobservation')
@@ -162,7 +158,6 @@ Contents
     >>> contents = ngwd.contents
     >>> len(contents)
     1
-
 
     Network
     >>> network = contents['GW_LEVEL']

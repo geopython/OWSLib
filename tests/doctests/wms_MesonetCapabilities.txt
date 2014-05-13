@@ -4,12 +4,12 @@ Imports
     >>> from owslib.wms import WebMapService
     >>> from tests.utils import resource_file
 
-Fake a request to a WMS Server using saved doc from 
+Fake a request to a WMS Server using saved doc from
 http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?
 
     >>> xml = open(resource_file('wms_mesonet-caps.xml'), 'r').read()
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
-    
+
 Test capabilities
 -----------------
 
@@ -34,21 +34,21 @@ Test available content layers
     >>> sorted([wms[layer].id for layer in wms.contents])
     ['nexrad-n0r-wmst', 'nexrad_base_reflect', 'time_idx']
 
- 
+
 Test single item accessor
-    
+
     >>> wms['time_idx'].title
     'NEXRAD BASE REFLECT'
 
     >>> wms['time_idx'].keywords
     []
-    
+
     >>> wms['time_idx'].boundingBox
     (-126.0, 24.0, -66.0, 50.0, 'EPSG:4326')
 
     >>> wms['time_idx'].boundingBoxWGS84
     (-126.0, 24.0, -66.0, 50.0)
-    
+
     >>> sorted(wms['time_idx'].crsOptions)
     ['EPSG:102100', 'EPSG:3857', 'EPSG:4326', 'EPSG:900913']
 

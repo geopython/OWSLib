@@ -39,5 +39,5 @@ Simulate end of process
 Display location of process output
     >>> for output in execution.processOutputs:
     ...     output.reference
-    ... 
+    ...
     'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'

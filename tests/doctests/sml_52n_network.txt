@@ -16,7 +16,7 @@ Initialize
 
 Contacts
 
-    >>> system.contacts.keys()
+    >>> list(system.contacts.keys())
     ['http://mmisw.org/ont/ioos/definition/publisher']
 
     >>> publishers = system.get_contacts_by_role('http://mmisw.org/ont/ioos/definition/publisher')
@@ -59,7 +59,7 @@ Capabilities
 
 Characteristics
 
-    >>> system.characteristics.keys()
+    >>> list(system.characteristics.keys())
     []
 
 Components

@@ -1396,7 +1396,7 @@ def printInputOutput(value, indent=''):
         print('%s Allowed Value: %s' % (indent, printValue(val)))
     for val in value.supportedValues:
         print('%s Supported Value: %s' % (indent, printValue(val)))
-    print('%s Default Value: %s ' % (indent, printValue(value.defaultValue)))
+    print('%s Default Value: %s' % (indent, printValue(value.defaultValue)))
 
     # Input fields
     if isinstance(value, Input):

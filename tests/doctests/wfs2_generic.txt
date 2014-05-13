@@ -3,7 +3,7 @@ Imports and initialize
     >>> from owslib.wfs import WebFeatureService
     >>> from tests.utils import resource_file, sorted_url_query
 
-    >>> getcapsin = open(resource_file("wfs_CUZK_GetCapabilities_2_0_0.xml")).read()
+    >>> getcapsin = open(resource_file('wfs_CUZK_GetCapabilities_2_0_0.xml')).read()
     >>> wfs = WebFeatureService('http://services.cuzk.cz/wfs/inspire-cp-wfs.asp', xml=getcapsin, version='2.0.0')
 
 Test the capabilities info
@@ -44,8 +44,8 @@ Test the getfeature method
     >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2))
     ['maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=CP%3ACadastralBoundary', 'version=2.0.0']
 
-    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2, bbox=[15,49,16,51,'urn:ogc:def:crs:EPSG:4326']))
+    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2, bbox=[15, 49, 16, 51, 'urn:ogc:def:crs:EPSG:4326']))
     ['bbox=49%2C15%2C51%2C16%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A4326', 'maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=CP%3ACadastralBoundary', 'version=2.0.0']
 
-    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2, bbox=[-685336,-993518,-684996,-993285]))
+    >>> sorted_url_query(wfs.getGETGetFeatureRequest(typename=['CP:CadastralBoundary'], maxfeatures=2, bbox=[-685336, -993518, -684996, -993285]))
     ['bbox=-685336%2C-993518%2C-684996%2C-993285%2Curn%3Aogc%3Adef%3Acrs%3AEPSG%3A%3A102067', 'maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=CP%3ACadastralBoundary', 'version=2.0.0']

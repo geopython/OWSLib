@@ -9,7 +9,7 @@ Imports
     >>> from owslib.wcs import WebCoverageService
     >>> from tests.utils import scratch_file
 
-    >>> wcs=WebCoverageService('http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best', version='1.0.0')
+    >>> wcs = WebCoverageService('http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best', version='1.0.0')
     >>> wcs.url
     'http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best'
     >>> wcs.version
@@ -26,34 +26,34 @@ Imports
     >>> wcs.identification.accessConstraints
     'NONE'
 
-#There is no 'ResponsibleParty' information in the NCEP/NAM capabilities document, so wcs.provider is empty.
-#but if there was you could do:
-#wcs.provider.url
-#and..
-#wcs.provider.contact.organization
-#wcs.provider.contact.email
-#wcs.provider.contact.address
-#etc... for region, city, postcode, country
+# There is no 'ResponsibleParty' information in the NCEP/NAM capabilities document, so wcs.provider is empty.
+# but if there was you could do:
+# wcs.provider.url
+# and..
+# wcs.provider.contact.organization
+# wcs.provider.contact.email
+# wcs.provider.contact.address
+# etc... for region, city, postcode, country
 
 Print the ids of all layers (actually just the first 3):
-   >>> sorted(wcs.contents.keys())
-   ['Absolute_vorticity_isobaric', 'Best_4_layer_lifted_index_layer_between_two_pressure_difference_from_ground_layer', 'Convective_Available_Potential_Energy_layer_between_two_pressure_difference_from_ground_layer', 'Convective_Available_Potential_Energy_surface', 'Convective_inhibition_layer_between_two_pressure_difference_from_ground_layer', 'Convective_inhibition_surface', 'Convective_precipitation_surface_Mixed_intervals_Accumulation', 'Geopotential_height_isobaric', 'Geopotential_height_surface', 'Geopotential_height_zeroDegC_isotherm', 'Mean_Sea_Level_Pressure_NAM_Model_Reduction_msl', 'Parcel_lifted_index_to_500_hPa_layer_between_two_pressure_difference_from_ground_layer', 'Precipitable_water_entire_atmosphere', 'Pressure_cloud_base', 'Pressure_cloud_tops', 'Pressure_maximum_wind', 'Pressure_reduced_to_MSL_msl', 'Pressure_surface', 'Pressure_tropopause', 'Relative_humidity_height_above_ground', 'Relative_humidity_isobaric', 'Relative_humidity_layer_between_two_pressure_difference_from_ground_layer', 'Relative_humidity_zeroDegC_isotherm', 'Storm_relative_helicity_layer_between_two_heights_above_ground_layer', 'Temperature_cloud_tops', 'Temperature_height_above_ground', 'Temperature_isobaric', 'Temperature_layer_between_two_pressure_difference_from_ground_layer', 'Temperature_tropopause', 'Total_precipitation_surface_Mixed_intervals_Accumulation', 'Vertical_velocity_pressure_isobaric', 'u-component_of_wind_height_above_ground', 'u-component_of_wind_isobaric', 'u-component_of_wind_layer_between_two_pressure_difference_from_ground_layer', 'u-component_of_wind_maximum_wind', 'u-component_of_wind_tropopause', 'v-component_of_wind_height_above_ground', 'v-component_of_wind_isobaric', 'v-component_of_wind_layer_between_two_pressure_difference_from_ground_layer', 'v-component_of_wind_maximum_wind', 'v-component_of_wind_tropopause']
+    >>> sorted(wcs.contents.keys())
+    ['Absolute_vorticity_isobaric', 'Best_4_layer_lifted_index_layer_between_two_pressure_difference_from_ground_layer', 'Convective_Available_Potential_Energy_layer_between_two_pressure_difference_from_ground_layer', 'Convective_Available_Potential_Energy_surface', 'Convective_inhibition_layer_between_two_pressure_difference_from_ground_layer', 'Convective_inhibition_surface', 'Convective_precipitation_surface_Mixed_intervals_Accumulation', 'Geopotential_height_isobaric', 'Geopotential_height_surface', 'Geopotential_height_zeroDegC_isotherm', 'Mean_Sea_Level_Pressure_NAM_Model_Reduction_msl', 'Parcel_lifted_index_to_500_hPa_layer_between_two_pressure_difference_from_ground_layer', 'Precipitable_water_entire_atmosphere', 'Pressure_cloud_base', 'Pressure_cloud_tops', 'Pressure_maximum_wind', 'Pressure_reduced_to_MSL_msl', 'Pressure_surface', 'Pressure_tropopause', 'Relative_humidity_height_above_ground', 'Relative_humidity_isobaric', 'Relative_humidity_layer_between_two_pressure_difference_from_ground_layer', 'Relative_humidity_zeroDegC_isotherm', 'Storm_relative_helicity_layer_between_two_heights_above_ground_layer', 'Temperature_cloud_tops', 'Temperature_height_above_ground', 'Temperature_isobaric', 'Temperature_layer_between_two_pressure_difference_from_ground_layer', 'Temperature_tropopause', 'Total_precipitation_surface_Mixed_intervals_Accumulation', 'Vertical_velocity_pressure_isobaric', 'u-component_of_wind_height_above_ground', 'u-component_of_wind_isobaric', 'u-component_of_wind_layer_between_two_pressure_difference_from_ground_layer', 'u-component_of_wind_maximum_wind', 'u-component_of_wind_tropopause', 'v-component_of_wind_height_above_ground', 'v-component_of_wind_isobaric', 'v-component_of_wind_layer_between_two_pressure_difference_from_ground_layer', 'v-component_of_wind_maximum_wind', 'v-component_of_wind_tropopause']
 
 
-#To further interrogate a single "coverage" get the coverageMetadata object
-#You can either do:
-    >>> cvg= wcs.contents['Temperature_tropopause'] #to get it from the dictonary
+# To further interrogate a single "coverage" get the coverageMetadata object
+# You can either do:
+    >>> cvg = wcs.contents['Temperature_tropopause']  # to get it from the dictonary
 
-#or even simpler you can do:
-    >>> cvg=wcs['Temperature_tropopause']
+# or even simpler you can do:
+    >>> cvg = wcs['Temperature_tropopause']
 
     >>> cvg.boundingBoxWGS84
     (-153.58891112103777, 11.747698396806157, -48.598408556239576, 57.484319872365305)
 
-    >>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
+    >>> len(cvg.timepositions) > 1  # The old test kept failing as the response timepositions kept changign on the server
     True
 
-    >>> filter(None, map(lambda x: x.getcode(), cvg.supportedCRS))
+    >>> [c for c in [x.getcode() for x in cvg.supportedCRS] if c]
     ['EPSG:9802']
 
     >>> cvg.supportedFormats
@@ -78,18 +78,18 @@ Print the ids of all layers (actually just the first 3):
     [['81.27100405485734', '0.0'], ['0.0', '81.27100086212158']]
 
 
-#Now we have enough information to build a getCoverage request:
-    >>> covID='Temperature_tropopause'
-    >>> timeRange=['2009-01-08T06:00:00',  '2009-01-08T12:00:00']  #Okay, you should be able to select a range of times, but the server doesn't seem to like it.
-    >>> timeRange=[cvg.timepositions[10]] #So for now I'll just  choose one timestep (from cvg.timepositions)
-    >>> bb=(-140, -15, 30, 55) # chosen from cvg.boundingBoxWGS84
-    >>> formatType='NetCDF3' # chosen from cvg.supportedFormats
+# Now we have enough information to build a getCoverage request:
+    >>> covID = 'Temperature_tropopause'
+    >>> timeRange = ['2009-01-08T06:00:00', '2009-01-08T12:00:00']  # Okay, you should be able to select a range of times, but the server doesn't seem to like it.
+    >>> timeRange = [cvg.timepositions[10]]  # So for now I'll just  choose one timestep (from cvg.timepositions)
+    >>> bb = (-140, -15, 30, 55)  # chosen from cvg.boundingBoxWGS84
+    >>> formatType = 'NetCDF3'  # chosen from cvg.supportedFormats
 
-#Make the actual getCoverage request.
-    >>> output=wcs.getCoverage(identifier=covID,time=timeRange,bbox=bb, format=formatType)
+# Make the actual getCoverage request.
+    >>> output = wcs.getCoverage(identifier=covID, time=timeRange, bbox=bb, format=formatType)
 
-#Then write this to a netcdf file.
+# Then write this to a netcdf file.
     >>> filename = scratch_file('threddstest.nc')
-    >>> f=open(filename, 'wb')
+    >>> f = open(filename, 'wb')
     >>> f.write(output.read())
     >>> f.close()
