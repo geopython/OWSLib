@@ -10,7 +10,7 @@ import cgi
 from cStringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
-from owslib.util import openURL, testXMLValue, extract_xml_list, ServiceException
+from owslib.util import openURL, testXMLValue, extract_xml_list, ServiceException, xmltag_split
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -162,9 +162,11 @@ class WebFeatureService_1_0_0(object):
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
-        base_url = self.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods[method]['url']
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
-        
 
         # check featureid
         if featureid:
@@ -318,6 +320,7 @@ class ContentMetadata:
 
             self.metadataUrls.append(metadataUrl)
 
+
 class OperationMetadata:
     """Abstraction for WFS metadata.
     
@@ -325,14 +328,13 @@ class OperationMetadata:
     """
     def __init__(self, elem):
         """."""
-        self.name = elem.tag
+        self.name = xmltag_split(elem.tag)
         # formatOptions
         self.formatOptions = [f.tag for f in elem.findall(nspath('ResultFormat/*'))]
-        methods = []
+        self.methods = []
         for verb in elem.findall(nspath('DCPType/HTTP/*')):
             url = verb.attrib['onlineResource']
-            methods.append((verb.tag, {'url': url}))
-        self.methods = dict(methods)
+            self.methods.append({'type' : xmltag_split(verb.tag), 'url': url})
 
 
 class WFSCapabilitiesReader(object):

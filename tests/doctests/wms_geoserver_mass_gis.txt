@@ -89,8 +89,9 @@ Test operations
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
     
-    >>> wms.getOperationByName('GetMap').methods
-    {'Get': {'url': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?SERVICE=WMS&'}}
+    >>> x = wms.getOperationByName('GetMap').methods
+    >>> x == [{'type' : 'Get', 'url': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?SERVICE=WMS&'}]
+    True
     
     >>> len(wms.getOperationByName('GetMap').formatOptions)
     29
