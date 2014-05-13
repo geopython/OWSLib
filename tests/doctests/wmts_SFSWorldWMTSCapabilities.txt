@@ -149,7 +149,7 @@ Test single item accessor
     {'default': {'isDefault': True}}
     >>> wmts['World'].formats
     ['image/png']
-    >>> sorted(wmts['World'].tilematrixsets)
+    >>> sorted(wmts['World'].tilematrixsetlinks.keys())
     ['GlobalCRS84Scale', 'GoogleMapsCompatible']
     >>> wmts['World'].infoformats
     ['application/gml+xml; version=3.1']
@@ -168,7 +168,7 @@ Test single item accessor
     {'default': {'isDefault': True}}
     >>> wmts['Ocean'].formats
     ['image/png']
-    >>> wmts['Ocean'].tilematrixsets
+    >>> sorted(wmts['Ocean'].tilematrixsetlinks.keys())
     ['GlobalCRS84Scale', 'GoogleMapsCompatible']
     >>> wmts['Ocean'].infoformats
     ['application/gml+xml; version=3.1']
