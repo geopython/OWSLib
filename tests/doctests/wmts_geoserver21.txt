@@ -129,8 +129,14 @@ Test single item accessor
     {'GH_Areas_Protegidas4326': {'isDefault': True}}
     >>> wmts['geonode:GH_Areas_Protegidas4326'].formats
     ['image/png', 'image/jpeg']
-    >>> wmts['geonode:GH_Areas_Protegidas4326'].tilematrixsets
+    >>> sorted(wmts['geonode:GH_Areas_Protegidas4326'].tilematrixsetlinks.keys())
     ['EPSG:4326', 'EPSG:900913']
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].tilematrixsetlinks['EPSG:4326']
+    <TileMatrixSetLink: EPSG:4326, tilematrixlimits={...}>
+    >>> sorted(wmts['geonode:GH_Areas_Protegidas4326'].tilematrixsetlinks['EPSG:4326'].tilematrixlimits.keys())
+    ['EPSG:4326:0', 'EPSG:4326:1', 'EPSG:4326:10', 'EPSG:4326:11', 'EPSG:4326:12', 'EPSG:4326:13', 'EPSG:4326:14', 'EPSG:4326:15', 'EPSG:4326:16', 'EPSG:4326:17', 'EPSG:4326:18', 'EPSG:4326:19', 'EPSG:4326:2', 'EPSG:4326:20', 'EPSG:4326:3', 'EPSG:4326:4', 'EPSG:4326:5', 'EPSG:4326:6', 'EPSG:4326:7', 'EPSG:4326:8', 'EPSG:4326:9', 'null']
+    >>> wmts['geonode:GH_Areas_Protegidas4326'].tilematrixsetlinks['EPSG:4326'].tilematrixlimits['EPSG:4326:14']
+    <TileMatrixLimits: EPSG:4326:14, minRow=6510, maxRow=7010, minCol=7994, maxCol=8713>
     >>> wmts['geonode:GH_Areas_Protegidas4326'].infoformats
     ['text/plain', 'text/html', 'application/vnd.ogc.gml']
     >>> wmts['geonode:GH_Areas_Protegidas4326'].resourceURLs

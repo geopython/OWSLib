@@ -148,8 +148,12 @@ Test single item accessor
     True
     >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].formats
     ['image/png']
-    >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsets
+    >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsetlinks.keys()
     ['EPSG4326_2km']
+    >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsetlinks['EPSG4326_2km']
+    <TileMatrixSetLink: EPSG4326_2km, tilematrixlimits={...}>
+    >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsetlinks['EPSG4326_2km'].tilematrixlimits
+    {}
 
     >>> wmts['MODIS_Aqua_Water_Vapor_5km_Night'].title
     'MODIS_Aqua_Water_Vapor_5km_Night'
