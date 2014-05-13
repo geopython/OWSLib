@@ -1,7 +1,7 @@
 # Example script that performs a set of (small) live requests versus the live CEDA WPS service
 
-from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution, ComplexData, printInputOutput
-from owslib.util import dump
+from owslib.wps import WebProcessingService, printInputOutput
+
 
 verbose = True
 wps = WebProcessingService('http://ceda-wps2.badc.rl.ac.uk/wps', verbose=verbose)

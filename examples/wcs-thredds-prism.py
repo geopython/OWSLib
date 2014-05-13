@@ -11,7 +11,10 @@
 #
 # Example to find the equivalent information using OWSLib:
 #
+
 from owslib.wcs import WebCoverageService
+
+
 wcs = WebCoverageService('http://cida.usgs.gov/thredds/wcs/prism', version='1.0.0')
 # Take a look at the contents (coverages) of the wcs.
 print(wcs.contents)

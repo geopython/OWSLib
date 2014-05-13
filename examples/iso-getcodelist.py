@@ -11,10 +11,10 @@
 # get a list of entries for a given code list dictionary
 
 import sys
-import urllib2
 
 from owslib.etree import etree
 from owslib.iso import CodelistCatalogue
+
 
 if len(sys.argv) < 3:
     print('Usage: %s <path/to/gmxCodelists.xml> <CodeListDictionary>' % sys.argv[0])

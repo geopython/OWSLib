@@ -1,7 +1,6 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
-from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution, printInputOutput
-from owslib.util import dump
+from owslib.wps import WebProcessingService, GMLMultiPolygonFeatureCollection, monitorExecution, printInputOutput
 
 # instantiate WPS client
 # setting verbose=True will print out all HTTP request and responses to standard output
@@ -61,8 +60,7 @@ inputs = [("FEATURE_ATTRIBUTE_NAME", "the_geom"),
           ("GROUP_BY", "STATISTIC"),
           ("SUMMARIZE_TIMESTEP", "false"),
           ("SUMMARIZE_FEATURE_ATTRIBUTE", "false"),
-          ("FEATURE_COLLECTION", featureCollection)
-          ]
+          ("FEATURE_COLLECTION", featureCollection)]
 output = "OUTPUT"
 execution = wps.execute(processid, inputs, output="OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file

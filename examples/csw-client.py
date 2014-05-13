@@ -11,7 +11,8 @@
 import sys
 import getopt
 
-from owslib.csw import CatalogueServiceWeb
+from owslib.csw import CatalogueServiceWeb, schema_location
+from owslib.util import xmlvalid
 
 
 def usage():
@@ -147,7 +148,7 @@ if print_request is True:  # print the request
 
 if validate is True:  # do XML validation
     print('Validating request XML')
-    if util.xmlvalid(c.request, csw.schema_location.split()[1]) is True:
+    if xmlvalid(c.request, schema_location.split()[1]) is True:
         print('request is valid XML')
     else:
         print('request is NOT valid XML')

@@ -11,7 +11,9 @@
 # simple process to harvest CSW catalogues via Harvest operations
 
 import sys
+
 from owslib.csw import CatalogueServiceWeb
+
 
 stop = 0
 flag = 0

@@ -8,7 +8,7 @@
 
 import sys
 import getopt
-import os
+
 from owslib.wps import WebProcessingService, monitorExecution
 
 
