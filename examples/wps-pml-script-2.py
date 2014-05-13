@@ -31,8 +31,8 @@ for output in process.processOutputs:
 
 # 3) Execute
 # GET request: http://rsg.pml.ac.uk/wps/vector.cgi?request=execute&service=WPS&version=1.0.0&identifier=v.net.path&datainputs=[input=http://rsg.pml.ac.uk/wps/example/graph.gml;file=1%20-960123.1421801624%204665723.56559387%20-101288.65106088226%205108200.011823481]
-processid = "v.net.path"
-inputs = [("input", "http://rsg.pml.ac.uk/wps/example/graph.gml"),
-          ("file", "1 -960123.1421801624 4665723.56559387 -101288.65106088226 5108200.011823481")]
+processid = 'v.net.path'
+inputs = [('input', 'http://rsg.pml.ac.uk/wps/example/graph.gml'),
+          ('file', '1 -960123.1421801624 4665723.56559387 -101288.65106088226 5108200.011823481')]
 execution = wps.execute(processid, inputs)
 monitorExecution(execution)

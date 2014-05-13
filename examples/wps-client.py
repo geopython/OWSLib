@@ -13,7 +13,7 @@ from owslib.wps import WebProcessingService, monitorExecution
 
 
 def usage():
-    print("""
+    print('''
 
 Usage: %s [parameters]
 
@@ -52,7 +52,7 @@ python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../te
 python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest5.xml
 python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r Execute -x ../tests/wps_PMLExecuteRequest6.xml
 
-""" % sys.argv[0])
+''' % sys.argv[0])
 
 # check args
 if len(sys.argv) == 1:

@@ -16,7 +16,7 @@ from owslib.util import xmlvalid
 
 
 def usage():
-    print("""
+    print('''
     %s [options]
 
 Required Parameters
@@ -54,7 +54,7 @@ GetRecords
 GetRecordById
     --id=[ID] the ID of the record
 
-""" % sys.argv[0])
+''' % sys.argv[0])
 
 # check args
 if len(sys.argv) == 1:

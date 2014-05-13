@@ -28,20 +28,20 @@ for output in process.processOutputs:
 
 # 3a) Execute
 # GET request: http://rsg.pml.ac.uk/wps/generic.cgi?request=Execute&service=wps&version=1.0.0&identifier=reprojectImage&datainputs=[inputImage=http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img;outputSRS=EPSG:4326]&responsedocument=outputImage=@asreference=true
-processid = "reprojectImage"
-inputs = [("inputImage", "http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img"),
-          ("outputSRS", "EPSG:4326")]
-output = "outputImage"
+processid = 'reprojectImage'
+inputs = [('inputImage', 'http://rsg.pml.ac.uk/wps/testdata/elev_srtm_30m.img'),
+          ('outputSRS', 'EPSG:4326')]
+output = 'outputImage'
 execution = wps.execute(processid, inputs, output)
 
 monitorExecution(execution)
 
 # 3b) Execute
 # GET request: http://rsg.pml.ac.uk/wps/generic.cgi?request=Execute&service=WPS&version=1.0.0&identifier=reprojectCoords&datainputs=[coords=http://rsg.pml.ac.uk/wps/testdata/coords.txt;outputSRS=EPSG:32630;inputSRS=EPSG:4326]
-processid = "reprojectCoords"
-inputs = [("coords", "http://rsg.pml.ac.uk/wps/testdata/coords.txt"),
-          ("outputSRS", "EPSG:32630"),
-          ("inputSRS", "EPSG:4326")]
+processid = 'reprojectCoords'
+inputs = [('coords', 'http://rsg.pml.ac.uk/wps/testdata/coords.txt'),
+          ('outputSRS', 'EPSG:32630'),
+          ('inputSRS', 'EPSG:4326')]
 execution = wps.execute(processid, inputs)
 
 monitorExecution(execution)
