@@ -22,6 +22,7 @@ import cgi
 from urllib import urlencode
 import re
 from copy import deepcopy
+import warnings
 
 
 """
@@ -344,6 +345,31 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
 
         return response
 
+
+def element_to_string(element, encoding=None):
+    """
+    Returns a string from a XML object
+
+    Parameters
+    ----------
+    - xml:                 etree Element
+    - encoding (optional): encoding in string form. 'utf-8', 'ISO-8859-1', etc.
+
+    """
+    if encoding is None:
+        encoding = "ISO-8859-1"
+
+    if etree.__name__ == 'lxml.etree':
+        if encoding in ['unicode', 'utf-8']:
+            return '<?xml version="1.0" encoding="utf-8" standalone="no"?>\n%s' % \
+                   etree.tostring(element, encoding='unicode')
+        else:
+            return etree.tostring(element, encoding=encoding, xml_declaration=True)
+    else:
+        return '<?xml version="1.0" encoding="%s" standalone="no"?>\n%s' % (encoding,
+               etree.tostring(element, encoding=encoding))
+
+
 def xml2string(xml):
     """
 
@@ -355,6 +381,8 @@ def xml2string(xml):
     - xml: xml string
 
     """
+    warnings.warn("DEPRECIATION WARNING!  You should now use the 'element_to_string' method \
+                   The 'xml2string' method will be removed in a future version of OWSLib.")
     return '<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>\n' + xml
 
 def xmlvalid(xml, xsd):
