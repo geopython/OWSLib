@@ -256,7 +256,7 @@ class CatalogueServiceWeb:
 
         """
 
-        # construct request 
+        # construct request
         data = {
             'service': self.service,
             'version': self.version,
@@ -264,13 +264,13 @@ class CatalogueServiceWeb:
             'outputFormat': format,
             'outputSchema': outputschema,
             'elementsetname': esn,
-            'id': '',
+            'id': ','.join(id),
         }
 
-        self.request = '%s%s%s' % (bind_url(self.url), urlencode(data), ','.join(id))
+        self.request = '%s%s' % (bind_url(self.url), urlencode(data))
 
         self._invoke()
- 
+
         if self.exceptionreport is None:
             self.results = {}
             self.records = OrderedDict()
