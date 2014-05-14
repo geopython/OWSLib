@@ -1,8 +1,8 @@
-from owslib.etree import etree
-from owslib.util import nspath, testXMLValue, openURL
-from owslib.util import xml_to_dict as _xml_to_dict
-from datetime import datetime
 from dateutil import parser
+
+from owslib.etree import etree
+from owslib.util import testXMLValue, xml_to_dict as _xml_to_dict
+
 
 namespaces = {
     'wml1.1': '{http://www.cuahsi.org/waterML/1.1/}',

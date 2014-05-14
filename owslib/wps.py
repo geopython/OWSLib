@@ -84,13 +84,14 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 
 """
 
+from time import sleep
+
 from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
-from time import sleep
 from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue,
                          getNamespace, xml2string, nspath, openURL, nspath_eval)
-from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
+
 
 # namespace definition
 n = Namespaces()

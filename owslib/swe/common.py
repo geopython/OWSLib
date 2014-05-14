@@ -1,11 +1,9 @@
-from owslib.util import nspath_eval
-from owslib.namespaces import Namespaces
-from owslib.util import testXMLAttribute, testXMLValue, InfiniteDateTime, NegativeInfiniteDateTime
-
-from dateutil import parser
 from datetime import timedelta
 
-from owslib.etree import etree
+from dateutil import parser
+
+from owslib.namespaces import Namespaces
+from owslib.util import nspath_eval, testXMLAttribute, testXMLValue, InfiniteDateTime, NegativeInfiniteDateTime
 
 
 def get_namespaces():

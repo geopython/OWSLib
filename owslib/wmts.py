@@ -26,14 +26,9 @@ More extensive testing is needed and feedback (to bradh@frogmouth.net) would be 
 
 """
 
-import urlparse
-import urllib2
-from urllib import urlencode
-from etree import etree
-from .util import openURL, testXMLValue
-from fgdc import Metadata
-from iso import MD_Metadata
-from ows import ServiceProvider, ServiceIdentification, OperationsMetadata
+from owslib.etree import etree
+from owslib.util import openURL, testXMLValue, urlencode, parse_qsl
+from owslib.ows import ServiceProvider, ServiceIdentification, OperationsMetadata
 
 
 class ServiceException(Exception):
@@ -432,7 +427,7 @@ class WMTSCapabilitiesReader(object):
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = urlparse.parse_qsl(service_url.split('?')[1])
+            qs = parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 

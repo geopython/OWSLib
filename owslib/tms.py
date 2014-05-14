@@ -15,8 +15,9 @@
 # TMS as defined in:
 # http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification
 
-from etree import etree
-from .util import openURL, testXMLValue
+from owslib.etree import etree
+from owslib.util import openURL, testXMLValue
+
 
 FORCE900913 = False
 

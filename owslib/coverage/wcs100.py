@@ -9,16 +9,11 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
-from urllib import urlencode
-from owslib.util import openURL, testXMLValue
-from owslib.etree import etree
-from owslib.crs import Crs
-import os
-import errno
-
 import logging
-from owslib.util import log
+
+from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
+from owslib.util import openURL, testXMLValue, urlencode, log
+from owslib.crs import Crs
 
 #  function to save writing out WCS namespace in full each time
 

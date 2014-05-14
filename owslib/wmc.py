@@ -16,7 +16,8 @@ https://portal.opengeospatial.org/files/?artifact_id=8618
 
 """
 
-from etree import etree
+from owslib.etree import etree
+
 
 context_ns_uri = 'http://www.opengis.net/context'
 context_schemas_uri = 'http://schemas.opengis.net/context/1.0.0/context.xsd'

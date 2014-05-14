@@ -9,7 +9,6 @@
 
 """ DIF metadata parser """
 
-from owslib.etree import etree
 from owslib import util
 from owslib.namespaces import Namespaces
 

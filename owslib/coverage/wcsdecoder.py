@@ -14,9 +14,10 @@
 # decoder.getCoverages()
 
 import os
-from owslib.etree import etree
 import email
 import errno
+
+from owslib.etree import etree
 
 
 class WCSDecoder(object):

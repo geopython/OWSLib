@@ -11,18 +11,11 @@
 
 ##########NOTE: Does not conform to new interfaces yet #################
 
-from wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
-from owslib.util import openURL, testXMLValue
-from urllib import urlencode
-from urllib2 import urlopen
-from owslib.etree import etree
-import os
-import errno
-from owslib.coverage import wcsdecoder
-from owslib.crs import Crs
-
 import logging
-from owslib.util import log
+
+from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
+from owslib.util import openURL, testXMLValue, urlencode, log
+from owslib.crs import Crs
 
 
 def ns(tag):

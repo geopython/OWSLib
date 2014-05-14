@@ -12,21 +12,21 @@ Utility functions and classes
 """
 
 import sys
-from dateutil import parser
 from datetime import datetime
-import pytz
-from owslib.etree import etree
-from owslib.namespaces import Namespaces
-import urlparse
-import urllib2
-from urllib2 import urlopen, HTTPError, Request
-from urllib2 import HTTPPasswordMgrWithDefaultRealm
-from urllib2 import HTTPBasicAuthHandler
-from StringIO import StringIO
-import cgi
-from urllib import urlencode
 import re
 from copy import deepcopy
+
+PY2 = sys.version_info[0] == 2
+from urlparse import urlsplit, parse_qsl
+from urllib import urlencode
+from urllib2 import urlopen, build_opener, Request, HTTPError, HTTPBasicAuthHandler, HTTPPasswordMgrWithDefaultRealm
+from StringIO import StringIO
+
+from dateutil import parser
+import pytz
+
+from owslib.etree import etree
+from owslib.namespaces import Namespaces
 
 
 class RereadableURL(StringIO, object):
@@ -148,7 +148,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         passman = HTTPPasswordMgrWithDefaultRealm()
         passman.add_password(None, url_base, username, password)
         auth_handler = HTTPBasicAuthHandler(passman)
-        opener = urllib2.build_opener(auth_handler)
+        opener = build_opener(auth_handler)
         openit = opener.open
     else:
         # NOTE: optionally set debuglevel>0 to debug HTTP connection
@@ -332,8 +332,8 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
     """
 
     if url is not None:
-        u = urlparse.urlsplit(url)
-        r = urllib2.Request(url, request)
+        u = urlsplit(url)
+        r = Request(url, request)
         r.add_header('User-Agent', 'OWSLib (https://geopython.github.io/OWSLib)')
         r.add_header('Content-type', 'text/xml')
         r.add_header('Content-length', '%d' % len(request))
@@ -343,11 +343,11 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
         r.add_header('Host', u.netloc)
 
         try:
-            up = urllib2.urlopen(r, timeout=timeout)
+            up = urlopen(r, timeout=timeout)
         except TypeError:
             import socket
             socket.setdefaulttimeout(timeout)
-            up = urllib2.urlopen(r)
+            up = urlopen(r)
 
         ui = up.info()  # headers
         response = up.read()
@@ -419,7 +419,7 @@ def build_get_url(base_url, params):
 
     qs = []
     if base_url.find('?') != -1:
-        qs = cgi.parse_qsl(base_url.split('?')[1])
+        qs = parse_qsl(base_url.split('?')[1])
 
     pars = [x[0] for x in qs]
 

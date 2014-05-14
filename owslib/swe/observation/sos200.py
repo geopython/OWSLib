@@ -1,11 +1,8 @@
-import cgi
 from owslib.etree import etree
-from datetime import datetime
-from urllib import urlencode
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200
-from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
+from owslib.util import openURL, testXMLValue, nspath_eval, extract_time, urlencode, parse_qsl
 from owslib.namespaces import Namespaces
 
 
@@ -267,7 +264,7 @@ class SosCapabilitiesReader(object):
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
+            qs = parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 

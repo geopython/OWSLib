@@ -10,12 +10,7 @@
 """ CSW request and response processor """
 
 import warnings
-import StringIO
 import random
-from urllib import urlencode
-from urllib2 import urlopen
-
-from owslib.util import OrderedDict
 
 from owslib.etree import etree
 from owslib import fes
@@ -25,7 +20,7 @@ from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.namespaces import Namespaces
-from owslib.util import cleanup_namespaces, bind_url, add_namespaces
+
 
 # default variables
 outputformat = 'application/xml'
@@ -72,7 +67,7 @@ class CatalogueServiceWeb(object):
 
             data = {'service': self.service, 'version': self.version, 'request': 'GetCapabilities'}
 
-            self.request = '%s%s' % (bind_url(self.url), urlencode(data))
+            self.request = '%s%s' % (util.bind_url(self.url), util.urlencode(data))
 
             self._invoke()
 
@@ -241,7 +236,7 @@ class CatalogueServiceWeb(object):
             self.results['nextrecord'] = int(util.testXMLValue(val, True))
 
             # process list of matching records
-            self.records = OrderedDict()
+            self.records = util.OrderedDict()
 
             self._parserecords(outputschema, esn)
 
@@ -271,13 +266,13 @@ class CatalogueServiceWeb(object):
             'id': '',
         }
 
-        self.request = '%s%s%s' % (bind_url(self.url), urlencode(data), ','.join(id))
+        self.request = '%s%s%s' % (util.bind_url(self.url), util.urlencode(data), ','.join(id))
 
         self._invoke()
 
         if self.exceptionreport is None:
             self.results = {}
-            self.records = OrderedDict()
+            self.records = util.OrderedDict()
             self._parserecords(outputschema, esn)
 
     def getrecords2(self, constraints=[], sortby=None, typenames='csw:Record', esn='summary', outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None, resulttype='results'):
@@ -366,7 +361,7 @@ class CatalogueServiceWeb(object):
                 self.results['nextrecord'] = None
 
             # process list of matching records
-            self.records = OrderedDict()
+            self.records = util.OrderedDict()
 
             self._parserecords(outputschema, esn)
 
@@ -588,9 +583,9 @@ class CatalogueServiceWeb(object):
         # do HTTP request
 
         if isinstance(self.request, basestring):  # GET KVP
-            self.response = urlopen(self.request, timeout=self.timeout).read()
+            self.response = util.urlopen(self.request, timeout=self.timeout).read()
         else:
-            self.request = cleanup_namespaces(self.request)
+            self.request = util.cleanup_namespaces(self.request)
             # Add any namespaces used in the "typeNames" attribute of the
             # csw:Query element to the query's xml namespaces.
             for query in self.request.findall(util.nspath_eval('csw:Query', namespaces)):
@@ -598,14 +593,14 @@ class CatalogueServiceWeb(object):
                 if ns is not None:
                     # Pull out "gmd" from something like "gmd:MD_Metadata"
                     ns = ns.split(":")[0]
-                    self.request = add_namespaces(self.request, ns)
+                    self.request = util.add_namespaces(self.request, ns)
 
             self.request = util.xml2string(etree.tostring(self.request))
 
             self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
-        self._exml = etree.parse(StringIO.StringIO(self.response))
+        self._exml = etree.parse(util.StringIO(self.response))
 
         # it's XML.  Attempt to decipher whether the XML response is CSW-ish """
         valid_xpaths = [

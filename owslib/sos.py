@@ -11,7 +11,7 @@
 Sensor Observation Service (SOS) methods and metadata. Factory function.
 """
 
-from swe.observation import sos100, sos200
+from owslib.swe.observation import sos100, sos200
 
 
 def SensorObservationService(url, version='1.0.0', xml=None):

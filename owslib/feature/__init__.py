@@ -6,10 +6,7 @@
 # =============================================================================
 
 from owslib.crs import Crs
-
-from urllib import urlencode
-import logging
-from owslib.util import log
+from owslib.util import urlencode, log
 
 
 class WebFeatureService_(object):

@@ -7,20 +7,16 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-import cgi
-from cStringIO import StringIO
-from urllib import urlencode
-from urllib2 import urlopen
-from owslib.util import openURL, testXMLValue, nspath_eval, ServiceException
+from owslib.util import (openURL, testXMLValue, nspath_eval, ServiceException,
+                         urlencode, urlopen, parse_qsl, StringIO, log)
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
-from owslib.ows import *
-from owslib.fes import *
+from owslib.ows import OwsCommon, ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
+from owslib.fes import FilterCapabilities
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
-from owslib.util import log
 
 
 def get_namespaces():
@@ -75,18 +71,18 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         '''set up capabilities metadata objects: '''
 
         # ServiceIdentification
-        val = self._capabilities.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
+        val = self._capabilities.find(nspath_eval('ows:ServiceIdentification', namespaces))
         self.identification = ServiceIdentification(val, self.owscommon.namespace)
         # ServiceProvider
-        val = self._capabilities.find(util.nspath_eval('ows:ServiceProvider', namespaces))
+        val = self._capabilities.find(nspath_eval('ows:ServiceProvider', namespaces))
         self.provider = ServiceProvider(val, self.owscommon.namespace)
         # ServiceOperations metadata
         self.operations = []
-        for elem in self._capabilities.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
+        for elem in self._capabilities.findall(nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
             self.operations.append(OperationsMetadata(elem, self.owscommon.namespace))
 
         # FilterCapabilities
-        val = self._capabilities.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
+        val = self._capabilities.find(nspath_eval('ogc:Filter_Capabilities', namespaces))
         self.filters = FilterCapabilities(val)
 
         # serviceContents metadata: our assumption is that services use a top-level
@@ -318,7 +314,7 @@ class WFSCapabilitiesReader(object):
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
+            qs = parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 

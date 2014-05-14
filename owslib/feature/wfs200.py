@@ -6,22 +6,17 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
-# owslib imports:
+import logging
+
+from owslib.fgdc import Metadata
+from owslib.iso import MD_Metadata
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue
+from owslib.util import nspath, testXMLValue, urlencode, urlopen, parse_qsl, StringIO, log
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
 
-# other imports
-import cgi
-from cStringIO import StringIO
-from urllib import urlencode
-from urllib2 import urlopen
-
-import logging
-from owslib.util import log
 
 n = Namespaces()
 WFS_NAMESPACE = n.get_namespace("wfs20")
@@ -376,7 +371,7 @@ class ContentMetadata(object):
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urllib2.urlopen(metadataUrl['url'], timeout=timeout)
+                    content = urlopen(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     try:  # FGDC
                         metadataUrl['metadata'] = Metadata(doc)
@@ -403,7 +398,7 @@ class WFSCapabilitiesReader(object):
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
+            qs = parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 

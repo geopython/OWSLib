@@ -15,14 +15,12 @@ API for Web Map Service (WMS) methods and metadata.
 Currently supports only version 1.1.1 of the WMS protocol.
 """
 
-import cgi
-import urllib2
-from urllib import urlencode
 import warnings
-from etree import etree
-from .util import openURL, testXMLValue, extract_xml_list
-from fgdc import Metadata
-from iso import MD_Metadata
+
+from owslib.etree import etree
+from owslib.util import openURL, testXMLValue, extract_xml_list, urlencode, urlopen, parse_qsl
+from owslib.fgdc import Metadata
+from owslib.iso import MD_Metadata
 
 
 class ServiceException(Exception):
@@ -482,7 +480,7 @@ class ContentMetadata(object):
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urllib2.urlopen(metadataUrl['url'], timeout=timeout)
+                    content = urlopen(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':
@@ -612,7 +610,7 @@ class WMSCapabilitiesReader(object):
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
+            qs = parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 
