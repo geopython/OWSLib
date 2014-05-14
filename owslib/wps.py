@@ -88,7 +88,7 @@ from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
 from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue, 
-                  getNamespace, xml2string, nspath, openURL, nspath_eval)
+                  getNamespace, element_to_string, nspath, openURL, nspath_eval)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 
@@ -197,7 +197,7 @@ class WebProcessingService(object):
             self._capabilities = reader.readFromUrl(self.url, username=self.username, password=self.password)
             
         if self.verbose==True:
-            print xml2string(etree.tostring(self._capabilities))
+            print element_to_string(self._capabilities)
 
         # populate the capabilities metadata obects from the XML tree
         self._parseCapabilitiesMetadata(self._capabilities)
@@ -218,7 +218,7 @@ class WebProcessingService(object):
             rootElement = reader.readFromUrl(self.url, identifier)
             
         if self.verbose==True:
-            print xml2string(etree.tostring(rootElement))
+            print element_to_string(rootElement)
 
         # build metadata objects
         return self._parseProcessMetadata(rootElement)

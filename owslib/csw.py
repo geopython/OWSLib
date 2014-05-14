@@ -611,7 +611,7 @@ class CatalogueServiceWeb:
                     ns_keys = [x.split(':')[0] for x in ns.split(' ')]
                     self.request = add_namespaces(self.request, ns_keys)
 
-            self.request = util.xml2string(etree.tostring(self.request))
+            self.request = util.element_to_string(self.request, encoding='utf-8')
 
             self.response = util.http_post(xml_post_url, self.request, self.lang, self.timeout)
 
