@@ -22,7 +22,7 @@ Find out what a TMS has to offer. Service metadata:
     'bluemarble'
 
 you can filter the contents by profile and srs:
-    >>> len(list(service.items()))
+    >>> len(service.items())
     14
     >>> len(service.items('EPSG:900913'))
     7

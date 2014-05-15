@@ -48,7 +48,7 @@ Check contact info (some of it is missing)
     >>> wms.provider.contact.position
 
 Test available content layers
-    >>> type(list(wms.items()))
+    >>> type(wms.items())
     <type 'list'>
     >>> type(wms.contents)
     <type 'dict'>
