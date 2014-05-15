@@ -167,7 +167,46 @@ class WebMapTileService(object):
             items.append((item,self.contents[item]))
         return items
 
-    def buildTileRequest(self, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
+    def buildTileRequest(self, layer=None, style=None, format=None,
+                         tilematrixset=None, tilematrix=None,
+                         row=None, column=None):
+        """Return the URL-encoded parameters for a GetTile request.
+
+        Parameters
+        ----------
+        layer : string
+            Content layer name.
+        style : string
+            Optional style name. Defaults to the first style defined for
+            the relevant layer in the GetCapabilities response.
+        format : string
+            Optional output image format,  such as 'image/jpeg'.
+            Defaults to the first format defined for the relevant layer
+            in the GetCapabilities response.
+        tilematrixset : string
+            Optional name of tile matrix set to use.
+            Defaults to the first tile matrix set defined for the
+            relevant layer in the GetCapabilities response.
+        tilematrix : string
+            Name of the tile matrix to use.
+        row : integer
+            Row index of tile to request.
+        column : integer
+            Column index of tile to request.
+
+        Example
+        -------
+            >>> url = 'http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi'
+            >>> wmts = WebMapTileService(url)
+            >>> wmts.buildTileRequest(layer='VIIRS_CityLights_2012',
+            ...                       tilematrixset='EPSG4326_500m',
+            ...                       tilematrix='6',
+            ...                       row=4, column=4)
+            'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&\
+LAYER=VIIRS_CityLights_2012&STYLE=default&TILEMATRIXSET=EPSG4326_500m&\
+TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
+
+        """
         request = {'version': self.version, 'request': 'GetTile'}
 
         if (layer is None):
@@ -179,7 +218,8 @@ class WebMapTileService(object):
         if tilematrixset is None:
             tilematrixset = self[layer].tilematrixsets[0]
         if tilematrix is None:
-            raise ValueError("tilematrix (zoom level) is mandatory (cannot be None)")
+            msg = 'tilematrix (zoom level) is mandatory (cannot be None)'
+            raise ValueError(msg)
         if row is None:
                 raise ValueError("row is mandatory (cannot be None)")
         if column is None:
@@ -201,10 +241,53 @@ class WebMapTileService(object):
         return data
 
 
-    def gettile(self, base_url=None, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
-        """Request a tile from a WMTS server
+    def gettile(self, base_url=None, layer=None, style=None, format=None,
+                tilematrixset=None, tilematrix=None, row=None, column=None):
+        """Return a tile from the WMTS.
+
+        Returns the tile image as a file-like object.
+
+        Parameters
+        ----------
+        base_url : string
+            Optional URL for request submission. Defaults to the URL of
+            the GetTile operation as declared in the GetCapabilities
+            response.
+        layer : string
+            Content layer name.
+        style : string
+            Optional style name. Defaults to the first style defined for
+            the relevant layer in the GetCapabilities response.
+        format : string
+            Optional output image format,  such as 'image/jpeg'.
+            Defaults to the first format defined for the relevant layer
+            in the GetCapabilities response.
+        tilematrixset : string
+            Optional name of tile matrix set to use.
+            Defaults to the first tile matrix set defined for the
+            relevant layer in the GetCapabilities response.
+        tilematrix : string
+            Name of the tile matrix to use.
+        row : integer
+            Row index of tile to request.
+        column : integer
+            Column index ot tile to request.
+
+        Example
+        -------
+            >>> url = 'http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi'
+            >>> wmts = WebMapTileService(url)
+            >>> img = wmts.gettile(layer='VIIRS_CityLights_2012',\
+                                   tilematrixset='EPSG4326_500m',\
+                                   tilematrix='6',\
+                                   row=4, column=4)
+            >>> out = open('tile.jpg', 'wb')
+            >>> out.write(img.read())
+            >>> out.close()
+
         """
-        data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column)
+        data = self.buildTileRequest(layer, style, format, tilematrixset,
+                                     tilematrix, row, column)
 
         if base_url is None:
             base_url = self.url
@@ -217,14 +300,15 @@ class WebMapTileService(object):
                     base_url = get_verbs[0].get('url')
             except StopIteration:
                 pass
-        u = openURL(base_url, data, username = self.username, password = self.password)
+        u = openURL(base_url, data, username=self.username,
+                    password=self.password)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = unicode(se_tree.find('ServiceException').text).strip()
-            raise ServiceException(err_message, se_xml)
+            err_message = unicode(se_tree.find('ServiceException').text)
+            raise ServiceException(err_message.strip(), se_xml)
         return u
 
     def getServiceXML(self):
