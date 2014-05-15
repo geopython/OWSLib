@@ -1,3 +1,6 @@
+from six import iteritems
+
+
 class Namespaces(object):
 
     """
@@ -69,7 +72,7 @@ class Namespaces(object):
             'http://www.opengis.net/wfs/2.0'
         """
         retval = None
-        if key in self.namespace_dict.keys():
+        if key in self.namespace_dict:
             retval = self.namespace_dict[key]
         return retval
 
@@ -99,7 +102,7 @@ class Namespaces(object):
         key += version
 
         retval = None
-        if key in self.namespace_dict.keys():
+        if key in self.namespace_dict:
             retval = self.namespace_dict[key]
 
         return retval
@@ -138,7 +141,7 @@ class Namespaces(object):
         return retval
 
     def get_namespace_from_url(self, url):
-        for k, v in self.namespace_dict.items():
+        for k, v in iteritems(self.namespace_dict):
             if v == url:
                 return k
         return None

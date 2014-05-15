@@ -650,7 +650,7 @@ class CodelistCatalogue(object):
                 self.dictionaries[id]['entries'][id2]['codespace'] = util.testXMLValue(val, True)
 
     def getcodelistdictionaries(self):
-        return self.dictionaries.keys()
+        return list(self.dictionaries.keys())
 
     def getcodedefinitionidentifiers(self, cdl):
         if cdl in self.dictionaries:

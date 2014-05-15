@@ -15,6 +15,8 @@
 # TMS as defined in:
 # http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification
 
+from six import itervalues
+
 from owslib.etree import etree
 from owslib.util import openURL, testXMLValue
 
@@ -130,7 +132,7 @@ class TileMapService(object):
                                         x, y, z, self.contents[id].tilemap.extension)
 
         elif title and srs:
-            for tm in self.contents.values():
+            for tm in itervalues(self.contents):
                 if tm.title == title and tm.srs == srs:
                     if mimetype:
                         if tm.tilemap.mimetype == mimetype:

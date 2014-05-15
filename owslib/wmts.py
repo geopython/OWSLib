@@ -63,7 +63,7 @@ class WebMapTileService(object):
 
     def __getitem__(self, name):
         ''' check contents dictionary to allow dict like access to service layers'''
-        if name in self.__getattribute__('contents').keys():
+        if name in self.__getattribute__('contents'):
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError('No content named %s' % name)
@@ -171,7 +171,7 @@ class WebMapTileService(object):
         if (layer is None):
             raise ValueError("layer is mandatory (cannot be None)")
         if style is None:
-            style = self[layer].styles.keys()[0]
+            style = list(self[layer].styles.keys())[0]
         if format is None:
             format = self[layer].formats[0]
         if tilematrixset is None:

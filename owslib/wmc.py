@@ -16,6 +16,9 @@ https://portal.opengeospatial.org/files/?artifact_id=8618
 
 """
 
+from six import iteritems
+from six.moves import zip
+
 from owslib.etree import etree
 
 
@@ -48,7 +51,7 @@ class MapContext(object):
             'id': self._map.id,
             'version': '1.0.0',
         }
-        for k, v in attrs.items():
+        for k, v in iteritems(attrs):
             root.attrib[k] = v
         return root
 

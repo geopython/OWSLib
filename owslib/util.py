@@ -15,6 +15,7 @@ from datetime import datetime
 import re
 from copy import deepcopy
 
+from six import iteritems
 from six.moves.urllib.parse import urlencode, urlsplit, parse_qsl
 from six.moves.urllib.request import (urlopen, build_opener, Request, HTTPBasicAuthHandler,
                                       HTTPPasswordMgrWithDefaultRealm)
@@ -48,7 +49,7 @@ class ServiceException(Exception):
 # http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
 dict_union = lambda d1, d2: dict((x, (dict_union(d1.get(x, {}), d2[x]) if
                                       isinstance(d2.get(x), dict) else d2.get(x, d1.get(x)))) for x in
-                                 set(d1.keys() + d2.keys()))
+                                 set(list(d1.keys()) + list(d2.keys())))
 
 
 # Infinite DateTimes for Python.  Used in SWE 2.0 and other OGC specs as "INF" and "-INF"
@@ -427,7 +428,7 @@ def build_get_url(base_url, params):
 
     pars = [x[0] for x in qs]
 
-    for key, value in params.iteritems():
+    for key, value in iteritems(params):
         if key not in pars:
             qs.append((key, value))
 

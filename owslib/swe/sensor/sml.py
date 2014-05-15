@@ -65,13 +65,13 @@ class PropertyGroup(object):
         """
             Return list of element by name, case insensitive
         """
-        return [self.capabilities[capab] for capab in self.capabilities.keys() if capab.lower() == name.lower()]
+        return [self.capabilities[capab] for capab in self.capabilities if capab.lower() == name.lower()]
 
     def get_characteristics_by_name(self, name):
         """
             Return list of element objects by name, case insensitive
         """
-        return [self.characteristics[charac] for charac in self.characteristics.keys() if charac.lower() == name.lower()]
+        return [self.characteristics[charac] for charac in self.characteristics if charac.lower() == name.lower()]
 
 
 class ConstraintGroup(object):
@@ -131,7 +131,7 @@ class ReferenceGroup(object):
         """
             Return a Contact by role, case insensitive
         """
-        return [self.contacts[contact] for contact in self.contacts.keys() if contact.lower() == role.lower()]
+        return [self.contacts[contact] for contact in self.contacts if contact.lower() == role.lower()]
 
 
 class GeneralInfoGroup(object):
@@ -153,13 +153,13 @@ class GeneralInfoGroup(object):
         """
             Return list of Identifier objects by name, case insensitive
         """
-        return [self.identifiers[identifier] for identifier in self.identifiers.keys() if identifier.lower() == name.lower()]
+        return [self.identifiers[identifier] for identifier in self.identifiers if identifier.lower() == name.lower()]
 
     def get_classifiers_by_name(self, name):
         """
             Return list of Classifier objects by name, case insensitive
         """
-        return [self.classifiers[classi] for classi in self.classifiers.keys() if classi.lower() == name.lower()]
+        return [self.classifiers[classi] for classi in self.classifiers if classi.lower() == name.lower()]
 
 
 class Contact(object):

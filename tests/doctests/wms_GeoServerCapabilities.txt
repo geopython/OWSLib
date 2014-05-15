@@ -33,7 +33,7 @@ Test capabilities
 
 Test available content layers
 
-    >>> 'opengeo:poi' in wms.contents.keys()
+    >>> 'opengeo:poi' in wms.contents
     True
 
     >>> layers = [wms[layer].title for layer in wms.contents]
