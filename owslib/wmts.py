@@ -167,7 +167,7 @@ class WebMapTileService(object):
             items.append((item,self.contents[item]))
         return items
 
-    def buildTileRequest(self, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
+    def buildTileRequest(self, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None, **kwargs):
         request = {'version': self.version, 'request': 'GetTile'}
 
         if (layer is None):
@@ -197,14 +197,17 @@ class WebMapTileService(object):
         request.append(('TILECOL', str(column)))
         request.append(('FORMAT', format))
 
+        for key, value in kwargs.iteritems():
+            request.append(key, value)
+
         data = urlencode(request, True)
         return data
 
 
-    def gettile(self, base_url=None, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None):
+    def gettile(self, base_url=None, layer=None, style=None, format=None, tilematrixset=None, tilematrix=None, row=None, column=None, **kwargs):
         """Request a tile from a WMTS server
         """
-        data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column)
+        data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column, **kwargs)
 
         if base_url is None:
             base_url = self.getOperationByName('GetTile').methods['Get']['url']
