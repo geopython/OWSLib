@@ -1,8 +1,10 @@
+from six.moves.urllib.parse import urlencode, parse_qsl
+
 from owslib.etree import etree
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities
-from owslib.util import openURL, testXMLValue, nspath_eval, extract_time, urlencode, parse_qsl
+from owslib.util import openURL, testXMLValue, nspath_eval, extract_time
 from owslib.namespaces import Namespaces
 
 

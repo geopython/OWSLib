@@ -1,6 +1,8 @@
 import os
+
+from six.moves.urllib.parse import urlparse
+
 from owslib.etree import etree
-from urlparse import urlparse
 
 
 def resource_file(filepath):

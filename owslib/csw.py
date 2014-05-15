@@ -12,6 +12,9 @@
 import warnings
 import random
 
+from six.moves.urllib.parse import urlencode
+from six.moves.urllib.request import urlopen
+
 from owslib.etree import etree
 from owslib import fes
 from owslib import util
@@ -67,7 +70,7 @@ class CatalogueServiceWeb(object):
 
             data = {'service': self.service, 'version': self.version, 'request': 'GetCapabilities'}
 
-            self.request = '%s%s' % (util.bind_url(self.url), util.urlencode(data))
+            self.request = '%s%s' % (util.bind_url(self.url), urlencode(data))
 
             self._invoke()
 
@@ -266,7 +269,7 @@ class CatalogueServiceWeb(object):
             'id': '',
         }
 
-        self.request = '%s%s%s' % (util.bind_url(self.url), util.urlencode(data), ','.join(id))
+        self.request = '%s%s%s' % (util.bind_url(self.url), urlencode(data), ','.join(id))
 
         self._invoke()
 
@@ -583,7 +586,7 @@ class CatalogueServiceWeb(object):
         # do HTTP request
 
         if isinstance(self.request, basestring):  # GET KVP
-            self.response = util.urlopen(self.request, timeout=self.timeout).read()
+            self.response = urlopen(self.request, timeout=self.timeout).read()
         else:
             self.request = util.cleanup_namespaces(self.request)
             # Add any namespaces used in the "typeNames" attribute of the

@@ -23,7 +23,7 @@ from owslib.etree import etree
 class WCSDecoder(object):
 
     def __init__(self, u):
-        ''' initiate with a urllib  url object.'''
+        ''' initiate with a urllib url object.'''
         self.u = u
         self._getType()
 

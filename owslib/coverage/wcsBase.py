@@ -9,9 +9,10 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
+from six.moves.urllib.parse import urlencode, parse_qsl
+from six.moves.urllib.request import urlopen, Request
 
 from owslib.etree import etree
-from owslib.util import urlencode, urlopen, Request, parse_qsl
 
 
 class ServiceException(Exception):

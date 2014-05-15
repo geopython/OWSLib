@@ -17,8 +17,11 @@ Currently supports only version 1.1.1 of the WMS protocol.
 
 import warnings
 
+from six.moves.urllib.parse import urlencode, parse_qsl
+from six.moves.urllib.request import urlopen
+
 from owslib.etree import etree
-from owslib.util import openURL, testXMLValue, extract_xml_list, urlencode, urlopen, parse_qsl
+from owslib.util import openURL, testXMLValue, extract_xml_list
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 

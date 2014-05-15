@@ -6,9 +6,10 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
+from six.moves.urllib.parse import urlencode, parse_qsl
+from six.moves.urllib.request import urlopen
 
-from owslib.util import (openURL, testXMLValue, extract_xml_list, ServiceException,
-                         urlopen, urlencode, parse_qsl, StringIO, log)
+from owslib.util import openURL, testXMLValue, extract_xml_list, ServiceException, StringIO, log
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata

@@ -8,11 +8,14 @@
 
 import logging
 
+from six.moves.urllib.parse import urlencode, parse_qsl
+from six.moves.urllib.request import urlopen
+
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue, urlencode, urlopen, parse_qsl, StringIO, log
+from owslib.util import nspath, testXMLValue, StringIO, log
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces

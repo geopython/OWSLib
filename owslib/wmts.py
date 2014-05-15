@@ -26,8 +26,10 @@ More extensive testing is needed and feedback (to bradh@frogmouth.net) would be 
 
 """
 
+from six.moves.urllib.parse import urlencode, parse_qsl
+
 from owslib.etree import etree
-from owslib.util import openURL, testXMLValue, urlencode, parse_qsl
+from owslib.util import openURL, testXMLValue
 from owslib.ows import ServiceProvider, ServiceIdentification, OperationsMetadata
 
 

@@ -13,10 +13,10 @@
 Web Coverage Server (WCS) methods and metadata. Factory function.
 """
 
+from six.moves.urllib.request import urlopen, Request
 
 from owslib.etree import etree
 from owslib.coverage import wcs100, wcs110, wcsBase
-from owslib.util import urlopen, Request
 
 
 def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30):

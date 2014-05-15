@@ -7,8 +7,10 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-from owslib.util import (openURL, testXMLValue, nspath_eval, ServiceException,
-                         urlencode, urlopen, parse_qsl, StringIO, log)
+from six.moves.urllib.parse import urlencode, parse_qsl
+from six.moves.urllib.request import urlopen
+
+from owslib.util import openURL, testXMLValue, nspath_eval, ServiceException, StringIO, log
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata

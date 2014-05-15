@@ -11,15 +11,15 @@
 Utility functions and classes
 """
 
-import sys
 from datetime import datetime
 import re
 from copy import deepcopy
 
-PY2 = sys.version_info[0] == 2
-from urlparse import urlsplit, parse_qsl
-from urllib import urlencode
-from urllib2 import urlopen, build_opener, Request, HTTPError, HTTPBasicAuthHandler, HTTPPasswordMgrWithDefaultRealm
+from six.moves.urllib.parse import urlencode, urlsplit, parse_qsl
+from six.moves.urllib.request import (urlopen, build_opener, Request, HTTPBasicAuthHandler,
+                                      HTTPPasswordMgrWithDefaultRealm)
+from six.moves.urllib.error import HTTPError
+
 from StringIO import StringIO
 
 from dateutil import parser
@@ -132,7 +132,11 @@ def xml_to_dict(root, prefix=None, depth=1, diction=None):
 
 
 def openURL(url_base, data, method='Get', cookies=None, username=None, password=None, timeout=30):
-    ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
+    '''
+    function to open urls - wrapper around urllib2.urlopen/urllib.request.urlopen
+    but with additional checks for OGC service exceptions and url formatting,
+    also handles cookies and simple user password authentication
+    '''
     url_base.strip()
     lastchar = url_base[-1]
     if lastchar not in ['?', '&']:
@@ -152,7 +156,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         openit = opener.open
     else:
         # NOTE: optionally set debuglevel>0 to debug HTTP connection
-        #opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=0))
+        #opener = build_opener(HTTPHandler(debuglevel=0))
         #openit = opener.open
         openit = urlopen
 

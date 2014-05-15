@@ -13,8 +13,10 @@
 
 import logging
 
+from six.moves.urllib.parse import urlencode
+
 from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
-from owslib.util import openURL, testXMLValue, urlencode, log
+from owslib.util import openURL, testXMLValue, log
 from owslib.crs import Crs
 
 

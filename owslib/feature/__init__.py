@@ -5,8 +5,10 @@
 #
 # =============================================================================
 
+from six.moves.urllib.parse import urlencode
+
 from owslib.crs import Crs
-from owslib.util import urlencode, log
+from owslib.util import log
 
 
 class WebFeatureService_(object):
