@@ -26,6 +26,7 @@ More extensive testing is needed and feedback (to bradh@frogmouth.net) would be 
 
 """
 
+import warnings
 import urlparse
 import urllib2
 from urllib import urlencode
@@ -449,6 +450,10 @@ class ContentMetadata:
             self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
         # TODO: there is probably some more logic here, and it should probably be shared code
 
+        self._tilematrixsets = [f.text.strip() for f in
+                                elem.findall(_TILE_MATRIX_SET_LINK_TAG + '/' +
+                                             _TILE_MATRIX_SET_TAG)]
+
         link_elements = elem.findall(_TILE_MATRIX_SET_LINK_TAG)
         tile_matrix_set_links = TileMatrixSetLink.from_elements(link_elements)
         self.tilematrixsetlinks = {}
@@ -488,6 +493,16 @@ class ContentMetadata:
         self.layers = []
         for child in elem.findall('{http://www.opengis.net/wmts/1.0}Layer'):
             self.layers.append(ContentMetadata(child, self))
+
+    @property
+    def tilematrixsets(self):
+        # NB. This attribute has been superseeded by the
+        # `tilematrixsetlinks` attribute defined below, but is included
+        # for now to provide continuity.
+        warnings.warn("The 'tilematrixsets' attribute has been deprecated"
+                      " and will be removed in a future version of OWSLib."
+                      " Please use 'tilematrixsetlinks' instead.")
+        return self._tilematrixsets
 
     def __str__(self):
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
