@@ -6,6 +6,7 @@ Imports
     >>> from owslib.ows import OperationsMetadata
     >>> from owslib.crs import Crs
     >>> from datetime import datetime
+    >>> from operator import itemgetter
 
 
 Initialize ncSOS
@@ -121,14 +122,14 @@ OperationsMetadata
     # GetCapabilities
 
     >>> getcap.constraints
-    {}
+    []
 
     >>> x = getcap.parameters
     >>> x == {'Sections': {'values': ['ServiceIdentification', 'ServiceProvider', 'OperationsMetadata', 'Contents', 'All']}}
     True
 
-    >>> x = getcap.methods
-    >>> x == {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    >>> x = sorted(getcap.methods, key=itemgetter('type'))
+    >>> x == [{'type': 'Get', 'url': 'http://sdf.ndbc.noaa.gov/sos/server.php', 'constraints': []}, {'type' : 'Post', 'url': 'http://sdf.ndbc.noaa.gov/sos/server.php', 'constraints': []}]
     True
 
 
@@ -137,14 +138,14 @@ OperationsMetadata
     >>> descsen = ndbc.get_operation_by_name('describesensor')
 
     >>> descsen.constraints
-    {}
+    []
 
     >>> x = descsen.parameters
     >>> x == {'outputFormat': {'values': ['text/xml;subtype="sensorML/1.0.1"']}}
     True
 
-    >>> x = descsen.methods
-    >>> x == {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    >>> x = sorted(descsen.methods, key=itemgetter('type'))
+    >>> x == [{'type': 'Get', 'url': 'http://sdf.ndbc.noaa.gov/sos/server.php', 'constraints': []}, {'type' : 'Post', 'url': 'http://sdf.ndbc.noaa.gov/sos/server.php', 'constraints': []}]
     True
 
     # GetObservation
@@ -152,14 +153,14 @@ OperationsMetadata
     >>> getob = ndbc.get_operation_by_name('getobservation')
 
     >>> getob.constraints
-    {}
+    []
 
     >>> x = getob.parameters
     >>> x == {'observedProperty': {'values': ['air_temperature', 'air_pressure_at_sea_level', 'sea_water_electrical_conductivity', 'currents', 'sea_water_salinity', 'sea_floor_depth_below_sea_surface', 'sea_water_temperature', 'waves', 'winds']}}
     True
 
-    >>> x = getob.methods
-    >>> x == {'Post': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}, 'Get': {'url': 'http://sdf.ndbc.noaa.gov/sos/server.php'}}
+    >>> x = sorted(getob.methods, key=itemgetter('type'))
+    >>> x == [{'type' : 'Get', 'url': 'http://sdf.ndbc.noaa.gov/sos/server.php', 'constraints': []}, {'type' : 'Post', 'url': 'http://sdf.ndbc.noaa.gov/sos/server.php', 'constraints': []}]
     True
 
 Filter_Capabilities

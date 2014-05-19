@@ -105,7 +105,7 @@ class WebFeatureService_:
         3) featureid (direct access to known features)
         """
 
-        base_url = self.getOperationByName('GetFeature').methods[method]['url']
+        base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
         base_url = base_url if base_url.endswith("?") else base_url+"?"
             
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}

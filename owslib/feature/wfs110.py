@@ -148,7 +148,10 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
-        base_url = self.getOperationByName('GetFeature').methods[method]['url']
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
 
         if not isinstance(typename, list):

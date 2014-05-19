@@ -30,7 +30,7 @@ import urlparse
 import urllib2
 from urllib import urlencode
 from etree import etree
-from .util import openURL, testXMLValue
+from .util import openURL, testXMLValue, xmltag_split
 from fgdc import Metadata
 from iso import MD_Metadata
 from ows import ServiceProvider, ServiceIdentification, OperationsMetadata
@@ -207,7 +207,16 @@ class WebMapTileService(object):
         data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column)
 
         if base_url is None:
-            base_url = self.getOperationByName('GetTile').methods['Get']['url']
+            base_url = self.url
+            try:
+                get_verbs = filter(lambda x: x.get('type').lower() == 'get', self.getOperationByName('GetTile').methods)
+                if len(get_verbs) > 1:
+                    # Filter by constraints
+                    base_url = next(x for x in filter(list, ([pv.get('url') for const in pv.get('constraints') if 'kvp' in map(lambda x: x.lower(), const.values)] for pv in get_verbs if pv.get('constraints'))))[0]
+                elif len(get_verbs) == 1:
+                    base_url = get_verbs[0].get('url')
+            except StopIteration:
+                pass
         u = openURL(base_url, data, username = self.username, password = self.password)
 
         # check for service exceptions, and return
@@ -374,30 +383,6 @@ class ContentMetadata:
     def __str__(self):
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
 
-
-class OperationsMetadata:
-    """Abstraction for WMTS OperationsMetadata.
-
-    Implements IOperationMetadata.
-    """
-    def __init__(self, elem):
-        """."""
-        self.name = elem.attrib['name']
-        # formatOptions
-        self.formatOptions = [f.text for f in elem.findall('{http://www.opengis.net/ows/1.1}Format')]
-        methods = []
-        for verb in elem.findall('{http://www.opengis.net/ows/1.1}DCP/{http://www.opengis.net/ows/1.1}HTTP'):
-            url = verb.find('{http://www.opengis.net/ows/1.1}Get').attrib['{http://www.w3.org/1999/xlink}href']
-            encodings = []
-            constraints = verb.findall('{http://www.opengis.net/ows/1.1}Get/{http://www.opengis.net/ows/1.1}Constraint')
-            for constraint in constraints:
-                if constraint.attrib['name'] == "GetEncoding":
-                    for encoding in constraint.findall('{http://www.opengis.net/ows/1.1}AllowedValues/{http://www.opengis.net/ows/1.1}Value'):
-                        encodings.append(encoding.text)
-            if len(encodings) < 1: # KVP is only a SHOULD requirement, and SFS doesn't provide it.
-                encodings = ['KVP']
-            methods.append(('Get', {'url': url, 'encodings': encodings}))
-        self.methods = dict(methods)
 
 class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset

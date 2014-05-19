@@ -218,8 +218,11 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
     def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get'),**kwargs):
-        ''' the WFS GetPropertyValue method'''         
-        base_url = self.getOperationByName('GetPropertyValue').methods[method]['url']
+        ''' the WFS GetPropertyValue method'''
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetPropertyValue').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetPropertyValue'}
         if query:
             request['query'] = str(query)
@@ -245,12 +248,15 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         method=nspath('Get')
         
         #first make the ListStoredQueries response and save the results in a dictionary if form {storedqueryid:(title, returnfeaturetype)}
-        base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('ListStoredQueries').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
+
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         encoded_request = urlencode(request)
         u = urlopen(base_url + encoded_request, timeout=timeout)
         tree=etree.fromstring(u.read())
-        base_url = self.getOperationByName('ListStoredQueries').methods[method]['url']
         tempdict={}       
         for sqelem in tree[:]:
             title=rft=id=None
@@ -263,7 +269,10 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             tempdict[id]=(title,rft)        #store in temporary dictionary
         
         #then make the DescribeStoredQueries request and get the rest of the information about the stored queries 
-        base_url = self.getOperationByName('DescribeStoredQueries').methods[method]['url']
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('DescribeStoredQueries').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         encoded_request = urlencode(request)
         u = urlopen(base_url + encoded_request, timeout=timeout)

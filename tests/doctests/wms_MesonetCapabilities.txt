@@ -3,6 +3,7 @@ Imports
 
     >>> from owslib.wms import WebMapService
     >>> from tests.utils import resource_file
+    >>> from operator import itemgetter
 
 Fake a request to a WMS Server using saved doc from 
 http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?
@@ -77,8 +78,8 @@ Test operations
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic', 'GetStyles']
 
-    >>> x = wms.getOperationByName('GetMap').methods
-    >>> x == {'Post': {'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}, 'Get': {'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}}
+    >>> x = sorted(wms.getOperationByName('GetMap').methods, key=itemgetter('type'))
+    >>> x == [{'type': 'Get', 'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}, {'type': 'Post', 'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}]
     True
 
     >>> wms.getOperationByName('GetMap').formatOptions

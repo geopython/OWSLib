@@ -3,6 +3,7 @@ Imports
 
     >>> from tests.utils import cast_tuple_int_list, resource_file
     >>> from owslib.wfs import WebFeatureService
+    >>> from operator import itemgetter
 
 Fake a request to a WFS Server using saved doc from.
 
@@ -80,13 +81,13 @@ Expect a KeyError for invalid names
 Test operations
 
     >>> sorted([op.name for op in wfs.operations])
-    ['{http://www.opengis.net/wfs}DescribeFeatureType', '{http://www.opengis.net/wfs}GetCapabilities', '{http://www.opengis.net/wfs}GetFeature']
+    ['DescribeFeatureType', 'GetCapabilities', 'GetFeature']
 
-    >>> x = wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods
-    >>> x == {'{http://www.opengis.net/wfs}Get': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}, '{http://www.opengis.net/wfs}Post': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}}
+    >>> x = sorted(wfs.getOperationByName('GetFeature').methods, key=itemgetter('type'))
+    >>> x == [{'type': 'Get', 'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}, {'type': 'Post', 'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}]
     True
 
-    >>> sorted(wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').formatOptions)
+    >>> sorted(wfs.getOperationByName('GetFeature').formatOptions)
     ['{http://www.opengis.net/wfs}GML2', '{http://www.opengis.net/wfs}GML3']
 
 
