@@ -166,9 +166,18 @@ Test operations
     >>> sorted([op.name for op in wmts.operations])
     ['GetCapabilities', 'GetTile']
 
-    >>> x = wmts.getOperationByName('GetTile').methods
-    >>> x == {'Get': {'encodings': ['KVP'], 'url': 'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?'}}
-    True
+    >>> x = wmts.getOperationByName('GetTile').methods[0]
+    >>> x.get('type')
+    'Get'
+    >>> x.get('url')
+    'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?'
+    >>> len(x.get('constraints'))
+    1
+    >>> cst = x.get('constraints')[0]
+    >>> cst.name
+    'GetEncoding'
+    >>> cst.values
+    ['KVP']
 
 Test the gettile methods
 

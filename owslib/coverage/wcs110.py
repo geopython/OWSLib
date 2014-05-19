@@ -138,10 +138,12 @@ class WebCoverageService_1_1_0(WCSBase):
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, rangesubset=%s, gridbaseCRS=%s, gridtype=%s, gridCS=%s, gridorigin=%s, gridoffsets=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, rangesubset, gridbaseCRS, gridtype, gridCS, gridorigin, gridoffsets, method, str(kwargs)))
         
-        
         if method == 'Get':
             method='{http://www.opengis.net/wcs/1.1/ows}Get'
-        base_url = self.getOperationByName('GetCoverage').methods[method]['url']
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetCoverage').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
 
 
         #process kwargs

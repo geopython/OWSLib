@@ -204,15 +204,15 @@ Test operations
     ['GetCapabilities', 'GetFeatureInfo', 'GetTile']
 
     >>> x = wmts.getOperationByName('GetFeatureInfo').methods
-    >>> x == {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+    >>> x == [{'type': 'Get', 'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'constraints': []}]
     True
 
     >>> x = wmts.getOperationByName('GetTile').methods
-    >>> x == {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+    >>> x == [{'type' : 'Get', 'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'constraints': []}]
     True
 
     >>> x = wmts.getOperationByName('GetCapabilities').methods
-    >>> x == {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+    >>> x == [{'type' : 'Get', 'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'constraints': []}]
     True
 
 

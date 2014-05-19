@@ -256,7 +256,7 @@ class CatalogueServiceWeb:
 
         """
 
-        # construct request 
+        # construct request
         data = {
             'service': self.service,
             'version': self.version,
@@ -264,13 +264,13 @@ class CatalogueServiceWeb:
             'outputFormat': format,
             'outputSchema': outputschema,
             'elementsetname': esn,
-            'id': '',
+            'id': ','.join(id),
         }
 
-        self.request = '%s%s%s' % (bind_url(self.url), urlencode(data), ','.join(id))
+        self.request = '%s%s' % (bind_url(self.url), urlencode(data))
 
         self._invoke()
- 
+
         if self.exceptionreport is None:
             self.results = {}
             self.records = OrderedDict()
@@ -586,6 +586,20 @@ class CatalogueServiceWeb:
         if isinstance(self.request, basestring):  # GET KVP
             self.response = urlopen(self.request, timeout=self.timeout).read()
         else:
+            xml_post_url = self.url
+            # Get correct POST URL based on Operation list.
+            for op in self.operations:
+                post_verbs = filter(lambda x: x.get('type').lower() == 'post', op.methods)
+                if len(post_verbs) > 1:
+                    # Filter by constraints.  We must match a PostEncoding of "XML"
+                    try:
+                        xml_post_url = next(x for x in filter(list, ([pv.get('url') for const in pv.get('constraints') if const.name.lower() == "postencoding" and 'xml' in map(lambda x: x.lower(), const.values)] for pv in post_verbs)))[0]
+                    except StopIteration:
+                        # Well, just use the first one.
+                        xml_post_url = post_verbs[0].get('url')
+                elif len(post_verbs) == 1:
+                    xml_post_url = post_verbs[0].get('url')
+
             self.request = cleanup_namespaces(self.request)
             # Add any namespaces used in the "typeNames" attribute of the
             # csw:Query element to the query's xml namespaces.
@@ -597,9 +611,9 @@ class CatalogueServiceWeb:
                     ns_keys = [x.split(':')[0] for x in ns.split(' ')]
                     self.request = add_namespaces(self.request, ns_keys)
 
-            self.request = util.xml2string(etree.tostring(self.request))
+            self.request = util.element_to_string(self.request, encoding='utf-8')
 
-            self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
+            self.response = util.http_post(xml_post_url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
         self._exml = etree.parse(StringIO.StringIO(self.response))

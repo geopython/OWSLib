@@ -75,7 +75,7 @@ Test operations
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
     
     >>> x = wms.getOperationByName('GetMap').methods
-    >>> x == {'Get': {'url': 'http://localhost:8080/geoserver/wms?SERVICE=WMS&'}}
+    >>> x == [{'type': 'Get', 'url': 'http://localhost:8080/geoserver/wms?SERVICE=WMS&'}]
     True
     
     >>> wms.getOperationByName('GetMap').formatOptions
