@@ -25,10 +25,28 @@ namespaces = get_namespaces()
 
 class MD_Metadata(object):
     """ Process gmd:MD_Metadata """
-    def __init__(self, md):
+    def __init__(self, md=None):
 
         if md is None:
-            pass
+            self.xml = None
+            self.identifier = None
+            self.parentidentifier = None
+            self.language = None
+            self.dataseturi = None
+            self.languagecode = None
+            self.datestamp = None
+            self.charset = None
+            self.hierarchy = None
+            self.contact = []
+            self.datetimestamp = None
+            self.stdname = None
+            self.stdver = None
+            self.referencesystem = None
+            self.identification = None
+            self.serviceidentification = None
+            self.identificationinfo = []
+            self.distribution = None
+            self.dataquality = None
         else:
             if hasattr(md, 'getroot'):  # standalone document
                 self.xml = etree.tostring(md.getroot())
@@ -128,9 +146,10 @@ class MD_Metadata(object):
 
 class CI_Date(object):
     """ process CI_Date """
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.date = None
+            self.type = None
         else:
             val = md.find(util.nspath_eval('gmd:date/gco:Date', namespaces))
             if val is not None:
@@ -147,10 +166,22 @@ class CI_Date(object):
 
 class CI_ResponsibleParty(object):
     """ process CI_ResponsibleParty """
-    def __init__(self, md):
+    def __init__(self, md=None):
 
         if md is None:
-            pass
+            self.name = None
+            self.organization = None
+            self.position = None
+            self.phone = None
+            self.fax = None
+            self.address = None
+            self.city = None
+            self.region = None
+            self.postcode = None
+            self.country = None
+            self.email = None
+            self.onlineresource = None
+            self.role = None
         else:
             val = md.find(util.nspath_eval('gmd:individualName/gco:CharacterString', namespaces))
             self.name = util.testXMLValue(val)
@@ -196,9 +227,39 @@ class CI_ResponsibleParty(object):
 
 class MD_DataIdentification(object):
     """ process MD_DataIdentification """
-    def __init__(self, md, identtype):
+    def __init__(self, md=None, identtype=None):
         if md is None:
-            pass
+            self.identtype = None
+            self.title = None
+            self.alternatetitle = None
+            self.aggregationinfo = None
+            self.date = []
+            self.datetype = []
+            self.uselimitation = []
+            self.accessconstraints = []
+            self.classification = []
+            self.otherconstraints = []
+            self.securityconstraints = []
+            self.useconstraints = []
+            self.denominators = []
+            self.distance = []
+            self.uom = []
+            self.resourcelanguage = []
+            self.creator = None
+            self.publisher = None
+            self.originator = None
+            self.edition = None
+            self.abstract = None
+            self.purpose = None
+            self.status = None
+            self.contact = []
+            self.keywords = []
+            self.topiccategory = []
+            self.supplementalinformation = None
+            self.extent = None
+            self.bbox = None
+            self.temporalextent_start = None
+            self.temporalextent_end = None
         else:
             self.identtype = identtype
             val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
@@ -368,9 +429,10 @@ class MD_DataIdentification(object):
 
 class MD_Distributor(object):        
     """ process MD_Distributor """
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.contact = None
+            self.online = []
         else:
             self.contact = None
             val = md.find(util.nspath_eval('gmd:MD_Distributor/gmd:distributorContact/gmd:CI_ResponsibleParty', namespaces))
@@ -384,8 +446,12 @@ class MD_Distributor(object):
 
 class MD_Distribution(object):
     """ process MD_Distribution """
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
+            self.format = None
+            self.version = None
+            self.distributor = []
+            self.online = []
             pass
         else:
             val = md.find(util.nspath_eval('gmd:distributionFormat/gmd:MD_Format/gmd:name/gco:CharacterString', namespaces))
@@ -406,9 +472,15 @@ class MD_Distribution(object):
         
 class DQ_DataQuality(object):
     ''' process DQ_DataQuality'''
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.conformancetitle = []
+            self.conformancedate = []
+            self.conformancedatetype = []
+            self.conformancedegree = []
+            self.lineage = None
+            self.specificationtitle = None
+            self.specificationdate = []
         else:
             self.conformancetitle = []
             for i in md.findall(util.nspath_eval('gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces)):
@@ -448,9 +520,16 @@ class DQ_DataQuality(object):
 
 class SV_ServiceIdentification(object):
     """ process SV_ServiceIdentification """
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.identtype = 'service'
+            self.type = None
+            self.version = None
+            self.fees = None
+            self.bbox = None
+            self.couplingtype
+            self.operations = []
+            self.operateson = []
         else:
             self.identtype = 'service'
             val = md.find(util.nspath_eval('srv:serviceType/gco:LocalName', namespaces))
@@ -500,9 +579,13 @@ class SV_ServiceIdentification(object):
 
 class CI_OnlineResource(object):
     """ process CI_OnlineResource """
-    def __init__(self,md):
+    def __init__(self,md=None):
         if md is None:
-            pass
+            self.url = None
+            self.protocol = None
+            self.name = None
+            self.description = None
+            self.function = None
         else:
             val = md.find(util.nspath_eval('gmd:linkage/gmd:URL', namespaces))
             self.url = util.testXMLValue(val)
@@ -520,9 +603,12 @@ class CI_OnlineResource(object):
 
 
 class EX_GeographicBoundingBox(object):
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.minx = None
+            self.maxx = None
+            self.miny = None
+            self.maxy = None
         else:
             val = md.find(util.nspath_eval('gmd:westBoundLongitude/gco:Decimal', namespaces))
             self.minx = util.testXMLValue(val)
@@ -534,9 +620,10 @@ class EX_GeographicBoundingBox(object):
             self.maxy = util.testXMLValue(val)
     
 class EX_Polygon(object):
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.exterior_ring = None
+            self.interior_rings = []
         else:
             linear_ring = md.find(util.nspath_eval('gml32:Polygon/gml32:exterior/gml32:LinearRing', namespaces))
             if linear_ring is not None:
@@ -558,9 +645,10 @@ class EX_Polygon(object):
         return coordinates
         
 class EX_GeographicBoundingPolygon(object):
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.is_extent
+            self.polygons = []
         else:
             val = md.find(util.nspath_eval('gmd:extentTypeCode', namespaces))
             self.is_extent = util.testXMLValue(val)
@@ -573,9 +661,11 @@ class EX_GeographicBoundingPolygon(object):
                 
 class EX_Extent(object):
     """ process EX_Extent """
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.boundingBox = None
+            self.boundingPolygon = None
+            self.description_code = None
         else:
             self.boundingBox = None
             self.boundingPolygon = None
