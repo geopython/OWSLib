@@ -233,6 +233,8 @@ class MD_DataIdentification(object):
             self.title = None
             self.alternatetitle = None
             self.aggregationinfo = None
+            self.uricode = []
+            self.uricodespace = []
             self.date = []
             self.datetype = []
             self.uselimitation = []
@@ -270,6 +272,18 @@ class MD_DataIdentification(object):
 
             val = md.find(util.nspath_eval('gmd:aggregationInfo', namespaces))
             self.aggregationinfo = util.testXMLValue(val)
+
+            self.uricode = []
+            for i in md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces)):
+                val = util.testXMLValue(i)
+                if val is not None:
+                    self.uricode.append(val)
+
+            self.uricodespace = []
+            for i in md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:codeSpace/gco:CharacterString', namespaces)):
+                val = util.testXMLValue(i)
+                if val is not None:
+                    self.uricodespace.append(val)
 
             self.date = []
             self.datetype = []
