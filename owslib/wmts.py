@@ -26,14 +26,28 @@ More extensive testing is needed and feedback (to bradh@frogmouth.net) would be 
 
 """
 
+import warnings
 import urlparse
 import urllib2
 from urllib import urlencode
 from etree import etree
-from .util import openURL, testXMLValue, xmltag_split
+from .util import openURL, testXMLValue, getXMLInteger
 from fgdc import Metadata
 from iso import MD_Metadata
 from ows import ServiceProvider, ServiceIdentification, OperationsMetadata
+
+
+_WMTS_NS = '{http://www.opengis.net/wmts/1.0}'
+_TILE_MATRIX_SET_LINK_TAG = _WMTS_NS + 'TileMatrixSetLink'
+_TILE_MATRIX_SET_TAG = _WMTS_NS + 'TileMatrixSet'
+_TILE_MATRIX_SET_LIMITS_TAG = _WMTS_NS + 'TileMatrixSetLimits'
+_TILE_MATRIX_LIMITS_TAG = _WMTS_NS + 'TileMatrixLimits'
+_TILE_MATRIX_TAG = _WMTS_NS + 'TileMatrix'
+_MIN_TILE_ROW_TAG = _WMTS_NS + 'MinTileRow'
+_MAX_TILE_ROW_TAG = _WMTS_NS + 'MaxTileRow'
+_MIN_TILE_COL_TAG = _WMTS_NS + 'MinTileCol'
+_MAX_TILE_COL_TAG = _WMTS_NS + 'MaxTileCol'
+
 
 class ServiceException(Exception):
     """WMTS ServiceException
@@ -177,7 +191,7 @@ class WebMapTileService(object):
         if format is None:
             format = self[layer].formats[0]
         if tilematrixset is None:
-            tilematrixset = self[layer].tilematrixsets[0]
+            tilematrixset = sorted(self[layer].tilematrixsetlinks.keys())[0]
         if tilematrix is None:
             raise ValueError("tilematrix (zoom level) is mandatory (cannot be None)")
         if row is None:
@@ -316,6 +330,93 @@ class Theme:
             if layerRef.text is not None:
                 self.layerRefs.append(layerRef.text)
 
+
+class TileMatrixLimits(object):
+    """
+    Represents a WMTS TileMatrixLimits element.
+
+    """
+    def __init__(self, elem):
+        if elem.tag != _TILE_MATRIX_LIMITS_TAG:
+            raise ValueError('%s should be a TileMatrixLimits' % elem)
+
+        tm = elem.find(_TILE_MATRIX_TAG)
+        if tm is None:
+            raise ValueError('Missing TileMatrix in %s' % elem)
+        self.tilematrix = tm.text.strip()
+
+        self.mintilerow = getXMLInteger(elem, _MIN_TILE_ROW_TAG)
+        self.maxtilerow = getXMLInteger(elem, _MAX_TILE_ROW_TAG)
+        self.mintilecol = getXMLInteger(elem, _MIN_TILE_COL_TAG)
+        self.maxtilecol = getXMLInteger(elem, _MAX_TILE_COL_TAG)
+
+    def __repr__(self):
+        fmt = ('<TileMatrixLimits: {self.tilematrix}'
+               ', minRow={self.mintilerow}, maxRow={self.maxtilerow}'
+               ', minCol={self.mintilecol}, maxCol={self.maxtilecol}>')
+        return fmt.format(self=self)
+
+
+class TileMatrixSetLink(object):
+    """
+    Represents a WMTS TileMatrixSetLink element.
+
+    """
+    @staticmethod
+    def from_elements(link_elements):
+        """
+        Return a list of TileMatrixSetLink instances derived from the
+        given list of <TileMatrixSetLink> XML elements.
+
+        """
+        # NB. The WMTS spec is contradictory re. the multiplicity
+        # relationships between Layer and TileMatrixSetLink, and
+        # TileMatrixSetLink and tileMatrixSet (URI).
+        # Try to figure out which model has been used by the server.
+        links = []
+        for link_element in link_elements:
+            matrix_set_elements = link_element.findall(_TILE_MATRIX_SET_TAG)
+            if len(matrix_set_elements) == 0:
+                raise ValueError('Missing TileMatrixSet in %s' % link_element)
+            elif len(matrix_set_elements) > 1:
+                set_limits_elements = link_element.findall(
+                    _TILE_MATRIX_SET_LIMITS_TAG)
+                if set_limits_elements:
+                   raise ValueError('Multiple instances of TileMatrixSet'
+                                    ' plus TileMatrixSetLimits in %s' %
+                                    link_element)
+                for matrix_set_element in matrix_set_elements:
+                    uri = matrix_set_element.text.strip()
+                    links.append(TileMatrixSetLink(uri))
+            else:
+                uri = matrix_set_elements[0].text.strip()
+
+                tilematrixlimits = {}
+                path = '%s/%s' % (_TILE_MATRIX_SET_LIMITS_TAG, _TILE_MATRIX_LIMITS_TAG)
+                for limits_element in link_element.findall(path):
+                    tml = TileMatrixLimits(limits_element)
+                    if tml.tilematrix:
+                        if tml.tilematrix in tilematrixlimits:
+                            raise KeyError('TileMatrixLimits with tileMatrix "%s" already exists' % tml.tilematrix)
+                        tilematrixlimits[tml.tilematrix] = tml
+
+                links.append(TileMatrixSetLink(uri, tilematrixlimits))
+        return links
+
+    def __init__(self, tilematrixset, tilematrixlimits=None):
+        self.tilematrixset = tilematrixset
+
+        if tilematrixlimits is None:
+            self.tilematrixlimits = {}
+        else:
+            self.tilematrixlimits = tilematrixlimits
+
+    def __repr__(self):
+        fmt = ('<TileMatrixSetLink: {self.tilematrixset}'
+               ', tilematrixlimits={{...}}>')
+        return fmt.format(self=self)
+
+
 class ContentMetadata:
     """
     Abstraction for WMTS layer metadata.
@@ -352,7 +453,20 @@ class ContentMetadata:
             self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
         # TODO: there is probably some more logic here, and it should probably be shared code
 
-        self.tilematrixsets = [f.text.strip() for f in elem.findall('{http://www.opengis.net/wmts/1.0}TileMatrixSetLink/{http://www.opengis.net/wmts/1.0}TileMatrixSet')]
+        self._tilematrixsets = [f.text.strip() for f in
+                                elem.findall(_TILE_MATRIX_SET_LINK_TAG + '/' +
+                                             _TILE_MATRIX_SET_TAG)]
+
+        link_elements = elem.findall(_TILE_MATRIX_SET_LINK_TAG)
+        tile_matrix_set_links = TileMatrixSetLink.from_elements(link_elements)
+        self.tilematrixsetlinks = {}
+        for tmsl in tile_matrix_set_links:
+            if tmsl.tilematrixset:
+                if tmsl.tilematrixset in self.tilematrixsetlinks:
+                    raise KeyError('TileMatrixSetLink with tilematrixset "%s"'
+                                   ' already exists' %
+                                   tmsl.tilematrixset)
+                self.tilematrixsetlinks[tmsl.tilematrixset] = tmsl
 
         self.resourceURLs = []
         for resourceURL in elem.findall('{http://www.opengis.net/wmts/1.0}ResourceURL'):
@@ -382,6 +496,16 @@ class ContentMetadata:
         self.layers = []
         for child in elem.findall('{http://www.opengis.net/wmts/1.0}Layer'):
             self.layers.append(ContentMetadata(child, self))
+
+    @property
+    def tilematrixsets(self):
+        # NB. This attribute has been superseeded by the
+        # `tilematrixsetlinks` attribute defined below, but is included
+        # for now to provide continuity.
+        warnings.warn("The 'tilematrixsets' attribute has been deprecated"
+                      " and will be removed in a future version of OWSLib."
+                      " Please use 'tilematrixsetlinks' instead.")
+        return self._tilematrixsets
 
     def __str__(self):
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
