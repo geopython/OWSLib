@@ -205,6 +205,8 @@ class WebMapTileService(object):
             Row index of tile to request.
         column : integer
             Column index of tile to request.
+        **kwargs : extra arguments
+            anything else e.g. vendor specific parameters
 
         Example
         -------
@@ -284,7 +286,9 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         row : integer
             Row index of tile to request.
         column : integer
-            Column index ot tile to request.
+            Column index of tile to request.
+        **kwargs : extra arguments
+            anything else e.g. vendor specific parameters
 
         Example
         -------
