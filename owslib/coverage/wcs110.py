@@ -113,11 +113,11 @@ class WebCoverageService_1_1_0(WCSBase):
         ##Could be multipart mime or XML Coverages document, need to use the decoder...
         # decoder=wcsdecoder.WCSDecoder(u)
         # x=decoder.getCoverages()
-        # if type(x) is wcsdecoder.MpartMime:
-        #     filenames=x.unpackToDir(directory)
-        #     print 'Files from 1.1.0 service written to %s directory'%(directory)
+        # if isinstance(x, wcsdecoder.MpartMime):
+        #     filenames = x.unpackToDir(directory)
+        #     print('Files from 1.1.0 service written to %s directory' % (directory))
         # else:
-        #     filenames=x
+        #     filenames = x
         # return filenames
 
     # TO DO: Handle rest of the  WCS 1.1.0 keyword parameters e.g. GridCRS etc.

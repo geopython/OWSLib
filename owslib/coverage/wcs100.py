@@ -93,7 +93,7 @@ class WebCoverageService_1_0_0(WCSBase):
 
     def __makeString(self, value):
         # using repr unconditionally breaks things in some circumstances if a value is already a string
-        if type(value) is not str:
+        if not isinstance(value, str):
             sval = repr(value)
         else:
             sval = value
