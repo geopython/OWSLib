@@ -5,6 +5,12 @@ from six.moves.urllib.parse import urlparse
 from owslib.etree import etree
 
 
+try:
+    Element = etree._Element
+except AttributeError:
+    Element = etree.Element
+
+
 def resource_file(filepath):
     return os.path.join(test_directory(), 'resources', filepath)
 
@@ -25,9 +31,9 @@ def scratch_file(filename):
 
 
 def compare_xml(a, b):
-    if not isinstance(a, etree._Element):
+    if not isinstance(a, Element):
         a = etree.fromstring(a)
-    if not isinstance(b, etree._Element):
+    if not isinstance(b, Element):
         b = etree.fromstring(b)
 
     return compare_elements(a, b)
