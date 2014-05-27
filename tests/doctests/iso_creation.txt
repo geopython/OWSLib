@@ -1,0 +1,39 @@
+Imports
+
+    >>> import urllib2
+    >>> from owslib.etree import etree
+    >>> from owslib.iso import MD_Metadata, MD_DataIdentification, CI_ResponsibleParty
+
+Print testing of various ISO fields
+
+    >>> md = MD_Metadata()
+	>>> md.identification = MD_DataIdentification()
+	>>> val = CI_ResponsibleParty()
+	>>> val.organization = 'NTUA'
+	>>> val.email = 'gcpp.kalxas@gmail.com'
+	>>> val.role = 'pointOfContact'
+	>>> md.contact.append(val)
+	>>> md.datestamp = '2014-05-20'
+	>>> md.identification.title = 'Title'
+	>>> md.identification.abstract = 'Abstract'
+	>>> md.identification.identtype = 'dataset'
+	>>> md.identifier = '286c0725-146e-4533-b1bf-d6e367f6c342'
+	>>> md.identification.topiccategory.append('biota')
+	>>> md.identification.topiccategory.append('environment')
+	>>> kw = {}
+	>>> kw['keywords'] = []
+	>>> kw['keywords'].append('Agricultural and aquaculture facilities')
+	>>> kw['keywords'].append('Bio-geographical regions')
+	>>> kw['type'] = None
+	>>> kw['thesaurus'] = {}
+	>>> kw['thesaurus']['date'] = '2008-06-01'
+	>>> kw['thesaurus']['datetype'] = 'publication'
+	>>> kw['thesaurus']['title'] = 'GEMET - INSPIRE themes, version 1.0'
+	>>> md.identification.keywords.append(kw)
+
+	>>> md.identifier
+	'286c0725-146e-4533-b1bf-d6e367f6c342'
+	>>> kw
+	{'keywords': ['Agricultural and aquaculture facilities', 'Bio-geographical regions'], 'type': None, 'thesaurus': {'date': '2008-06-01', 'datetype': 'publication', 'title': 'GEMET - INSPIRE themes, version 1.0'}}
+    >>> md.languagecode is None
+    True
