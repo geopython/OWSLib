@@ -1,3 +1,9 @@
+owslib (0.8.7-1~precise1) precise; urgency=low
+
+  * Update to 0.8.7.
+
+ -- Angelos Tzotsos <gcpp.kalxas@gmail.com>  Thu, 05 Jun 2014 01:41:45 +0200
+
 owslib (0.8.3-1~precise1) precise; urgency=low
 
   * Update to 0.8.3.
