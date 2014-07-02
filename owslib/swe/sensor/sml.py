@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+from six import text_type, binary_type
+
 from owslib.etree import etree
 from owslib.util import testXMLValue, testXMLAttribute, nspath_eval, extract_xml_list
 from owslib.namespaces import Namespaces
@@ -20,7 +22,7 @@ def nsp(path):
 class SensorML(object):
 
     def __init__(self, element):
-        if isinstance(element, str):
+        if isinstance(element, (text_type, binary_type)):
             self._root = etree.fromstring(element)
         else:
             self._root = element

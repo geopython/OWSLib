@@ -1,4 +1,4 @@
-from six import iteritems
+from six import iteritems, text_type, binary_type
 
 
 class Namespaces(object):
@@ -131,7 +131,7 @@ class Namespaces(object):
         if keys is None or len(keys) == 0:
             return self.namespace_dict
 
-        if isinstance(keys, unicode) or isinstance(keys, str):
+        if isinstance(keys, (text_type, binary_type)):
             return {keys: self.get_namespace(keys)}
 
         retval = {}

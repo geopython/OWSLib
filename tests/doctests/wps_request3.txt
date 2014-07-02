@@ -40,6 +40,6 @@ Supply process input arguments
 
 Compare to cached XML request
 
-    >>> _request = open(resource_file('wps_USGSExecuteRequest3.xml'), 'r').read()
+    >>> _request = open(resource_file('wps_USGSExecuteRequest3.xml'), 'rb').read()
     >>> compare_xml(request, _request)
     True

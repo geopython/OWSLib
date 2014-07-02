@@ -15,10 +15,10 @@
 # TMS as defined in:
 # http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification
 
-from six import itervalues
+from six import itervalues, text_type, binary_type
 
 from owslib.etree import etree
-from owslib.util import openURL, testXMLValue
+from owslib.util import openURL, testXMLValue, OrderedDict
 
 
 FORCE900913 = False
@@ -50,7 +50,7 @@ class TileMapService(object):
         self.version = version
         self.services = None
         self._capabilities = None
-        self.contents = {}
+        self.contents = OrderedDict()
 
         # Authentication handled by Reader
         reader = TMSCapabilitiesReader(
@@ -78,7 +78,7 @@ class TileMapService(object):
             self.version = self._capabilities.attrib.get('version')
         self.identification = ServiceIdentification(self._capabilities, self.version)
 
-        self.contents = {}
+        self.contents = OrderedDict()
         tilemaps = self._capabilities.find('TileMaps')
         if tilemaps is not None:
             for tilemap in tilemaps.findall('TileMap'):
@@ -118,7 +118,7 @@ class TileMapService(object):
     def _gettilefromset(self, tilesets, x, y, z, ext):
         for tileset in tilesets:
             if tileset['order'] == z:
-                url = tileset['href'] + '/' + str(x) + '/' + str(y) + '.' + ext
+                url = tileset['href'] + '/' + text_type(x) + '/' + text_type(y) + '.' + ext
                 u = openURL(url, '', username=self.username,
                             password=self.password)
                 return u
@@ -295,8 +295,8 @@ class TileMap(object):
         self._parse(etree.fromstring(u.read()))
 
     def readString(self, st):
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         self._parse(etree.fromstring(st))
 
 
@@ -325,6 +325,6 @@ class TMSCapabilitiesReader(object):
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         return etree.fromstring(st)

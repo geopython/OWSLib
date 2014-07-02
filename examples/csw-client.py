@@ -64,7 +64,7 @@ if len(sys.argv) == 1:
 try:
     opts, args = getopt.getopt(sys.argv[1:], '', ['typename=', 'request=', 'lang=', 'version', 'keyword=', 'bbox=', 'schema=', 'qtype=', 'esn=', 'url=', 'print-request', 'sortby=', 'id=', 'dtype=', 'dname=', 'validate'])
 except getopt.GetoptError as err:
-    print(str(err))
+    print(err)
     usage()
     sys.exit(2)
 

@@ -2,13 +2,7 @@ import os
 
 from six.moves.urllib.parse import urlparse
 
-from owslib.etree import etree
-
-
-try:
-    Element = etree._Element
-except AttributeError:
-    Element = etree.Element
+from owslib.etree import etree, Element
 
 
 def resource_file(filepath):

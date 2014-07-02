@@ -11,6 +11,7 @@
 
 import logging
 
+from six import text_type, binary_type
 from six.moves.urllib.parse import urlencode
 
 from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
@@ -52,7 +53,7 @@ class WebCoverageService_1_0_0(WCSBase):
         se = self._capabilities.find('ServiceException')
 
         if se is not None:
-            err_message = str(se.text).strip()
+            err_message = text_type(se.text).strip()
             raise ServiceException(err_message, xml)
 
         # serviceIdentification metadata
@@ -93,7 +94,7 @@ class WebCoverageService_1_0_0(WCSBase):
 
     def __makeString(self, value):
         # using repr unconditionally breaks things in some circumstances if a value is already a string
-        if not isinstance(value, str):
+        if not isinstance(value, (text_type, binary_type)):
             sval = repr(value)
         else:
             sval = value
@@ -111,7 +112,7 @@ class WebCoverageService_1_0_0(WCSBase):
 
         """
         if log.isEnabledFor(logging.DEBUG):
-            log.debug('WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s' % (identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
+            log.debug('WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s' % (identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, text_type(kwargs)))
 
         base_url = self.getOperationByName('GetCoverage').methods[method]['url']
 

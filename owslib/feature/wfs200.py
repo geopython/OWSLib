@@ -8,6 +8,7 @@
 
 import logging
 
+from six import text_type, binary_type, BytesIO
 from six.moves.urllib.parse import urlencode, parse_qsl
 from six.moves.urllib.request import urlopen
 
@@ -15,7 +16,7 @@ from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue, StringIO, log
+from owslib.util import nspath, testXMLValue, log
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
@@ -167,7 +168,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """
 
         url = data = None
-        if typename and isinstance(typename, str):
+        if typename and isinstance(typename, (text_type, binary_type)):
             typename = [typename]
         if method.upper() == "GET":
             (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid,
@@ -188,7 +189,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         try:
             length = int(u.info()['Content-Length'])
             have_read = False
-        except KeyError:
+        except (TypeError, KeyError, AttributeError):
             data = u.read()
             have_read = True
             length = len(data)
@@ -201,16 +202,16 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return StringIO(data)
+                return BytesIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
-                    raise ServiceException(str(se.text).strip())
+                    raise ServiceException(text_type(se.text).strip())
                 else:
-                    return StringIO(data)
+                    return BytesIO(data)
         else:
             if have_read:
-                return StringIO(data)
+                return BytesIO(data)
             return u
 
     def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get'), **kwargs):
@@ -218,16 +219,16 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         base_url = self.getOperationByName('GetPropertyValue').methods[method]['url']
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetPropertyValue'}
         if query:
-            request['query'] = str(query)
+            request['query'] = text_type(query)
         if valuereference:
-            request['valueReference'] = str(valuereference)
+            request['valueReference'] = text_type(valuereference)
         if storedquery_id:
-            request['storedQuery_id'] = str(storedquery_id)
+            request['storedQuery_id'] = text_type(storedquery_id)
         if typename:
-            request['typename'] = str(typename)
+            request['typename'] = text_type(typename)
         if kwargs:
             for kw in kwargs:
-                request[kw] = str(kwargs[kw])
+                request[kw] = text_type(kwargs[kw])
         encoded_request = urlencode(request)
         u = urlopen(base_url + encoded_request)
         return u.read()
@@ -436,6 +437,6 @@ class WFSCapabilitiesReader(object):
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         return etree.fromstring(st)

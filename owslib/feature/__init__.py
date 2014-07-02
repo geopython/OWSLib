@@ -5,6 +5,7 @@
 #
 # =============================================================================
 
+from six import text_type, binary_type
 from six.moves.urllib.parse import urlencode
 
 from owslib.crs import Crs
@@ -117,18 +118,18 @@ class WebFeatureService_(object):
         elif bbox:
             request['bbox'] = self.getBBOXKVP(bbox, typename)
         elif filter:
-            request['query'] = str(filter)
+            request['query'] = text_type(filter)
         if typename:
-            typename = [typename] if isinstance(typename, str) else typename
+            typename = [typename] if isinstance(typename, (text_type, binary_type)) else typename
             request['typename'] = ','.join(typename)
         if propertyname:
             request['propertyname'] = ','.join(propertyname)
         if featureversion:
-            request['featureversion'] = str(featureversion)
+            request['featureversion'] = text_type(featureversion)
         if maxfeatures:
-            request['maxfeatures'] = str(maxfeatures)
+            request['maxfeatures'] = text_type(maxfeatures)
         if storedQueryID:
-            request['storedQuery_id'] = str(storedQueryID)
+            request['storedQuery_id'] = text_type(storedQueryID)
             for param in storedQueryParams:
                 request[param] = storedQueryParams[param]
         if outputFormat is not None:

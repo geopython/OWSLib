@@ -7,7 +7,7 @@ Imports
 Fake a request to a WMTS Server using saved doc from
 http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi
 
-    >>> xml = open(resource_file('eosdis-wmts-cap.xml'), 'r').read()
+    >>> xml = open(resource_file('eosdis-wmts-cap.xml'), 'rb').read()
     >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
 
 Test capabilities
@@ -175,13 +175,13 @@ Test the gettile methods
     # TODO - more checks
     >>> try:
     ...     from PIL import Image
-    ...     import cStringIO
+    ...     from six import BytesIO
     ... except:
     ...     pass
     ... else:
     ...     rq = wmts.buildTileRequest(layer='MODIS_Aqua_SurfaceReflectance_Bands121', tilematrix='0', row=0, column=0)
     ...     assert rq == 'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=MODIS_Aqua_SurfaceReflectance_Bands121&STYLE=default&TILEMATRIXSET=EPSG4326_250m&TILEMATRIX=0&TILEROW=0&TILECOL=0&FORMAT=image%2Fjpeg'
     ...     tile000 = wmts.gettile(layer='MODIS_Aqua_SurfaceReflectance_Bands121', tilematrix='0', row=0, column=0)
-    ...     im = cStringIO.StringIO(tile000.read())
+    ...     im = BytesIO(tile000.read())
     ...     image = Image.open(im)
     ...     assert image.size == (512, 512)

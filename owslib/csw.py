@@ -12,7 +12,7 @@
 import warnings
 import random
 
-from six import iteritems
+from six import iteritems, text_type, binary_type, BytesIO
 from six.moves.urllib.parse import urlencode
 from six.moves.urllib.request import urlopen
 
@@ -210,8 +210,8 @@ class CatalogueServiceWeb(object):
             node0.set('resultType', resulttype)
             node0.set('service', self.service)
             if startposition > 0:
-                node0.set('startPosition', str(startposition))
-            node0.set('maxRecords', str(maxrecords))
+                node0.set('startPosition', text_type(startposition))
+            node0.set('maxRecords', text_type(maxrecords))
             node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
 
             node1 = etree.SubElement(node0, util.nspath_eval('csw:Query', namespaces))
@@ -267,10 +267,10 @@ class CatalogueServiceWeb(object):
             'outputFormat': format,
             'outputSchema': outputschema,
             'elementsetname': esn,
-            'id': '',
+            'id': ','.join(id),
         }
 
-        self.request = '%s%s%s' % (util.bind_url(self.url), urlencode(data), ','.join(id))
+        self.request = '%s%s' % (util.bind_url(self.url), urlencode(data))
 
         self._invoke()
 
@@ -320,8 +320,8 @@ class CatalogueServiceWeb(object):
             node0.set('service', self.service)
             node0.set('resultType', resulttype)
             if startposition > 0:
-                node0.set('startPosition', str(startposition))
-            node0.set('maxRecords', str(maxrecords))
+                node0.set('startPosition', text_type(startposition))
+            node0.set('maxRecords', text_type(maxrecords))
             node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
 
             node1 = etree.SubElement(node0, util.nspath_eval('csw:Query', namespaces))
@@ -586,7 +586,7 @@ class CatalogueServiceWeb(object):
     def _invoke(self):
         # do HTTP request
 
-        if isinstance(self.request, basestring):  # GET KVP
+        if isinstance(self.request, (text_type, binary_type)):  # GET KVP
             self.response = urlopen(self.request, timeout=self.timeout).read()
         else:
             self.request = util.cleanup_namespaces(self.request)
@@ -604,7 +604,7 @@ class CatalogueServiceWeb(object):
             self.response = util.http_post(self.url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
-        self._exml = etree.parse(util.StringIO(self.response))
+        self._exml = etree.parse(BytesIO(self.response))
 
         # it's XML.  Attempt to decipher whether the XML response is CSW-ish """
         valid_xpaths = [

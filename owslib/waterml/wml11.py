@@ -1,3 +1,5 @@
+from six import text_type, binary_type
+
 from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse, namespaces
 from owslib.etree import etree
 
@@ -10,8 +12,8 @@ class WaterML_1_1(object):
 
     def __init__(self, element):
 
-        if isinstance(element, str) or isinstance(element, unicode):
-            self._root = etree.fromstring(str(element))
+        if isinstance(element, (text_type, binary_type)):
+            self._root = etree.fromstring(element)
         else:
             self._root = element
 
@@ -23,11 +25,11 @@ class WaterML_1_1(object):
     @property
     def response(self):
         try:
-            if self._root.tag == str(ns(self._ns) + 'variablesResponse'):
+            if self._root.tag == text_type(ns(self._ns) + 'variablesResponse'):
                 return VariablesResponse(self._root, self._ns)
-            elif self._root.tag == str(ns(self._ns) + 'timeSeriesResponse'):
+            elif self._root.tag == text_type(ns(self._ns) + 'timeSeriesResponse'):
                 return TimeSeriesResponse(self._root, self._ns)
-            elif self._root.tag == str(ns(self._ns) + 'sitesResponse'):
+            elif self._root.tag == text_type(ns(self._ns) + 'sitesResponse'):
                 return SitesResponse(self._root, self._ns)
         except:
             raise

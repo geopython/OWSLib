@@ -460,11 +460,11 @@ class AbstractEncoding(object):
     def __new__(cls, element):
         t = element[-1].tag.split("}")[-1]
         if t == "TextEncoding":
-            return super(AbstractEncoding, cls).__new__(TextEncoding, element)
+            return super(AbstractEncoding, cls).__new__(TextEncoding)
         elif t == "XMLEncoding":
-            return super(AbstractEncoding, cls).__new__(XMLEncoding, element)
+            return super(AbstractEncoding, cls).__new__(XMLEncoding)
         elif t == "BinaryEncoding":
-            return super(AbstractEncoding, cls).__new__(BinaryEncoding, element)
+            return super(AbstractEncoding, cls).__new__(BinaryEncoding)
 
 
 class TextEncoding(AbstractEncoding):

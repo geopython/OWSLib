@@ -12,7 +12,7 @@ Initialize WPS client
 
 Execute fake invocation of GetCapabilities operation by parsing cached response from USGS service
 
-    >>> xml = open(resource_file('wps_CEDACapabilities.xml'), 'r').read()
+    >>> xml = open(resource_file('wps_CEDACapabilities.xml'), 'rb').read()
     >>> wps.getcapabilities(xml=xml)
 
 Check WPS description

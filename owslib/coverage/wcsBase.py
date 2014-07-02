@@ -9,6 +9,7 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
+from six import text_type, binary_type
 from six.moves.urllib.parse import urlencode, parse_qsl
 from six.moves.urllib.request import urlopen, Request
 
@@ -121,8 +122,8 @@ class WCSCapabilitiesReader(object):
         instance of WCSCapabilitiesInfoset
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         return etree.fromstring(st)
 
 

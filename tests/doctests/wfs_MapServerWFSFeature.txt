@@ -7,12 +7,12 @@ Test the getfeature method
 
     >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0.0')
     >>> response = wfs.getfeature(typename=['IBA'], maxfeatures=5)
-    >>> response.read().find('<wfs:FeatureCollection') > 0
+    >>> response.read().find('<wfs:FeatureCollection'.encode('utf8')) > 0
     True
 
 Handle service exception
 
-    >>> response = wfs.getfeature(typename=['totally bogus'], maxfeatures=5)
+    >>> response = wfs.getfeature(typename=['totally bogus'], maxfeatures=5)  # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
     ServiceException: msWFSGetFeature(): WFS server error. TYPENAME 'totally bogus' doesn't exist in this server.  Please check the capabilities and reformulate your request.

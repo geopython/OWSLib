@@ -1,5 +1,7 @@
 from dateutil import parser
 
+from six import text_type, binary_type
+
 from owslib.etree import etree
 from owslib.util import testXMLValue, xml_to_dict as _xml_to_dict
 
@@ -74,12 +76,12 @@ class SitesResponse(XMLParser):
         if isinstance(key, int) and key < len(self.sites):
             return self.sites[key]
 
-        if isinstance(key, str):
+        if isinstance(key, (text_type, binary_type)):
             site = [site for site in self.sites for code in site.site_info.site_codes if code == key]
             if len(site) > 0:
                 return site[0]
 
-        raise KeyError('Unknown key ' + str(key))
+        raise KeyError('Unknown key ' + text_type(key))
 
     def parse_sites_response(self, xml=None):
         if xml is not None:
@@ -174,12 +176,12 @@ class Site(XMLParser):
         if isinstance(key, int) and key < len(self.series_catalogs):
             return self.series_catalogs[key]
 
-        if isinstance(key, str):
+        if isinstance(key, (text_type, binary_type)):
             var = [series.variable for catalog in self.series_catalogs for series in catalog if series.code == key]
             if len(var) > 0:
                 return var[0]
 
-        raise KeyError('Unknown key ' + str(key))
+        raise KeyError('Unknown key ' + text_type(key))
 
     """Accessor propeties/methods"""
     @property
@@ -342,12 +344,12 @@ class SeriesCatalog(XMLParser):
         if isinstance(key, int) and key < len(self.series):
             return self.series[key]
 
-        if isinstance(key, str):
+        if isinstance(key, (text_type, binary_type)):
             srs = [series for series in self.series if series.code == key]
             if len(srs) > 0:
                 return srs[0]
 
-        raise KeyError('Unknown key ' + str(key))
+        raise KeyError('Unknown key ' + text_type(key))
 
     def parse_seriescatalog(self, xml=None):
         if xml is not None:
@@ -925,7 +927,7 @@ class VariablesResponse(XMLParser):
         if isinstance(key, int) and key < len(self.variables):
             return self.variables[key]
 
-        if isinstance(key, str):
+        if isinstance(key, (text_type, binary_type)):
             v = [var for var in self.variables if var.variable_code == key]
             if len(v) > 0:
                 return v[0]
@@ -934,7 +936,7 @@ class VariablesResponse(XMLParser):
             if len(v) > 0:
                 return v[0]
 
-        raise KeyError('Unknown key ' + str(key))
+        raise KeyError('Unknown key ' + text_type(key))
 
     """Accessor properties/methods"""
     @property

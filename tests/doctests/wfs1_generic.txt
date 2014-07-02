@@ -3,7 +3,7 @@ Imports and initialize
     >>> from owslib.wfs import WebFeatureService
     >>> from tests.utils import resource_file, sorted_url_query
 
-    >>> getcapsin = open(resource_file('wfs_HSRS_GetCapabilities_1_1_0.xml')).read()
+    >>> getcapsin = open(resource_file('wfs_HSRS_GetCapabilities_1_1_0.xml'), 'rb').read()
     >>> wfs = WebFeatureService('http://gis.bnhelp.cz/ows/crwfs', xml=getcapsin, version='1.1.0')
 
 Test the capabilities info
@@ -27,8 +27,8 @@ Test the capabilities info
     'http://www.hsrs.cz'
     >>> wfs.provider.contact.email
     >>> wfs.provider.contact.phone
-    >>> wfs.provider.contact.name
-    u'Stanislav Hol\xfd'
+    >>> wfs.provider.contact.name == u'Stanislav Hol\xfd'
+    True
     >>> wfs.provider.contact.organization
     >>> wfs.provider.contact.city
     >>> wfs.provider.contact.region
@@ -59,21 +59,21 @@ WFS 1.0.0
     >>> import json
     >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
     >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
-    >>> json.dumps(json.loads(feature.read()))
+    >>> json.dumps(json.loads(feature.read().decode('utf8')))
     '{...}'
 
 WFS 1.1.0
     >>> import json
     >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.1.0')
     >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
-    >>> json.dumps(json.loads(feature.read()))
+    >>> json.dumps(json.loads(feature.read().decode('utf8')))
     '{...}'
 
 WFS 2.0.0
     >>> import json
     >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='2.0.0')
     >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
-    >>> json.dumps(json.loads(feature.read()))
+    >>> json.dumps(json.loads(feature.read().decode('utf8')))
     '{...}'
 
 
@@ -82,7 +82,7 @@ Test srsName
 WFS 1.0.0
     >>> import json
     >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
-    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname='EPSG:99999999')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname='EPSG:99999999')  # doctest: +IGNORE_EXCEPTION_DETAIL
     ...
     Traceback (most recent call last):
     ...
@@ -92,13 +92,13 @@ WFS 1.0.0
     >>> import json
     >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
     >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname='urn:x-ogc:def:crs:EPSG:4326')
-    >>> json.dumps(json.loads(feature.read()))
+    >>> json.dumps(json.loads(feature.read().decode('utf8')))
     '{...}'
 
 WFS 1.1.0
     >>> import json
     >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.1.0')
-    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname='EPSG:99999999')
+    >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname='EPSG:99999999')  # doctest: +IGNORE_EXCEPTION_DETAIL
     ...
     Traceback (most recent call last):
     ...
@@ -107,5 +107,5 @@ WFS 1.1.0
     >>> import json
     >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
     >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname='urn:x-ogc:def:crs:EPSG:4326')
-    >>> json.dumps(json.loads(feature.read()))
+    >>> json.dumps(json.loads(feature.read().decode('utf8')))
     '{...}'

@@ -1,3 +1,4 @@
+from six import text_type, binary_type
 from six.moves.urllib.parse import urlencode, parse_qsl
 
 from owslib.etree import etree
@@ -107,10 +108,10 @@ class SensorObservationService_2_0_0(object):
         request = {'service': 'SOS', 'version': self.version, 'request': 'DescribeSensor'}
 
         # Required Fields
-        assert isinstance(outputFormat, str)
+        assert isinstance(outputFormat, (text_type, binary_type))
         request['procedureDescriptionFormat'] = outputFormat
 
-        assert isinstance(procedure, str)
+        assert isinstance(procedure, (text_type, binary_type))
         request['procedure'] = procedure
 
         # Optional Fields
@@ -299,6 +300,6 @@ class SosCapabilitiesReader(object):
 
             st should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         return etree.fromstring(st)

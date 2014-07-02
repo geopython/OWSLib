@@ -91,5 +91,5 @@ Print the ids of all layers (actually just the first 3):
 # Then write this to a netcdf file.
     >>> filename = scratch_file('threddstest.nc')
     >>> f = open(filename, 'wb')
-    >>> f.write(output.read())
+    >>> written_bytes = f.write(output.read())
     >>> f.close()

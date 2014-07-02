@@ -3,7 +3,7 @@ Imports and initialize
     >>> from owslib.wfs import WebFeatureService
     >>> from tests.utils import resource_file, sorted_url_query
 
-    >>> getcapsin = open(resource_file('wfs_CUZK_GetCapabilities_2_0_0.xml')).read()
+    >>> getcapsin = open(resource_file('wfs_CUZK_GetCapabilities_2_0_0.xml'), 'rb').read()
     >>> wfs = WebFeatureService('http://services.cuzk.cz/wfs/inspire-cp-wfs.asp', xml=getcapsin, version='2.0.0')
 
 Test the capabilities info

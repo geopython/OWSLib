@@ -7,7 +7,7 @@ Imports
 Fake a request to a WMS Server using saved doc from
 http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?
 
-    >>> xml = open(resource_file('wms_mesonet-caps.xml'), 'r').read()
+    >>> xml = open(resource_file('wms_mesonet-caps.xml'), 'rb').read()
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
 
 Test capabilities

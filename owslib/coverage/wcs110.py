@@ -13,6 +13,7 @@
 
 import logging
 
+from six import text_type
 from six.moves.urllib.parse import urlencode
 
 from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
@@ -52,7 +53,7 @@ class WebCoverageService_1_1_0(WCSBase):
         se = self._capabilities.find('{http://www.opengis.net/ows/1.1}Exception')
 
         if se is not None:
-            err_message = str(se.text).strip()
+            err_message = text_type(se.text).strip()
             raise ServiceException(err_message, xml)
 
         # build metadata objects:
@@ -135,7 +136,7 @@ class WebCoverageService_1_1_0(WCSBase):
         if store = false, returns a multipart mime
         """
         if log.isEnabledFor(logging.DEBUG):
-            log.debug('WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, rangesubset=%s, gridbaseCRS=%s, gridtype=%s, gridCS=%s, gridorigin=%s, gridoffsets=%s, method=%s, other_arguments=%s' % (identifier, bbox, time, format, rangesubset, gridbaseCRS, gridtype, gridCS, gridorigin, gridoffsets, method, str(kwargs)))
+            log.debug('WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, rangesubset=%s, gridbaseCRS=%s, gridtype=%s, gridCS=%s, gridorigin=%s, gridoffsets=%s, method=%s, other_arguments=%s' % (identifier, bbox, time, format, rangesubset, gridbaseCRS, gridtype, gridCS, gridorigin, gridoffsets, method, text_type(kwargs)))
 
         if method == 'Get':
             method = '{http://www.opengis.net/wcs/1.1/ows}Get'

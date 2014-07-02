@@ -7,10 +7,11 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+from six import text_type, binary_type, BytesIO
 from six.moves.urllib.parse import urlencode, parse_qsl
 from six.moves.urllib.request import urlopen
 
-from owslib.util import openURL, testXMLValue, nspath_eval, ServiceException, StringIO, log
+from owslib.util import openURL, testXMLValue, nspath_eval, ServiceException, log
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -166,7 +167,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
                     options = ", ".join([x.id for x in self.contents[typename[0]].crsOptions])
                     raise ServiceException("SRSNAME %s not supported.  Options: %s" % (srsname, options))
             else:
-                request['srsname'] = str(srsname)
+                request['srsname'] = text_type(srsname)
 
         # check featureid
         if featureid:
@@ -178,7 +179,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         # or filter
         elif filter and typename:
-            request['filter'] = str(filter)
+            request['filter'] = text_type(filter)
 
         assert len(typename) > 0
         request['typename'] = ','.join(typename)
@@ -189,9 +190,9 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             request['propertyname'] = ','.join(propertyname)
 
         if featureversion is not None:
-            request['featureversion'] = str(featureversion)
+            request['featureversion'] = text_type(featureversion)
         if maxfeatures is not None:
-            request['maxfeatures'] = str(maxfeatures)
+            request['maxfeatures'] = text_type(maxfeatures)
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
 
@@ -205,7 +206,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         try:
             length = int(u.info()['Content-Length'])
             have_read = False
-        except (KeyError, AttributeError):
+        except (TypeError, KeyError, AttributeError):
             data = u.read()
             have_read = True
             length = len(data)
@@ -218,16 +219,16 @@ class WebFeatureService_1_1_0(WebFeatureService_):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return StringIO(data)
+                return BytesIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % namespaces["ogc"]:
                     se = tree.find(nspath_eval('ServiceException', namespaces["ogc"]))
-                    raise ServiceException(str(se.text).strip())
+                    raise ServiceException(text_type(se.text).strip())
                 else:
-                    return StringIO(data)
+                    return BytesIO(data)
         else:
             if have_read:
-                return StringIO(data)
+                return BytesIO(data)
             return u
 
     def getOperationByName(self, name):
@@ -351,6 +352,6 @@ class WFSCapabilitiesReader(object):
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         return etree.fromstring(st)

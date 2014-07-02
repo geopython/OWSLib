@@ -15,13 +15,11 @@ from datetime import datetime
 import re
 from copy import deepcopy
 
-from six import iteritems
+from six import iteritems, text_type, binary_type, BytesIO
 from six.moves.urllib.parse import urlencode, urlsplit, parse_qsl
 from six.moves.urllib.request import (urlopen, build_opener, Request, HTTPBasicAuthHandler,
                                       HTTPPasswordMgrWithDefaultRealm)
 from six.moves.urllib.error import HTTPError
-
-from StringIO import StringIO
 
 from dateutil import parser
 import pytz
@@ -30,14 +28,14 @@ from owslib.etree import etree
 from owslib.namespaces import Namespaces
 
 
-class RereadableURL(StringIO, object):
+class RereadableURL(BytesIO, object):
 
-    """ Class that acts like a combination of StringIO and url - has seek method and url headers etc """
+    """ Class that acts like a combination of BytesIO and url - has seek method and url headers etc """
 
     def __init__(self, u):
         # get url headers etc from url
         self.headers = u.headers
-        # get file like seek, read methods from StringIO
+        # get file like seek, read methods from BytesIO
         content = u.read()
         super(RereadableURL, self).__init__(content)
 
@@ -183,7 +181,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
     # check for service exceptions without the http header set
     if (('Content-Type' in u.info()) and (u.info()['Content-Type'] in ['text/xml', 'application/xml'])):
         # just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
-        # wrap the url stram in a extended StringIO object so it's re-readable
+        # wrap the url stram in a extended BytesIO object so it's re-readable
         u = RereadableURL(u)
         se_xml = u.read()
         se_tree = etree.fromstring(se_xml)
@@ -191,7 +189,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         if serviceException is None:
             serviceException = se_tree.find('ServiceException')
         if serviceException is not None:
-            raise ServiceException(str(serviceException.text).strip())
+            raise ServiceException(text_type(serviceException.text).strip())
         u.seek(0)  # return cursor to start of u
     return u
 
@@ -242,7 +240,7 @@ def cleanup_namespaces(element):
 
 
 def add_namespaces(root, ns_keys):
-    if isinstance(ns_keys, basestring):
+    if isinstance(ns_keys, (text_type, binary_type)):
         ns_keys = [ns_keys]
 
     namespaces = Namespaces()
@@ -362,7 +360,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
         if 'Content-Encoding' in ui:
             if ui['Content-Encoding'] == 'gzip':  # uncompress response
                 import gzip
-                cds = StringIO(response)
+                cds = BytesIO(response)
                 gz = gzip.GzipFile(fileobj=cds)
                 response = gz.read()
 
@@ -380,7 +378,10 @@ def xml2string(xml):
     - xml: xml string
 
     """
-    return '<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>\n' + xml
+    prefix = '<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>\n'
+    if isinstance(prefix, text_type) and isinstance(xml, binary_type):
+        prefix = prefix.encode('utf8')
+    return prefix + xml
 
 
 def xmlvalid(xml, xsd):
@@ -399,7 +400,7 @@ def xmlvalid(xml, xsd):
     xsd1 = etree.parse(xsd)
     xsd2 = etree.XMLSchema(xsd1)
 
-    doc = etree.parse(StringIO(xml))
+    doc = etree.parse(BytesIO(xml))
     return xsd2.validate(doc)
 
 
@@ -452,7 +453,7 @@ def getTypedValue(type, value):
     elif type == 'float':
         return float(value)
     elif type == 'string':
-        return str(value)
+        return text_type(value)
     else:
         return value  # no type casting
 

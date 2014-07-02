@@ -10,7 +10,7 @@ Imports
 
 Initialize
 
-    >>> xml = open(resource_file('sos_ngwd.xml'), 'r').read()
+    >>> xml = open(resource_file('sos_ngwd.xml'), 'rb').read()
     >>> ngwd = SensorObservationService(None, xml=xml, version='2.0.0')
 
 ServiceIdentification

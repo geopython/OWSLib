@@ -12,7 +12,7 @@ Initialize WPS client
 
 Execute fake invocation of DescribeProcess operation by parsing cached response from USGS service
 
-    >>> xml = open(resource_file('wps_USGSDescribeProcess.xml'), 'r').read()
+    >>> xml = open(resource_file('wps_USGSDescribeProcess.xml'), 'rb').read()
     >>> process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', xml=xml)
 
 Check process description

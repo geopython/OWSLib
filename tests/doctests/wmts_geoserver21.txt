@@ -7,7 +7,7 @@ Imports
 Fake a request to a WMTS Server using saved doc from
 http://geonode.iwlearn.org/geoserver/gwc/service/wmts?REQUEST=GetCapabilities
 
-    >>> xml = open(resource_file('geoserver21-wmts-cap.xml'), 'r').read()
+    >>> xml = open(resource_file('geoserver21-wmts-cap.xml'), 'rb').read()
     >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
 
 Test capabilities

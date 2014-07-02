@@ -17,6 +17,7 @@ Currently supports only version 1.1.1 of the WMS protocol.
 
 import warnings
 
+from six import text_type, binary_type
 from six.moves.urllib.parse import urlencode, parse_qsl
 from six.moves.urllib.request import urlopen
 
@@ -82,7 +83,7 @@ class WebMapService(object):
         # avoid building capabilities metadata if the response is a ServiceExceptionReport
         se = self._capabilities.find('ServiceException')
         if se is not None:
-            err_message = str(se.text).strip()
+            err_message = text_type(se.text).strip()
             raise ServiceException(err_message, xml)
 
         # build metadata objects
@@ -152,7 +153,7 @@ class WebMapService(object):
         if u.info().gettype() == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = str(se_tree.find('ServiceException').text).strip()
+            err_message = text_type(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
 
@@ -199,7 +200,7 @@ class WebMapService(object):
                                  format='image/jpeg',\
                                  transparent=True)
             >>> out = open('example.jpg.jpg', 'wb')
-            >>> out.write(img.read())
+            >>> written_bytes = out.write(img.read())
             >>> out.close()
 
         """
@@ -216,18 +217,18 @@ class WebMapService(object):
             request['styles'] = ''
 
         # size
-        request['width'] = str(size[0])
-        request['height'] = str(size[1])
+        request['width'] = text_type(size[0])
+        request['height'] = text_type(size[1])
 
-        request['srs'] = str(srs)
+        request['srs'] = text_type(srs)
         request['bbox'] = ','.join([repr(x) for x in bbox])
-        request['format'] = str(format)
-        request['transparent'] = str(transparent).upper()
+        request['format'] = text_type(format)
+        request['transparent'] = text_type(transparent).upper()
         request['bgcolor'] = '0x' + bgcolor[1:7]
-        request['exceptions'] = str(exceptions)
+        request['exceptions'] = text_type(exceptions)
 
         if time is not None:
-            request['time'] = str(time)
+            request['time'] = text_type(time)
 
         if kwargs:
             for kw in kwargs:
@@ -241,7 +242,7 @@ class WebMapService(object):
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = unicode(se_tree.find('ServiceException').text).strip()
+            err_message = text_type(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
 
@@ -329,7 +330,7 @@ class ContentMetadata(object):
         if parent:
             self.index = "%s.%d" % (parent.index, index)
         else:
-            self.index = str(index)
+            self.index = text_type(index)
 
         self.id = self.name = testXMLValue(elem.find('Name'))
 
@@ -646,6 +647,6 @@ class WMSCapabilitiesReader(object):
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         return etree.fromstring(st)

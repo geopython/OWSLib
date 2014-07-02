@@ -42,12 +42,16 @@ Correct Usage Tests
 
 Invalid Usage Tests
 
-    >>> ns.get_namespace()
+    # For python 2: TypeError: get_namespace() takes exactly 2 arguments (1 given)
+    # For python 3: TypeError: get_namespace() missing 1 required positional argument: 'key'
+    >>> ns.get_namespace()  # doctest: +ELLIPSIS
     Traceback (most recent call last):
     ...
-    TypeError: get_namespace() takes exactly 2 arguments (1 given)
+    TypeError: get_namespace() ...
 
-    >>> ns.get_versioned_namespace()
+    # For Python 2: TypeError: get_versioned_namespace() takes at least 2 arguments (1 given)
+    # For python 3: TypeError: get_versioned_namespace() missing 1 required positional argument: 'key'
+    >>> ns.get_versioned_namespace()  # doctest: +ELLIPSIS
     Traceback (most recent call last):
     ...
-    TypeError: get_versioned_namespace() takes at least 2 arguments (1 given)
+    TypeError: get_versioned_namespace() ...

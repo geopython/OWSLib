@@ -4,7 +4,7 @@
 # Contact email: sgillies@frii.com
 # =============================================================================
 
-from six import iteritems
+from six import iteritems, text_type, PY2
 
 
 def patch_well_known_namespaces(etree_module):
@@ -32,6 +32,18 @@ def patch_well_known_namespaces(etree_module):
 # try to find lxml or elementtree
 try:
     from lxml import etree
+
+    if not PY2:
+        _fromstring = etree.fromstring
+
+        def _fromstring_encoded(text, *args, **kwargs):
+            if isinstance(text, text_type):
+                text = text.encode('utf8')
+            return _fromstring(text, *args, **kwargs)
+
+        etree.fromstring = _fromstring_encoded
+
+    Element = etree._Element
 except ImportError:
     try:
         # Python 2.5 with ElementTree included
@@ -42,5 +54,10 @@ except ImportError:
             import elementtree.ElementTree as etree
         except ImportError:
             raise RuntimeError('You need either lxml or ElementTree to use OWSLib!')
+
+    if PY2:
+        Element = etree._Element
+    else:
+        Element = etree.Element
 
 patch_well_known_namespaces(etree)

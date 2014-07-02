@@ -30,7 +30,7 @@
 
 >>> c.provider.site
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
+...
 AttributeError: 'ServiceProvider' object has no attribute 'site'
 
 >>> c.provider.url
@@ -38,7 +38,7 @@ AttributeError: 'ServiceProvider' object has no attribute 'site'
 
 >>> c.provider.uri
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
+...
 AttributeError: 'ServiceProvider' object has no attribute 'uri'
 
 >>> c.provider.contact.name
@@ -56,14 +56,14 @@ AttributeError: 'ServiceProvider' object has no attribute 'uri'
 
 >>> c.get_operation_by_name('GetRecords-bad')
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
+...
 KeyError: 'No operation named GetRecords-bad'
 
 >>> c.describerecord()
 
->>> c.getdomain('GetRecords.outputSchema')
+>>> c.getdomain('GetRecords.outputSchema')  # doctest: +IGNORE_EXCEPTION_DETAIL
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
+...
 ExceptionReport: 'Operation not supported: GetDomain'
 
 >>> c.getrecordbyid(['DGFKRYMCWUZSCDRBWRXMIETZE'])

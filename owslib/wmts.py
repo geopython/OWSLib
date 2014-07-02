@@ -25,7 +25,7 @@ PLEASE NOTE: the owslib wmts module should be considered in early-beta state: it
 More extensive testing is needed and feedback (to bradh@frogmouth.net) would be appreciated.
 
 """
-
+from six import text_type, binary_type
 from six.moves.urllib.parse import urlencode, parse_qsl
 
 from owslib.etree import etree
@@ -91,7 +91,7 @@ class WebMapTileService(object):
         # TODO: check if this needs a namespace
         se = self._capabilities.find('ServiceException')
         if se is not None:
-            err_message = str(se.text).strip()
+            err_message = text_type(se.text).strip()
             raise ServiceException(err_message, xml)
 
         # build metadata objects
@@ -191,8 +191,8 @@ class WebMapTileService(object):
         request.append(('STYLE', style))
         request.append(('TILEMATRIXSET', tilematrixset))
         request.append(('TILEMATRIX', tilematrix))
-        request.append(('TILEROW', str(row)))
-        request.append(('TILECOL', str(column)))
+        request.append(('TILEROW', text_type(row)))
+        request.append(('TILECOL', text_type(column)))
         request.append(('FORMAT', format))
 
         data = urlencode(request, True)
@@ -211,7 +211,7 @@ class WebMapTileService(object):
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = unicode(se_tree.find('ServiceException').text).strip()
+            err_message = text_type(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
 
@@ -327,7 +327,7 @@ class ContentMetadata(object):
         if parent:
             self.index = "%s.%d" % (parent.index, index)
         else:
-            self.index = str(index)
+            self.index = text_type(index)
 
         self.id = self.name = testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Identifier'))
         # title is mandatory property
@@ -462,6 +462,6 @@ class WMTSCapabilitiesReader(object):
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         return etree.fromstring(st)

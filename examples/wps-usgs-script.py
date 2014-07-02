@@ -12,7 +12,7 @@ wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessi
 
 wps.getcapabilities()
 # alternatively, read capabilities from XML file (no live request to WPS server)
-#xml = open('../tests/USGSCapabilities.xml', 'r').read()
+#xml = open('../tests/USGSCapabilities.xml', 'rb').read()
 #wps.getcapabilities(xml=xml)
 print('WPS Identification type: %s' % wps.identification.type)
 print('WPS Identification title: %s' % wps.identification.title)
@@ -27,7 +27,7 @@ for process in wps.processes:
 
 process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm')
 # alternatively, read process description from XML file (no live request to WPS server)
-#xml = open('../tests/USGSDescribeProcess.xml', 'r').read()
+#xml = open('../tests/USGSDescribeProcess.xml', 'rb').read()
 #process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', xml=xml)
 print('WPS Process: identifier=%s' % process.identifier)
 print('WPS Process: title=%s' % process.title)
@@ -64,7 +64,7 @@ inputs = [('FEATURE_ATTRIBUTE_NAME', 'the_geom'),
 output = 'OUTPUT'
 execution = wps.execute(processid, inputs, output='OUTPUT')
 # alternatively, submit a pre-made request specified in an XML file
-#request = open('../tests/wps_USGSExecuteRequest1.xml','r').read()
+#request = open('../tests/wps_USGSExecuteRequest1.xml','rb').read()
 #execution = wps.execute(None, [], request=request)
 
 # The monitorExecution() function can be conveniently used to wait for the process termination
@@ -101,7 +101,7 @@ inputs =  [ ('FEATURE_ATTRIBUTE_NAME', 'the_geom'),
 output = 'OUTPUT'
 execution = wps.execute(processid, inputs, output = 'OUTPUT')
 # alternatively, submit a pre-made request specified in an XML file
-#request = open('../tests/wps_USGSExecuteRequest3.xml','r').read()
+#request = open('../tests/wps_USGSExecuteRequest3.xml','rb').read()
 #execution = wps.execute(None, [], request=request)
 monitorExecution(execution)
 '''

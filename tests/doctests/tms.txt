@@ -59,18 +59,22 @@ The details of the TileMap are fetched on demand
     (-180.0, -90.0)
 
 You can get tiles by their x,y,z indices, the title of the tilemap, projection and mime-type
-    >>> service.gettile(10, 10, 0, title='bluemarble', srs='EPSG:4326', mimetype='image/png').geturl()
-    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@png/0/10/10.png?'
-    >>> service.gettile(10, 10, 1, title='bluemarble', srs='EPSG:4326', mimetype='image/jpeg').geturl()
-    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@jpeg/1/10/10.jpeg?'
+    >>> url = service.gettile(10, 10, 0, title='bluemarble', srs='EPSG:4326', mimetype='image/png').geturl()
+    >>> url == 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@png/0/10/10.png?'
+    True
+    >>> url = service.gettile(10, 10, 1, title='bluemarble', srs='EPSG:4326', mimetype='image/jpeg').geturl()
+    >>> url == 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@jpeg/1/10/10.jpeg?'
+    True
 
 if mimetype is ommited the tile is fetched from the first TileMap found:
-    >>> service.gettile(10, 10, 1, title='bluemarble', srs='EPSG:900913').geturl()
-    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/1/10/10.jpeg?'
+    >>> url = service.gettile(10, 10, 1, title='bluemarble', srs='EPSG:900913').geturl()
+    >>> url == 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@png/1/10/10.png?'
+    True
 
 You can also specify the Tilemap by id:
-    >>> service.gettile(10, 10, 0, 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg').geturl()
-    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/0/10/10.jpeg?'
+    >>> url = service.gettile(10, 10, 0, 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg').geturl()
+    >>> url == 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/0/10/10.jpeg?'
+    True
 
 An extensive test with:
     >>> servers = [

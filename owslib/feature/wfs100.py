@@ -6,10 +6,11 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
+from six import text_type, binary_type, BytesIO
 from six.moves.urllib.parse import urlencode, parse_qsl
 from six.moves.urllib.request import urlopen
 
-from owslib.util import openURL, testXMLValue, extract_xml_list, ServiceException, StringIO, log
+from owslib.util import openURL, testXMLValue, extract_xml_list, ServiceException, log
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -171,10 +172,10 @@ class WebFeatureService_1_0_0(object):
         elif bbox and typename:
             request['bbox'] = ','.join([repr(x) for x in bbox])
         elif filter and typename:
-            request['filter'] = str(filter)
+            request['filter'] = text_type(filter)
 
         if srsname:
-            request['srsname'] = str(srsname)
+            request['srsname'] = text_type(srsname)
 
         assert len(typename) > 0
         request['typename'] = ','.join(typename)
@@ -182,9 +183,9 @@ class WebFeatureService_1_0_0(object):
         if propertyname:
             request['propertyname'] = ','.join(propertyname)
         if featureversion:
-            request['featureversion'] = str(featureversion)
+            request['featureversion'] = text_type(featureversion)
         if maxfeatures:
-            request['maxfeatures'] = str(maxfeatures)
+            request['maxfeatures'] = text_type(maxfeatures)
 
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
@@ -200,7 +201,7 @@ class WebFeatureService_1_0_0(object):
         try:
             length = int(u.info()['Content-Length'])
             have_read = False
-        except (KeyError, AttributeError):
+        except (TypeError, KeyError, AttributeError):
             data = u.read()
             have_read = True
             length = len(data)
@@ -213,16 +214,16 @@ class WebFeatureService_1_0_0(object):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return StringIO(data)
+                return BytesIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
-                    raise ServiceException(str(se.text).strip())
+                    raise ServiceException(text_type(se.text).strip())
                 else:
-                    return StringIO(data)
+                    return BytesIO(data)
         else:
             if have_read:
-                return StringIO(data)
+                return BytesIO(data)
             return u
 
     def getOperationByName(self, name):
@@ -395,6 +396,6 @@ class WFSCapabilitiesReader(object):
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, (text_type, binary_type)):
+            raise ValueError('String must be of type string, not %s' % type(st))
         return etree.fromstring(st)

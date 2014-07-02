@@ -16,7 +16,7 @@ https://portal.opengeospatial.org/files/?artifact_id=8618
 
 """
 
-from six import iteritems
+from six import iteritems, text_type
 from six.moves import zip
 
 from owslib.etree import etree
@@ -63,17 +63,17 @@ class MapContext(object):
 
     def _getWindowElement(self):
         window = WMCElement('Window')
-        window.attrib['width'] = str(self._map.size[0])
-        window.attrib['height'] = str(self._map.size[1])
+        window.attrib['width'] = text_type(self._map.size[0])
+        window.attrib['height'] = text_type(self._map.size[1])
         return window
 
     def _getBoundingBoxElement(self):
         bbox = WMCElement('BoundingBox')
-        bbox.attrib['SRS'] = str(self._map.srs.split()[0])
-        bbox.attrib['minx'] = str(self._map.bounds[0])
-        bbox.attrib['miny'] = str(self._map.bounds[1])
-        bbox.attrib['maxx'] = str(self._map.bounds[2])
-        bbox.attrib['maxy'] = str(self._map.bounds[3])
+        bbox.attrib['SRS'] = text_type(self._map.srs.split()[0])
+        bbox.attrib['minx'] = text_type(self._map.bounds[0])
+        bbox.attrib['miny'] = text_type(self._map.bounds[1])
+        bbox.attrib['maxx'] = text_type(self._map.bounds[2])
+        bbox.attrib['maxy'] = text_type(self._map.bounds[3])
         return bbox
 
     def _getLayerListElement(self):
@@ -87,8 +87,7 @@ class MapContext(object):
             # Layer
             layer = WMCElement('Layer')
             layer.attrib['queryable'] = '0'
-            layer.attrib['hidden'] = str(
-                int(name not in self._map.visible_layers))
+            layer.attrib['hidden'] = text_type(int(name not in self._map.visible_layers))
 
             # Layer styles
             if layer_infos and layer_infos.get(title):

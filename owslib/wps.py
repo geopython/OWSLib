@@ -86,6 +86,8 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 
 from time import sleep
 
+from six import text_type, binary_type
+
 from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue,
@@ -384,8 +386,8 @@ class WPSReader(object):
         Method to read a WPS GetCapabilities document from an XML string.
         """
 
-        if not isinstance(string, str):
-            raise ValueError("Input must be of type string, not %s" % type(string))
+        if not isinstance(string, (text_type, binary_type)):
+            raise ValueError('Input must be of type string, not %s' % type(string))
         return etree.fromstring(string)
 
 
@@ -525,7 +527,7 @@ class WPSExecution(object):
             #     <wps:LiteralData>dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml</wps:LiteralData>
             #   </wps:Data>
             # </wps:Input>
-            if isinstance(val, str):
+            if isinstance(val, (text_type, binary_type)):
                 dataElement = etree.SubElement(inputElement, nspath_eval('wps:Data', namespaces))
                 literalDataElement = etree.SubElement(dataElement, nspath_eval('wps:LiteralData', namespaces))
                 literalDataElement.text = val
@@ -561,7 +563,7 @@ class WPSExecution(object):
             responseFormElement = etree.SubElement(root, nspath_eval('wps:ResponseForm', namespaces))
             responseDocumentElement = etree.SubElement(responseFormElement, nspath_eval('wps:ResponseDocument', namespaces),
                                                        attrib={'storeExecuteResponse': 'true', 'status': 'true'})
-            if isinstance(output, str):
+            if isinstance(output, (text_type, binary_type)):
                 self._add_output(responseDocumentElement, output, asReference=True)
             elif isinstance(output, list):
                 for (identifier, as_reference) in output:
@@ -572,7 +574,7 @@ class WPSExecution(object):
 
     def _add_output(self, element, identifier, asReference=False):
         outputElement = etree.SubElement(element, nspath_eval('wps:Output', namespaces),
-                                         attrib={'asReference': str(asReference).lower()})
+                                         attrib={'asReference': text_type(asReference).lower()})
         outputIdentifierElement = etree.SubElement(outputElement, nspath_eval('ows:Identifier', namespaces)).text = identifier
 
     # wait for 60 seconds by default

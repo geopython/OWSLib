@@ -6,7 +6,7 @@ Imports
 
 Fake a request to a WFS Server using saved doc from.
 
-    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read()
+    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'rb').read()
     >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
 
 Test capabilities
@@ -99,5 +99,5 @@ Lastly, test the getcapabilities method
 
     >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0')
     >>> xml = wfs.getcapabilities().read()
-    >>> xml.find('<WFS_Capabilities') > 0
+    >>> xml.find('<WFS_Capabilities'.encode('utf8')) > 0
     True
