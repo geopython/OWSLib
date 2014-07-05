@@ -588,17 +588,20 @@ class CatalogueServiceWeb:
         else:
             xml_post_url = self.url
             # Get correct POST URL based on Operation list.
-            for op in self.operations:
-                post_verbs = filter(lambda x: x.get('type').lower() == 'post', op.methods)
-                if len(post_verbs) > 1:
-                    # Filter by constraints.  We must match a PostEncoding of "XML"
-                    try:
-                        xml_post_url = next(x for x in filter(list, ([pv.get('url') for const in pv.get('constraints') if const.name.lower() == "postencoding" and 'xml' in map(lambda x: x.lower(), const.values)] for pv in post_verbs)))[0]
-                    except StopIteration:
-                        # Well, just use the first one.
+            # If skip_caps=True, then self.operations has not been set, so use
+            # default URL.
+            if hasattr(self, 'operations'):
+                for op in self.operations:
+                    post_verbs = filter(lambda x: x.get('type').lower() == 'post', op.methods)
+                    if len(post_verbs) > 1:
+                        # Filter by constraints.  We must match a PostEncoding of "XML"
+                        try:
+                            xml_post_url = next(x for x in filter(list, ([pv.get('url') for const in pv.get('constraints') if const.name.lower() == "postencoding" and 'xml' in map(lambda x: x.lower(), const.values)] for pv in post_verbs)))[0]
+                        except StopIteration:
+                            # Well, just use the first one.
+                            xml_post_url = post_verbs[0].get('url')
+                    elif len(post_verbs) == 1:
                         xml_post_url = post_verbs[0].get('url')
-                elif len(post_verbs) == 1:
-                    xml_post_url = post_verbs[0].get('url')
 
             self.request = cleanup_namespaces(self.request)
             # Add any namespaces used in the "typeNames" attribute of the
