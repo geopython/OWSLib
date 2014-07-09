@@ -4,9 +4,17 @@
 # Setup
 >>> service = SensorObservationService('http://geoviqua.dev.52north.org/SOS-Q/sos/kvp',version='2.0.0')
 
->>> service.contents
-{'http://www.52north.org/test/offering/9': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198cc50>, 'http://kli.uni-muenster.de/stations/rks/observations': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198cb50>, 'http://geoviqua.dev.52north.org/procedures/ws2500': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198c710>, 'http://kli.uni-muenster.de/stations/hbs/observations': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198ca50>, 'http://geoviqua.dev.52north.org/procedures/ws2500-internal': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198c950>, 'http://geoviqua.dev.52north.org/procedures/WXT520': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198c210>}
+>>> for i in service.contents:
+...  print i
+... 
+http://www.52north.org/test/offering/9
+http://kli.uni-muenster.de/stations/rks/observations
+http://geoviqua.dev.52north.org/procedures/ws2500
+http://kli.uni-muenster.de/stations/hbs/observations
+http://geoviqua.dev.52north.org/procedures/ws2500-internal
+http://geoviqua.dev.52north.org/procedures/WXT520
 
+>>> id = service.identification
 
 # Check basic service metadata
 >>> id.service
