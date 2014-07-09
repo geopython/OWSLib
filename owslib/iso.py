@@ -541,7 +541,7 @@ class SV_ServiceIdentification(object):
             self.version = None
             self.fees = None
             self.bbox = None
-            self.couplingtype
+            self.couplingtype = None
             self.operations = []
             self.operateson = []
         else:
@@ -661,7 +661,7 @@ class EX_Polygon(object):
 class EX_GeographicBoundingPolygon(object):
     def __init__(self, md=None):
         if md is None:
-            self.is_extent
+            self.is_extent = None
             self.polygons = []
         else:
             val = md.find(util.nspath_eval('gmd:extentTypeCode', namespaces))
