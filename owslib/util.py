@@ -23,6 +23,7 @@ from urllib import urlencode
 import re
 from copy import deepcopy
 import warnings
+import time
 
 
 """
@@ -36,6 +37,25 @@ class RereadableURL(StringIO,object):
         self.headers = u.headers                
         #get file like seek, read methods from StringIO
         content=u.read()
+        #Due to race conditions the XML file might be empty. In that case the parsing method would
+        #throw an exception. This issue can be fixed by requesting the url again and again
+        #until the content is non-empty. To avoid an endless loop a time limit is hardcoded.
+        timelimit = 10.0#sleep for an accumulated maximum of 10 seconds before giving up.
+        timestep = 0.25
+        timecur = 0.0
+        while content == "":
+            page = urllib2.urlopen(u.url)
+            text = page.read()
+            #The header line with <?xml... should not be in content.
+            if "<?xml" == text.strip()[:5]:
+                content = "\n".join(text.split("\n")[1:])
+            else:
+                content = text
+            if timecur > timelimit:
+                break#The parsing with se_tree = etree.fromstring(se_xml) will throw an exception.
+            if content == "":
+                time.sleep(timestep)
+                timecur += timestep
         super(RereadableURL, self).__init__(content)
 
 
