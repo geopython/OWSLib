@@ -14,7 +14,7 @@ class PyTest(TestCommand):
         errno = pytest.main(self.test_args)
         sys.exit(errno)
 
-readme = open('README.txt').read()
+readme = open('README.md').read()
 reqs = [line.strip() for line in open('requirements.txt')]
 
 if sys.version[:3] < '2.7':

@@ -49,6 +49,7 @@ class Namespaces(object):
         'swe20' :   'http://www.opengis.net/swe/2.0',
         'swes'  :   'http://www.opengis.net/swes/2.0',
         'tml'   :   'ttp://www.opengis.net/tml',
+        'wml2'  :   'http://www.opengis.net/waterml/2.0',
         'wfs'   :   'http://www.opengis.net/wfs',
         'wfs20' :   'http://www.opengis.net/wfs/2.0',
         'wcs'   :   'http://www.opengis.net/wcs',

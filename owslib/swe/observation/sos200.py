@@ -10,12 +10,14 @@ except ImportError:     # Python 2
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200
-from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
+from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, nspath, extract_time
 from owslib.namespaces import Namespaces
+from owslib.swe.observation.om import MeasurementObservation
+from owslib.swe.observation.waterml2 import MeasurementTimeseriesObservation
 
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["fes","ogc","om","gml32","sa","sml","swe20","swes","xlink"])
+    ns = n.get_namespaces(["fes","ogc", "xsi", "om20","gml32","sa","sml","swe20","swes","xlink"])
     ns["ows"] = n.get_namespace("ows110")
     ns["sos"] = n.get_namespace("sos20")
     return ns
@@ -148,6 +150,7 @@ class SensorObservationService_2_0_0(object):
                               observedProperties=None,
                               eventTime=None,
                               method='Get',
+                              timeout=30,
                               **kwargs):
         """
         Parameters
@@ -160,7 +163,10 @@ class SensorObservationService_2_0_0(object):
             anything else e.g. vendor specific parameters
         """
 
-        base_url = self.get_operation_by_name('GetObservation').methods[method]['url']
+        # Pluck out the get observation URL for HTTP method - methods is an
+        # array of dicts
+        methods = self.get_operation_by_name('GetObservation').methods
+        base_url = [ m['url'] for m in methods if m['type'] == method][0]
 
         request = {'service': 'SOS', 'version': self.version, 'request': 'GetObservation'}
 
@@ -323,3 +329,52 @@ class SosCapabilitiesReader(object):
         if not isinstance(st, str) and not isinstance(st, bytes):
             raise ValueError("String must be of type string or bytes, not %s" % type(st))
         return etree.fromstring(st)
+
+class SOSGetObservationResponse(object):
+    """ The base response type from SOS2.0. Container for OM_Observation
+    objects.
+    """
+    def __init__(self, element):
+        obs_data = element.findall(
+            nspath_eval("sos:observationData/om20:OM_Observation", namespaces))
+        self.observations = []
+        decoder = ObservationDecoder()
+        for obs in obs_data:
+            parsed_obs = decoder.decode_observation(obs)
+            self.observations.append(parsed_obs)
+
+    def __iter__(self):
+        for obs in self.observations:
+            yield obs
+
+    def __getitem__(self, index):
+        return self.observations[index]
+
+class ObservationDecoder(object):
+    """ Class to handle decoding different Observation types.
+        The decode method inspects the type of om:result element and
+        returns the appropriate observation type, which handles parsing
+        of the result.
+    """
+    def decode_observation(self, element):
+        """ Returns a parsed observation of the appropriate type,
+        by inspecting the result element.
+
+        'element' input is the XML tree of the OM_Observation object
+        """
+        result_element = element.find(nspath_eval("om20:result", namespaces))
+        if len(result_element) == 0:
+            result_type = testXMLAttribute(
+                result_element, nspath_eval("xsi:type", namespaces))
+        else:
+            result_type = list(result_element)[0].tag
+
+        if result_type.find('MeasureType') != -1:
+            return MeasurementObservation(element)
+        elif (result_type ==
+                '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries'):
+            return MeasurementTimeseriesObservation(element)
+        else:
+            raise NotImplementedError('Result type of %s not supported'
+                % result_type)
+
