@@ -1,0 +1,32 @@
+# Imports
+>>> from owslib.sos import SensorObservationService
+
+# Setup
+>>> service = SensorObservationService('http://geoviqua.dev.52north.org/SOS-Q/sos/kvp',version='2.0.0')
+
+>>> service.contents
+{'http://www.52north.org/test/offering/9': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198cc50>, 'http://kli.uni-muenster.de/stations/rks/observations': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198cb50>, 'http://geoviqua.dev.52north.org/procedures/ws2500': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198c710>, 'http://kli.uni-muenster.de/stations/hbs/observations': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198ca50>, 'http://geoviqua.dev.52north.org/procedures/ws2500-internal': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198c950>, 'http://geoviqua.dev.52north.org/procedures/WXT520': <owslib.swe.observation.sos200.SosObservationOffering object at 0x10198c210>}
+
+
+# Check basic service metadata
+>>> id.service
+'OGC:SOS'
+
+>>> id.title
+'52N SOS for GeoViQua Project'
+
+>>> id.keywords
+['citizen science', 'climate', 'quality', 'testbed', 'weather']
+
+>>> provider=service.provider
+>>> provider.name
+'52North'
+
+>>> provider.contact.name
+u'Eike Hinderk J\xfcrrens'
+>>> provider.contact.position
+'Software Developer'
+
+>>> len(service.operations)
+16
+
