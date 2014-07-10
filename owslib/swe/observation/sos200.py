@@ -155,7 +155,10 @@ class SensorObservationService_2_0_0(object):
             anything else e.g. vendor specific parameters
         """
 
-        base_url = self.get_operation_by_name('GetObservation').methods[method]['url']
+        # Pluck out the get observation URL for HTTP method - methods is an
+        # array of dicts
+        methods = self.get_operation_by_name('GetObservation').methods
+        base_url = [ m['url'] for m in methods if m['type'] == method][0]
 
         request = {'service': 'SOS', 'version': self.version, 'request': 'GetObservation'}
 
