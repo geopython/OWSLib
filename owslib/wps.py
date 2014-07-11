@@ -813,6 +813,9 @@ class InputOutput(object):
         self.supportedValues = []
         self.defaultValue = None
         self.dataType = None
+        self.anyValue = False
+        self.rangeMinValue = None
+        self.rangeMaxValue = None
         
     def _parseData(self, element):
         """
@@ -857,11 +860,19 @@ class InputOutput(object):
                     self.dataType = subElement.get( nspath("reference", ns=subns) ).split(':')[1]
                 elif subElement.tag.endswith('AllowedValues'):
                     for value in subElement.findall( nspath('Value', ns=subns) ):
-                        self.allowedValues.append( getTypedValue(self.dataType, value.text) )
+                        # Check for (probably) misconfigured range setting (value ==> 5-100)
+                        if (self.dataType == 'integer' or self.dataType == 'float') and "-" in value.text:
+                            # Type is numeric, and value contains a '-'... is probably a range
+                            minv, maxv = value.text.split('-')
+                            self.rangeMinValue = getTypedValue(self.dataType, minv)
+                            self.rangeMaxValue = getTypedValue(self.dataType, maxv)
+                        else:
+                            self.allowedValues.append( getTypedValue(self.dataType, value.text) )
                 elif subElement.tag.endswith('DefaultValue'):
                     self.defaultValue = getTypedValue(self.dataType, subElement.text)
                 elif subElement.tag.endswith('AnyValue'):
-                    self.allowedValues.append( getTypedValue(self.dataType, 'AnyValue') )
+                    self.anyValue = True
+                    # self.allowedValues.append( getTypedValue(self.dataType, 'AnyValue') ) # Chrashes when dataType is numeric
                     
 
     def _parseComplexData(self, element, complexDataElementName):
