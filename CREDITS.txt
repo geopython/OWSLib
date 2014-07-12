@@ -10,3 +10,4 @@
  * Christian Ledermann <christian.ledermann@gmail.com>
  * Sean Cowan <scowan@asascience.com>
  * Kyle Wilcox <wilcox.kyle@gmail.com>
+ * Angelos Tzotsos <gcpp.kalxas@gmail.com>
