@@ -115,6 +115,10 @@ class MeasurementTimeseries(Timeseries):
             #print point
             self.points.append(TimeValuePair(point))
 
+    def __iter__(self):
+        for point in self.points:
+            yield point
+
     def _parse_metadata(self, element):
         ''' Parse metadata elements relating to timeseries:
             TS: baseTime, spacing, commentBlock, parameter
