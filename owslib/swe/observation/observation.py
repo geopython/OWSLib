@@ -1,9 +1,19 @@
+# -*- coding: ISO-8859-15 -*-
+# =============================================================================
+# Copyright (c) 2014 Pete Taylor
+#
+# Authors : Pete Taylor <peterataylor@gmail.com>
+#
+# Contact email: peterataylor@gmail.com
+# =============================================================================
 from owslib.util import nspath_eval, extract_time
 from owslib.namespaces import Namespaces
 from owslib.util import testXMLAttribute, testXMLValue  
 from owslib.swe.common import Quantity
 from datetime import datetime
 from dateutil import parser 
+
+''' O&M Observation and WaterML2.0 classes to decode XML '''
 
 def get_namespaces():                                                                                                                                                   
      ns = Namespaces()
@@ -60,35 +70,38 @@ class OM_Observation(object):
 
         result_element = element.find(nspv("om20:result"))
 
-        # This result type check will be replaced with specialised classes
+        # O&M supports various result types. It is recommended that the type
+        # be specified in the om:type field; however this is not always done. 
+        # Here we check the result element to determine the type to load
         if (len(result_element) == 0):
             result_type = testXMLAttribute(element.find(nspv(
                 "om20:result")), nspv("xsi:type")) 
         else:
             result_type = list(result_element)[0].tag
 
-        WML2_MEASUREMENT_TS = '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries'
-        if result_type == WML2_MEASUREMENT_TS:
+        self.WML2_MEASUREMENT_TS = '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries'
+        self.WML2_MEASUREMENT_DR = '{http://www.opengis.net/waterml-dr/2.0}MeasurementTimeseriesDomainRange'
+
+        if result_type == self.WML2_MEASUREMENT_TS:
             result_element = element.find(nspv("om20:result/wml2:MeasurementTimeseries"))
             self.result = MeasurementTimeseries(result_element)
-        if result_type.find('MeasureType') != -1:
+        elif result_type.find('MeasureType') != -1:
             uom = testXMLAttribute(element.find(nspv(
                 "om20:result")), "uom") 
-
             value_str = testXMLValue(element.find(nspv("om20:result")))
             try:
                 value = float(value_str)
             except:
                 raise ValueError("Error parsing measurement value")
             self.result = Measurement(value, uom)
-            # print self.result
-
 
 class OMResult(object):
+    ''' Base class for different OM_Observation result types '''
     def __init__(self, element):
         pass
 
 class Measurement(OMResult):
+    ''' A single measurement (value + uom) '''
     def __init__(self, value, uom):
         super(Measurement, self).__init__(None)
         self.value = value
@@ -96,13 +109,13 @@ class Measurement(OMResult):
     def __str__(self):
         return str(self.value) + "(" + self.uom + ")"
 
-
 class Timeseries(OMResult):
+    ''' Generic time-series class '''
     def __init__(self, element):
         super(Timeseries, self).__init__(element)
 
 class MeasurementTimeseries(Timeseries):
-    ''' A timeseries of measurements, with per-value metadata. '''
+    ''' A WaterML2.0 timeseries of measurements, with per-value metadata. '''
     def __init__(self, element):
         super(MeasurementTimeseries, self).__init__(element)
 
@@ -125,9 +138,9 @@ class MeasurementTimeseries(Timeseries):
             MTS: startAnchor, endAnchor, cumulative, accAnchor/Length, maxGap
         '''
         pass
-
         
 class TimeValuePair(object):
+    ''' A time-value pair as specified by WaterML2.0 '''
     def __init__(self, element):
         date_str = testXMLValue(element.find(nspv(
            "wml2:MeasurementTVP/wml2:time")))
@@ -186,6 +199,13 @@ class MeasurementTimeseriesDomainRange(Timeseries):
     def __init__(self, element):
         super(MeasurementTimseriesDomainRange, self, element).__init__()
 
+
+class MonitoringPoint(object):
+    ''' A WaterML2.0 Monitoring Point, which is a specialised O&M SamplingPoint
+    '''
+    def __init__(self,element):
+        pass
+
 class SOSGetObservationResponse(object):
     ''' The base response type from SOS2.0. Container for OM_Observation
     objects.
@@ -195,3 +215,7 @@ class SOSGetObservationResponse(object):
         self.observations = [] 
         for obs in obs_data:
             self.observations.append(OM_Observation(obs.find(nspv("om20:OM_Observation"))))
+
+    def __iter__(self):
+        for obs in self.observations:
+            yield obs
