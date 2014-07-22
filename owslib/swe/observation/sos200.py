@@ -7,10 +7,11 @@ from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200
 from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
 from owslib.namespaces import Namespaces
+from owslib.swe.observation.om import OM_Observation
 
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["fes","ogc","om","gml32","sml","swe20","swes","xlink"])
+    ns = n.get_namespaces(["fes","ogc","om20","gml32","sml","swe20","swes","xlink"])
     ns["ows"] = n.get_namespace("ows110")
     ns["sos"] = n.get_namespace("sos20")
     return ns
@@ -315,3 +316,19 @@ class SosCapabilitiesReader(object):
         if not isinstance(st, str):
             raise ValueError("String must be of type string, not %s" % type(st))
         return etree.fromstring(st)
+
+class SOSGetObservationResponse(object):
+    ''' The base response type from SOS2.0. Container for OM_Observation
+    objects.
+    '''
+    def __init__(self, element):
+        obs_data = element.findall(nspath_eval("sos:observationData",
+                namespaces))
+        self.observations = []
+        for obs in obs_data:
+            self.observations.append(OM_Observation(obs.find(nspath_eval("om20:OM_Observation",
+                namespaces))))
+
+    def __iter__(self):
+        for obs in self.observations:
+            yield obs
