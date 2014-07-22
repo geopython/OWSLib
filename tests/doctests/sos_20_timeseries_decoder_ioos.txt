@@ -2,7 +2,7 @@
 
 # Imports
 >>> from owslib.sos import SensorObservationService
->>> from owslib.swe.observation.observation import SOSGetObservationResponse
+>>> from owslib.swe.observation.sos200 import SOSGetObservationResponse
 >>> from owslib.etree import etree
 
 # Setup
@@ -21,7 +21,7 @@
 >>> parsed_response = SOSGetObservationResponse(xml_tree)
 
 >>> type(parsed_response)
-<class 'owslib.swe.observation.observation.SOSGetObservationResponse'>
+<class 'owslib.swe.observation.sos200.SOSGetObservationResponse'>
 
 # This O&M structure of the results splits each point into an O&M object, resulting in 400 results
 >>> len(parsed_response.observations)
@@ -32,7 +32,7 @@
 >>> xml_tree = etree.fromstring(response)
 >>> parsed_response = SOSGetObservationResponse(xml_tree)
 >>> type(parsed_response)
-<class 'owslib.swe.observation.observation.SOSGetObservationResponse'>
+<class 'owslib.swe.observation.sos200.SOSGetObservationResponse'>
 
 # The WaterML2.0 response creates an observation for logical groups of feature/observedProp/proc, with the om:result containing a time-series of results. 
 # This results in 20 OM_Observation objects, each with a time-series of 20 points
