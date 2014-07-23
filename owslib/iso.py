@@ -247,9 +247,9 @@ class MD_DataIdentification(object):
             self.distance = []
             self.uom = []
             self.resourcelanguage = []
-            self.creator = None
-            self.publisher = None
-            self.originator = None
+            self.creator = []
+            self.publisher = []
+            self.contributor = []
             self.edition = None
             self.abstract = None
             self.purpose = None
@@ -347,17 +347,20 @@ class MD_DataIdentification(object):
                 if val is not None:
                     self.resourcelanguage.append(val)
 
-            val = md.find(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName', namespaces))
-            if val is not None:
-                val2 = val.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)) 
-                if val2 is not None:
-                    clv = _testCodeListValue(val)
+            self.creator = []
+            self.publisher = []
+            self.contributor = []
+            for val in md.findall(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty', namespaces)):
+                role = val.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces))
+                if role is not None:
+                    clv = _testCodeListValue(role)
+                    rp = CI_ResponsibleParty(val)
                     if clv == 'originator':
-                        self.creator = util.testXMLValue(val)
+                        self.creator.append(rp)
                     elif clv == 'publisher':
-                        self.publisher = util.testXMLValue(val)
-                    elif clv == 'contributor':
-                        self.originator = util.testXMLValue(val)
+                        self.publisher.append(rp)
+                    elif clv == 'author':
+                        self.contributor.append(rp)
 
             val = md.find(util.nspath_eval('gmd:edition/gco:CharacterString', namespaces))
             self.edition = util.testXMLValue(val)
