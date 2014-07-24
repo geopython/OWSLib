@@ -5,11 +5,11 @@ OWSLib |release| documentation
 .. toctree::
    :maxdepth: 2
 
-.. image:: http://www.ohloh.net/p/owslib/widgets/project_partner_badge.gif
+.. image:: https://www.openhub.net/p/owslib/widgets/project_partner_badge.gif
    :width: 193px
    :height: 33px
    :alt: OWSLib
-   :target: http://www.ohloh.net/p/owslib?ref=WidgetProjectPartnerBadge
+   :target: https://www.openhub.net/p/owslib?ref=WidgetProjectPartnerBadge
 
 :Author: Tom Kralidis
 :Contact: tomkralidis at gmail.com
