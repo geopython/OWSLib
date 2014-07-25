@@ -12,6 +12,7 @@ from owslib.util import testXMLAttribute, testXMLValue
 from owslib.swe.common import Quantity
 from datetime import datetime
 from dateutil import parser 
+from owslib.swe.observation.om import OM_Observation, OMResult
 
 def get_namespaces():
      ns = Namespaces()
@@ -22,10 +23,24 @@ namespaces = get_namespaces()
 def nspv(path):
     return nspath_eval(path, namespaces)
 
-class Timeseries(object):
+class Timeseries(OMResult):
     ''' Generic time-series class '''
     def __init__(self, element):
         super(Timeseries, self).__init__(element)
+
+class MeasurementTimeseriesObservation(OM_Observation):
+    def __init__(self, element):
+        super(MeasurementTimeseriesObservation, self).__init__(element)
+        self._parse_result()
+
+    def _parse_result(self):
+        if self.result is not None:
+            result = self.result.find(nspv(
+                     "wml2:MeasurementTimeseries"))           
+            self.result = MeasurementTimeseries(result)
+
+    def get_result(self):
+        return self.result
 
 class MeasurementTimeseries(Timeseries):
     ''' A WaterML2.0 timeseries of measurements, with per-value metadata. '''
@@ -38,7 +53,6 @@ class MeasurementTimeseries(Timeseries):
         elems = element.findall(nspv("wml2:point"))
         self.points = []
         for point in elems:
-            #print point
             self.points.append(TimeValuePair(point))
 
     def __iter__(self):

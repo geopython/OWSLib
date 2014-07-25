@@ -5,13 +5,14 @@ from urllib import urlencode
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200
-from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
+from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, nspath, extract_time
 from owslib.namespaces import Namespaces
-from owslib.swe.observation.om import OM_Observation
+from owslib.swe.observation.om import OM_MeasurementObservation
+from owslib.swe.observation.waterml2 import MeasurementTimeseriesObservation
 
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["fes","ogc","om20","gml32","sml","swe20","swes","xlink"])
+    ns = n.get_namespaces(["fes","ogc","xsi", "om20","gml32","sml","swe20","swes","xlink"])
     ns["ows"] = n.get_namespace("ows110")
     ns["sos"] = n.get_namespace("sos20")
     return ns
@@ -322,13 +323,35 @@ class SOSGetObservationResponse(object):
     objects.
     '''
     def __init__(self, element):
-        obs_data = element.findall(nspath_eval("sos:observationData",
+        obs_data = element.findall(nspath_eval("sos:observationData/om20:OM_Observation",
                 namespaces))
         self.observations = []
+        decoder = ObservationDecoder()
         for obs in obs_data:
-            self.observations.append(OM_Observation(obs.find(nspath_eval("om20:OM_Observation",
-                namespaces))))
+            parsed_obs = decoder.decode_observation(obs)
+            self.observations.append(parsed_obs)
 
     def __iter__(self):
         for obs in self.observations:
             yield obs
+
+class ObservationDecoder(object):
+    ''' Class to handle decoding different Observation types. 
+        The decode method inspects the type of om:result element and 
+        returns the appropriate observation type, which handles parsing
+        of the result. 
+    '''
+    def decode_observation(self, element):
+        result_element = element.find(nspath_eval("om20:result", namespaces))
+        if (len(result_element) == 0):
+            result_type = testXMLAttribute(result_element, nspath_eval("xsi:type", namespaces))
+        else:
+            result_type = list(result_element)[0].tag
+       
+        if result_type.find('MeasureType') != -1:
+            return OM_MeasurementObservation(element) 
+        elif result_type == '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries':
+            return MeasurementTimeseriesObservation(element)
+        else:
+            raise NotImplementedError('Result type of %s not supported' % result_type)
+

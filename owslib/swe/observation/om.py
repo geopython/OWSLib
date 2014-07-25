@@ -11,7 +11,6 @@ from owslib.util import nspath_eval, extract_time
 from owslib.namespaces import Namespaces
 from owslib.util import testXMLAttribute, testXMLValue
 from datetime import datetime
-from owslib.swe.observation.waterml2 import MeasurementTimeseries
 
 def get_namespaces():
      ns = Namespaces()
@@ -66,42 +65,30 @@ class OM_Observation(object):
         self.resultTime = extract_time(element.find(nspv(
             "om20:resultTime/gml32:TimeInstant/gml32:timePosition")))
 
-        result_element = element.find(nspv("om20:result"))
-
-        # O&M supports various result types. It is recommended that the type
-        # be specified in the om:type field; however this is not always done. 
-        # Here we check the result element to determine the type to load
-        if (len(result_element) == 0):
-            self.result_type = testXMLAttribute(element.find(nspv(
-                "om20:result")), nspv("xsi:type"))
-        else:
-            self.result_type = list(result_element)[0].tag
-
         self.result = element.find(nspv("om20:result"))
-
-        '''
-        self.WML2_MEASUREMENT_TS = '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries'
-        self.WML2_MEASUREMENT_DR = '{http://www.opengis.net/waterml-dr/2.0}MeasurementTimeseriesDomainRange'
-
-        if result_type == self.WML2_MEASUREMENT_TS:
-            result_element = element.find(nspv("om20:result/wml2:MeasurementTimeseries"))
-            self.result = MeasurementTimeseries(result_element)
-        elif result_type.find('MeasureType') != -1:
-            uom = testXMLAttribute(element.find(nspv(
-                "om20:result")), "uom")
-            value_str = testXMLValue(element.find(nspv("om20:result")))
-            try:
-                value = float(value_str)
-            except:
-                raise ValueError("Error parsing measurement value")
-            self.result = Measurement(value, uom)'''
 
     def get_result(self):
         ''' This will handle different result types using specialised
         observation types ''' 
         return self.result
 
+class OM_MeasurementObservation(OM_Observation):
+    def __init__(self, element):
+        super(OM_MeasurementObservation, self).__init__(element) 
+        self._parse_result()
 
+    def _parse_result(self):
+        if self.result is not None:
+            uom = testXMLAttribute(self.result, "uom")
+            value_str = testXMLValue(self.result)
+            try:
+                value = float(value_str)
+            except:
+                raise ValueError("Error parsing measurement value")
+            self.result = Measurement(value, uom)
+
+    def get_result(self):
+        return self.result
 
 class OMResult(object): 
     ''' Base class for different OM_Observation result types ''' 
