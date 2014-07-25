@@ -26,6 +26,8 @@
 # This O&M structure of the results splits each point into an O&M object, resulting in 400 results
 >>> len(parsed_response.observations)
 400
+>>> type(parsed_response.observations[0])
+<class 'owslib.swe.observation.om.OM_MeasurementObservation'>
 
 # Get observation for a specific offering (in this case corresponds to a station) and observed property (sea water temperature)
 >>> response = service.get_observation(responseFormat='http://www.opengis.net/waterml/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'])
@@ -34,14 +36,12 @@
 >>> type(parsed_response)
 <class 'owslib.swe.observation.sos200.SOSGetObservationResponse'>
 
-# The WaterML2.0 response creates an observation for logical groups of feature/observedProp/proc, with the om:result containing a time-series of results. 
-# This results in 20 OM_Observation objects, each with a time-series of 20 points
 >>> len(parsed_response.observations)
 20
 >>> type(parsed_response.observations[0])
-<class 'owslib.swe.observation.observation.OM_Observation'>
+<class 'owslib.swe.observation.waterml2.MeasurementTimeseriesObservation'>
 >>> type(parsed_response.observations[0].result)
-<class 'owslib.swe.observation.observation.MeasurementTimeseries'>
+<class 'owslib.swe.observation.waterml2.MeasurementTimeseries'>
 
 >>> measurement_timeseries = parsed_response.observations[0].result
 >>> len(measurement_timeseries.points)
