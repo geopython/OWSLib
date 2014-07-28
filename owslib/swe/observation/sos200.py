@@ -319,9 +319,9 @@ class SosCapabilitiesReader(object):
         return etree.fromstring(st)
 
 class SOSGetObservationResponse(object):
-    ''' The base response type from SOS2.0. Container for OM_Observation
+    """ The base response type from SOS2.0. Container for OM_Observation
     objects.
-    '''
+    """
     def __init__(self, element):
         obs_data = element.findall(nspath_eval("sos:observationData/om20:OM_Observation",
                 namespaces))
@@ -336,12 +336,17 @@ class SOSGetObservationResponse(object):
             yield obs
 
 class ObservationDecoder(object):
-    ''' Class to handle decoding different Observation types. 
+    """ Class to handle decoding different Observation types. 
         The decode method inspects the type of om:result element and 
         returns the appropriate observation type, which handles parsing
         of the result. 
-    '''
+    """
     def decode_observation(self, element):
+        """ Returns a parsed observation of the appropriate type,
+        by inspecting the result element. 
+
+        'element' input is the XML tree of the OM_Observation object
+        """
         result_element = element.find(nspath_eval("om20:result", namespaces))
         if (len(result_element) == 0):
             result_type = testXMLAttribute(result_element, nspath_eval("xsi:type", namespaces))
