@@ -59,6 +59,9 @@ class MeasurementTimeseries(Timeseries):
         for point in self.points:
             yield point
 
+    def __len__(self):
+        return len(self.points)
+
     def _parse_metadata(self, element):
         ''' Parse metadata elements relating to timeseries:
             TS: baseTime, spacing, commentBlock, parameter
@@ -67,7 +70,9 @@ class MeasurementTimeseries(Timeseries):
         pass
 
 class TimeValuePair(object):
-    ''' A time-value pair as specified by WaterML2.0 '''
+    ''' A time-value pair as specified by WaterML2.0 
+        Currently no support for tvp metadata.
+    '''
     def __init__(self, element):
         date_str = testXMLValue(element.find(nspv(
            "wml2:MeasurementTVP/wml2:time")))
