@@ -1,4 +1,4 @@
-# SOS version 2.0 tests using the 52North 'Geoviqua' service
+# SOS version 2.0 tests using the 52North installation for IOOS: http://ioossos.axiomalaska.com/
 
 # Imports
 >>> from owslib.sos import SensorObservationService
@@ -23,6 +23,14 @@
 >>> type(parsed_response)
 <class 'owslib.swe.observation.sos200.SOSGetObservationResponse'>
 
+>>> o=parsed_response.observations[0]
+
+## Value changes each call so can't be tested
+## >>> o.get_result().value
+
+>>> o.get_result().uom
+'urn:ogc:def:uom:udunits:2:Cel'
+
 # This O&M structure of the results splits each point into an O&M object, resulting in 400 results
 >>> len(parsed_response.observations)
 400
@@ -40,12 +48,12 @@
 20
 >>> type(parsed_response.observations[0])
 <class 'owslib.swe.observation.waterml2.MeasurementTimeseriesObservation'>
->>> type(parsed_response.observations[0].result)
+>>> type(parsed_response.observations[0].get_result())
 <class 'owslib.swe.observation.waterml2.MeasurementTimeseries'>
 
->>> measurement_timeseries = parsed_response.observations[0].result
->>> len(measurement_timeseries.points)
+>>> measurement_timeseries = parsed_response.observations[0].get_result()
+>>> len(measurement_timeseries)
 20
 
-
->>> response = service.get_observation(responseFormat='http://www.opengis.net/waterml-dr/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'])
+# TODO: domain-range decoding 
+## >>> response = service.get_observation(responseFormat='http://www.opengis.net/waterml-dr/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'])
