@@ -55,5 +55,3 @@
 >>> len(measurement_timeseries)
 20
 
-# TODO: domain-range decoding 
-## >>> response = service.get_observation(responseFormat='http://www.opengis.net/waterml-dr/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'])
