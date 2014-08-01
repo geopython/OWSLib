@@ -23,11 +23,6 @@ namespaces = get_namespaces()
 def nspv(path):
     return nspath_eval(path, namespaces)
 
-class Timeseries(OMResult):
-    ''' Generic time-series class '''
-    def __init__(self, element):
-        super(Timeseries, self).__init__(element)
-
 class MeasurementTimeseriesObservation(OM_Observation):
     def __init__(self, element):
         super(MeasurementTimeseriesObservation, self).__init__(element)
@@ -41,6 +36,11 @@ class MeasurementTimeseriesObservation(OM_Observation):
 
     def get_result(self):
         return self.result
+
+class Timeseries(OMResult):
+    ''' Generic time-series class '''
+    def __init__(self, element):
+        super(Timeseries, self).__init__(element)
 
 class MeasurementTimeseries(Timeseries):
     ''' A WaterML2.0 timeseries of measurements, with per-value metadata. '''
@@ -77,7 +77,7 @@ class TimeValuePair(object):
         date_str = testXMLValue(element.find(nspv(
            "wml2:MeasurementTVP/wml2:time")))
         try:
-            self.time = parser.parse(date_str)
+            self.datetime = parser.parse(date_str)
         except:
             raise ValueError("Error parsing datetime string: %s" % date_str)
 
@@ -89,7 +89,7 @@ class TimeValuePair(object):
             raise ValueError("Error parsing time series point value: %" %
                     value_str)
     def __str__(self):
-        return str(self.time) + "," + str(self.value)
+        return str(self.datetime) + "," + str(self.value)
 
 class TVPMetadata(object):
     def __init__(self, element):
