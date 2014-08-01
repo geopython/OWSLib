@@ -7,7 +7,7 @@ from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200
 from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, nspath, extract_time
 from owslib.namespaces import Namespaces
-from owslib.swe.observation.om import OM_MeasurementObservation
+from owslib.swe.observation.om import MeasurementObservation
 from owslib.swe.observation.waterml2 import MeasurementTimeseriesObservation
 
 def get_namespaces():
@@ -145,6 +145,7 @@ class SensorObservationService_2_0_0(object):
                               observedProperties=None,
                               eventTime=None,
                               method='Get',
+                              timeout=30,
                               **kwargs):
         """
         Parameters
@@ -323,8 +324,8 @@ class SOSGetObservationResponse(object):
     objects.
     """
     def __init__(self, element):
-        obs_data = element.findall(nspath_eval("sos:observationData/om20:OM_Observation",
-                namespaces))
+        obs_data = element.findall(
+            nspath_eval("sos:observationData/om20:OM_Observation", namespaces))
         self.observations = []
         decoder = ObservationDecoder()
         for obs in obs_data:
@@ -339,27 +340,30 @@ class SOSGetObservationResponse(object):
         return self.observations[index]
 
 class ObservationDecoder(object):
-    """ Class to handle decoding different Observation types. 
-        The decode method inspects the type of om:result element and 
+    """ Class to handle decoding different Observation types.
+        The decode method inspects the type of om:result element and
         returns the appropriate observation type, which handles parsing
-        of the result. 
+        of the result.
     """
     def decode_observation(self, element):
         """ Returns a parsed observation of the appropriate type,
-        by inspecting the result element. 
+        by inspecting the result element.
 
         'element' input is the XML tree of the OM_Observation object
         """
         result_element = element.find(nspath_eval("om20:result", namespaces))
-        if (len(result_element) == 0):
-            result_type = testXMLAttribute(result_element, nspath_eval("xsi:type", namespaces))
+        if len(result_element) == 0:
+            result_type = testXMLAttribute(
+                result_element, nspath_eval("xsi:type", namespaces))
         else:
             result_type = list(result_element)[0].tag
-       
+
         if result_type.find('MeasureType') != -1:
-            return OM_MeasurementObservation(element) 
-        elif result_type == '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries':
+            return MeasurementObservation(element)
+        elif (result_type ==
+                '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries'):
             return MeasurementTimeseriesObservation(element)
         else:
-            raise NotImplementedError('Result type of %s not supported' % result_type)
+            raise NotImplementedError('Result type of %s not supported'
+                % result_type)
 

@@ -14,7 +14,7 @@
 # Check allowed params for get observation
 >>> get_obs=service.get_operation_by_name('GetObservation')
 
->>> response = service.get_observation(responseFormat='http://www.opengis.net/om/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'])
+>>> response = service.get_observation(responseFormat='http://www.opengis.net/om/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'], timeout=60)
 
 >>> xml_tree = etree.fromstring(response)
 
@@ -35,10 +35,10 @@
 >>> len(parsed_response.observations)
 400
 >>> type(parsed_response.observations[0])
-<class 'owslib.swe.observation.om.OM_MeasurementObservation'>
+<class 'owslib.swe.observation.om.MeasurementObservation'>
 
 # Get observation for a specific offering (in this case corresponds to a station) and observed property (sea water temperature)
->>> response = service.get_observation(responseFormat='http://www.opengis.net/waterml/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'])
+>>> response = service.get_observation(responseFormat='http://www.opengis.net/waterml/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'], timeout=60)
 >>> xml_tree = etree.fromstring(response)
 >>> parsed_response = SOSGetObservationResponse(xml_tree)
 >>> type(parsed_response)

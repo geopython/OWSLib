@@ -6,38 +6,41 @@
 #
 # Contact email: peterataylor@gmail.com
 # =============================================================================
-from owslib.util import nspath_eval, extract_time
+from owslib.util import nspath_eval
 from owslib.namespaces import Namespaces
-from owslib.util import testXMLAttribute, testXMLValue  
+from owslib.util import testXMLAttribute, testXMLValue
 from owslib.swe.common import Quantity
-from datetime import datetime
-from dateutil import parser 
-from owslib.swe.observation.om import OM_Observation, OMResult
+from dateutil import parser
+from owslib.swe.observation.om import OM_Observation, Result
 
 def get_namespaces():
-     ns = Namespaces()
-     return ns.get_namespaces(["swe20", "xlink", "sos20", "om20", "gml32",
-         "xsi", "wml2"])
+    ns = Namespaces()
+    return ns.get_namespaces(["swe20", "xlink", "sos20", "om20", "gml32",
+        "xsi", "wml2"])
 namespaces = get_namespaces()
 
 def nspv(path):
     return nspath_eval(path, namespaces)
 
 class MeasurementTimeseriesObservation(OM_Observation):
+    ''' A timeseries observation that has a measurement timeseries as
+    result. An implementation of the WaterML2
+    MeasurementTimeseriesObservation. '''
     def __init__(self, element):
         super(MeasurementTimeseriesObservation, self).__init__(element)
         self._parse_result()
 
     def _parse_result(self):
+        ''' Parse the result element of the observation type '''
         if self.result is not None:
             result = self.result.find(nspv(
-                     "wml2:MeasurementTimeseries"))           
+                     "wml2:MeasurementTimeseries"))
             self.result = MeasurementTimeseries(result)
 
     def get_result(self):
         return self.result
 
-class Timeseries(OMResult):
+class Timeseries(Result):
     ''' Generic time-series class '''
     def __init__(self, element):
         super(Timeseries, self).__init__(element)
@@ -47,8 +50,8 @@ class MeasurementTimeseries(Timeseries):
     def __init__(self, element):
         super(MeasurementTimeseries, self).__init__(element)
 
-        self.defaultTVPMetadata = TVPMeasurementMetadata(
-                element.find(nspv("wml2:defaultPointMetadata/wml2:DefaultTVPMeasurementMetadata")))
+        self.defaultTVPMetadata = TVPMeasurementMetadata(element.find(
+            nspv("wml2:defaultPointMetadata/wml2:DefaultTVPMeasurementMetadata")))
 
         elems = element.findall(nspv("wml2:point"))
         self.points = []
@@ -70,12 +73,12 @@ class MeasurementTimeseries(Timeseries):
         pass
 
 class TimeValuePair(object):
-    ''' A time-value pair as specified by WaterML2.0 
+    ''' A time-value pair as specified by WaterML2.0
         Currently no support for tvp metadata.
     '''
     def __init__(self, element):
-        date_str = testXMLValue(element.find(nspv(
-           "wml2:MeasurementTVP/wml2:time")))
+        date_str = testXMLValue(
+            element.find(nspv("wml2:MeasurementTVP/wml2:time")))
         try:
             self.datetime = parser.parse(date_str)
         except:
@@ -86,15 +89,15 @@ class TimeValuePair(object):
         try:
             self.value = float(value_str)
         except:
-            raise ValueError("Error parsing time series point value: %" %
-                    value_str)
+            raise ValueError(
+                "Error parsing time series point value: %s" % value_str)
     def __str__(self):
         return str(self.datetime) + "," + str(self.value)
 
 class TVPMetadata(object):
     def __init__(self, element):
         ''' Base time-value pair metadata. Still to do:
-            - relatedObservation 
+            - relatedObservation
         '''
         self.quality = testXMLAttribute(element.find(nspv(
             "wml2:quality")), nspv("xlink:href"))
@@ -125,14 +128,15 @@ class TVPMeasurementMetadata(TVPMetadata):
 
         accuracy = testXMLValue(element.find(nspv("wml2:accuracy")))
         if accuracy is not None:
-            self.accuracy = Quantity()
+            self.accuracy = Quantity(element)
 
 class MeasurementTimeseriesDomainRange(Timeseries):
+    ''' Class to implement domain range timeseries encoding '''
     def __init__(self, element):
-        super(MeasurementTimseriesDomainRange, self, element).__init__()
+        super(MeasurementTimeseriesDomainRange, self, element).__init__()
 
 class MonitoringPoint(object):
     ''' A WaterML2.0 Monitoring Point, which is a specialised O&M SamplingPoint
     '''
-    def __init__(self,element):
+    def __init__(self, element):
         pass
