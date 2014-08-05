@@ -62,7 +62,7 @@ class WebCoverageService_1_1_0(WCSBase):
         self.identification=ServiceIdentification(elem)
         
         #serviceProvider
-        elem=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceProvider')
+        elem=self._capabilities.find('{http://www.opengis.net/ows/1.1}ServiceProvider') or self._capabilities.find('{http://www.opengis.net/ows}ServiceProvider')
         self.provider=ServiceProvider(elem)
                 
         #serviceOperations
@@ -209,10 +209,14 @@ class ServiceIdentification(object):
         self.title=testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Title'))
         if self.title is None:  #may have used the wcs ows namespace:
             self.title=testXMLValue(elem.find('{http://www.opengis.net/wcs/1.1/ows}Title'))
+        if self.title is None:  #may have used the other wcs ows namespace:
+            self.title=testXMLValue(elem.find('{http://www.opengis.net/ows}Title'))
         
         self.abstract=testXMLValue(elem.find('{http://www.opengis.net/ows/1.1}Abstract'))
         if self.abstract is None:#may have used the wcs ows namespace:
             self.abstract=testXMLValue(elem.find('{http://www.opengis.net/wcs/1.1/ows}Abstract'))
+        if self.title is None:  #may have used the other wcs ows namespace:
+            self.title=testXMLValue(elem.find('{http://www.opengis.net/ows}Abstract'))
         if elem.find('{http://www.opengis.net/ows/1.1}Abstract') is not None:
             self.abstract=elem.find('{http://www.opengis.net/ows/1.1}Abstract').text
         else:
