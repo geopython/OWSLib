@@ -813,6 +813,7 @@ class InputOutput(object):
         self.supportedValues = []
         self.defaultValue = None
         self.dataType = None
+        self.anyValue = False
         
     def _parseData(self, element):
         """
@@ -861,7 +862,7 @@ class InputOutput(object):
                 elif subElement.tag.endswith('DefaultValue'):
                     self.defaultValue = getTypedValue(self.dataType, subElement.text)
                 elif subElement.tag.endswith('AnyValue'):
-                    self.allowedValues.append( getTypedValue(self.dataType, 'AnyValue') )
+                    self.anyValue = True
                     
 
     def _parseComplexData(self, element, complexDataElementName):
@@ -1370,6 +1371,8 @@ def printInputOutput(value, indent=''):
     print '%s identifier=%s, title=%s, abstract=%s, data type=%s' % (indent, value.identifier, value.title, value.abstract, value.dataType)
     for val in value.allowedValues:
         print '%s Allowed Value: %s' % (indent, printValue(val))
+    if value.anyValue:
+        print ' Any value allowed'
     for val in value.supportedValues:
         print '%s Supported Value: %s' % (indent, printValue(val))
     print '%s Default Value: %s ' % (indent, printValue(value.defaultValue))
