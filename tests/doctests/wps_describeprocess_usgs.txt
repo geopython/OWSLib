@@ -44,32 +44,32 @@ Check process inputs
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=DATASET_URI, title=Dataset URI, abstract=The base data web service URI for the dataset of interest., data type=anyURI
-     Allowed Value: AnyValue
+     Any value allowed
      Default Value: None 
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=DATASET_ID, title=Dataset Identifier, abstract=The unique identifier for the data type or variable of interest., data type=string
-     Allowed Value: AnyValue
+     Any value allowed
      Default Value: None 
      minOccurs=1, maxOccurs=2147483647
     Process input:
      identifier=REQUIRE_FULL_COVERAGE, title=Require Full Coverage, abstract=If turned on, the service will require that the dataset of interest fully cover the polygon analysis zone data., data type=boolean
-     Allowed Value: True
+     Any value allowed
      Default Value: True 
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=TIME_START, title=Time Start, abstract=The date to begin analysis., data type=dateTime
-     Allowed Value: AnyValue
+     Any value allowed
      Default Value: None 
      minOccurs=0, maxOccurs=1
     Process input:
      identifier=TIME_END, title=Time End, abstract=The date to end analysis., data type=dateTime
-     Allowed Value: AnyValue
+     Any value allowed
      Default Value: None 
      minOccurs=0, maxOccurs=1
     Process input:
      identifier=FEATURE_ATTRIBUTE_NAME, title=Feature Attribute Name, abstract=The attribute that will be used to label column headers in processing output., data type=string
-     Allowed Value: AnyValue
+     Any value allowed
      Default Value: None 
      minOccurs=1, maxOccurs=1
     Process input:
@@ -98,12 +98,12 @@ Check process inputs
      minOccurs=1, maxOccurs=1
     Process input:
      identifier=SUMMARIZE_TIMESTEP, title=Summarize Timestep, abstract=If selected, processing output will include columns with summarized statistics for all feature attribute values for each timestep, data type=boolean
-     Allowed Value: True
+     Any value allowed
      Default Value: True 
      minOccurs=0, maxOccurs=1
     Process input:
      identifier=SUMMARIZE_FEATURE_ATTRIBUTE, title=Summarize Feature Attribute, abstract=If selected, processing output will include a final row of statistics summarizing all timesteps for each feature attribute value, data type=boolean
-     Allowed Value: True
+     Any value allowed
      Default Value: True 
      minOccurs=0, maxOccurs=1
 
