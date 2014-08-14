@@ -545,12 +545,17 @@ class SV_ServiceIdentification(object):
             self.operations = []
             self.operateson = []
         else:
+            val=md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
+            self.title=util.testXMLValue(val)
             self.identtype = 'service'
             val = md.find(util.nspath_eval('srv:serviceType/gco:LocalName', namespaces))
             self.type = util.testXMLValue(val)
           
             val = md.find(util.nspath_eval('srv:serviceTypeVersion/gco:CharacterString', namespaces))
             self.version = util.testXMLValue(val)
+
+            val = md.find(util.nspath_eval('srv:accessProperties/gmd:MD_StandardOrderProcess/gmd:fees/gco:CharacterString', namespaces))
+            self.fees = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval('srv:accessProperties/gmd:MD_StandardOrderProcess/gmd:fees/gco:CharacterString', namespaces))
             self.fees = util.testXMLValue(val)
