@@ -654,6 +654,9 @@ class SV_ServiceIdentification(object):
             val = md.find(util.nspath_eval('srv:accessProperties/gmd:MD_StandardOrderProcess/gmd:fees/gco:CharacterString', namespaces))
             self.fees = util.testXMLValue(val)
 
+            val = md.find(util.nspath_eval('srv:accessProperties/gmd:MD_StandardOrderProcess/gmd:fees/gco:CharacterString', namespaces))
+            self.fees = util.testXMLValue(val)
+
             val = md.find(util.nspath_eval('srv:extent/gmd:EX_Extent', namespaces))
 
             if val is not None:
