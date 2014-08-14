@@ -111,7 +111,10 @@ class WebCoverageService_1_0_0(WCSBase):
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
                 
-        base_url = self.getOperationByName('GetCoverage').methods[method]['url']
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetCoverage').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
         
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 1.0.0 DEBUG: base url of server: %s'%base_url)
@@ -164,7 +167,8 @@ class WebCoverageService_1_0_0(WCSBase):
             if item.name == name:
                 return item
         raise KeyError, "No operation named %s" % name
-    
+
+
 class OperationMetadata(object):
     """Abstraction for WCS metadata.   
     Implements IMetadata.
@@ -174,15 +178,15 @@ class OperationMetadata(object):
         self.name = elem.tag.split('}')[1]          
         
         #self.formatOptions = [f.text for f in elem.findall('{http://www.opengis.net/wcs/1.1/ows}Parameter/{http://www.opengis.net/wcs/1.1/ows}AllowedValues/{http://www.opengis.net/wcs/1.1/ows}Value')]
-        methods = []
+        self.methods = []
         for resource in elem.findall(ns('DCPType/')+ns('HTTP/')+ns('Get/')+ns('OnlineResource')):
             url = resource.attrib['{http://www.w3.org/1999/xlink}href']
-            methods.append(('Get', {'url': url}))        
+            self.methods.append({'type': 'Get', 'url': url})
         for resource in elem.findall(ns('DCPType/')+ns('HTTP/')+ns('Post/')+ns('OnlineResource')):
             url = resource.attrib['{http://www.w3.org/1999/xlink}href']
-            methods.append(('Post', {'url': url}))        
-        self.methods = dict(methods)
-            
+            self.methods.append({'type': 'Post', 'url': url})
+
+
 class ServiceIdentification(object):
     """ Abstraction for ServiceIdentification metadata """
     def __init__(self,elem):

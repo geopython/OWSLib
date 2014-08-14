@@ -1,0 +1,24 @@
+Imports
+
+    >>> from owslib.csw import CatalogueServiceWeb as cs
+
+
+Properties
+
+    >>> c = cs('http://demo.pycsw.org/cite/csw')
+    >>> c.version
+    '2.0.2'
+    
+    >>> c.identification.title
+    'pycsw Geospatial Catalogue OGC CITE demo and Reference Implementation'
+
+
+GetRecords
+
+    >>> c.getrecords2()
+    >>> c.results.get('returned') > 0
+    True
+    >>> c.results.get('nextrecord') > 0
+    True
+    >>> c.results.get('matches') > 0
+    True

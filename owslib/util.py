@@ -12,6 +12,7 @@ from dateutil import parser
 from datetime import datetime
 import pytz
 from owslib.etree import etree
+from owslib.namespaces import Namespaces
 import urlparse, urllib2
 from urllib2 import urlopen, HTTPError, Request
 from urllib2 import HTTPPasswordMgrWithDefaultRealm
@@ -20,6 +21,9 @@ from StringIO import StringIO
 import cgi
 from urllib import urlencode
 import re
+from copy import deepcopy
+import warnings
+import time
 
 
 """
@@ -33,6 +37,25 @@ class RereadableURL(StringIO,object):
         self.headers = u.headers                
         #get file like seek, read methods from StringIO
         content=u.read()
+        #Due to race conditions the XML file might be empty. In that case the parsing method would
+        #throw an exception. This issue can be fixed by requesting the url again and again
+        #until the content is non-empty. To avoid an endless loop a time limit is hardcoded.
+        timelimit = 10.0#sleep for an accumulated maximum of 10 seconds before giving up.
+        timestep = 0.25
+        timecur = 0.0
+        while content == "":
+            page = urllib2.urlopen(u.url)
+            text = page.read()
+            #The header line with <?xml... should not be in content.
+            if "<?xml" == text.strip()[:5]:
+                content = "\n".join(text.split("\n")[1:])
+            else:
+                content = text
+            if timecur > timelimit:
+                break#The parsing with se_tree = etree.fromstring(se_xml) will throw an exception.
+            if content == "":
+                time.sleep(timestep)
+                timecur += timestep
         super(RereadableURL, self).__init__(content)
 
 
@@ -216,6 +239,66 @@ def cleanup_namespaces(element):
     else:
         return etree.fromstring(etree.tostring(element))
 
+
+def add_namespaces(root, ns_keys):
+    if isinstance(ns_keys, basestring):
+        ns_keys = [ns_keys]
+
+    namespaces = Namespaces()
+
+    ns_keys = map(lambda x: (x, namespaces.get_namespace(x)), ns_keys)
+
+    if etree.__name__ != 'lxml.etree':
+        # We can just add more namespaces when not using lxml.
+        # We can't re-add an existing namespaces.  Get a list of current
+        # namespaces in use
+        existing_namespaces = set()
+        for elem in root.getiterator():
+            if elem.tag[0] == "{":
+                uri, tag = elem.tag[1:].split("}")
+                existing_namespaces.add(namespaces.get_namespace_from_url(uri))
+        for key, link in ns_keys:
+            if link is not None and key not in existing_namespaces:
+                root.set("xmlns:%s" % key, link)
+        return root
+    else:
+        # lxml does not support setting xmlns attributes
+        # Update the elements nsmap with new namespaces
+        new_map = root.nsmap
+        for key, link in ns_keys:
+            if link is not None:
+                new_map[key] = link
+        # Recreate the root element with updated nsmap
+        new_root = etree.Element(root.tag, nsmap=new_map)
+        # Carry over attributes
+        for a, v in root.items():
+            new_root.set(a, v)
+        # Carry over children
+        for child in root:
+            new_root.append(deepcopy(child))
+        return new_root
+
+
+def getXMLInteger(elem, tag):
+    """
+    Return the text within the named tag as an integer.
+
+    Raises an exception if the tag cannot be found or if its textual
+    value cannot be converted to an integer.
+
+    Parameters
+    ----------
+
+    - elem: the element to search within
+    - tag: the name of the tag to look for
+
+    """
+    e = elem.find(tag)
+    if e is None:
+        raise ValueError('Missing %s in %s' % (tag, elem))
+    return int(e.text.strip())
+
+
 def testXMLValue(val, attrib=False):
     """
 
@@ -302,6 +385,31 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
 
         return response
 
+
+def element_to_string(element, encoding=None):
+    """
+    Returns a string from a XML object
+
+    Parameters
+    ----------
+    - xml:                 etree Element
+    - encoding (optional): encoding in string form. 'utf-8', 'ISO-8859-1', etc.
+
+    """
+    if encoding is None:
+        encoding = "ISO-8859-1"
+
+    if etree.__name__ == 'lxml.etree':
+        if encoding in ['unicode', 'utf-8']:
+            return '<?xml version="1.0" encoding="utf-8" standalone="no"?>\n%s' % \
+                   etree.tostring(element, encoding='unicode')
+        else:
+            return etree.tostring(element, encoding=encoding, xml_declaration=True)
+    else:
+        return '<?xml version="1.0" encoding="%s" standalone="no"?>\n%s' % (encoding,
+               etree.tostring(element, encoding=encoding))
+
+
 def xml2string(xml):
     """
 
@@ -313,6 +421,8 @@ def xml2string(xml):
     - xml: xml string
 
     """
+    warnings.warn("DEPRECIATION WARNING!  You should now use the 'element_to_string' method \
+                   The 'xml2string' method will be removed in a future version of OWSLib.")
     return '<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>\n' + xml
 
 def xmlvalid(xml, xsd):

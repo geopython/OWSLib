@@ -150,6 +150,12 @@ Test single item accessor
     ['image/png']
     >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsets
     ['EPSG4326_2km']
+    >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsetlinks.keys()
+    ['EPSG4326_2km']
+    >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsetlinks['EPSG4326_2km']
+    <TileMatrixSetLink: EPSG4326_2km, tilematrixlimits={...}>
+    >>> wmts['MODIS_Aqua_Cloud_Top_Temp_Night'].tilematrixsetlinks['EPSG4326_2km'].tilematrixlimits
+    {}
 
     >>> wmts['MODIS_Aqua_Water_Vapor_5km_Night'].title
     'MODIS_Aqua_Water_Vapor_5km_Night'
@@ -166,9 +172,18 @@ Test operations
     >>> sorted([op.name for op in wmts.operations])
     ['GetCapabilities', 'GetTile']
 
-    >>> x = wmts.getOperationByName('GetTile').methods
-    >>> x == {'Get': {'encodings': ['KVP'], 'url': 'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?'}}
-    True
+    >>> x = wmts.getOperationByName('GetTile').methods[0]
+    >>> x.get('type')
+    'Get'
+    >>> x.get('url')
+    'http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?'
+    >>> len(x.get('constraints'))
+    1
+    >>> cst = x.get('constraints')[0]
+    >>> cst.name
+    'GetEncoding'
+    >>> cst.values
+    ['KVP']
 
 Test the gettile methods
 

@@ -151,6 +151,8 @@ Test single item accessor
     ['image/png']
     >>> sorted(wmts['World'].tilematrixsets)
     ['GlobalCRS84Scale', 'GoogleMapsCompatible']
+    >>> sorted(wmts['World'].tilematrixsetlinks.keys())
+    ['GlobalCRS84Scale', 'GoogleMapsCompatible']
     >>> wmts['World'].infoformats
     ['application/gml+xml; version=3.1']
     >>> wmts['World'].resourceURLs[0] == {'resourceType': 'tile', 'template': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World/World/default/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}.png', 'format': 'image/png'}
@@ -168,7 +170,9 @@ Test single item accessor
     {'default': {'isDefault': True}}
     >>> wmts['Ocean'].formats
     ['image/png']
-    >>> wmts['Ocean'].tilematrixsets
+    >>> sorted(wmts['Ocean'].tilematrixsets)
+    ['GlobalCRS84Scale', 'GoogleMapsCompatible']
+    >>> sorted(wmts['Ocean'].tilematrixsetlinks.keys())
     ['GlobalCRS84Scale', 'GoogleMapsCompatible']
     >>> wmts['Ocean'].infoformats
     ['application/gml+xml; version=3.1']
@@ -204,15 +208,15 @@ Test operations
     ['GetCapabilities', 'GetFeatureInfo', 'GetTile']
 
     >>> x = wmts.getOperationByName('GetFeatureInfo').methods
-    >>> x == {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+    >>> x == [{'type': 'Get', 'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'constraints': []}]
     True
 
     >>> x = wmts.getOperationByName('GetTile').methods
-    >>> x == {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+    >>> x == [{'type' : 'Get', 'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'constraints': []}]
     True
 
     >>> x = wmts.getOperationByName('GetCapabilities').methods
-    >>> x == {'Get': {'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'encodings': ['KVP']}}
+    >>> x == [{'type' : 'Get', 'url': 'http://server.caris.com/spatialfusionserver/services/ows/wmts/World', 'constraints': []}]
     True
 
 

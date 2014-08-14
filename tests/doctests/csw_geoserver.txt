@@ -1,0 +1,16 @@
+>>> from owslib.csw import CatalogueServiceWeb
+>>> c=CatalogueServiceWeb('http://suite.opengeo.org/geoserver/ows')
+>>> c.getrecords2(typenames='gmd:MD_Metadata')
+>>> c.results.get('returned') > 0
+True
+>>> c.results.get('nextrecord') > 0
+True
+>>> c.results.get('matches') > 0
+True
+>>> c.getrecords2(typenames='csw:Record gmd:MD_Metadata')
+>>> c.results.get('returned') > 0
+True
+>>> c.results.get('nextrecord') > 0
+True
+>>> c.results.get('matches') > 0
+True
