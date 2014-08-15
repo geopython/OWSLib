@@ -548,6 +548,8 @@ class SV_ServiceIdentification(object):
             self.operations = []
             self.operateson = []
         else:
+            val=md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
+            self.title=util.testXMLValue(val)
             self.identtype = 'service'
             val = md.find(util.nspath_eval('srv:serviceType/gco:LocalName', namespaces))
             self.type = util.testXMLValue(val)
