@@ -15,6 +15,7 @@ class Namespaces(object):
         'fgdc'  :   'http://www.opengis.net/cat/csw/csdgm',
         'gco'   :   'http://www.isotc211.org/2005/gco',
         'gmd'   :   'http://www.isotc211.org/2005/gmd',
+        'gmi'   :   'http://www.isotc211.org/2005/gmi',
         'gml'   :   'http://www.opengis.net/gml',
         'gml311':   'http://www.opengis.net/gml',
         'gml32' :   'http://www.opengis.net/gml/3.2',
