@@ -511,7 +511,7 @@ class CatalogueServiceWeb:
 
     def _parserecords(self, outputschema, esn):
         if outputschema == namespaces['gmd']: # iso 19139
-            for i in self._exml.findall('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)):
+            for i in self._exml.findall('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)) or self._exml.findall('.//'+util.nspath_eval('gmi:MI_Metadata', namespaces)):
                 val = i.find(util.nspath_eval('gmd:fileIdentifier/gco:CharacterString', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
