@@ -66,7 +66,7 @@ Initialize CSW client
     ##########################################################
     >>> filter = fes.PropertyIsNull(propertyname='sys.siteuuid')
     >>> c.getrecords2([filter])
-    >>> c.results == {'matches': 2, 'nextrecord': 0, 'returned': 2}
+    >>> c.results == {'matches': 1, 'nextrecord': 0, 'returned': 1}
     True
 
 
