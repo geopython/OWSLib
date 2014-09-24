@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.8.8 documentation &mdash; OWSLib 0.8.8 documentation</title>
+    <title>OWSLib 0.8.9 documentation &mdash; OWSLib 0.8.9 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.8.8',
+        VERSION:     '0.8.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="OWSLib 0.8.8 documentation" href="#" />
+    <link rel="top" title="OWSLib 0.8.9 documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -53,7 +53,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">OWSLib 0.8.8 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.8.9 documentation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -64,12 +64,12 @@
           <div class="body">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.8.8 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.8.9 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
 </div>
-<a class="reference external image-reference" href="http://www.ohloh.net/p/owslib?ref=WidgetProjectPartnerBadge"><img alt="OWSLib" src="http://www.ohloh.net/p/owslib/widgets/project_partner_badge.gif" style="width: 193px; height: 33px;" /></a>
+<a class="reference external image-reference" href="https://www.openhub.net/p/owslib?ref=WidgetProjectPartnerBadge"><img alt="OWSLib" src="https://www.openhub.net/p/owslib/widgets/project_partner_badge.gif" style="width: 193px; height: 33px;" /></a>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -78,9 +78,9 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.8.8</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.8.9</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2014-07-05</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2014-09-24</td>
 </tr>
 </tbody>
 </table>
@@ -160,12 +160,14 @@
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
-<p>OWSLib requires a Python interpreter, as well as <a class="reference external" href="http://effbot.org/zone/element-index.htm">ElementTree</a> or <a class="reference external" href="http://codespeak.net/lxml">lxml</a> for XML parsing.</p>
+<p>OWSLib requires a Python interpreter, as well as <a class="reference external" href="https://docs.python.org/2/library/xml.etree.elementtree.html">ElementTree</a> or <a class="reference external" href="http://lxml.de">lxml</a> for XML parsing.</p>
 </div>
 <div class="section" id="install">
 <h3>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
 <p>PyPI:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>easy_install OWSLib
+<span class="c"># pip works too</span>
+<span class="nv">$ </span>pip install OWSLib
 </pre></div>
 </div>
 <p>Git:</p>
@@ -187,6 +189,11 @@
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>wget -O /etc/yum.repos.d/RHEL-CBS.repo http://download.opensuse.org/repositories/Application:/Geo/RHEL_6/Application:Geo.repo
 <span class="nv">$ </span>yum install owslib
 </pre></div>
+</div>
+<p>Fedora:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As of Fedora 20, OWSLib is part of the Fedora core package collection</p>
 </div>
 </div>
 </div>
@@ -275,7 +282,9 @@
 </pre></div>
 </div>
 <p>Search for bird data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;birds&#39;</span><span class="p">],</span> <span class="n">maxrecords</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.fes</span> <span class="kn">import</span> <span class="n">PropertyIsEqualTo</span><span class="p">,</span> <span class="n">PropertyIsLike</span><span class="p">,</span> <span class="n">BBox</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">birds_query</span> <span class="o">=</span> <span class="n">PropertyIsEqualTo</span><span class="p">(</span><span class="s">&#39;csw:AnyText&#39;</span><span class="p">,</span> <span class="s">&#39;birds&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">constraints</span><span class="o">=</span><span class="p">[</span><span class="n">birds_query</span><span class="p">],</span> <span class="n">maxrecords</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">results</span>
 <span class="go">{&#39;matches&#39;: 101, &#39;nextrecord&#39;: 21, &#39;returned&#39;: 20}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">csw</span><span class="o">.</span><span class="n">records</span><span class="p">:</span>
@@ -305,14 +314,17 @@
 </pre></div>
 </div>
 <p>Search for bird data in Canada:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;birds&#39;</span><span class="p">],</span><span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">141</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span><span class="mi">84</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bbox_query</span> <span class="o">=</span> <span class="n">BBox</span><span class="p">([</span><span class="o">-</span><span class="mi">141</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span><span class="mi">84</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">constraints</span><span class="o">=</span><span class="p">[</span><span class="n">birds_query</span><span class="p">,</span> <span class="n">bbox_query</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">results</span>
 <span class="go">{&#39;matches&#39;: 3, &#39;nextrecord&#39;: 0, &#39;returned&#39;: 3}</span>
 <span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
-<p>Search for &#8216;birds&#8217; or &#8216;fowl&#8217;</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;birds&#39;</span><span class="p">,</span> <span class="s">&#39;fowl&#39;</span><span class="p">])</span>
+<p>Search for keywords like &#8216;birds&#8217; or &#8216;fowl&#8217;</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">birds_query_like</span> <span class="o">=</span> <span class="n">PropertyIsLike</span><span class="p">(</span><span class="s">&#39;dc:subject&#39;</span><span class="p">,</span> <span class="s">&#39;%birds%&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fowl_query_like</span> <span class="o">=</span> <span class="n">PropertyIsLike</span><span class="p">(</span><span class="s">&#39;dc:subject&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="si">%f</span><span class="s">owl%&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">getrecords</span><span class="p">(</span><span class="n">constraints</span><span class="o">=</span><span class="p">[</span><span class="n">birds_query_like</span><span class="p">,</span> <span class="n">fowl_query_like</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">results</span>
 <span class="go">{&#39;matches&#39;: 107, &#39;nextrecord&#39;: 11, &#39;returned&#39;: 10}</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -1489,6 +1501,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
 <li>Christian Ledermann &lt;<a class="reference external" href="mailto:christian&#46;ledermann&#37;&#52;&#48;gmail&#46;com">christian<span>&#46;</span>ledermann<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</li>
 <li>Sean Cowan &lt;<a class="reference external" href="mailto:scowan&#37;&#52;&#48;asascience&#46;com">scowan<span>&#64;</span>asascience<span>&#46;</span>com</a>&gt;</li>
 <li>Kyle Wilcox &lt;<a class="reference external" href="mailto:wilcox&#46;kyle&#37;&#52;&#48;gmail&#46;com">wilcox<span>&#46;</span>kyle<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</li>
+<li>Angelos Tzotsos &lt;<a class="reference external" href="mailto:gcpp&#46;kalxas&#37;&#52;&#48;gmail&#46;com">gcpp<span>&#46;</span>kalxas<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</li>
 </ul>
 </div></blockquote>
 </div>
@@ -1502,7 +1515,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.8.8 documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.8.9 documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1578,12 +1591,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">OWSLib 0.8.8 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.8.9 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2014-07-05T14:22:35Z.
+      Last updated on 2014-09-24T08:18:08Z.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
