@@ -9,11 +9,12 @@
 
 """ CSW request and response processor """
 
+import base64
 import warnings
 import StringIO
 import random
 from urllib import urlencode
-from urllib2 import urlopen
+from urllib2 import Request, urlopen
 
 from owslib.util import OrderedDict
 
@@ -39,7 +40,8 @@ schema_location = '%s %s' % (namespaces['csw'], schema)
 
 class CatalogueServiceWeb:
     """ csw request class """
-    def __init__(self, url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False):
+    def __init__(self, url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False,
+                 username=None, password=None):
         """
 
         Construct and process a GetCapabilities request
@@ -52,6 +54,8 @@ class CatalogueServiceWeb:
         - version: version (default is '2.0.2')
         - timeout: timeout in seconds
         - skip_caps: whether to skip GetCapabilities processing on init (default is False)
+        - username: username for HTTP basic authentication
+        - password: password for HTTP basic authentication
 
         """
 
@@ -59,6 +63,8 @@ class CatalogueServiceWeb:
         self.lang = lang
         self.version = version
         self.timeout = timeout
+        self.username = username
+        self.password = password
         self.service = 'CSW'
         self.exceptionreport = None
         self.owscommon = ows.OwsCommon('1.0.0')
@@ -584,7 +590,11 @@ class CatalogueServiceWeb:
         # do HTTP request
 
         if isinstance(self.request, basestring):  # GET KVP
-            self.response = urlopen(self.request, timeout=self.timeout).read()
+            req = Request(self.request)
+            if self.username is not None and self.password is not None:
+                base64string = base64.encodestring('%s:%s' % (self.username, self.password))[:-1]
+                req.add_header('Authorization', 'Basic %s' % base64string)
+            self.response = urlopen(req, timeout=self.timeout).read()
         else:
             xml_post_url = self.url
             # Get correct POST URL based on Operation list.
@@ -616,7 +626,7 @@ class CatalogueServiceWeb:
 
             self.request = util.element_to_string(self.request, encoding='utf-8')
 
-            self.response = util.http_post(xml_post_url, self.request, self.lang, self.timeout)
+            self.response = util.http_post(xml_post_url, self.request, self.lang, self.timeout, self.username, self.password)
 
         # parse result see if it's XML
         self._exml = etree.parse(StringIO.StringIO(self.response))

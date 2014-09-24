@@ -7,6 +7,7 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+import base64
 import sys
 from dateutil import parser
 from datetime import datetime
@@ -338,7 +339,7 @@ def testXMLAttribute(element, attribute):
 
     return None
 
-def http_post(url=None, request=None, lang='en-US', timeout=10):
+def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, password=None):
     """
 
     Invoke an HTTP POST request 
@@ -364,6 +365,9 @@ def http_post(url=None, request=None, lang='en-US', timeout=10):
         r.add_header('Accept-Encoding', 'gzip,deflate')
         r.add_header('Host', u.netloc)
 
+        if username is not None and password is not None:
+            base64string = base64.encodestring('%s:%s' % (username, password))[:-1]
+            r.add_header('Authorization', 'Basic %s' % base64string) 
         try:
             up = urllib2.urlopen(r,timeout=timeout);
         except TypeError:
