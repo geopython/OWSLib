@@ -236,7 +236,8 @@ class WebProcessingService(object):
         """
         
         # instantiate a WPSExecution object
-        print 'Executing WPS request...'
+        if self.verbose==True:
+            print 'Executing WPS request...'
         execution = WPSExecution(version=self.version, url=self.url, username=self.username, password=self.password, verbose=self.verbose)
 
         # build XML request from parameters 
@@ -581,7 +582,8 @@ class WPSExecution():
             # override status location
             if url is not None:
                 self.statusLocation = url
-            print '\nChecking execution status... (location=%s)' % self.statusLocation
+            if self.verbose==True:
+                print '\nChecking execution status... (location=%s)' % self.statusLocation
             response = reader.readFromUrl(self.statusLocation, username=self.username, password=self.password)
         else:
             response = reader.readFromString(response)
@@ -595,7 +597,8 @@ class WPSExecution():
                     
         # sleep given number of seconds
         if self.isComplete()==False:
-            print 'Sleeping %d seconds...' % sleepSecs
+            if self.verbose==True:
+                print 'Sleeping %d seconds...' % sleepSecs
             sleep(sleepSecs)
 
         
@@ -654,7 +657,8 @@ class WPSExecution():
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
-                print 'Output written to file: %s' %filepath
+                if self.verbose==True:
+                    print 'Output written to file: %s' %filepath
             
         else:
             raise Exception("Execution not successfully completed: status=%s" % self.status)
@@ -700,14 +704,16 @@ class WPSExecution():
             self._parseExceptionReport(response)
             
         else:
-            print 'Unknown Response'
+            raise Exception('Unknown Response Recieved from WPS.')
             
         # print status, errors
-        print 'Execution status=%s' % self.status
-        print 'Percent completed=%s' % self.percentCompleted
-        print 'Status message=%s' % self.statusMessage
-        for error in self.errors:
-            dump(error)
+        if self.verbose==True:
+            print 'Execution status=%s' % self.status
+            print 'Percent completed=%s' % self.percentCompleted
+            print 'Status message=%s' % self.statusMessage
+            #Should this raise an exception instead of printing?
+            for error in self.errors:
+                dump(error)
 
             
     def _parseExceptionReport(self, root):
@@ -1026,7 +1032,6 @@ class Output(InputOutput):
             if complexDataElement is not None:
                 self.dataType = "ComplexData"
                 self.mimeType = complexDataElement.get('mimeType')
-                #print etree.tostring(complexDataElement)
                 if complexDataElement.text is not None and complexDataElement.text.strip() is not '':
                     self.data.append(complexDataElement.text.strip())
                 for child in complexDataElement:
@@ -1037,7 +1042,7 @@ class Output(InputOutput):
                 if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
                     self.data.append(literalDataElement.text.strip())
                     
-    def retrieveData(self, username=None, password=None):
+    def retrieveData(self, username=None, password=None, verbose=False):
         """
         Method to retrieve data from server-side reference: 
         returns "" if the reference is not known.
@@ -1051,7 +1056,9 @@ class Output(InputOutput):
         
         # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
         # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
-        print 'Output URL=%s' % url
+        # Need to bubble verbose up to things that call this.
+        if verbose==True:
+            print 'Output URL=%s' % url
         if '?' in url:
             spliturl=url.split('?')
             u = openURL(spliturl[0], spliturl[1], method='Get', username = username, password = password)
@@ -1091,7 +1098,8 @@ class Output(InputOutput):
             out = open(self.filePath, 'wb')
             out.write(content)
             out.close()
-            print 'Output written to file: %s' %self.filePath
+            if self.verbose==True:
+                print 'Output written to file: %s' %self.filePath
                 
                     
 class WPSException:
@@ -1322,7 +1330,7 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
         idElement.text = "0"
         return dataElement
     
-def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
+def monitorExecution(execution, sleepSecs=3, download=False, filepath=None, verbose=False):
     '''
     Convenience method to monitor the status of a WPS execution till it completes (succesfully or not),
     and write the output to file after a succesfull job completion.
@@ -1336,7 +1344,8 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     
     while execution.isComplete()==False:
         execution.checkStatus(sleepSecs=sleepSecs)
-        print 'Execution status: %s' % execution.status
+        if verbose==True:
+            print 'Execution status: %s' % execution.status
         
     if execution.isSucceded():
         if download:
@@ -1344,10 +1353,13 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
         else:
             for output in execution.processOutputs:               
                 if output.reference is not None:
-                    print 'Output URL=%s' % output.reference
+                    if verbose==True:
+                        print 'Output URL=%s' % output.reference
     else:
         for ex in execution.errors:
-            print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
+            if verbose==True:
+                # Should raise an exception here?
+                print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
 
 def printValue(value):
     '''
