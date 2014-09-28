@@ -1,11 +1,12 @@
 Instantiate WPS
 
     >>> import logging
+    >>> import sys
     >>> from tests.utils import resource_file, compare_xml
     >>> from owslib.wps import WebProcessingService
     >>> logger = logging.getLogger('owslib')
     >>> logger.setLevel(logging.INFO)
-    >>> sh = logging.StreamHandler()
+    >>> sh = logging.StreamHandler(sys.stdout)
     >>> formatter = logging.Formatter('%(message)s')
     >>> sh.setFormatter(formatter)
     >>> logger.addHandler(sh)
