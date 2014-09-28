@@ -3,8 +3,9 @@ This test does not execute any live HTTP request, rather it parses XML files con
 
 Imports
 
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import resource_file, setup_logging
     >>> from owslib.wps import WebProcessingService
+    >>> logger = setup_logging()
 
 Initialize WPS client
 
