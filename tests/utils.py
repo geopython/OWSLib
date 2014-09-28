@@ -1,6 +1,17 @@
+import logging
 import os
+import sys
 from owslib.etree import etree
 from urlparse import urlparse
+
+def setup_logging():
+    logger = logging.getLogger('owslib')
+    logger.setLevel(logging.INFO)
+    sh = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter('%(message)s')
+    sh.setFormatter(formatter)
+    logger.addHandler(sh)
+    return logger
 
 def resource_file(filepath):
     return os.path.join(test_directory(), 'resources', filepath)

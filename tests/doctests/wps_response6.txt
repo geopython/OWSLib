@@ -1,15 +1,8 @@
 Instantiate WPS
 
-    >>> import logging
-    >>> import sys
-    >>> from tests.utils import resource_file, compare_xml
+    >>> from tests.utils import resource_file, compare_xml, setup_logging
     >>> from owslib.wps import WebProcessingService
-    >>> logger = logging.getLogger('owslib')
-    >>> logger.setLevel(logging.INFO)
-    >>> sh = logging.StreamHandler(sys.stdout)
-    >>> formatter = logging.Formatter('%(message)s')
-    >>> sh.setFormatter(formatter)
-    >>> logger.addHandler(sh)
+    >>> logger = setup_logging()
     >>> wps = WebProcessingService('http://rsg.pml.ac.uk/wps/vector.cgi')
 
 Execute face WPS invocation
