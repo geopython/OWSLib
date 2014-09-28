@@ -14,7 +14,7 @@ install:
   - if [ "$TRAVIS_PYTHON_VERSION" == "2.6" ]; then pip install -r requirements-2.6.txt; fi
   - if [ "$LXML" == "true" ]; then pip install lxml; fi
 script:
-  - python -m pytest -s
+  - python -m pytest
 notifications:
   irc:
     - "irc.freenode.org#geopython"
