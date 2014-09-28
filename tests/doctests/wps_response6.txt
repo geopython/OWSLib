@@ -1,6 +1,13 @@
 Instantiate WPS
 
     >>> from tests.utils import resource_file, compare_xml
+    >>> import logging
+    >>> logger = logging.getLogger('owslib')
+    >>> sh = logging.StreamHandler()
+    >>> formatter = logging.Formatter('%(message)s')
+    >>> sh.setFormatter(formatter)
+    >>> sh.setLevel(logging.INFO)
+    >>> logger.addHandler(sh)
     >>> from owslib.wps import WebProcessingService
     >>> wps = WebProcessingService('http://rsg.pml.ac.uk/wps/vector.cgi')
 
