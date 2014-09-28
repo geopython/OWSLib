@@ -5,7 +5,7 @@ Imports
 
     >>> from tests.utils import resource_file, setup_logging
     >>> from owslib.wps import WebProcessingService
-    >>> logger = setup_logging()
+    >>> logger = setup_logging('INFO')
 
 Initialize WPS client
 

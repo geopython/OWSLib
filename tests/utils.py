@@ -4,9 +4,10 @@ import sys
 from owslib.etree import etree
 from urlparse import urlparse
 
-def setup_logging():
+def setup_logging(loglevel='INFO'):
+    """Helper function to setup logging for tests"""
     logger = logging.getLogger('owslib')
-    logger.setLevel(logging.INFO)
+    logger.setLevel(getattr(logging, loglevel))
     sh = logging.StreamHandler(sys.stdout)
     formatter = logging.Formatter('%(message)s')
     sh.setFormatter(formatter)

@@ -2,7 +2,7 @@ Instantiate WPS
 
     >>> from tests.utils import resource_file, compare_xml, setup_logging
     >>> from owslib.wps import WebProcessingService
-    >>> logger = setup_logging()
+    >>> logger = setup_logging('INFO')
     >>> wps = WebProcessingService('http://rsg.pml.ac.uk/wps/vector.cgi')
 
 Execute face WPS invocation
