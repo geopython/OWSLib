@@ -255,7 +255,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         encoded_request = urlencode(request)
-        u = urlopen(base_url + encoded_request, timeout=timeout)
+        u = urlopen(base_url, data=encoded_request, timeout=timeout)
         tree=etree.fromstring(u.read())
         tempdict={}       
         for sqelem in tree[:]:
@@ -275,7 +275,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         encoded_request = urlencode(request)
-        u = urlopen(base_url + encoded_request, timeout=timeout)
+        u = urlopen(base_url, data=encoded_request, timeout=timeout)
         tree=etree.fromstring(u.read())
         tempdict2={} 
         for sqelem in tree[:]:

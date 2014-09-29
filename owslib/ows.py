@@ -162,6 +162,8 @@ class Constraint(object):
 class OperationsMetadata(object):
     """Initialize an OWS OperationMetadata construct"""
     def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
+        if 'name' not in elem.attrib: # This is not a valid element
+            return
         self.name = elem.attrib['name']
         self.formatOptions = ['text/xml']
         parameters = []
