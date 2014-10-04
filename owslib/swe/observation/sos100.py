@@ -115,6 +115,10 @@ class SensorObservationService_1_0_0(object):
 
         assert isinstance(procedure, str)
         request['procedure'] = procedure
+        
+        url_kwargs = {}
+        if 'timeout' in kwargs:
+            url_kwargs['timeout'] = kwargs.pop('timeout') # Client specified timeout value
 
         # Optional Fields
         if kwargs:
@@ -123,7 +127,11 @@ class SensorObservationService_1_0_0(object):
        
         data = urlencode(request)        
 
-        response = openURL(base_url, data, method, username=self.username, password=self.password).read()
+
+        response = openURL(base_url, data, method, username=self.username, password=self.password, **url_kwargs).read()
+
+            
+
         tr = etree.fromstring(response)
 
         if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
@@ -168,6 +176,10 @@ class SensorObservationService_1_0_0(object):
         # Optional Fields
         if eventTime is not None:
             request['eventTime'] = eventTime
+        
+        url_kwargs = {}
+        if 'timeout' in kwargs:
+            url_kwargs['timeout'] = kwargs.pop('timeout') # Client specified timeout value
 
         if kwargs:
             for kw in kwargs:
@@ -175,7 +187,7 @@ class SensorObservationService_1_0_0(object):
 
         data = urlencode(request)        
 
-        response = openURL(base_url, data, method, username=self.username, password=self.password).read()
+        response = openURL(base_url, data, method, username=self.username, password=self.password, **kwargs).read()
         try:
             tr = etree.fromstring(response)
             if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
