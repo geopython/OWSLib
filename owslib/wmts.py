@@ -252,7 +252,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         request.append(('FORMAT', format))
 
         for key, value in kwargs.iteritems():
-            request.append(key, value)
+            request.append((key, value))
 
         data = urlencode(request, True)
         return data
