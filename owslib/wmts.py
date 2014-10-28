@@ -84,13 +84,36 @@ class WebMapTileService(object):
 
 
     def __init__(self, url, version='1.0.0', xml=None,
-                username=None, password=None, parse_remote_metadata=False
+                username=None, password=None, parse_remote_metadata=False,
+                vendor_kwargs=None
                 ):
-        """Initialize."""
+        """Initialize.
+
+        Parameters
+        ----------
+        url : string
+            Base URL for the WMTS service.
+        version : string
+            Optional WMTS version. Defaults to '1.0.0'.
+        xml : string
+            Optional XML content to use as the content for the initial
+            GetCapabilities request. Typically only used for testing.
+        username : string
+            Optional user name for authentication.
+        password : string
+            Optional password for authentication.
+        parse_remote_metadata: string
+            Currently unused.
+        vendor_kwargs : dict
+            Optional vendor-specific parameters to be included in all
+            requests.
+
+        """
         self.url = url
         self.username = username
         self.password = password
         self.version = version
+        self.vendor_kwargs = vendor_kwargs
         self._capabilities = None
 
         # Authentication handled by Reader
@@ -101,7 +124,7 @@ class WebMapTileService(object):
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
-            self._capabilities = reader.read(self.url)
+            self._capabilities = reader.read(self.url, self.vendor_kwargs)
 
         # avoid building capabilities metadata if the response is a ServiceExceptionReport
         # TODO: check if this needs a namespace
@@ -118,7 +141,8 @@ class WebMapTileService(object):
             reader = WMTSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
                 )
-            self._capabilities = ServiceMetadata(reader.read(self.url))
+            xml = reader.read(self.url, self.vendor_kwargs)
+            self._capabilities = ServiceMetadata(xml)
         return self._capabilities
 
     def _buildMetadata(self, parse_remote_metadata=False):
@@ -303,7 +327,10 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             >>> out.close()
 
         """
-        data = self.buildTileRequest(layer, style, format, tilematrixset, tilematrix, row, column, **kwargs)
+        vendor_kwargs = self.vendor_kwargs or {}
+        vendor_kwargs.update(kwargs)
+        data = self.buildTileRequest(layer, style, format, tilematrixset,
+                                     tilematrix, row, column, **vendor_kwargs)
 
         if base_url is None:
             base_url = self.url
@@ -606,33 +633,36 @@ class WMTSCapabilitiesReader:
         self.username = un
         self.password = pw
 
-    def capabilities_url(self, service_url):
+    def capabilities_url(self, service_url, vendor_kwargs=None):
         """Return a capabilities url
         """
-        qs = []
-        if service_url.find('?') != -1:
-            qs = urlparse.parse_qsl(service_url.split('?')[1])
+        # Ensure the 'service', 'request', and 'version' parameters,
+        # and any vendor-specific parameters are included in the URL.
+        pieces = urlparse.urlparse(service_url)
+        args = urlparse.parse_qs(pieces.query)
+        if 'service' not in args:
+            args['service'] = 'WMTS'
+        if 'request' not in args:
+            args['request'] = 'GetCapabilities'
+        if 'version' not in args:
+            args['version'] = self.version
+        if vendor_kwargs:
+            args.update(vendor_kwargs)
+        query = urlencode(args, doseq=True)
+        pieces = urlparse.ParseResult(pieces.scheme, pieces.netloc,
+                                      pieces.path, pieces.params,
+                                      query, pieces.fragment)
+        return urlparse.urlunparse(pieces)
 
-        params = [x[0] for x in qs]
-
-        if 'service' not in params:
-            qs.append(('service', 'WMTS'))
-        if 'request' not in params:
-            qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
-            qs.append(('version', self.version))
-
-        urlqs = urlencode(tuple(qs))
-        return service_url.split('?')[0] + '?' + urlqs
-
-    def read(self, service_url):
+    def read(self, service_url, vendor_kwargs=None):
         """Get and parse a WMTS capabilities document, returning an
         elementtree instance
 
         service_url is the base url, to which is appended the service,
-        version, and request parameters
+        version, and request parameters. Optional vendor-specific
+        parameters can also be supplied as a dict.
         """
-        getcaprequest = self.capabilities_url(service_url)
+        getcaprequest = self.capabilities_url(service_url, vendor_kwargs)
 
         #now split it up again to use the generic openURL function...
         spliturl=getcaprequest.split('?')
