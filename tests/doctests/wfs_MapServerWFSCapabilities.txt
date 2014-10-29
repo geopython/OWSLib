@@ -18,7 +18,7 @@ Service Identification:
     'MapServer WFS'
 
     >>> wfs.identification.version
-    '1.0.0'
+    '1.0'
 
     >>> wfs.identification.title
     'Atlas of the Cryosphere: Southern Hemisphere'
