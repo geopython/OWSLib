@@ -62,7 +62,7 @@ Test single item accessor
 
     >>> wfs['glaciers'].boundingBox
 
-    >>> cast_tuple_int_list(wfs['IBA'].boundingBoxWGS84)
+    >>> cast_tuple_int_list(wfs['glaciers'].boundingBoxWGS84)
     [-11887400000, -850889000, 557154000, 262891000]
 
     >>> map(lambda x: x.getcode(), wfs['glaciers'].crsOptions)
