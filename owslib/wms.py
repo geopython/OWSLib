@@ -1,4 +1,4 @@
-# -*- coding: ISO-8859-15 -*-
+# -*- coding: iso-8859-15 -*-
 # =============================================================================
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2005 Nuxeo SARL <http://nuxeo.com>
@@ -366,7 +366,8 @@ class ContentMetadata:
         sh = elem.find('ScaleHint') 
         self.scaleHint = None 
         if sh is not None: 
-            self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
+            if 'min' in sh.attrib and 'max' in sh.attrib:
+                self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
 
         attribution = elem.find('Attribution')
         if attribution is not None:
