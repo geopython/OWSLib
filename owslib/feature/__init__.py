@@ -119,7 +119,10 @@ class WebFeatureService_:
             request['query'] = str(filter)
         if typename:
             typename = [typename] if type(typename) == type("") else typename
-            request['typename'] = ','.join(typename)
+            if self.version == "2.0.0":
+                request['typename'] = ','.join(typename)
+            else:
+                request['typenames'] = ','.join(typename)
         if propertyname: 
             request['propertyname'] = ','.join(propertyname)
         if featureversion: 
