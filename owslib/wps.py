@@ -91,6 +91,7 @@ from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue,
                   getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
+import re
 
 # namespace definition
 n = Namespaces()
@@ -808,6 +809,9 @@ class InputOutput(object):
         self.supportedValues = []
         self.defaultValue = None
         self.dataType = None
+        self.rangeMinValue = None
+        self.rangeMaxValue = None
+        
         
     def _parseData(self, element):
         """
@@ -852,7 +856,15 @@ class InputOutput(object):
                     self.dataType = subElement.get( nspath("reference", ns=subns) ).split(':')[1]
                 elif subElement.tag.endswith('AllowedValues'):
                     for value in subElement.findall( nspath('Value', ns=subns) ):
-                        self.allowedValues.append( getTypedValue(self.dataType, value.text) )
+                        # Check for (probably) misconfigured range setting (value ==> 5-100)
+                        # but do not find a normal negative value (value ==> -3)
+                        if (self.dataType == 'integer' or self.dataType == 'float') and re.search('\d\s*-\s*\d', value.text):
+                            # Type is numeric, and value contains a '-'... is probably a range
+                            minv, maxv = value.text.split('-')
+                            self.rangeMinValue = getTypedValue(self.dataType, minv)
+                            self.rangeMaxValue = getTypedValue(self.dataType, maxv)
+                        else:
+                            self.allowedValues.append( getTypedValue(self.dataType, value.text) )
                 elif subElement.tag.endswith('DefaultValue'):
                     self.defaultValue = getTypedValue(self.dataType, subElement.text)
                 elif subElement.tag.endswith('AnyValue'):
