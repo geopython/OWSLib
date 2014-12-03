@@ -115,7 +115,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
-                   srsname=None, outputFormat=None, method='Get'):
+                   srsname=None, outputFormat=None, method='Get',
+                   timeout=30):
         """Request and return feature data as a file-like object.
 
         Parameters
@@ -140,6 +141,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             EPSG code to request the data in
         outputFormat: string (optional)
             Requested response format of the request.
+        timeout : number
+            A timeout value (in seconds) for the request.
 
         There are 3 different modes of use
 
@@ -199,7 +202,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method)
+        u = openURL(base_url, data, method, timeout=timeout)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k

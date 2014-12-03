@@ -129,7 +129,8 @@ class WebFeatureService_1_0_0(object):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
-                   srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get'):
+                   srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get',
+                   timeout=30):
         """Request and return feature data as a file-like object.
         
         Parameters
@@ -154,6 +155,8 @@ class WebFeatureService_1_0_0(object):
             EPSG code to request the data in
         outputFormat: string (optional)
             Requested response format of the request.
+        timeout : number
+            A timeout value (in seconds) for the request.
 
             
         There are 3 different modes of use
@@ -192,7 +195,7 @@ class WebFeatureService_1_0_0(object):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method)
+        u = openURL(base_url, data, method, timeout=timeout)
         
         
         # check for service exceptions, rewrap, and return
