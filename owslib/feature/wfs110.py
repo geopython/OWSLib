@@ -32,7 +32,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, parse_remote_metadata=False):
+    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30):
         """ overridden __new__ method
 
         @type url: string
@@ -41,10 +41,11 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         @param xml: elementtree object
         @type parse_remote_metadata: boolean
         @param parse_remote_metadata: whether to fully process MetadataURL elements
+        @param timeout: time (in seconds) after which requests should timeout
         @return: initialized WebFeatureService_1_1_0 object
         """
         obj=object.__new__(self)
-        obj.__init__(url, version, xml, parse_remote_metadata)
+        obj.__init__(url, version, xml, parse_remote_metadata, timeout)
         return obj
 
     def __getitem__(self,name):
@@ -55,10 +56,11 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             raise KeyError, "No content named %s" % name
 
 
-    def __init__(self, url, version, xml=None, parse_remote_metadata=False):
+    def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30):
         """Initialize."""
         self.url = url
         self.version = version
+        self.timeout = timeout
         self._capabilities = None
         self.owscommon = OwsCommon('1.0.0')
         reader = WFSCapabilitiesReader(self.version)
@@ -99,12 +101,16 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
 
-    def getcapabilities(self, timeout=30):
+    def getcapabilities(self, timeout=None):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
+        if timeout:
+            to = timeout
+        else:
+            to = self.timeout
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url), timeout=timeout)
+        return urlopen(reader.capabilities_url(self.url), timeout=to)
 
     def items(self):
         '''supports dict-like items() access'''
@@ -116,7 +122,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
                    srsname=None, outputFormat=None, method='Get',
-                   timeout=30):
+                   timeout=None):
         """Request and return feature data as a file-like object.
 
         Parameters
@@ -151,6 +157,10 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
+        if timeout:
+            to = timeout
+        else:
+            to = self.timeout
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
@@ -202,7 +212,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=timeout)
+        u = openURL(base_url, data, method, timeout=to)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k

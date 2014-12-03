@@ -15,8 +15,10 @@ from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
+from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
 from owslib.util import log
+from _socket import timeout
 
 n = Namespaces()
 WFS_NAMESPACE = n.get_namespace("wfs")
@@ -44,12 +46,12 @@ def nspath(path, ns=WFS_NAMESPACE):
     return "/".join(components)
 
 
-class WebFeatureService_1_0_0(object):
+class WebFeatureService_1_0_0(WebFeatureService_):
     """Abstraction for OGC Web Feature Service (WFS).
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, parse_remote_metadata=False):
+    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30):
         """ overridden __new__ method 
         
         @type url: string
@@ -58,10 +60,11 @@ class WebFeatureService_1_0_0(object):
         @param xml: elementtree object
         @type parse_remote_metadata: boolean
         @param parse_remote_metadata: whether to fully process MetadataURL elements
+        @param timeout: time (in seconds) after which requests should timeout
         @return: initialized WebFeatureService_1_0_0 object
         """
         obj=object.__new__(self)
-        obj.__init__(url, version, xml, parse_remote_metadata)
+        obj.__init__(url, version, xml, parse_remote_metadata, timeout)
         return obj
     
     def __getitem__(self,name):
@@ -72,10 +75,11 @@ class WebFeatureService_1_0_0(object):
             raise KeyError, "No content named %s" % name
     
     
-    def __init__(self, url, version, xml=None, parse_remote_metadata=False):
+    def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30):
         """Initialize."""
         self.url = url
         self.version = version
+        self.timeout = timeout
         self._capabilities = None
         reader = WFSCapabilitiesReader(self.version)
         if xml:
@@ -113,12 +117,16 @@ class WebFeatureService_1_0_0(object):
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
       
-    def getcapabilities(self, timeout=30):
+    def getcapabilities(self, timeout=None):
         """Request and return capabilities document from the WFS as a 
         file-like object.
         NOTE: this is effectively redundant now"""
+        if timeout:
+            to = timeout
+        else:
+            to = self.timeout
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url), timeout=timeout)
+        return urlopen(reader.capabilities_url(self.url), timeout=to)
     
     def items(self):
         '''supports dict-like items() access'''
@@ -130,7 +138,7 @@ class WebFeatureService_1_0_0(object):
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
                    srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get',
-                   timeout=30):
+                   timeout=None):
         """Request and return feature data as a file-like object.
         
         Parameters
@@ -165,6 +173,10 @@ class WebFeatureService_1_0_0(object):
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
+        if timeout:
+            to = timeout
+        else:
+            to = self.timeout
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
@@ -195,7 +207,7 @@ class WebFeatureService_1_0_0(object):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=timeout)
+        u = openURL(base_url, data, method, timeout=to)
         
         
         # check for service exceptions, rewrap, and return
