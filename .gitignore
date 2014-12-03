@@ -8,4 +8,5 @@ OWSLib.egg-info
 tests/scratch/*
 pytest-*
 pytest_cov-*
+.tox
 

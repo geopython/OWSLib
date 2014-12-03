@@ -78,12 +78,13 @@ Test single item accessor
     >>> wms['global_mosaic'].boundingBoxWGS84
     (-180.0, -60.0, 180.0, 84.0)
     
-    >>> wms['global_mosaic'].crsOptions
+    >>> sorted(wms['global_mosaic'].crsOptions)
     ['AUTO:42003', 'EPSG:4326']
 
     
-    >>> wms['global_mosaic'].styles
-    {'pseudo_bright': {'title': 'Pseudo-color image (Uses IR and Visual bands, 542 mapping), gamma 1.5'}, 'pseudo': {'title': '(default) Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping), gamma 1.5'}, 'visual': {'title': 'Real-color image, pan sharpened (Uses the visual bands, 321 mapping), gamma 1.5'}, 'pseudo_low': {'title': 'Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping)'}, 'visual_low': {'title': 'Real-color image, pan sharpened (Uses the visual bands, 321 mapping)'}, 'visual_bright': {'title': 'Real-color image (Uses the visual bands, 321 mapping), gamma 1.5'}}
+    >>> x = wms['global_mosaic'].styles
+    >>> x == {'pseudo_bright': {'title': 'Pseudo-color image (Uses IR and Visual bands, 542 mapping), gamma 1.5'}, 'pseudo': {'title': '(default) Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping), gamma 1.5'}, 'visual': {'title': 'Real-color image, pan sharpened (Uses the visual bands, 321 mapping), gamma 1.5'}, 'pseudo_low': {'title': 'Pseudo-color image, pan sharpened (Uses IR and Visual bands, 542 mapping)'}, 'visual_low': {'title': 'Real-color image, pan sharpened (Uses the visual bands, 321 mapping)'}, 'visual_bright': {'title': 'Real-color image (Uses the visual bands, 321 mapping), gamma 1.5'}}
+    True
     
 Expect a KeyError for invalid names
 
@@ -94,11 +95,12 @@ Expect a KeyError for invalid names
 
 Test operations
 
-    >>> [op.name for op in wms.operations]
-    ['GetTileService', 'GetCapabilities', 'GetMap']
+    >>> sorted([op.name for op in wms.operations])
+    ['GetCapabilities', 'GetMap', 'GetTileService']
 
-    >>> wms.getOperationByName('GetMap').methods
-    {'Get': {'url': 'http://wms.jpl.nasa.gov/wms.cgi?'}}
+    >>> x = wms.getOperationByName('GetMap').methods
+    >>> x == [{'type': 'Get', 'url': 'http://wms.jpl.nasa.gov/wms.cgi?'}]
+    True
     
     >>> wms.getOperationByName('GetMap').formatOptions
     ['image/jpeg', 'image/png', 'image/geotiff', 'image/tiff', 'application/vnd.google-earth.kml+xml']

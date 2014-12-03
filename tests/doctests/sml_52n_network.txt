@@ -1,0 +1,73 @@
+Imports
+
+    >>> from tests.utils import resource_file
+    >>> from owslib.swe.sensor.sml import SensorML
+    >>> from dateutil import parser
+    >>> import pytz
+
+Initialize
+
+    >>> xml = open(resource_file('sml_52N_network.xml'), 'r').read()
+    >>> root = SensorML(xml)
+    >>> system = root.members[0]
+
+    >>> system.description
+    'Contains all procedures in the SOS Server'
+
+Contacts
+
+    >>> system.contacts.keys()
+    ['http://mmisw.org/ont/ioos/definition/publisher']
+
+    >>> publishers = system.get_contacts_by_role('http://mmisw.org/ont/ioos/definition/publisher')
+    >>> publishers[0].role
+    'http://mmisw.org/ont/ioos/definition/publisher'
+    >>> publishers[0].organization
+    'GLOS'
+    >>> publishers[0].country
+    'USA'
+    >>> publishers[0].url
+    'http://glos.us'
+
+Identification
+
+    >>> sorted(system.identifiers.keys())
+    ['longName', 'networkID', 'shortName']
+
+    >>> sid = system.get_identifiers_by_name('networkID')
+    >>> sid[0].name
+    'networkID'
+    >>> sid[0].definition
+    'http://mmisw.org/ont/ioos/definition/networkID'
+    >>> sid[0].value
+    'urn:ioos:network:glos:all'
+
+Classifiers
+
+    >>> sorted(system.classifiers.keys())
+    ['parentNetwork', 'publisher']
+    >>> classi = system.get_classifiers_by_name('publisher')
+    >>> classi[0].definition
+    'http://mmisw.org/ont/ioos/definition/publisher'
+    >>> classi[0].value
+    'GLOS'
+
+Capabilities
+
+    >>> sorted(system.capabilities.keys())
+    ['featuresOfInterest', 'observationTimeRange', 'observedBBOX', 'offerings']
+
+Characteristics
+
+    >>> system.characteristics.keys()
+    []
+
+Components
+
+    >>> comps = system.components
+    >>> len(comps)
+    14
+
+Connections
+
+    >>> comps = system.connections

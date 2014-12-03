@@ -1,25 +1,35 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<WFS_Capabilities version="1.0.0" updateSequence="0" xmlns="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengeospatial.net//wfs/1.0.0/WFS-capabilities.xsd">
+<?xml version='1.0' encoding="ISO-8859-1" ?>
+<WFS_Capabilities 
+   version="1.0.0" 
+   updateSequence="0" 
+   xmlns="http://www.opengis.net/wfs" 
+   xmlns:ogc="http://www.opengis.net/ogc" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-capabilities.xsd">
 
-<!-- MapServer version 4.8.1 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=WBMP OUTPUT=PDF OUTPUT=SWF OUTPUT=SVG SUPPORTS=PROJ SUPPORTS=FREETYPE SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER INPUT=JPEG INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE DEBUG=MSDEBUG -->
+<!-- MapServer version 5.2.1 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=WBMP OUTPUT=SVG SUPPORTS=PROJ SUPPORTS=FREETYPE SUPPORTS=ICONV SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=GEOS INPUT=EPPL7 INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE -->
 
 <Service>
   <Name>MapServer WFS</Name>
-  <Title>Bird Studies Canada WMS/WFS Server</Title>
-  <Abstract>Bird Studies Canada WMS/WFS Server for bird distribution and abundance data, and related information.  Bird Studies Canada gratefully acknowledges the support of Environment Canada - Canadian Information System for the Environment in developing this service.</Abstract>
+  <Title>Atlas of the Cryosphere: Southern Hemisphere</Title>
+  <Abstract>The National Snow and Ice Data Center (NSIDC) Atlas of the Cryosphere is a map server that provides data and information pertinent to the frozen regions of Earth, including monthly climatologies of sea ice extent and concentration, snow cover extent, and snow water equivalent, in addition to glacier outlines, ice sheet elevation and accumulation, and more. In order to support polar projections, the Atlas is divided into two separate map servers: one for the Northern Hemisphere and one for the Southern Hemisphere. In addition to providing map images and source data through Open Geospatial Consortium, Inc. (OGC) protocols (WMS, WFS, and WCS), a dynamic web interface for exploring these data is also available at http://nsidc.org/data/atlas. If you have questions, comments or suggestions, please contact NSIDC User Services at +1.303.492.6199 or nsidc@nsidc.org. The development of this map server application was supported by NASA&#39;s Earth Observing System (EOS) Program under contract NAS5-03099 and was developed using MapServer, an Open Source development environment for building spatially-enabled internet applications. To cite the Atlas of the Cryosphere: Maurer, J. 2007. Atlas of the Cryosphere. Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Available at http://nsidc.org/data/atlas/.</Abstract>
   <Keywords>
-    birds
-    distribution
-    abundance
-    conservation
-    sites
-    monitoring
-    populations
-    canada
+    Antarctica
+    Cryosphere
+    Earth Science
+    Fronts
+    Glacial Landforms/Processes
+    Glaciers
+    Ice Sheets
+    Oceans
+    Ocean Circulation
+    Ocean Currents
+    Polar
+    Southern Hemisphere
   </Keywords>
-  <OnlineResource>http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&amp;entryType=webService&amp;entryId=3920&amp;entryLang=en&amp;portal=gdp</OnlineResource>
-  <Fees>None</Fees>
-  <AccessConstraints>None</AccessConstraints>
+  <OnlineResource>http://nsidc.org</OnlineResource>
+  <Fees>none</Fees>
+  <AccessConstraints>none</AccessConstraints>
 </Service>
 
 <Capability>
@@ -27,44 +37,42 @@
     <GetCapabilities>
       <DCPType>
         <HTTP>
-          <Get onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+          <Get onlineResource="http://nsidc.org/cgi-bin/atlas_south?" />
         </HTTP>
       </DCPType>
       <DCPType>
         <HTTP>
-          <Post onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+          <Post onlineResource="http://nsidc.org/cgi-bin/atlas_south?" />
         </HTTP>
       </DCPType>
     </GetCapabilities>
     <DescribeFeatureType>
       <SchemaDescriptionLanguage>
         <XMLSCHEMA/>
-        <SFE_XMLSCHEMA/>
       </SchemaDescriptionLanguage>
       <DCPType>
         <HTTP>
-          <Get onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+          <Get onlineResource="http://nsidc.org/cgi-bin/atlas_south?" />
         </HTTP>
       </DCPType>
       <DCPType>
         <HTTP>
-          <Post onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+          <Post onlineResource="http://nsidc.org/cgi-bin/atlas_south?" />
         </HTTP>
       </DCPType>
     </DescribeFeatureType>
     <GetFeature>
       <ResultFormat>
         <GML2/>
-        <GML3/>
       </ResultFormat>
       <DCPType>
         <HTTP>
-          <Get onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+          <Get onlineResource="http://nsidc.org/cgi-bin/atlas_south?" />
         </HTTP>
       </DCPType>
       <DCPType>
         <HTTP>
-          <Post onlineResource="http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?"/>
+          <Post onlineResource="http://nsidc.org/cgi-bin/atlas_south?" />
         </HTTP>
       </DCPType>
     </GetFeature>
@@ -76,195 +84,406 @@
     <Query/>
   </Operations>
     <FeatureType>
-        <Name>IBA</Name>
-        <Title>Canadian Important Bird Areas</Title>
-        <Abstract>This layer represents *generalized* boundaries of Important Bird Areas (IBA) in Canada.  IBAs, in Canada and elsewhere, are evaluated and designated on the basis of internationally criteria.  The polygons contained in the dataset meet these criteria and are therefore deemed significant at the national, continental, or global level.  In Canada, IBAs are not legally recognized entities and therefore do not have any regulatory status.  Nevertheless, they are extremely useful for conservation planning for birds.  Polygon boundaries were digitized on-screen in ArcView GIS 3.2 by using NTDB 1:50K or 1:250K digital layers for reference.  If NTDB coverage was not available (e.g., far north), the Digital Chart of the World (1:1M) was used.  The boundaries of IBAs in this dataset are intentionally generalized to reflect the importance of the surrounding ecosystem on the values present within IBAs.  For example, small islands supporting colonies of seabirds might be buffered by 1 or 2 km to form an IBA.  Boundaries for a very small minority of IBAs were available in paper form as part of IBA conservation plans that had been developed previously.  In such cases, we visually estimated their boundaries against the NTDB or other base layers.  Many IBAs are already recognized as other types of protected areas, e.g., National Wildlife Areas, National and Provincial Parks, Migratory Bird Sanctuaries, conservation reserves, and so on.  In these cases, we used digital boundaries from other sources (e.g., WWF Canada's Designated Areas Database, Environment Canada's Canadian Conservation Areas Database) as reference points when digitizing IBA boundaries.  Please cite as follows:  Bird Studies Canada and Nature Canada.  2004.  Important Bird Areas of Canada Database.  Port Rowan, Ontario:  Bird Studies Canada.  To access the Canadian IBA directory: http://www.bsc-eoc.org/iba/ibasites.html.  Full metadata for this layer:  http://www.bsc-eoc.org/website/metadata/caniba_poly.xml</Abstract>
+        <Name>antarctic_ice_shelves_fill</Name>
+        <Title>Antarctic ice shelves</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2007. Antarctic coastlines and grounding line derived from MODIS Mosaic of Antarctica (MOA). Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 24 April 2008. Background: These outlines were hand-digitized from the Moderate-resolution Imaging Spectroradiometer (MODIS) mosaic of Antarctica (MOA) image map produced and distributed by the National Snow and Ice Data Center (NSIDC) at: http://nsidc.org/data/nsidc-0280.html. The coastline includes the ice shelves surrounding Antarctica while the grounding line excludes them. Coastlines for islands surrounding Antarctica are provided separately from the rest of Antarctica&#39;s grounding line.</Abstract>
         <Keywords>
-          iba
-          birdlife
-          birds
-          conservation
-          sites
-          canada
+          Antarctica
+          Coastlines
+          Cryosphere
+          Ice Sheets
+          Ice Shelves
+          Polar
+          Shorelines
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-141.238" miny="41.6718" maxx="-52.667" maxy="78.1059"/>
-        <MetadataURL type="FGDC" format="XML">http://www.bsc-eoc.org/website/metadata/caniba_poly.xml</MetadataURL>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.53364e+06" miny="-2.18804e+06" maxx="2.78867e+06" maxy="2.29553e+06" />
     </FeatureType>
     <FeatureType>
-        <Name>CBC_PT</Name>
-        <Title>Canadian Christmas Bird Count Locations</Title>
-        <Abstract>A winter survey of bird populations conducted during the Christmas period - December 14 to January 5th inclusive.  More than 1800 counts are conducted each year across Canada, the United States and Latin America.  On a selected day within the count period, local birders count as many birds as possible within a 24 km (15 mile) diameter circle.  The Christmas Bird Count had long been organized on the continental scale by the New York-based National Audubon Society. In 2000, Audubon finalized an agreement with Bird Studies Canada that would see BSC partner with Audubon to coordinate CBCs in Canada.  This layer represents the centre point of all the Christmas Bird Counts conducted in Canada.  An accompanying layer (CBC_PY) contains the 24 km circles.</Abstract>
+        <Name>antarctic_continent</Name>
+        <Title>Antarctic continent</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2007. Antarctic coastlines and grounding line derived from MODIS Mosaic of Antarctica (MOA). Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 24 April 2008. Background: These outlines were hand-digitized from the Moderate-resolution Imaging Spectroradiometer (MODIS) mosaic of Antarctica (MOA) image map produced and distributed by the National Snow and Ice Data Center (NSIDC) at: http://nsidc.org/data/nsidc-0280.html. The coastline includes the ice shelves surrounding Antarctica while the grounding line excludes them. Coastlines for islands surrounding Antarctica are provided separately from the rest of Antarctica&#39;s grounding line.</Abstract>
         <Keywords>
-          birds
-          winter
-          survey
-          population
-          volunteers
-          cbc
-          christmas
-          canada
+          Antarctica
+          Coastlines
+          Cryosphere
+          Ice Sheets
+          Ice Shelves
+          Polar
+          Shorelines
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-137.517" miny="42.0317" maxx="-52.7" maxy="65.2784"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.53069e+06" miny="-2.18277e+06" maxx="2.63754e+06" maxy="2.20462e+06" />
     </FeatureType>
     <FeatureType>
-        <Name>CBC_PY</Name>
-        <Title>Canadian Christmas Bird Count Locations</Title>
-        <Abstract>A winter survey of bird populations conducted during the Christmas period - December 14 to January 5th inclusive.  More than 1800 counts are conducted each year across Canada, the United States and Latin America.  On a selected day within the count period, local birders count as many birds as possible within a 24 km (15 mile) diameter circle.  The Christmas Bird Count had long been organized on the continental scale by the New York-based National Audubon Society. In 2000, Audubon finalized an agreement with Bird Studies Canada that would see BSC partner with Audubon to coordinate CBCs in Canada.  This layer represents the 24 km circles surveyed as part of each Christmas Bird Count conducted in Canada.  An accompanying layer (CBC_PT) contains the centre point of the circles.</Abstract>
+        <Name>antarctic_islands</Name>
+        <Title>Antarctic islands</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2007. Antarctic coastlines and grounding line derived from MODIS Mosaic of Antarctica (MOA). Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 24 April 2008. Background: These outlines were hand-digitized from the Moderate-resolution Imaging Spectroradiometer (MODIS) mosaic of Antarctica (MOA) image map produced and distributed by the National Snow and Ice Data Center (NSIDC) at: http://nsidc.org/data/nsidc-0280.html. The coastline includes the ice shelves surrounding Antarctica while the grounding line excludes them. Coastlines for islands surrounding Antarctica are provided separately from the rest of Antarctica&#39;s grounding line.</Abstract>
         <Keywords>
-          birds
-          winter
-          survey
-          population
-          volunteers
-          cbc
-          christmas
-          canada
+          Antarctica
+          Coastlines
+          Cryosphere
+          Ice Sheets
+          Ice Shelves
+          Polar
+          Shorelines
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-137.745" miny="41.9265" maxx="-52.5407" maxy="65.39"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.69646e+06" miny="-2.54681e+06" maxx="2.73223e+06" maxy="2.33751e+06" />
     </FeatureType>
     <FeatureType>
-        <Name>MMP</Name>
-        <Title>Marsh Monitoring Program Route Locations</Title>
-        <Abstract>A Spring survey of birds and amphibians carried out primarily within the Great Lakes region of North America.</Abstract>
+        <Name>land_excluding_antarctica</Name>
+        <Title>land (excluding Antarctica)</Title>
+        <Abstract>Center for International Earth Science Information Network (CIESIN), Columbia University; and Centro Internacional de Agricultura Tropical (CIAT). 2005. Gridded Population of the World Version 3 (GPWv3): Coastlines. Palisades, NY, USA: Socioeconomic Data and Applications Center (SEDAC), Columbia University. Available at http://sedac.ciesin.columbia.edu/gpw. 19 January 2007. Background: Coastlines derived from the Gridded Population of the World (GPW) land area grid at 2.5 arc-minute resolution. Permanent ice and all but large lakes have been merged with neighbouring polygons to make a layer more appropriate for cartographic visualization of the data. Does not include Antarctica.</Abstract>
         <Keywords>
-          birds
-          waterbirds
-          amphibians
-          marsh
-          wetland
-          survey
-          populations
-          volunteers
-          canada
-          united states
-          great lakes
-          AOC
+          Coastlines
+          Global
+          Shorelines
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-99.5513" miny="40.4143" maxx="-66.4431" maxy="50.3027"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-4.16763e+09" miny="-3.13035e+09" maxx="1.61503e+09" maxy="6.57174e+08" />
     </FeatureType>
     <FeatureType>
-        <Name>CLLS</Name>
-        <Title>Canadian Lakes Loon Survey Locations</Title>
-        <Abstract>A volunteer-based program that monitors the effects of acid rain and other human disturbance on loon breeding and presence on Canada's cottage lakes and other waterbodies.</Abstract>
+        <Name>antarctica_elevation_contours</Name>
+        <Title>Antarctic suface elevation contours</Title>
+        <Abstract>Liu, H., K. Jezek, B. Li, and Z. Zhao. 2001. Radarsat Antarctic Mapping Project digital elevation model version 2. Boulder, CO, USA: National Snow and Ice Data Center. Digital media. Available at http://nsidc.org/data/nsidc-0082.html. 01 November 2006. Background:  The high-resolution Radarsat Antarctic Mapping Project (RAMP) Digital Elevation Model (DEM) combines topographic data from a variety of sources to provide consistent coverage of all of Antarctica. Version 2 improves upon the original version by incorporating new topographic data, error corrections, extended coverage, and other modifications. The DEM incorporates topographic data from satellite radar altimetry, airborne radar surveys, the recently-updated Antarctic Digital Database (version 2), and large-scale topographic maps from the U.S. Geological Survey (USGS) and the Australian Antarctic Division. Data were collected between the 1940s and present, with most collected during the 1980s and 1990s. Although the RAMP DEM was created to aid in processing RAMP radar data, it does not utilize any RAMP radar data. The Atlas of the Cryosphere uses the RAMP DEM gridded at 1 km.</Abstract>
         <Keywords>
-          birds
-          Gavia immer
-          loons
-          lakes
-          survey
-          populations
-          volunteers
-          canada
-          acid rain
-          disturbance
-          ecosystem health
+          Antarctica
+          Cryosphere
+          Earth Science
+          Ice Sheets
+          Ice Sheet Elevation
+          Polar
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-137.1" miny="42.4667" maxx="-52.7" maxy="62.91"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.65479e+06" miny="-2.07939e+06" maxx="2.55084e+06" maxy="2.04649e+06" />
+        <MetadataURL type="FGDC" format="text/html">http://nsidc.org/cgi-bin/get_metadata.pl?id=nsidc-0082&amp;format=fgdc</MetadataURL>
     </FeatureType>
     <FeatureType>
-        <Name>OBBA_SQUARE</Name>
-        <Title>Ontario Breeding Bird Atlas 10 km Squares</Title>
-        <Abstract>A sampling unit used by the Ontario Breeding Bird Atlas to collect breeding evidence data for all bird species within the Province of Ontario.  Squares are based upon the Universal Transverse Mercator (UTM) grid system, NAD83, and measure 10Km by 10Km except near UTM zone boundaries, where they are smaller.</Abstract>
+        <Name>glaciers</Name>
+        <Title>glaciers</Title>
+        <Abstract>National Imagery and Mapping Agency (NIMA). 1992. VMAP_1V10 - Vector Map Level 0 (Digital Chart of the World). Bethesda, MD, USA: National Imagery and Mapping Agency (NIMA). Available at http://www.maproom.psu.edu/dcw/ and http://webgis.wr.usgs.gov/globalgis/. 01 September 2000. Background: The primary source for this database is the U.S. Defense Mapping Agency&#39;s (DMA) Operational Navigation Chart (ONC) 1:1,000,000 scale paper map series produced by the United States, Australia, Canada, and the United Kingdom. These charts were designed to meet the needs of pilots and air crews in medium-and low-altitude en route navigation and to support military operational planning, intelligence briefings, and other needs. Level 0 (low resolution) coverage is global, and is entirely in the public domain. The National Imagery and Mapping Agency (NIMA) is a federal agency of the United States Government and is now known as the National Geospatial-Intelligence Agency (NGA).</Abstract>
         <Keywords>
-          birds
-          distribution
-          abundance
-          breeding range
-          survey
-          populations
-          volunteers
-          Ontario
+          Antarctica
+          Cryosphere
+          Earth Science
+          Global
+          Glaciers
+          Polar
+          Southern Hemisphere
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-95.2926" miny="41.6296" maxx="-74.2355" maxy="56.9225"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-1.18874e+10" miny="-8.50889e+08" maxx="5.57154e+08" maxy="2.62891e+08" />
     </FeatureType>
     <FeatureType>
-        <Name>OBBA_REGION</Name>
-        <Title>Ontario Breeding Bird Atlas Administrative Regions</Title>
-        <Abstract>An administrative unit that is used for local bird atlas co-ordination, which is based on bioregions and access.  Each region is assigned a Regional Coordinator who administers bird surveys within their region.</Abstract>
+        <Name>glacier_outlines</Name>
+        <Title>glacier outlines</Title>
+        <Abstract>Armstrong, R., B. Raup, S.J.S. Khalsa, R. Barry, J. Kargel, C. Helm, and H. Kiefer. 2005. GLIMS glacier database. Boulder, CO, USA: National Snow and Ice Data Center. Available at http://nsidc.org/data/nsidc-0272.html. 24 August 2006. Background: Global Land Ice Measurements from Space (GLIMS) is an international project with the goal of surveying a majority of the world&#39;s estimated 160,000 glaciers. GLIMS uses data collected primarily by the Advanced Spaceborne Thermal Emission and Reflection Radiometer (ASTER) instrument aboard the Terra satellite and the LANDSAT Enhanced Thematic Mapper Plus (ETM+), along with historical observations. The GLIMS project is currently creating a unique glacier inventory, storing information about the extent and rates of change of all the world&#39;s glacial resources. GLIMS consists of many institutions called Regional Centers, who produce glacier analyses for their particular region. The GLIMS Glacier Database provides students, educators, scientists, and the public with reliable glacier data from these analyses. New glacier data are continually being added to the database.</Abstract>
         <Keywords>
-          birds
-          distribution
-          abundance
-          breeding range
-          survey
-          populations
-          volunteers
-          Ontario
+          Antarctica
+          Cryosphere
+          Earth Science
+          Global
+          Glaciers
+          Polar
+          Southern Hemisphere
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-95.2926" miny="41.6296" maxx="-74.2355" maxy="56.9225"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-1.30201e+09" miny="-1.37912e+09" maxx="3.12602e+08" maxy="1.00412e+09" />
+        <MetadataURL type="FGDC" format="text/html">http://nsidc.org/cgi-bin/get_metadata.pl?id=nsidc-0272&amp;format=fgdc</MetadataURL>
     </FeatureType>
     <FeatureType>
-        <Name>OBBA_BLOCK</Name>
-        <Title>Ontario Breeding Bird Atlas 100 km Blocks</Title>
-        <Abstract>A sampling unit used by the Ontario Breeding Bird Atlas to collect breeding evidence data for all bird species within the Province of Ontario.  Blocks are based upon the Universal Transverse Mercator (UTM) grid system, NAD83, and measure 100Km by 100Km except near UTM zone boundaries, where they are smaller.</Abstract>
+        <Name>coastlines_excluding_antarctica</Name>
+        <Title>coastlines (excluding Antarctica)</Title>
+        <Abstract>Center for International Earth Science Information Network (CIESIN), Columbia University; and Centro Internacional de Agricultura Tropical (CIAT). 2005. Gridded Population of the World Version 3 (GPWv3): Coastlines. Palisades, NY, USA: Socioeconomic Data and Applications Center (SEDAC), Columbia University. Available at http://sedac.ciesin.columbia.edu/gpw. 19 January 2007. Background: Coastlines derived from the Gridded Population of the World (GPW) land area grid at 2.5 arc-minute resolution. Permanent ice and all but large lakes have been merged with neighbouring polygons to make a layer more appropriate for cartographic visualization of the data. Does not include Antarctica.</Abstract>
         <Keywords>
-          birds
-          distribution
-          abundance
-          breeding range
-          survey
-          populations
-          volunteers
-          Ontario
+          Coastlines
+          Global
+          Shorelines
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-96" miny="41.5286" maxx="-73.7075" maxy="57.7329"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-4.16763e+09" miny="-3.13035e+09" maxx="1.61503e+09" maxy="6.57174e+08" />
     </FeatureType>
     <FeatureType>
-        <Name>OWLS</Name>
-        <Title>Nocturnal Owl Survey Locations</Title>
-        <Abstract>A volunteer-based program that monitors the abundance of owl species across Canada by means of broadcast surveys.  Ontario survey locations are currently available through this service.</Abstract>
+        <Name>antarctic_ice_shelves_outline</Name>
+        <Title>Antarctic coastline (includes ice shelves)</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2007. Antarctic coastlines and grounding line derived from MODIS Mosaic of Antarctica (MOA). Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 24 April 2008. Background: These outlines were hand-digitized from the Moderate-resolution Imaging Spectroradiometer (MODIS) mosaic of Antarctica (MOA) image map produced and distributed by the National Snow and Ice Data Center (NSIDC) at: http://nsidc.org/data/nsidc-0280.html. The coastline includes the ice shelves surrounding Antarctica while the grounding line excludes them. Coastlines for islands surrounding Antarctica are provided separately from the rest of Antarctica&#39;s grounding line.</Abstract>
         <Keywords>
-          birds
-          owls
-          survey
-          populations
-          volunteers
-          canada
-          broadcast
+          Antarctica
+          Coastlines
+          Cryosphere
+          Ice Sheets
+          Polar
+          Shorelines
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-94.9897" miny="43.2858" maxx="-74.755" maxy="51.7095"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.53364e+06" miny="-2.18804e+06" maxx="2.78867e+06" maxy="2.29553e+06" />
     </FeatureType>
     <FeatureType>
-        <Name>BBS_PT</Name>
-        <Title>Breeding Bird Survey Route Start Points</Title>
-        <Abstract>The Breeding Bird Survey, initiated in 1966, is one of the oldest surveys of breeding birds in North America. It is conducted primarily by volunteers, who follow a predetermined, roadside route each year at the height of the breeding season.  This layer portrays the start point for each BBS route in Canada.</Abstract>
+        <Name>antarctic_coastline</Name>
+        <Title>Antarctic grounding line (excludes ice shelves)</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2007. Antarctic coastlines and grounding line derived from MODIS Mosaic of Antarctica (MOA). Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 24 April 2008. Background: These outlines were hand-digitized from the Moderate-resolution Imaging Spectroradiometer (MODIS) mosaic of Antarctica (MOA) image map produced and distributed by the National Snow and Ice Data Center (NSIDC) at: http://nsidc.org/data/nsidc-0280.html. The coastline includes the ice shelves surrounding Antarctica while the grounding line excludes them. Coastlines for islands surrounding Antarctica are provided separately from the rest of Antarctica&#39;s grounding line.</Abstract>
         <Keywords>
-          birds
-          breeding
-          survey
-          roadside
-          populations
-          volunteers
-          canada
+          Antarctica
+          Coastlines
+          Cryosphere
+          Ice Sheets
+          Polar
+          Shorelines
         </Keywords>
-        <SRS>EPSG:4326</SRS>
-        <LatLongBoundingBox minx="-140.952" miny="42.0986" maxx="-52.8184" maxy="68.0856"/>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.53069e+06" miny="-2.18277e+06" maxx="2.63754e+06" maxy="2.20462e+06" />
+    </FeatureType>
+    <FeatureType>
+        <Name>antarctic_islands_coastlines</Name>
+        <Title>Antarctic island coastlines</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2007. Antarctic coastlines and grounding line derived from MODIS Mosaic of Antarctica (MOA). Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 24 April 2008. Background: These outlines were hand-digitized from the Moderate-resolution Imaging Spectroradiometer (MODIS) mosaic of Antarctica (MOA) image map produced and distributed by the National Snow and Ice Data Center (NSIDC) at: http://nsidc.org/data/nsidc-0280.html. The coastline includes the ice shelves surrounding Antarctica while the grounding line excludes them. Coastlines for islands surrounding Antarctica are provided separately from the rest of Antarctica&#39;s grounding line.</Abstract>
+        <Keywords>
+          Antarctica
+          Coastlines
+          Cryosphere
+          Ice Sheets
+          Polar
+          Shorelines
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.69646e+06" miny="-2.54681e+06" maxx="2.73223e+06" maxy="2.33751e+06" />
+    </FeatureType>
+    <FeatureType>
+        <Name>country_borders_excluding_antarctica</Name>
+        <Title>countries (excluding Antarctica)</Title>
+        <Abstract>Center for International Earth Science Information Network (CIESIN), Columbia University; and Centro Internacional de Agricultura Tropical (CIAT). 2005. Gridded Population of the World Version 3 (GPWv3): National Boundaries.  Palisades, NY, USA: Socioeconomic Data and Applications Center (SEDAC), Columbia University. Available at http://sedac.ciesin.columbia.edu/gpw. 19 January 2007. Background: National boundaries derived from the Gridded Population of the World (GPW) country-level land area grids at 2.5 arc-minute resolution. Permanent ice and all but large lakes have been merged with neighbouring polygons to make a layer more appropriate for cartographic visualization of the data. Does not include Antarctica.</Abstract>
+        <Keywords>
+          Boundaries
+          Global
+          Political Divisions
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-4.16763e+09" miny="-3.13035e+09" maxx="1.61503e+09" maxy="6.57174e+08" />
+    </FeatureType>
+    <FeatureType>
+        <Name>antarctica_country_border</Name>
+        <Title>Antarctica border</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2007. Antarctic coastlines and grounding line derived from MODIS Mosaic of Antarctica (MOA). Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 24 April 2008. Background: These outlines were hand-digitized from the Moderate-resolution Imaging Spectroradiometer (MODIS) mosaic of Antarctica (MOA) image map produced and distributed by the National Snow and Ice Data Center (NSIDC) at: http://nsidc.org/data/nsidc-0280.html. The coastline includes the ice shelves surrounding Antarctica while the grounding line excludes them. Coastlines for islands surrounding Antarctica are provided separately from the rest of Antarctica&#39;s grounding line.</Abstract>
+        <Keywords>
+          Antarctica
+          Coastlines
+          Cryosphere
+          Ice Sheets
+          Polar
+          Shorelines
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.53069e+06" miny="-2.18277e+06" maxx="2.63754e+06" maxy="2.20462e+06" />
+    </FeatureType>
+    <FeatureType>
+        <Name>antarctica_islands_coastlines</Name>
+        <Title>Antarctic island coastlines</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2007. Antarctic coastlines and grounding line derived from MODIS Mosaic of Antarctica (MOA). Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 24 April 2008. Background: These outlines were hand-digitized from the Moderate-resolution Imaging Spectroradiometer (MODIS) mosaic of Antarctica (MOA) image map produced and distributed by the National Snow and Ice Data Center (NSIDC) at: http://nsidc.org/data/nsidc-0280.html. The coastline includes the ice shelves surrounding Antarctica while the grounding line excludes them. Coastlines for islands surrounding Antarctica are provided separately from the rest of Antarctica&#39;s grounding line.</Abstract>
+        <Keywords>
+          Antarctica
+          Coastlines
+          Cryosphere
+          Ice Sheets
+          Polar
+          Shorelines
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.69646e+06" miny="-2.54681e+06" maxx="2.73223e+06" maxy="2.33751e+06" />
+    </FeatureType>
+    <FeatureType>
+        <Name>antarctic_polar_front</Name>
+        <Title>Antarctic Polar Front</Title>
+        <Abstract>Orsi, A. and Ryan, U. 2001. Locations of the various fronts in the Southern Ocean. Kingston, Tasmania, Australia: Australian Antarctic Data Centre. Digital media. Available at http://aadc-maps.aad.gov.au/aadc/metadata/metadata_redirect.cfm?md=AMD/AU/southern_ocean_fronts. 28 September 2006. Background: Hydrographic observations were used in this study of the Southern Ocean to improve our knowledge of large-scale aspects of the Antarctic Circumpolar Current (ACC). The Antarctic Polar Front, also known as the Antarctic Convergence, is the southern front of the Antarctic Circumpolar Current that separates the Antarctic Zone in the south from the Polar Frontal Zone in the north. The Polar Front is taken by many to delineate the actual northern boundary of the Antarctic Zone. It is characterized by sea surface temperatures near 5-6 deg C and a salinity minimum of 33.8-34.0 psu produced by high rainfall.</Abstract>
+        <Keywords>
+          Antarctica
+          Cryosphere
+          Earth Science
+          Fronts
+          Oceans
+          Ocean Circulation
+          Ocean Currents
+          Polar
+          Southern Ocean
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-8.1732e+06" miny="-6.36216e+06" maxx="6.42829e+06" maxy="7.20843e+06" />
+    </FeatureType>
+    <FeatureType>
+        <Name>international_date_line</Name>
+        <Title>International Date Line</Title>
+        <Abstract>National Geographic Society. 1992. National Geographic Atlas of the World, Revised Sixth Edition. Washington, D.C. USA: National Geographic Society. Compiled by J. Maurer. 2007. Boulder, Colorado USA: National Snow and Ice Data Center. Digital Media. Background: The International Date Line (IDL), also known as just the Date Line, is an imaginary line on the surface of the Earth opposite the Prime Meridian which offsets the date as one travels east or west across it. Roughly along 180 deg longitude, with diversions to pass around some territories and island groups, it corresponds to the time zone boundary separating +12 and -12 hours GMT (UT1). Crossing the IDL travelling east results in a day or 24 hours being subtracted, and crossing west results in a day being added.</Abstract>
+        <Keywords>
+          Boundaries
+          Date Line
+          International Date Line
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.6045e+06" miny="-3.02286e+07" maxx="1.67564e-08" maxy="8.57857e-10" />
+    </FeatureType>
+    <FeatureType>
+        <Name>antarctic_megadunes</Name>
+        <Title>Antarctic megadunes</Title>
+        <Abstract>Bohlander, J. and T. Scambos. 2005. Outlines of Antarctic megadunes regions. Boulder, CO, USA: National Snow and Ice Data Center. Background: Unlike snow dunes that are piles of drifted snow, Antarctic megadunes are long, undulating waves in the surface of the ice sheet that are 2 to 4 meters (6.5 to 13 feet) high and 2 to 5 kilometers (1 to 3 miles) apart. They are slightly rounded at their crests and are so subtle that a person on the ground cannot see the pattern. Regions of megadunes on the Antarctic ice sheet have been identified and outlined using satellite remote sensing imagery.</Abstract>
+        <Keywords>
+          Antarctica
+          Cryosphere
+          Earth Science
+          Glacial Landforms/Processes
+          Ice Sheets
+          Megadunes
+          Polar
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-362700" miny="-1.38342e+06" maxx="2.3493e+06" maxy="1.31808e+06" />
+    </FeatureType>
+    <FeatureType>
+        <Name>antarctic_research_stations</Name>
+        <Title>Antarctic permanent research stations</Title>
+        <Abstract>Wikipedia contributors. 24 January 2007. List of research stations in Antarctica. Wikipedia, The Free Encyclopedia. Available at http://en.wikipedia.org/wiki/List_of_research_stations_in_Antarctica. 24 January 2007. Background: A number of governments maintain permanent research stations throughout Antarctica. Many of the stations are staffed around the year. A total of 30 countries (as of October 2006), all signatory to the Antarctic Treaty, operate seasonal (summer) and year-round research stations on the continent and in its surrounding oceans. The population of persons doing and supporting science on the continent and its nearby islands varies from approximately 4,000 persons during the summer season to 1,000 persons during winter.</Abstract>
+        <Keywords>
+          Antarctica
+          Cryosphere
+          Earth Science
+          Polar
+          Research Stations
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-2.67777e+06" miny="-2.00692e+06" maxx="2.63868e+06" maxy="2.33423e+06" />
+    </FeatureType>
+    <FeatureType>
+        <Name>antarctic_ice_cores</Name>
+        <Title>Antarctic ice core locations</Title>
+        <Abstract>Maurer, J. compiler. 2009. Deep ice core locations. Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Accessed 03 May 2009. Background: Labels the locations of several deep ice cores from the Antarctic ice sheet, including: the European Project for Ice Coring in Antarctica (EPICA) Dome C; Siple Dome, West Antarctic Ice Sheet (WAIS) Dome A; Vostok; WAIS Divide; Byrd; Taylor Dome; Dome Fuji; Dome B; Komsomolskaya; and Talos Dome Ice Core (TALDICE).</Abstract>
+        <Keywords>
+          Antarctica
+          Cryosphere
+          Earth Science
+          Ice Core Records
+          Polar
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="-1.07304e+06" miny="-1.77267e+06" maxx="1.742e+06" maxy="1.07181e+06" />
+    </FeatureType>
+    <FeatureType>
+        <Name>south_pole_geographic</Name>
+        <Title>South Pole, Geographic</Title>
+        <Abstract>Labels the location of the South Pole (90 deg S, 0 deg), also referred to as the Geographic South Pole.</Abstract>
+        <Keywords>
+          Antarctica
+          Geographic South Pole
+          Polar
+          South Pole
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="0" miny="-2.0978e+06" maxx="1.89817e+06" maxy="189149" />
+    </FeatureType>
+    <FeatureType>
+        <Name>south_pole_magnetic</Name>
+        <Title>South Pole, Magnetic</Title>
+        <Abstract>McClean, S. 24 January 2007. Geomagnetism Frequently Asked Questions. National Geophysical Data Center. http://www.ngdc.noaa.gov/seg/geomag/faqgeom.shtml#q4b. 24 January 2007. Background: Labels the location of the Magnetic South Pole, which in 2005 was computed to be 64.53 deg S, 137.86 deg E by the World Magnetic Model (WMM). The Earth&#39;s magnetic poles are the two points on the earth&#39;s surface at which magnetic meridians converge; the horizontal component of the magnetic field of the earth becomes zero at this point; also called the dip pole. The magnetic poles migrate over time.</Abstract>
+        <Keywords>
+          Antarctica
+          Earth Science
+          Geomagnetism
+          Magnetic Field
+          Magnetic South Pole
+          Polar
+          South Pole
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="0" miny="-2.0978e+06" maxx="1.89817e+06" maxy="189149" />
+    </FeatureType>
+    <FeatureType>
+        <Name>south_pole_geomagnetic</Name>
+        <Title>South Pole, Geomagnetic</Title>
+        <Abstract>McClean, S. 24 January 2007. Geomagnetism Frequently Asked Questions. National Geophysical Data Center. http://www.ngdc.noaa.gov/seg/geomag/faqgeom.shtml#q4b. 24 January 2007. Background: Labels the location of the Geomagnetic South Pole, which in 2005 was computed to be 79.74 deg S, 108.22 deg E by the World Magnetic Model (WMM). The Earth&#39;s geomagnetic poles are the points of intersection of the Earth&#39;s surface with the axis of a simple magnetic dipole that best approximates the Earth&#39;s actual, more complex magnetic field. If the Earth&#39;s magnetic field were a perfect dipole, then the field lines would be vertical at the geomagnetic poles and they would therefore coincide with the magnetic poles: however, the dipole approximation is in fact far from perfect, so in reality the magnetic and geomagnetic poles lie some distance apart. The geomagnetic poles migrate over time.</Abstract>
+        <Keywords>
+          Antarctica
+          Earth Science
+          Geomagnetic Indices
+          Geomagnetism
+          Geomagnetic South Pole
+          Polar
+          South Pole
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="0" miny="-2.0978e+06" maxx="1.89817e+06" maxy="189149" />
+    </FeatureType>
+    <FeatureType>
+        <Name>south_pole_inaccessibility</Name>
+        <Title>South Pole of Inaccessibility</Title>
+        <Abstract>Wikipedia contributors. 20 January 2007. South Pole. Wikipedia, The Free Encyclopedia. Available at http://en.wikipedia.org/w/index.php?title=South_Pole&amp;oldid=101993204. 24 January 2007. Background: Labels the location of the South Pole of Inaccessibility (85.83 deg S, 65.78 deg E), which is the point on the Antarctic continent farthest from the Southern Ocean. This pole was reached on December 14, 1958 by the 3rd Soviet Antarctic Expedition, led by Yevgeny Tolstikov. At that point they established a temporary station named Polyus Nedostupnosti.</Abstract>
+        <Keywords>
+          Antarctica
+          Polar
+          South Pole
+          South Pole of Inaccessibility
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="0" miny="-2.0978e+06" maxx="1.89817e+06" maxy="189149" />
+    </FeatureType>
+    <FeatureType>
+        <Name>south_pole_of_cold</Name>
+        <Title>South Pole of Cold</Title>
+        <Abstract>Wikipedia contributors. 23 January 2007. Pole of Cold. Wikipedia, The Free Encyclopedia. Available at http://en.wikipedia.org/w/index.php?title=Pole_of_Cold&amp;oldid=102629381. 24 January 2007. Background: The Poles of Cold are the places in the Northern and Southern hemispheres where the lowest air temperature was recorded. In the Southern hemisphere, the Pole of Cold is in Antarctica near the Russian Antarctic station Vostok at 78.47.S, 106.8.E where a temperature of -89.2.C (-129.8.F) was recorded on July 21, 1983.</Abstract>
+        <Keywords>
+          Antarctica
+          Cold Pole
+          Cryosphere
+          Earth Science
+          Polar
+          South Pole
+          South Pole of Cold
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="0" miny="-2.0978e+06" maxx="1.89817e+06" maxy="189149" />
+    </FeatureType>
+    <FeatureType>
+        <Name>south_poles_wfs</Name>
+        <Title>South Poles</Title>
+        <Abstract>Labels the location of various types of South Poles: geographic, geomagnetic, magnetic, pole of cold, and pole of inaccessibility. Citations: McClean, S. 2007. Geomagnetism frequently asked questions. Boulder, Colorado USA: National Geophysical Data Center (NGDC). Available at http://www.ngdc.noaa.gov/geomag/faqgeom.shtml. Accessed 24 January 2007; Wikipedia contributors. 2007. Pole of Cold. Wikipedia, The Free Encyclopedia. Available at http://en.wikipedia.org/wiki/Pole_of_Cold. Accessed 24 January 2007; Wikipedia contributors. 2007. South Pole. Wikipedia, The Free Encyclopedia. Available at http://en.wikipedia.org/w/index.php?title=South_Pole&amp;oldid=101993204. Accessed 24 Janu
+ary 2007.</Abstract>
+        <Keywords>
+          Antarctica
+          Cold Pole
+          Geographic South Pole
+          Geomagnetic Indices
+          Geomagnetism
+          Geomagnetic South Pole
+          Magnetic Field
+          Magnetic South Pole
+          Polar
+          South Pole
+          South Pole of Cold
+          South Pole of Inaccessibility
+        </Keywords>
+        <SRS>EPSG:3031</SRS>
+        <LatLongBoundingBox minx="0" miny="-2.0978e+06" maxx="1.89817e+06" maxy="189149" />
     </FeatureType>
 </FeatureTypeList>
 
 <ogc:Filter_Capabilities>
   <ogc:Spatial_Capabilities>
     <ogc:Spatial_Operators>
+      <ogc:Equals/>
+      <ogc:Disjoint/>
+      <ogc:Touches/>
+      <ogc:Within/>
+      <ogc:Overlaps/>
+      <ogc:Crosses/>
       <ogc:Intersect/>
+      <ogc:Contains/>
       <ogc:DWithin/>
       <ogc:BBOX/>
     </ogc:Spatial_Operators>
   </ogc:Spatial_Capabilities>
   <ogc:Scalar_Capabilities>
-    <ogc:Logical_Operators/>
+    <ogc:Logical_Operators />
     <ogc:Comparison_Operators>
-      <ogc:Simple_Comparisons/>
-      <ogc:Like/>
-      <ogc:Between/>
+      <ogc:Simple_Comparisons />
+      <ogc:Like />
+      <ogc:Between />
     </ogc:Comparison_Operators>
   </ogc:Scalar_Capabilities>
 </ogc:Filter_Capabilities>

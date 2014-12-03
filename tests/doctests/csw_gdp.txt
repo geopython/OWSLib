@@ -1,7 +1,9 @@
 Imports
 
     >>> from owslib import fes    
+    >>> from owslib.dif import namespaces 
     >>> from owslib.csw import CatalogueServiceWeb as cs
+    >>> from owslib.etree import etree
 
     >>> c=cs('http://geodiscover.cgdi.ca/wes/serviceManagerCSW/csw',timeout=30)
     >>> c.identification.title
@@ -20,7 +22,7 @@ Imports
     >>> prop = fes.PropertyIsLike("csw:AnyText", "birds")
     >>> c.getrecords2([prop])
     >>> c.results['matches']
-    99
+    100
     >>> c.results['returned']
     10
     >>> c.records['9250AA67-F3AC-6C12-0CB9-0662231AA181'].title
@@ -55,9 +57,23 @@ Imports
 
     >>> prop = fes.PropertyIsLike("csw:AnyText", "glacial")
     >>> c.getrecords2([prop], outputschema='http://www.fgdc.gov')
-    >>> c.results
-    {'matches': 369, 'nextrecord': 11, 'returned': 10}
+    >>> c.results['matches'] > 300
+    True
+    >>> c.results['nextrecord']
+    11
 
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2)
-    >>> c.results
-    {'matches': 369, 'nextrecord': 3, 'returned': 2}
+    >>> c.results['returned']
+    2
+    >>> c.results['nextrecord']
+    3
+    >>> sortBy=fes.SortBy([fes.SortProperty("dc:title", "ASC")])
+    >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sortBy)
+    >>> xml=etree.fromstring(c.response)
+    >>> xml.findtext(".//{http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/}Entry_Title")
+    'Agu Bay and Easter Cape (Surficial AS1959)'
+    >>> sortBy=fes.SortBy([fes.SortProperty("dc:title", "DESC")])
+    >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sortBy)
+    >>> xml=etree.fromstring(c.response)
+    >>> xml.findtext(".//{http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/}Entry_Title")
+    'Young Inlet (Surficial OF3450)'

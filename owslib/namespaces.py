@@ -15,6 +15,7 @@ class Namespaces(object):
         'fgdc'  :   'http://www.opengis.net/cat/csw/csdgm',
         'gco'   :   'http://www.isotc211.org/2005/gco',
         'gmd'   :   'http://www.isotc211.org/2005/gmd',
+        'gmi'   :   'http://www.isotc211.org/2005/gmi',
         'gml'   :   'http://www.opengis.net/gml',
         'gml311':   'http://www.opengis.net/gml',
         'gml32' :   'http://www.opengis.net/gml/3.2',
@@ -32,13 +33,14 @@ class Namespaces(object):
         'rim'   :   'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0',
         'rdf'   :   'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         'sml'   :   'http://www.opengis.net/sensorML/1.0.1',
+        'sml101':   'http://www.opengis.net/sensorML/1.0.1',
         'sos'   :   'http://www.opengis.net/sos/1.0',
         'sos20' :   'http://www.opengis.net/sos/2.0',
         'srv'   :   'http://www.isotc211.org/2005/srv',
         'swe'   :   'http://www.opengis.net/swe/1.0.1',
         'swe10' :   'http://www.opengis.net/swe/1.0',
         'swe101':   'http://www.opengis.net/swe/1.0.1',
-        'swe20':   'http://www.opengis.net/swe/2.0',
+        'swe20' :   'http://www.opengis.net/swe/2.0',
         'swes'  :   'http://www.opengis.net/swes/2.0',
         'tml'   :   'ttp://www.opengis.net/tml',
         'wfs'   :   'http://www.opengis.net/wfs',
@@ -113,10 +115,12 @@ class Namespaces(object):
             Example:
             --------
             >>> ns = Namespaces()
-            >>> ns.get_namespaces(['csw','gmd'])
-            { 'csw' : http://www.opengis.net/cat/csw/2.0.2', 'gmd' : 'http://www.isotc211.org/2005/gmd' }
-            >>> ns.get_namespaces('csw')
-            { 'csw' : http://www.opengis.net/cat/csw/2.0.2' }
+            >>> x = ns.get_namespaces(['csw','gmd'])
+            >>> x == {'csw': 'http://www.opengis.net/cat/csw/2.0.2', 'gmd': 'http://www.isotc211.org/2005/gmd'}
+            True
+            >>> x = ns.get_namespaces('csw')
+            >>> x == {'csw': 'http://www.opengis.net/cat/csw/2.0.2'}
+            True
             >>> ns.get_namespaces()
             {...}
         """
@@ -129,7 +133,12 @@ class Namespaces(object):
 
         retval = {}
         for key in keys:
-            if key in self.namespace_dict.keys():
-                retval[key] = self.namespace_dict[key]
+            retval[key] = self.get_namespace(key)
 
         return retval
+
+    def get_namespace_from_url(self, url):
+        for k, v in self.namespace_dict.items():
+            if v == url:
+                return k
+        return None

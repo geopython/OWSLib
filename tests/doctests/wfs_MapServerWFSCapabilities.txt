@@ -3,12 +3,13 @@ Imports
 
     >>> from tests.utils import cast_tuple_int_list, resource_file
     >>> from owslib.wfs import WebFeatureService
-    
+    >>> from operator import itemgetter
+
 Fake a request to a WFS Server using saved doc from.
 
-    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read() 
+    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read()
     >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
-    
+
 Test capabilities
 
 Service Identification:
@@ -18,21 +19,21 @@ Service Identification:
 
     >>> wfs.identification.version
     '1.0'
-    
+
     >>> wfs.identification.title
-    'Bird Studies Canada WMS/WFS Server'
-    
+    'Atlas of the Cryosphere: Southern Hemisphere'
+
     >>> wfs.identification.abstract
-    'Bird Studies Canada WMS/WFS Server for bird distribution and abundance data, and related information.  Bird Studies Canada gratefully acknowledges the support of Environment Canada - Canadian Information System for the Environment in developing this service.'
-    
+    "The National Snow and Ice Data Center (NSIDC) Atlas of the Cryosphere is a map server that provides data and information pertinent to the frozen regions of Earth, including monthly climatologies of sea ice extent and concentration, snow cover extent, and snow water equivalent, in addition to glacier outlines, ice sheet elevation and accumulation, and more. In order to support polar projections, the Atlas is divided into two separate map servers: one for the Northern Hemisphere and one for the Southern Hemisphere. In addition to providing map images and source data through Open Geospatial Consortium, Inc. (OGC) protocols (WMS, WFS, and WCS), a dynamic web interface for exploring these data is also available at http://nsidc.org/data/atlas. If you have questions, comments or suggestions, please contact NSIDC User Services at +1.303.492.6199 or nsidc@nsidc.org. The development of this map server application was supported by NASA's Earth Observing System (EOS) Program under contract NAS5-03099 and was developed using MapServer, an Open Source development environment for building spatially-enabled internet applications. To cite the Atlas of the Cryosphere: Maurer, J. 2007. Atlas of the Cryosphere. Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Available at http://nsidc.org/data/atlas/."
+
     >>> wfs.identification.keywords
-    ['\n    birds\n    distribution\n    abundance\n    conservation\n    sites\n    monitoring\n    populations\n    canada\n  ']
+    ['\n    Antarctica\n    Cryosphere\n    Earth Science\n    Fronts\n    Glacial Landforms/Processes\n    Glaciers\n    Ice Sheets\n    Oceans\n    Ocean Circulation\n    Ocean Currents\n    Polar\n    Southern Hemisphere\n  ']
 
     >>> wfs.identification.accessconstraints
-    'None'
+    'none'
 
     >>> wfs.identification.fees
-    'None'
+    'none'
 
 Service Provider:
 
@@ -40,36 +41,36 @@ Service Provider:
     'MapServer WFS'
 
     >>> wfs.provider.url
-    'http://geodiscover.cgdi.ca/gdp/search?action=entrySummary&entryType=webService&entryId=3920&entryLang=en&portal=gdp'
-    
+    'http://nsidc.org'
+
     #TODO: test contact info:
     #>>> wfs.provider.contact.name
 
-    
+
 Test available content layers
 
-    >>> wfs.contents.keys()
-    ['CBC_PT', 'OBBA_REGION', 'IBA', 'MMP', 'CBC_PY', 'OBBA_SQUARE', 'BBS_PT', 'OWLS', 'OBBA_BLOCK', 'CLLS']
-    
-    >>> [wfs[layer].title for layer in wfs.contents]
-    ['Canadian Christmas Bird Count Locations', 'Ontario Breeding Bird Atlas Administrative Regions', 'Canadian Important Bird Areas', 'Marsh Monitoring Program Route Locations', 'Canadian Christmas Bird Count Locations', 'Ontario Breeding Bird Atlas 10 km Squares', 'Breeding Bird Survey Route Start Points', 'Nocturnal Owl Survey Locations', 'Ontario Breeding Bird Atlas 100 km Blocks', 'Canadian Lakes Loon Survey Locations']
-    
+    >>> sorted(wfs.contents.keys())
+    ['antarctic_coastline', 'antarctic_continent', 'antarctic_ice_cores', 'antarctic_ice_shelves_fill', 'antarctic_ice_shelves_outline', 'antarctic_islands', 'antarctic_islands_coastlines', 'antarctic_megadunes', 'antarctic_polar_front', 'antarctic_research_stations', 'antarctica_country_border', 'antarctica_elevation_contours', 'antarctica_islands_coastlines', 'coastlines_excluding_antarctica', 'country_borders_excluding_antarctica', 'glacier_outlines', 'glaciers', 'international_date_line', 'land_excluding_antarctica', 'south_pole_geographic', 'south_pole_geomagnetic', 'south_pole_inaccessibility', 'south_pole_magnetic', 'south_pole_of_cold', 'south_poles_wfs']
+
+    >>> sorted([wfs[layer].title for layer in wfs.contents])
+    ['Antarctic Polar Front', 'Antarctic coastline (includes ice shelves)', 'Antarctic continent', 'Antarctic grounding line (excludes ice shelves)', 'Antarctic ice core locations', 'Antarctic ice shelves', 'Antarctic island coastlines', 'Antarctic island coastlines', 'Antarctic islands', 'Antarctic megadunes', 'Antarctic permanent research stations', 'Antarctic suface elevation contours', 'Antarctica border', 'International Date Line', 'South Pole of Cold', 'South Pole of Inaccessibility', 'South Pole, Geographic', 'South Pole, Geomagnetic', 'South Pole, Magnetic', 'South Poles', 'coastlines (excluding Antarctica)', 'countries (excluding Antarctica)', 'glacier outlines', 'glaciers', 'land (excluding Antarctica)']
+
 Test single item accessor
 
-    >>> wfs['IBA'].title
-    'Canadian Important Bird Areas'
-    
-    >>> wfs['IBA'].boundingBox
-    
-    >>> cast_tuple_int_list(wfs['IBA'].boundingBoxWGS84)
-    [-141, 41, -52, 78]
-    
-    >>> map(lambda x: x.getcode(), wfs['IBA'].crsOptions)
-    ['EPSG:4326']
-    
-    >>> wfs['IBA'].verbOptions
+    >>> wfs['glaciers'].title
+    'glaciers'
+
+    >>> wfs['glaciers'].boundingBox
+
+    >>> cast_tuple_int_list(wfs['glaciers'].boundingBoxWGS84)
+    [-11887400000, -850889000, 557154000, 262891000]
+
+    >>> map(lambda x: x.getcode(), wfs['glaciers'].crsOptions)
+    ['EPSG:3031']
+
+    >>> wfs['glaciers'].verbOptions
     ['{http://www.opengis.net/wfs}Query']
-    
+
 Expect a KeyError for invalid names
 
     >>> wfs['utterly bogus'].title
@@ -79,14 +80,15 @@ Expect a KeyError for invalid names
 
 Test operations
 
-    >>> [op.name for op in wfs.operations]
-    ['{http://www.opengis.net/wfs}GetCapabilities', '{http://www.opengis.net/wfs}DescribeFeatureType', '{http://www.opengis.net/wfs}GetFeature']
-    
-    >>> wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').methods
-    {'{http://www.opengis.net/wfs}Get': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}, '{http://www.opengis.net/wfs}Post': {'url': 'http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?'}}
-    
-    >>> wfs.getOperationByName('{http://www.opengis.net/wfs}GetFeature').formatOptions
-    ['{http://www.opengis.net/wfs}GML2', '{http://www.opengis.net/wfs}GML3']
+    >>> sorted([op.name for op in wfs.operations])
+    ['DescribeFeatureType', 'GetCapabilities', 'GetFeature']
+
+    >>> x = sorted(wfs.getOperationByName('GetFeature').methods, key=itemgetter('type'))
+    >>> x == [{'type': 'Get', 'url': 'http://nsidc.org/cgi-bin/atlas_south?'}, {'type': 'Post', 'url': 'http://nsidc.org/cgi-bin/atlas_south?'}]
+    True
+
+    >>> sorted(wfs.getOperationByName('GetFeature').formatOptions)
+    ['{http://www.opengis.net/wfs}GML2']
 
 
 Test exceptions
@@ -96,8 +98,7 @@ Test exceptions
 
 Lastly, test the getcapabilities method
 
-    >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0')
+    >>> wfs = WebFeatureService('http://nsidc.org/cgi-bin/atlas_south?', version='1.0')
     >>> xml = wfs.getcapabilities().read()
     >>> xml.find('<WFS_Capabilities') > 0
     True
-

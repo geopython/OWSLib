@@ -5,11 +5,11 @@ OWSLib |release| documentation
 .. toctree::
    :maxdepth: 2
 
-.. image:: http://www.ohloh.net/p/owslib/widgets/project_partner_badge.gif
+.. image:: https://www.openhub.net/p/owslib/widgets/project_partner_badge.gif
    :width: 193px
    :height: 33px
    :alt: OWSLib
-   :target: http://www.ohloh.net/p/owslib?ref=WidgetProjectPartnerBadge
+   :target: https://www.openhub.net/p/owslib?ref=WidgetProjectPartnerBadge
 
 :Author: Tom Kralidis
 :Contact: tomkralidis at gmail.com
@@ -71,7 +71,7 @@ Installation
 Requirements
 ------------
 
-OWSLib requires a Python interpreter, as well as `ElementTree <http://effbot.org/zone/element-index.htm>`_ or `lxml <http://codespeak.net/lxml>`_ for XML parsing.
+OWSLib requires a Python interpreter, as well as `ElementTree <https://docs.python.org/2/library/xml.etree.elementtree.html>`_ or `lxml <http://lxml.de>`_ for XML parsing.
 
 Install
 -------
@@ -81,6 +81,8 @@ PyPI:
 .. code-block:: bash
 
   $ easy_install OWSLib
+  # pip works too
+  $ pip install OWSLib
 
 Git:
 
@@ -109,6 +111,15 @@ RedHat Enterprise Linux
 
   $ wget -O /etc/yum.repos.d/RHEL-CBS.repo http://download.opensuse.org/repositories/Application:/Geo/RHEL_6/Application:Geo.repo
   $ yum install owslib
+
+Fedora:
+
+.. note::
+
+  As of Fedora 20, OWSLib is part of the Fedora core package collection
+
+.. code-block:: bash
+  $ yum install OWSLib
 
 Usage
 =====
@@ -220,7 +231,9 @@ Search for bird data:
 
 .. code-block:: python
 
-  >>> csw.getrecords(keywords=['birds'], maxrecords=20)
+  >>> from owslib.fes import PropertyIsEqualTo, PropertyIsLike, BBox
+  >>> birds_query = PropertyIsEqualTo('csw:AnyText', 'birds')
+  >>> csw.getrecords(constraints=[birds_query], maxrecords=20)
   >>> csw.results    
   {'matches': 101, 'nextrecord': 21, 'returned': 20}
   >>> for rec in csw.records:
@@ -252,16 +265,19 @@ Search for bird data in Canada:
 
 .. code-block:: python
 
-  >>> csw.getrecords(keywords=['birds'],bbox=[-141,42,-52,84])
+  >>> bbox_query = BBox([-141,42,-52,84])
+  >>> csw.getrecords(constraints=[birds_query, bbox_query])
   >>> csw.results
   {'matches': 3, 'nextrecord': 0, 'returned': 3}
   >>> 
 
-Search for 'birds' or 'fowl'
+Search for keywords like 'birds' or 'fowl'
 
 .. code-block:: python
 
-  >>> csw.getrecords(keywords=['birds', 'fowl'])
+  >>> birds_query_like = PropertyIsLike('dc:subject', '%birds%')
+  >>> fowl_query_like = PropertyIsLike('dc:subject', '%fowl%')
+  >>> csw.getrecords(constraints=[birds_query_like, fowl_query_like])
   >>> csw.results
   {'matches': 107, 'nextrecord': 11, 'returned': 10}
   >>> 
@@ -508,11 +524,11 @@ SOS
 
 GetCapabilities
 
-.. include:: ../../tests/doctests/sos_ndbc_getcapabilities.txt
+.. include:: ../../tests/doctests/sos_10_getcapabilities.txt
 
 GetObservation
 
-.. include:: ../../tests/doctests/sos_ndbc_getobservation.txt
+.. include:: ../../tests/doctests/sos_10_ndbc_getobservation.txt
 
 SensorML
 --------
@@ -603,6 +619,21 @@ IRC
 ---
 
 As well, visit OWSLib on IRC on ``#geopython`` at `freenode`_ for realtime discussion.
+
+
+Logging
+=======
+
+OWSLib logs messages to the 'owslib' named python logger.  You may configure your
+application to use the log messages like so:
+
+.. code-block:: python
+
+    import logging
+    owslib_log = logging.getLogger('owslib')
+    # Add formatting and handlers as needed
+    owslib_log.setLevel(logging.DEBUG)
+
 
 License
 =======

@@ -1,4 +1,3 @@
-	
 Imports
 
 	>>> from tests.utils import resource_file
@@ -12,12 +11,12 @@ Test GetSiteInfo
 	>>> response.site_names
 	['Little Bear River at Mendon Road near Mendon, Utah']
 	>>> site = response.sites[0]
-	>>> site.variable_names
-	['Battery voltage', 'Oxygen, dissolved percent of saturation', 'Oxygen, dissolved', 'Specific conductance, unfiltered', 'Phosphorus, total as P', 'pH, unfiltered', 'Phosphorus, total as P, filtered', 'Turbidity', 'Solids, total Suspended', 'Gage height', 'Temperature']
+	>>> sorted(site.variable_names)
+	['Battery voltage', 'Gage height', 'Oxygen, dissolved', 'Oxygen, dissolved percent of saturation', 'Phosphorus, total as P', 'Phosphorus, total as P, filtered', 'Solids, total Suspended', 'Specific conductance, unfiltered', 'Temperature', 'Turbidity', 'pH, unfiltered']
 	>>> codes = site.variable_codes
 	>>> sorted(codes)
         ['USU10', 'USU11', 'USU12', 'USU13', 'USU3', 'USU32', 'USU33', 'USU34', 'USU35', 'USU36', 'USU37', 'USU39', 'USU4', 'USU40', 'USU41', 'USU5', 'USU6', 'USU7', 'USU8', 'USU9']
-	>>> var = site[codes[7]]
+	>>> var = site['USU9']
 	>>> var.unit.name
 	'nephelometric turbidity units'
 	>>> var.unit.id
@@ -40,4 +39,4 @@ Test GetValues
 	>>> values = series.values[0]
 	>>> values.get_date_values()
 	[(datetime.datetime(2008, 4, 14, 13, 0), '0.1192'), (datetime.datetime(2008, 4, 14, 13, 0), '0.114'), (datetime.datetime(2008, 4, 14, 14, 0), '0.1424'), (datetime.datetime(2008, 4, 14, 15, 0), '0.1814'), (datetime.datetime(2008, 4, 14, 16, 0), '0.3841'), (datetime.datetime(2008, 4, 14, 18, 0), '0.9124'), (datetime.datetime(2008, 4, 14, 20, 0), '0.0655'), (datetime.datetime(2008, 4, 14, 21, 0), '0.4342'), (datetime.datetime(2008, 4, 14, 22, 0), '0.9543'), (datetime.datetime(2008, 4, 14, 23, 0), '0.7308'), (datetime.datetime(2008, 4, 14, 23, 0), '0.7004'), (datetime.datetime(2008, 4, 15, 0, 0), '0.6097'), (datetime.datetime(2008, 4, 15, 1, 0), '0.5544'), (datetime.datetime(2008, 4, 15, 1, 0), '0.6182'), (datetime.datetime(2008, 4, 15, 1, 0), '0.5476'), (datetime.datetime(2008, 4, 15, 2, 0), '0.5728'), (datetime.datetime(2008, 4, 15, 2, 0), '0.369'), (datetime.datetime(2008, 4, 15, 2, 0), '0.3664'), (datetime.datetime(2008, 4, 15, 2, 0), '0.4767'), (datetime.datetime(2008, 4, 15, 3, 0), '0.3144'), (datetime.datetime(2008, 4, 15, 4, 0), '0.4517'), (datetime.datetime(2008, 4, 15, 5, 0), '0.3838'), (datetime.datetime(2008, 4, 15, 6, 0), '0.4702'), (datetime.datetime(2008, 4, 15, 7, 0), '0.389'), (datetime.datetime(2008, 4, 15, 8, 0), '0.4949'), (datetime.datetime(2008, 4, 15, 9, 0), '0.2778'), (datetime.datetime(2008, 4, 15, 10, 0), '0.3576'), (datetime.datetime(2008, 4, 15, 11, 0), '0.3618'), (datetime.datetime(2008, 4, 15, 12, 0), '0.2803')]
-	
+

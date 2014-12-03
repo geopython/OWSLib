@@ -15,7 +15,7 @@ Name:           python-%{pyname}
 Version:        0.7.2
 Release:        0
 Summary:        Python interface to OGC Web Services
-License:        MIT
+License:        BSD
 Url:            http://geopython.github.com/OWSLib/
 Group:          Productivity/Scientific/Other
 Source0:        %{pyname}-%{version}.tar.gz

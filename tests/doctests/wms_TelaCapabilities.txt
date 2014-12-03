@@ -3,6 +3,7 @@ Imports
 
     >>> from owslib.wms import WebMapService
     >>> from tests.utils import resource_file
+    >>> from operator import itemgetter
     
 Fake a request to a WMS Server using saved doc from telascience.org.
 http://wms.telascience.org/cgi-bin/ngBM_wms?
@@ -35,12 +36,12 @@ Test capabilities
 
 Test available content layers
 
-    >>> wms.contents.keys()
-    ['USGS_1ft_San_Diego', 'world.topo.bathy.200409', 'ngBM']
+    >>> sorted(wms.contents.keys())
+    ['USGS_1ft_San_Diego', 'ngBM', 'world.topo.bathy.200409']
 
     
-    >>> [wms[layer].title for layer in wms.contents]
-    ['USGS 1ft San Diego', 'world.topo.bathy.200409', 'BM']
+    >>> sorted([wms[layer].title for layer in wms.contents])
+    ['BM', 'USGS 1ft San Diego', 'world.topo.bathy.200409']
 
     
 Test single item accessor
@@ -54,7 +55,7 @@ Test single item accessor
     >>> wms['world.topo.bathy.200409'].boundingBoxWGS84
     (-180.0, -90.0, 180.0, 90.0)
     
-    >>> wms['world.topo.bathy.200409'].crsOptions
+    >>> sorted(wms['world.topo.bathy.200409'].crsOptions)
     ['EPSG:4326', 'init=epsg:4326']
 
     
@@ -70,11 +71,12 @@ Expect a KeyError for invalid names
 
 Test operations
 
-    >>> [op.name for op in wms.operations]
-    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
+    >>> sorted([op.name for op in wms.operations])
+    ['DescribeLayer', 'GetCapabilities', 'GetFeatureInfo', 'GetLegendGraphic', 'GetMap']
     
-    >>> wms.getOperationByName('GetMap').methods
-    {'Post': {'url': 'http://wms.telascience.org/cgi-bin/ngBM_wms?'}, 'Get': {'url': 'http://wms.telascience.org/cgi-bin/ngBM_wms?'}}
+    >>> x = sorted(wms.getOperationByName('GetMap').methods, key=itemgetter('type'))
+    >>> x == [{'type': 'Get', 'url': 'http://wms.telascience.org/cgi-bin/ngBM_wms?'}, {'type': 'Post', 'url': 'http://wms.telascience.org/cgi-bin/ngBM_wms?'}]
+    True
     
     >>> wms.getOperationByName('GetMap').formatOptions
     ['image/gif', 'image/png', 'image/jpeg', 'image/wbmp', 'image/tiff', 'image/png; mode=24bit']

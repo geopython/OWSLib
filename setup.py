@@ -17,6 +17,9 @@ readme = open('README.txt').read()
 reqs = [line.strip() for line in open('requirements.txt')]
 reqs.append('pytz>=2013d')
 
+if sys.version[:3] < '2.7':
+    reqs += [line.strip() for line in open('requirements-2.6.txt')]
+
 setup(name              = 'OWSLib',
       version           = owslib.__version__,
       description       = 'OGC Web Service utility library',
@@ -27,11 +30,10 @@ setup(name              = 'OWSLib',
       author_email      = 'sean.gillies@gmail.com',
       maintainer        = 'Tom Kralidis',
       maintainer_email  = 'tomkralidis@gmail.com',
-      url               = 'https://geopython.github.io/OWSLib',
+      url               = 'http://geopython.github.io/OWSLib',
       install_requires  = reqs,
-      tests_require     = ['pytest', 'pytest-cov'],
       cmdclass          = {'test': PyTest},
-      packages          = find_packages(),
+      packages          = find_packages(exclude=["docs", "etc", "examples", "tests"]),
       classifiers       = [
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

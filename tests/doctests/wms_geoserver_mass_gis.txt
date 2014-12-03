@@ -73,8 +73,9 @@ Test single item accessor
     >>> cast_tuple_int_list(wms['massgis:GISDATA.SHORELINES_ARC'].boundingBoxWGS84)
     [-71, 41, -69, 42]
     
-    >>> wms['massgis:GISDATA.SHORELINES_ARC'].styles
-    {'GISDATA.SHORELINES_ARC::Default': {'legend': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GISDATA.SHORELINES_ARC', 'title': None}}
+    >>> x = wms['massgis:GISDATA.SHORELINES_ARC'].styles
+    >>> x == {'GISDATA.SHORELINES_ARC::Default': {'legend': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GISDATA.SHORELINES_ARC', 'title': None}}
+    True
     
 Expect a KeyError for invalid names
 
@@ -88,8 +89,9 @@ Test operations
     >>> [op.name for op in wms.operations]
     ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
     
-    >>> wms.getOperationByName('GetMap').methods
-    {'Get': {'url': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?SERVICE=WMS&'}}
+    >>> x = wms.getOperationByName('GetMap').methods
+    >>> x == [{'type' : 'Get', 'url': 'http://giswebservices.massgis.state.ma.us/geoserver/wms?SERVICE=WMS&'}]
+    True
     
     >>> len(wms.getOperationByName('GetMap').formatOptions)
     29

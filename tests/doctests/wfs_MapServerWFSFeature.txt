@@ -5,8 +5,8 @@ Imports
     
 Test the getfeature method
 
-    >>> wfs = WebFeatureService('http://www.bsc-eoc.org/cgi-bin/bsc_ows.asp?', version='1.0.0')
-    >>> response = wfs.getfeature(typename=['IBA'], maxfeatures=5)
+    >>> wfs = WebFeatureService('http://nsidc.org/cgi-bin/atlas_south?', version='1.0.0')
+    >>> response = wfs.getfeature(typename=['glaciers'], maxfeatures=5)
     >>> response.read().find('<wfs:FeatureCollection') > 0
     True
 

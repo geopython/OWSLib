@@ -1,0 +1,23 @@
+    >>> from owslib.csw import CatalogueServiceWeb as cs
+    >>> c=cs('https://gateway.ceh.ac.uk/soapServices/CSWStartup')
+    >>> c.version
+    '2.0.2'
+    
+    #no longer inspire, files name is probably misleading at this point
+    >>> #c.identification.title
+    #'INSPIRE Geoportal Discovery Service'
+    >>> c.identification.title
+    'Centre for Ecology and Hydrology Information Gateway CSW Service'
+    >>> c.getrecords2()
+    >>> c.results['returned'] == 10
+    True
+    >>> c.results['nextrecord'] is not None
+    False
+    >>> c.results['matches'] < 10
+    False
+    >>> c.filters.spatial_operators
+    ['BBOX', 'Beyond', 'Contains', 'Crosses', 'Disjoint', 'DWithin', 'Equals', 'Intersects', 'Overlaps', 'Touches', 'Within']
+    >>> c.filters.temporal_operators
+    []
+    >>> c.filters.scalar_comparison_operators
+    ['Between', 'EqualTo', 'GreaterThan', 'GreaterThanEqualTo', 'LessThan', 'LessThanEqualTo', 'Like', 'NotEqualTo', 'NullCheck']

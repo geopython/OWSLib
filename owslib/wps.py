@@ -88,7 +88,7 @@ from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
 from time import sleep
 from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue, 
-                  getNamespace, xml2string, nspath, openURL, nspath_eval)
+                  getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 
@@ -104,7 +104,7 @@ GML_NAMESPACE = n.get_namespace("gml")
 DRAW_NAMESPACE = n.get_namespace("draw")
 
 GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
-DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd'
+DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/climate/derivative/xsd/draw.xsd'
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
 
@@ -196,8 +196,7 @@ class WebProcessingService(object):
         else:
             self._capabilities = reader.readFromUrl(self.url, username=self.username, password=self.password)
             
-        if self.verbose==True:
-            print xml2string(etree.tostring(self._capabilities))
+        log.debug(element_to_string(self._capabilities))
 
         # populate the capabilities metadata obects from the XML tree
         self._parseCapabilitiesMetadata(self._capabilities)
@@ -217,8 +216,7 @@ class WebProcessingService(object):
             # read from server
             rootElement = reader.readFromUrl(self.url, identifier)
             
-        if self.verbose==True:
-            print xml2string(etree.tostring(rootElement))
+        log.info(element_to_string(rootElement))
 
         # build metadata objects
         return self._parseProcessMetadata(rootElement)
@@ -236,15 +234,15 @@ class WebProcessingService(object):
         """
         
         # instantiate a WPSExecution object
-        print 'Executing WPS request...'
+        log.info('Executing WPS request...')
         execution = WPSExecution(version=self.version, url=self.url, username=self.username, password=self.password, verbose=self.verbose)
 
         # build XML request from parameters 
         if request is None:
            requestElement = execution.buildRequest(identifier, inputs, output)
-           request = etree.tostring( requestElement )   
-        if self.verbose==True:
-               print request
+           request = etree.tostring( requestElement )
+           execution.request = request   
+        log.debug(request)
         
         # submit the request to the live server
         if response is None:   
@@ -252,8 +250,7 @@ class WebProcessingService(object):
         else:
             response = etree.fromstring(response)
             
-        if self.verbose==True:
-            print etree.tostring(response)
+        log.debug(etree.tostring(response))
             
         # parse response
         execution.parseResponse(response)
@@ -358,8 +355,7 @@ class WPSReader(object):
         if method == 'Get':
             # full HTTP request url
             request_url = build_get_url(url, data)
-            if self.verbose==True:
-                print request_url
+            log.debug(request_url)
     
             # split URL into base url and query string to use utility function
             spliturl=request_url.split('?')
@@ -463,6 +459,8 @@ class WPSExecution():
         self.process = None
         self.serviceInstance = None
         self.status = None
+        self.percentCompleted = 0
+        self.statusMessage = None
         self.errors = []
         self.statusLocation = None
         self.dataInputs=[]
@@ -548,12 +546,20 @@ class WPSExecution():
             responseFormElement = etree.SubElement(root, nspath_eval('wps:ResponseForm', namespaces))
             responseDocumentElement = etree.SubElement(responseFormElement, nspath_eval('wps:ResponseDocument', namespaces), 
                                                        attrib={'storeExecuteResponse':'true', 'status':'true'} )
-            outputElement = etree.SubElement(responseDocumentElement, nspath_eval('wps:Output', namespaces), 
-                                                       attrib={'asReference':'true'} )
-            outputIdentifierElement = etree.SubElement(outputElement, nspath_eval('ows:Identifier', namespaces)).text = output
-                  
-
+            if isinstance(output, str):
+                self._add_output(responseDocumentElement, output, asReference=True)
+            elif isinstance(output, list):
+                for (identifier,as_reference) in output:
+                    self._add_output(responseDocumentElement, identifier, asReference=as_reference)
+            else:
+                raise Exception('output parameter is neither string nor list. output=%s' % output)
         return root
+
+    def _add_output(self, element, identifier, asReference=False):
+        outputElement = etree.SubElement(element, nspath_eval('wps:Output', namespaces), 
+                                                       attrib={'asReference':str(asReference).lower()} )
+        outputIdentifierElement = etree.SubElement(outputElement, nspath_eval('ows:Identifier', namespaces)).text = identifier
+                  
                 
     # wait for 60 seconds by default
     def checkStatus(self, url=None, response=None, sleepSecs=60):
@@ -571,21 +577,20 @@ class WPSExecution():
             # override status location
             if url is not None:
                 self.statusLocation = url
-            print '\nChecking execution status... (location=%s)' % self.statusLocation
+            log.info('\nChecking execution status... (location=%s)' % self.statusLocation)
             response = reader.readFromUrl(self.statusLocation, username=self.username, password=self.password)
         else:
             response = reader.readFromString(response)
                 
         # store latest response
         self.response = etree.tostring(response)
-        if self.verbose==True:
-            print self.response
+        log.debug(self.response)
 
         self.parseResponse(response)
                     
         # sleep given number of seconds
         if self.isComplete()==False:
-            print 'Sleeping %d seconds...' % sleepSecs
+            log.info('Sleeping %d seconds...' % sleepSecs)
             sleep(sleepSecs)
 
         
@@ -613,8 +618,8 @@ class WPSExecution():
         
     def getOutput(self, filepath=None):
         """
-        Method to write the output of a WPS process to a file: 
-        either retrieve the referenced file from the server, or write out the content of response embedded output.
+        Method to write the outputs of a WPS process to a file: 
+        either retrieves the referenced files from the server, or writes out the content of response embedded output.
         
         filepath: optional path to the output file, otherwise a file will be created in the local directory with the name assigned by the server, 
                   or default name 'wps.out' for embedded output.
@@ -624,25 +629,14 @@ class WPSExecution():
             content = ''
             for output in self.processOutputs:
                 
+                output_content = output.retrieveData(self.username, self.password)
+                
                 # ExecuteResponse contains reference to server-side output
-                if output.reference is not None:
-                    # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
-                    # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
-                    url = output.reference
-                    print 'Output URL=%s' % url
-                    if '?' in url:
-                        spliturl=url.split('?')
-                        u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
-                        # extract output filepath from URL query string
-                        if filepath is None:
-                            filepath = spliturl[1].split('=')[1]
-                    else:
-                        u = openURL(url, '', method='Get', username = self.username, password = self.password)
-                        # extract output filepath from base URL
-                        if filepath is None:
-                            filepath = url.split('/')[-1]
-                    content = content + u.read()
-                 
+                if output_content is not "":
+                    content = content + output_content
+                    if filepath is None:
+                        filepath = output.fileName
+                    
                 # ExecuteResponse contain embedded output   
                 if len(output.data)>0:
                     if filepath is None:
@@ -655,7 +649,7 @@ class WPSExecution():
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
-                print 'Output written to file: %s' %filepath
+                log.info('Output written to file: %s' %filepath)
             
         else:
             raise Exception("Execution not successfully completed: status=%s" % self.status)
@@ -701,10 +695,12 @@ class WPSExecution():
             self._parseExceptionReport(response)
             
         else:
-            print 'Unknown Response'
+            log.debug('Unknown Response')
             
-        # print status, errors
-        print 'Execution status=%s' % self.status
+        # log status, errors
+        log.info('Execution status=%s' % self.status)
+        log.info('Percent completed=%s' % self.percentCompleted)
+        log.info('Status message=%s' % self.statusMessage)
         for error in self.errors:
             dump(error)
 
@@ -717,7 +713,7 @@ class WPSExecution():
         if self.status is None:
             self.status = "Exception"
             
-        for exceptionEl in root.findall( nspath('Exception', ns=getNamespace(root)) ):
+        for exceptionEl in root.findall( nspath('Exception', ns=namespaces['ows']) ):
             self.errors.append( WPSException(exceptionEl) )
 
 
@@ -747,11 +743,19 @@ class WPSExecution():
         # </ns0:Status>
         statusEl = root.find( nspath('Status/*', ns=wpsns) )
         self.status = statusEl.tag.split('}')[1]
+        # get progress info
+        try:
+            percentCompleted = int(statusEl.get('percentCompleted'))
+            self.percentCompleted = percentCompleted
+        except:
+            pass
+        # get status message
+        self.statusMessage = statusEl.text
         # exceptions ?
         for element in statusEl:
             if element.tag.endswith('ExceptionReport'):
                 self._parseExceptionReport(element)
-        
+
         self.process = Process(root.find(nspath('Process', ns=wpsns)), verbose=self.verbose)
         
         #<wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
@@ -960,6 +964,8 @@ class Output(InputOutput):
         self.reference = None
         self.mimeType = None
         self.data = []
+        self.fileName = None
+        self.filePath = None
         
         # extract wps namespace from outputElement itself
         wpsns = getNamespace(outputElement)
@@ -1015,11 +1021,71 @@ class Output(InputOutput):
             if complexDataElement is not None:
                 self.dataType = "ComplexData"
                 self.mimeType = complexDataElement.get('mimeType')
-                #print etree.tostring(complexDataElement)
                 if complexDataElement.text is not None and complexDataElement.text.strip() is not '':
                     self.data.append(complexDataElement.text.strip())
                 for child in complexDataElement:
                     self.data.append(etree.tostring(child))
+            literalDataElement = dataElement.find( nspath('LiteralData', ns=wpsns) )
+            if literalDataElement is not None:
+                self.dataType = literalDataElement.get('dataType')
+                if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
+                    self.data.append(literalDataElement.text.strip())
+                    
+    def retrieveData(self, username=None, password=None):
+        """
+        Method to retrieve data from server-side reference: 
+        returns "" if the reference is not known.
+        
+        username, password: credentials to access the remote WPS server 
+        """
+        
+        url = self.reference
+        if url is None: 
+            return ""
+        
+        # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'
+        # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
+        log.info('Output URL=%s' % url)
+        if '?' in url:
+            spliturl=url.split('?')
+            u = openURL(spliturl[0], spliturl[1], method='Get', username = username, password = password)
+            # extract output filepath from URL query string
+            self.fileName = spliturl[1].split('=')[1]
+        else:
+            u = openURL(url, '', method='Get', username = username, password = password)
+            # extract output filepath from base URL
+            self.fileName = url.split('/')[-1]
+                
+        return u.read()      
+
+                    
+    def writeToDisk(self, path=None, username=None, password=None):
+        """
+        Method to write an output of a WPS process to disk: 
+        it either retrieves the referenced file from the server, or write out the content of response embedded output.
+        
+        filepath: optional path to the output file, otherwise a file will be created in the local directory with the name assigned by the server,
+        username, password: credentials to access the remote WPS server
+        """ 
+        
+        # Check if ExecuteResponse contains reference to server-side output    
+        content = self.retrieveData(username, password)
+         
+        # ExecuteResponse contain embedded output   
+        if content is "" and len(self.data)>0:
+            self.fileName = self.identifier
+            for data in self.data:
+                content = content + data
+                    
+        # write out content
+        if content is not "":
+            if self.fileName == "":
+                self.fileName = self.identifier
+            self.filePath = path + self.fileName
+            out = open(self.filePath, 'wb')
+            out.write(content)
+            out.close()
+            log.info('Output written to file: %s' %self.filePath)
                 
                     
 class WPSException:
@@ -1207,7 +1273,7 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
                         xmlns:draw="gov.usgs.cida.gdp.draw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                         xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
                         xmlns:xlink="http://www.w3.org/1999/xlink"
-                        xsi:schemaLocation="gov.usgs.cida.gdp.draw http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd">
+                        xsi:schemaLocation="gov.usgs.cida.gdp.draw http://cida.usgs.gov/climate/derivative/xsd/draw.xsd">
                         <gml:box gml:id="box.1">
                             <gml:the_geom>
                                 <gml:MultiPolygon srsDimension="2"
@@ -1264,7 +1330,7 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     
     while execution.isComplete()==False:
         execution.checkStatus(sleepSecs=sleepSecs)
-        print 'Execution status: %s' % execution.status
+        log.info('Execution status: %s' % execution.status)
         
     if execution.isSucceded():
         if download:
@@ -1272,10 +1338,10 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
         else:
             for output in execution.processOutputs:               
                 if output.reference is not None:
-                    print 'Output URL=%s' % output.reference
+                    log.info('Output URL=%s' % output.reference)
     else:
         for ex in execution.errors:
-            print 'Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text)
+            log.error('Error: code=%s, locator=%s, text=%s' % (ex.code, ex.locator, ex.text))
 
 def printValue(value):
     '''

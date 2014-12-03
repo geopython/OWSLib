@@ -1,0 +1,2923 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML/1.0.1" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:swe="http://www.opengis.net/swe/1.0.1" version="1.0.1" xsi:schemaLocation="http://www.opengis.net/swe/1.0.1 http://schemas.opengis.net/sweCommon/1.0.1/swe.xsd http://www.opengis.net/sensorML/1.0.1 http://schemas.opengis.net/sensorML/1.0.1/sensorML.xsd">
+  <sml:capabilities name="ioosServiceMetadata">
+    <swe:SimpleDataRecord>
+      <swe:field name="ioosTemplateVersion">
+        <swe:Text definition="http://code.google.com/p/ioostech/source/browse/#svn%2Ftrunk%2Ftemplates%2FMilestone1.0">
+          <swe:value>1.0</swe:value>
+        </swe:Text>
+      </swe:field>
+    </swe:SimpleDataRecord>
+  </sml:capabilities>
+  <sml:member>
+    <sml:System xmlns:ns="http://www.opengis.net/sensorML/1.0.1">
+      <gml:description>Contains all procedures in the SOS Server</gml:description>
+      <gml:name>urn:ioos:network:glos:all</gml:name>
+      <ns:keywords>
+        <ns:KeywordList>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-32.6m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-23.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-10.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-20.116m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:network:glos:all</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-15.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-17.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-18.288m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-10.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-15.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-15.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-18.288m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-29.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-10.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-20.68m)</ns:keyword>
+          <ns:keyword>network-all</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-23.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-20.68m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-15.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-20.116m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-17.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-23.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-29.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-18.288m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-20.68m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-15.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-17.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-23.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-32.6m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-17.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45028</ns:keyword>
+          <ns:keyword>NONE</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45027</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-18.288m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-32.6m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-10.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-15.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-18.288m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-4.267m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-3.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-29.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45161</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45163</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-18.288m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-23.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-29.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-17.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-32.6m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-32.6m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-5.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-12.496m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-23.0m)</ns:keyword>
+          <ns:keyword>Contains all procedures in the SOS Server</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-9.81m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-14.325m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-20.116m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-10.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-20.68m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-20.68m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-10.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-20.116m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-26.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-9.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-20.68m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-5.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-29.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:GVSU1</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-29.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-20.116m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-19.2m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-4.37m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-12.53m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-8.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-9.7m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-20.68m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-19.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-23.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-16.459m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-11.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-23.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-6.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-13.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-2.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-7.09m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-20.68m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-31.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-6.705m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-15.24m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-10.668m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-8.839m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-13.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45023(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-22.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-4.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-20.68m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-23.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-16.5m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-23.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-3.048m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-15.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-19.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:UMBIO(height-1.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-7.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45022(height-12.8m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-11.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-6.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-17.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45013(height-27.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45026(height-8.4m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-15.0m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45014(height-16.1m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45024(height-21.9m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45025(height-17.96m)</ns:keyword>
+          <ns:keyword>urn:ioos:station:us.glos:45029(height-15.0m)</ns:keyword>
+        </ns:KeywordList>
+      </ns:keywords>
+      <sml:identification>
+        <ns:IdentifierList>
+          <ns:identifier name="networkID">
+            <ns:Term definition="http://mmisw.org/ont/ioos/definition/networkID">
+              <ns:value>urn:ioos:network:glos:all</ns:value>
+            </ns:Term>
+          </ns:identifier>
+          <ns:identifier name="shortName">
+            <ns:Term definition="http://mmisw.org/ont/ioos/definition/shortName">
+              <ns:value>network-all</ns:value>
+            </ns:Term>
+          </ns:identifier>
+          <ns:identifier name="longName">
+            <ns:Term definition="http://mmisw.org/ont/ioos/definition/longName">
+              <ns:value>Contains all procedures in the SOS Server</ns:value>
+            </ns:Term>
+          </ns:identifier>
+        </ns:IdentifierList>
+      </sml:identification>
+      <sml:classification>
+        <ns:ClassifierList>
+          <ns:classifier name="publisher">
+            <ns:Term definition="http://mmisw.org/ont/ioos/definition/publisher">
+              <ns:value>GLOS</ns:value>
+            </ns:Term>
+          </ns:classifier>
+          <ns:classifier name="parentNetwork">
+            <ns:Term definition="http://mmisw.org/ont/ioos/definition/parentNetwork">
+              <ns:value>GLOS</ns:value>
+            </ns:Term>
+          </ns:classifier>
+        </ns:ClassifierList>
+      </sml:classification>
+      <ns:capabilities name="observedBBOX">
+        <swe:DataRecord>
+          <swe:field name="observedBBOX">
+            <swe:Envelope referenceFrame="4326">
+              <swe:lowerCorner>
+                <swe:Vector>
+                  <swe:coordinate name="easting">
+                    <swe:Quantity axisID="x">
+                      <swe:uom code="degree"/>
+                      <swe:value>41.983</swe:value>
+                    </swe:Quantity>
+                  </swe:coordinate>
+                  <swe:coordinate name="northing">
+                    <swe:Quantity axisID="y">
+                      <swe:uom code="degree"/>
+                      <swe:value>-91.929</swe:value>
+                    </swe:Quantity>
+                  </swe:coordinate>
+                </swe:Vector>
+              </swe:lowerCorner>
+              <swe:upperCorner>
+                <swe:Vector>
+                  <swe:coordinate name="easting">
+                    <swe:Quantity>
+                      <swe:uom code="degree"/>
+                      <swe:value>47.279</swe:value>
+                    </swe:Quantity>
+                  </swe:coordinate>
+                  <swe:coordinate name="northing">
+                    <swe:Quantity axisID="y">
+                      <swe:uom code="degree"/>
+                      <swe:value>-83.599</swe:value>
+                    </swe:Quantity>
+                  </swe:coordinate>
+                </swe:Vector>
+              </swe:upperCorner>
+            </swe:Envelope>
+          </swe:field>
+        </swe:DataRecord>
+      </ns:capabilities>
+      <ns:capabilities name="featuresOfInterest">
+        <swe:SimpleDataRecord>
+          <swe:field name="featureOfInterestID1">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID2">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID3">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-10.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID4">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID5">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID6">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID7">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID8">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID9">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID10">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID11">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID12">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID13">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID14">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID15">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID16">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID17">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID18">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-17.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID19">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID20">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-18.288m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID21">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID22">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID23">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID24">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID25">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-20.116m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID26">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID27">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID28">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID29">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID30">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID31">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID32">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID33">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-29.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID34">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID35">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID36">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID37">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-32.6m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID38">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID39">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID40">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID41">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID42">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID43">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID44">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID45">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID46">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID47">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID48">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID49">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID50">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID51">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID52">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID53">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45013(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID54">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID55">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID56">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-10.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID57">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID58">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID59">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID60">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID61">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID62">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID63">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID64">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID65">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID66">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID67">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID68">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID69">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID70">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID71">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-17.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID72">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID73">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-18.288m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID74">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID75">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID76">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID77">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID78">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-20.116m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID79">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID80">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID81">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID82">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID83">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID84">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID85">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID86">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-29.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID87">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID88">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID89">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID90">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-32.6m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID91">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID92">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID93">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID94">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID95">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID96">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID97">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID98">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID99">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID100">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID101">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID102">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID103">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID104">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID105">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID106">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45014(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID107">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID108">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID109">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID110">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID111">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID112">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID113">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID114">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID115">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID116">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID117">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID118">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID119">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID120">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID121">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID122">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID123">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID124">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID125">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID126">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID127">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID128">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID129">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID130">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID131">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID132">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID133">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID134">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID135">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID136">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID137">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID138">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID139">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID140">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID141">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID142">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID143">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID144">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID145">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID146">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID147">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID148">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID149">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID150">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID151">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID152">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID153">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45022(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID154">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID155">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID156">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-10.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID157">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID158">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID159">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID160">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID161">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID162">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID163">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID164">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID165">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID166">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID167">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID168">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID169">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID170">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID171">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-17.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID172">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID173">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-18.288m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID174">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID175">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID176">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID177">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID178">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-20.116m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID179">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID180">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID181">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID182">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID183">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID184">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID185">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID186">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-29.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID187">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID188">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID189">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID190">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-32.6m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID191">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID192">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID193">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID194">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID195">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID196">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID197">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID198">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID199">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID200">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID201">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID202">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID203">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID204">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID205">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID206">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45023(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID207">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID208">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID209">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID210">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID211">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID212">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID213">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID214">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID215">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID216">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID217">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID218">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID219">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID220">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID221">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID222">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID223">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID224">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID225">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID226">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID227">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID228">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID229">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID230">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID231">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID232">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID233">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID234">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID235">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID236">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID237">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID238">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID239">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID240">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID241">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID242">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID243">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID244">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID245">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID246">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID247">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID248">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID249">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID250">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID251">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID252">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID253">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45024(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID254">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID255">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID256">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-10.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID257">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID258">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID259">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID260">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID261">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID262">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID263">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID264">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID265">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID266">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID267">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID268">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID269">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID270">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID271">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-17.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID272">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID273">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-18.288m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID274">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID275">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID276">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID277">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID278">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-20.116m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID279">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID280">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID281">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID282">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID283">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID284">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID285">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID286">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-29.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID287">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID288">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID289">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID290">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-32.6m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID291">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID292">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID293">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID294">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID295">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID296">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID297">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID298">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID299">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID300">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID301">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID302">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID303">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID304">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID305">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID306">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45025(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID307">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID308">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID309">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-10.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID310">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID311">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID312">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID313">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID314">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID315">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID316">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID317">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID318">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID319">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID320">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID321">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID322">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID323">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID324">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-17.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID325">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID326">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-18.288m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID327">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID328">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID329">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID330">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID331">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID332">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID333">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID334">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID335">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID336">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID337">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID338">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-29.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID339">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID340">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID341">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID342">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID343">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID344">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID345">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID346">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID347">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID348">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID349">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID350">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID351">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID352">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID353">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID354">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID355">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID356">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID357">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45026(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID358">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45027</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID359">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45028</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID360">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID361">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID362">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-10.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID363">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID364">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID365">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID366">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID367">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID368">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID369">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID370">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID371">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID372">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID373">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID374">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID375">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID376">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID377">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-17.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID378">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID379">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-18.288m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID380">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID381">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID382">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID383">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID384">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-20.116m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID385">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID386">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID387">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID388">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID389">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID390">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID391">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID392">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-29.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID393">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID394">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID395">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID396">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-32.6m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID397">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID398">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID399">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID400">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID401">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID402">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID403">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID404">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID405">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID406">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID407">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID408">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID409">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID410">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID411">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID412">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45029(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID413">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45161</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID414">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:45163</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID415">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:GVSU1</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID416">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID417">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-1.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID418">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-10.668m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID419">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-11.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID420">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-11.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID421">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-12.496m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID422">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-12.53m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID423">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-12.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID424">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-13.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID425">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-13.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID426">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-14.325m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID427">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-15.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID428">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-15.24m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID429">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-16.1m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID430">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-16.459m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID431">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-16.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID432">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-17.96m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID433">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-19.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID434">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-19.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID435">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-19.5m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID436">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-2.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID437">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-20.68m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID438">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-21.9m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID439">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-22.8m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID440">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-23.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID441">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-23.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID442">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-26.2m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID443">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-27.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID444">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-3.048m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID445">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-3.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID446">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-31.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID447">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-4.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID448">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-4.267m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID449">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-4.37m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID450">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-5.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID451">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-5.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID452">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-6.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID453">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-6.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID454">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-6.705m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID455">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-7.09m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID456">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-7.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID457">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-8.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID458">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-8.4m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID459">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-8.839m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID460">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-9.0m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID461">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-9.7m)</swe:value>
+            </swe:Text>
+          </swe:field>
+          <swe:field name="featureOfInterestID462">
+            <swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+              <swe:value>urn:ioos:station:us.glos:UMBIO(height-9.81m)</swe:value>
+            </swe:Text>
+          </swe:field>
+        </swe:SimpleDataRecord>
+      </ns:capabilities>
+      <ns:capabilities name="offerings">
+        <swe:SimpleDataRecord>
+          <swe:field name="Offering for urn:ioos:network:glos:all">
+            <swe:Text definition="http://www.opengis.net/def/offering/identifier">
+              <swe:value>urn:ioos:network:glos:all</swe:value>
+            </swe:Text>
+          </swe:field>
+        </swe:SimpleDataRecord>
+      </ns:capabilities>
+      <ns:capabilities name="observationTimeRange">
+        <swe:DataRecord>
+          <swe:field name="observationTimeRange">
+            <swe:TimeRange definition="http://mmisw.org/ont/ioos/swe_element_type/observationTimeRange">
+              <swe:value>2013-08-26T18:10:00.000Z 2013-09-20T12:50:00.000Z</swe:value>
+            </swe:TimeRange>
+          </swe:field>
+        </swe:DataRecord>
+      </ns:capabilities>
+      <sml:contact xlink:role="http://mmisw.org/ont/ioos/definition/publisher">
+        <sml:ResponsibleParty>
+          <sml:organizationName>GLOS</sml:organizationName>
+          <sml:contactInfo>
+            <sml:address>
+              <sml:country>USA</sml:country>
+              <sml:electronicMailAddress>dmac@glos.us</sml:electronicMailAddress>
+            </sml:address>
+            <sml:onlineResource xlink:href="http://glos.us"/>
+          </sml:contactInfo>
+        </sml:ResponsibleParty>
+      </sml:contact>
+      <ns:components>
+        <ns:ComponentList>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45024" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45024&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45025" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45025&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45026" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45026&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45013" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45013&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45014" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45014&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45027" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45027&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:GVSU1" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:GVSU1&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:UMBIO" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:UMBIO&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45022" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45022&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45161" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45161&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45023" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45023&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45163" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45163&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45029" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45029&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+          <ns:component name="component1" xlink:title="urn:ioos:station:us.glos:45028" xlink:href="http://sos.glos.us/52n/sos/kvp?request=DescribeSensor&amp;service=SOS&amp;version=2.0.0&amp;procedure=urn:ioos:station:us.glos:45028&amp;procedureDescriptionFormat=text%2Fxml%3Bsubtype%3D%22sensorML%2F1.0.1%2Fprofiles%2Fioos_sos%2F1.0%22"/>
+        </ns:ComponentList>
+      </ns:components>
+    </sml:System>
+  </sml:member>
+</sml:SensorML>

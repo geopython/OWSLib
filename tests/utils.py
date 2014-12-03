@@ -1,5 +1,18 @@
+import logging
 import os
+import sys
 from owslib.etree import etree
+from urlparse import urlparse
+
+def setup_logging(loglevel='INFO'):
+    """Helper function to setup logging for tests"""
+    logger = logging.getLogger('owslib')
+    logger.setLevel(getattr(logging, loglevel))
+    sh = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter('%(message)s')
+    sh.setFormatter(formatter)
+    logger.addHandler(sh)
+    return logger
 
 def resource_file(filepath):
     return os.path.join(test_directory(), 'resources', filepath)
@@ -52,3 +65,6 @@ def cast_tuple_int_list_srs(tup):
     tup2 = cast_tuple_int_list(tup[:4])
     tup2.append(tup[-1])
     return tup2
+
+def sorted_url_query(url):
+    return sorted(urlparse(url).query.split("&"))
