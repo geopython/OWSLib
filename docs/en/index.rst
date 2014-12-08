@@ -62,7 +62,7 @@ Standards Support
 +-------------------+---------------------+
 | `WMTS`_           | 1.0.0               |
 +-------------------+---------------------+
-| `WaterML`_        | 1.0, 1.1            |
+| `WaterML`_        | 1.0, 1.1, 2.0       |
 +-------------------+---------------------+
 
 Installation
@@ -519,8 +519,8 @@ You can also submit a pre-made request encoded as WPS XML:
 	Output URL=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=5103866488472745994OUTPUT.f80e2a78-96a9-4343-9777-be60fac5b256
 
 
-SOS
----
+SOS 1.0
+-------
 
 GetCapabilities
 
@@ -529,6 +529,16 @@ GetCapabilities
 GetObservation
 
 .. include:: ../../tests/doctests/sos_10_ndbc_getobservation.txt
+
+SOS 2.0
+-------
+Examples of service metadata and GetObservation
+
+.. include:: ../../tests/doctests/sos_20_52n_geoviqua.txt
+
+Using the GetObservation response decoder for O&M and WaterML2.0 results
+
+.. include:: ../../tests/doctests/sos_20_timeseries_decoder_ioos.txt
 
 SensorML
 --------
@@ -677,6 +687,8 @@ Credits
 .. _`OGC WMC`: http://www.opengeospatial.org/standards/wmc
 .. _`OGC WPS`: http://www.opengeospatial.org/standards/wps
 .. _`OGC SOS`: http://www.opengeospatial.org/standards/sos
+.. _`OGC O&M`: http://www.opengeospatial.org/standards/om
+.. _`OGC WaterML2.0`: http://www.opengeospatial.org/standards/waterml
 .. _`OGC SensorML`: http://www.opengeospatial.org/standards/sensorml
 .. _`OGC CSW`: http://www.opengeospatial.org/standards/cat
 .. _`OGC WMTS`: http://www.opengeospatial.org/standards/wmts
@@ -690,4 +702,4 @@ Credits
 .. _`freenode`: http://freenode.net/
 .. _`ohloh`: http://www.ohloh.net/p/OWSLib
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
-.. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
+.. _`WaterML1.0`: http://his.cuahsi.org/wofws.html#waterml

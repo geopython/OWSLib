@@ -1,0 +1,59 @@
+# Tests using the 52North demo service
+
+>>> from owslib.sos import SensorObservationService
+>>> service = SensorObservationService('http://sensorweb.demo.52north.org/52n-sos-webapp/sos/kvp',version='2.0.0')
+>>> for content in service.contents:
+...  print content
+... 
+test1
+http://www.52north.org/test/offering/8
+http://www.52north.org/test/offering/9
+myOfferingXYT
+http://www.example.org/offering/http://www.52north.org/test/procedure/9x/observations
+http://www.52north.org/test/offering/2
+http://www.52north.org/test/offering/3
+http://www.52north.org/test/offering/1
+http://www.52north.org/test/offering/6
+http://www.52north.org/test/offering/7
+http://www.52north.org/test/offering/4
+http://www.52north.org/test/offering/5
+http://www.example.org/offering/http://www.52north.org/test/procedure/9x4/observations
+http://www.52north.org/test/offering/29
+asdafagfa
+http://www.52north.org/test/offering/19
+http://www.52north.org/test/offering/SHUSIV_1
+z1
+http://www.52north.org/test/offering/22
+
+>>> id = service.identification
+
+# Check basic service metadata
+>>> id.service
+'OGC:SOS'
+
+>>> id.title
+'52N SOS'
+
+>>> provider=service.provider
+>>> provider.name
+'52North'
+
+>>> len(service.operations)
+13
+
+# Check allowed params for get FOI
+>>> get_foi=service.get_operation_by_name('GetFeatureOfInterest')
+>>> get_foi.parameters['featureOfInterest']['values']
+['http://www.52north.org/test/featureOfInterest/1', 'http://www.52north.org/test/featureOfInterest/19', 'http://www.52north.org/test/featureOfInterest/2', 'http://www.52north.org/test/featureOfInterest/3', 'http://www.52north.org/test/featureOfInterest/4', 'http://www.52north.org/test/featureOfInterest/5', 'http://www.52north.org/test/featureOfInterest/6', 'http://www.52north.org/test/featureOfInterest/7', 'http://www.52north.org/test/featureOfInterest/8', 'http://www.52north.org/test/featureOfInterest/9']
+
+# Check allowed params for get observation
+>>> get_obs=service.get_operation_by_name('GetObservation')
+
+get_obs.parameters['responseFormat']['values']
+['http://www.opengis.net/om/2.0']
+
+# Get observation call
+
+# Get latest value using O&M reponse format 
+#'<?xml version="1.0" encoding="UTF-8"?>\n<sos:GetObservationResponse xmlns:sos="http://www.opengis.net/sos/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:om="http://www.opengis.net/om/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sos/2.0 http://schemas.opengis.net/sos/2.0/sosGetObservation.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd http://www.opengis.net/om/2.0 http://schemas.opengis.net/om/2.0/observation.xsd">\n  <sos:observationData>\n    <om:OM_Observation gml:id="o_729058FD6AAFC4701C83D125175F889F51FD4798">\n      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>\n      <om:phenomenonTime>\n        <gml:TimeInstant gml:id="phenomenonTime_2118549">\n          <gml:timePosition>2014-07-10T04:31:58.000Z</gml:timePosition>\n        </gml:TimeInstant>\n      </om:phenomenonTime>\n      <om:resultTime xlink:href="#phenomenonTime_2118549"/>\n      <om:procedure xlink:href="http://geoviqua.dev.52north.org/procedures/WXT520"/>\n      <om:observedProperty xlink:href="http://geoviqua.dev.52north.org/properties/AirTemperature"/>\n      <om:featureOfInterest xlink:href="http://geoviqua.dev.52north.org/stations/Vaisala-WXT520" xlink:title="Vaisala_WXT520"/>\n      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="degC" xsi:type="ns:MeasureType">17.2</om:result>\n    </om:OM_Observation>\n  </sos:observationData>\n</sos:GetObservationResponse>'
+>>> latest_response = service.get_observation('http://www.opengis.net/om/2.0', ['http://www.52north.org/test/offering/1'], ['http://www.52north.org/test/observableProperty/1'], eventTime='om:phenomenonTime,latest', timeout=120)
