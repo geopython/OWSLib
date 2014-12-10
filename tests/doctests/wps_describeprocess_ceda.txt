@@ -32,9 +32,10 @@ Check process inputs
     ... 
     Process input:
      identifier=NumberToDouble, title=NumberToDouble, abstract=NumberToDouble, data type=LiteralData
-     Allowed Value: AnyValue
+     Any value allowed
      Default Value: None 
      minOccurs=1, maxOccurs=-1
+
 
 Check process outputs
 
