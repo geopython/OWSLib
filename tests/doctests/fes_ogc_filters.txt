@@ -16,6 +16,18 @@ SortBy
     >>> compare_xml(should_return, sortby.toXML())
     True
 
+BBox
+    >>> filter = fes.BBox([-170, -80, 170, 80])
+    >>> should_return = '<ns0:BBOX xmlns:ns1="http://www.opengis.net/gml" xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>ows:BoundingBox</ns0:PropertyName><ns1:Envelope><ns1:lowerCorner>-170 -80</ns1:lowerCorner><ns1:upperCorner>170 80</ns1:upperCorner></ns1:Envelope></ns0:BBOX>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
+BBox with CRS
+    >>> filter = fes.BBox([-170, -80, 170, 80], 'urn:ogc:def:crs:OGC:1.3:CRS84')
+    >>> should_return = '<ns0:BBOX xmlns:ns1="http://www.opengis.net/gml" xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>ows:BoundingBox</ns0:PropertyName><ns1:Envelope srsName="urn:ogc:def:crs:OGC:1.3:CRS84"><ns1:lowerCorner>-170 -80</ns1:lowerCorner><ns1:upperCorner>170 80</ns1:upperCorner></ns1:Envelope></ns0:BBOX>'
+    >>> compare_xml(should_return, filter.toXML())
+    True
+
 PropertyIsEqualTo
     >>> filter = fes.PropertyIsEqualTo("property", "value")
     >>> should_return = '<ns0:PropertyIsEqualTo xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>value</ns0:Literal></ns0:PropertyIsEqualTo>'
