@@ -37,6 +37,16 @@ def compare_xml(a,b):
 
     return compare_elements(a,b)
 
+def compare_xml_string(a, b):
+    """comparse XML serialized as string"""
+
+    if a == b:
+        return True
+    else:
+        print a
+        print b
+        return False
+
 def compare_elements(a,b):
     # Tag
     if a.tag != b.tag:
