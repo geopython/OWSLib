@@ -104,7 +104,7 @@ class FilterRequest(object):
 
         return self._root
        
-    def setConstraint(self, constraint):
+    def setConstraint(self, constraint, tostring=False):
         """
         Construct and process a  GetRecords request
     
@@ -115,9 +115,13 @@ class FilterRequest(object):
 
         """
         self._root.append(constraint.toXML())
+
+        if tostring:
+            return util.element_to_string(self._root, xml_declaration=False)
+
         return self._root
 
-    def setConstraintList(self, constraints):
+    def setConstraintList(self, constraints, tostring=False):
         """
         Construct and process a  GetRecords request
     
@@ -159,6 +163,10 @@ class FilterRequest(object):
                     ors.append(And(operations=ands))
 
         self._root.append(Or(operations=ors).toXML())
+
+        if tostring:
+            return util.element_to_string(self._root, xml_declaration=False)
+
         return self._root
 
 
