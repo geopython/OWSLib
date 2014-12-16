@@ -126,13 +126,14 @@ setConstraint
 setConstraint filter as string
     >>> fr = fes.FilterRequest()
     >>> filter = fr.setConstraint(filter1, tostring=True)
-    >>> should_return = '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\"><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>like</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>'
+    >>> should_return
+    >>> should_return = '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>like</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>'
     >>> should_return == filter
     True
 
 setConstraintList filter as string
     >>> fr = fes.FilterRequest()
-    >>> filter = fr.setConstraintList([filter1, filter2, filter3])
-    >>> should_return = '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:Or><ogc:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>like</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsEqualTo><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>equal</ogc:Literal></ogc:PropertyIsEqualTo><ogc:PropertyIsLessThan><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>less</ogc:Literal></ogc:PropertyIsLessThan></ogc:Or></ogc:Filter>'
+    >>> filter = fr.setConstraintList([filter1, filter2, filter3], tostring=True)
+    >>> should_return = '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:Or><ogc:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>like</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsEqualTo><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>equal</ogc:Literal></ogc:PropertyIsEqualTo><ogc:PropertyIsLessThan><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>less</ogc:Literal></ogc:PropertyIsLessThan></ogc:Or></ogc:Filter>'
     >>> should_return == filter
     True
