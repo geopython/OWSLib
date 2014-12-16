@@ -1,7 +1,7 @@
 Imports
     >>> from owslib import fes
     >>> from owslib.etree import etree
-    >>> from tests.utils import compare_xml, compare_xml_string
+    >>> from tests.utils import compare_xml
 
 SortProperty
     >>> sort = fes.SortProperty("property", "ASC")
