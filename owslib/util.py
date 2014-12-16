@@ -415,13 +415,13 @@ def element_to_string(element, encoding=None, xml_declaration=False):
             else:
                 output = etree.tostring(element, encoding=encoding, xml_declaration=True)
         else:
-                output = etree.tostring(element, encoding=encoding)
+                output = etree.tostring(element)
     else:
         if xml_declaration:
             output = '<?xml version="1.0" encoding="%s" standalone="no"?>\n%s' % (encoding,
                    etree.tostring(element, encoding=encoding))
         else:
-            output = etree.tostring(element, encoding=encoding)
+            output = etree.tostring(element)
 
     return output
 
