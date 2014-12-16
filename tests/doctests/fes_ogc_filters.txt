@@ -126,13 +126,13 @@ setConstraint
 setConstraint filter as string
     >>> fr = fes.FilterRequest()
     >>> filter = fr.setConstraint(filter1, tostring=True)
-    >>> should_return = '<ns0:Filter xmlns:ogc="http://www.opengis.net/ogc"><ns0:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike></ns0:Filter>'
+    >>> should_return = '<ns0:Filter xmlns:ogc="http://www.opengis.net/ogc"><ns0:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike></ns0:Filter>'
     >>> should_return == filter
     True
 
 setConstraintList filter as string
     >>> fr = fes.FilterRequest()
     >>> filter = fr.setConstraintList([filter1, filter2, filter3], tostring=True)
-    >>> should_return = '<ns0:Filter xmlns:ogc="http://www.opengis.net/ogc"><ns0:Or><ns0:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike><ns0:PropertyIsEqualTo><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>equal</ns0:Literal></ns0:PropertyIsEqualTo><ns0:PropertyIsLessThan><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>less</ns0:Literal></ns0:PropertyIsLessThan></ns0:Or></ns0:Filter>'
+    >>> should_return = '<ns0:Filter xmlns:ogc="http://www.opengis.net/ogc"><ns0:Or><ns0:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike><ns0:PropertyIsEqualTo><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>equal</ns0:Literal></ns0:PropertyIsEqualTo><ns0:PropertyIsLessThan><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>less</ns0:Literal></ns0:PropertyIsLessThan></ns0:Or></ns0:Filter>'
     >>> should_return == filter
     True
