@@ -104,7 +104,7 @@ class FilterRequest(object):
 
         return self._root
        
-    def setConstraint(self, constraint):
+    def setConstraint(self, constraint, tostring=False):
         """
         Construct and process a  GetRecords request
     
@@ -112,12 +112,17 @@ class FilterRequest(object):
         ----------
 
         - constraint: An OgcExpression object
+        - tostring (optional): return as string
 
         """
         self._root.append(constraint.toXML())
+
+        if tostring:
+            return util.element_to_string(self._root, xml_declaration=False)
+
         return self._root
 
-    def setConstraintList(self, constraints):
+    def setConstraintList(self, constraints, tostring=False):
         """
         Construct and process a  GetRecords request
     
@@ -135,6 +140,7 @@ class FilterRequest(object):
 
                        [[a,b],[c],[d],[e]] or [[a,b],c,d,e]
                        (a && b) || c || d || e
+        - tostring (optional): return as string
 
         """
         ors = []
@@ -159,6 +165,10 @@ class FilterRequest(object):
                     ors.append(And(operations=ands))
 
         self._root.append(Or(operations=ors).toXML())
+
+        if tostring:
+            return util.element_to_string(self._root, xml_declaration=False)
+
         return self._root
 
 
@@ -392,4 +402,5 @@ class UnaryLogicOpType(OgcExpression):
 class Not(UnaryLogicOpType):
     def __init__(self, operations):
         super(Not,self).__init__('ogc:Not', operations)
+
 
