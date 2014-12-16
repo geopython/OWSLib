@@ -125,7 +125,7 @@ setConstraint
 
 filter as string
     >>> fr = fes.FilterRequest()
-    >>> filter = fr.setConstraint(filter1).tostring()
+    >>> filter = fr.setConstraint(filter1, tostring=True)
     >>> should_return = '<ns0:Filter xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike></ns0:Filter>'
     >>> should_return == filter
     True
