@@ -396,8 +396,9 @@ def element_to_string(element, encoding=None, xml_declaration=False):
 
     Parameters
     ----------
-    - element:                 etree Element
+    - element: etree Element
     - encoding (optional): encoding in string form. 'utf-8', 'ISO-8859-1', etc.
+    - xml_declaration (optional): whether to include xml declaration
 
     """
 

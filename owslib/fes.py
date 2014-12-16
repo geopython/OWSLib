@@ -112,6 +112,7 @@ class FilterRequest(object):
         ----------
 
         - constraint: An OgcExpression object
+        - tostring (optional): return as string
 
         """
         self._root.append(constraint.toXML())
@@ -139,6 +140,7 @@ class FilterRequest(object):
 
                        [[a,b],[c],[d],[e]] or [[a,b],c,d,e]
                        (a && b) || c || d || e
+        - tostring (optional): return as string
 
         """
         ors = []
