@@ -126,13 +126,13 @@ setConstraint
 setConstraint filter as string
     >>> fr = fes.FilterRequest()
     >>> filter = fr.setConstraint(filter1, tostring=True)
-    >>> should_return = '<ns0:Filter xmlns:ogc="http://www.opengis.net/ogc"><ns0:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike></ns0:Filter>'
+    >>> should_return = '<ns0:Filter xmlns:ns0="http://www.opengis.net/ogc"><ns0:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ns0:PropertyName>property</ns0:PropertyName><ns0:Literal>like</ns0:Literal></ns0:PropertyIsLike></ns0:Filter>'
     >>> compare_xml(should_return, filter)
     True
 
-#setConstraintList filter as string
-#    >>> fr = fes.FilterRequest()
-#    >>> filter = fr.setConstraintList([filter1, filter2, filter3], tostring=True)
-#    >>> should_return = '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:Or><ogc:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>like</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsEqualTo><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>equal</ogc:Literal></ogc:PropertyIsEqualTo><ogc:PropertyIsLessThan><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>less</ogc:Literal></ogc:PropertyIsLessThan></ogc:Or></ogc:Filter>'
-#    >>> compare_xml(should_return, filter)
-#    True
+setConstraintList filter as string
+    >>> fr = fes.FilterRequest()
+    >>> filter = fr.setConstraintList([filter1, filter2, filter3], tostring=True)
+    >>> should_return = '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:Or><ogc:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>like</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsEqualTo><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>equal</ogc:Literal></ogc:PropertyIsEqualTo><ogc:PropertyIsLessThan><ogc:PropertyName>property</ogc:PropertyName><ogc:Literal>less</ogc:Literal></ogc:PropertyIsLessThan></ogc:Or></ogc:Filter>'
+    >>> compare_xml(should_return, filter)
+    True
