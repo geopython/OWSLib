@@ -15,10 +15,8 @@ from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
-from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
 from owslib.util import log
-from _socket import timeout
 
 n = Namespaces()
 WFS_NAMESPACE = n.get_namespace("wfs")
@@ -46,7 +44,7 @@ def nspath(path, ns=WFS_NAMESPACE):
     return "/".join(components)
 
 
-class WebFeatureService_1_0_0(WebFeatureService_):
+class WebFeatureService_1_0_0(object):
     """Abstraction for OGC Web Feature Service (WFS).
 
     Implements IWebFeatureService.
@@ -117,16 +115,12 @@ class WebFeatureService_1_0_0(WebFeatureService_):
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
       
-    def getcapabilities(self, timeout=None):
+    def getcapabilities(self):
         """Request and return capabilities document from the WFS as a 
         file-like object.
         NOTE: this is effectively redundant now"""
-        if timeout:
-            to = timeout
-        else:
-            to = self.timeout
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url), timeout=to)
+        return urlopen(reader.capabilities_url(self.url), timeout=self.timeout)
     
     def items(self):
         '''supports dict-like items() access'''
@@ -138,7 +132,7 @@ class WebFeatureService_1_0_0(WebFeatureService_):
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
                    srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get',
-                   timeout=None, startindex=None):
+                   startindex=None):
         """Request and return feature data as a file-like object.
         
         Parameters
@@ -163,8 +157,6 @@ class WebFeatureService_1_0_0(WebFeatureService_):
             EPSG code to request the data in
         outputFormat: string (optional)
             Requested response format of the request.
-        timeout : number
-            A timeout value (in seconds) for the request.
         startindex: int (optional)
             Start position to return feature set (paging in combination with maxfeatures)
 
@@ -175,10 +167,6 @@ class WebFeatureService_1_0_0(WebFeatureService_):
         2) typename and filter (more expressive)
         3) featureid (direct access to known features)
         """
-        if timeout:
-            to = timeout
-        else:
-            to = self.timeout
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
@@ -210,7 +198,7 @@ class WebFeatureService_1_0_0(WebFeatureService_):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=to)
+        u = openURL(base_url, data, method, timeout=self.timeout)
         
         
         # check for service exceptions, rewrap, and return
