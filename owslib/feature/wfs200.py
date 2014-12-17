@@ -141,7 +141,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   method='Get', timeout=None, outputFormat=None):
+                   method='Get', timeout=None, outputFormat=None, startindex=None):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
         Parameters
@@ -166,6 +166,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             A timeout value (in seconds) for the request.
         outputFormat: string (optional)
             Requested response format of the request.
+        startindex: int (optional)
+            Start position to return feature set (paging in combination with maxfeatures)
 
         There are 3 different modes of use
 
@@ -184,7 +186,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid,
                                                  featureversion, propertyname,
                                                  maxfeatures, storedQueryID,
-                                                 storedQueryParams, outputFormat)
+                                                 storedQueryParams, outputFormat, startindex)
             if log.isEnabledFor(logging.DEBUG):
                 log.debug('GetFeature WFS GET url %s'% url)
         else:

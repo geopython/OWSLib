@@ -104,7 +104,7 @@ class FilterRequest(object):
 
         return self._root
        
-    def setConstraint(self, constraint):
+    def setConstraint(self, constraint, tostring=False):
         """
         Construct and process a  GetRecords request
     
@@ -112,12 +112,17 @@ class FilterRequest(object):
         ----------
 
         - constraint: An OgcExpression object
+        - tostring (optional): return as string
 
         """
         self._root.append(constraint.toXML())
+
+        if tostring:
+            return util.element_to_string(self._root, xml_declaration=False)
+
         return self._root
 
-    def setConstraintList(self, constraints):
+    def setConstraintList(self, constraints, tostring=False):
         """
         Construct and process a  GetRecords request
     
@@ -135,6 +140,7 @@ class FilterRequest(object):
 
                        [[a,b],[c],[d],[e]] or [[a,b],c,d,e]
                        (a && b) || c || d || e
+        - tostring (optional): return as string
 
         """
         ors = []
@@ -159,6 +165,10 @@ class FilterRequest(object):
                     ors.append(And(operations=ands))
 
         self._root.append(Or(operations=ors).toXML())
+
+        if tostring:
+            return util.element_to_string(self._root, xml_declaration=False)
+
         return self._root
 
 
@@ -340,12 +350,15 @@ class PropertyIsBetween(OgcExpression):
         
 class BBox(OgcExpression):
     """Construct a BBox, two pairs of coordinates (west-south and east-north)"""
-    def __init__(self, bbox):
+    def __init__(self, bbox, crs=None):
         self.bbox = bbox
+        self.crs = crs
     def toXML(self):
         tmp = etree.Element(util.nspath_eval('ogc:BBOX', namespaces))
         etree.SubElement(tmp, util.nspath_eval('ogc:PropertyName', namespaces)).text = 'ows:BoundingBox'
         tmp2 = etree.SubElement(tmp, util.nspath_eval('gml:Envelope', namespaces))
+        if self.crs is not None:
+            tmp2.set('srsName', self.crs)
         etree.SubElement(tmp2, util.nspath_eval('gml:lowerCorner', namespaces)).text = '%s %s' % (self.bbox[0], self.bbox[1])
         etree.SubElement(tmp2, util.nspath_eval('gml:upperCorner', namespaces)).text = '%s %s' % (self.bbox[2], self.bbox[3])
         return tmp
@@ -389,4 +402,5 @@ class UnaryLogicOpType(OgcExpression):
 class Not(UnaryLogicOpType):
     def __init__(self, operations):
         super(Not,self).__init__('ogc:Not', operations)
+
 

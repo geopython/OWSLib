@@ -390,28 +390,40 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
         return response
 
 
-def element_to_string(element, encoding=None):
+def element_to_string(element, encoding=None, xml_declaration=False):
     """
     Returns a string from a XML object
 
     Parameters
     ----------
-    - xml:                 etree Element
+    - element: etree Element
     - encoding (optional): encoding in string form. 'utf-8', 'ISO-8859-1', etc.
+    - xml_declaration (optional): whether to include xml declaration
 
     """
+
+    output = None
+
     if encoding is None:
         encoding = "ISO-8859-1"
 
     if etree.__name__ == 'lxml.etree':
-        if encoding in ['unicode', 'utf-8']:
-            return '<?xml version="1.0" encoding="utf-8" standalone="no"?>\n%s' % \
-                   etree.tostring(element, encoding='unicode')
+        if xml_declaration:
+            if encoding in ['unicode', 'utf-8']:
+                output = '<?xml version="1.0" encoding="utf-8" standalone="no"?>\n%s' % \
+                       etree.tostring(element, encoding='unicode')
+            else:
+                output = etree.tostring(element, encoding=encoding, xml_declaration=True)
         else:
-            return etree.tostring(element, encoding=encoding, xml_declaration=True)
+                output = etree.tostring(element)
     else:
-        return '<?xml version="1.0" encoding="%s" standalone="no"?>\n%s' % (encoding,
-               etree.tostring(element, encoding=encoding))
+        if xml_declaration:
+            output = '<?xml version="1.0" encoding="%s" standalone="no"?>\n%s' % (encoding,
+                   etree.tostring(element, encoding=encoding))
+        else:
+            output = etree.tostring(element)
+
+    return output
 
 
 def xml2string(xml):
@@ -575,4 +587,5 @@ try:  # 2.7
     from collections import OrderedDict
 except:  # 2.6
     from ordereddict import OrderedDict
+
 

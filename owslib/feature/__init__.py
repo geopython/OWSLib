@@ -76,7 +76,7 @@ class WebFeatureService_(object):
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
-                   outputFormat=None, method='Get'):
+                   outputFormat=None, method='Get', startindex=None):
         """Formulate proper GetFeature request using KVP encoding
         ----------
         typename : list
@@ -97,6 +97,8 @@ class WebFeatureService_(object):
             Qualified name of the HTTP DCP method to use.
         outputFormat: string (optional)
             Requested response format of the request.
+        startindex: int (optional)
+            Start position to return feature set (paging in combination with maxfeatures)
 
         There are 3 different modes of use
 
@@ -119,16 +121,15 @@ class WebFeatureService_(object):
             request['query'] = str(filter)
         if typename:
             typename = [typename] if type(typename) == type("") else typename
-            if self.version == "2.0.0":
-                request['typename'] = ','.join(typename)
-            else:
-                request['typenames'] = ','.join(typename)
+            request['typename'] = ','.join(typename)
         if propertyname: 
             request['propertyname'] = ','.join(propertyname)
         if featureversion: 
             request['featureversion'] = str(featureversion)
         if maxfeatures: 
             request['maxfeatures'] = str(maxfeatures)
+        if startindex:
+            request['startindex'] = str(startindex)
         if storedQueryID: 
             request['storedQuery_id']=str(storedQueryID)
             for param in storedQueryParams:

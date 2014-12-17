@@ -122,7 +122,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=['*'], maxfeatures=None,
                    srsname=None, outputFormat=None, method='Get',
-                   timeout=None):
+                   timeout=None, startindex=None):
         """Request and return feature data as a file-like object.
 
         Parameters
@@ -149,6 +149,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             Requested response format of the request.
         timeout : number
             A timeout value (in seconds) for the request.
+        startindex: int (optional)
+            Start position to return feature set (paging in combination with maxfeatures)
 
         There are 3 different modes of use
 
@@ -207,6 +209,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             request['featureversion'] = str(featureversion)
         if maxfeatures is not None:
             request['maxfeatures'] = str(maxfeatures)
+        if startindex is not None:
+            request['startindex'] = str(startindex)
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
 

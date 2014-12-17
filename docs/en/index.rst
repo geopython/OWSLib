@@ -233,7 +233,7 @@ Search for bird data:
 
   >>> from owslib.fes import PropertyIsEqualTo, PropertyIsLike, BBox
   >>> birds_query = PropertyIsEqualTo('csw:AnyText', 'birds')
-  >>> csw.getrecords(constraints=[birds_query], maxrecords=20)
+  >>> csw.getrecords2(constraints=[birds_query], maxrecords=20)
   >>> csw.results    
   {'matches': 101, 'nextrecord': 21, 'returned': 20}
   >>> for rec in csw.records:
@@ -266,7 +266,7 @@ Search for bird data in Canada:
 .. code-block:: python
 
   >>> bbox_query = BBox([-141,42,-52,84])
-  >>> csw.getrecords(constraints=[birds_query, bbox_query])
+  >>> csw.getrecords2(constraints=[birds_query, bbox_query])
   >>> csw.results
   {'matches': 3, 'nextrecord': 0, 'returned': 3}
   >>> 
@@ -277,7 +277,7 @@ Search for keywords like 'birds' or 'fowl'
 
   >>> birds_query_like = PropertyIsLike('dc:subject', '%birds%')
   >>> fowl_query_like = PropertyIsLike('dc:subject', '%fowl%')
-  >>> csw.getrecords(constraints=[birds_query_like, fowl_query_like])
+  >>> csw.getrecords2(constraints=[birds_query_like, fowl_query_like])
   >>> csw.results
   {'matches': 107, 'nextrecord': 11, 'returned': 10}
   >>> 
