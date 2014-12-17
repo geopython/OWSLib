@@ -176,7 +176,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid,
                                                  featureversion, propertyname,
                                                  maxfeatures, storedQueryID,
-                                                 storedQueryParams, outputFormat, startindex)
+                                                 storedQueryParams, outputFormat, 'Get', startindex)
             if log.isEnabledFor(logging.DEBUG):
                 log.debug('GetFeature WFS GET url %s'% url)
         else:
