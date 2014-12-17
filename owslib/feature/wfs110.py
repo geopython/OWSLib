@@ -18,6 +18,7 @@ from owslib.iso import MD_Metadata
 from owslib.ows import *
 from owslib.fes import *
 from owslib.crs import Crs
+from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
 from owslib.util import log
 
@@ -26,7 +27,7 @@ def get_namespaces():
     return n.get_namespaces(["gml","ogc","ows","wfs"])
 namespaces = get_namespaces()
 
-class WebFeatureService_1_1_0(object):
+class WebFeatureService_1_1_0(WebFeatureService_):
     """Abstraction for OGC Web Feature Service (WFS).
 
     Implements IWebFeatureService.
