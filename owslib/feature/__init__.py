@@ -11,7 +11,7 @@ from urllib import urlencode
 import logging
 from owslib.util import log
 
-class WebFeatureService_:
+class WebFeatureService_(object):
     """Base class for WebFeatureService implementations"""
 
     def getBBOXKVP (self,bbox,typename):
