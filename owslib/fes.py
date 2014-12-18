@@ -146,10 +146,14 @@ class FilterRequest(object):
         ors = []
         if len(constraints) == 1:
             if isinstance(constraints[0], OgcExpression):
-                return self.setConstraint(constraints[0])
+                flt = self.setConstraint(constraints[0])
             else:
                 self._root.append(And(operations=constraints[0]).toXML())
-                return self._root
+                flt = self._root
+            if tostring:
+                return util.element_to_string(flt, xml_declaration=False)
+            else:
+                return flt
 
         for c in constraints:
             if isinstance(c, OgcExpression):
