@@ -402,7 +402,7 @@ class CatalogueServiceWeb:
         validtransactions = ['insert', 'update', 'delete']
 
         if ttype not in validtransactions:  # invalid transaction
-            raise RuntimeError, 'Invalid transaction \'%s\'.' % ttype
+            raise RuntimeError('Invalid transaction \'%s\'.' % ttype)
 
         node1 = etree.SubElement(node0, util.nspath_eval('csw:%s' % ttype.capitalize(), namespaces))
 
@@ -411,7 +411,7 @@ class CatalogueServiceWeb:
 
         if ttype == 'insert':
             if record is None:
-                raise RuntimeError, 'Nothing to insert.'
+                raise RuntimeError('Nothing to insert.')
             node1.append(etree.fromstring(record))
  
         if ttype == 'update':
@@ -487,7 +487,7 @@ class CatalogueServiceWeb:
         for item in self.operations:
             if item.name.lower() == name.lower():
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError("No operation named %s" % name)
 
     def getService_urls(self, service_string=None):
         """
@@ -650,7 +650,7 @@ class CatalogueServiceWeb:
         ]
 
         if self._exml.getroot().tag not in valid_xpaths:
-            raise RuntimeError, 'Document is XML, but not CSW-ish'
+            raise RuntimeError('Document is XML, but not CSW-ish')
 
         # check if it's an OGC Exception
         val = self._exml.find(util.nspath_eval('ows:Exception', namespaces))

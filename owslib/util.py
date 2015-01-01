@@ -179,7 +179,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         u = openit(req, timeout=timeout)
     except HTTPError as e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
         if e.code in [400, 401]:
-            raise ServiceException, e.read()
+            raise ServiceException(e.read())
         else:
             raise e
     # check for service exceptions without the http header set
@@ -193,8 +193,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         if serviceException is None:
             serviceException=se_tree.find('ServiceException')
         if serviceException is not None:
-            raise ServiceException, \
-            str(serviceException.text).strip()
+            raise ServiceException(str(serviceException.text).strip())
         u.seek(0) #return cursor to start of u      
     return u
 

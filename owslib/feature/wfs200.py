@@ -61,7 +61,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError("No content named %s" % name)
     
     
     def __init__(self, url,  version, xml=None, parse_remote_metadata=False, timeout=30):
@@ -303,7 +303,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError("No operation named %s" % name)
 
 class StoredQuery(object):
     '''' Class to describe a storedquery '''

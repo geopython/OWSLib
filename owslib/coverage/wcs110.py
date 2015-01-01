@@ -36,7 +36,7 @@ class WebCoverageService_1_1_0(WCSBase):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError("No content named %s" % name)
     
     def __init__(self,url,xml, cookies):
         self.version='1.1.0'
@@ -191,7 +191,7 @@ class WebCoverageService_1_1_0(WCSBase):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError("No operation named %s" % name)
         
 class Operation(object):
     """Abstraction for operation metadata    
