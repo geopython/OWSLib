@@ -390,7 +390,7 @@ class ContentMetadata:
                         metadataUrl['metadata'] = Metadata(doc)
                     except:  # ISO
                         metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception, err:
+                except Exception:
                     metadataUrl['metadata'] = None
 
             self.metadataUrls.append(metadataUrl)

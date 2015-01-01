@@ -222,7 +222,7 @@ class SosObservationOffering(object):
             # (left, bottom, right, top) in self.bbox_srs units
             self.bbox = (float(lower_left_corner[1]), float(lower_left_corner[0]), float(upper_right_corner[1]), float(upper_right_corner[0]))
             self.bbox_srs = Crs(testXMLValue(envelope.attrib.get('srsName'), True))
-        except Exception, err:
+        except Exception:
             self.bbox = None
             self.bbox_srs = None
 

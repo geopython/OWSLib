@@ -177,7 +177,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         if cookies is not None:
             req.add_header('Cookie', cookies)
         u = openit(req, timeout=timeout)
-    except HTTPError, e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
+    except HTTPError as e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
         if e.code in [400, 401]:
             raise ServiceException, e.read()
         else:
