@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from owslib.util import nspath_eval
 from owslib.namespaces import Namespaces
 from owslib.util import testXMLAttribute, testXMLValue, InfiniteDateTime, NegativeInfiniteDateTime
@@ -24,7 +26,7 @@ def make_pair(string, cast=None):
         try:
             string = map(lambda x: cast(x), string)
         except:
-            print "Could not cast pair to correct type.  Setting to an empty tuple!"
+            print("Could not cast pair to correct type.  Setting to an empty tuple!")
             string = ""
 
     return tuple(string)

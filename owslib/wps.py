@@ -83,6 +83,7 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
     - The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
 
 """
+from __future__ import print_function
 
 from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
@@ -1362,21 +1363,21 @@ def printInputOutput(value, indent=''):
     '''
 
     # InputOutput fields
-    print '%s identifier=%s, title=%s, abstract=%s, data type=%s' % (indent, value.identifier, value.title, value.abstract, value.dataType)
+    print('%s identifier=%s, title=%s, abstract=%s, data type=%s' % (indent, value.identifier, value.title, value.abstract, value.dataType))
     for val in value.allowedValues:
-        print '%s Allowed Value: %s' % (indent, printValue(val))
+        print('%s Allowed Value: %s' % (indent, printValue(val)))
     if value.anyValue:
-        print ' Any value allowed'
+        print(' Any value allowed')
     for val in value.supportedValues:
-        print '%s Supported Value: %s' % (indent, printValue(val))
-    print '%s Default Value: %s ' % (indent, printValue(value.defaultValue))
-    
+        print('%s Supported Value: %s' % (indent, printValue(val)))
+    print('%s Default Value: %s ' % (indent, printValue(value.defaultValue)))
+
     # Input fields
     if isinstance(value, Input):
-        print '%s minOccurs=%d, maxOccurs=%d' % (indent, value.minOccurs, value.maxOccurs)
-        
+        print('%s minOccurs=%d, maxOccurs=%d' % (indent, value.minOccurs, value.maxOccurs))
+
     # Output fields
     if isinstance(value, Output):
-        print '%s reference=%s, mimeType=%s' % (indent, value.reference, value.mimeType)
+        print('%s reference=%s, mimeType=%s' % (indent, value.reference, value.mimeType))
         for datum in value.data:
-            print '%s Data Value: %s' % (indent, printValue(datum))
+            print('%s Data Value: %s' % (indent, printValue(datum)))
