@@ -13,10 +13,12 @@
 Web Coverage Server (WCS) methods and metadata. Factory function.
 """
 
+from __future__ import absolute_import
 
 import urllib2
-import etree
-from coverage import wcs100, wcs110, wcsBase
+from . import etree
+from .coverage import wcs100, wcs110, wcsBase
+
 
 def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30):
     ''' wcs factory function, returns a version specific WebCoverageService object '''

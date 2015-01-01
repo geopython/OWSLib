@@ -29,15 +29,17 @@ would be appreciated.
 
 """
 
+from __future__ import absolute_import
+
 import warnings
 import urlparse
 import urllib2
 from urllib import urlencode
-from etree import etree
+from .etree import etree
 from .util import openURL, testXMLValue, getXMLInteger
-from fgdc import Metadata
-from iso import MD_Metadata
-from ows import ServiceProvider, ServiceIdentification, OperationsMetadata
+from .fgdc import Metadata
+from .iso import MD_Metadata
+from .ows import ServiceProvider, ServiceIdentification, OperationsMetadata
 
 
 _OWS_NS = '{http://www.opengis.net/ows/1.1}'

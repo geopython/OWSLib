@@ -13,7 +13,11 @@
 Web Feature Server (WFS) methods and metadata. Factory function.
 """
 
-from feature import wfs100, wfs110, wfs200 
+from __future__ import absolute_import
+
+from .feature import wfs100, wfs110, wfs200
+
+
 def WebFeatureService(url, version='1.0.0', xml=None, parse_remote_metadata=False,
                       timeout=30):
     ''' wfs factory function, returns a version specific WebFeatureService object
