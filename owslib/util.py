@@ -183,7 +183,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
         else:
             raise e
     # check for service exceptions without the http header set
-    if ((u.info().has_key('Content-Type')) and (u.info()['Content-Type'] in ['text/xml', 'application/xml'])):          
+    if 'Content-Type' in u.info() and u.info()['Content-Type'] in ['text/xml', 'application/xml']:
         #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
         #wrap the url stram in a extended StringIO object so it's re-readable
         u=RereadableURL(u)      
@@ -380,7 +380,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
         up.close()
 
         # check if response is gzip compressed
-        if ui.has_key('Content-Encoding'):
+        if 'Content-Encoding' in ui:
             if ui['Content-Encoding'] == 'gzip':  # uncompress response
                 import gzip
                 cds = StringIO(response)
