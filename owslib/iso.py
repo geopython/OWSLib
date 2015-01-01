@@ -762,7 +762,7 @@ class CodelistCatalogue(object):
         return self.dictionaries.keys()
 
     def getcodedefinitionidentifiers(self, cdl):
-        if self.dictionaries.has_key(cdl):
+        if cdl in self.dictionaries:
             ids = []
             for i in self.dictionaries[cdl]['entries']:
                 ids.append(self.dictionaries[cdl]['entries'][i]['identifier'])
