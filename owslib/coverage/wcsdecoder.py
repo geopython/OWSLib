@@ -66,9 +66,9 @@ class MpartMime(object):
         #create the directory if it doesn't exist:
         try:
             os.mkdir(unpackdir)
-        except OSError, e:
+        except OSError as e:
             # Ignore directory exists error
-            if e.errno <> errno.EEXIST:
+            if e.errno != errno.EEXIST:
                 raise
                
         #now walk through the multipart mime and write out files

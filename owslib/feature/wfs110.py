@@ -53,7 +53,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError("No content named %s" % name)
 
 
     def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30):
@@ -244,7 +244,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError("No operation named %s" % name)
 
 
 
@@ -299,7 +299,7 @@ class ContentMetadata:
                             metadataUrl['metadata'] = Metadata(doc)
                         if metadataUrl['type'] in ['TC211', '19115', '19139']:
                             metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception, err:
+                except Exception:
                     metadataUrl['metadata'] = None
 
             self.metadataUrls.append(metadataUrl)

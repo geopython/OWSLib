@@ -55,7 +55,7 @@ class WebMapService(object):
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
-            raise KeyError, "No content named %s" % name
+            raise KeyError("No content named %s" % name)
 
     
     def __init__(self, url, version='1.1.1', xml=None, 
@@ -261,7 +261,7 @@ class WebMapService(object):
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError("No operation named %s" % name)
     
 class ServiceIdentification(object):
     ''' Implements IServiceIdentificationMetadata '''
@@ -300,14 +300,14 @@ class ServiceProvider(object):
         for item in self.contents:
             if item.name == name:
                 return item
-        raise KeyError, "No content named %s" % name
+        raise KeyError("No content named %s" % name)
 
     def getOperationByName(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
                 return item
-        raise KeyError, "No operation named %s" % name
+        raise KeyError("No operation named %s" % name)
         
 class ContentMetadata:
     """
@@ -485,7 +485,7 @@ class ContentMetadata:
                             metadataUrl['metadata'] = Metadata(doc)
                         if metadataUrl['type'] == 'TC211':
                             metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception, err:
+                except Exception:
                     metadataUrl['metadata'] = None
 
             self.metadataUrls.append(metadataUrl)
