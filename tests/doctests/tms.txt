@@ -32,8 +32,8 @@ you can filter the contents by profile and srs:
     7
     >>> len(service.items('EPSG:4326', profile='global-mercator'))
     0
-    >>> service.items('EPSG:4326')[0]
-    ('http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@png', <owslib.tms.ContentMetadata object at ...>)
+    >>> sorted(service.items('EPSG:4326'))[0]  # doctest: +ELLIPSIS
+    ('http://maps.opengeo.org/geowebcache/service/tms/1.0.0/blue@EPSG%3A4326@png', <owslib.tms.ContentMetadata object at ...>)
 
 The details of the TileMap are fetched on demand
     >>> tm._tile_map == None

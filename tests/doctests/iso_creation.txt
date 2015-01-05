@@ -33,7 +33,7 @@ Print testing of various ISO fields
 
 	>>> md.identifier
 	'286c0725-146e-4533-b1bf-d6e367f6c342'
-	>>> kw
-	{'keywords': ['Agricultural and aquaculture facilities', 'Bio-geographical regions'], 'type': None, 'thesaurus': {'date': '2008-06-01', 'datetype': 'publication', 'title': 'GEMET - INSPIRE themes, version 1.0'}}
+	>>> kw == {'keywords': ['Agricultural and aquaculture facilities', 'Bio-geographical regions'], 'type': None, 'thesaurus': {'date': '2008-06-01', 'datetype': 'publication', 'title': 'GEMET - INSPIRE themes, version 1.0'}}
+	True
     >>> md.languagecode is None
     True
