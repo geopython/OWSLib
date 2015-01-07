@@ -83,7 +83,8 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
     - The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
 
 """
-from __future__ import print_function
+
+from __future__ import (absolute_import, print_function)
 
 from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata

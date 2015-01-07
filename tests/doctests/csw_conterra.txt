@@ -1,3 +1,4 @@
+    >>> from __future__ import absolute_import
     >>> from owslib.csw import CatalogueServiceWeb as cs
     >>> c=cs('https://gateway.ceh.ac.uk/soapServices/CSWStartup')
     >>> c.version

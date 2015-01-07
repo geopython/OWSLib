@@ -2,6 +2,7 @@
 #Author: Dominic Lowe, 17th September 2009    
 #Part of OWSLib package.
 
+    >>> from __future__ import absolute_import
     >>> from tests.utils import resource_file
     >>> from owslib.csw import CatalogueServiceWeb
     >>> from owslib.wms import WebMapService

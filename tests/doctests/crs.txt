@@ -1,3 +1,4 @@
+    >>> from __future__ import absolute_import
     >>> from owslib import crs
     >>> c=crs.Crs('EPSG:4326')
     >>> c.code

@@ -9,6 +9,8 @@
 
 """ API for OGC CRS constructs. """
 
+from __future__ import absolute_import
+
 # list of URN codes for EPSG in which axis order
 # of coordinates are y,x (e.g. lat, long)
 axisorder_yx = frozenset([

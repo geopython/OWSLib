@@ -1,5 +1,6 @@
 Imports
 
+    >>> from __future__ import absolute_import
     >>> import urllib2
     >>> from owslib.etree import etree
     >>> from owslib.iso import MD_Metadata, MD_DataIdentification, CI_ResponsibleParty

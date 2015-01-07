@@ -1,9 +1,13 @@
+Imports
+
+    >>> from __future__ import absolute_import
+    >>> from owslib import tms
+
 You can find a list of servers at
 http://svn.osgeo.org/gdal/trunk/gdal/frmts/wms/WMSServerList.txt
 
 Find out what a TMS has to offer. Service metadata:
 
-    >>> from owslib import tms
     >>> service = tms.TileMapService('http://maps.opengeo.org/geowebcache/service/tms/1.0.0')
     >>> service.identification.title
     'Tile Map Service'

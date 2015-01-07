@@ -5,6 +5,8 @@
 #
 # =============================================================================
 
+from __future__ import absolute_import
+
 from owslib.crs import Crs
 
 from urllib import urlencode

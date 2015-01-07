@@ -1,5 +1,6 @@
 Imports
 
+    >>> from __future__ import absolute_import
     >>> from owslib import fes    
     >>> from owslib.dif import namespaces 
     >>> from owslib.csw import CatalogueServiceWeb as cs

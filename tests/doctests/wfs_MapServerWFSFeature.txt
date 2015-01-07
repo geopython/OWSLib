@@ -1,6 +1,7 @@
 
 Imports
 
+    >>> from __future__ import absolute_import
     >>> from owslib.wfs import WebFeatureService
     
 Test the getfeature method

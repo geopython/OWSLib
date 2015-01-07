@@ -6,6 +6,8 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
+from __future__ import absolute_import
+
 import cgi
 from cStringIO import StringIO
 from urllib import urlencode

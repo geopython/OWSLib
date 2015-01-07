@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import cgi
 from owslib.etree import etree
 from datetime import datetime

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse, namespaces
 from owslib.etree import etree
 

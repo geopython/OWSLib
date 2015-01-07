@@ -9,6 +9,8 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
+from __future__ import absolute_import
+
 from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
 from urllib import urlencode
 from owslib.util import openURL, testXMLValue

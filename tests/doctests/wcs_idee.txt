@@ -4,6 +4,7 @@ COWS Web Coverage Service doctest
 WCS Version 1.0.0
 =================
 
+    >>> from __future__ import absolute_import
     >>> from tests.utils import cast_tuple_int_list, scratch_file
     >>> from owslib.wcs import WebCoverageService
 

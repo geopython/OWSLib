@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+
+
 class Namespaces(object):
     """
         Class for holding and maniputlating a dictionary containing the various namespaces for

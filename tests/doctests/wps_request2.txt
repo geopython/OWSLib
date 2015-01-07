@@ -3,6 +3,7 @@ The specific request involves a FeatureWeightedGridStatisticsAlgorithm process o
 
 Imports
 
+    >>> from __future__ import absolute_import
     >>> from tests.utils import resource_file, compare_xml
     >>> from owslib.wps import WPSExecution, WFSFeatureCollection, WFSQuery
     >>> from owslib.etree import etree

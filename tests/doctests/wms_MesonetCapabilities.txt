@@ -1,6 +1,7 @@
 
 Imports
 
+    >>> from __future__ import absolute_import
     >>> from owslib.wms import WebMapService
     >>> from tests.utils import resource_file
     >>> from operator import itemgetter

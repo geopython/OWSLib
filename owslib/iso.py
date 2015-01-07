@@ -10,6 +10,8 @@
 
 """ ISO metadata parser """
 
+from __future__ import absolute_import
+
 from owslib.etree import etree
 from owslib import util
 from owslib.namespaces import Namespaces

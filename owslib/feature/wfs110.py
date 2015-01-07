@@ -7,6 +7,8 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+from __future__ import absolute_import
+
 import cgi
 from cStringIO import StringIO
 from urllib import urlencode

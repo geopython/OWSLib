@@ -4,6 +4,8 @@
 # Contact email: sgillies@frii.com
 # =============================================================================
 
+from __future__ import absolute_import
+
 
 def patch_well_known_namespaces(etree_module):
 

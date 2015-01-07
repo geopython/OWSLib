@@ -1,4 +1,5 @@
 Imports
+    >>> from __future__ import absolute_import
     >>> from owslib.csw import CatalogueServiceWeb as cs
     >>> from xml.dom import minidom as md
     >>> from owslib import fes, csw

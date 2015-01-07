@@ -1,6 +1,7 @@
 
 Imports
 
+    >>> from __future__ import absolute_import
     >>> from tests.utils import resource_file
     >>> from owslib.sos import SensorObservationService
     >>> from owslib.fes import FilterCapabilities200

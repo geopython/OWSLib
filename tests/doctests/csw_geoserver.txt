@@ -1,3 +1,4 @@
+>>> from __future__ import absolute_import
 >>> from owslib.csw import CatalogueServiceWeb
 >>> c=CatalogueServiceWeb('http://sdi.georchestra.org/geoserver/ows')
 >>> c.getrecords2(typenames='csw:Record')

@@ -1,6 +1,7 @@
 
 Imports
 
+    >>> from __future__ import absolute_import
     >>> from tests.utils import resource_file
     >>> import urllib2
     >>> from owslib.etree import etree
