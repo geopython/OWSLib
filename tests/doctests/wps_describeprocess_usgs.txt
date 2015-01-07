@@ -3,6 +3,7 @@ This test does not execute any live HTTP request, rather it parses XML files con
 
 Imports
 
+    >>> from __future__ import print_function
     >>> from tests.utils import resource_file
     >>> from owslib.wps import WebProcessingService, printInputOutput
 
@@ -26,7 +27,7 @@ Check process description
 
 Check process inputs
     >>> for input in process.dataInputs:
-    ...     print 'Process input:'
+    ...     print('Process input:')
     ...     printInputOutput(input, indent='')
     ... 
     Process input:
@@ -110,7 +111,7 @@ Check process inputs
 
 Check process outputs
     >>> for output in process.processOutputs:
-    ...     print 'Process output:'
+    ...     print('Process output:')
     ...     printInputOutput(output, indent='')
     ... 
     Process output:
