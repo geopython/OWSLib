@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-from __future__ import (absolute_import, division)
+from __future__ import (absolute_import, division, print_function)
 
 from owslib.etree import etree
 from owslib import crs, util

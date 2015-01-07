@@ -9,7 +9,7 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from __future__ import (absolute_import, division)
+from __future__ import (absolute_import, division, print_function)
 
 from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
 from urllib import urlencode

@@ -9,7 +9,7 @@
 
 """ API for OGC CRS constructs. """
 
-from __future__ import (absolute_import, division)
+from __future__ import (absolute_import, division, print_function)
 
 # list of URN codes for EPSG in which axis order
 # of coordinates are y,x (e.g. lat, long)

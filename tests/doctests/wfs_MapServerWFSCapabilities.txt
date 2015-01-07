@@ -1,7 +1,7 @@
 
 Imports
 
-    >>> from __future__ import (absolute_import, division)
+    >>> from __future__ import (absolute_import, division, print_function)
     >>> from tests.utils import cast_tuple_int_list, resource_file
     >>> from owslib.wfs import WebFeatureService
     >>> from operator import itemgetter
