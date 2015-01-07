@@ -11,7 +11,9 @@
 
 ##########NOTE: Does not conform to new interfaces yet #################
 
-from wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
+from __future__ import absolute_import
+
+from .wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
 from owslib.util import openURL, testXMLValue
 from urllib import urlencode
 from urllib2 import urlopen

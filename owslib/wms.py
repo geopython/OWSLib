@@ -15,14 +15,17 @@ API for Web Map Service (WMS) methods and metadata.
 Currently supports only version 1.1.1 of the WMS protocol.
 """
 
+from __future__ import absolute_import
+
 import cgi
 import urllib2
 from urllib import urlencode
 import warnings
-from etree import etree
+from .etree import etree
 from .util import openURL, testXMLValue, extract_xml_list, xmltag_split
-from fgdc import Metadata
-from iso import MD_Metadata
+from .fgdc import Metadata
+from .iso import MD_Metadata
+
 
 class ServiceException(Exception):
     """WMS ServiceException
