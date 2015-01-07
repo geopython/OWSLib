@@ -13,7 +13,7 @@
 #decoder=wcsdecoder.WCSDecoder(u)
 #decoder.getCoverages()
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 import os
 from owslib.etree import etree

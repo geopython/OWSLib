@@ -7,7 +7,7 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 import cgi
 from cStringIO import StringIO

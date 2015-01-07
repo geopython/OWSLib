@@ -1,6 +1,6 @@
 Imports and initialize
 
-    >>> from __future__ import absolute_import
+    >>> from __future__ import (absolute_import, division)
     >>> from owslib.wfs import WebFeatureService
     >>> from tests.utils import resource_file, sorted_url_query
 

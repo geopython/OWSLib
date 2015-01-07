@@ -15,7 +15,7 @@ OWS Common: http://www.opengeospatial.org/standards/common
 Currently supports version 1.1.0 (06-121r3).
 """
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 from owslib.etree import etree
 from owslib import crs, util

@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse, namespaces
 from owslib.etree import etree

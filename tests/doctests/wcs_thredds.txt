@@ -6,7 +6,7 @@ Version 1.0.0
 
 Imports
 
-    >>> from __future__ import absolute_import
+    >>> from __future__ import (absolute_import, division)
     >>> from owslib.wcs import WebCoverageService
     >>> from tests.utils import scratch_file
 

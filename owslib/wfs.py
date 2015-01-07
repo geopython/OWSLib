@@ -13,7 +13,7 @@
 Web Feature Server (WFS) methods and metadata. Factory function.
 """
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 from .feature import wfs100, wfs110, wfs200
 

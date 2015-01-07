@@ -15,7 +15,7 @@ Filter Encoding: http://www.opengeospatial.org/standards/filter
 Currently supports version 1.1.0 (04-095).
 """
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 from owslib.etree import etree
 from owslib import util

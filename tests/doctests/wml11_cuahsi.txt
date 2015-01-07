@@ -2,7 +2,7 @@ Using WaterML 1.1 for examples
 
 Imports
 
-	>>> from __future__ import absolute_import
+	>>> from __future__ import (absolute_import, division)
 	>>> from tests.utils import resource_file
 	>>> from owslib.waterml.wml11 import WaterML_1_1 as wml
 

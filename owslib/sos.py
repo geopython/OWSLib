@@ -11,7 +11,7 @@
 Sensor Observation Service (SOS) methods and metadata. Factory function.
 """
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 from .swe.observation import sos100, sos200
 

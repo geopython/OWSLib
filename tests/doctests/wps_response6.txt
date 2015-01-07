@@ -1,6 +1,6 @@
 Instantiate WPS
 
-    >>> from __future__ import absolute_import
+    >>> from __future__ import (absolute_import, division)
     >>> from tests.utils import resource_file, compare_xml, setup_logging
     >>> from owslib.wps import WebProcessingService
     >>> logger = setup_logging('INFO')

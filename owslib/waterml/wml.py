@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 from owslib.etree import etree
 from owslib.util import nspath, testXMLValue, openURL

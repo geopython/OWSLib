@@ -13,7 +13,7 @@
 Web Coverage Server (WCS) methods and metadata. Factory function.
 """
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division)
 
 import urllib2
 from . import etree
