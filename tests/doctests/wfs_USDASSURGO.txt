@@ -1,6 +1,7 @@
 # Test ability of OWSLib.wfs to interact with USDA SSURGO WFS 1.0.0 web service
 # Contact e-mail: selimnairb@gmail.com
 
+>>> from __future__ import (absolute_import, division, print_function)
 >>> import unittest
 >>> from owslib.wfs import WebFeatureService
 >>> wfs_filter = "<Filter><BBOX><PropertyName>Geometry</PropertyName> <Box srsName='EPSG:4326'><coordinates>-76.766960,39.283611 -76.684120,39.338394</coordinates> </Box></BBOX></Filter>"

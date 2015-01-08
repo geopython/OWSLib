@@ -3,7 +3,7 @@ This test does not execute any live HTTP request, rather it parses XML files con
 
 Imports
 
-    >>> from __future__ import print_function
+    >>> from __future__ import (absolute_import, division, print_function)
     >>> from tests.utils import resource_file
     >>> from owslib.wps import WebProcessingService
 

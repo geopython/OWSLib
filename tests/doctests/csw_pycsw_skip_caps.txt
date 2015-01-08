@@ -5,6 +5,7 @@ for the appropriate URL since skip_caps=True.
 
 Imports
 
+    >>> from __future__ import (absolute_import, division, print_function)
     >>> from owslib.csw import CatalogueServiceWeb as cs
 
 Properties

@@ -13,6 +13,8 @@
 #decoder=wcsdecoder.WCSDecoder(u)
 #decoder.getCoverages()
 
+from __future__ import (absolute_import, division, print_function)
+
 import os
 from owslib.etree import etree
 import email

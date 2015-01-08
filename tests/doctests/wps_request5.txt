@@ -3,6 +3,7 @@ The specific request involves a "reprojectCoords" process submitted to the PML W
 
 Imports
 
+    >>> from __future__ import (absolute_import, division, print_function)
     >>> from tests.utils import resource_file, compare_xml
     >>> from owslib.wps import WebProcessingService, WPSExecution
     >>> from owslib.etree import etree

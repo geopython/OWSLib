@@ -11,7 +11,7 @@
 
 ##########NOTE: Does not conform to new interfaces yet #################
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division, print_function)
 
 from .wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
 from owslib.util import openURL, testXMLValue

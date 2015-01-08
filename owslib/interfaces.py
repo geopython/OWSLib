@@ -1,3 +1,5 @@
+from __future__ import (absolute_import, division, print_function)
+
 
 # Follows the 4 aspects of service metadata
 
