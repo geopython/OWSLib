@@ -189,7 +189,8 @@ class SensorObservationService_1_0_0(object):
 
         data = urlencode(request)
 
-        response = openURL(base_url, data, method, username=self.username, password=self.password, **kwargs).read()
+        response = openURL(base_url, data, method, username=self.username,
+                           password=self.password, **url_kwargs).read()
         try:
             tr = etree.fromstring(response)
             if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
