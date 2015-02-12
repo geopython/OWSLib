@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.8.12 documentation &mdash; OWSLib 0.8.12 documentation</title>
+    <title>OWSLib 0.8.13 documentation &mdash; OWSLib 0.8.13 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.12',
+        VERSION:     '0.8.13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="OWSLib 0.8.12 documentation" href="#" />
+    <link rel="top" title="OWSLib 0.8.13 documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -51,7 +51,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">OWSLib 0.8.12 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.8.13 documentation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -62,7 +62,7 @@
           <div class="body">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.8.12 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.8.13 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
@@ -76,9 +76,9 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.8.12</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.8.13</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2014-12-19</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2015-02-12</td>
 </tr>
 </tbody>
 </table>
@@ -544,7 +544,8 @@
 <h3>SOS<a class="headerlink" href="#sos" title="Permalink to this headline">¶</a></h3>
 <p>GetCapabilities</p>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">cast_tuple_int_list</span><span class="p">,</span> <span class="n">resource_file</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">cast_tuple_int_list</span><span class="p">,</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="kn">import</span> <span class="n">SensorObservationService</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.fes</span> <span class="kn">import</span> <span class="n">FilterCapabilities</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ows</span> <span class="kn">import</span> <span class="n">OperationsMetadata</span>
@@ -924,7 +925,8 @@
 </div>
 <p>GetObservation</p>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="kn">import</span> <span class="n">SensorObservationService</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ows</span> <span class="kn">import</span> <span class="n">OperationsMetadata</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.fes</span> <span class="kn">import</span> <span class="n">FilterCapabilities</span>
@@ -993,7 +995,8 @@
 <div class="section" id="sensorml">
 <h3>SensorML<a class="headerlink" href="#sensorml" title="Permalink to this headline">¶</a></h3>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.swe.sensor.sml</span> <span class="kn">import</span> <span class="n">SensorML</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">parser</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pytz</span>
@@ -1121,7 +1124,8 @@
 </div>
 <p>ISO Codelists:</p>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.etree</span> <span class="kn">import</span> <span class="n">etree</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.iso</span> <span class="kn">import</span> <span class="n">CodelistCatalogue</span>
@@ -1141,7 +1145,8 @@
 </div>
 <div class="section" id="crs-handling">
 <h3>CRS Handling<a class="headerlink" href="#crs-handling" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib</span> <span class="kn">import</span> <span class="n">crs</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib</span> <span class="kn">import</span> <span class="n">crs</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s">&#39;EPSG:4326&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">code</span>
 <span class="go">4326</span>
@@ -1184,7 +1189,8 @@
 <div class="section" id="wmts">
 <h3>WMTS<a class="headerlink" href="#wmts" title="Permalink to this headline">¶</a></h3>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">scratch_file</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">scratch_file</span>
 </pre></div>
 </div>
 <p>Find out what a WMTS has to offer. Service metadata:</p>
@@ -1232,7 +1238,8 @@
 <h3>WaterML<a class="headerlink" href="#waterml" title="Permalink to this headline">¶</a></h3>
 <p>Using WaterML 1.1 for examples</p>
 <p>Imports</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.waterml.wml11</span> <span class="kn">import</span> <span class="n">WaterML_1_1</span> <span class="k">as</span> <span class="n">wml</span>
 </pre></div>
 </div>
@@ -1534,7 +1541,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.8.12 documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.8.13 documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1610,12 +1617,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">OWSLib 0.8.12 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.8.13 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2014-12-19T16:11:09Z.
+      Last updated on 2015-02-12T10:52:14Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
