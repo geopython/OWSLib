@@ -541,6 +541,9 @@ class SV_ServiceIdentification(object):
     """ process SV_ServiceIdentification """
     def __init__(self, md=None):
         if md is None:
+            self.title = None
+            self.abstract = None
+            self.contact = None
             self.identtype = 'service'
             self.type = None
             self.version = None
@@ -552,6 +555,15 @@ class SV_ServiceIdentification(object):
         else:
             val=md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
             self.title=util.testXMLValue(val)
+            
+            val=md.find(util.nspath_eval('gmd:abstract/gco:CharacterString', namespaces))
+            self.abstract=util.testXMLValue(val)
+            
+            self.contact = None
+            val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty', namespaces))
+            if val is not None:
+                self.contact = CI_ResponsibleParty(val)
+            
             self.identtype = 'service'
             val = md.find(util.nspath_eval('srv:serviceType/gco:LocalName', namespaces))
             self.type = util.testXMLValue(val)
