@@ -1,0 +1,28 @@
+
+Imports
+
+    >>> from tests.utils import resource_file
+    >>> from owslib.etree import etree
+	>>> from owslib.iso import MD_Metadata
+
+Print testing some metadata elements
+
+    >>> e=etree.parse(resource_file('iso_xml_srv.xml'))
+    >>> x=MD_Metadata(e)
+    >>> x.identificationinfo[0].title
+    'Parameter-elevation Regressions on Independent Slopes Model Monthly Climate Data for the Continental United States.'
+
+    >>> x.identificationinfo[1].title
+    'Parameter-elevation Regressions on Independent Slopes Model Monthly Climate Data for the Continental United States. February 2013 Snapshot'
+
+	>>> x.identificationinfo[1].abstract[0:40]
+	'This dataset was created using the PRISM'
+	
+	>>> x.identificationinfo[1].contact.name
+	'Christopher Daley'
+	
+	>>> x.identificationinfo[1].contact.email
+	'daley@nacse.org'
+
+	>>> x.identificationinfo[1].operations[0]['connectpoint'][0].url
+	'http://cida.usgs.gov/thredds/dodsC/prism'
