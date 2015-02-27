@@ -12,7 +12,7 @@
 """
 API for Web Map Service (WMS) methods and metadata.
 
-Currently supports only version 1.1.1 of the WMS protocol.
+Support for version 1.1.1 of the WMS protocol.
 """
 
 from __future__ import (absolute_import, division, print_function)
@@ -23,36 +23,16 @@ from urllib import urlencode
 import warnings
 from .etree import etree
 from .util import openURL, testXMLValue, extract_xml_list, xmltag_split
-from .fgdc import Metadata
-from .iso import MD_Metadata
+from owslib.fgdc import Metadata
+from owslib.iso import MD_Metadata
 
 
-class ServiceException(Exception):
-    """WMS ServiceException
+class WebMapService_1_1_1(object):
+    """Abstraction for OGC Web Map Service (WMS)
 
-    Attributes:
-        message -- short error message
-        xml  -- full xml error message from server
+    Implements IWebMapService
     """
 
-    def __init__(self, message, xml):
-        self.message = message
-        self.xml = xml
-        
-    def __str__(self):
-        return repr(self.message)
-
-
-class CapabilitiesError(Exception):
-    pass
-
-
-class WebMapService(object):
-    """Abstraction for OGC Web Map Service (WMS).
-
-    Implements IWebMapService.
-    """
-    
     def __getitem__(self,name):
         ''' check contents dictionary to allow dict like access to service layers'''
         if name in self.__getattribute__('contents').keys():
@@ -60,15 +40,14 @@ class WebMapService(object):
         else:
             raise KeyError("No content named %s" % name)
 
-    
-    def __init__(self, url, version='1.1.1', xml=None, 
+    def __init__(self, url, xml=None, 
                 username=None, password=None, parse_remote_metadata=False
                 ):
         """Initialize."""
         self.url = url
         self.username = username
         self.password = password
-        self.version = version
+        self.version = '1.1.1'
         self._capabilities = None
         
         # Authentication handled by Reader
