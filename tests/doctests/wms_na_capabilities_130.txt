@@ -1,0 +1,99 @@
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from tests.utils import cast_tuple_int_list, cast_tuple_int_list_srs, resource_file
+    >>> from owslib.wms import WebMapService
+    
+Fake a request to a WMS Server using saved doc from the National Atlas for
+the 1 Million Scale datasets.
+http://webservices.nationalatlas.gov/wms/1million?SERVICE=WMS&REQUEST=GetCapabilities
+
+    >>> xml = open(resource_file('wms_nationalatlas_getcapabilities_130.xml'), 'r').read() 
+    >>> wms = WebMapService('url', version='1.3.0', xml=xml)
+    
+Test capabilities
+
+    >>> wms.identification.type
+    'WMS'
+
+    >>> wms.identification.title
+    '1 Million Scale WMS Layers from the National Atlas of the United States'
+
+    >>> wms.identification.abstract
+    'Test Data for 1 Million Scale'
+    
+    >>> wms.provider.url
+    'http://webservices.nationalatlas.gov/wms?'
+    
+    >>> wms.identification.keywords
+    ['United States', 'National Atlas']
+
+    >>> p = wms.provider.contact
+    >>> p.name
+    >>> p.email
+
+    >>> p.position
+    'WMS Support Staff'
+
+Test available content layers
+
+    >>> 'treecanopy' in wms.contents.keys()
+    True
+    
+    >>> layers=[wms[layer].title for layer in wms.contents]
+    >>> '1 Million Scale - Airports' in layers
+    True
+        
+Test single item accessor
+
+    >>> wms['treecanopy'].title
+    '1 Million Scale - Tree Canopy 100 Meter Resolution'
+    
+    >>> cast_tuple_int_list_srs(wms['treecanopy'].boundingBox)
+    [-179, 17, -62, 71, 'EPSG:4326']
+    
+    >>> cast_tuple_int_list(wms['treecanopy'].boundingBoxWGS84)
+    [-179.998, 17.06, -62.6641, 71.954]
+    
+    >>> wms['treecanopy'].crsOptions
+    ['CSR:84']
+
+    >>> x = wms['treecanopy'].attribution
+    >>> x == {'url': 'http://svn.codehaus.org/geoserver/trunk/data/release/data/', 'logo_size': (353, 112), 'logo_url': 'http://geoserver.org/s/1518/25/0.1/_/download/resources/com.atlassian.confluence.themes.geoserver%3Ageoserver/chrome/geoserver-logo.png', 'title': 'GeoServer Sample Data'}
+    False
+    
+    >>> x = wms['treecanopy'].styles
+    >>> x == {'point': {'legend': 'http://localhost:8080/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=poi', 'title': 'A boring default style'}}
+    True
+    
+Expect a KeyError for invalid names
+
+    >>> wms['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wms.operations]
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
+    
+    >>> x = wms.getOperationByName('GetMap').methods
+    >>> x == [{'type': 'Get', 'url': 'http://localhost:8080/geoserver/wms?SERVICE=WMS&'}]
+    True
+    
+    >>> wms.getOperationByName('GetMap').formatOptions
+    ['image/png', 'application/atom xml', 'application/atom+xml', 'application/openlayers', 'application/pdf', 'application/rss xml', 'application/rss+xml', 'application/vnd.google-earth.kml', 'application/vnd.google-earth.kml xml', 'application/vnd.google-earth.kml+xml', 'application/vnd.google-earth.kmz', 'application/vnd.google-earth.kmz xml', 'application/vnd.google-earth.kmz+xml', 'atom', 'image/geotiff', 'image/geotiff8', 'image/gif', 'image/jpeg', 'image/png8', 'image/svg', 'image/svg xml', 'image/svg+xml', 'image/tiff', 'image/tiff8', 'kml', 'kmz', 'openlayers', 'rss']
+
+Test exceptions
+
+    >>> wms.exceptions
+    ['application/vnd.ogc.se_xml', 'application/vnd.ogc.se_inimage']
+
+Lastly, test the getcapabilities method
+
+#    >>> wms = WebMapService('http://wms.telascience.org/cgi-bin/ngBM_wms?', version='1.1.1')
+#    >>> xml = wms.getcapabilities().read()
+#    >>> xml.find('<WMT_MS_Capabilities version="1.1.1">') > 0
+#    True
+
