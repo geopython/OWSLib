@@ -58,12 +58,15 @@ Test single item accessor
     >>> wms['treecanopy'].crsOptions
     ['CSR:84']
 
-    >>> x = wms['treecanopy'].attribution
+    >>> x = wms['one_million'].attribution
     >>> x == {'url': 'http://svn.codehaus.org/geoserver/trunk/data/release/data/', 'logo_size': (353, 112), 'logo_url': 'http://geoserver.org/s/1518/25/0.1/_/download/resources/com.atlassian.confluence.themes.geoserver%3Ageoserver/chrome/geoserver-logo.png', 'title': 'GeoServer Sample Data'}
     False
-    
+
+    >>> x['url'] == 'http://nationalatlas.gov/infodocs/wms_intro.html'
+    True
+
     >>> x = wms['treecanopy'].styles
-    >>> x == {'point': {'legend': 'http://localhost:8080/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=poi', 'title': 'A boring default style'}}
+    >>> x == {'treei0100a': {'legend': 'http://nationalatlas.gov/images/treei0100a.gif', 'title': 'treei0100a'}}
     True
     
 Expect a KeyError for invalid names
@@ -76,19 +79,20 @@ Expect a KeyError for invalid names
 Test operations
 
     >>> [op.name for op in wms.operations]
-    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic']
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic', 'GetStyles']
     
-    >>> x = wms.getOperationByName('GetMap').methods
-    >>> x == [{'type': 'Get', 'url': 'http://localhost:8080/geoserver/wms?SERVICE=WMS&'}]
+    >>> x = wms.getOperationByName('GetMap').methods[0]
+    >>> x == {'type': 'Get', 'url': 'http://webservices.nationalatlas.gov/wms?'}
     True
     
     >>> wms.getOperationByName('GetMap').formatOptions
-    ['image/png', 'application/atom xml', 'application/atom+xml', 'application/openlayers', 'application/pdf', 'application/rss xml', 'application/rss+xml', 'application/vnd.google-earth.kml', 'application/vnd.google-earth.kml xml', 'application/vnd.google-earth.kml+xml', 'application/vnd.google-earth.kmz', 'application/vnd.google-earth.kmz xml', 'application/vnd.google-earth.kmz+xml', 'atom', 'image/geotiff', 'image/geotiff8', 'image/gif', 'image/jpeg', 'image/png8', 'image/svg', 'image/svg xml', 'image/svg+xml', 'image/tiff', 'image/tiff8', 'kml', 'kmz', 'openlayers', 'rss']
+    ['image/png', 'image/jpeg', 'image/gif', 'image/png; mode=8bit', 'image/tiff']
+    
 
 Test exceptions
 
     >>> wms.exceptions
-    ['application/vnd.ogc.se_xml', 'application/vnd.ogc.se_inimage']
+    ['XML', 'INIMAGE', 'BLANK']
 
 Lastly, test the getcapabilities method
 
