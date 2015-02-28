@@ -53,7 +53,7 @@ Test single item accessor
     [-179, 17, -62, 71, 'EPSG:4326']
     
     >>> cast_tuple_int_list(wms['treecanopy'].boundingBoxWGS84)
-    [-179.998, 17.06, -62.6641, 71.954]
+    [-179, 17, -62, 71]
     
     >>> wms['treecanopy'].crsOptions
     ['CSR:84']
