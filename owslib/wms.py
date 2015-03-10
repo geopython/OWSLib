@@ -19,7 +19,7 @@ from __future__ import (absolute_import, division, print_function)
 from .map import wms111, wms130
 
 
-def WebMapService(url, version, xml=None, parse_remote_metadata=False,
+def WebMapService(url, version='1.1.1', xml=None, parse_remote_metadata=False,
                   timeout=30):
     '''wms factory function, returns a version specific WebMapService object)
 
