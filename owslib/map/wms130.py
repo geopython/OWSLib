@@ -156,6 +156,10 @@ class WebMapService_1_3_0(object):
             A spatial reference system identifier.
         bbox : tuple
             (left, bottom, right, top) in srs units.
+
+
+            CRS:84: (long, lat)
+            EPSG:4326: (lat, long)
         format : string
             Output image format such as 'image/jpeg'.
         size : tuple
@@ -185,6 +189,14 @@ class WebMapService_1_3_0(object):
             >>> out.close()
 
         """
+        def _build_bbox():
+            if str(srs).lower() in ['epsg:4326']:
+                # it's lonlat pairs
+                return (bbox[1], bbox[0], bbox[3], bbox[2])
+            else:
+                # it's latlon
+                return bbox
+
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if
                             m.get('type').lower() == method.lower()))
@@ -205,6 +217,8 @@ class WebMapService_1_3_0(object):
         request['width'] = str(size[0])
         request['height'] = str(size[1])
 
+        # remap srs to crs for the actual request
+        bbox = _build_bbox()
         request['crs'] = str(srs)
         request['bbox'] = ','.join([repr(x) for x in bbox])
         request['format'] = str(format)
