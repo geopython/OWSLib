@@ -345,7 +345,7 @@ class ContentMetadata:
         if b is not None:
             try:
                 # sometimes the SRS attribute is (wrongly) not provided
-                srs = b.attrib['SRS']
+                srs = b.attrib['CRS']
             except KeyError:
                 srs = None
             self.boundingBox = (
@@ -406,11 +406,11 @@ class ContentMetadata:
             self.crsOptions = list(self.parent.crsOptions)
 
         # Look for SRS option attached to this layer
-        if elem.find(nspath('SRS', WMS_NAMESPACE)) is not None:
+        if elem.find(nspath('CRS', WMS_NAMESPACE)) is not None:
             # some servers found in the wild use a single SRS
             # tag containing a whitespace separated list of SRIDs
             # instead of several SRS tags. hence the inner loop
-            for srslist in map(lambda x: x.text, elem.findall(nspath('SRS', WMS_NAMESPACE))):
+            for srslist in map(lambda x: x.text, elem.findall(nspath('CRS', WMS_NAMESPACE))):
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
