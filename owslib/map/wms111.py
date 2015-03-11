@@ -360,6 +360,22 @@ class ContentMetadata:
             if hasattr(self.parent, 'boundingBox'):
                 self.boundingBox = self.parent.boundingBox
 
+        # make a bbox list (of tuples)
+        crs_list = []
+        for bb in elem.findall('BoundingBox'):
+            srs = bb.attrib.get('SRS', None)
+            box = (bb.attrib['minx'], bb.attrib['miny'], bb.attrib['maxx'], bb.attrib['maxy'])
+            crs_list.append(
+                (
+                    float(box[0]),
+                    float(box[1]),
+                    float(box[2]),
+                    float(box[3]),
+                    srs
+                )
+            )
+        self.crs_list = crs_list
+
         # ScaleHint 
         sh = elem.find('ScaleHint') 
         self.scaleHint = None 
