@@ -249,7 +249,7 @@ class WebMapService_1_3_0(object):
 
             se_tree = etree.fromstring(se_xml)
             # TODO: add the ogc namespace for this
-            err_message = unicode(se_tree.find('{http://www.opengis.net/ogc}ServiceExceptionReport').text).strip()
+            err_message = unicode(se_tree.find('//*[local-name()="ServiceExceptionReport"]').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
 
@@ -362,14 +362,16 @@ class ContentMetadata:
             except KeyError:
                 srs = None
 
-            # if the bbox crs == epsg:4326, handle the axis change
-            box = (b.attrib['minx'], b.attrib['miny'], b.attrib['maxx'], b.attrib['maxy'])
-            box = build_bbox(srs, box)
+            box = map(float, [b.attrib['minx'],
+                              b.attrib['miny'],
+                              b.attrib['maxx'],
+                              b.attrib['maxy']]
+                      )
             self.boundingBox = (
-                float(box[0]),
-                float(box[1]),
-                float(box[2]),
-                float(box[3]),
+                box[0],
+                box[1],
+                box[2],
+                box[3],
                 srs,
             )
         elif self.parent:
@@ -380,17 +382,18 @@ class ContentMetadata:
         crs_list = []
         for bb in elem.findall(nspath('BoundingBox', WMS_NAMESPACE)):
             srs = bb.attrib.get('CRS', None)
-            box = (bb.attrib['minx'], bb.attrib['miny'], bb.attrib['maxx'], bb.attrib['maxy'])
-            #box = build_bbox(srs, box)
-            crs_list.append(
-                (
-                    float(box[0]),
-                    float(box[1]),
-                    float(box[2]),
-                    float(box[3]),
-                    srs
-                )
-            )
+            box = map(float, [bb.attrib['minx'],
+                              bb.attrib['miny'],
+                              bb.attrib['maxx'],
+                              bb.attrib['maxy']]
+                      )
+            crs_list.append((
+                box[0],
+                box[1],
+                box[2],
+                box[3],
+                srs,
+            ))
         self.crs_list = crs_list
 
         # ScaleHint
@@ -485,23 +488,25 @@ class ContentMetadata:
         # keywords
         self.keywords = [f.text for f in elem.findall(nspath('KeywordList/Keyword', WMS_NAMESPACE))]
 
-        # timepositions - times for which data is available.
+        # extents replaced by dimensions of name
+        # <Dimension name="elevation" units="meters" default="500" multipleValues="1"
+        #    nearestValue="0" current="true" unitSymbol="m">500, 490, 480</Dimension>
+        # it can be repeated with the same name so ? this assumes a single one to match 1.1.1
+
         self.timepositions = None
         self.defaulttimeposition = None
-        for extent in elem.findall(nspath('Extent', WMS_NAMESPACE)):
-            if extent.attrib.get("name").lower() == 'time':
-                if extent.text:
-                    self.timepositions = extent.text.split(',')
-                    self.defaulttimeposition = extent.attrib.get("default")
-                    break
+        time_xpath = '*[local-name()="Dimension" and @name="time"]'
+        time_dimension = next(iter(elem.xpath(time_xpath)), None)
+        if time_dimension is not None:
+            self.timepositions = time_dimension.text.split(',') if time_dimension.text else None
+            self.defaulttimeposition = time_dimension.attrib.get('default', '')
 
         # Elevations - available vertical levels
         self.elevations = None
-        for extent in elem.findall(nspath('Extent', WMS_NAMESPACE)):
-            if extent.attrib.get("name").lower() == 'elevation':
-                if extent.text:
-                    self.elevations = extent.text.split(',')
-                    break
+        elev_xpath = '*[local-name()="Dimension" and @name="elevation"]'
+        elev_dimension = next(iter(elem.xpath(elev_xpath)), None)
+        if elev_dimension is not None:
+            self.elevations = elev_dimension.text.split(',') if elev_dimension.text else None
 
         # MetadataURLs
         self.metadataUrls = []
