@@ -236,20 +236,17 @@ class WebMapService_1_3_0(object):
 
         data = urlencode(request)
 
-        print (data)
-
         u = openURL(base_url, data, method, username=self.username, password=self.password)
 
         # check for service exceptions, and return
-        # error: AttributeError: 'RereadableURL' object has no attribute 'info'
-        if u.info()['Content-Type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
+        # fyi: in openURL, if the path goes through the content-type 
+        # check w/out http header set and it instantiates a new rereadable
+        # url, it loses the additional url obj methods (so just the stringio) and
+        # the original u.info() fails with an attributeerror
+        if u.headers['Content-Type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
-
-            print (se_xml)
-
             se_tree = etree.fromstring(se_xml)
-            # TODO: add the ogc namespace for this
-            err_message = unicode(se_tree.find('//*[local-name()="ServiceExceptionReport"]').text).strip()
+            err_message = unicode(next(iter(se_tree.xpath('//*[local-name()="ServiceException"]/text()')), '')).strip()
             raise ServiceException(err_message, se_xml)
         return u
 
@@ -506,7 +503,7 @@ class ContentMetadata:
         elev_xpath = '*[local-name()="Dimension" and @name="elevation"]'
         elev_dimension = next(iter(elem.xpath(elev_xpath)), None)
         if elev_dimension is not None:
-            self.elevations = elev_dimension.text.split(',') if elev_dimension.text else None
+            self.elevations = [e.strip() for e in elev_dimension.text.split(',')] if elev_dimension.text else None
 
         # MetadataURLs
         self.metadataUrls = []

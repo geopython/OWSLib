@@ -311,6 +311,11 @@
                 <Dimension name="elevation" units="meters" default="500" multipleValues="1" nearestValue="0" current="true" unitSymbol="m">500, 490, 480</Dimension>
                 <Dimension name="time" units="ISO8601" default="2006-06-23T03:10:00Z" nearestValue="0">1995-01-01/2013-12-31/PT5M</Dimension>
 
+                <MetadataURL type="FGDC">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="9250AA67-F3AC-6C12-0CB9-0662231AA181_fgdc.xml"/>
+                </MetadataURL>
+                
                 <Style>
                     <Name>default</Name>
                     <Title>default</Title>

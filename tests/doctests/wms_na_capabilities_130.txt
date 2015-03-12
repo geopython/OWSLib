@@ -50,13 +50,16 @@ Test single item accessor
     '1 Million Scale - Tree Canopy 100 Meter Resolution'
     
     >>> cast_tuple_int_list_srs(wms['treecanopy'].boundingBox)
-    [-179, 17, -62, 71, 'EPSG:4326']
+    [-179, 17, -62, 71, 'CRS:84']
     
     >>> cast_tuple_int_list(wms['treecanopy'].boundingBoxWGS84)
     [-179, 17, -62, 71]
     
     >>> wms['treecanopy'].crsOptions
-    ['CSR:84']
+    ['EPSG:4326', 'EPSG:4269', 'EPSG:3785', 'EPSG:4267', 'EPSG:900913', 'EPSG:54008', 'EPSG:102100', 'CRS:84', 'EPSG:54004', 'EPSG:102113', 'EPSG:2163', 'EPSG:3857']
+
+    >>> 'EPSG:3857' in wms['treecanopy'].crsOptions
+    True
 
     >>> x = wms['one_million'].attribution
     >>> x == {'url': 'http://svn.codehaus.org/geoserver/trunk/data/release/data/', 'logo_size': (353, 112), 'logo_url': 'http://geoserver.org/s/1518/25/0.1/_/download/resources/com.atlassian.confluence.themes.geoserver%3Ageoserver/chrome/geoserver-logo.png', 'title': 'GeoServer Sample Data'}
@@ -68,6 +71,24 @@ Test single item accessor
     >>> x = wms['treecanopy'].styles
     >>> x == {'treei0100a': {'legend': 'http://nationalatlas.gov/images/treei0100a.gif', 'title': 'treei0100a'}}
     True
+
+Test the Dimensions
+    
+    >>> wms['coast1m'].timepositions
+    ['1995-01-01/2013-12-31/PT5M']
+
+    >>> '480' in wms['coast1m'].elevations
+    True
+
+Test the metadata link
+    >>> len(wms['coast1m'].metadataUrls) > 0
+    True
+
+    >>> wms['coast1m'].metadataUrls[0]['format']
+    'text/xml'
+
+    >>> wms['coast1m'].metadataUrls[0]['url']
+    '9250AA67-F3AC-6C12-0CB9-0662231AA181_fgdc.xml'
     
 Expect a KeyError for invalid names
 

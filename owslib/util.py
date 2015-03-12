@@ -37,7 +37,7 @@ class RereadableURL(StringIO,object):
     """ Class that acts like a combination of StringIO and url - has seek method and url headers etc """
     def __init__(self, u):
         #get url headers etc from url
-        self.headers = u.headers                
+        self.headers = u.headers
         #get file like seek, read methods from StringIO
         content=u.read()
         #Due to race conditions the XML file might be empty. In that case the parsing method would
@@ -188,7 +188,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
     if 'Content-Type' in u.info() and u.info()['Content-Type'] in ['text/xml', 'application/xml']:
         #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
         #wrap the url stram in a extended StringIO object so it's re-readable
-        u=RereadableURL(u)      
+        u=RereadableURL(u)
         se_xml= u.read()
         se_tree = etree.fromstring(se_xml)
         serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
@@ -196,7 +196,7 @@ def openURL(url_base, data, method='Get', cookies=None, username=None, password=
             serviceException=se_tree.find('ServiceException')
         if serviceException is not None:
             raise ServiceException(str(serviceException.text).strip())
-        u.seek(0) #return cursor to start of u      
+        u.seek(0) #return cursor to start of u  
     return u
 
 #default namespace for nspath is OWS common
