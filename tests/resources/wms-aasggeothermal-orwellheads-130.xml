@@ -105,6 +105,12 @@
 <BoundingBox CRS="CRS:84" minx="-124.399896" miny="41.999877" maxx="-116.779783" maxy="46.162222"/>
 <BoundingBox CRS="EPSG:4326" minx="41.999877" miny="-124.399896" maxx="46.162222" maxy="-116.779783"/>
 <BoundingBox CRS="EPSG:3857" minx="-13848133.077456" miny="5160961.019264" maxx="-12999865.978509" maxy="5806383.628162"/>
+
+        <FeatureListURL>
+            <Format>text/xml</Format>
+            <OnlineResource xlink:href="http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+        </FeatureListURL>
+
         <Style>
           <Name>default</Name>
           <Title>Wellheader</Title>

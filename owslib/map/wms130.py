@@ -486,6 +486,7 @@ class ContentMetadata:
         self.keywords = [f.text for f in elem.findall(nspath('KeywordList/Keyword', WMS_NAMESPACE))]
 
         # extents replaced by dimensions of name
+        # comment by Soren Scott
         # <Dimension name="elevation" units="meters" default="500" multipleValues="1"
         #    nearestValue="0" current="true" unitSymbol="m">500, 490, 480</Dimension>
         # it can be repeated with the same name so ? this assumes a single one to match 1.1.1
@@ -536,6 +537,16 @@ class ContentMetadata:
                 'url': m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
             }
             self.dataUrls.append(dataUrl)
+
+        # FeatureListURLs
+        self.featureListUrls = []
+        for m in elem.findall(nspath('FeatureListURL', WMS_NAMESPACE)):
+            featureUrl = {
+                'format': m.find(nspath('Format', WMS_NAMESPACE)).text.strip(),
+                'url': m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
+            }
+            self.featureListUrls.append(featureUrl)
+
 
         self.layers = []
         for child in elem.findall(nspath('Layer', WMS_NAMESPACE)):

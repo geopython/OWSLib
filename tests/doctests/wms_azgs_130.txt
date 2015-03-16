@@ -79,6 +79,17 @@ Test the styles
     >>> wms['Wellheader'].styles['default']['title']
     'Wellheader'
 
+Test Feature List URL 
+    
+    # added to the local copy, fyi
+
+    >>> wms['Wellheader'].featureListUrls is not None
+    True
+
+    >>> wms['Wellheader'].featureListUrls[0]['format']
+    'text/xml'
+
+
 Expect KeyError for invalid names
 
     >>> wms['utterly bogus'].title
