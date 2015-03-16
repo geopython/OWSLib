@@ -86,5 +86,24 @@ Expect KeyError for invalid names
     ...
     KeyError: 'No content named utterly bogus'
 
+Test operations
+
+    >>> [op.name for op in wms.operations]
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'GetStyles']
+
+    >>> x = wms.getOperationByName('GetMap').methods[0]
+    >>> x == {'type': 'Get', 'url': 'http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?'}
+    True
+
+    >>> wms.getOperationByName('GetCapabilities').formatOptions
+    ['application/vnd.ogc.wms_xml', 'text/xml']
+
+Test exceptions
+
+    >>> wms.exceptions
+    ['application/vnd.ogc.se_xml', 'application/vnd.ogc.se_inimage', 'application/vnd.ogc.se_blank', 'text/xml', 'XML']
+
+
+
 
 
