@@ -1,0 +1,90 @@
+
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from owslib.wms import WebMapService
+    >>> from tests.utils import resource_file
+    >>> from operator import itemgetter
+
+Fake a request to an ArcGIS WMS Server using saved doc from 
+http://services.azgs.az.gov/ArcGIS/services/aasggeothermal/ORWellHeaders/MapServer/WMSServer?request=GetCapabilities&service=WMS
+
+    >>> xml = open(resource_file('wms-aasggeothermal-orwellheads-130.xml'), 'r').read()
+    >>> wms = WebMapService('url', version='1.3.0', xml=xml)
+
+Test capabilities
+
+    >>> wms.identification.type
+    'WMS'
+
+    >>> wms.identification.title
+    'aasggeothermal_ORWellHeaders'
+
+    >>> wms.identification.abstract
+    'WellHeaders in the state of Oregon'
+
+    >>> wms.identification.keywords
+    ['Well Headers, Well Log Depth, Geothermal, Oregon']
+
+    >>> wms.provider.contact.name
+    'Geoinformatics'
+
+    >>> wms.provider.name
+    'Arizona Geological Survey'
+
+    >>> wms.identification.accessconstraints is None
+    True
+
+Test available content layers
+
+    >>> 'Wellheader' in wms.contents.keys()
+    True
+
+    >>> layers = [wms[layer].title for layer in wms.contents]
+    >>> 'Wellheader' in layers
+    True
+
+    # we should not find this parent layer
+    >>> 'ORWellHeaders' in layers
+    False
+
+Test single item accessor
+    
+    >>> wms['Wellheader'].title
+    'Wellheader'
+
+    >>> wms['Wellheader'].boundingBox
+    (-124.399896, 41.999877, -116.779783, 46.162222, 'CRS:84')
+
+    >>> wms['Wellheader'].boundingBoxWGS84
+    (-124.399896, 41.999877, -116.779783, 46.162222)
+
+    >>> 'EPSG:3857' in wms['Wellheader'].crsOptions
+    True
+
+
+    # not changing this behavior for backwards compatibility
+    # and harmonization with the existing 1.1.1
+    #>>> wms['Wellheader'].attribution is None
+    #True
+
+Test the styles
+
+    >>> wms['Wellheader'].styles is not None
+    True
+
+    >>> 'default' in wms['Wellheader'].styles
+    True
+
+    >>> wms['Wellheader'].styles['default']['title']
+    'Wellheader'
+
+Expect KeyError for invalid names
+
+    >>> wms['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+
+

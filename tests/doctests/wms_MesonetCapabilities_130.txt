@@ -28,6 +28,9 @@ Test capabilities
     >>> wms.identification.accessconstraints
     'None'
 
+    >>> wms.provider.contact.name
+    'Daryl Herzmann'
+
 Test available content layers
 
     >>> sorted(wms.contents.keys())
@@ -85,6 +88,13 @@ Test operations
 
     >>> wms.getOperationByName('GetMap').formatOptions
     ['image/png', 'image/jpeg', 'image/gif', 'image/png; mode=8bit', 'application/x-pdf', 'image/svg+xml', 'image/tiff']
+
+    >>> 'image/png; mode=8bit' in wms.getOperationByName('GetLegendGraphic').formatOptions
+    True
+
+    >>> x = sorted(wms.getOperationByName('GetMap').methods, key=itemgetter('type'))
+    >>> x[0]['type'] == 'Get'
+    True
 
 Test exceptions
 
