@@ -248,7 +248,7 @@ class ContentMetadata:
         # bbox
         self.boundingBoxWGS84 = None
         b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)), namespaces['ows'])
-        if b is not None:
+        if b is not None and b.minx is not None and b.miny is not None and b.maxx is not None and b.maxy is not None:
             self.boundingBoxWGS84 = (
                     float(b.minx), float(b.miny),
                     float(b.maxx), float(b.maxy),
