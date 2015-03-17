@@ -1,4 +1,5 @@
 from __future__ import (absolute_import, division, print_function)
+import six
 
 
 class Namespaces(object):
@@ -72,7 +73,7 @@ class Namespaces(object):
             'http://www.opengis.net/wfs/2.0'
         """
         retval = None
-        if key in self.namespace_dict.keys():
+        if key in self.namespace_dict:
             retval = self.namespace_dict[key]
         return retval
     
@@ -102,7 +103,7 @@ class Namespaces(object):
         key += version
 
         retval = None
-        if key in self.namespace_dict.keys():
+        if key in self.namespace_dict:
             retval = self.namespace_dict[key]
             
         return retval
@@ -131,7 +132,7 @@ class Namespaces(object):
         if keys is None or len(keys) == 0:
             return self.namespace_dict
 
-        if isinstance(keys, unicode) or isinstance(keys, str):
+        if isinstance(keys, six.string_types):
             return { keys: self.get_namespace(keys) }
 
         retval = {}
