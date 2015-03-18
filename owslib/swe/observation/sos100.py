@@ -3,7 +3,10 @@ from __future__ import (absolute_import, division, print_function)
 import cgi
 from owslib.etree import etree
 from datetime import datetime
-from urllib import urlencode
+try:                    # Python 3
+    from urllib.parse import urlencode
+except ImportError:     # Python 2
+    from urllib import urlencode
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities
@@ -316,6 +319,6 @@ class SosCapabilitiesReader(object):
 
             st should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, bytes):
+            raise ValueError("String must be of type bytes, not %s" % type(st))
         return etree.fromstring(st)

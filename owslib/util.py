@@ -44,7 +44,7 @@ import six
 Utility functions and classes
 """
 
-class RereadableURL(StringIO,object):
+class RereadableURL(BytesIO,object):
     """ Class that acts like a combination of StringIO and url - has seek method and url headers etc """
     def __init__(self, u):
         #get url headers etc from url
