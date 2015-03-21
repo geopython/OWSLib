@@ -32,9 +32,15 @@ would be appreciated.
 from __future__ import (absolute_import, division, print_function)
 
 import warnings
-import urlparse
-import urllib2
-from urllib import urlencode
+import six
+
+try: # Python 3
+    from urllib.request import urlopen, Request
+    from urllib.parse import urlencode
+except ImportError: # Python 2
+    from urllib import urlencode
+    from urllib2 import Request, urlopen
+
 from .etree import etree
 from .util import openURL, testXMLValue, getXMLInteger
 from .fgdc import Metadata
