@@ -4,7 +4,10 @@ import logging
 import os
 import sys
 from owslib.etree import etree
-from urlparse import urlparse
+try:                    # Python 3
+    from urllib.parse import urlparse
+except ImportError:     # Python 2
+    from urlparse import urlparse
 
 def setup_logging(loglevel='INFO'):
     """Helper function to setup logging for tests"""

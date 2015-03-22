@@ -32,9 +32,13 @@ would be appreciated.
 from __future__ import (absolute_import, division, print_function)
 
 import warnings
-import urlparse
-import urllib2
-from urllib import urlencode
+import six
+from six.moves import filter
+try:                    # Python 3
+    from urllib.parse import urlencode, urlparse, urlunparse, parse_qs, ParseResult
+except ImportError:      # Python 2
+    from urllib import urlencode
+    from urlparse import urlparse, urlunparse, parse_qs, ParseResult
 from .etree import etree
 from .util import openURL, testXMLValue, getXMLInteger
 from .fgdc import Metadata
@@ -115,7 +119,7 @@ class WebMapTileService(object):
     def __getitem__(self, name):
         '''Check contents dictionary to allow dict like access to
         service layers'''
-        if name in self.__getattribute__('contents').keys():
+        if name in self.__getattribute__('contents'):
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError("No content named %s" % name)
@@ -293,7 +297,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         if (layer is None):
             raise ValueError("layer is mandatory (cannot be None)")
         if style is None:
-            style = self[layer].styles.keys()[0]
+            style = list(self[layer].styles.keys())[0]
         if format is None:
             format = self[layer].formats[0]
         if tilematrixset is None:
@@ -318,7 +322,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         request.append(('TILECOL', str(column)))
         request.append(('FORMAT', format))
 
-        for key, value in kwargs.iteritems():
+        for key, value in six.iteritems(kwargs):
             request.append((key, value))
 
         data = urlencode(request, True)
@@ -380,9 +384,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         if base_url is None:
             base_url = self.url
             try:
-                get_verbs = filter(
-                    lambda x: x.get('type').lower() == 'get',
-                    self.getOperationByName('GetTile').methods)
+                get_verbs = [x for x in self.getOperationByName('GetTile').methods if x.get('type').lower() == 'get']
                 if len(get_verbs) > 1:
                     # Filter by constraints
                     base_url = next(
@@ -390,8 +392,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
                             list,
                             ([pv.get('url')
                                 for const in pv.get('constraints')
-                                if 'kvp' in map(
-                                    lambda x: x.lower(), const.values)]
+                                if 'kvp' in [x.lower() for x in const.values]]
                              for pv in get_verbs if pv.get('constraints'))))[0]
                 elif len(get_verbs) == 1:
                     base_url = get_verbs[0].get('url')
@@ -404,7 +405,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = unicode(se_tree.find('ServiceException').text)
+            err_message = six.text_type(se_tree.find('ServiceException').text)
             raise ServiceException(err_message.strip(), se_xml)
         return u
 
@@ -703,8 +704,8 @@ class WMTSCapabilitiesReader:
         """
         # Ensure the 'service', 'request', and 'version' parameters,
         # and any vendor-specific parameters are included in the URL.
-        pieces = urlparse.urlparse(service_url)
-        args = urlparse.parse_qs(pieces.query)
+        pieces = urlparse(service_url)
+        args = parse_qs(pieces.query)
         if 'service' not in args:
             args['service'] = 'WMTS'
         if 'request' not in args:
@@ -714,10 +715,10 @@ class WMTSCapabilitiesReader:
         if vendor_kwargs:
             args.update(vendor_kwargs)
         query = urlencode(args, doseq=True)
-        pieces = urlparse.ParseResult(pieces.scheme, pieces.netloc,
+        pieces = ParseResult(pieces.scheme, pieces.netloc,
                                       pieces.path, pieces.params,
                                       query, pieces.fragment)
-        return urlparse.urlunparse(pieces)
+        return urlunparse(pieces)
 
     def read(self, service_url, vendor_kwargs=None):
         """Get and parse a WMTS capabilities document, returning an

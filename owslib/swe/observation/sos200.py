@@ -3,7 +3,10 @@ from __future__ import (absolute_import, division, print_function)
 import cgi
 from owslib.etree import etree
 from datetime import datetime
-from urllib import urlencode
+try:                    # Python 3
+    from urllib.parse import urlencode
+except ImportError:     # Python 2
+    from urllib import urlencode
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200
