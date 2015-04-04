@@ -267,6 +267,9 @@ class SosObservationOffering(object):
 
     def __str__(self):
         return 'Offering id: %s, name: %s' % (self.id, self.name)
+    
+    def __repr__(self):
+        return "<SosObservationOffering '%s'>" % self.name
 
 class SosCapabilitiesReader(object):
     def __init__(self, version="2.0.0", url=None, username=None, password=None):
