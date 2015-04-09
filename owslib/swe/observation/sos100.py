@@ -135,6 +135,7 @@ class SensorObservationService_1_0_0(object):
                                 offerings=None,
                                 observedProperties=None,
                                 eventTime=None,
+                                procedure=None,
                                 method='Get',
                                 **kwargs):
         """
@@ -168,6 +169,9 @@ class SensorObservationService_1_0_0(object):
         # Optional Fields
         if eventTime is not None:
             request['eventTime'] = eventTime
+
+        if procedure is not None:
+            request['procedure'] = procedure
 
         if kwargs:
             for kw in kwargs:
