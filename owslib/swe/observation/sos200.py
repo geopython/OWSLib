@@ -15,7 +15,7 @@ from owslib.namespaces import Namespaces
 
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["fes","ogc","om","gml32","sml","swe20","swes","xlink"])
+    ns = n.get_namespaces(["fes","ogc","om","gml32","sa","sml","swe20","swes","xlink"])
     ns["ows"] = n.get_namespace("ows110")
     ns["sos"] = n.get_namespace("sos20")
     return ns
@@ -181,6 +181,9 @@ class SensorObservationService_2_0_0(object):
         url_kwargs = {}
         if 'timeout' in kwargs:
             url_kwargs['timeout'] = kwargs.pop('timeout') # Client specified timeout value
+
+        if procedure is not None:
+            request['procedure'] = procedure
 
         if kwargs:
             for kw in kwargs:

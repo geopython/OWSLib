@@ -15,7 +15,7 @@ from owslib.namespaces import Namespaces
 
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["ogc","sml","gml","sos","swe","xlink","sa"])
+    ns = n.get_namespaces(["ogc","sa","sml","gml","sos","swe","xlink"])
     ns["ows"] = n.get_namespace("ows110")
     return ns
 namespaces = get_namespaces()
