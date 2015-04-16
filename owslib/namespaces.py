@@ -36,6 +36,7 @@ class Namespaces(object):
         'ows200':   'http://www.opengis.net/ows/2.0',
         'rim'   :   'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0',
         'rdf'   :   'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'sa'    :   'http://www.opengis.net/sampling/1.0',
         'sml'   :   'http://www.opengis.net/sensorML/1.0.1',
         'sml101':   'http://www.opengis.net/sensorML/1.0.1',
         'sos'   :   'http://www.opengis.net/sos/1.0',
