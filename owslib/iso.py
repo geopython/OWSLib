@@ -717,12 +717,29 @@ class EX_Extent(object):
 
 class MD_ReferenceSystem(object):
     """ process MD_ReferenceSystem """
-    def __init__(self, md):
+    def __init__(self, md=None):
         if md is None:
-            pass
+            self.code = None
+            self.codeSpace = None
+            self.version = None
         else:
             val = md.find(util.nspath_eval('gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
-            self.code = util.testXMLValue(val)
+            if val is not None:
+                self.code = util.testXMLValue(val)
+            else:
+                self.code = None
+
+            val = md.find(util.nspath_eval('gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:codeSpace/gco:CharacterString', namespaces))
+            if val is not None:
+                self.codeSpace = util.testXMLValue(val)
+            else:
+                self.codeSpace = None
+
+            val = md.find(util.nspath_eval('gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:version/gco:CharacterString', namespaces))
+            if val is not None:
+                self.version = util.testXMLValue(val)
+            else:
+                self.version = None
 
 def _testCodeListValue(elpath):
     """ get gco:CodeListValue_Type attribute, else get text content """

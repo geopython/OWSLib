@@ -3,7 +3,7 @@ Imports
     >>> from __future__ import (absolute_import, division, print_function)
     >>> import urllib2
     >>> from owslib.etree import etree
-    >>> from owslib.iso import MD_Metadata, MD_DataIdentification, CI_ResponsibleParty
+    >>> from owslib.iso import MD_Metadata, MD_DataIdentification, CI_ResponsibleParty, MD_ReferenceSystem
 
 Print testing of various ISO fields
 
@@ -21,6 +21,10 @@ Print testing of various ISO fields
 	>>> md.identifier = '286c0725-146e-4533-b1bf-d6e367f6c342'
 	>>> md.identification.topiccategory.append('biota')
 	>>> md.identification.topiccategory.append('environment')
+	>>> md.referencesystem = MD_ReferenceSystem()
+	>>> md.referencesystem.code = '4326'
+	>>> md.referencesystem.codeSpace = 'urn:ogc:def:crs:EPSG'
+	>>> md.referencesystem.version = '6.11.2'
 	>>> kw = {}
 	>>> kw['keywords'] = []
 	>>> kw['keywords'].append('Agricultural and aquaculture facilities')
