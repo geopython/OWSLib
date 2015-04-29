@@ -2,6 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 
 from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse, namespaces
 from owslib.etree import etree
+import six
 
 def ns(namespace):
     return namespaces.get(namespace)
@@ -9,7 +10,7 @@ def ns(namespace):
 class WaterML_1_1(object):
     def __init__(self, element):
 
-        if isinstance(element, str) or isinstance(element, unicode):
+        if isinstance(element, six.string_types):
             self._root = etree.fromstring(str(element))
         else:
             self._root = element
