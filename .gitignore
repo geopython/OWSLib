@@ -9,4 +9,5 @@ tests/scratch/*
 pytest-*
 pytest_cov-*
 .tox
+.*.swp
 
