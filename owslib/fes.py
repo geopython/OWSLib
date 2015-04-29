@@ -98,7 +98,7 @@ class FilterRequest(object):
     
 
         # And together filters if more than one exists
-        filters = filter(None,[keyword_filter, bbox_filter, dc_type_equals_filter])
+        filters = [_f for _f in [keyword_filter, bbox_filter, dc_type_equals_filter] if _f]
         if len(filters) == 1:
             self._root.append(filters[0].toXML())
         elif len(filters) > 1:

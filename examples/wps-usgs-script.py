@@ -1,5 +1,7 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
+from __future__ import absolute_import
+from __future__ import print_function
 from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution, printInputOutput
 from owslib.util import dump
 
@@ -15,13 +17,13 @@ wps.getcapabilities()
 # alternatively, read capabilities from XML file (no live request to WPS server)
 #xml = open('../tests/USGSCapabilities.xml', 'r').read() 
 #wps.getcapabilities(xml=xml)
-print 'WPS Identification type: %s' % wps.identification.type
-print 'WPS Identification title: %s' % wps.identification.title
-print 'WPS Identification abstract: %s' % wps.identification.abstract
+print('WPS Identification type: %s' % wps.identification.type)
+print('WPS Identification title: %s' % wps.identification.title)
+print('WPS Identification abstract: %s' % wps.identification.abstract)
 for operation in wps.operations:
-    print 'WPS Operation: %s' % operation.name
+    print('WPS Operation: %s' % operation.name)
 for process in wps.processes:
-    print 'WPS Process: identifier=%s title=%s' % (process.identifier, process.title)
+    print('WPS Process: identifier=%s title=%s' % (process.identifier, process.title))
 
 # 2) DescribeProcess
 # Submits an HTTP GET "DescribeProcess" request to the WPS service and parses the HTTP response
@@ -30,14 +32,14 @@ process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGr
 # alternatively, read process description from XML file (no live request to WPS server)
 #xml = open('../tests/USGSDescribeProcess.xml', 'r').read()
 #process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', xml=xml)
-print 'WPS Process: identifier=%s' % process.identifier
-print 'WPS Process: title=%s' % process.title
-print 'WPS Process: abstract=%s' % process.abstract
+print('WPS Process: identifier=%s' % process.identifier)
+print('WPS Process: title=%s' % process.title)
+print('WPS Process: abstract=%s' % process.abstract)
 for input in process.dataInputs:
-    print 'Process input:'
+    print('Process input:')
     printInputOutput(input, indent='\t')
 for output in process.processOutputs:
-    print 'Process output:'
+    print('Process output:')
     printInputOutput(output, indent='\t')
 
 # 3a) Execute
