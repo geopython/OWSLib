@@ -165,15 +165,15 @@ class WebMapService(object):
             raise ServiceException(err_message, se_xml)
         return u
 
-    def getmap(self, layers=None, styles=None, srs=None, bbox=None,
-               format=None, size=None, time=None, transparent=False,
+    def getmap_request(self, layers=None, styles=None, srs=None, bbox=None,
+               format=None, height=None, width=None, time=None, transparent=False,
                bgcolor='#FFFFFF',
                exceptions='application/vnd.ogc.se_xml',
                method='Get',
                **kwargs
-               ):
-        """Request and return an image from the WMS as a file-like object.
-        
+    ):
+        """Returns GetMap WMS request from given parameteres.
+
         Parameters
         ----------
         layers : list
@@ -187,38 +187,24 @@ class WebMapService(object):
             (left, bottom, right, top) in srs units.
         format : string
             Output image format such as 'image/jpeg'.
-        size : tuple
-            (width, height) in pixels.
+        height : int
+            height in pixels.
+        width : int
+            width in pixels.
         transparent : bool
             Optional. Transparent background if True.
+        time : string
+            Optional. Time dimension in valid layer time format.
         bgcolor : string
             Optional. Image background color.
         method : string
             Optional. HTTP DCP method name: Get or Post.
         **kwargs : extra arguments
             anything else e.g. vendor specific parameters
-        
-        Example
-        -------
-            >>> wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
-            >>> img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'],\
-                                 styles=[''],\
-                                 srs='EPSG:4326',\
-                                 bbox=(-70.8, 42, -70, 42.8),\
-                                 size=(300, 300),\
-                                 format='image/jpeg',\
-                                 transparent=True)
-            >>> out = open('example.jpg.jpg', 'wb')
-            >>> out.write(img.read())
-            >>> out.close()
+        """
 
-        """        
-        try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if m.get('type').lower() == method.lower()))
-        except StopIteration:
-            base_url = self.url
         request = {'version': self.version, 'request': 'GetMap'}
-        
+
         # check layers and styles
         assert len(layers) > 0
         request['layers'] = ','.join(layers)
@@ -229,43 +215,195 @@ class WebMapService(object):
             request['styles'] = ''
 
         # size
-        request['width'] = str(size[0])
-        request['height'] = str(size[1])
-        
+        request['width'] = str(width)
+        request['height'] = str(height)
+
         request['srs'] = str(srs)
         request['bbox'] = ','.join([repr(x) for x in bbox])
         request['format'] = str(format)
         request['transparent'] = str(transparent).upper()
         request['bgcolor'] = '0x' + bgcolor[1:7]
         request['exceptions'] = str(exceptions)
-        
+
         if time is not None:
             request['time'] = str(time)
-        
+
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
 
+        return request
+
+
+    def getmap(self, layers=None, styles=None, srs=None, bbox=None,format=None, height=None, width=None, time=None, transparent=False, bgcolor='#FFFFFF', exceptions='application/vnd.ogc.se_xml',method='Get',**kwargs):
+        """Request and return an image from the WMS as a file-like object.
+
+        Parameters
+        ----------
+        layers : list
+            List of content layer names.
+        styles : list
+            Optional list of named styles, must be the same length as the
+            layers list.
+        srs : string
+            A spatial reference system identifier.
+        bbox : tuple
+            (left, bottom, right, top) in srs units.
+        format : string
+            Output image format such as 'image/jpeg'.
+        height : int
+            height in pixels.
+        width : int
+            width in pixels.
+        time : string
+            Optional. Time dimension in valid layer time format.
+        transparent : bool
+            Optional. Transparent background if True.
+        bgcolor : string
+            Optional. Image background color.
+        method : string
+            Optional. HTTP DCP method name: Get or Post.
+        **kwargs : extra arguments
+            anything else e.g. vendor specific parameters
+
+        Example
+        -------
+            >>> wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
+            >>> img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'],\
+                                 styles=[''],\
+                                 srs='EPSG:4326',\
+                                 bbox=(-70.8, 42, -70, 42.8),\
+                                 width=300,\
+                                 height=300,\
+                                 format='image/jpeg',\
+                                 transparent=True)
+            >>> out = open('example.jpg.jpg', 'wb')
+            >>> out.write(img.read())
+            >>> out.close()
+
+        """
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
+        request = self.getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox, format=format, height=height, width=width, time=time, transparent=transparent, bgcolor=bgcolor,exceptions=exceptions, method=method, **kwargs )
         data = urlencode(request)
-        
         u = openURL(base_url, data, method, username = self.username, password = self.password)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find('ServiceException').text).strip()
+            err_message = unicode(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
-        
+
     def getServiceXML(self):
         xml = None
         if self._capabilities is not None:
             xml = etree.tostring(self._capabilities)
         return xml
 
-    def getfeatureinfo(self):
-        raise NotImplementedError
+    def getfeatureinfo(self,  query_layers=None, info_format=None, layers=None, x=None, y=None,
+                       styles=None, srs=None, bbox=None,
+                       format=None, height=None, width=None, time=None, transparent=False,
+                       bgcolor='#FFFFFF',
+                       exceptions='application/vnd.ogc.se_xml',
+                       method='Get',
+                       **kwargs
+    ):
+        """Request and return point feature information from the WMS in requested format.
+
+        Parameters
+        ----------
+        query_layers : list
+            List of query layer names.
+        info_format : string
+            Output info format such as 'application/json'.
+        layers : list
+            List of content layer names.
+        x : int
+            X image coordinate.
+        y : int
+            Y image coordinate.
+        styles : list
+            Optional list of named styles, must be the same length as the
+            layers list.
+        srs : string
+            A spatial reference system identifier.
+        bbox : tuple
+            (left, bottom, right, top) in srs units.
+        format : string
+            Output image format such as 'image/jpeg'.
+        height : int
+            height in pixels.
+        width : int
+            width in pixels.
+        time : string
+            Optional. Time dimension in valid layer time format.
+        transparent : bool
+            Optional. Transparent background if True.
+        bgcolor : string
+            Optional. Image background color.
+        method : string
+            Optional. HTTP DCP method name: Get or Post.
+        **kwargs : extra arguments
+            anything else e.g. vendor specific parameters
+
+        Example
+        -------
+            >>> wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
+            >>> gfi = wms.getfeatureinfo(query_layers=['massgis:GISDATA.SHORELINES_ARC'],\
+                                 info_format='text/plain',\
+                                 layers=['massgis:GISDATA.SHORELINES_ARC'],\
+                                 x=15,\
+                                 y=30,\
+                                 styles=[''],\
+                                 srs='EPSG:4326',\
+                                 bbox=(-70.8, 42, -70, 42.8),\
+                                 width=300,\
+                                 height=300,\
+                                 format='image/jpeg',\
+                                 transparent=True)
+            >>> print res.read()
+        """
+        request = 'GetFeatureInfo'
+        #test if layer is queryable
+        for layer_name in query_layers:
+            if layer_name in ['', None]:
+                raise ValueError, '%s argument can not be %s ' % ('layer_name', str(layer_name))
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName(request).methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
+
+        getfi_request = {'version': self.version, 'request': request}
+
+        # check layers
+        assert len(query_layers) > 0
+        getfi_request['query_layers'] = ','.join(query_layers)
+        getfi_request['feature_count'] = 50
+        available_info_formats = self.getOperationByName(request).formatOptions
+        getfi_request['info_format'] = info_format if info_format in available_info_formats else 'text/plain'
+        getfi_request['x'] = x
+        getfi_request['y'] = y
+
+        #build a getFeatureInfo request
+        request = self.getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox, format=format, height=height, width=width, time=time, transparent=transparent, bgcolor=bgcolor,exceptions=exceptions, method=method, **kwargs )
+
+        request.update(getfi_request)
+
+        data = urlencode(request)
+
+        u = openURL(base_url, data, method, username=self.username, password=self.password)
+
+        # check for service exceptions, and return
+        if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
+            se_xml = u.read()
+            se_tree = etree.fromstring(se_xml)
+            err_message = unicode(se_tree.find('ServiceException').text).strip()
+            raise ServiceException(err_message, se_xml)
+        return u
 
     def getOperationByName(self, name): 
         """Return a named content item."""
