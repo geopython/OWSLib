@@ -208,8 +208,8 @@ class WebMapService(object):
                                  size=(300, 300),\
                                  format='image/jpeg',\
                                  transparent=True)
-            >>> out = open('example.jpg.jpg', 'wb')
-            >>> out.write(img.read())
+            >>> out = open('example.jpg', 'wb')
+            >>> bytes_written = out.write(img.read())
             >>> out.close()
 
         """        
