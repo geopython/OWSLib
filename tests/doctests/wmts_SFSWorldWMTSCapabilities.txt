@@ -183,7 +183,7 @@ Test single item accessor
     True
 
 Test themes
-    >>> wmts.themes.keys()
+    >>> list(wmts.themes.keys())
     ['Earth']
     >>> wmts.themes['Earth'].title
     'Earth'

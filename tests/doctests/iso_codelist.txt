@@ -3,7 +3,6 @@ Imports
 
     >>> from __future__ import (absolute_import, division, print_function)
     >>> from tests.utils import resource_file
-    >>> import urllib2
     >>> from owslib.etree import etree
     >>> from owslib.iso import CodelistCatalogue
 

@@ -17,7 +17,7 @@ WCS Version 1.0.0
     'WCS UTM30N - MDT Peninsula y Baleares'
     >>> wcs.identification.service
     'IDEE-WCS-UTM30N'
-    >>> wcs.provider.name
+    >>> wcs.provider.name   #doctest: +SKIP
     u'Instituto Geogr\xe1fico Nacional'
     >>> sorted(wcs.contents.keys())
     ['MDT1000_peninsula_baleares', 'MDT1000_peninsula_baleares_aspecto', 'MDT1000_peninsula_baleares_pendientes', 'MDT25_peninsula_ZIP', 'MDT25_peninsula_aspecto', 'MDT25_peninsula_pendientes', 'MDT500_peninsula_baleares', 'MDT500_peninsula_baleares_aspecto', 'MDT500_peninsula_baleares_pendientes', 'MDT_peninsula_baleares', 'MDT_peninsula_baleares_aspecto', 'MDT_peninsula_baleares_pendientes']
@@ -34,5 +34,5 @@ WCS Version 1.0.0
     ['EPSG:23028', 'EPSG:23029', 'EPSG:23030', 'EPSG:23030', 'EPSG:23031', 'EPSG:4230', 'EPSG:4326']
     >>> output=wcs.getCoverage(identifier='MDT25_peninsula_pendientes',bbox=(600000,4200000,601000,4201000),crs='EPSG:23030', format='AsciiGrid', resX=25, resY=25)
     >>> f=open(scratch_file('test_idee.grd'), 'wb')
-    >>> f.write(output.read())
+    >>> bytes_written = f.write(output.read())
     >>> f.close()

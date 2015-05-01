@@ -18,9 +18,15 @@ from owslib.namespaces import Namespaces
 
 #other imports
 import cgi
-from cStringIO import StringIO
-from urllib import urlencode
-from urllib2 import urlopen
+from six.moves import cStringIO as StringIO
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
+try:
+    from urllib2 import urlopen
+except ImportError:
+    from urllib.request import urlopen
 
 import logging
 from owslib.util import log

@@ -372,7 +372,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
                                    tilematrix='6',\
                                    row=4, column=4)
             >>> out = open('tile.jpg', 'wb')
-            >>> out.write(img.read())
+            >>> bytes_written = out.write(img.read())
             >>> out.close()
 
         """

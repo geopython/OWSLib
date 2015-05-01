@@ -11,11 +11,18 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-from urllib import urlencode
-from urllib2 import urlopen, Request
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
+try:
+    from urllib2 import urlopen, Request
+except ImportError:
+    from urllib.request import urlopen, Request
 from owslib.etree import etree
 import cgi
-from StringIO import StringIO
+from six.moves import cStringIO as StringIO
+import six
 
 
 class ServiceException(Exception):
@@ -119,8 +126,6 @@ class WCSCapabilitiesReader(object):
         instance of WCSCapabilitiesInfoset
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
         return etree.fromstring(st)
 
 class DescribeCoverageReader(object):
