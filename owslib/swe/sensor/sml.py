@@ -19,7 +19,7 @@ def nsp(path):
 
 class SensorML(object):
     def __init__(self, element):
-        if isinstance(element, str):
+        if isinstance(element, str) or isinstance(element, bytes):
             self._root = etree.fromstring(element)
         else:
             self._root = element

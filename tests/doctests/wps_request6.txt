@@ -22,6 +22,6 @@ Build XML request for WPS process execution
 
 Compare to cached XML request
 
-    >>> _request = open(resource_file('wps_PMLExecuteRequest6.xml'), 'r').read()
+    >>> _request = open(resource_file('wps_PMLExecuteRequest6.xml'), 'rb').read()
     >>> compare_xml(request, _request)
     True

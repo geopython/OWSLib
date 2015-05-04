@@ -83,7 +83,7 @@ for opt, arg in options:
     elif opt in ('-r', '--request'):
         request = arg
     elif opt in ('-x', '--xml'):
-        xml = open(arg, 'r').read()
+        xml = open(arg, 'rb').read()
     elif opt in ('-i', '--identifier'):
         identifier = arg
     elif opt in ('-v', '--verbose'):

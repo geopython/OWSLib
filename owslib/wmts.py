@@ -741,7 +741,7 @@ class WMTSCapabilitiesReader:
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            msg = 'String must be of type string, not %s' % type(st)
+        if not isinstance(st, str) and not isinstance(st, bytes):
+            msg = 'String must be of type string or bytes, not %s' % type(st)
             raise ValueError(msg)
         return etree.fromstring(st)

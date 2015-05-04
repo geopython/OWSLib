@@ -8,7 +8,7 @@ Imports
 Fake a request to a WMTS Server using saved doc from
 http://server.caris.com/spatialfusionserver/services/ows/wmts/World/1.0.0/WMTSCapabilities.xml
 
-    >>> xml = open(resource_file('sfs-wmts-cap-world.xml'), 'r').read()
+    >>> xml = open(resource_file('sfs-wmts-cap-world.xml'), 'rb').read()
     >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
 
 Test capabilities

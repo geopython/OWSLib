@@ -21,7 +21,7 @@ for process in wps.processes:
 # 2) DescribeProcess
 process = wps.describeprocess('v.net.path')
 # alternatively, read process description from XML file (no live request to WPS server)
-#xml = open('../tests/USGSDescribeProcess.xml', 'r').read()
+#xml = open('../tests/USGSDescribeProcess.xml', 'rb').read()
 #process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', xml=xml)
 print('WPS Process: identifier=%s' % process.identifier)
 print('WPS Process: title=%s' % process.title)

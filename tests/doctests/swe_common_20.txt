@@ -7,7 +7,7 @@ Imports
 
 Initialize
 
-    >>> swexml  = open(resource_file('swe_ioos_multistation_timeseries.xml'), 'r').read()
+    >>> swexml  = open(resource_file('swe_ioos_multistation_timeseries.xml'), 'rb').read()
     >>> dr      = etree.fromstring(swexml)
     >>> if hasattr(dr, 'getroot'):
     ...     dr = dr.getroot()

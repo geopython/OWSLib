@@ -22,6 +22,6 @@ Process input/ouutput arguments
 
 Compare to cached XML request
 
-    >>> _request = open(resource_file('wps_PMLExecuteRequest5.xml'), 'r').read()
+    >>> _request = open(resource_file('wps_PMLExecuteRequest5.xml'), 'rb').read()
     >>> compare_xml(request, _request)
     True

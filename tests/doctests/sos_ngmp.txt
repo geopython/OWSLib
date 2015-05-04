@@ -12,7 +12,7 @@ Imports
 
 Initialize
 
-    >>> xml = open(resource_file('sos_ngmp.xml'), 'r').read()
+    >>> xml = open(resource_file('sos_ngmp.xml'), 'rb').read()
     >>> ngmp = SensorObservationService(None, xml=xml, version='2.0.0')
 
 ServiceIdentification

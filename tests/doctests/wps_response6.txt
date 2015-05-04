@@ -8,8 +8,8 @@ Instantiate WPS
 
 Execute face WPS invocation
 
-    >>> request = open(resource_file('wps_PMLExecuteRequest6.xml'), 'r').read()
-    >>> response = open(resource_file('wps_PMLExecuteResponse6.xml'), 'r').read()
+    >>> request = open(resource_file('wps_PMLExecuteRequest6.xml'), 'rb').read()
+    >>> response = open(resource_file('wps_PMLExecuteResponse6.xml'), 'rb').read()
     >>> 
     >>> execution = wps.execute(None, [], request=request, response=response)
     Executing WPS request...

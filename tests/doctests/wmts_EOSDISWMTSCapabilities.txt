@@ -8,7 +8,7 @@ Imports
 Fake a request to a WMTS Server using saved doc from
 http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi
 
-    >>> xml = open(resource_file('eosdis-wmts-cap.xml'), 'r').read()
+    >>> xml = open(resource_file('eosdis-wmts-cap.xml'), 'rb').read()
     >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
 
 Test capabilities

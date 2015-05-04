@@ -8,7 +8,7 @@ Fake a request to a WMS Server using saved doc from GeoServer, using a subset
 of the sample data distributed with the installer.
 http://localhost:8080/geoserver/wms?request=GetCapabilities
 
-    >>> xml = open(resource_file('wms_geoserver-cap.xml'), 'r').read() 
+    >>> xml = open(resource_file('wms_geoserver-cap.xml'), 'rb').read() 
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
     
 Test capabilities

@@ -8,7 +8,7 @@ Imports
 
 Fake a request to a WFS Server using saved doc from.
 
-    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read()
+    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'rb').read()
     >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
 
 Test capabilities
