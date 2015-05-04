@@ -213,14 +213,14 @@ class WebFeatureService_1_0_0(object):
         # We're going to assume that anything with a content-length > 32k
         # is data. We'll check anything smaller.
 
-        try:
+        if 'Content-Length' in u.info():
             length = int(u.info()['Content-Length'])
             have_read = False
-        except (KeyError, AttributeError):
+        else:
             data = u.read()
             have_read = True
             length = len(data)
-     
+
         if length < 32000:
             if not have_read:
                 data = u.read()
