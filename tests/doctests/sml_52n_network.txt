@@ -17,7 +17,7 @@ Initialize
 
 Contacts
 
-    >>> system.contacts.keys()
+    >>> list(system.contacts.keys())
     ['http://mmisw.org/ont/ioos/definition/publisher']
 
     >>> publishers = system.get_contacts_by_role('http://mmisw.org/ont/ioos/definition/publisher')
@@ -32,7 +32,7 @@ Contacts
 
 Identification
 
-    >>> sorted(system.identifiers.keys())
+    >>> sorted(list(system.identifiers.keys()))
     ['longName', 'networkID', 'shortName']
 
     >>> sid = system.get_identifiers_by_name('networkID')
@@ -45,7 +45,7 @@ Identification
 
 Classifiers
 
-    >>> sorted(system.classifiers.keys())
+    >>> sorted(list(system.classifiers.keys()))
     ['parentNetwork', 'publisher']
     >>> classi = system.get_classifiers_by_name('publisher')
     >>> classi[0].definition
@@ -55,12 +55,12 @@ Classifiers
 
 Capabilities
 
-    >>> sorted(system.capabilities.keys())
+    >>> sorted(list(system.capabilities.keys()))
     ['featuresOfInterest', 'observationTimeRange', 'observedBBOX', 'offerings']
 
 Characteristics
 
-    >>> system.characteristics.keys()
+    >>> list(system.characteristics.keys())
     []
 
 Components
