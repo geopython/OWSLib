@@ -66,7 +66,7 @@ Identification
 
 Classifiers
 
-    >>> system.classifiers.keys()
+    >>> sorted(system.classifiers.keys())
     ['Platform Type']
     >>> classi = system.get_classifiers_by_name('Platform type')
     >>> classi[0].name
