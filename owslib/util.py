@@ -38,40 +38,11 @@ from copy import deepcopy
 import warnings
 import time
 import six
-
+import requests
 
 """
 Utility functions and classes
 """
-
-class RereadableURL(BytesIO,object):
-    """ Class that acts like a combination of StringIO and url - has seek method and url headers etc """
-    def __init__(self, u):
-        #get url headers etc from url
-        self.headers = u.headers                
-        #get file like seek, read methods from StringIO
-        content=u.read()
-        #Due to race conditions the XML file might be empty. In that case the parsing method would
-        #throw an exception. This issue can be fixed by requesting the url again and again
-        #until the content is non-empty. To avoid an endless loop a time limit is hardcoded.
-        timelimit = 10.0#sleep for an accumulated maximum of 10 seconds before giving up.
-        timestep = 0.25
-        timecur = 0.0
-        while content == "":
-            page = urlopen(u.url)
-            text = page.read()
-            #The header line with <?xml... should not be in content.
-            if "<?xml" == text.strip()[:5]:
-                content = "\n".join(text.split("\n")[1:])
-            else:
-                content = text
-            if timecur > timelimit:
-                break#The parsing with se_tree = etree.fromstring(se_xml) will throw an exception.
-            if content == "":
-                time.sleep(timestep)
-                timecur += timestep
-        super(RereadableURL, self).__init__(content)
-
 
 class ServiceException(Exception):
     #TODO: this should go in ows common module when refactored.  
@@ -151,64 +122,75 @@ def xml_to_dict(root, prefix=None, depth=1, diction=None):
 
     return ret
 
-def openURL(url_base, data, method='Get', cookies=None, username=None, password=None, timeout=30):
+class ResponseWrapper(object):
+    def __init__(self, response):
+        self._response = response
+
+    def info(self):
+        return self._response.headers
+
+    def read(self):
+        if not self._response.encoding:
+            return self._response.content           # bytes
+
+        return self._response.text.encode('utf-8')  # str
+
+    def geturl(self):
+        return self._response.url
+
+    # @TODO: __getattribute__ for poking at response
+
+def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30):
     ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
-    url_base.strip() 
-    lastchar = url_base[-1]
-    if lastchar not in ['?', '&']:
-        if url_base.find('?') == -1:
-            url_base = url_base + '?'
-        else:
-            url_base = url_base + '&'
-            
+    auth = None
     if username and password:
-        # Provide login information in order to use the WMS server
-        # Create an OpenerDirector with support for Basic HTTP 
-        # Authentication...
-        passman = HTTPPasswordMgrWithDefaultRealm()
-        passman.add_password(None, url_base, username, password)
-        auth_handler = HTTPBasicAuthHandler(passman)
-        opener = build_opener(auth_handler)
-        openit = opener.open
+        auth = (username, password)
+
+    headers = {}
+    rkwargs = {'timeout':timeout}
+
+    # FIXUP for WFS in particular, remove xml style namespace
+    # @TODO does this belong here?
+    method = method.split("}")[-1]
+
+    if method.lower() == 'post':
+        try:
+            xml = etree.fromstring(data)
+            headers['Content-Type'] = "text/xml"
+        except (ParseError, UnicodeEncodeError):
+            pass
+
+        rkwargs['data'] = data
+
+    elif method.lower() == 'get':
+        rkwargs['params'] = data
     else:
-        # NOTE: optionally set debuglevel>0 to debug HTTP connection
-        #opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=0))
-        #openit = opener.open
-        openit = urlopen
-   
-    try:
-        if method == 'Post':
-            req = Request(url_base, data)
-            # set appropriate header if posting XML
-            try:
-                xml = etree.fromstring(data)
-                req.add_header('Content-Type', "text/xml")
-            except:
-                pass
-        else:
-            req=Request(url_base + data)
-        if cookies is not None:
-            req.add_header('Cookie', cookies)
-        u = openit(req, timeout=timeout)
-    except HTTPError as e: #Some servers may set the http header to 400 if returning an OGC service exception or 401 if unauthorised.
-        if e.code in [400, 401]:
-            raise ServiceException(e.read())
-        else:
-            raise e
+        raise ValueError("Unknown method ('%s'), expected 'get' or 'post'" % method)
+
+    if cookies is not None:
+        rkwargs['cookies'] = cookies
+
+    req = requests.request(method.upper(),
+                           url_base,
+                           **rkwargs)
+
+    if req.status_code in [400, 401]:
+        raise ServiceException(req.text)
+
+    if req.status_code in [404]:    # add more if needed
+        req.raise_for_status()
+
     # check for service exceptions without the http header set
-    if 'Content-Type' in u.info() and u.info()['Content-Type'] in ['text/xml', 'application/xml']:
+    if 'Content-Type' in req.headers and req.headers['Content-Type'] in ['text/xml', 'application/xml']:
         #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
-        #wrap the url stram in a extended StringIO object so it's re-readable
-        u=RereadableURL(u)      
-        se_xml= u.read()
-        se_tree = etree.fromstring(se_xml)
+        se_tree = etree.fromstring(req.content)
         serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
         if serviceException is None:
             serviceException=se_tree.find('ServiceException')
         if serviceException is not None:
             raise ServiceException(str(serviceException.text).strip())
-        u.seek(0) #return cursor to start of u      
-    return u
+
+    return ResponseWrapper(req)
 
 #default namespace for nspath is OWS common
 OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'

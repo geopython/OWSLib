@@ -14,10 +14,6 @@ try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
-try:
-    from urllib2 import urlopen
-except ImportError:
-    from urllib.request import urlopen
 from owslib.util import openURL, testXMLValue, extract_xml_list, ServiceException, xmltag_split
 from owslib.etree import etree
 from owslib.fgdc import Metadata
@@ -128,7 +124,7 @@ class WebFeatureService_1_0_0(object):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url), timeout=self.timeout)
+        return openURL(reader.capabilities_url(self.url), timeout=self.timeout)
     
     def items(self):
         '''supports dict-like items() access'''
@@ -229,16 +225,16 @@ class WebFeatureService_1_0_0(object):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return StringIO(data)
+                return StringIO(data.decode())
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
                     raise ServiceException(str(se.text).strip())
                 else:
-                    return StringIO(data)
+                    return StringIO(data.decode())
         else:
             if have_read:
-                return StringIO(data)
+                return StringIO(data.decode())
             return u
 
     def getOperationByName(self, name):
@@ -322,7 +318,7 @@ class ContentMetadata:
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urlopen(metadataUrl['url'], timeout=timeout)
+                    content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':
@@ -391,7 +387,7 @@ class WFSCapabilitiesReader(object):
             A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = urlopen(request, timeout=timeout)
+        u = openURL(request, timeout=timeout)
         return etree.fromstring(u.read())
 
     def readString(self, st):

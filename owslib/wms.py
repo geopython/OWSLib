@@ -158,7 +158,7 @@ class WebMapService(object):
             )
         u = self._open(reader.capabilities_url(self.url))
         # check for service exceptions, and return
-        if u.info().gettype() == 'application/vnd.ogc.se_xml':
+        if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = str(se_tree.find('ServiceException').text).strip()

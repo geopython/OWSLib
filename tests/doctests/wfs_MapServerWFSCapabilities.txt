@@ -100,6 +100,6 @@ Test exceptions
 Lastly, test the getcapabilities method
 
     >>> wfs = WebFeatureService('http://nsidc.org/cgi-bin/atlas_south?', version='1.0')
-    >>> xml = wfs.getcapabilities().read()
+    >>> xml = wfs.getcapabilities().read().decode()
     >>> xml.find('<WFS_Capabilities') > 0
     True

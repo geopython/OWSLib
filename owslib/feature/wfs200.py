@@ -213,16 +213,16 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return StringIO(data)
+                return StringIO(data.decode())
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
                     raise ServiceException(str(se.text).strip())
                 else:
-                    return StringIO(data)
+                    return StringIO(data.decode())
         else:
             if have_read:
-                return StringIO(data)
+                return StringIO(data.decode())
             return u
 
 
