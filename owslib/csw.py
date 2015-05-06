@@ -49,7 +49,7 @@ namespaces = get_namespaces()
 schema = 'http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd'
 schema_location = '%s %s' % (namespaces['csw'], schema)
 
-class CatalogueServiceWeb:
+class CatalogueServiceWeb(object):
     """ csw request class """
     def __init__(self, url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False,
                  username=None, password=None):
