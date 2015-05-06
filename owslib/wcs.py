@@ -41,3 +41,5 @@ def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30):
         return wcs100.WebCoverageService_1_0_0.__new__(wcs100.WebCoverageService_1_0_0, url, xml, cookies)
     elif version == '1.1.0':
         return wcs110.WebCoverageService_1_1_0.__new__(wcs110.WebCoverageService_1_1_0,url, xml, cookies)
+    elif version == '1.1.1':
+        return wcs111.WebCoverageService_1_1_1.__new__(wcs111.WebCoverageService_1_1_1,url, xml, cookies)
