@@ -9,7 +9,6 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import base64
 import sys
 from dateutil import parser
 from datetime import datetime
@@ -17,12 +16,8 @@ import pytz
 from owslib.etree import etree
 from owslib.namespaces import Namespaces
 try:                    # Python 3
-    from urllib.request import (urlopen, HTTPError, Request, build_opener,\
-        HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler)
     from urllib.parse import urlsplit, urlencode
 except ImportError:     # Python 2
-    from urllib2 import (urlopen, HTTPError, Request, build_opener,
-        HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler)
     from urlparse import urlsplit
     from urllib import urlencode
 
@@ -348,41 +343,31 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
 
     """
 
-    if url is not None:
-        u = urlsplit(url)
-        r = Request(url, request)
-        r.add_header('User-Agent', 'OWSLib (https://geopython.github.io/OWSLib)')
-        r.add_header('Content-type', 'text/xml')
-        r.add_header('Content-length', '%d' % len(request))
-        r.add_header('Accept', 'text/xml')
-        r.add_header('Accept-Language', lang)
-        r.add_header('Accept-Encoding', 'gzip,deflate')
-        r.add_header('Host', u.netloc)
+    if url is None:
+        raise ValueError("URL required")
 
-        if username is not None and password is not None:
-            base64string = base64.encodestring('%s:%s' % (username, password))[:-1]
-            r.add_header('Authorization', 'Basic %s' % base64string) 
-        try:
-            up = urlopen(r,timeout=timeout);
-        except TypeError:
-            import socket
-            socket.setdefaulttimeout(timeout)
-            up = urlopen(r)
+    u = urlsplit(url)
 
-        ui = up.info()  # headers
-        response = up.read()
-        up.close()
+    headers = {
+        'User-Agent'      : 'OWSLib (https://geopython.github.io/OWSLib)',
+        'Content-type'    : 'text/xml',
+        'Content-length'  : '%d' % len(request),
+        'Accept'          : 'text/xml',
+        'Accept-Language' : lang,
+        'Accept-Encoding' : 'gzip,deflate',
+        'Host'            : u.netloc,
+    }
 
-        # check if response is gzip compressed
-        if 'Content-Encoding' in ui:
-            if ui['Content-Encoding'] == 'gzip':  # uncompress response
-                import gzip
-                cds = BytesIO(response)
-                gz = gzip.GzipFile(fileobj=cds)
-                response = gz.read()
+    rkwargs = {}
 
-        return response
+    if username is not None and password is not None:
+        rkwargs['auth'] = (username, password)
 
+    up = requests.post(url, request, headers=headers, **rkwargs)
+    if not up.encoding:
+        return up.content           # bytes
+
+    return up.text.encode('utf-8')  # str
 
 def element_to_string(element, encoding=None, xml_declaration=False):
     """
