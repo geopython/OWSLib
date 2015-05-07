@@ -263,7 +263,7 @@ class ServiceProvider(object):
     implements IServiceProviderMetadata """
     
     def __init__(self, elem, nmSpc):
-        name=elem.find(self.ns.OWS('ProviderName'))
+        name=elem.find(nmSpc.OWS('ProviderName'))
 
         if name is not None:
             self.name=name.text
