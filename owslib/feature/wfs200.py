@@ -140,7 +140,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         return items
     
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
-                   featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
+                   featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams=None,
                    method='Get', outputFormat=None, startindex=None):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
@@ -173,6 +173,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
         """
+        storedQueryParams = storedQueryParams or {}
         url = data = None
         if typename and type(typename) == type(""):
             typename = [typename]

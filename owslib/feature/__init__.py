@@ -80,7 +80,7 @@ class WebFeatureService_(object):
             return None
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
-                   featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams={},
+                   featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams=None,
                    outputFormat=None, method='Get', startindex=None):
         """Formulate proper GetFeature request using KVP encoding
         ----------
@@ -111,6 +111,7 @@ class WebFeatureService_(object):
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
         """
+        storedQueryParams = storedQueryParams or {}
 
         base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
         base_url = base_url if base_url.endswith("?") else base_url+"?"
