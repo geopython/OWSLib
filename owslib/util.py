@@ -118,6 +118,11 @@ def xml_to_dict(root, prefix=None, depth=1, diction=None):
     return ret
 
 class ResponseWrapper(object):
+    """
+    Return object type from openURL.
+
+    Provides a thin shim around requests response object to maintain code compatibility.
+    """
     def __init__(self, response):
         self._response = response
 
@@ -136,7 +141,12 @@ class ResponseWrapper(object):
     # @TODO: __getattribute__ for poking at response
 
 def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30):
-    ''' function to open urls - wrapper around urllib2.urlopen but with additional checks for OGC service exceptions and url formatting, also handles cookies and simple user password authentication'''
+    """
+    Function to open URLs.
+
+    Uses requests library but with additional checks for OGC service exceptions and url formatting.
+    Also handles cookies and simple user password authentication.
+    """
     auth = None
     if username and password:
         auth = (username, password)
