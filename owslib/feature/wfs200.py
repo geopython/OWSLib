@@ -11,7 +11,7 @@ from __future__ import (absolute_import, division, print_function)
 #owslib imports:
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue
+from owslib.util import nspath, testXMLValue, openURL
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.namespaces import Namespaces
@@ -23,10 +23,6 @@ try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
-try:
-    from urllib2 import urlopen
-except ImportError:
-    from urllib.request import urlopen
 
 import logging
 from owslib.util import log
@@ -134,7 +130,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url), timeout=self.timeout)
+        return openURL(reader.capabilities_url(self.url), timeout=self.timeout)
     
     def items(self):
         '''supports dict-like items() access'''
@@ -192,8 +188,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
         # If method is 'Post', data will be None here
-        u = urlopen(url, data, self.timeout)
-        
+        u = openURL(url, data, method, timeout=self.timeout)
+
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
         # is data. We'll check anything smaller.
@@ -245,7 +241,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             for kw in kwargs.keys():
                 request[kw]=str(kwargs[kw])
         encoded_request=urlencode(request)
-        u = urlopen(base_url + encoded_request)
+        u = openURL(base_url + encoded_request)
         return u.read()
         
         
@@ -264,7 +260,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         encoded_request = urlencode(request)
-        u = urlopen(base_url, data=encoded_request, timeout=self.timeout)
+        u = openURL(base_url, data=encoded_request, timeout=self.timeout)
         tree=etree.fromstring(u.read())
         tempdict={}       
         for sqelem in tree[:]:
@@ -284,7 +280,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         encoded_request = urlencode(request)
-        u = urlopen(base_url, data=encoded_request, timeout=to)
+        u = openURL(base_url, data=encoded_request, timeout=to)
         tree=etree.fromstring(u.read())
         tempdict2={} 
         for sqelem in tree[:]:
@@ -392,7 +388,7 @@ class ContentMetadata:
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urllib2.urlopen(metadataUrl['url'], timeout=timeout)
+                    content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     try:  # FGDC
                         metadataUrl['metadata'] = Metadata(doc)
@@ -444,7 +440,7 @@ class WFSCapabilitiesReader(object):
             A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = urlopen(request, timeout=timeout)
+        u = openURL(request, timeout=timeout)
         return etree.fromstring(u.read())
 
     def readString(self, st):

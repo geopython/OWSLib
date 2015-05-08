@@ -19,10 +19,8 @@ from __future__ import (absolute_import, division, print_function)
 
 import cgi
 try:                    # Python 3
-    from urllib.request import urlopen
     from urllib.parse import urlencode
 except ImportError:     # Python 2
-    from urllib2 import urlopen
     from urllib import urlencode
 
 import warnings
@@ -489,7 +487,7 @@ class ContentMetadata:
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urlopen(metadataUrl['url'], timeout=timeout)
+                    content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':

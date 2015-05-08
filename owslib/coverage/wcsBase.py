@@ -15,14 +15,11 @@ try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
-try:
-    from urllib2 import urlopen, Request
-except ImportError:
-    from urllib.request import urlopen, Request
 from owslib.etree import etree
 import cgi
 from six.moves import cStringIO as StringIO
 import six
+from owslib.util import openURL
 
 
 class ServiceException(Exception):
@@ -115,12 +112,9 @@ class WCSCapabilitiesReader(object):
         @return: An elementtree tree representation of the capabilities document
         """
         request = self.capabilities_url(service_url)
-        req = Request(request)
-        if self.cookies is not None:
-            req.add_header('Cookie', self.cookies)   
-        u = urlopen(req, timeout=timeout)
+        u = openURL(request, timeout=timeout, cookies=self.cookies)
         return etree.fromstring(u.read())
-    
+
     def readString(self, st):
         """Parse a WCS capabilities document, returning an
         instance of WCSCapabilitiesInfoset
@@ -186,10 +180,6 @@ class DescribeCoverageReader(object):
         @return: An elementtree tree representation of the capabilities document
         """
         request = self.descCov_url(service_url)
-        req = Request(request)
-        if self.cookies is not None:
-            req.add_header('Cookie', self.cookies)   
-        u = urlopen(req, timeout=timeout)
+        u = openURL(request, cookies=self.cookies, timeout=timeout)
         return etree.fromstring(u.read())
-    
-       
+

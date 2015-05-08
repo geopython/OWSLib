@@ -19,10 +19,6 @@ try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
-try:
-    from urllib2 import urlopen
-except ImportError:
-    from urllib.request import urlopen
 from owslib.etree import etree
 import os, errno
 from owslib.coverage import wcsdecoder
