@@ -13,8 +13,9 @@ Test the getfeature method
 
 Handle service exception
 
-    >>> response = wfs.getfeature(typename=['totally bogus'], maxfeatures=5)    #doctest: +IGNORE_EXCEPTION_DETAIL
-    Traceback (most recent call last):
-    ...
-    owslib.util.ServiceException: msWFSGetFeature(): WFS server error. TYPENAME 'totally bogus' doesn't exist in this server.  Please check the capabilities and reformulate your request.
+    >>> from owslib.util import ServiceException
+    >>> try:
+    ...     response = wfs.getfeature(typename=['totally bogus'], maxfeatures=5)
+    ... except ServiceException as e:
+    ...     assert "msWFSGetFeature(): WFS server error. TYPENAME 'totally bogus' doesn't exist in this server.  Please check the capabilities and reformulate your request." in str(e)
 
