@@ -9,6 +9,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 import cgi
+from six import PY2
 from six.moves import cStringIO as StringIO
 try:
     from urllib import urlencode
@@ -132,7 +133,18 @@ class WebFeatureService_1_0_0(object):
         for item in self.contents:
             items.append((item,self.contents[item]))
         return items
-    
+
+    def _makeStringIO(self, strval):
+        """
+        Helper method to make sure the StringIO being returned will work.
+
+        Differences between Python 2.6/2.7/3.x mean we have a lot of cases to handle.
+        """
+        if PY2:
+            return StringIO(strval)
+
+        return StringIO(strval.decode())
+
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname='*', maxfeatures=None,
                    srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get',
@@ -228,16 +240,16 @@ class WebFeatureService_1_0_0(object):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return StringIO(data.decode())
+                return self._makeStringIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
                     raise ServiceException(str(se.text).strip())
                 else:
-                    return StringIO(data.decode())
+                    return self._makeStringIO(data)
         else:
             if have_read:
-                return StringIO(data.decode())
+                return self._makeStringIO(data)
             return u
 
     def getOperationByName(self, name):
