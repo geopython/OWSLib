@@ -40,7 +40,7 @@ except ImportError:
     try:
         # Python 2.5 with ElementTree included
         import xml.etree.ElementTree as etree
-        ElementType = etree.Element
+        ElementType = etree._ElementInterface
     except ImportError:
         try:
             # Python < 2.5 with ElementTree installed
