@@ -33,7 +33,7 @@ from .etree import etree
 from .util import openURL, testXMLValue, extract_xml_list, xmltag_split
 from .fgdc import Metadata
 from .iso import MD_Metadata
-from collections import OrderedDict
+from owslib.util import OrderedDict
 
 class ServiceException(Exception):
     """WMS ServiceException
