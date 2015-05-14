@@ -40,13 +40,19 @@ except ImportError:
     try:
         # Python 2.x/3.x with ElementTree included
         import xml.etree.ElementTree as etree
-        from xml.etree.ElementTree import ParseError
+
+        try:
+            from xml.etree.ElementTree import ParseError
+        except ImportError:
+            from xml.parsers.expat import ExpatError as ParseError
+
         try:
             # python 2.x
             ElementType = etree._ElementInterface
         except AttributeError:
             # python 3.x
             ElementType = etree.Element
+
     except ImportError:
         try:
             # Python < 2.5 with ElementTree installed
