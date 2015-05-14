@@ -54,7 +54,7 @@ Print the ids of all layers (actually just the first 3):
     >>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
     True
 
-    >>> filter(None, map(lambda x: x.getcode(), cvg.supportedCRS))
+    >>> [y for y in (x.getcode() for x in cvg.supportedCRS) if y]
     ['EPSG:9802']
 
     >>> cvg.supportedFormats
@@ -92,5 +92,5 @@ Print the ids of all layers (actually just the first 3):
 #Then write this to a netcdf file.
     >>> filename = scratch_file('threddstest.nc')
     >>> f=open(filename, 'wb')
-    >>> f.write(output.read())
+    >>> bytes_written = f.write(output.read())
     >>> f.close()

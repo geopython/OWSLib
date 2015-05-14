@@ -377,7 +377,7 @@ class WPSReader(object):
         Method to read a WPS GetCapabilities document from an XML string.
         """
         
-        if not isinstance(string, str):
+        if not isinstance(string, str) and not isinstance(string, bytes):
             raise ValueError("Input must be of type string, not %s" % type(string))
         return etree.fromstring(string)    
 

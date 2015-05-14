@@ -1,5 +1,7 @@
 # Example script that performs a set of (small) live requests versus the live USGS WPS service
 
+from __future__ import absolute_import
+from __future__ import print_function
 from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution, printInputOutput
 from owslib.util import dump
 
@@ -13,31 +15,31 @@ wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessi
 
 wps.getcapabilities()
 # alternatively, read capabilities from XML file (no live request to WPS server)
-#xml = open('../tests/USGSCapabilities.xml', 'r').read() 
+#xml = open('../tests/USGSCapabilities.xml', 'rb').read() 
 #wps.getcapabilities(xml=xml)
-print 'WPS Identification type: %s' % wps.identification.type
-print 'WPS Identification title: %s' % wps.identification.title
-print 'WPS Identification abstract: %s' % wps.identification.abstract
+print('WPS Identification type: %s' % wps.identification.type)
+print('WPS Identification title: %s' % wps.identification.title)
+print('WPS Identification abstract: %s' % wps.identification.abstract)
 for operation in wps.operations:
-    print 'WPS Operation: %s' % operation.name
+    print('WPS Operation: %s' % operation.name)
 for process in wps.processes:
-    print 'WPS Process: identifier=%s title=%s' % (process.identifier, process.title)
+    print('WPS Process: identifier=%s title=%s' % (process.identifier, process.title))
 
 # 2) DescribeProcess
 # Submits an HTTP GET "DescribeProcess" request to the WPS service and parses the HTTP response
 
 process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm')
 # alternatively, read process description from XML file (no live request to WPS server)
-#xml = open('../tests/USGSDescribeProcess.xml', 'r').read()
+#xml = open('../tests/USGSDescribeProcess.xml', 'rb').read()
 #process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', xml=xml)
-print 'WPS Process: identifier=%s' % process.identifier
-print 'WPS Process: title=%s' % process.title
-print 'WPS Process: abstract=%s' % process.abstract
+print('WPS Process: identifier=%s' % process.identifier)
+print('WPS Process: title=%s' % process.title)
+print('WPS Process: abstract=%s' % process.abstract)
 for input in process.dataInputs:
-    print 'Process input:'
+    print('Process input:')
     printInputOutput(input, indent='\t')
 for output in process.processOutputs:
-    print 'Process output:'
+    print('Process output:')
     printInputOutput(output, indent='\t')
 
 # 3a) Execute
@@ -66,7 +68,7 @@ inputs = [ ("FEATURE_ATTRIBUTE_NAME","the_geom"),
 output = "OUTPUT"
 execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
-#request = open('../tests/wps_USGSExecuteRequest1.xml','r').read()
+#request = open('../tests/wps_USGSExecuteRequest1.xml','rb').read()
 #execution = wps.execute(None, [], request=request)
 
 # The monitorExecution() function can be conveniently used to wait for the process termination
@@ -103,7 +105,7 @@ inputs =  [ ("FEATURE_ATTRIBUTE_NAME","the_geom"),
 output = "OUTPUT"
 execution = wps.execute(processid, inputs, output = "OUTPUT")
 # alternatively, submit a pre-made request specified in an XML file
-#request = open('../tests/wps_USGSExecuteRequest3.xml','r').read()
+#request = open('../tests/wps_USGSExecuteRequest3.xml','rb').read()
 #execution = wps.execute(None, [], request=request)
 monitorExecution(execution)    
 '''

@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function)
 import logging
 import os
 import sys
-from owslib.etree import etree
+from owslib.etree import etree, ElementType
 try:                    # Python 3
     from urllib.parse import urlparse
 except ImportError:     # Python 2
@@ -35,9 +35,9 @@ def scratch_file(filename):
     return os.path.join(scratch_directory(), filename)
 
 def compare_xml(a,b):
-    if not isinstance(a, etree._Element):
+    if not isinstance(a, ElementType):
         a = etree.fromstring(a)
-    if not isinstance(b, etree._Element):
+    if not isinstance(b, ElementType):
         b = etree.fromstring(b)
 
     return compare_elements(a,b)

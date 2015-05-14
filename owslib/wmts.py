@@ -372,7 +372,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
                                    tilematrix='6',\
                                    row=4, column=4)
             >>> out = open('tile.jpg', 'wb')
-            >>> out.write(img.read())
+            >>> bytes_written = out.write(img.read())
             >>> out.close()
 
         """
@@ -741,7 +741,7 @@ class WMTSCapabilitiesReader:
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            msg = 'String must be of type string, not %s' % type(st)
+        if not isinstance(st, str) and not isinstance(st, bytes):
+            msg = 'String must be of type string or bytes, not %s' % type(st)
             raise ValueError(msg)
         return etree.fromstring(st)

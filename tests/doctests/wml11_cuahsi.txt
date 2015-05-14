@@ -7,7 +7,7 @@ Imports
 	>>> from owslib.waterml.wml11 import WaterML_1_1 as wml
 
 An example GetSites response (from cuahsi)
-	>>> f = open(resource_file('cuahsi_example_all_sites.xml'), 'r').read()
+	>>> f = open(resource_file('cuahsi_example_all_sites.xml'), 'rb').read()
 	>>> sites = wml(f).response
 
 Can view the queryInfo structure for information about the query

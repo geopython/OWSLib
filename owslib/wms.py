@@ -19,10 +19,8 @@ from __future__ import (absolute_import, division, print_function)
 
 import cgi
 try:                    # Python 3
-    from urllib.request import urlopen
     from urllib.parse import urlencode
 except ImportError:     # Python 2
-    from urllib2 import urlopen
     from urllib import urlencode
 
 import warnings
@@ -158,7 +156,7 @@ class WebMapService(object):
             )
         u = self._open(reader.capabilities_url(self.url))
         # check for service exceptions, and return
-        if u.info().gettype() == 'application/vnd.ogc.se_xml':
+        if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = str(se_tree.find('ServiceException').text).strip()
@@ -208,8 +206,8 @@ class WebMapService(object):
                                  size=(300, 300),\
                                  format='image/jpeg',\
                                  transparent=True)
-            >>> out = open('example.jpg.jpg', 'wb')
-            >>> out.write(img.read())
+            >>> out = open('example.jpg', 'wb')
+            >>> bytes_written = out.write(img.read())
             >>> out.close()
 
         """        
@@ -489,7 +487,7 @@ class ContentMetadata:
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urlopen(metadataUrl['url'], timeout=timeout)
+                    content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':
@@ -637,6 +635,6 @@ class WMSCapabilitiesReader:
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, str) and not isinstance(st, bytes):
+            raise ValueError("String must be of type string or bytes, not %s" % type(st))
         return etree.fromstring(st)

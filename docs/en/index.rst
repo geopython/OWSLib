@@ -507,7 +507,7 @@ You can also submit a pre-made request encoded as WPS XML:
 
 .. code-block:: python
 
-	>>> request = open('/Users/cinquini/Documents/workspace-cog/wps/tests/resources/wps_USGSExecuteRequest1.xml','r').read()
+	>>> request = open('/Users/cinquini/Documents/workspace-cog/wps/tests/resources/wps_USGSExecuteRequest1.xml','rb').read()
 	>>> execution = wps.execute(None, [], request=request)
 	Executing WPS request...
 	Execution status=ProcessStarted

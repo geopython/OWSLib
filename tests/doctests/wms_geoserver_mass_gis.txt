@@ -9,7 +9,7 @@ Imports
 Fake a request to a GeoServer WMS Server using saved doc from 
 http://giswebservices.massgis.state.ma.us/geoserver/wms
 
-    >>> xml = open(resource_file('wms_mass_gis-caps.xml'), 'r').read()
+    >>> xml = open(resource_file('wms_mass_gis-caps.xml'), 'rb').read()
     >>> wms = WebMapService('url', version='1.1.1', xml=xml)
     
 Test capabilities
@@ -54,10 +54,10 @@ Check contact info (some of it is missing)
     'GIS Programmer'
 
 Test available content layers
-    >>> type(wms.items())
-    <type 'list'>
-    >>> type(wms.contents)
-    <type 'dict'>
+    >>> isinstance(wms.items(), list)
+    True
+    >>> isinstance(wms.contents, dict)
+    True
 
  
 Test single item accessor
@@ -108,5 +108,5 @@ Lastly, test the getcapabilities and getmap methods
     >>> wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
     >>> img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'], styles=[''], srs='EPSG:4326', bbox=(-70.8, 42, -70, 42.8), size=(300, 300), format='image/jpeg', transparent=True)
     >>> out = open(scratch_file('massgis_shoreline.jpg'), 'wb')
-    >>> out.write(img.read())
+    >>> bytes_written = out.write(img.read())
     >>> out.close()

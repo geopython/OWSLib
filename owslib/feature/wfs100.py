@@ -9,9 +9,12 @@
 from __future__ import (absolute_import, division, print_function)
 
 import cgi
-from cStringIO import StringIO
-from urllib import urlencode
-from urllib2 import urlopen
+from six import PY2
+from six.moves import cStringIO as StringIO
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 from owslib.util import openURL, testXMLValue, extract_xml_list, ServiceException, xmltag_split
 from owslib.etree import etree
 from owslib.fgdc import Metadata
@@ -122,7 +125,7 @@ class WebFeatureService_1_0_0(object):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return urlopen(reader.capabilities_url(self.url), timeout=self.timeout)
+        return openURL(reader.capabilities_url(self.url), timeout=self.timeout)
     
     def items(self):
         '''supports dict-like items() access'''
@@ -130,9 +133,20 @@ class WebFeatureService_1_0_0(object):
         for item in self.contents:
             items.append((item,self.contents[item]))
         return items
-    
+
+    def _makeStringIO(self, strval):
+        """
+        Helper method to make sure the StringIO being returned will work.
+
+        Differences between Python 2.6/2.7/3.x mean we have a lot of cases to handle.
+        """
+        if PY2:
+            return StringIO(strval)
+
+        return StringIO(strval.decode())
+
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
-                   featureversion=None, propertyname=['*'], maxfeatures=None,
+                   featureversion=None, propertyname='*', maxfeatures=None,
                    srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get',
                    startindex=None):
         """Request and return feature data as a file-like object.
@@ -189,8 +203,11 @@ class WebFeatureService_1_0_0(object):
         assert len(typename) > 0
         request['typename'] = ','.join(typename)
         
-        if propertyname:
+        if propertyname is not None:
+            if not isinstance(propertyname, list):
+                propertyname = [propertyname]
             request['propertyname'] = ','.join(propertyname)
+
         if featureversion: request['featureversion'] = str(featureversion)
         if maxfeatures: request['maxfeatures'] = str(maxfeatures)
         if startindex: request['startindex'] = str(startindex)
@@ -207,14 +224,14 @@ class WebFeatureService_1_0_0(object):
         # We're going to assume that anything with a content-length > 32k
         # is data. We'll check anything smaller.
 
-        try:
+        if 'Content-Length' in u.info():
             length = int(u.info()['Content-Length'])
             have_read = False
-        except (KeyError, AttributeError):
+        else:
             data = u.read()
             have_read = True
             length = len(data)
-     
+
         if length < 32000:
             if not have_read:
                 data = u.read()
@@ -223,16 +240,16 @@ class WebFeatureService_1_0_0(object):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return StringIO(data)
+                return self._makeStringIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
                     raise ServiceException(str(se.text).strip())
                 else:
-                    return StringIO(data)
+                    return self._makeStringIO(data)
         else:
             if have_read:
-                return StringIO(data)
+                return self._makeStringIO(data)
             return u
 
     def getOperationByName(self, name):
@@ -316,7 +333,7 @@ class ContentMetadata:
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urlopen(metadataUrl['url'], timeout=timeout)
+                    content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':
@@ -385,7 +402,7 @@ class WFSCapabilitiesReader(object):
             A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = urlopen(request, timeout=timeout)
+        u = openURL(request, timeout=timeout)
         return etree.fromstring(u.read())
 
     def readString(self, st):
@@ -394,7 +411,7 @@ class WFSCapabilitiesReader(object):
 
         string should be an XML capabilities document
         """
-        if not isinstance(st, str):
-            raise ValueError("String must be of type string, not %s" % type(st))
+        if not isinstance(st, str) and not isinstance(st, bytes):
+            raise ValueError("String must be of type string or bytes, not %s" % type(st))
         return etree.fromstring(st)
     

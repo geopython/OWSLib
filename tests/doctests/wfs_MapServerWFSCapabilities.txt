@@ -8,7 +8,7 @@ Imports
 
 Fake a request to a WFS Server using saved doc from.
 
-    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read()
+    >>> xml = open(resource_file('mapserver-wfs-cap.xml'), 'rb').read()
     >>> wfs = WebFeatureService('url', version='1.0', xml=xml)
 
 Test capabilities
@@ -66,7 +66,7 @@ Test single item accessor
     >>> cast_tuple_int_list(wfs['glaciers'].boundingBoxWGS84)
     [-11887400000, -850889000, 557154000, 262891000]
 
-    >>> map(lambda x: x.getcode(), wfs['glaciers'].crsOptions)
+    >>> [x.getcode() for x in wfs['glaciers'].crsOptions]
     ['EPSG:3031']
 
     >>> wfs['glaciers'].verbOptions
@@ -100,6 +100,6 @@ Test exceptions
 Lastly, test the getcapabilities method
 
     >>> wfs = WebFeatureService('http://nsidc.org/cgi-bin/atlas_south?', version='1.0')
-    >>> xml = wfs.getcapabilities().read()
+    >>> xml = wfs.getcapabilities().read().decode('utf-8')
     >>> xml.find('<WFS_Capabilities') > 0
     True

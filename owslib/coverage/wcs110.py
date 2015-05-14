@@ -15,8 +15,10 @@ from __future__ import (absolute_import, division, print_function)
 
 from .wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
 from owslib.util import openURL, testXMLValue
-from urllib import urlencode
-from urllib2 import urlopen
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 from owslib.etree import etree
 import os, errno
 from owslib.coverage import wcsdecoder

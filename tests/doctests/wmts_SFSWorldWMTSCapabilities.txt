@@ -8,7 +8,7 @@ Imports
 Fake a request to a WMTS Server using saved doc from
 http://server.caris.com/spatialfusionserver/services/ows/wmts/World/1.0.0/WMTSCapabilities.xml
 
-    >>> xml = open(resource_file('sfs-wmts-cap-world.xml'), 'r').read()
+    >>> xml = open(resource_file('sfs-wmts-cap-world.xml'), 'rb').read()
     >>> wmts = WebMapTileService('url', version='1.0.0', xml=xml)
 
 Test capabilities
@@ -183,7 +183,7 @@ Test single item accessor
     True
 
 Test themes
-    >>> wmts.themes.keys()
+    >>> list(wmts.themes.keys())
     ['Earth']
     >>> wmts.themes['Earth'].title
     'Earth'
@@ -223,15 +223,18 @@ Test operations
 
 Test the gettile methods
     >>> try:
+    ...     from io import BytesIO as ImageIO
+    ... except ImportError:
+    ...     from cStringIO import StringIO as ImageIO
+    >>> try:
     ...     from PIL import Image
     ... except:
     ...     pass
     ... else:
     ...     rq = wmts.buildTileRequest(layer='World', tilematrix='0', row=0, column=0)
     ...     assert rq == 'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=World&STYLE=default&TILEMATRIXSET=GlobalCRS84Scale&TILEMATRIX=0&TILEROW=0&TILECOL=0&FORMAT=image%2Fpng'
-    ...     import cStringIO
     ...     tile000 = wmts.gettile(layer='World', tilematrix='0', row=0, column=0)
-    ...     im = cStringIO.StringIO(tile000.read())
+    ...     im = ImageIO(tile000.read())
     ...     image = Image.open(im)
     ...     assert image.size == (256, 256)
 

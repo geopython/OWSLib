@@ -12,8 +12,8 @@
 
 #TODO, we should run all these from local XML documents (as per the WMS and WFS services)
 
-    >>> wmsxml = open(resource_file('wms_JPLCapabilities.xml'), 'r').read() 
-    >>> wfsxml = open(resource_file('mapserver-wfs-cap.xml'), 'r').read()
+    >>> wmsxml = open(resource_file('wms_JPLCapabilities.xml'), 'rb').read() 
+    >>> wfsxml = open(resource_file('mapserver-wfs-cap.xml'), 'rb').read()
     >>> wms = WebMapService('url', version='1.1.1', xml=wmsxml)
     >>> wfs = WebFeatureService('url', version='1.0', xml=wfsxml)
     >>> wcs=WebCoverageService('http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best', version='1.0.0')
@@ -24,7 +24,7 @@
     >>> services=[csw, wms, wcs, wfs]
     >>> for service in services:
     ...     type(service)
-    <type 'instance'>
+    <class 'owslib.csw.CatalogueServiceWeb'>
     <class 'owslib.wms.WebMapService'>
     <class 'owslib.coverage.wcs100.WebCoverageService_1_0_0'>
     <class 'owslib.feature.wfs100.WebFeatureService_1_0_0'>
@@ -112,13 +112,13 @@
     ...     service.identification.type
     ...     type(service.contents)
     'CSW'
-    <type 'dict'>
+    <... 'dict'>
     'OGC:WMS'
-    <type 'dict'>
+    <... 'dict'>
     'OGC:WCS'
-    <type 'dict'>
+    <... 'dict'>
     'MapServer WFS'
-    <type 'dict'>
+    <... 'dict'>
 
 
 #Check any item (WCS coverage, WMS layer etc) from the contents of each service
@@ -130,7 +130,7 @@
     >>> for service in services:
     ...	    if type(service.contents) is dict:
     ...         service.identification.type
-    ...         content=service.contents[service.contents.iterkeys().next()] #get random item from contents dictionary -has to be a nicer way to do this!
+    ...         content=service.contents[list(service.contents.keys())[0]] #get random item from contents dictionary -has to be a nicer way to do this!
     ...         [[attribute, hasattr(content, attribute)] for attribute in ['id','title','boundingBox', 'boundingBoxWGS84', 'crsOptions', 'styles', 'timepositions']]
     'CSW'
     [['id', False], ['title', True], ['boundingBox', False], ['boundingBoxWGS84', False], ['crsOptions', False], ['styles', False], ['timepositions', False]]

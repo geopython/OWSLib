@@ -11,7 +11,6 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import base64
 import inspect
 import warnings
 import six
@@ -21,11 +20,9 @@ except ImportError:
     from io import BytesIO  # Python 3
 import random
 try:                    # Python 3
-    from urllib.request import urlopen, Request
     from urllib.parse import urlencode
 except ImportError:     # Python 2
     from urllib import urlencode
-    from urllib2 import Request, urlopen
 
 from owslib.util import OrderedDict
 
@@ -37,7 +34,7 @@ from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.namespaces import Namespaces
-from owslib.util import cleanup_namespaces, bind_url, add_namespaces
+from owslib.util import cleanup_namespaces, bind_url, add_namespaces, openURL
 
 # default variables
 outputformat = 'application/xml'
@@ -49,7 +46,7 @@ namespaces = get_namespaces()
 schema = 'http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd'
 schema_location = '%s %s' % (namespaces['csw'], schema)
 
-class CatalogueServiceWeb:
+class CatalogueServiceWeb(object):
     """ csw request class """
     def __init__(self, url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False,
                  username=None, password=None):
@@ -601,11 +598,7 @@ class CatalogueServiceWeb:
         # do HTTP request
 
         if isinstance(self.request, six.string_types):  # GET KVP
-            req = Request(self.request)
-            if self.username is not None and self.password is not None:
-                base64string = base64.encodestring('%s:%s' % (self.username, self.password))[:-1]
-                req.add_header('Authorization', 'Basic %s' % base64string)
-            self.response = urlopen(req, timeout=self.timeout).read()
+            self.response = openURL(self.request, None, 'Get', username=self.username, password=self.password, timeout=self.timeout).read()
         else:
             xml_post_url = self.url
             # Get correct POST URL based on Operation list.
