@@ -6,7 +6,7 @@
 
 from __future__ import (absolute_import, division, print_function)
 import six
-
+import inspect
 
 def patch_well_known_namespaces(etree_module):
 
@@ -46,12 +46,12 @@ except ImportError:
         except ImportError:
             from xml.parsers.expat import ExpatError as ParseError
 
-        try:
-            # python 2.x
-            ElementType = etree._ElementInterface
-        except AttributeError:
-            # python 3.x
+        if hasattr(etree, 'Element') and inspect.isclass(etree.Element):
+            # python 3.4, 3.3, 2.7
             ElementType = etree.Element
+        else:
+            # python 2.6
+            ElementType = etree._ElementInterface
 
     except ImportError:
         try:
