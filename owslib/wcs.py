@@ -17,7 +17,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import urllib2
 from . import etree
-from .coverage import wcs100, wcs110, wcsBase
+from .coverage import wcs100, wcs110, wcs111, wcsBase
 
 
 def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30):
