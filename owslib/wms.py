@@ -67,24 +67,21 @@ class WebMapService(object):
             raise KeyError("No content named %s" % name)
 
     
-    def __init__(self, url, version='1.1.1', xml=None, 
-                username=None, password=None, parse_remote_metadata=False
-                ):
+    def __init__(self, url, version='1.1.1', xml=None, username=None, password=None, parse_remote_metadata=False, timeout=30):
         """Initialize."""
         self.url = url
         self.username = username
         self.password = password
         self.version = version
+        self.timeout = timeout
         self._capabilities = None
-        
+
         # Authentication handled by Reader
-        reader = WMSCapabilitiesReader(
-                self.version, url=self.url, un=self.username, pw=self.password
-                )
+        reader = WMSCapabilitiesReader(self.version, url=self.url, un=self.username, pw=self.password)
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
-            self._capabilities = reader.read(self.url)
+            self._capabilities = reader.read(self.url, timeout=self.timeout)
 
         # avoid building capabilities metadata if the response is a ServiceExceptionReport
         se = self._capabilities.find('ServiceException') 
@@ -168,6 +165,7 @@ class WebMapService(object):
                bgcolor='#FFFFFF',
                exceptions='application/vnd.ogc.se_xml',
                method='Get',
+               timeout=60,
                **kwargs
                ):
         """Request and return an image from the WMS as a file-like object.
@@ -246,7 +244,7 @@ class WebMapService(object):
 
         data = urlencode(request)
         
-        u = openURL(base_url, data, method, username = self.username, password = self.password)
+        u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -616,7 +614,7 @@ class WMSCapabilitiesReader:
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
 
-    def read(self, service_url):
+    def read(self, service_url, timeout=30):
         """Get and parse a WMS capabilities document, returning an
         elementtree instance
 
@@ -627,7 +625,7 @@ class WMSCapabilitiesReader:
 
         #now split it up again to use the generic openURL function...
         spliturl=getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get', username = self.username, password = self.password)
+        u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password, timeout=timeout)
         return etree.fromstring(u.read())
 
     def readString(self, st):
