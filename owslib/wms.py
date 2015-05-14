@@ -165,7 +165,7 @@ class WebMapService(object):
                bgcolor='#FFFFFF',
                exceptions='application/vnd.ogc.se_xml',
                method='Get',
-               timeout=60,
+               timeout=None,
                **kwargs
                ):
         """Request and return an image from the WMS as a file-like object.
