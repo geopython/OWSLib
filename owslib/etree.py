@@ -34,12 +34,13 @@ def patch_well_known_namespaces(etree_module):
 
 # try to find lxml or elementtree
 try:
-    from lxml import etree
+    from lxml import etree, ParseError
     ElementType = etree._Element
 except ImportError:
     try:
         # Python 2.x/3.x with ElementTree included
         import xml.etree.ElementTree as etree
+        from xml.etree.ElementTree import ParseError
         try:
             # python 2.x
             ElementType = etree._ElementInterface
@@ -50,6 +51,7 @@ except ImportError:
         try:
             # Python < 2.5 with ElementTree installed
             import elementtree.ElementTree as etree
+            ParseError = StandardError      # i can't find a ParseError related item in elementtree docs!
             ElementType = etree.Element
         except ImportError:
             raise RuntimeError('You need either lxml or ElementTree to use OWSLib!')
