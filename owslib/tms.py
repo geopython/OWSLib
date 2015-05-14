@@ -18,7 +18,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 from .etree import etree
-from .util import openURL, testXMLValue
+from .util import openURL, testXMLValue, ServiceException
 
 
 FORCE900913 = False
@@ -160,7 +160,7 @@ class ServiceIdentification(object):
     def __init__(self, infoset, version):
         self._root=infoset
         if self._root.tag != 'TileMapService':
-            raise ServiceException
+            raise ServiceException("Expected TileMapService tag, got %s" % self._root.tag)
         self.version = version
         self.title = testXMLValue(self._root.find('Title'))
         self.abstract = testXMLValue(self._root.find('Abstract'))
