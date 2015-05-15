@@ -35,7 +35,8 @@ import warnings
 import six
 from six.moves import filter
 try:                    # Python 3
-    from urllib.parse import urlencode, urlparse, urlunparse, parse_qs, ParseResult
+    from urllib.parse import (urlencode, urlparse, urlunparse, parse_qs,
+                              ParseResult)
 except ImportError:      # Python 2
     from urllib import urlencode
     from urlparse import urlparse, urlunparse, parse_qs, ParseResult
@@ -384,7 +385,9 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         if base_url is None:
             base_url = self.url
             try:
-                get_verbs = [x for x in self.getOperationByName('GetTile').methods if x.get('type').lower() == 'get']
+                methods = self.getOperationByName('GetTile').methods
+                get_verbs = [x for x in methods
+                             if x.get('type').lower() == 'get']
                 if len(get_verbs) > 1:
                     # Filter by constraints
                     base_url = next(
@@ -716,8 +719,8 @@ class WMTSCapabilitiesReader:
             args.update(vendor_kwargs)
         query = urlencode(args, doseq=True)
         pieces = ParseResult(pieces.scheme, pieces.netloc,
-                                      pieces.path, pieces.params,
-                                      query, pieces.fragment)
+                             pieces.path, pieces.params,
+                             query, pieces.fragment)
         return urlunparse(pieces)
 
     def read(self, service_url, vendor_kwargs=None):

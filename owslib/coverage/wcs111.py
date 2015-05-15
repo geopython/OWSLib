@@ -8,16 +8,16 @@
 # Contact email: luis.a.de.sousa@gmail.com
 # =============================================================================
 
-import wcs110
+from owslib.coverage import wcs110
 
 class Namespaces_1_1_1():
-    
+
     def WCS(self, tag):
         return '{http://www.opengis.net/wcs/1.1.1}'+tag
-    
+
     def WCS_OWS(self, tag):
         return '{http://www.opengis.net/wcs/1.1.1/ows}'+tag
-    
+
     def OWS(self, tag):
         return '{http://www.opengis.net/ows/1.1}'+tag
 
@@ -28,5 +28,4 @@ class WebCoverageService_1_1_1(wcs110.WebCoverageService_1_1_0):
     """
     version='1.1.1'
     ns = Namespaces_1_1_1()
-        
-        
+

@@ -13,7 +13,7 @@ import sys
 from dateutil import parser
 from datetime import datetime
 import pytz
-from owslib.etree import etree
+from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
 try:                    # Python 3
     from urllib.parse import urlsplit, urlencode

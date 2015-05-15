@@ -8,7 +8,7 @@ http://svn.osgeo.org/gdal/trunk/gdal/frmts/wms/WMSServerList.txt
 
 Find out what a TMS has to offer. Service metadata:
 
-    >>> service = tms.TileMapService('http://maps.opengeo.org/geowebcache/service/tms/1.0.0')
+    >>> service = tms.TileMapService('http://maps.opengeo.org/geowebcache/service/tms/1.0.0', timeout=120)
     >>> service.identification.title
     'Tile Map Service'
     >>> service.identification.abstract
