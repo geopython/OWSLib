@@ -149,8 +149,8 @@ class SensorObservationService_2_0_0(object):
                               offerings=None,
                               observedProperties=None,
                               eventTime=None,
+                              procedure=None,
                               method='Get',
-                              timeout=30,
                               **kwargs):
         """
         Parameters
