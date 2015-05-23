@@ -1815,6 +1815,24 @@ class Crs(object):
                                     (self.version or ""),
                                     (self.code or ""))
 
+    def getcodeuri1(self):
+        """Create for example "http://www.opengis.net/def/crs/EPSG/0/4326"
+           string and return back
+
+        :returns: String code formated in "http://www.opengis.net/def/crs/EPSG/0/code"
+        """
+
+        return 'http://www.opengis.net/def/crs/EPSG/0/%s' % self.code
+
+    def getcodeuri2(self):
+        """Create for example "http://www.opengis.net/gml/srs/epsg.xml#4326"
+           string and return back
+
+        :returns: String code formated in "http://www.opengis.net/gml/srs/epsg.xml#code"
+        """
+
+        return 'http://www.opengis.net/gml/srs/epsg.xml#%s' % self.code
+
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.getcodeurn() == other.getcodeurn()
