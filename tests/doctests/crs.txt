@@ -3,6 +3,12 @@
     >>> c=crs.Crs('EPSG:4326')
     >>> c.code
     4326
+    >>> c.getcodeurn()
+    'urn:ogc:def:crs:EPSG::4326'
+    >>> c.getcodeuri1()
+    'http://www.opengis.net/def/crs/EPSG/0/4326'
+    >>> c.getcodeuri2()
+    'http://www.opengis.net/gml/epsg.xml#4326'
     >>> c=crs.Crs('urn:ogc:def:crs:EPSG::4326')
     >>> c.authority
     'EPSG'
