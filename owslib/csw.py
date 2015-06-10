@@ -89,18 +89,24 @@ class CatalogueServiceWeb(object):
             if self.exceptionreport is None:
                 # ServiceIdentification
                 val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
-                self.identification=ows.ServiceIdentification(val,self.owscommon.namespace)
+                if val is not None:
+                  self.identification = ows.ServiceIdentification(val,self.owscommon.namespace)
+                else:
+                  self.identification = None
                 # ServiceProvider
                 val = self._exml.find(util.nspath_eval('ows:ServiceProvider', namespaces))
-                self.provider=ows.ServiceProvider(val,self.owscommon.namespace)
+                if val is not None:
+                    self.provider = ows.ServiceProvider(val,self.owscommon.namespace)
+                else:
+                  self.provider = None
                 # ServiceOperations metadata 
-                self.operations=[]
+                self.operations = []
                 for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
                     self.operations.append(ows.OperationsMetadata(elem, self.owscommon.namespace))
         
                 # FilterCapabilities
                 val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
-                self.filters=fes.FilterCapabilities(val)
+                self.filters = fes.FilterCapabilities(val)
  
     def describerecord(self, typename='csw:Record', format=outputformat):
         """
