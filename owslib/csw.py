@@ -82,7 +82,7 @@ class CatalogueServiceWeb(object):
 
             data = {'service': self.service, 'version': self.version, 'request': 'GetCapabilities'}
 
-            self.request = '%s%s' % (bind_url(self.url), urlencode(data))
+            self.request = urlencode(data)
     
             self._invoke()
     
@@ -287,7 +287,7 @@ class CatalogueServiceWeb(object):
             'id': ','.join(id),
         }
 
-        self.request = '%s%s' % (bind_url(self.url), urlencode(data))
+        self.request = urlencode(data)
 
         self._invoke()
 
@@ -603,18 +603,21 @@ class CatalogueServiceWeb(object):
     def _invoke(self):
         # do HTTP request
 
-        if isinstance(self.request, six.string_types):  # GET KVP
-            self.response = openURL(self.request, None, 'Get', username=self.username, password=self.password, timeout=self.timeout).read()
-        else:
-            xml_post_url = self.url
-            # Get correct POST URL based on Operation list.
-            # If skip_caps=True, then self.operations has not been set, so use
-            # default URL.
-            if hasattr(self, 'operations'):
-                caller = inspect.stack()[1][3] 
-                if caller == 'getrecords2': caller = 'getrecords'
-                try:
-                    op = self.get_operation_by_name(caller)
+        request_url = self.url
+
+        # Get correct URL based on Operation list.
+
+        # If skip_caps=True, then self.operations has not been set, so use
+        # default URL.
+        if hasattr(self, 'operations'):
+            caller = inspect.stack()[1][3]
+            if caller == 'getrecords2': caller = 'getrecords'
+            try:
+                op = self.get_operation_by_name(caller)
+                if isinstance(self.request, six.string_types):  # GET KVP
+                    get_verbs = [x for x in op.methods if x.get('type').lower() == 'get']
+                    request_url = get_verbs[0].get('url')
+                else:
                     post_verbs = [x for x in op.methods if x.get('type').lower() == 'post']
                     if len(post_verbs) > 1:
                         # Filter by constraints.  We must match a PostEncoding of "XML"
@@ -623,16 +626,20 @@ class CatalogueServiceWeb(object):
                                 if const.name.lower() == 'postencoding':
                                     values = [v.lower() for v in const.values]
                                     if 'xml' in values:
-                                        xml_post_url = pv.get('url')
+                                        request_url = pv.get('url')
                                         break
                         else:
                             # Well, just use the first one.
-                            xml_post_url = post_verbs[0].get('url')
+                            request_url = post_verbs[0].get('url')
                     elif len(post_verbs) == 1:
-                        xml_post_url = post_verbs[0].get('url')
-                except:  # no such luck, just go with xml_post_url
-                    pass
+                        request_post_url = post_verbs[0].get('url')
+            except:  # no such luck, just go with request_url
+                pass
 
+        if isinstance(self.request, six.string_types):  # GET KVP
+            self.request = '%s%s' % (bind_url(request_url), self.request)
+            self.response = openURL(self.request, None, 'Get', username=self.username, password=self.password, timeout=self.timeout).read()
+        else:
             self.request = cleanup_namespaces(self.request)
             # Add any namespaces used in the "typeNames" attribute of the
             # csw:Query element to the query's xml namespaces.
@@ -646,7 +653,7 @@ class CatalogueServiceWeb(object):
 
             self.request = util.element_to_string(self.request, encoding='utf-8')
 
-            self.response = util.http_post(xml_post_url, self.request, self.lang, self.timeout, self.username, self.password)
+            self.response = util.http_post(request_url, self.request, self.lang, self.timeout, self.username, self.password)
 
         # parse result see if it's XML
         self._exml = etree.parse(BytesIO(self.response))
