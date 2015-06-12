@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.8.13 documentation &mdash; OWSLib 0.8.13 documentation</title>
+    <title>OWSLib 0.9.0 documentation &mdash; OWSLib 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.13',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="OWSLib 0.8.13 documentation" href="#" />
+    <link rel="top" title="OWSLib 0.9.0 documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -51,7 +51,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">OWSLib 0.8.13 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.9.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -62,7 +62,7 @@
           <div class="body">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.8.13 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.9.0 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
@@ -76,9 +76,9 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.8.13</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.9.0</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2015-02-12</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2015-06-12</td>
 </tr>
 </tbody>
 </table>
@@ -527,7 +527,7 @@
 </pre></div>
 </div>
 <p>You can also submit a pre-made request encoded as WPS XML:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">request</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;/Users/cinquini/Documents/workspace-cog/wps/tests/resources/wps_USGSExecuteRequest1.xml&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">request</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;/Users/cinquini/Documents/workspace-cog/wps/tests/resources/wps_USGSExecuteRequest1.xml&#39;</span><span class="p">,</span><span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">execution</span> <span class="o">=</span> <span class="n">wps</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">[],</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)</span>
 <span class="go">Executing WPS request...</span>
 <span class="go">Execution status=ProcessStarted</span>
@@ -555,17 +555,17 @@
 </pre></div>
 </div>
 <p>Initialize ncSOS</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_ncSOS_getcapabilities.xml&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_ncSOS_getcapabilities.xml&#39;</span><span class="p">),</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ncsos</span> <span class="o">=</span> <span class="n">SensorObservationService</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xml</span><span class="o">=</span><span class="n">xml</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Initialize 52N</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_52n_getcapabilities.xml&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_52n_getcapabilities.xml&#39;</span><span class="p">),</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f2n</span> <span class="o">=</span> <span class="n">SensorObservationService</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xml</span><span class="o">=</span><span class="n">xml</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Initialize NDBC</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">),</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ndbc</span> <span class="o">=</span> <span class="n">SensorObservationService</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xml</span><span class="o">=</span><span class="n">xml</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -935,7 +935,7 @@
 </pre></div>
 </div>
 <p>Initialize</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">),</span><span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sos_ndbc_getcapabilities.xml&#39;</span><span class="p">),</span><span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ndbc</span> <span class="o">=</span> <span class="n">SensorObservationService</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xml</span><span class="o">=</span><span class="n">xml</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -948,7 +948,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">observedProperties</span> <span class="o">=</span> <span class="p">[</span><span class="n">off</span><span class="o">.</span><span class="n">observed_properties</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#observedProperties = [ndbc.get_operation_by_name(&#39;GetObservation&#39;).parameters[&#39;observedProperty&#39;][&#39;values&#39;][0]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eventTime</span> <span class="o">=</span> <span class="s">&quot;This is not a valid eventTime!&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span><span class="n">offerings</span><span class="o">=</span><span class="n">offerings</span><span class="p">,</span> <span class="n">responseFormat</span><span class="o">=</span><span class="n">responseFormat</span><span class="p">,</span> <span class="n">observedProperties</span><span class="o">=</span><span class="n">observedProperties</span><span class="p">,</span> <span class="n">eventTime</span><span class="o">=</span><span class="n">eventTime</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span><span class="n">offerings</span><span class="o">=</span><span class="n">offerings</span><span class="p">,</span> <span class="n">responseFormat</span><span class="o">=</span><span class="n">responseFormat</span><span class="p">,</span> <span class="n">observedProperties</span><span class="o">=</span><span class="n">observedProperties</span><span class="p">,</span> <span class="n">eventTime</span><span class="o">=</span><span class="n">eventTime</span><span class="p">)</span>     
 <span class="gt">Traceback (most recent call last):</span>
   File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
 <span class="gr">ExceptionReport</span>: <span class="n">&#39;This is not a valid eventTime!&#39;</span>
@@ -975,7 +975,7 @@
 <div><p># Send a funky procedure</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">procedure</span> <span class="o">=</span> <span class="s">&quot;foobar&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputFormat</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">get_operation_by_name</span><span class="p">(</span><span class="s">&#39;DescribeSensor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;outputFormat&#39;</span><span class="p">][</span><span class="s">&#39;values&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">describe_sensor</span><span class="p">(</span><span class="n">procedure</span><span class="o">=</span><span class="n">procedure</span><span class="p">,</span> <span class="n">outputFormat</span><span class="o">=</span><span class="n">outputFormat</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">ndbc</span><span class="o">.</span><span class="n">describe_sensor</span><span class="p">(</span><span class="n">procedure</span><span class="o">=</span><span class="n">procedure</span><span class="p">,</span> <span class="n">outputFormat</span><span class="o">=</span><span class="n">outputFormat</span><span class="p">)</span>     
 <span class="gt">Traceback (most recent call last):</span>
   File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
 <span class="gr">ExceptionReport</span>: <span class="n">&#39;foobar&#39;</span>
@@ -1003,7 +1003,7 @@
 </pre></div>
 </div>
 <p>Initialize</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sml_ndbc_station.xml&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;sml_ndbc_station.xml&#39;</span><span class="p">),</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">SensorML</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">system</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
@@ -1064,7 +1064,7 @@
 </pre></div>
 </div>
 <p>Classifiers</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">system</span><span class="o">.</span><span class="n">classifiers</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">classifiers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="go">[&#39;Platform Type&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">classi</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_classifiers_by_name</span><span class="p">(</span><span class="s">&#39;Platform type&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">classi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
@@ -1126,7 +1126,6 @@
 <p>Imports</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.etree</span> <span class="kn">import</span> <span class="n">etree</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.iso</span> <span class="kn">import</span> <span class="n">CodelistCatalogue</span>
 </pre></div>
@@ -1150,6 +1149,12 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s">&#39;EPSG:4326&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">code</span>
 <span class="go">4326</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">getcodeurn</span><span class="p">()</span>
+<span class="go">&#39;urn:ogc:def:crs:EPSG::4326&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">getcodeuri1</span><span class="p">()</span>
+<span class="go">&#39;http://www.opengis.net/def/crs/EPSG/0/4326&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">getcodeuri2</span><span class="p">()</span>
+<span class="go">&#39;http://www.opengis.net/gml/srs/epsg.xml#4326&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s">&#39;urn:ogc:def:crs:EPSG::4326&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">authority</span>
 <span class="go">&#39;EPSG&#39;</span>
@@ -1227,7 +1232,7 @@
 <p>Fetch a tile (using some defaults):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tile</span> <span class="o">=</span> <span class="n">wmts</span><span class="o">.</span><span class="n">gettile</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="s">&#39;MODIS_Terra_CorrectedReflectance_TrueColor&#39;</span><span class="p">,</span> <span class="n">tilematrixset</span><span class="o">=</span><span class="s">&#39;EPSG4326_250m&#39;</span><span class="p">,</span> <span class="n">tilematrix</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&quot;image/jpeg&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">scratch_file</span><span class="p">(</span><span class="s">&#39;nasa_modis_terra_truecolour.jpg&#39;</span><span class="p">),</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bytes_written</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1245,7 +1250,7 @@
 </div>
 <dl class="docutils">
 <dt>An example GetSites response (from cuahsi)</dt>
-<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;cuahsi_example_all_sites.xml&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;cuahsi_example_all_sites.xml&#39;</span><span class="p">),</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sites</span> <span class="o">=</span> <span class="n">wml</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">response</span>
 </pre></div>
 </div>
@@ -1541,7 +1546,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.8.13 documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.9.0 documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1617,12 +1622,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">OWSLib 0.8.13 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.9.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2015-02-12T10:52:14Z.
+      Last updated on 2015-06-12T16:58:20Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
