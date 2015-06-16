@@ -132,8 +132,11 @@ class WebFeatureService_(object):
             request['propertyname'] = ','.join(propertyname)
         if featureversion: 
             request['featureversion'] = str(featureversion)
-        if maxfeatures: 
-            request['maxfeatures'] = str(maxfeatures)
+        if maxfeatures:
+            if self.version == '2.0.0':
+                request['count'] = str(maxfeatures)
+            else:
+                request['maxfeatures'] = str(maxfeatures)
         if startindex:
             request['startindex'] = str(startindex)
         if storedQueryID: 
