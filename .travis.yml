@@ -17,6 +17,8 @@ install:
 script:
   - python -m pytest
   - pep8 owslib/wmts.py
+after_success:
+  - coveralls  
 notifications:
   irc:
     - "irc.freenode.org#geopython"
