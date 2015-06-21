@@ -1839,5 +1839,8 @@ class Crs(object):
         else:
             return False
 
+    def __hash__(self):
+        return hash(repr(self))
+
     def __repr__(self):
         return self.getcodeurn()
