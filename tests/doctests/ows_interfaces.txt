@@ -114,7 +114,7 @@
     'CSW'
     <type 'dict'>
     'OGC:WMS'
-    <type 'dict'>
+    <class 'collections.OrderedDict'>
     'OGC:WCS'
     <type 'dict'>
     'MapServer WFS'
