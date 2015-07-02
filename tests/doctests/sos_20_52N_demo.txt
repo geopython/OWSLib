@@ -3,8 +3,8 @@
 >>> from owslib.sos import SensorObservationService
 >>> service = SensorObservationService('http://sensorweb.demo.52north.org/52n-sos-webapp/sos/kvp',version='2.0.0')
 >>> for content in service.contents:
-...  print content
-... 
+...  print(content)
+...
 test1
 http://www.52north.org/test/offering/8
 http://www.52north.org/test/offering/9

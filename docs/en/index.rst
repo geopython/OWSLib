@@ -319,8 +319,8 @@ Search for bird data:
   >>> csw.results
   {'matches': 101, 'nextrecord': 21, 'returned': 20}
   >>> for rec in csw.records:
-  ...     print csw.records[rec].title
-  ...
+  ...     print(csw.records[rec].title)
+  ... 
   ALLSPECIES
   NatureServe Canada References
   Bird Studies Canada - BirdMap WMS

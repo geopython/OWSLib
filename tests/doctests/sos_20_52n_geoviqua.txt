@@ -7,8 +7,8 @@
 >>> service = SensorObservationService('http://geoviqua.dev.52north.org/SOS-Q/sos/kvp',version='2.0.0')
 
 >>> for content in service.contents:
-...  print content
-... 
+...  print(content)
+...
 http://www.52north.org/test/offering/9
 http://kli.uni-muenster.de/stations/rks/observations
 http://geoviqua.dev.52north.org/procedures/ws2500
