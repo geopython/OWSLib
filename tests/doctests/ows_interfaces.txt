@@ -113,13 +113,13 @@
     ...     service.identification.type
     ...     type(service.contents)
     'CSW'
-    <type 'dict'>
+    <... 'dict'>
     'OGC:WMS'
-    <class 'collections.OrderedDict'>
+    <...OrderedDict'>
     'OGC:WCS'
-    <type 'dict'>
+    <... 'dict'>
     'MapServer WFS'
-    <type 'dict'>
+    <... 'dict'>
 
 
 #Check any item (WCS coverage, WMS layer etc) from the contents of each service

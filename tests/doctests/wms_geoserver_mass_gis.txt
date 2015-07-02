@@ -57,7 +57,7 @@ Test available content layers
     >>> isinstance(wms.items(), list)
     True
     >>> type(wms.contents)
-    <class 'collections.OrderedDict'>
+    <class '...OrderedDict'>
 
  
 Test single item accessor
