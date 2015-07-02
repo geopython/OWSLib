@@ -56,8 +56,8 @@ Check contact info (some of it is missing)
 Test available content layers
     >>> isinstance(wms.items(), list)
     True
-    >>> isinstance(wms.contents, dict)
-    True
+    >>> type(wms.contents)
+    <class 'collections.OrderedDict'>
 
  
 Test single item accessor
