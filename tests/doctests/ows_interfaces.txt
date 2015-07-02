@@ -131,7 +131,7 @@
     >>> for service in services:
     ...	    if type(service.contents) in [dict, OrderedDict]:
     ...         service.identification.type
-    ...         content=service.contents[service.contents.keys()[0]] #get random item from contents dictionary -has to be a nicer way to do this!
+    ...         content=service.contents[list(service.contents.keys())[0]] #get random item from contents dictionary -has to be a nicer way to do this!
     ...         [[attribute, hasattr(content, attribute)] for attribute in ['id','title','boundingBox', 'boundingBoxWGS84', 'crsOptions', 'styles', 'timepositions']]
     'CSW'
     [['id', False], ['title', True], ['boundingBox', False], ['boundingBoxWGS84', False], ['crsOptions', False], ['styles', False], ['timepositions', False]]
