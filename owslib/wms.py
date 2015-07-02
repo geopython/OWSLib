@@ -28,7 +28,7 @@ import warnings
 import six
 
 from .etree import etree
-from .util import openURL, testXMLValue, extract_xml_list, xmltag_split
+from .util import openURL, testXMLValue, extract_xml_list, xmltag_split, OrderedDict
 from .fgdc import Metadata
 from .iso import MD_Metadata
 
@@ -117,7 +117,7 @@ class WebMapService(object):
           
         #serviceContents metadata: our assumption is that services use a top-level 
         #layer as a metadata organizer, nothing more.
-        self.contents={}
+        self.contents = OrderedDict()
         caps = self._capabilities.find('Capability')
         
         #recursively gather content metadata for all layer elements.
