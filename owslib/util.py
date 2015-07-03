@@ -361,7 +361,6 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     headers = {
         'User-Agent'      : 'OWSLib (https://geopython.github.io/OWSLib)',
         'Content-type'    : 'text/xml',
-        'Content-length'  : '%d' % len(request),
         'Accept'          : 'text/xml',
         'Accept-Language' : lang,
         'Accept-Encoding' : 'gzip,deflate',
