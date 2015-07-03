@@ -176,7 +176,7 @@ class ContentMetadata(object):
     Abstraction for TMS layer metadata.
     """
     def __str__(self):
-        return 'Layer Title: %s, URL: %s' % (self.title, self.id)
+        return ('Layer Title: %s, URL: %s' % (self.title, self.id)).encode('utf-8')
 
     def __init__(self, elem, un=None, pw=None):
         if elem.tag != 'TileMap':

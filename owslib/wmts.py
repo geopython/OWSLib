@@ -687,7 +687,7 @@ class ContentMetadata:
         return self._tilematrixsets
 
     def __str__(self):
-        return 'Layer Name: %s Title: %s' % (self.name, self.title)
+        return ('Layer Name: %s Title: %s' % (self.name, self.title)).encode('utf-8')
 
 
 class WMTSCapabilitiesReader:

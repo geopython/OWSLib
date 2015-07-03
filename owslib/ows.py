@@ -156,9 +156,9 @@ class Constraint(object):
 
     def __repr__(self):
         if self.values:
-            return "Constraint: %s - %s" % (self.name, self.values)
+            return ("Constraint: %s - %s" % (self.name, self.values)).encode('utf-8')
         else:
-            return "Constraint: %s" % self.name
+            return ("Constraint: %s" % self.name).encode('utf-8')
 
 
 class OperationsMetadata(object):
