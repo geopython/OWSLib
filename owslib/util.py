@@ -147,12 +147,16 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     Uses requests library but with additional checks for OGC service exceptions and url formatting.
     Also handles cookies and simple user password authentication.
     """
+    headers = {}
+    rkwargs = {}
+
+    rkwargs['timeout'] = timeout
+
     auth = None
     if username and password:
         auth = (username, password)
 
-    headers = {}
-    rkwargs = {'timeout':timeout}
+    rkwargs['auth'] = auth
 
     # FIXUP for WFS in particular, remove xml style namespace
     # @TODO does this belong here?
