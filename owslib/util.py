@@ -129,10 +129,7 @@ class ResponseWrapper(object):
         return self._response.headers
 
     def read(self):
-        if not self._response.encoding:
-            return self._response.content           # bytes
-
-        return self._response.text.encode('utf-8')  # str
+        return self._response.content
 
     def geturl(self):
         return self._response.url
@@ -378,10 +375,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
         rkwargs['auth'] = (username, password)
 
     up = requests.post(url, request, headers=headers, **rkwargs)
-    if not up.encoding:
-        return up.content           # bytes
-
-    return up.text.encode('utf-8')  # str
+    return up.content
 
 def element_to_string(element, encoding=None, xml_declaration=False):
     """
