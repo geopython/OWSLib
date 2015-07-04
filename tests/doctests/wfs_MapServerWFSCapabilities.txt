@@ -62,9 +62,10 @@ Test single item accessor
     'glaciers'
 
     >>> wfs['glaciers'].boundingBox
+    (-11887400000.0, -850889000.0, 557154000.0, 262891000.0, urn:ogc:def:crs:EPSG::3031)
 
     >>> cast_tuple_int_list(wfs['glaciers'].boundingBoxWGS84)
-    [-11887400000, -850889000, 557154000, 262891000]
+    [-94, 89, 64, 87]
 
     >>> [x.getcode() for x in wfs['glaciers'].crsOptions]
     ['EPSG:3031']

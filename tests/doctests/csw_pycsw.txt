@@ -11,7 +11,7 @@ Properties
     '2.0.2'
     
     >>> c.identification.title
-    'pycsw Geospatial Catalogue OGC CITE demo and Reference Implementation'
+    'pycsw OGC CITE demo and Reference Implementation'
 
 
 GetRecords
