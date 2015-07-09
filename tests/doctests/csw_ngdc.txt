@@ -21,7 +21,7 @@ Get some records
     >>> uuid_filter = fes.PropertyIsEqualTo(propertyname='sys.siteuuid', literal="{%s}" % aoos_uuid)
 
     >>> c.getrecords2([uuid_filter], esn='full', maxrecords=999999)
-    >>> len(c.records) > 60
+    >>> len(c.records) > 40
     True
     >>> 'AOOS SOS' in c.records
     True
