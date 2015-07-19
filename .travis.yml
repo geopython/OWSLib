@@ -6,6 +6,7 @@ python:
   - "3.3"
   - "3.4"
 #  - "pypy"
+sudo: false
 env:
   - LXML=true
   - LXML=false
