@@ -23,6 +23,8 @@ from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.util import log
 
+import pyproj
+
 n = Namespaces()
 WFS_NAMESPACE = n.get_namespace("wfs")
 OGC_NAMESPACE = n.get_namespace("ogc")
@@ -295,18 +297,30 @@ class ContentMetadata:
 
         # bboxes
         self.boundingBox = None
-        b = elem.find(nspath('BoundingBox'))
+        b = elem.find(nspath('LatLongBoundingBox'))
+        srs = elem.find(nspath('SRS'))
+
         if b is not None:
             self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
-                    float(b.attrib['maxx']), float(b.attrib['maxy']),
-                    b.attrib['SRS'])
+                    float(b.attrib['maxx']), float(b.attrib['maxy']), Crs(srs.text))
+
+        # transform wgs84 bbox from given default bboxt 
         self.boundingBoxWGS84 = None
-        b = elem.find(nspath('LatLongBoundingBox'))
-        if b is not None:
-            self.boundingBoxWGS84 = (
-                    float(b.attrib['minx']),float(b.attrib['miny']),
-                    float(b.attrib['maxx']), float(b.attrib['maxy']),
-                    )
+
+        if b is not None and srs is not None:
+            wgs84 = pyproj.Proj(init="epsg:4326")
+            try:
+                src_srs = pyproj.Proj(init=srs.text)
+                mincorner = pyproj.transform(src_srs, wgs84, b.attrib['minx'],
+                        b.attrib['miny'])
+                maxcorner = pyproj.transform(src_srs, wgs84, b.attrib['maxx'],
+                        b.attrib['maxy'])
+
+                self.boundingBoxWGS84 = (mincorner[0], mincorner[1],
+                        maxcorner[0], maxcorner[1])
+            except RuntimeError as e:
+                pass
+
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS'))]
 

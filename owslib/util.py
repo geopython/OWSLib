@@ -147,12 +147,16 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     Uses requests library but with additional checks for OGC service exceptions and url formatting.
     Also handles cookies and simple user password authentication.
     """
+    headers = {}
+    rkwargs = {}
+
+    rkwargs['timeout'] = timeout
+
     auth = None
     if username and password:
         auth = (username, password)
 
-    headers = {}
-    rkwargs = {'timeout':timeout}
+    rkwargs['auth'] = auth
 
     # FIXUP for WFS in particular, remove xml style namespace
     # @TODO does this belong here?
@@ -361,7 +365,6 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     headers = {
         'User-Agent'      : 'OWSLib (https://geopython.github.io/OWSLib)',
         'Content-type'    : 'text/xml',
-        'Content-length'  : '%d' % len(request),
         'Accept'          : 'text/xml',
         'Accept-Language' : lang,
         'Accept-Encoding' : 'gzip,deflate',

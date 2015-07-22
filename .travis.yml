@@ -6,6 +6,7 @@ python:
   - "3.3"
   - "3.4"
 #  - "pypy"
+sudo: false
 env:
   - LXML=true
   - LXML=false
@@ -17,6 +18,8 @@ install:
 script:
   - python -m pytest
   - pep8 owslib/wmts.py
+after_success:
+  - coveralls  
 notifications:
   irc:
     - "irc.freenode.org#geopython"

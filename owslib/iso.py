@@ -318,7 +318,7 @@ class MD_DataIdentification(object):
                     self.otherconstraints.append(val)
 
             self.securityconstraints = []
-            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_SecurityConstraints/gmd:useLimitation', namespaces)):
+            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_SecurityConstraints/gmd:classification/gmd:MD_ClassificationCode', namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.securityconstraints.append(val)

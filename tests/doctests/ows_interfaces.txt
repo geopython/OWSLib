@@ -8,6 +8,7 @@
     >>> from owslib.wms import WebMapService
     >>> from owslib.wcs import WebCoverageService
     >>> from owslib.wfs import WebFeatureService
+    >>> from owslib.util import OrderedDict
 
 
 #TODO, we should run all these from local XML documents (as per the WMS and WFS services)
@@ -114,7 +115,7 @@
     'CSW'
     <... 'dict'>
     'OGC:WMS'
-    <... 'dict'>
+    <...OrderedDict'>
     'OGC:WCS'
     <... 'dict'>
     'MapServer WFS'
@@ -128,7 +129,7 @@
 
 	
     >>> for service in services:
-    ...	    if type(service.contents) is dict:
+    ...	    if type(service.contents) in [dict, OrderedDict]:
     ...         service.identification.type
     ...         content=service.contents[list(service.contents.keys())[0]] #get random item from contents dictionary -has to be a nicer way to do this!
     ...         [[attribute, hasattr(content, attribute)] for attribute in ['id','title','boundingBox', 'boundingBoxWGS84', 'crsOptions', 'styles', 'timepositions']]

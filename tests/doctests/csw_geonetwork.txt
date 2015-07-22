@@ -1,0 +1,11 @@
+>>> from __future__ import (absolute_import, division, print_function)
+>>> from owslib.csw import CatalogueServiceWeb
+>>> c=CatalogueServiceWeb('http://metadata.bgs.ac.uk/geonetwork/srv/en/csw')
+>>> c.getrecords2(typenames='csw:Record')
+>>> c.results.get('returned') > 0
+True
+>>> c.results.get('nextrecord') > 0
+True
+>>> c.results.get('matches') > 0
+True
+
