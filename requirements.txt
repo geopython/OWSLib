@@ -1,4 +1,4 @@
 python-dateutil>=1.5
 pytz
-requests>=2.6
+requests>=1.0
 pyproj
