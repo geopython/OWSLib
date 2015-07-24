@@ -728,7 +728,8 @@ class WPSExecution():
         wpsns = getNamespace(root)
 
         self.serviceInstance = root.get( 'serviceInstance' )
-        self.statusLocation = root.get( 'statusLocation' )
+        if self.statusLocation is None:
+            self.statusLocation = root.get( 'statusLocation' )
         
         # <ns0:Status creationTime="2011-11-09T14:19:50Z">
         #  <ns0:ProcessSucceeded>PyWPS Process v.net.path successfully calculated</ns0:ProcessSucceeded>
