@@ -21,27 +21,11 @@ import cgi
 import urllib2
 from urllib import urlencode
 import warnings
-from owslib.etree import etree
-from owslib.util import openURL, testXMLValue, extract_xml_list, xmltag_split
-from owslib.fgdc import Metadata
-from owslib.iso import MD_Metadata
-from owslib.wms import ServiceException
-
-
-class ServiceException(Exception):
-    """WMS ServiceException
-
-    Attributes:
-        message -- short error message
-        xml  -- full xml error message from server
-    """
-
-    def __init__(self, message, xml):
-        self.message = message
-        self.xml = xml
-
-    def __str__(self):
-        return repr(self.message)
+from .etree import etree
+from .util import openURL, testXMLValue, extract_xml_list, xmltag_split
+from .fgdc import Metadata
+from .iso import MD_Metadata
+from .wms import ServiceException
 
 
 class WebMapService_1_1_1(object):
