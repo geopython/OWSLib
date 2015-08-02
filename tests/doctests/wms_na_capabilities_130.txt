@@ -108,12 +108,11 @@ Test operations
     
     >>> wms.getOperationByName('GetMap').formatOptions
     ['image/png', 'image/jpeg', 'image/gif', 'image/png; mode=8bit', 'image/tiff']
-    
 
 Test exceptions
 
     >>> wms.exceptions
-    ['XML', 'INIMAGE', 'BLANK']
+    ['application/vnd.ogc.se_xml', 'application/vnd.ogc.se_inimage']
 
 Lastly, test the getcapabilities method
 

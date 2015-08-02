@@ -21,7 +21,6 @@
                 <ContactPerson/>
                 <ContactOrganization>National Atlas of the United States</ContactOrganization>
             </ContactPersonPrimary>
-            <ContactPosition>WMS Support Staff</ContactPosition>
             <ContactElectronicMailAddress>atlasmail@usgs.gov</ContactElectronicMailAddress>
         </ContactInformation>
         <Fees>none</Fees>
