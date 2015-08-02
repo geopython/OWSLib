@@ -183,13 +183,10 @@ class WebMapService_1_3_0(object):
             but the "between 4000 and 5000" option is incorrect as is
             just handling mercator
             """
-
             if str(srs).lower() in ['epsg:4326']:
                 # it's lonlat pairs
                 return (bbox[1], bbox[0], bbox[3], bbox[2])
-            else:
-                # it's latlon
-                return bbox
+            return bbox
 
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if
@@ -345,8 +342,6 @@ class ContentMetadata:
         self.abstract = testXMLValue(elem.find(nspath('Abstract', WMS_NAMESPACE)))
 
         # bboxes
-        # TODO: LOOK UP AN ISSUE RE: not bboxES but just the one
-        #       and then don't do that
         b = elem.find(nspath('BoundingBox', WMS_NAMESPACE))
         self.boundingBox = None
         if b is not None:
@@ -356,11 +351,15 @@ class ContentMetadata:
                 srs = b.attrib['CRS']
             except KeyError:
                 srs = None
+
+            # if the bbox crs == epsg:4326, handle the axis change
+            box = (b.attrib['minx'], b.attrib['miny'], b.attrib['maxx'], b.attrib['maxy'])
+            box = build_bbox(srs, box)
             self.boundingBox = (
-                float(b.attrib['minx']),
-                float(b.attrib['miny']),
-                float(b.attrib['maxx']),
-                float(b.attrib['maxy']),
+                float(box[0]),
+                float(box[1]),
+                float(box[2]),
+                float(box[3]),
                 srs,
                 )
         elif self.parent:

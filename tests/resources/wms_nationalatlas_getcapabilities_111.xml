@@ -173,7 +173,7 @@
           <Title>default</Title>
           <LegendURL width="71" height="21">
              <Format>image/png</Format>
-             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://webservices.nationalatlas.gov/wms?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=expense&amp;format=image/png&amp;STYLE=default"/>
+             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://webservices.nationalatlas.gov/wms?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=airports1m&amp;format=image/png&amp;STYLE=default"/>
           </LegendURL>
         </Style>
     </Layer>
@@ -242,7 +242,6 @@
                     minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
         <BoundingBox SRS="EPSG:900913"
                     minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
-
         <Style>
           <Name>default</Name>
           <Title>default</Title>
