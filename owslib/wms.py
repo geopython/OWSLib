@@ -35,8 +35,8 @@ class ServiceException(Exception):
         return repr(self.message)
 
 
-def WebMapService(url, version, xml=None, parse_remote_metadata=False,
-        timeout=30):
+def WebMapService(url, version='1.1.1', xml=None, parse_remote_metadata=False,
+                  timeout=30):
     '''wms factory function, returns a version specific WebMapService object)
 
     @type url: string
