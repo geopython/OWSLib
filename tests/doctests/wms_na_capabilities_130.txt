@@ -57,19 +57,10 @@ Test single item accessor
     
     >>> wms['treecanopy'].crsOptions
     ['EPSG:4326', 'EPSG:4269', 'EPSG:3785', 'EPSG:4267', 'EPSG:900913', 'EPSG:54008', 'EPSG:102100', 'CRS:84', 'EPSG:54004', 'EPSG:102113', 'EPSG:2163', 'EPSG:3857']
-<<<<<<< HEAD
-=======
 
     >>> 'EPSG:3857' in wms['treecanopy'].crsOptions
     True
->>>>>>> some wackiness if the get map is an xml error
 
-<<<<<<< HEAD
-    >>> 'EPSG:3857' in wms['treecanopy'].crsOptions
-    True
-
-=======
->>>>>>> updated doctests for wms 1.3.0
     >>> x = wms['one_million'].attribution
     >>> x == {'url': 'http://svn.codehaus.org/geoserver/trunk/data/release/data/', 'logo_size': (353, 112), 'logo_url': 'http://geoserver.org/s/1518/25/0.1/_/download/resources/com.atlassian.confluence.themes.geoserver%3Ageoserver/chrome/geoserver-logo.png', 'title': 'GeoServer Sample Data'}
     False
@@ -79,25 +70,9 @@ Test single item accessor
 
     >>> x = wms['treecanopy'].styles
     >>> x == {'treei0100a': {'legend': 'http://nationalatlas.gov/images/treei0100a.gif', 'title': 'treei0100a'}}
-<<<<<<< HEAD
+
     True
 
-Test the Dimensions
-    
-    >>> wms['coast1m'].timepositions
-    ['1995-01-01/2013-12-31/PT5M']
-
-    >>> '480' in wms['coast1m'].elevations
-=======
->>>>>>> updated doctests for wms 1.3.0
-    True
-
-Test the metadata link
-    >>> len(wms['coast1m'].metadataUrls) > 0
-    True
-
-<<<<<<< HEAD
-=======
 Test the Dimensions
     
     >>> wms['coast1m'].timepositions
@@ -110,7 +85,18 @@ Test the metadata link
     >>> len(wms['coast1m'].metadataUrls) > 0
     True
 
->>>>>>> some wackiness if the get map is an xml error
+Test the Dimensions
+    
+    >>> wms['coast1m'].timepositions
+    ['1995-01-01/2013-12-31/PT5M']
+
+    >>> '480' in wms['coast1m'].elevations
+    True
+
+Test the metadata link
+    >>> len(wms['coast1m'].metadataUrls) > 0
+    True
+
     >>> wms['coast1m'].metadataUrls[0]['format']
     'text/xml'
 
@@ -135,10 +121,6 @@ Test operations
     
     >>> wms.getOperationByName('GetMap').formatOptions
     ['image/png', 'image/jpeg', 'image/gif', 'image/png; mode=8bit', 'image/tiff']
-<<<<<<< HEAD
-=======
-    
->>>>>>> updated doctests for wms 1.3.0
 
 Test exceptions
 
