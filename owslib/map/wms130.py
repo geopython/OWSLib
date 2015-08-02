@@ -341,6 +341,8 @@ class ContentMetadata:
         self.abstract = testXMLValue(elem.find(nspath('Abstract', WMS_NAMESPACE)))
 
         # bboxes
+        # TODO: LOOK UP AN ISSUE RE: not bboxES but just the one
+        #       and then don't do that
         b = elem.find(nspath('BoundingBox', WMS_NAMESPACE))
         self.boundingBox = None
         if b is not None:
@@ -402,6 +404,7 @@ class ContentMetadata:
                 self.attribution['logo_url'] = logo.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
 
         b = elem.find(nspath('EX_GeographicBoundingBox', WMS_NAMESPACE))
+<<<<<<< HEAD
         if b is not None:
             westBoundLongitude = b.find(nspath('westBoundLongitude', WMS_NAMESPACE))
             eastBoundLongitude = b.find(nspath('eastBoundLongitude', WMS_NAMESPACE))
@@ -416,12 +419,18 @@ class ContentMetadata:
 
 
         b = elem.find(ns('LatLonBoundingBox'))
+=======
+>>>>>>> wgs84 bbox patch
         if b is not None:
+            westBoundLongitude = b.find(nspath('westBoundLongitude', WMS_NAMESPACE))
+            eastBoundLongitude = b.find(nspath('eastBoundLongitude', WMS_NAMESPACE))
+            southBoundLatitude = b.find(nspath('southBoundLatitude', WMS_NAMESPACE))
+            northBoundLatitude = b.find(nspath('northBoundLatitude', WMS_NAMESPACE))
             self.boundingBoxWGS84 = (
-                float(b.attrib['minx']),
-                float(b.attrib['miny']),
-                float(b.attrib['maxx']),
-                float(b.attrib['maxy']),
+                float(westBoundLongitude.text if westBoundLongitude is not None else ''),
+                float(southBoundLatitude.text if southBoundLatitude is not None else ''),
+                float(eastBoundLongitude.text if eastBoundLongitude is not None else ''),
+                float(northBoundLatitude.text if northBoundLatitude is not None else ''),
             )
         elif self.parent:
             self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
