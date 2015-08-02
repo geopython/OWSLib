@@ -183,9 +183,13 @@ class WebMapService_1_3_0(object):
             but the "between 4000 and 5000" option is incorrect as is
             just handling mercator
             """
-            if str(srs).lower() in ['epsg:4326', 'epsg:4269', 'epsg:4267']:
+
+            if str(srs).lower() in ['epsg:4326']:
+                # it's lonlat pairs
                 return (bbox[1], bbox[0], bbox[3], bbox[2])
-            return bbox
+            else:
+                # it's latlon
+                return bbox
 
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if
