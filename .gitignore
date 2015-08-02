@@ -10,9 +10,5 @@ pytest-*
 pytest_cov-*
 .tox
 .ipynb_*
-<<<<<<< HEAD
 *.ipynb
 notebooks/
-=======
-*.ipynb
->>>>>>> clarify param handling for wms versions
