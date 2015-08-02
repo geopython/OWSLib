@@ -348,8 +348,8 @@ class ContentMetadata:
         if b is not None:
             try:
                 # sometimes the SRS attribute is (wrongly) not provided
-                # srs = b.attrib['CRS']
-                srs = b.attrib['SRS']
+                # srs = b.attrib['SRS']
+                srs = b.attrib['CRS']
             except KeyError:
                 srs = None
             self.boundingBox = (
@@ -404,23 +404,6 @@ class ContentMetadata:
                 self.attribution['logo_url'] = logo.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
 
         b = elem.find(nspath('EX_GeographicBoundingBox', WMS_NAMESPACE))
-<<<<<<< HEAD
-        if b is not None:
-            westBoundLongitude = b.find(nspath('westBoundLongitude', WMS_NAMESPACE))
-            eastBoundLongitude = b.find(nspath('eastBoundLongitude', WMS_NAMESPACE))
-            southBoundLatitude = b.find(nspath('southBoundLatitude', WMS_NAMESPACE))
-            northBoundLatitude = b.find(nspath('northBoundLatitude', WMS_NAMESPACE))
-            self.boundingBoxWGS84 = (
-                float(westBoundLongitude.text if westBoundLongitude is not None else ''),
-                float(southBoundLatitude.text if southBoundLatitude is not None else ''),
-                float(eastBoundLongitude.text if eastBoundLongitude is not None else ''),
-                float(northBoundLatitude.text if northBoundLatitude is not None else '')
-            )
-
-
-        b = elem.find(ns('LatLonBoundingBox'))
-=======
->>>>>>> wgs84 bbox patch
         if b is not None:
             westBoundLongitude = b.find(nspath('westBoundLongitude', WMS_NAMESPACE))
             eastBoundLongitude = b.find(nspath('eastBoundLongitude', WMS_NAMESPACE))
@@ -451,8 +434,6 @@ class ContentMetadata:
             # tag containing a whitespace separated list of SRIDs
             # instead of several SRS tags. hence the inner loop
             for srslist in map(lambda x: x.text, elem.findall(nspath('CRS', WMS_NAMESPACE))):
-
-            # for srslist in map(lambda x: x.text, elem.findall(ns('SRS'))):
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
