@@ -239,7 +239,7 @@ class WebMapService_1_3_0(object):
             # TODO: change from the xpath
             # err_message = unicode(next(iter(se_tree.xpath('//*[local-name()="ServiceException"]/text()')), '')).strip()
             # TODO: add the ogc namespace for this
-            err_message = unicode(se_tree.find('//*[local-name()="ServiceExceptionReport"]').text).strip()
+            err_message = unicode(next(iter(se_tree.xpath('//*[local-name()="ServiceException"]/text()')), '')).strip()
             raise ServiceException(err_message, se_xml)
         return u
 

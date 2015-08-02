@@ -57,6 +57,12 @@ Test single item accessor
     
     >>> wms['treecanopy'].crsOptions
     ['EPSG:4326', 'EPSG:4269', 'EPSG:3785', 'EPSG:4267', 'EPSG:900913', 'EPSG:54008', 'EPSG:102100', 'CRS:84', 'EPSG:54004', 'EPSG:102113', 'EPSG:2163', 'EPSG:3857']
+<<<<<<< HEAD
+=======
+
+    >>> 'EPSG:3857' in wms['treecanopy'].crsOptions
+    True
+>>>>>>> some wackiness if the get map is an xml error
 
 <<<<<<< HEAD
     >>> 'EPSG:3857' in wms['treecanopy'].crsOptions
@@ -90,6 +96,21 @@ Test the metadata link
     >>> len(wms['coast1m'].metadataUrls) > 0
     True
 
+<<<<<<< HEAD
+=======
+Test the Dimensions
+    
+    >>> wms['coast1m'].timepositions
+    ['1995-01-01/2013-12-31/PT5M']
+
+    >>> '480' in wms['coast1m'].elevations
+    True
+
+Test the metadata link
+    >>> len(wms['coast1m'].metadataUrls) > 0
+    True
+
+>>>>>>> some wackiness if the get map is an xml error
     >>> wms['coast1m'].metadataUrls[0]['format']
     'text/xml'
 
