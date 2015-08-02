@@ -19,8 +19,24 @@ from __future__ import (absolute_import, division, print_function)
 from .map import wms111, wms130
 
 
-def WebMapService(url, version='1.1.1', xml=None, parse_remote_metadata=False,
-                  timeout=30):
+class ServiceException(Exception):
+    """WMS ServiceException
+
+    Attributes:
+        message -- short error message
+        xml  -- full xml error message from server
+    """
+
+    def __init__(self, message, xml):
+        self.message = message
+        self.xml = xml
+
+    def __str__(self):
+        return repr(self.message)
+
+
+def WebMapService(url, version, xml=None, parse_remote_metadata=False,
+        timeout=30):
     '''wms factory function, returns a version specific WebMapService object)
 
     @type url: string

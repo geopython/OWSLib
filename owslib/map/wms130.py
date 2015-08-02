@@ -21,10 +21,11 @@ import cgi
 import urllib2
 from urllib import urlencode
 import warnings
-from owslib.etree import etree
-from owslib.util import openURL, testXMLValue, extract_xml_list, xmltag_split, nspath
-from owslib.fgdc import Metadata
-from owslib.iso import MD_Metadata
+from .etree import etree
+from .util import openURL, testXMLValue, extract_xml_list, xmltag_split, nspath
+from .fgdc import Metadata
+from .iso import MD_Metadata
+from .wms import ServiceException
 
 
 WMS_NAMESPACE = 'http://www.opengis.net/wms'
@@ -32,22 +33,6 @@ WMS_NAMESPACE = 'http://www.opengis.net/wms'
 
 def strip_ns(tag):
     return tag[tag.index('}') + 1:]
-
-
-class ServiceException(Exception):
-    """WMS ServiceException
-
-    Attributes:
-        message -- short error message
-        xml  -- full xml error message from server
-    """
-
-    def __init__(self, message, xml):
-        self.message = message
-        self.xml = xml
-
-    def __str__(self):
-        return repr(self.message)
 
 
 class WebMapService_1_3_0(object):
@@ -63,18 +48,20 @@ class WebMapService_1_3_0(object):
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self, url, version='1.3.0', xml=None,
-                 username=None, password=None, parse_remote_metadata=False):
+
+    def __init__(self, url, xml=None,
+                username=None, password=None, parse_remote_metadata=False):
         """Initialize."""
         self.url = url
         self.username = username
         self.password = password
-        self.version = version
+        self.version = '1.3.0'
         self._capabilities = None
 
         # Authentication handled by Reader
-        reader = WMSCapabilitiesReader(self.version, url=self.url,
-                                       un=self.username, pw=self.password)
+        reader = WMSCapabilitiesReader(
+                self.version, url=self.url, un=self.username, pw=self.password
+                )
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -101,6 +88,8 @@ class WebMapService_1_3_0(object):
         # serviceOperations metadata
         self.operations = []
         for elem in self._capabilities.find(nspath('Capability/Request', WMS_NAMESPACE))[:]:
+        # had this for a reason. what was it?
+        # for elem in self._capabilities.find('/'.join([ns(t) for t in ['Capability', 'Request']]))[:]:
             self.operations.append(OperationMetadata(elem))
 
         # serviceContents metadata: our assumption is that services use a top-level
@@ -293,6 +282,7 @@ class ServiceProvider(object):
         self.url = self._root.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib.get('{http://www.w3.org/1999/xlink}href', '')
         # contact metadata
         contact = self._root.find(nspath('ContactInformation', WMS_NAMESPACE))
+
         # sometimes there is a contact block that is empty, so make
         # sure there are children to parse
         if contact is not None and contact[:] != []:
@@ -343,6 +333,7 @@ class ContentMetadata:
 
         # title is mandatory property
         self.title = None
+
         title = testXMLValue(elem.find(nspath('Title', WMS_NAMESPACE)))
         if title is not None:
             self.title = title.strip()
@@ -355,22 +346,17 @@ class ContentMetadata:
         if b is not None:
             try:
                 # sometimes the SRS attribute is (wrongly) not provided
-                srs = b.attrib['CRS']
+                # srs = b.attrib['CRS']
+                srs = b.attrib['SRS']
             except KeyError:
                 srs = None
-
-            box = map(float, [b.attrib['minx'],
-                              b.attrib['miny'],
-                              b.attrib['maxx'],
-                              b.attrib['maxy']]
-                      )
             self.boundingBox = (
-                box[0],
-                box[1],
-                box[2],
-                box[3],
+                float(b.attrib['minx']),
+                float(b.attrib['miny']),
+                float(b.attrib['maxx']),
+                float(b.attrib['maxy']),
                 srs,
-            )
+                )
         elif self.parent:
             if hasattr(self.parent, 'boundingBox'):
                 self.boundingBox = self.parent.boundingBox
@@ -406,6 +392,7 @@ class ContentMetadata:
             title = attribution.find(nspath('Title', WMS_NAMESPACE))
             url = attribution.find(nspath('OnlineResource', WMS_NAMESPACE))
             logo = attribution.find(nspath('LogoURL', WMS_NAMESPACE))
+
             if title is not None:
                 self.attribution['title'] = title.text
             if url is not None:
@@ -424,7 +411,17 @@ class ContentMetadata:
                 float(westBoundLongitude.text if westBoundLongitude is not None else ''),
                 float(southBoundLatitude.text if southBoundLatitude is not None else ''),
                 float(eastBoundLongitude.text if eastBoundLongitude is not None else ''),
-                float(northBoundLatitude.text if northBoundLatitude is not None else ''),
+                float(northBoundLatitude.text if northBoundLatitude is not None else '')
+            )
+
+
+        b = elem.find(ns('LatLonBoundingBox'))
+        if b is not None:
+            self.boundingBoxWGS84 = (
+                float(b.attrib['minx']),
+                float(b.attrib['miny']),
+                float(b.attrib['maxx']),
+                float(b.attrib['maxy']),
             )
         elif self.parent:
             self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
@@ -445,6 +442,8 @@ class ContentMetadata:
             # tag containing a whitespace separated list of SRIDs
             # instead of several SRS tags. hence the inner loop
             for srslist in map(lambda x: x.text, elem.findall(nspath('CRS', WMS_NAMESPACE))):
+
+            # for srslist in map(lambda x: x.text, elem.findall(ns('SRS'))):
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
@@ -473,6 +472,7 @@ class ContentMetadata:
         for s in elem.findall(nspath('Style', WMS_NAMESPACE)):
             name = s.find(nspath('Name', WMS_NAMESPACE))
             title = s.find(nspath('Title', WMS_NAMESPACE))
+
             if name is None or title is None:
                 raise ValueError('%s missing name or title' % (s,))
             style = {'title': title.text}
@@ -546,7 +546,6 @@ class ContentMetadata:
                 'url': m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
             }
             self.featureListUrls.append(featureUrl)
-
 
         self.layers = []
         for child in elem.findall(nspath('Layer', WMS_NAMESPACE)):

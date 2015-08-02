@@ -25,6 +25,7 @@ from owslib.etree import etree
 from owslib.util import openURL, testXMLValue, extract_xml_list, xmltag_split
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
+from owslib.wms import ServiceException
 
 
 class ServiceException(Exception):
