@@ -236,7 +236,10 @@ class WebMapService_1_3_0(object):
         if u.headers['Content-Type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = unicode(next(iter(se_tree.xpath('//*[local-name()="ServiceException"]/text()')), '')).strip()
+            # TODO: change from the xpath
+            # err_message = unicode(next(iter(se_tree.xpath('//*[local-name()="ServiceException"]/text()')), '')).strip()
+            # TODO: add the ogc namespace for this
+            err_message = unicode(se_tree.find('//*[local-name()="ServiceExceptionReport"]').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
 
@@ -352,14 +355,16 @@ class ContentMetadata:
             except KeyError:
                 srs = None
 
-            # if the bbox crs == epsg:4326, handle the axis change
-            box = (b.attrib['minx'], b.attrib['miny'], b.attrib['maxx'], b.attrib['maxy'])
-            box = build_bbox(srs, box)
+            box = map(float, [b.attrib['minx'],
+                              b.attrib['miny'],
+                              b.attrib['maxx'],
+                              b.attrib['maxy']]
+                      )
             self.boundingBox = (
-                float(box[0]),
-                float(box[1]),
-                float(box[2]),
-                float(box[3]),
+                box[0],
+                box[1],
+                box[2],
+                box[3],
                 srs,
                 )
         elif self.parent:
