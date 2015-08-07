@@ -344,7 +344,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         if numres > 0:
             # choose random ResourceURL if more than one available
             resindex = randint(0, numres - 1)
-            resurl = self[layer].resourceURLs[resindex]['template']
+            resurl = tileresourceurls[resindex]['template']
             if tilematrixset:
                 resurl = resurl.replace('{TileMatrixSet}', tilematrixset)
             resurl = resurl.replace('{TileMatrix}', tilematrix)
