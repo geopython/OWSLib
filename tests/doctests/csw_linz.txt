@@ -25,9 +25,11 @@ Imports
     'This layer provides the **current** strata parcel polygons and their associated descriptive data as a single layer to facilitate their use independently of other primary parcels or non primary parcels.\n\nStrata parcels are portions of land where the vertical extent is limited. \n\nThe combination of this layer with the primary parcels layer provides all current parcels for New Zealand (i.e. excludes Historic and Pending parcels)\n\nIf you require approved or historic parcels see the [All Parcels Layer](http://data.linz.govt.nz/layer/1571-nz-all-parcels)\n\nThis layer has a nominal accuracy of 0.1-1m in urban areas and 1-100m in rural areas. For more detailed information about parcel accuracies please refer to the [Survey Boundary Marks](http://data.linz.govt.nz/layer/774-nz-survey-boundary-marks) layer which contains accuracies for each parcel node.\n\nThe originating data for parcel/title associations includes some non-official sources where the official data does not support a link. For more information [see](http://www.linz.govt.nz/about-linz/linz-data-service/dataset-information/cadastral-titles-data)'
     >>> c.getrecordbyid(['4d8c2d95-4ac2-1aa3-5b81-3cd4eff1ad0f'])
     >>> prop = fes.PropertyIsLike("csw:AnyText", "hydro")
-    >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd-bad')
-    >>> c.exceptionreport
-
+    >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd-bad')  #doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: 'Invalid outputSchema parameter value: http://www.isotc211.org/2005/gmd-bad'
+    >>> c.response  #doctest: +SKIP
     >>> prop = fes.PropertyIsLike("csw:AnyText", "hydro")
     >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd', maxrecords=2)
     >>> c.results['returned']
