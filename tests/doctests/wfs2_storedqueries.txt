@@ -1,0 +1,15 @@
+>>> from __future__ import (absolute_import, division, print_function)
+>>> from owslib.wfs import WebFeatureService
+
+>>> wfs = WebFeatureService(url='http://geoserv.weichand.de/cgi-bin/test-mapserver7.cgi', version='2.0.0', timeout=30)
+
+
+>>> # convert list(storedqueries) into dict(storedqueries)
+>>> storedqueries = dict((x.id, x) for x in wfs.storedqueries)
+>>> storedqueries['http://inspire.ec.europa.eu/operation/download/GetSpatialDataSet'].title
+'GetDataSetByIdLanguageAndCrs (TG 3.1)'
+
+>>> # convert list(parameters) into dict(parameters)
+>>> parameters = dict((x.name, x) for x in storedqueries['http://inspire.ec.europa.eu/operation/download/GetSpatialDataSet'].parameters)
+>>> parameters['CRS'].type
+'xsd:string'

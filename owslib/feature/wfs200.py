@@ -293,13 +293,14 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         encoded_request = urlencode(request)
-        u = openURL(base_url, data=encoded_request, timeout=to)
+        u = openURL(base_url, data=encoded_request, timeout=self.timeout)
         tree=etree.fromstring(u.read())
         tempdict2={} 
         for sqelem in tree[:]:
             params=[] #list to store parameters for the stored query description
             id =sqelem.get('id')
             for elem in sqelem[:]:
+                abstract = ''
                 if elem.tag==nspath('Abstract', WFS_NAMESPACE):
                     abstract=elem.text
                 elif elem.tag==nspath('Parameter', WFS_NAMESPACE):
@@ -308,9 +309,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             tempdict2[id]=(abstract, params) #store in another temporary dictionary
         
         #now group the results into StoredQuery objects:
-        for key in tempdict.keys(): 
-            abstract='blah'
-            parameters=[]
+        for key in tempdict.keys():
             sqs.append(StoredQuery(key, tempdict[key][0], tempdict[key][1], tempdict2[key][0], tempdict2[key][1]))
         return sqs
     storedqueries = property(_getStoredQueries, None)
