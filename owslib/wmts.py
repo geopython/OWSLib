@@ -31,6 +31,7 @@ would be appreciated.
 
 from __future__ import (absolute_import, division, print_function)
 
+from random import randint
 import warnings
 import six
 from six.moves import filter
@@ -199,8 +200,11 @@ class WebMapTileService(object):
 
         # serviceOperations metadata
         self.operations = []
-        for elem in self._capabilities.find(_OPERATIONS_METADATA_TAG)[:]:
-            self.operations.append(OperationsMetadata(elem))
+        serviceop = self._capabilities.find(_OPERATIONS_METADATA_TAG)
+        #  REST only WMTS does not have any Operations
+        if serviceop is not None:
+            for elem in serviceop[:]:
+                self.operations.append(OperationsMetadata(elem))
 
         # serviceContents metadata: our assumption is that services use
         # a top-level layer as a metadata organizer, nothing more.
@@ -293,7 +297,6 @@ LAYER=VIIRS_CityLights_2012&STYLE=default&TILEMATRIXSET=EPSG4326_500m&\
 TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
 
         """
-        request = {'version': self.version, 'request': 'GetTile'}
 
         if (layer is None):
             raise ValueError("layer is mandatory (cannot be None)")
@@ -328,6 +331,58 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
 
         data = urlencode(request, True)
         return data
+
+    def buildTileResource(self, layer=None, style=None, format=None,
+                          tilematrixset=None, tilematrix=None, row=None,
+                          column=None, **kwargs):
+
+        tileresourceurls = []
+        for resourceURL in self[layer].resourceURLs:
+            if resourceURL['resourceType'] == 'tile':
+                tileresourceurls.append(resourceURL)
+        numres = len(tileresourceurls)
+        if numres > 0:
+            # choose random ResourceURL if more than one available
+            resindex = randint(0, numres - 1)
+            resurl = self[layer].resourceURLs[resindex]['template']
+            if tilematrixset:
+                resurl = resurl.replace('{TileMatrixSet}', tilematrixset)
+            resurl = resurl.replace('{TileMatrix}', tilematrix)
+            resurl = resurl.replace('{TileRow}', row)
+            resurl = resurl.replace('{TileCol}', column)
+            if style:
+                resurl = resurl.replace('{Style}', style)
+            return resurl
+
+        return None
+
+    @property
+    def restonly(self):
+
+        # if OperationsMetadata is missing completely --> use REST
+        if len(self.operations) == 0:
+            return True
+
+        # check if KVP or RESTful are available
+        restenc = False
+        kvpenc = False
+        for operation in self.operations:
+            if operation.name == 'GetTile':
+                for method in operation.methods:
+                    if 'kvp' in str(method['constraints']).lower():
+                        kvpenc = True
+                    if 'rest' in str(method['constraints']).lower():
+                        restenc = True
+
+        # if KVP is available --> use KVP
+        if kvpenc:
+            return False
+
+        # if the operation has no constraint --> use KVP
+        if not kvpenc and not restenc:
+            return False
+
+        return restenc
 
     def gettile(self, base_url=None, layer=None, style=None, format=None,
                 tilematrixset=None, tilematrix=None, row=None, column=None,
@@ -379,6 +434,16 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         """
         vendor_kwargs = self.vendor_kwargs or {}
         vendor_kwargs.update(kwargs)
+
+        # REST only WMTS
+        if self.restonly:
+            resurl = self.buildTileResource(
+                layer, style, format, tilematrixset, tilematrix,
+                row, column, **vendor_kwargs)
+            u = openURL(resurl, username=self.username, password=self.password)
+            return u
+
+        # KVP implemetation
         data = self.buildTileRequest(layer, style, format, tilematrixset,
                                      tilematrix, row, column, **vendor_kwargs)
 
