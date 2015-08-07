@@ -58,8 +58,8 @@ Imports
     >>> c.results['returned']
     2
     >>> c.results['nextrecord']
-    3
+    0
     >>> sort_by=fes.SortBy([fes.SortProperty("dc:title", "ASC")])
     >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sort_by)
     >>> c.records['3cb46f76-e8d7-65ac-8b41-055675021f7b'].title
-    >>> 'NZ Ross Dependency Glacial Lake Polygons (ANT, 1:50k)'
+    'NZ Ross Dependency Glacial Lake Polygons (ANT, 1:50k)'
