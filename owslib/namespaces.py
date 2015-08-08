@@ -50,6 +50,7 @@ class Namespaces(object):
         'tml'   :   'ttp://www.opengis.net/tml',
         'wfs'   :   'http://www.opengis.net/wfs',
         'wfs20' :   'http://www.opengis.net/wfs/2.0',
+        'wms'   :   'http://www.opengis.net/wms',
         'wcs'   :   'http://www.opengis.net/wcs',
         'wps'   :   'http://www.opengis.net/wps/1.0.0',
         'wps100':   'http://www.opengis.net/wps/1.0.0',
