@@ -200,6 +200,73 @@ Result:
 
 WFS
 ---
+Connect to a WFS and inspect its capabilities.
+
+::
+
+    >>> from owslib.wfs import WebFeatureService
+    >>> wfs11 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='1.1.0')
+    >>> wfs11.identification.title    
+    'INSPIRE WFS 2.0 DemoServer Verwaltungsgrenzen Bayern
+
+    >>> [operation.name for operation in wfs11.operations]
+    ['GetCapabilities', 'DescribeFeatureType', 'GetFeature', 'GetGmlObject']
+
+List FeatureTypes
+
+::
+
+    >>> list(wfs11.contents)
+    ['bvv:vg_ex', 'bvv:bayern_ex', 'bvv:lkr_ex', 'bvv:regbez_ex', 'bvv:gmd_ex']
+
+Download GML using ``typename``, ``bbox`` and ``srsname``.
+
+::
+
+    >>> # OWSLib will switch the axis order from EN to NE automatically if designated by EPSG-Registry
+    >>> response = wfs11.getfeature(typename='bvv:gmd_ex', bbox=(4500000,5500000,4500500,5500500), srsname='urn:x-ogc:def:crs:EPSG:31468')
+
+Download GML using ``typename`` and ``filter``. OWSLib currently only
+support filter building for WFS 1.1 (FE.1.1).
+
+::
+
+    >>> from owslib.fes import *
+    >>> from owslib.etree import etree
+    >>> from owslib.wfs import WebFeatureService
+    >>> wfs11 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='1.1.0')
+
+    >>> filter = PropertyIsLike(propertyname='bez_gem', literal='Ingolstadt', wildCard='*')
+    >>> filterxml = etree.tostring(filter.toXML()).decode("utf-8")
+    >>> response = wfs11.getfeature(typename='bvv:gmd_ex', filter=filterxml)
+
+Save response to a file.
+
+::
+
+    >>> out = open('/tmp/data.gml', 'wb')
+    >>> out.write(bytes(response.read(), 'UTF-8'))
+    >>> out.close()    
+
+Download GML using ``StoredQueries``\ (only available for WFS 2.0
+services)
+
+::
+
+    >>> from owslib.wfs import WebFeatureService
+    >>> wfs20 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='2.0.0')
+
+    >>> # List StoredQueries
+    >>> [storedquery.id for storedquery in wfs20.storedqueries]
+    ['bboxQuery', 'urn:ogc:def:query:OGC-WFS::GetFeatureById', 'GemeindeByGemeindeschluesselEpsg31468', 'DWithinQuery']
+
+    >>> # List Parameters for StoredQuery[1]
+    >>> parameter.name for parameter in wfs20.storedqueries[1].parameters]
+    ['ID']
+
+
+    >>> response = wfs20.getfeature(storedQueryID='urn:ogc:def:query:OGC-WFS::GetFeatureById', storedQueryParams={'ID':'gmd_ex.1'})
+
 
 WCS
 ---
