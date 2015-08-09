@@ -6,8 +6,8 @@ try:                    # Python 3
 except ImportError:     # Python 2
     from urllib import urlencode
 
-from .etree import etree
-from .util import openURL
+from owslib.etree import etree
+from owslib.util import openURL
 
 
 class WMSCapabilitiesReader(object):

@@ -35,6 +35,6 @@ def WebMapService(url, version='1.1.1', xml=None, parse_remote_metadata=False,
     if version in ['1.1.1']:
         return wms111.WebMapService_1_1_1(url, version, xml, parse_remote_metadata,
                                           timeout=timeout)
-    elif version in ['1.1.3']:
+    elif version in ['1.3.0']:
         return wms130.WebMapService_1_3_0(url, version, xml, parse_remote_metadata,
                                           timeout=timeout)

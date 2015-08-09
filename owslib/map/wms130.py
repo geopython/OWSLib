@@ -22,7 +22,7 @@ from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
-from owslib.map.wms_cap import WMSCapabilitiesReader
+from owslib.map.common import WMSCapabilitiesReader
 
 from owslib.util import log
 
@@ -58,6 +58,9 @@ class WebMapService_1_3_0():
             err_message = str(se.text).strip()
             raise ServiceException(err_message, xml)
 
+        # build metadata objects
+        self._buildMetadata(parse_remote_metadata)
+
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
 
@@ -77,7 +80,7 @@ class WebMapService_1_3_0():
 
         # serviceContents metadata: our assumption is that services use a top-level
         # layer as a metadata organizer, nothing more.
-        self.contents = {}
+        self.contents = OrderedDict()
         caps = self._capabilities.find(nspath('Capability', WMS_NAMESPACE))
 
         # recursively gather content metadata for all layer elements.
@@ -120,6 +123,81 @@ class WebMapService_1_3_0():
             if item.name == name:
                 return item
         raise KeyError("No operation named %s" % name)
+
+    def getmap(self, layers=None,
+               styles=None,
+               crs=None,
+               bbox=None,
+               format=None,
+               size=None,
+               time=None,
+               transparent=False,
+               bgcolor='#FFFFFF',
+               exceptions='XML',
+               method='Get',
+               **kwargs
+               ):
+        # TODO: add the init comments
+
+        try:
+            base_url = next((m.get('url') for m in
+                            self.getOperationByName('GetMap').methods if
+                            m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
+        request = {'version': self.version, 'request': 'GetMap'}
+
+        # check layers and styles
+        assert len(layers) > 0
+        request['layers'] = ','.join(layers)
+        if styles:
+            assert len(styles) == len(layers)
+            request['styles'] = ','.join(styles)
+        else:
+            request['styles'] = ''
+
+        # size
+        request['width'] = str(size[0])
+        request['height'] = str(size[1])
+
+        # remap srs to crs for the actual request
+        bbox = None
+        request['crs'] = str(crs)
+        request['bbox'] = ','.join([repr(x) for x in bbox])
+        request['format'] = str(format)
+        request['transparent'] = str(transparent).upper()
+        request['bgcolor'] = '0x' + bgcolor[1:7]
+        request['exceptions'] = str(exceptions)
+
+        if time is not None:
+            request['time'] = str(time)
+
+        if kwargs:
+            for kw in kwargs:
+                request[kw] = kwargs[kw]
+
+        data = urlencode(request)
+
+        # TODO: update this for the new style of requests
+        u = openURL(base_url,
+                    data,
+                    method,
+                    username=self.username,
+                    password=self.password)
+
+        # TODO: check on the changes to the request + exception handling
+        # check for service exceptions, and return
+        # fyi: in openURL, if the path goes through the content-type
+        # check w/out http header set and it instantiates a new rereadable
+        # url, it loses the additional url obj methods (so just the stringio)
+        # and the original u.info() fails with an attributeerror
+        if u.headers['Content-Type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
+            se_xml = u.read()
+            se_tree = etree.fromstring(se_xml)
+            # TODO: at least remove the expath here
+            err_message = unicode(next(iter(se_tree.xpath('//*[local-name()="ServiceException"]/text()')), '')).strip()
+            raise ServiceException(err_message, se_xml)
+        return u
 
 
 class ServiceIdentification(object):

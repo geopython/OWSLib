@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WMS_Capabilities version="1.3.0"
+  xmlns="http://www.opengis.net/wms"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:esri_wms="http://www.esri.com/wms"
+  xsi:schemaLocation="http://www.opengis.net/wms http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd http://www.esri.com/wms http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?version=1.3.0%26service=WMS%26request=GetSchemaExtension">
+  <Service>
+    <Name><![CDATA[WMS]]></Name>
+    <Title><![CDATA[aasggeothermal_ORWellHeaders]]></Title>
+    <Abstract><![CDATA[WellHeaders in the state of Oregon]]></Abstract>
+    <KeywordList><Keyword><![CDATA[Well Headers, Well Log Depth, Geothermal, Oregon]]></Keyword></KeywordList>
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?"/>
+    <ContactInformation>
+      <ContactPersonPrimary>
+        <ContactPerson><![CDATA[Geoinformatics]]></ContactPerson>
+        <ContactOrganization><![CDATA[Arizona Geological Survey]]></ContactOrganization>
+      </ContactPersonPrimary>
+      <ContactPosition><![CDATA[Geoinformatics Manager]]></ContactPosition>
+      <ContactAddress>
+        <AddressType><![CDATA[Postal]]></AddressType>
+        <Address><![CDATA[416 W. Congress St., Suite 100]]></Address>
+        <City><![CDATA[Tucson]]></City>
+        <StateOrProvince><![CDATA[AZ]]></StateOrProvince>
+        <PostCode><![CDATA[85701]]></PostCode>
+        <Country><![CDATA[US]]></Country>
+      </ContactAddress>
+      <ContactVoiceTelephone><![CDATA[520-770-3500]]></ContactVoiceTelephone>
+      <ContactFacsimileTelephone><![CDATA[]]></ContactFacsimileTelephone>
+      <ContactElectronicMailAddress><![CDATA[metadata@usgin.org]]></ContactElectronicMailAddress>
+    </ContactInformation>
+    <Fees><![CDATA[none]]></Fees>
+    <AccessConstraints><![CDATA[]]></AccessConstraints>
+    <MaxWidth>4000</MaxWidth>
+    <MaxHeight>4096</MaxHeight>
+  </Service>
+  <Capability>
+    <Request>
+      <GetCapabilities>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <Format>text/xml</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?"/></Get></HTTP>
+        </DCPType>
+      </GetCapabilities>
+      <GetMap>
+        <Format>image/bmp</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/tiff</Format>
+        <Format>image/png</Format>
+        <Format>image/png8</Format>
+        <Format>image/png24</Format>
+        <Format>image/png32</Format>
+        <Format>image/gif</Format>
+        <Format>image/svg+xml</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?"/></Get></HTTP>
+        </DCPType>
+      </GetMap>
+      <GetFeatureInfo>
+        <Format>application/vnd.esri.wms_raw_xml</Format>
+        <Format>application/vnd.esri.wms_featureinfo_xml</Format>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <Format>text/xml</Format>
+        <Format>text/html</Format>
+        <Format>text/plain</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?"/></Get></HTTP>
+        </DCPType>
+      </GetFeatureInfo>
+      <esri_wms:GetStyles>
+        <Format>application/vnd.ogc.sld+xml</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?"/></Get></HTTP>
+        </DCPType>
+      </esri_wms:GetStyles>
+    </Request>
+    <Exception>
+      <Format>application/vnd.ogc.se_xml</Format>
+      <Format>application/vnd.ogc.se_inimage</Format>
+      <Format>application/vnd.ogc.se_blank</Format>
+      <Format>text/xml</Format>
+      <Format>XML</Format>
+    </Exception>
+    <Layer>
+      <Title><![CDATA[ORWellHeaders]]></Title>
+<CRS>CRS:84</CRS>
+<CRS>EPSG:4326</CRS>
+<CRS>EPSG:3857</CRS>
+ <!-- alias 3857 -->
+<CRS>EPSG:102100</CRS>
+<EX_GeographicBoundingBox><westBoundLongitude>-124.399896</westBoundLongitude><eastBoundLongitude>-116.779783</eastBoundLongitude><southBoundLatitude>41.999877</southBoundLatitude><northBoundLatitude>46.162222</northBoundLatitude></EX_GeographicBoundingBox>
+<BoundingBox CRS="CRS:84" minx="-124.399896" miny="41.999877" maxx="-116.779783" maxy="46.162222"/>
+<BoundingBox CRS="EPSG:4326" minx="41.999877" miny="-124.399896" maxx="46.162222" maxy="-116.779783"/>
+<BoundingBox CRS="EPSG:3857" minx="-13848133.077456" miny="5160961.019264" maxx="-12999865.978509" maxy="5806383.628162"/>
+      <Layer queryable="1">
+        <Name>Wellheader</Name>
+        <Title><![CDATA[Wellheader]]></Title>
+        <Abstract><![CDATA[Wellheader]]></Abstract>
+<CRS>CRS:84</CRS>
+<CRS>EPSG:4326</CRS>
+<CRS>EPSG:3857</CRS>
+ <!-- alias 3857 -->
+<CRS>EPSG:102100</CRS>
+<EX_GeographicBoundingBox><westBoundLongitude>-124.399896</westBoundLongitude><eastBoundLongitude>-116.779783</eastBoundLongitude><southBoundLatitude>41.999877</southBoundLatitude><northBoundLatitude>46.162222</northBoundLatitude></EX_GeographicBoundingBox>
+<BoundingBox CRS="CRS:84" minx="-124.399896" miny="41.999877" maxx="-116.779783" maxy="46.162222"/>
+<BoundingBox CRS="EPSG:4326" minx="41.999877" miny="-124.399896" maxx="46.162222" maxy="-116.779783"/>
+<BoundingBox CRS="EPSG:3857" minx="-13848133.077456" miny="5160961.019264" maxx="-12999865.978509" maxy="5806383.628162"/>
+        <FeatureListURL>
+            <Format>text/xml</Format>
+            <OnlineResource xlink:href="http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+        </FeatureListURL>
+        <Style>
+          <Name>default</Name>
+          <Title>Wellheader</Title>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://services.azgs.az.gov/arcgis/services/aasggeothermal/ORWellHeaders/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=Wellheader" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" />
+          </LegendURL>
+        </Style>
+      </Layer>
+    </Layer>
+  </Capability>
+</WMS_Capabilities>

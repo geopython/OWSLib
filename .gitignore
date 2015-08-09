@@ -11,3 +11,4 @@ pytest_cov-*
 .tox
 .*.swp
 
+*.ipynb

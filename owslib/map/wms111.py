@@ -27,10 +27,11 @@ import warnings
 
 import six
 
-from .etree import etree
-from .util import openURL, testXMLValue, extract_xml_list, xmltag_split, OrderedDict
-from .fgdc import Metadata
-from .iso import MD_Metadata
+from owslib.etree import etree
+from owslib.util import openURL, testXMLValue, extract_xml_list, xmltag_split, OrderedDict
+from owslib.fgdc import Metadata
+from owslib.iso import MD_Metadata
+from owslib.map.common import WMSCapabilitiesReader
 
 
 class ServiceException(Exception):
@@ -53,7 +54,7 @@ class CapabilitiesError(Exception):
     pass
 
 
-class WebMapService(object):
+class WebMapService_1_1_1(object):
     """Abstraction for OGC Web Map Service (WMS).
 
     Implements IWebMapService.
