@@ -28,7 +28,6 @@ from owslib.util import log
 
 n = Namespaces()
 WMS_NAMESPACE = n.get_namespace("wms")
-# OGC_NAMESPACE = n.get_namespace("ogc")
 
 
 class WebMapService_1_3_0():
