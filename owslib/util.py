@@ -190,14 +190,25 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
         req.raise_for_status()
 
     # check for service exceptions without the http header set
-    if 'Content-Type' in req.headers and req.headers['Content-Type'] in ['text/xml', 'application/xml']:
+    if 'Content-Type' in req.headers and req.headers['Content-Type'] in ['text/xml', 'application/xml', 'application/vnd.ogc.se_xml']:
         #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
         se_tree = etree.fromstring(req.content)
-        serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
-        if serviceException is None:
-            serviceException=se_tree.find('ServiceException')
-        if serviceException is not None:
-            raise ServiceException(str(serviceException.text).strip())
+
+        # to handle the variety of namespaces and terms across services
+        # and versions, especially for "legacy" responses like WMS 1.3.0
+        possible_errors = [
+            '{http://www.opengis.net/ows}Exception',
+            '{http://www.opengis.net/ows/1.1}Exception',
+            '{http://www.opengis.net/ogc}ServiceException',
+            'ServiceException'
+        ]
+
+        for possible_error in possible_errors:
+            serviceException = se_tree.find(possible_error)
+            if serviceException is not None:
+                # and we need to deal with some message nesting
+                exception_text = '\n'.join([str(t).strip() for t in serviceException.itertext() if str(t).strip()])
+                raise ServiceException(exception_text)
 
     return ResponseWrapper(req)
 
