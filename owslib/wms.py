@@ -15,7 +15,7 @@ Web Map Server (WFS) methods and metadata. Factory function.
 
 from __future__ import (absolute_import, division, print_function)
 
-from .map import wms111, wms130
+from owslib.map import wms111, wms130
 
 
 def WebMapService(url, version='1.1.1', xml=None, parse_remote_metadata=False,

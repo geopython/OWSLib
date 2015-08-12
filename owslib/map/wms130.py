@@ -30,7 +30,16 @@ n = Namespaces()
 WMS_NAMESPACE = n.get_namespace("wms")
 
 
-class WebMapService_1_3_0():
+class WebMapService_1_3_0(object):
+
+    def __getitem__(self, name):
+        ''' check contents dictionary to allow dict
+        like access to service layers
+        '''
+        if name in self.__getattribute__('contents'):
+            return self.__getattribute__('contents')[name]
+        else:
+            raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.3.0', xml=None, username=None,
                  password=None, parse_remote_metadata=False, timeout=30):
@@ -260,48 +269,49 @@ class ContentMetadata(object):
         self.abstract = testXMLValue(elem.find(nspath('Abstract', WMS_NAMESPACE)))
 
         # bboxes
-        b = elem.find(nspath('BoundingBox', WMS_NAMESPACE))
-        self.boundingBox = None
+        b = elem.find(nspath('EX_GeographicBoundingBox', WMS_NAMESPACE))
+        self.boundingBoxWGS84 = None
         if b is not None:
-            try:
-                # sometimes the SRS attribute is (wrongly) not provided
-                srs = b.attrib['CRS']
-            except KeyError:
-                srs = None
+            minx = b.find(nspath('westBoundLongitude', WMS_NAMESPACE))
+            miny = b.find(nspath('southBoundLatitude', WMS_NAMESPACE))
+            maxx = b.find(nspath('eastBoundLongitude', WMS_NAMESPACE))
+            maxy = b.find(nspath('northBoundLatitude', WMS_NAMESPACE))
+            box = map(float, [minx.text if minx is not None else None,
+                              miny.text if miny is not None else None,
+                              maxx.text if maxx is not None else None,
+                              maxy.text if maxy is not None else None])
 
-            box = map(float, [b.attrib['minx'],
-                              b.attrib['miny'],
-                              b.attrib['maxx'],
-                              b.attrib['maxy']]
-                      )
-            self.boundingBox = (
-                box[0],
-                box[1],
-                box[2],
-                box[3],
-                srs,
-            )
+            self.boundingBoxWGS84 = tuple(box)
         elif self.parent:
-            if hasattr(self.parent, 'boundingBox'):
-                self.boundingBox = self.parent.boundingBox
+            if hasattr(self.parent, 'boundingBoxWGS84'):
+                self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
 
         # make a bbox list (of tuples)
         crs_list = []
         for bb in elem.findall(nspath('BoundingBox', WMS_NAMESPACE)):
-            srs = bb.attrib.get('CRS', None)
+            srs_str = bb.attrib.get('CRS', None)
+            srs = Crs(srs_str)
+
             box = map(float, [bb.attrib['minx'],
                               bb.attrib['miny'],
                               bb.attrib['maxx'],
                               bb.attrib['maxy']]
                       )
+            minx, miny, maxx, maxy = box[0], box[1], box[2], box[3]
+
+            # handle the ordering so that it always
+            # returns (minx, miny, maxx, maxy)
+            if srs and srs.axisorder == 'yx':
+                # reverse things
+                minx, miny, maxx, maxy = box[1], box[0], box[3], box[2]
+
             crs_list.append((
-                box[0],
-                box[1],
-                box[2],
-                box[3],
-                srs,
+                minx, miny, maxx, maxy,
+                srs_str,
             ))
         self.crs_list = crs_list
+        # and maintain the original boundingBox attribute (first in list)
+        self.boundingBox = crs_list[0]
 
         # ScaleHint
         sh = elem.find(nspath('ScaleHint', WMS_NAMESPACE))
@@ -323,23 +333,6 @@ class ContentMetadata(object):
             if logo is not None:
                 self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
                 self.attribution['logo_url'] = logo.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
-
-        b = elem.find(nspath('EX_GeographicBoundingBox', WMS_NAMESPACE))
-        if b is not None:
-            westBoundLongitude = b.find(nspath('westBoundLongitude', WMS_NAMESPACE))
-            eastBoundLongitude = b.find(nspath('eastBoundLongitude', WMS_NAMESPACE))
-            southBoundLatitude = b.find(nspath('southBoundLatitude', WMS_NAMESPACE))
-            northBoundLatitude = b.find(nspath('northBoundLatitude', WMS_NAMESPACE))
-            self.boundingBoxWGS84 = (
-                float(westBoundLongitude.text if westBoundLongitude is not None else ''),
-                float(southBoundLatitude.text if southBoundLatitude is not None else ''),
-                float(eastBoundLongitude.text if eastBoundLongitude is not None else ''),
-                float(northBoundLatitude.text if northBoundLatitude is not None else ''),
-            )
-        elif self.parent:
-            self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
-        else:
-            self.boundingBoxWGS84 = None
 
         # TODO: get this from the bbox attributes instead (deal with parents)
         # SRS options
@@ -403,16 +396,14 @@ class ContentMetadata(object):
 
         self.timepositions = None
         self.defaulttimeposition = None
-        time_xpath = '*[local-name()="Dimension" and @name="time"]'
-        time_dimension = next(iter(elem.xpath(time_xpath)), None)
+        time_dimension = next(iter(elem.findall(nspath('Dimension', WMS_NAMESPACE)+'[@name="time"]')), None)
         if time_dimension is not None:
             self.timepositions = time_dimension.text.split(',') if time_dimension.text else None
             self.defaulttimeposition = time_dimension.attrib.get('default', '')
 
         # Elevations - available vertical levels
         self.elevations = None
-        elev_xpath = '*[local-name()="Dimension" and @name="elevation"]'
-        elev_dimension = next(iter(elem.xpath(elev_xpath)), None)
+        elev_dimension = next(iter(elem.findall(nspath('Dimension', WMS_NAMESPACE)+'[@name="elevation"]')), None)
         if elev_dimension is not None:
             self.elevations = [e.strip() for e in elev_dimension.text.split(',')] if elev_dimension.text else None
 
@@ -427,7 +418,7 @@ class ContentMetadata(object):
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
                 try:
-                    content = urllib2.urlopen(metadataUrl['url'], timeout=timeout)
+                    content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
                     if metadataUrl['type'] is not None:
                         if metadataUrl['type'] == 'FGDC':
@@ -456,7 +447,6 @@ class ContentMetadata(object):
                 'url': m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
             }
             self.featureListUrls.append(featureUrl)
-
 
         self.layers = []
         for child in elem.findall(nspath('Layer', WMS_NAMESPACE)):
