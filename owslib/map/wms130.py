@@ -251,20 +251,18 @@ class WebMapService_1_3_0(object):
 
         data = urlencode(request)
 
-        # TODO: update this for the new style of requests
         u = openURL(base_url,
                     data,
                     method,
                     username=self.username,
                     password=self.password)
 
-        # TODO: check on the changes to the request + exception handling
-        # check for service exceptions, and return
-        # fyi: in openURL, if the path goes through the content-type
-        # check w/out http header set and it instantiates a new rereadable
-        # url, it loses the additional url obj methods (so just the stringio)
-        # and the original u.info() fails with an attributeerror
-        if u.info()['Content-Type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
+        # need to handle casing in the header keys
+        headers = {}
+        for k, v in u.info().iteritems():
+            headers[k.lower()] = v
+
+        if headers['content-type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = unicode(next(iter(se_tree.find('{http://www.opengis.net/ogc}ServiceException/text()')), '')).strip()
