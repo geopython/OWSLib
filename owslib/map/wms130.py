@@ -6,7 +6,6 @@ API For Web Map Service version 1.3.0
 
 from __future__ import (absolute_import, division, print_function)
 
-import cgi
 try:                    # Python 3
     from urllib.parse import urlencode
 except ImportError:     # Python 2
@@ -14,7 +13,6 @@ except ImportError:     # Python 2
 
 import warnings
 
-import six
 from owslib.etree import etree
 from owslib.util import openURL, ServiceException, testXMLValue, extract_xml_list, xmltag_split, OrderedDict
 from owslib.util import nspath
@@ -139,13 +137,68 @@ class WebMapService_1_3_0(object):
                format=None,
                size=None,
                time=None,
+               elevation=None,
+               dimensions={},
                transparent=False,
                bgcolor='#FFFFFF',
                exceptions='XML',
                method='Get',
                **kwargs
                ):
-        # TODO: add the init comments
+        """Request and return an image from the WMS as a file-like object.
+
+        Parameters
+        ----------
+        layers : list
+            List of content layer names.
+        styles : list
+            Optional list of named styles, must be the same length as the
+            layers list.
+        srs : string
+            A spatial reference system identifier.
+        bbox : tuple
+            (left, bottom, right, top) in srs units (note, this order does not
+                change depending on axis order of the crs).
+
+            CRS:84: (long, lat)
+            EPSG:4326: (lat, long)
+        format : string
+            Output image format such as 'image/jpeg'.
+        size : tuple
+            (width, height) in pixels.
+
+        time : string or list or range
+            Optional. Time value of the specified layer as ISO-8601 (per value)
+        elevation : string or list or range
+            Optional. Elevation value of the specified layer.
+        dimensions: dict (dimension : string or list or range)
+            Optional. Any other Dimension option, as specified in the GetCapabilities
+
+        transparent : bool
+            Optional. Transparent background if True.
+        bgcolor : string
+            Optional. Image background color.
+        method : string
+            Optional. HTTP DCP method name: Get or Post.
+        **kwargs : extra arguments
+            anything else e.g. vendor specific parameters
+
+        Example
+        -------
+            >>> wms = WebMapService('http://webservices.nationalatlas.gov/wms/1million',
+                                    version='1.3.0')
+            >>> img = wms.getmap(layers=['airports1m'],\
+                                 styles=['default'],\
+                                 srs='EPSG:4326',\
+                                 bbox=(-176.646, 17.7016, -64.8017, 71.2854),\
+                                 size=(300, 300),\
+                                 format='image/jpeg',\
+                                 transparent=True)
+            >>> out = open('example.jpg.jpg', 'wb')
+            >>> out.write(img.read())
+            >>> out.close()
+
+        """
 
         try:
             base_url = next((m.get('url') for m in
@@ -169,7 +222,11 @@ class WebMapService_1_3_0(object):
         request['height'] = str(size[1])
 
         # remap srs to crs for the actual request
-        bbox = None
+        sref = Crs(crs)
+        if sref.axisorder == 'yx':
+            # remap the given bbox
+            bbox = (bbox[1], bbox[0], bbox[3], bbox[2])
+
         request['crs'] = str(crs)
         request['bbox'] = ','.join([repr(x) for x in bbox])
         request['format'] = str(format)
@@ -177,8 +234,16 @@ class WebMapService_1_3_0(object):
         request['bgcolor'] = '0x' + bgcolor[1:7]
         request['exceptions'] = str(exceptions)
 
+        # the predefined dimensions
         if time is not None:
             request['time'] = str(time)
+
+        if elevation is not None:
+            request['elevation'] = str(elevation)
+
+        # any other specified dimension, prefixed with "dim_"
+        for k, v in dimensions.iteritems():
+            request['dim_' + k] = str(v)
 
         if kwargs:
             for kw in kwargs:
@@ -199,7 +264,7 @@ class WebMapService_1_3_0(object):
         # check w/out http header set and it instantiates a new rereadable
         # url, it loses the additional url obj methods (so just the stringio)
         # and the original u.info() fails with an attributeerror
-        if u.headers['Content-Type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
+        if u.info()['Content-Type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = unicode(next(iter(se_tree.find('{http://www.opengis.net/ogc}ServiceException/text()')), '')).strip()
