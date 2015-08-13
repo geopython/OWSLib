@@ -124,14 +124,15 @@ class MD_Metadata(object):
 
             self.identificationinfo = []
             for idinfo in md.findall(util.nspath_eval('gmd:identificationInfo', namespaces)):
-                val = list(idinfo)[0]
-                tagval = util.xmltag_split(val.tag)
-                if tagval == 'MD_DataIdentification': 
-                    self.identificationinfo.append(MD_DataIdentification(val, 'dataset'))
-                elif tagval == 'MD_ServiceIdentification': 
-                    self.identificationinfo.append(MD_DataIdentification(val, 'service'))
-                elif tagval == 'SV_ServiceIdentification': 
-                    self.identificationinfo.append(SV_ServiceIdentification(val))
+                if len(idinfo) > 0:    
+                    val = list(idinfo)[0]
+                    tagval = util.xmltag_split(val.tag)
+                    if tagval == 'MD_DataIdentification': 
+                        self.identificationinfo.append(MD_DataIdentification(val, 'dataset'))
+                    elif tagval == 'MD_ServiceIdentification': 
+                        self.identificationinfo.append(MD_DataIdentification(val, 'service'))
+                    elif tagval == 'SV_ServiceIdentification': 
+                        self.identificationinfo.append(SV_ServiceIdentification(val))
 
             val = md.find(util.nspath_eval('gmd:distributionInfo/gmd:MD_Distribution', namespaces))
 
