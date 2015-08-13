@@ -330,6 +330,10 @@ class ContentMetadata(object):
 
         self.abstract = testXMLValue(elem.find(nspath('Abstract', WMS_NAMESPACE)))
 
+        # TODO: what is the preferred response to esri's handling of custom projections
+        #       in the spatial ref definitions? see http://resources.arcgis.com/en/help/main/10.1/index.html#//00sq000000m1000000
+        #       and an example (20150812) http://maps.ngdc.noaa.gov/arcgis/services/firedetects/MapServer/WMSServer?request=GetCapabilities&service=WMS
+
         # bboxes
         b = elem.find(nspath('EX_GeographicBoundingBox', WMS_NAMESPACE))
         self.boundingBoxWGS84 = None
@@ -468,6 +472,15 @@ class ContentMetadata(object):
         elev_dimension = next(iter(elem.findall(nspath('Dimension', WMS_NAMESPACE)+'[@name="elevation"]')), None)
         if elev_dimension is not None:
             self.elevations = [e.strip() for e in elev_dimension.text.split(',')] if elev_dimension.text else None
+
+        # and now capture the dimensions as more generic things (and custom things)
+        self.dimensions = {}
+        for dim in elem.findall(nspath('Dimension', WMS_NAMESPACE)):
+            dim_name = dim.attrib.get('name')
+            dim_data = {k: v for k, v in dim.attrib.iteritems() if k !='name'}
+            # single values and ranges are not differentiated here
+            dim_data['values'] = dim.text.strip().split(',') if dim.text.strip() else None
+            self.dimensions[dim_name] = dim_data
 
         # MetadataURLs
         self.metadataUrls = []
