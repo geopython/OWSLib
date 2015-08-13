@@ -132,7 +132,7 @@ class WebMapService_1_3_0(object):
 
     def getmap(self, layers=None,
                styles=None,
-               crs=None,
+               srs=None,
                bbox=None,
                format=None,
                size=None,
@@ -156,6 +156,8 @@ class WebMapService_1_3_0(object):
             layers list.
         srs : string
             A spatial reference system identifier.
+            Note: this is an invalid query parameter key for 1.3.0 but is being
+                  retained for standardization with 1.1.1.
         bbox : tuple
             (left, bottom, right, top) in srs units (note, this order does not
                 change depending on axis order of the crs).
@@ -189,7 +191,7 @@ class WebMapService_1_3_0(object):
                                     version='1.3.0')
             >>> img = wms.getmap(layers=['airports1m'],\
                                  styles=['default'],\
-                                 srs='EPSG:4326',\
+                                 crs='EPSG:4326',\
                                  bbox=(-176.646, 17.7016, -64.8017, 71.2854),\
                                  size=(300, 300),\
                                  format='image/jpeg',\
@@ -222,12 +224,13 @@ class WebMapService_1_3_0(object):
         request['height'] = str(size[1])
 
         # remap srs to crs for the actual request
-        sref = Crs(crs)
+        sref = Crs(srs)
         if sref.axisorder == 'yx':
             # remap the given bbox
             bbox = (bbox[1], bbox[0], bbox[3], bbox[2])
 
-        request['crs'] = str(crs)
+        # remapping the srs to crs for the request
+        request['crs'] = str(srs)
         request['bbox'] = ','.join([repr(x) for x in bbox])
         request['format'] = str(format)
         request['transparent'] = str(transparent).upper()
