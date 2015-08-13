@@ -12,7 +12,7 @@ except ImportError:     # Python 2
     from urllib import urlencode
 
 import warnings
-
+import six
 from owslib.etree import etree
 from owslib.util import openURL, ServiceException, testXMLValue, extract_xml_list, xmltag_split, OrderedDict
 from owslib.util import nspath
@@ -245,7 +245,7 @@ class WebMapService_1_3_0(object):
             request['elevation'] = str(elevation)
 
         # any other specified dimension, prefixed with "dim_"
-        for k, v in dimensions.iteritems():
+        for k, v in six.iteritems(dimensions):
             request['dim_' + k] = str(v)
 
         if kwargs:
@@ -262,7 +262,7 @@ class WebMapService_1_3_0(object):
 
         # need to handle casing in the header keys
         headers = {}
-        for k, v in u.info().iteritems():
+        for k, v in six.iteritems(u.info()):
             headers[k.lower()] = v
 
         if headers['content-type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
@@ -345,10 +345,10 @@ class ContentMetadata(object):
             miny = b.find(nspath('southBoundLatitude', WMS_NAMESPACE))
             maxx = b.find(nspath('eastBoundLongitude', WMS_NAMESPACE))
             maxy = b.find(nspath('northBoundLatitude', WMS_NAMESPACE))
-            box = map(float, [minx.text if minx is not None else None,
+            box = tuple(map(float, [minx.text if minx is not None else None,
                               miny.text if miny is not None else None,
                               maxx.text if maxx is not None else None,
-                              maxy.text if maxy is not None else None])
+                              maxy.text if maxy is not None else None]))
 
             self.boundingBoxWGS84 = tuple(box)
         elif self.parent:
@@ -361,11 +361,11 @@ class ContentMetadata(object):
             srs_str = bb.attrib.get('CRS', None)
             srs = Crs(srs_str)
 
-            box = map(float, [bb.attrib['minx'],
-                              bb.attrib['miny'],
-                              bb.attrib['maxx'],
-                              bb.attrib['maxy']]
-                      )
+            box = tuple(map(float, [bb.attrib['minx'],
+                        bb.attrib['miny'],
+                        bb.attrib['maxx'],
+                        bb.attrib['maxy']]
+            ))
             minx, miny, maxx, maxy = box[0], box[1], box[2], box[3]
 
             # handle the ordering so that it always
@@ -480,7 +480,7 @@ class ContentMetadata(object):
         self.dimensions = {}
         for dim in elem.findall(nspath('Dimension', WMS_NAMESPACE)):
             dim_name = dim.attrib.get('name')
-            dim_data = {k: v for k, v in dim.attrib.iteritems() if k !='name'}
+            dim_data = {k: v for k, v in six.iteritems(dim.attrib) if k !='name'}
             # single values and ranges are not differentiated here
             dim_data['values'] = dim.text.strip().split(',') if dim.text.strip() else None
             self.dimensions[dim_name] = dim_data
