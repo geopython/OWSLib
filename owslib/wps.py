@@ -93,6 +93,10 @@ from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue,
                   getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
+try:                    # Python 3
+    from urllib.parse import urlparse
+except ImportError:     # Python 2
+    from urlparse import urlparse
 
 # namespace definition
 n = Namespaces()
@@ -117,7 +121,32 @@ def get_namespaces():
     return ns
 namespaces = get_namespaces()
 
-class IWebProcessingService():
+
+def is_reference(val):
+    """
+    Checks if the provided value is a reference (URL).
+    """
+    try:
+        parsed = urlparse(val)
+        is_ref = parsed.scheme != ''
+    except:
+        is_ref = False
+    return is_ref
+
+
+def is_literaldata(val):
+    if is_reference(val):
+        is_literal = False
+    elif isinstance(val, str) or isinstance(val, unicode):
+        is_literal = True
+    else:
+        is_literal = False
+    return is_literal
+
+def is_complexdata(val):
+    return hasattr(val, 'getXml')
+
+class IWebProcessingService(object):
     """
     Abstract interface for an OGC Web Processing Service (WPS).
     """
@@ -129,20 +158,24 @@ class IWebProcessingService():
         Makes a GetCapabilities request to the remote WPS server,
         returns an XML document wrapped in a python file-like object.
         """
+        raise NotImplementedError
     
     def describeprocess(**kw):
         """
         Makes a DescribeProcess request to the remote WPS server,
         returns a Process object containing all the process metadata.
         """
+        raise NotImplementedError
         
     def execute(**kw):
         """
         Submits an Execute request to the remote WPS server,
         returns a WPSExecution object, which can be used to monitor the status of the job, and ultimately retrieve the result.
         """
+        raise NotImplementedError
 
-class IComplexData():
+    
+class IComplexData(object):
     """
     Abstract interface representing complex input object for a WPS request.
     """
@@ -151,7 +184,8 @@ class IComplexData():
         """
         Method that returns the object data as an XML snippet, 
         to be inserted into the WPS request document sent to the server.
-        """ 
+        """
+        raise NotImplementedError
     
 class WebProcessingService(object):
     """
@@ -475,7 +509,7 @@ class WPSExecution():
         identifier: the requested process identifier
         inputs: array of input arguments for the process.
             - LiteralData inputs are expressed as simple (key,value) tuples where key is the input identifier, value is the value
-            - ComplexData inputs are express as (key, object) tuples, where key is the input identifier,
+            - ComplexData inputs are expressed as (key, object) tuples, where key is the input identifier,
               and the object must contain a 'getXml()' method that returns an XML infoset to be included in the WPS request
         output: optional identifier if process output is to be returned as a hyperlink reference
         """
@@ -505,6 +539,15 @@ class WPSExecution():
             identifierElement = etree.SubElement(inputElement, nspath_eval('ows:Identifier', namespaces))
             identifierElement.text = key
             
+            # Reference
+            # <wps:Input>
+            #   <ows:Identifier>DATASET_URI</ows:Identifier>
+            #   <wps:Reference xlink:href="http://somewhere/test.xml"/>
+            # </wps:Input>
+            if is_reference(val):
+                log.debug("reference %s", key)
+                refElement = etree.SubElement(inputElement, nspath_eval('wps:Reference', namespaces),
+                                    attrib = { nspath_eval("xlink:href",namespaces) : val} )
             # Literal data
             # <wps:Input>
             #   <ows:Identifier>DATASET_URI</ows:Identifier>
@@ -512,7 +555,8 @@ class WPSExecution():
             #     <wps:LiteralData>dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml</wps:LiteralData>
             #   </wps:Data>
             # </wps:Input>
-            if isinstance(val, str):
+            elif is_literaldata(val):
+                log.debug("literaldata %s", key)
                 dataElement = etree.SubElement(inputElement, nspath_eval('wps:Data', namespaces))
                 literalDataElement = etree.SubElement(dataElement, nspath_eval('wps:LiteralData', namespaces))
                 literalDataElement.text = val
@@ -534,8 +578,11 @@ class WPSExecution():
             #      </wps:Body>
             #   </wps:Reference>
             # </wps:Input>
-            else:
+            elif is_complexdata(val):
+                log.debug("complexdata %s", key)
                 inputElement.append( val.getXml() )
+            else:
+                raise Exception('input type of "%s" parameter is unknown' % key)
         
         # <wps:ResponseForm>
         #   <wps:ResponseDocument storeExecuteResponse="true" status="true">
@@ -1163,8 +1210,48 @@ class Process(object):
             if self.verbose==True:
                 dump(self.processOutputs[-1],  prefix='\tOutput: ')
      
-    
-class FeatureCollection():
+
+class ComplexDataInput(ComplexData):
+    def __init__(self, value, mimeType=None, encoding=None, schema=None):
+        super(ComplexDataInput, self).__init__(mimeType=mimeType, encoding=encoding, schema=schema)
+        self.value = value
+        
+    def getXml(self):
+        if is_reference(self.value):
+            return self.complexDataAsReference()
+        else:
+            return self.complexDataRaw()
+
+    def complexDataAsReference(self):
+        """
+           <wps:Reference xlink:href="http://somewhere/test.xml"/>
+        """
+        refElement = etree.Element(nspath_eval('wps:Reference', namespaces),
+                                attrib = { nspath_eval("xlink:href",namespaces) : self.value} )
+        return refElement
+
+    def complexDataRaw(self):
+        '''
+            <wps:Data>
+                <wps:ComplexData mimeType="text/xml" encoding="UTF-8"
+                    schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd">
+                </wps:ComplexData>
+            </wps:Data>
+        '''
+        dataElement = etree.Element(nspath_eval('wps:Data', namespaces))
+
+        attrib = dict()
+        if self.encoding:
+            attrib['encoding'] = self.encoding
+        if self.schema:
+            attrib['schema'] = self.schema
+        if self.mimeType:
+            attrib['mimeType'] = self.mimeType
+        complexDataElement = etree.SubElement(dataElement, nspath_eval('wps:ComplexData', namespaces), attrib=attrib )
+        complexDataElement.text = self.value
+        return dataElement
+                
+class FeatureCollection(object):
     '''
     Base class to represent a Feature Collection used as input to a WPS request.
     The method getXml() is invoked by the WPS execute() method to build the WPS request.
@@ -1222,7 +1309,7 @@ class WFSFeatureCollection(FeatureCollection):
         
         return root
     
-class WFSQuery():
+class WFSQuery(object):
     '''
     Class representing a WFS query, for insertion into a WFSFeatureCollection instance.
     
