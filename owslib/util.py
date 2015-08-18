@@ -34,6 +34,7 @@ import warnings
 import time
 import six
 import requests
+import codecs
 
 """
 Utility functions and classes
@@ -549,6 +550,29 @@ a newline. This will extract out all of the keywords correctly.
     flattened = [item.strip() for sublist in keywords for item in sublist]
     remove_blank = [_f for _f in flattened if _f]
     return remove_blank
+
+
+def strip_bom(raw_text):
+    """ return the raw (assumed) xml response without the BOM
+    """
+    boms = [
+        codecs.BOM,
+        codecs.BOM_BE,
+        codecs.BOM_LE,
+        codecs.BOM_UTF8,
+        codecs.BOM_UTF16,
+        codecs.BOM_UTF16_LE,
+        codecs.BOM_UTF16_BE,
+        codecs.BOM_UTF32,
+        codecs.BOM_UTF32_LE,
+        codecs.BOM_UTF32_BE
+    ]
+
+    if not isinstance(raw_text, unicode):
+        for bom in boms:
+            if raw_text.startswith(bom):
+                return raw_text.replace(bom, '')
+    return raw_text
 
 
 def bind_url(url):
