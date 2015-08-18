@@ -158,6 +158,8 @@ class WebMapService_1_3_0(object):
             A spatial reference system identifier.
             Note: this is an invalid query parameter key for 1.3.0 but is being
                   retained for standardization with 1.1.1.
+            Note: throws exception if the spatial ref is ESRI's "no reference"
+                  code (EPSG:0)
         bbox : tuple
             (left, bottom, right, top) in srs units (note, this order does not
                 change depending on axis order of the crs).
@@ -191,7 +193,7 @@ class WebMapService_1_3_0(object):
                                     version='1.3.0')
             >>> img = wms.getmap(layers=['airports1m'],\
                                  styles=['default'],\
-                                 crs='EPSG:4326',\
+                                 srs='EPSG:4326',\
                                  bbox=(-176.646, 17.7016, -64.8017, 71.2854),\
                                  size=(300, 300),\
                                  format='image/jpeg',\
@@ -224,6 +226,9 @@ class WebMapService_1_3_0(object):
         request['height'] = str(size[1])
 
         # remap srs to crs for the actual request
+        if srs.upper() == 'EPSG:0':
+            # if it's esri's unknown spatial ref code, bail
+            raise Exception('Undefined spatial reference (%s).' % srs)
         sref = Crs(srs)
         if sref.axisorder == 'yx':
             # remap the given bbox

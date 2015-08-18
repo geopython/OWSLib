@@ -3,7 +3,7 @@ Imports
 
     >>> from __future__ import (absolute_import, division, print_function)
     >>> from owslib.wms import WebMapService
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import resource_file, cast_tuple_int_list, cast_tuple_int_list_srs
     >>> from operator import itemgetter
 
 Fake a request to a WMS Server (1.3.0) using saved doc from 
@@ -45,11 +45,11 @@ Test single item accessor
     >>> wms['time_idx'].keywords
     []
     
-    >>> wms['time_idx'].boundingBox
-    (-126.0, 24.0, -66.0, 50.0, 'EPSG:4326')
+    >>> cast_tuple_int_list_srs(wms['time_idx'].boundingBox)
+    [-126, 24, -66, 50, 'EPSG:4326']
 
-    >>> wms['time_idx'].boundingBoxWGS84
-    (-126.0, 24.0, -66.0, 50.0)
+    >>> cast_tuple_int_list(wms['time_idx'].boundingBoxWGS84)
+    [-126, 24, -66, 50]
     
     >>> sorted(wms['time_idx'].crsOptions)
     ['EPSG:102100', 'EPSG:3857', 'EPSG:4326', 'EPSG:900913']
