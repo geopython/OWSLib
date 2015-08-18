@@ -7,7 +7,7 @@ except ImportError:     # Python 2
     from urllib import urlencode
 
 from owslib.etree import etree
-from owslib.util import openURL
+from owslib.util import openURL, strip_bom
 
 
 class WMSCapabilitiesReader(object):
@@ -66,7 +66,9 @@ class WMSCapabilitiesReader(object):
                     username=self.username,
                     password=self.password,
                     timeout=timeout)
-        return etree.fromstring(u.read())
+
+        raw_text = strip_bom(u.read())
+        return etree.fromstring(raw_text)
 
     def readString(self, st):
         """Parse a WMS capabilities document, returning an elementtree instance
@@ -75,4 +77,5 @@ class WMSCapabilitiesReader(object):
         """
         if not isinstance(st, str) and not isinstance(st, bytes):
             raise ValueError("String must be of type string or bytes, not %s" % type(st))
-        return etree.fromstring(st)
+        raw_text = strip_bom(st)
+        return etree.fromstring(raw_text)
