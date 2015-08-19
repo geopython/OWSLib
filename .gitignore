@@ -10,4 +10,7 @@ pytest-*
 pytest_cov-*
 .tox
 .*.swp
+*.*~
+.cache
+
 
