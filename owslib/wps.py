@@ -135,16 +135,18 @@ def is_reference(val):
 
 
 def is_literaldata(val):
-    if is_reference(val):
-        is_literal = False
-    elif isinstance(val, str) or isinstance(val, unicode):
-        is_literal = True
-    else:
-        is_literal = False
-    return is_literal
+    """
+    Checks if the provided value is a string (also unicode).
+    """
+    return isinstance(val, str) or isinstance(val, unicode)
+
 
 def is_complexdata(val):
+    """
+    Checks if the provided value is an implementation of IComplexData.
+    """
     return hasattr(val, 'getXml')
+
 
 class IWebProcessingService(object):
     """
@@ -539,15 +541,6 @@ class WPSExecution():
             identifierElement = etree.SubElement(inputElement, nspath_eval('ows:Identifier', namespaces))
             identifierElement.text = key
             
-            # Reference
-            # <wps:Input>
-            #   <ows:Identifier>DATASET_URI</ows:Identifier>
-            #   <wps:Reference xlink:href="http://somewhere/test.xml"/>
-            # </wps:Input>
-            if is_reference(val):
-                log.debug("reference %s", key)
-                refElement = etree.SubElement(inputElement, nspath_eval('wps:Reference', namespaces),
-                                    attrib = { nspath_eval("xlink:href",namespaces) : val} )
             # Literal data
             # <wps:Input>
             #   <ows:Identifier>DATASET_URI</ows:Identifier>
@@ -555,7 +548,7 @@ class WPSExecution():
             #     <wps:LiteralData>dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml</wps:LiteralData>
             #   </wps:Data>
             # </wps:Input>
-            elif is_literaldata(val):
+            if is_literaldata(val):
                 log.debug("literaldata %s", key)
                 dataElement = etree.SubElement(inputElement, nspath_eval('wps:Data', namespaces))
                 literalDataElement = etree.SubElement(dataElement, nspath_eval('wps:LiteralData', namespaces))
