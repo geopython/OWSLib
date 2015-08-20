@@ -21,8 +21,9 @@ Check WPS description
     >>> wps.identification.type
     'WPS'
     >>> wps.identification.title
-    '52°North WPS 3.3.1'
+    u'52\xb0North WPS 3.3.1'
     >>> wps.identification.abstract
+    u'Service based on the 52\xb0North implementation of WPS 1.0.0'
 
 Check available operations
     >>> for operation in wps.operations:
