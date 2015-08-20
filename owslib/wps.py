@@ -156,35 +156,6 @@ def is_complexdata(val):
     return hasattr(val, 'getXml')
 
 
-class IWebProcessingService(object):
-    """
-    Abstract interface for an OGC Web Processing Service (WPS).
-    """
-    
-    url = property("""URL for the remote WPS server (string).""")
-    
-    def getcapabilities(**kw):
-        """
-        Makes a GetCapabilities request to the remote WPS server,
-        returns an XML document wrapped in a python file-like object.
-        """
-        raise NotImplementedError
-    
-    def describeprocess(**kw):
-        """
-        Makes a DescribeProcess request to the remote WPS server,
-        returns a Process object containing all the process metadata.
-        """
-        raise NotImplementedError
-        
-    def execute(**kw):
-        """
-        Submits an Execute request to the remote WPS server,
-        returns a WPSExecution object, which can be used to monitor the status of the job, and ultimately retrieve the result.
-        """
-        raise NotImplementedError
-
-    
 class IComplexData(object):
     """
     Abstract interface representing complex input object for a WPS request.
