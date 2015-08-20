@@ -13,15 +13,15 @@ Process input/ouutput arguments
     >>> processid = "helloworld"
     >>> inputs = None
     >>> try:
-    >>>     inputs = [ ("user", u'Pingu')]
-    >>> except:
-    >>>     inputs = [ ("user", 'Pingu')]
+    ...     inputs = [ ("user", u'Pingu')]
+    ... except:
+    ...     inputs = [ ("user", 'Pingu')]
 
 Build XML request for WPS process execution
 
     >>> execution = WPSExecution()
     >>> requestElement = execution.buildRequest(processid, inputs)
-    >>> request = etree.tostring( requestElement, pretty_print = True )
+    >>> request = etree.tostring( requestElement )
 
 Compare to cached XML request
 
