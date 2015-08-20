@@ -11,7 +11,11 @@ Imports
 Process input/ouutput arguments
 
     >>> processid = "helloworld"
-    >>> inputs = [ ("user",u'Pingu'),]
+    >>> inputs = None
+    >>> try:
+    >>>     inputs = [ ("user", u'Pingu')]
+    >>> except:
+    >>>     inputs = [ ("user", 'Pingu')]
 
 Build XML request for WPS process execution
 
