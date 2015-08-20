@@ -136,9 +136,17 @@ def is_reference(val):
 
 def is_literaldata(val):
     """
-    Checks if the provided value is a string (also unicode).
+    Checks if the provided value is a string (includes unicode).
     """
-    return isinstance(val, str) or isinstance(val, unicode)
+    is_str = isinstance(val, str)
+    if not is_str:
+        # on python 2.x we need to check unicode 
+        try:
+            is_str = isinstance(val, unicode)
+        except:
+            # unicode is not available on python 3.x
+            is_str = False
+    return is_str
 
 
 def is_complexdata(val):
