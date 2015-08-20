@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wps:Capabilities xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WPS" version="1.0.0" xml:lang="en-US" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsGetCapabilities_response.xsd" updateSequence="1">
+  <ows:ServiceIdentification>
+    <ows:Title>52°North WPS 3.3.1</ows:Title>
+    <ows:Abstract>Service based on the 52°North implementation of WPS 1.0.0</ows:Abstract>
+    <ows:Keywords>
+      <ows:Keyword>WPS</ows:Keyword>
+      <ows:Keyword>geospatial</ows:Keyword>
+      <ows:Keyword>geoprocessing</ows:Keyword>
+    </ows:Keywords>
+    <ows:ServiceType>WPS</ows:ServiceType>
+    <ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+    <ows:Fees>NONE</ows:Fees>
+    <ows:AccessConstraints>NONE</ows:AccessConstraints>
+  </ows:ServiceIdentification>
+  <ows:ServiceProvider>
+    <ows:ProviderName>52North</ows:ProviderName>
+    <ows:ProviderSite xlink:href="http://www.52north.org/"/>
+    <ows:ServiceContact>
+      <ows:IndividualName>Benjamin Pross</ows:IndividualName>
+      <ows:PositionName>Software engineer, Geoprocessing Community Lead</ows:PositionName>
+      <ows:ContactInfo>
+        <ows:Phone>
+          <ows:Voice>+49 (0)251.396371-42</ows:Voice>
+          <ows:Facsimile>+49 (0)251.396371-11</ows:Facsimile>
+        </ows:Phone>
+        <ows:Address>
+          <ows:DeliveryPoint>Martin-Luther-King-Weg 24</ows:DeliveryPoint>
+          <ows:City>Münster</ows:City>
+          <ows:AdministrativeArea>NRW</ows:AdministrativeArea>
+          <ows:PostalCode>48155</ows:PostalCode>
+          <ows:Country>Germany</ows:Country>
+          <ows:ElectronicMailAddress>b.pross @52north.org</ows:ElectronicMailAddress>
+        </ows:Address>
+      </ows:ContactInfo>
+    </ows:ServiceContact>
+  </ows:ServiceProvider>
+  <ows:OperationsMetadata>
+    <ows:Operation name="GetCapabilities">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:href="http://geoprocessing.demo.52north.org:8080/52n-wps-webapp-3.3.1/WebProcessingService?"/>
+          <ows:Post xlink:href="http://geoprocessing.demo.52north.org:8080/52n-wps-webapp-3.3.1/WebProcessingService"/>
+        </ows:HTTP>
+      </ows:DCP>
+    </ows:Operation>
+    <ows:Operation name="DescribeProcess">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:href="http://geoprocessing.demo.52north.org:8080/52n-wps-webapp-3.3.1/WebProcessingService?"/>
+          <ows:Post xlink:href="http://geoprocessing.demo.52north.org:8080/52n-wps-webapp-3.3.1/WebProcessingService"/>
+        </ows:HTTP>
+      </ows:DCP>
+    </ows:Operation>
+    <ows:Operation name="Execute">
+      <ows:DCP>
+        <ows:HTTP>
+          <ows:Get xlink:href="http://geoprocessing.demo.52north.org:8080/52n-wps-webapp-3.3.1/WebProcessingService?"/>
+          <ows:Post xlink:href="http://geoprocessing.demo.52north.org:8080/52n-wps-webapp-3.3.1/WebProcessingService"/>
+        </ows:HTTP>
+      </ows:DCP>
+    </ows:Operation>
+  </ows:OperationsMetadata>
+  <wps:ProcessOfferings>
+    <wps:Process wps:processVersion="1.1.0">
+      <ows:Identifier>org.n52.wps.server.algorithm.test.MultiReferenceInputAlgorithm</ows:Identifier>
+      <ows:Title>for testing multiple inputs by reference</ows:Title>
+    </wps:Process>
+    <wps:Process wps:processVersion="1.0.0">
+      <ows:Identifier>org.n52.wps.server.algorithm.test.EchoProcess</ows:Identifier>
+      <ows:Title>Echo process</ows:Title>
+    </wps:Process>
+    <wps:Process wps:processVersion="1.1.0">
+      <ows:Identifier>org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</ows:Identifier>
+      <ows:Title>for testing multiple binary inputs by reference</ows:Title>
+    </wps:Process>
+    <wps:Process wps:processVersion="1.0.0">
+      <ows:Identifier>org.n52.wps.server.algorithm.test.LongRunningDummyTestClass</ows:Identifier>
+      <ows:Title>org.n52.wps.server.algorithm.test.LongRunningDummyTestClass</ows:Title>
+    </wps:Process>
+    <wps:Process wps:processVersion="1.1.0">
+      <ows:Identifier>org.n52.wps.server.algorithm.JTSConvexHullAlgorithm</ows:Identifier>
+      <ows:Title>org.n52.wps.server.algorithm.JTSConvexHullAlgorithm</ows:Title>
+    </wps:Process>
+    <wps:Process wps:processVersion="1.0.0">
+      <ows:Identifier>org.n52.wps.server.algorithm.test.MultipleComplexInAndOutputsDummyTestClass</ows:Identifier>
+      <ows:Title>org.n52.wps.server.algorithm.test.MultipleComplexInAndOutputsDummyTestClass</ows:Title>
+    </wps:Process>
+    <wps:Process wps:processVersion="1.0.0">
+      <ows:Identifier>org.n52.wps.server.algorithm.test.DummyTestClass</ows:Identifier>
+      <ows:Title>org.n52.wps.server.algorithm.test.DummyTestClass</ows:Title>
+    </wps:Process>
+  </wps:ProcessOfferings>
+  <wps:Languages>
+    <wps:Default>
+      <ows:Language>en-US</ows:Language>
+    </wps:Default>
+    <wps:Supported>
+      <ows:Language>en-US</ows:Language>
+    </wps:Supported>
+  </wps:Languages>
+</wps:Capabilities>
