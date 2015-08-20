@@ -156,7 +156,7 @@ def is_complexdata(val):
     return hasattr(val, 'getXml')
 
 
-class IComplexData(object):
+class IComplexDataInput(object):
     """
     Abstract interface representing complex input object for a WPS request.
     """
@@ -1183,7 +1183,7 @@ class Process(object):
                 dump(self.processOutputs[-1],  prefix='\tOutput: ')
      
 
-class ComplexDataInput(ComplexData):
+class ComplexDataInput(IComplexDataInput, ComplexData):
     def __init__(self, value, mimeType=None, encoding=None, schema=None):
         super(ComplexDataInput, self).__init__(mimeType=mimeType, encoding=encoding, schema=schema)
         self.value = value
@@ -1223,13 +1223,13 @@ class ComplexDataInput(ComplexData):
         complexDataElement.text = self.value
         return dataElement
                 
-class FeatureCollection(object):
+class FeatureCollection(IComplexDataInput):
     '''
     Base class to represent a Feature Collection used as input to a WPS request.
     The method getXml() is invoked by the WPS execute() method to build the WPS request.
     All subclasses must implement the getXml() method to provide their specific XML.
     
-    Implements IComplexData.
+    Implements IComplexDataInput.
     '''
     
     def __init__(self):
@@ -1281,11 +1281,11 @@ class WFSFeatureCollection(FeatureCollection):
         
         return root
     
-class WFSQuery(object):
+class WFSQuery(IComplexDataInput):
     '''
     Class representing a WFS query, for insertion into a WFSFeatureCollection instance.
     
-    Implements IComplexData.
+    Implements IComplexDataInput.
     '''
     
     def __init__(self, typeName, propertyNames=[], filters=[]):
