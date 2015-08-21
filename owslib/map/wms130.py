@@ -457,6 +457,17 @@ class ContentMetadata(object):
             legend = s.find(nspath('LegendURL/OnlineResource', WMS_NAMESPACE))
             if legend is not None:
                 style['legend'] = legend.attrib['{http://www.w3.org/1999/xlink}href']
+
+            lgd = s.find(nspath('LegendURL', WMS_NAMESPACE))
+            if lgd is not None:
+                if 'width' in lgd.attrib.keys():
+                    style['legend_width'] = lgd.attrib.get('width')
+                if 'height' in lgd.attrib.keys():
+                    style['legend_height'] = lgd.attrib.get('height')
+
+                lgd_format = lgd.find(nspath('Format', WMS_NAMESPACE))
+                if lgd_format is not None:
+                    style['legend_format'] = lgd_format.text.strip()
             self.styles[name.text] = style
 
         # keywords

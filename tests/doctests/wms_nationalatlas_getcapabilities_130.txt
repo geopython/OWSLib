@@ -32,5 +32,45 @@ Test available content layers
     >>> len(wms.contents.keys())
     20
 
-    >>> sorted([wms[layer].id for layer in wms.contents])
-    ['nexrad-n0r-wmst', 'nexrad_base_reflect', 'time_idx']
+    >>> 'elevation' in [wms[layer].id for layer in wms.contents]
+    True
+
+Test single item accessor
+    
+    >>> wms['elevation'].title
+    '1 Million Scale - Elevation 100 Meter Resolution'
+
+    >>> wms['elevation'].keywords
+    []
+    
+    >>> cast_tuple_int_list_srs(wms['elevation'].boundingBox)
+    [-179, 17, 180, 71, 'CRS:84']
+
+    >>> cast_tuple_int_list(wms['elevation'].boundingBoxWGS84)
+    [-179, 17, 180, 71]
+    
+    >>> sorted(wms['elevation'].crsOptions)
+    ['CRS:84', 'EPSG:102100', 'EPSG:102113', 'EPSG:2163', 'EPSG:3785', 'EPSG:3857', 'EPSG:4267', 'EPSG:4269', 'EPSG:4326', 'EPSG:54004', 'EPSG:54008', 'EPSG:900913']
+
+    >>> len(wms['elevation'].styles) == 1
+    True
+
+    >>> 'elevi0100g' in wms['elevation'].styles
+    True
+
+    >>> wms['elevation'].styles
+    True
+
+    >>> wms['elevation'].styles['elevi0100g']['legend_format']
+    'image/gif'
+
+    >>> wms['elevation'].timepositions
+    None
+
+    >>> wms['elevation'].defaulttimeposition
+    None
+
+    >>> wms['elevation'].parent is not None
+    True
+
+    
