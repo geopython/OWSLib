@@ -484,7 +484,7 @@ class ContentMetadata(object):
         time_dimension = next(iter(elem.findall(nspath('Dimension', WMS_NAMESPACE)+'[@name="time"]')), None)
         if time_dimension is not None:
             self.timepositions = time_dimension.text.split(',') if time_dimension.text else None
-            self.defaulttimeposition = time_dimension.attrib.get('default', '')
+            self.defaulttimeposition = time_dimension.attrib.get('default', None)
 
         # Elevations - available vertical levels
         self.elevations = None
