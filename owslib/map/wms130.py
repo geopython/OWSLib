@@ -385,7 +385,8 @@ class ContentMetadata(object):
             ))
         self.crs_list = crs_list
         # and maintain the original boundingBox attribute (first in list)
-        self.boundingBox = crs_list[0]
+        # or the wgs84 bbox (to handle cases of incomplete parentage)
+        self.boundingBox = crs_list[0] if crs_list else self.boundingBoxWGS84
 
         # ScaleHint
         sh = elem.find(nspath('ScaleHint', WMS_NAMESPACE))
