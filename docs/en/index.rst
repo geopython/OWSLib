@@ -90,6 +90,19 @@ Git:
 
   $ git clone git://github.com/geopython/OWSLib.git
 
+
+Anaconda:
+
+.. note::
+
+   The OWSLib conda packages are **not official** and provided on different conda channels: http://anaconda.org/search?q=type%3Aconda+owslib
+
+.. code-block:: bash
+  
+  $ conda install -c birdhouse owslib
+  # or
+  $ conda install -c ioos owslib
+
 openSUSE:
 
 .. code-block:: bash
@@ -658,6 +671,24 @@ You can find out about software metrics at the OWSLib ohloh page at http://www.o
 
 Testing
 -------
+
+.. code-block:: bash
+
+   $ python setup.py test
+
+Or ...
+
+.. code-block:: bash
+
+    # install requirements
+    $ pip install -r requirements.txt
+    $ pip install -r requirements-dev.txt # needed for tests only
+ 
+    # run tests
+    python -m pytest
+
+    # additional pep8 tests
+    pep8 owslib/wmts.py
 
 Support
 =======
