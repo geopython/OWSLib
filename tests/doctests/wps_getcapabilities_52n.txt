@@ -32,7 +32,7 @@ Check available operations
 
 Check high level process descriptions
     >>> for process in wps.processes:
-    ...     print(process.identifier, process.title)
+    ...     process.identifier, process.title
     ... 
     ('org.n52.wps.server.algorithm.test.MultiReferenceInputAlgorithm', 'for testing multiple inputs by reference')
     ('org.n52.wps.server.algorithm.test.EchoProcess', 'Echo process')
