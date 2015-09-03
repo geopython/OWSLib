@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.9.0 documentation &mdash; OWSLib 0.9.0 documentation</title>
+    <title>OWSLib 0.9.1 documentation &mdash; OWSLib 0.9.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.0',
+        VERSION:     '0.9.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="OWSLib 0.9.0 documentation" href="#" />
+    <link rel="top" title="OWSLib 0.9.1 documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -51,7 +51,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">OWSLib 0.9.0 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.9.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -62,7 +62,7 @@
           <div class="body">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.9.0 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.9.1 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
@@ -76,9 +76,9 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.9.0</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.9.1</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2015-06-12</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2015-09-03</td>
 </tr>
 </tbody>
 </table>
@@ -172,6 +172,16 @@
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git clone git://github.com/geopython/OWSLib.git
 </pre></div>
 </div>
+<p>Anaconda:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The OWSLib conda packages are <strong>not official</strong> and provided on different conda channels: <a class="reference external" href="http://anaconda.org/search?q=type%3Aconda+owslib">http://anaconda.org/search?q=type%3Aconda+owslib</a></p>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>conda install -c birdhouse owslib
+<span class="c"># or</span>
+<span class="nv">$ </span>conda install -c ioos owslib
+</pre></div>
+</div>
 <p>openSUSE:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>zypper ar http://download.opensuse.org/repositories/Application:/Geo/openSUSE_12.1/ GEO
 <span class="nv">$ </span>zypper refresh
@@ -257,6 +267,61 @@
 </div>
 <div class="section" id="wfs">
 <h3>WFS<a class="headerlink" href="#wfs" title="Permalink to this headline">¶</a></h3>
+<p>Connect to a WFS and inspect its capabilities.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wfs</span> <span class="kn">import</span> <span class="n">WebFeatureService</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wfs11</span> <span class="o">=</span> <span class="n">WebFeatureService</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s">&#39;http://geoserv.weichand.de:8080/geoserver/wfs&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.1.0&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wfs11</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">title</span>
+<span class="go">&#39;INSPIRE WFS 2.0 DemoServer Verwaltungsgrenzen Bayern</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">operation</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">wfs11</span><span class="o">.</span><span class="n">operations</span><span class="p">]</span>
+<span class="go">[&#39;GetCapabilities&#39;, &#39;DescribeFeatureType&#39;, &#39;GetFeature&#39;, &#39;GetGmlObject&#39;]</span>
+</pre></div>
+</div>
+<p>List FeatureTypes</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">wfs11</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span>
+<span class="go">[&#39;bvv:vg_ex&#39;, &#39;bvv:bayern_ex&#39;, &#39;bvv:lkr_ex&#39;, &#39;bvv:regbez_ex&#39;, &#39;bvv:gmd_ex&#39;]</span>
+</pre></div>
+</div>
+<p>Download GML using <tt class="docutils literal"><span class="pre">typename</span></tt>, <tt class="docutils literal"><span class="pre">bbox</span></tt> and <tt class="docutils literal"><span class="pre">srsname</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># OWSLib will switch the axis order from EN to NE automatically if designated by EPSG-Registry</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">wfs11</span><span class="o">.</span><span class="n">getfeature</span><span class="p">(</span><span class="n">typename</span><span class="o">=</span><span class="s">&#39;bvv:gmd_ex&#39;</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="p">(</span><span class="mi">4500000</span><span class="p">,</span><span class="mi">5500000</span><span class="p">,</span><span class="mi">4500500</span><span class="p">,</span><span class="mi">5500500</span><span class="p">),</span> <span class="n">srsname</span><span class="o">=</span><span class="s">&#39;urn:x-ogc:def:crs:EPSG:31468&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Download GML using <tt class="docutils literal"><span class="pre">typename</span></tt> and <tt class="docutils literal"><span class="pre">filter</span></tt>. OWSLib currently only
+support filter building for WFS 1.1 (FE.1.1).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.fes</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.etree</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wfs</span> <span class="kn">import</span> <span class="n">WebFeatureService</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wfs11</span> <span class="o">=</span> <span class="n">WebFeatureService</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s">&#39;http://geoserv.weichand.de:8080/geoserver/wfs&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.1.0&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">filter</span> <span class="o">=</span> <span class="n">PropertyIsLike</span><span class="p">(</span><span class="n">propertyname</span><span class="o">=</span><span class="s">&#39;bez_gem&#39;</span><span class="p">,</span> <span class="n">literal</span><span class="o">=</span><span class="s">&#39;Ingolstadt&#39;</span><span class="p">,</span> <span class="n">wildCard</span><span class="o">=</span><span class="s">&#39;*&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filterxml</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="nb">filter</span><span class="o">.</span><span class="n">toXML</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">wfs11</span><span class="o">.</span><span class="n">getfeature</span><span class="p">(</span><span class="n">typename</span><span class="o">=</span><span class="s">&#39;bvv:gmd_ex&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">filterxml</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Save response to a file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;/tmp/data.gml&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="s">&#39;UTF-8&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Download GML using <tt class="docutils literal"><span class="pre">StoredQueries</span></tt>(only available for WFS 2.0
+services)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.wfs</span> <span class="kn">import</span> <span class="n">WebFeatureService</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wfs20</span> <span class="o">=</span> <span class="n">WebFeatureService</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s">&#39;http://geoserv.weichand.de:8080/geoserver/wfs&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;2.0.0&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># List StoredQueries</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">storedquery</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">storedquery</span> <span class="ow">in</span> <span class="n">wfs20</span><span class="o">.</span><span class="n">storedqueries</span><span class="p">]</span>
+<span class="go">[&#39;bboxQuery&#39;, &#39;urn:ogc:def:query:OGC-WFS::GetFeatureById&#39;, &#39;GemeindeByGemeindeschluesselEpsg31468&#39;, &#39;DWithinQuery&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># List Parameters for StoredQuery[1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameter</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">wfs20</span><span class="o">.</span><span class="n">storedqueries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="p">]</span>
+<span class="go">[&#39;ID&#39;]</span>
+
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">wfs20</span><span class="o">.</span><span class="n">getfeature</span><span class="p">(</span><span class="n">storedQueryID</span><span class="o">=</span><span class="s">&#39;urn:ogc:def:query:OGC-WFS::GetFeatureById&#39;</span><span class="p">,</span> <span class="n">storedQueryParams</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;ID&#39;</span><span class="p">:</span><span class="s">&#39;gmd_ex.1&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="wcs">
 <h3>WCS<a class="headerlink" href="#wcs" title="Permalink to this headline">¶</a></h3>
@@ -1450,6 +1515,21 @@
 <p>You can find out about software metrics at the OWSLib ohloh page at <a class="reference external" href="http://www.ohloh.net/p/OWSLib">http://www.ohloh.net/p/OWSLib</a>.</p>
 <div class="section" id="testing">
 <h3>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python setup.py <span class="nb">test</span>
+</pre></div>
+</div>
+<p>Or ...</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># install requirements</span>
+<span class="nv">$ </span>pip install -r requirements.txt
+<span class="nv">$ </span>pip install -r requirements-dev.txt <span class="c"># needed for tests only</span>
+
+<span class="c"># run tests</span>
+python -m pytest
+
+<span class="c"># additional pep8 tests</span>
+pep8 owslib/wmts.py
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="support">
@@ -1546,7 +1626,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.9.0 documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.9.1 documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1622,12 +1702,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">OWSLib 0.9.0 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.9.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2015-06-12T16:58:20Z.
+      Last updated on 2015-09-03T19:38:19Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
