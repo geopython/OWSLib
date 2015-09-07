@@ -27,6 +27,8 @@ Test capabilities
 
     >>> wmts.identification.fees
 
+    >>> wmts.restonly
+    False
 
 Service Provider:
 

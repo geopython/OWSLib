@@ -1,0 +1,34 @@
+Imports:
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from tests.utils import scratch_file
+
+ServiceMetadata:
+
+    >>> from owslib.wmts import WebMapTileService
+    >>> wmts = WebMapTileService("http://geoserv.weichand.de/mapproxy/wmts/1.0.0/WMTSCapabilities.xml")
+    >>> wmts.identification.type
+    'OGC WMTS'
+    >>> wmts.identification.version
+    '1.0.0'
+    >>> wmts.identification.title
+    'WMTS-Testserver DOP80'
+
+Content:
+
+    >>> sorted(list(wmts.contents))
+    ['dop80']
+
+RESTful WMTS:
+
+  >>> wmts.restonly
+  True
+
+  >>> wmts.buildTileResource(layer='dop80', tilematrixset='webmercator', tilematrix='11', row='706', column='1089')
+  'http://geoserv.weichand.de/mapproxy/wmts/dop80/webmercator/11/1089/706.png'
+
+  >>> tile = wmts.gettile(layer='dop80', tilematrixset='webmercator', tilematrix='11', row='706', column='1089')
+  >>> out = open(scratch_file('bvv_bayern_dop80.png'), 'wb')
+  >>> bytes_written = out.write(tile.read())
+  >>> out.close()
+
