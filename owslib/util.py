@@ -581,3 +581,16 @@ except:  # 2.6
     from ordereddict import OrderedDict
 
 
+def which_etree():
+    """decipher which etree library is being used by OWSLib"""
+
+    which_etree = None
+
+    if 'lxml' in etree.__file__:
+        which_etree = 'lxml.etree'
+    elif 'xml/etree' in etree.__file__:
+        which_etree = 'xml.etree'
+    elif 'elementree' in etree.__file__:
+        which_etree = 'elementtree.ElementTree'
+
+    return which_etree
