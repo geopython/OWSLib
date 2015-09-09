@@ -276,7 +276,7 @@ class WebMapService(object):
                **kwargs
                ):
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if m.get('type').lower() == method.lower()))
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
 
