@@ -140,14 +140,14 @@
         <KeywordList/>
         <SRS>EPSG:4326</SRS>
         <!--WKT definition of this CRS:
-GEOGCS["WGS 84", 
-  DATUM["World Geodetic System 1984", 
-    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], 
-    AUTHORITY["EPSG","6326"]], 
-  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], 
-  UNIT["degree", 0.017453292519943295], 
-  AXIS["Geodetic longitude", EAST], 
-  AXIS["Geodetic latitude", NORTH], 
+GEOGCS["WGS 84",
+  DATUM["World Geodetic System 1984",
+    SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]],
+    AUTHORITY["EPSG","6326"]],
+  PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]],
+  UNIT["degree", 0.017453292519943295],
+  AXIS["Geodetic longitude", EAST],
+  AXIS["Geodetic latitude", NORTH],
   AUTHORITY["EPSG","4326"]]-->
         <LatLonBoundingBox minx="-74.012" miny="40.708" maxx="-74.002" maxy="40.72"/>
         <BoundingBox SRS="EPSG:4326" minx="-74.012" miny="40.708" maxx="-74.002" maxy="40.72"/>
@@ -168,6 +168,14 @@ GEOGCS["WGS 84",
             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost:8080/geoserver/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=poi"/>
           </LegendURL>
         </Style>
+      </Layer>
+      <Layer queryable="0">
+        <Name>parent_layer</Name>
+        <Title>Parent Layer</Title>
+        <Layer queryable="1">
+            <Name>child_layer</Name>
+            <Title>Child Layer</Title>
+        </Layer>
       </Layer>
     </Layer>
   </Capability>

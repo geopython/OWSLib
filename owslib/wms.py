@@ -123,13 +123,16 @@ class WebMapService(object):
         #recursively gather content metadata for all layer elements.
         #To the WebMapService.contents store only metadata of named layers.
         def gather_layers(parent_elem, parent_metadata):
+            layers = []
             for index, elem in enumerate(parent_elem.findall('Layer')):
                 cm = ContentMetadata(elem, parent=parent_metadata, index=index+1, parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
                         warnings.warn('Content metadata for layer "%s" already exists. Using child layer' % cm.id)
+                    layers.append(cm)
                     self.contents[cm.id] = cm
-                gather_layers(elem, cm)
+                cm.children = gather_layers(elem, cm)
+            return layers
         gather_layers(caps, None)
         
         #exceptions
@@ -376,7 +379,7 @@ class ContentMetadata:
 
     Implements IContentMetadata.
     """
-    def __init__(self, elem, parent=None, index=0, parse_remote_metadata=False, timeout=30):
+    def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False, timeout=30):
         if elem.tag != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
         
@@ -385,6 +388,8 @@ class ContentMetadata:
             self.index = "%s.%d" % (parent.index, index)
         else:
             self.index = str(index)
+
+        self._children = children
         
         self.id = self.name = testXMLValue(elem.find('Name'))
 
@@ -563,6 +568,24 @@ class ContentMetadata:
         self.layers = []
         for child in elem.findall('Layer'):
             self.layers.append(ContentMetadata(child, self))
+
+    @property
+    def children(self):
+        return self._children
+
+    @children.setter
+    def children(self, value):
+        if self._children is None:
+            self._children = value
+        else:
+            self._children.extend(value)
+        # If layer is a group and one of its children is queryable, the layer must be queryable.
+        if self._children and self.queryable == 0:
+            for child in self._children:
+                if child.queryable:
+                    self.queryable = child.queryable
+                    break
+
 
     def __str__(self):
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
