@@ -160,6 +160,41 @@ class WebMapService(object):
             raise ServiceException(err_message, se_xml)
         return u
 
+    def __build_getmap_request(self, layers=None, styles=None, srs=None, bbox=None,
+               format=None, size=None, time=None, transparent=False,
+               bgcolor=None, exceptions=None, **kwargs):
+
+        request = {'version': self.version, 'request': 'GetMap'}
+
+        # check layers and styles
+        assert len(layers) > 0
+        request['layers'] = ','.join(layers)
+        if styles:
+            assert len(styles) == len(layers)
+            request['styles'] = ','.join(styles)
+        else:
+            request['styles'] = ''
+
+        # size
+        request['width'] = str(size[0])
+        request['height'] = str(size[1])
+
+        request['srs'] = str(srs)
+        request['bbox'] = ','.join([repr(x) for x in bbox])
+        request['format'] = str(format)
+        request['transparent'] = str(transparent).upper()
+        request['bgcolor'] = '0x' + bgcolor[1:7]
+        request['exceptions'] = str(exceptions)
+
+        if time is not None:
+            request['time'] = str(time)
+
+        if kwargs:
+            for kw in kwargs:
+                request[kw]=kwargs[kw]
+
+        return request
+
     def getmap(self, layers=None, styles=None, srs=None, bbox=None,
                format=None, size=None, time=None, transparent=False,
                bgcolor='#FFFFFF',
@@ -213,35 +248,11 @@ class WebMapService(object):
             base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
-        request = {'version': self.version, 'request': 'GetMap'}
-        
-        # check layers and styles
-        assert len(layers) > 0
-        request['layers'] = ','.join(layers)
-        if styles:
-            assert len(styles) == len(layers)
-            request['styles'] = ','.join(styles)
-        else:
-            request['styles'] = ''
 
-        # size
-        request['width'] = str(size[0])
-        request['height'] = str(size[1])
+        request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
+               format=format, size=size, time=time, transparent=transparent,
+               bgcolor=bgcolor, exceptions=exceptions, kwargs=kwargs)
         
-        request['srs'] = str(srs)
-        request['bbox'] = ','.join([repr(x) for x in bbox])
-        request['format'] = str(format)
-        request['transparent'] = str(transparent).upper()
-        request['bgcolor'] = '0x' + bgcolor[1:7]
-        request['exceptions'] = str(exceptions)
-        
-        if time is not None:
-            request['time'] = str(time)
-        
-        if kwargs:
-            for kw in kwargs:
-                request[kw]=kwargs[kw]
-
         data = urlencode(request)
         
         u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
@@ -253,15 +264,58 @@ class WebMapService(object):
             err_message = six.text_type(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
-        
+
+
+    def getfeatureinfo(self, layers=None, styles=None, srs=None, bbox=None,
+               format=None, size=None, time=None, transparent=False,
+               bgcolor='#FFFFFF',
+               exceptions='application/vnd.ogc.se_xml',
+               query_layers = None, xy=None, info_format=None, feature_count=20,
+               method='Get',
+               timeout=None,
+               **kwargs
+               ):
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
+
+        # GetMap-Request
+        request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
+               format=format, size=size, time=time, transparent=transparent,
+               bgcolor=bgcolor, exceptions=exceptions, kwargs=kwargs)
+
+        # extend to GetFeatureInfo-Request
+        request['request'] = 'GetFeatureInfo'
+
+        if not query_layers:
+            __str_query_layers = ','.join(layers)
+        else:
+            __str_query_layers = ','.join(query_layers)
+
+        request['query_layers'] = __str_query_layers
+        request['x'] = str(xy[0])
+        request['y'] = str(xy[1])
+        request['info_format'] = info_format
+        request['feature_count'] = str(feature_count)
+
+        data = urlencode(request)
+
+        u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
+
+        # check for service exceptions, and return
+        if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
+            se_xml = u.read()
+            se_tree = etree.fromstring(se_xml)
+            err_message = six.text_type(se_tree.find('ServiceException').text).strip()
+            raise ServiceException(err_message, se_xml)
+        return u
+
     def getServiceXML(self):
         xml = None
         if self._capabilities is not None:
             xml = etree.tostring(self._capabilities)
         return xml
-
-    def getfeatureinfo(self):
-        raise NotImplementedError
 
     def getOperationByName(self, name): 
         """Return a named content item."""
