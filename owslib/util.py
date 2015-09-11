@@ -147,7 +147,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     Uses requests library but with additional checks for OGC service exceptions and url formatting.
     Also handles cookies and simple user password authentication.
     """
-    headers = {}
+    headers = None
     rkwargs = {}
 
     rkwargs['timeout'] = timeout
@@ -165,7 +165,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     if method.lower() == 'post':
         try:
             xml = etree.fromstring(data)
-            headers['Content-Type'] = "text/xml"
+            headers = {'Content-Type': 'text/xml'}
         except (ParseError, UnicodeEncodeError):
             pass
 
@@ -173,6 +173,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     elif method.lower() == 'get':
         rkwargs['params'] = data
+        
     else:
         raise ValueError("Unknown method ('%s'), expected 'get' or 'post'" % method)
 
@@ -181,6 +182,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     req = requests.request(method.upper(),
                            url_base,
+                           headers=headers,
                            **rkwargs)
 
     if req.status_code in [400, 401]:
@@ -592,5 +594,5 @@ def which_etree():
         which_etree = 'xml.etree'
     elif 'elementree' in etree.__file__:
         which_etree = 'elementtree.ElementTree'
-
+    
     return which_etree
