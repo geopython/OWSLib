@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TRANSFER xmlns="http://www.interlis.ch/INTERLIS2.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <HEADERSECTION SENDER="geocat.ch" VERSION="2.3">
+    <MODELS />
+  </HEADERSECTION>
+  <DATASECTION>
+    <GM03_2_1Comprehensive.Comprehensive BID="xw107834205a">
+      <GM03_2_1Core.Core.MD_Metadata TID="xN1700275456469187994">
+        <fileIdentifier>b6e8562f8bffdfa45b70db1e12fb2a1b64999f31aa0adb59142b3bee5a5d07861c7292c243088468</fileIdentifier>
+        <language>de</language>
+        <characterSet>utf8</characterSet>
+        <dateStamp>1999-12-31T12:00:00</dateStamp>
+        <metadataStandardName>GM03Core</metadataStandardName>
+        <metadataStandardVersion>2.3</metadataStandardVersion>
+        <hierarchyLevel>
+          <GM03_2_1Core.Core.MD_ScopeCode_>
+            <value>dataset</value>
+          </GM03_2_1Core.Core.MD_ScopeCode_>
+        </hierarchyLevel>
+      </GM03_2_1Core.Core.MD_Metadata>
+      <GM03_2_1Core.Core.MD_Metadatacontact>
+        <contact REF="xN8649995031921957558" />
+        <MD_Metadata REF="xN1700275456469187994" />
+        <role>
+          <GM03_2_1Core.Core.CI_RoleCode_>
+            <value>custodian</value>
+          </GM03_2_1Core.Core.CI_RoleCode_>
+        </role>
+      </GM03_2_1Core.Core.MD_Metadatacontact>
+      <GM03_2_1Core.Core.CI_ResponsibleParty TID="xN8649995031921957558">
+        <individualFirstName>Matthias</individualFirstName>
+        <individualLastName>Oettli</individualLastName>
+        <electronicalMailAddress>
+          <GM03_2_1Core.Core.URL_>
+            <value>matthias.oettli@amden.ch</value>
+          </GM03_2_1Core.Core.URL_>
+        </electronicalMailAddress>
+        <organisationName>
+          <GM03_2_1Core.Core.PT_FreeText>
+            <textGroup>
+              <GM03_2_1Core.Core.PT_Group>
+                <language>de</language>
+                <plainText>Gemeinde Amden (Datenherr); Gemeinde Amden (Verwaltungsstelle)</plainText>
+              </GM03_2_1Core.Core.PT_Group>
+            </textGroup>
+          </GM03_2_1Core.Core.PT_FreeText>
+        </organisationName>
+        <linkage>
+          <GM03_2_1Core.Core.PT_FreeURL>
+            <URLGroup>
+              <GM03_2_1Core.Core.PT_URLGroup>
+                <language>de</language>
+                <plainURL>www.amden.ch</plainURL>
+              </GM03_2_1Core.Core.PT_URLGroup>
+            </URLGroup>
+          </GM03_2_1Core.Core.PT_FreeURL>
+        </linkage>
+        <address REF="xN4764608505690439814" />
+        <contactInfo REF="xN1384672275328005245" />
+      </GM03_2_1Core.Core.CI_ResponsibleParty>
+      <GM03_2_1Core.Core.CI_Address TID="xN4764608505690439814" />
+      <GM03_2_1Core.Core.CI_Contact TID="xN1384672275328005245" />
+      <GM03_2_1Core.Core.CI_Telephone TID="xN4289127695412919835">
+        <number>055 611 60 76</number>
+        <numberType>mainNumber</numberType>
+        <CI_ResponsibleParty REF="xN8649995031921957558" />
+      </GM03_2_1Core.Core.CI_Telephone>
+      <GM03_2_1Comprehensive.Comprehensive.MD_DataIdentification TID="xN3766575436551981417">
+        <abstract>
+          <GM03_2_1Core.Core.PT_FreeText>
+            <textGroup>
+              <GM03_2_1Core.Core.PT_Group>
+                <language>de</language>
+                <plainText>Der Unterhaltsdienst beinhaltete folgende Themen: Standorte Ruhebänke, Standorte Splittkasten, öffentliche Plätze, Standorte Abfalleimer, Standorte Robidog, Sammelstellen; Zusätzliche Hinweise:</plainText>
+              </GM03_2_1Core.Core.PT_Group>
+            </textGroup>
+          </GM03_2_1Core.Core.PT_FreeText>
+        </abstract>
+        <MD_Metadata REF="xN1700275456469187994" />
+        <citation REF="xN1752770866428883463" />
+        <language>
+          <CodeISO.LanguageCodeISO_>
+            <value>de</value>
+          </CodeISO.LanguageCodeISO_>
+        </language>
+        <characterSet>
+          <GM03_2_1Core.Core.MD_CharacterSetCode_>
+            <value>utf8</value>
+          </GM03_2_1Core.Core.MD_CharacterSetCode_>
+        </characterSet>
+      </GM03_2_1Comprehensive.Comprehensive.MD_DataIdentification>
+      <GM03_2_1Comprehensive.Comprehensive.CI_Citation TID="xN1752770866428883463">
+        <title>
+          <GM03_2_1Core.Core.PT_FreeText>
+            <textGroup>
+              <GM03_2_1Core.Core.PT_Group>
+                <language>de</language>
+                <plainText>Unterhaltsdienst</plainText>
+              </GM03_2_1Core.Core.PT_Group>
+            </textGroup>
+          </GM03_2_1Core.Core.PT_FreeText>
+        </title>
+      </GM03_2_1Comprehensive.Comprehensive.CI_Citation>
+      <GM03_2_1Core.Core.CI_Date TID="xw107834205aac27b1b1b1b3b1">
+        <date>1999-12-31</date>
+        <dateType>creation</dateType>
+        <CI_Citation REF="xN1752770866428883463" />
+      </GM03_2_1Core.Core.CI_Date>
+      <GM03_2_1Core.Core.MD_IdentificationpointOfContact>
+        <pointOfContact REF="xN8649995031921957558" />
+        <MD_Identification REF="xN3766575436551981417" />
+        <role>
+          <GM03_2_1Core.Core.CI_RoleCode_>
+            <value>custodian</value>
+          </GM03_2_1Core.Core.CI_RoleCode_>
+        </role>
+      </GM03_2_1Core.Core.MD_IdentificationpointOfContact>
+      <GM03_2_1Core.Core.EX_Extent TID="xN2109595790587395274">
+        <description>
+          <GM03_2_1Core.Core.PT_FreeText>
+            <textGroup>
+              <GM03_2_1Core.Core.PT_Group>
+                <language>de</language>
+                <plainText>Amden</plainText>
+              </GM03_2_1Core.Core.PT_Group>
+            </textGroup>
+          </GM03_2_1Core.Core.PT_FreeText>
+        </description>
+        <MD_DataIdentification REF="xN3766575436551981417" />
+      </GM03_2_1Core.Core.EX_Extent>
+      <GM03_2_1Core.Core.EX_ExtentgeographicElement>
+        <EX_Extent REF="xN2109595790587395274" />
+        <geographicElement REF="xN747330322707818024" />
+      </GM03_2_1Core.Core.EX_ExtentgeographicElement>
+      <GM03_2_1Core.Core.EX_GeographicBoundingBox TID="xN747330322707818024">
+        <extentTypeCode>false</extentTypeCode>
+        <northBoundLatitude>47.1865387201702</northBoundLatitude>
+        <southBoundLatitude>47.1234508676764</southBoundLatitude>
+        <eastBoundLongitude>9.10597474389878</eastBoundLongitude>
+        <westBoundLongitude>9.23798212070671</westBoundLongitude>
+      </GM03_2_1Core.Core.EX_GeographicBoundingBox>
+    </GM03_2_1Comprehensive.Comprehensive>
+  </DATASECTION>
+</TRANSFER>
