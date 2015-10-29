@@ -7,12 +7,13 @@ from __future__ import print_function
 from owslib.wps import WebProcessingService, ComplexDataInput, monitorExecution
 
 verbose = False
+verify = False   # don't verify ssl certificates with requests
 
 def multiple_outputs():
     print("\nmultiple outputs ...")
     
     # get multiple outputs
-    wps = WebProcessingService('http://localhost:8094/wps', verbose=verbose)
+    wps = WebProcessingService('http://localhost:8094/wps', verbose=verbose, verify=verify)
 
     processid = 'dummyprocess'
     inputs = [("input1", '1'), ("input2", '2')]
@@ -42,7 +43,7 @@ def complex_input_with_reference():
     
     print("\ncomplex_input_with_reference ...")
 
-    wps = WebProcessingService('http://localhost:8094/wps', verbose=verbose)
+    wps = WebProcessingService('http://localhost:8094/wps', verbose=verbose, verify=verify)
 
     processid = 'wordcount'
     textdoc = ComplexDataInput("http://www.gutenberg.org/files/28885/28885-h/28885-h.htm")   # alice in wonderland
@@ -67,7 +68,7 @@ def complex_input_with_content():
     
     print("\ncomplex_input_with_content ...")
      
-    wps = WebProcessingService('http://localhost:8094/wps', verbose=verbose)
+    wps = WebProcessingService('http://localhost:8094/wps', verbose=verbose, verify=verify)
 
     processid = 'wordcount'
     textdoc = ComplexDataInput("ALICE was beginning to get very tired ...")   # alice in wonderland
