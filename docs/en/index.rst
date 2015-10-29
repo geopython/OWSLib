@@ -425,7 +425,7 @@ Inspect a remote WPS and retrieve the supported processes:
 .. code-block:: python
 
 	>>> from owslib.wps import WebProcessingService
-	>>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', verbose=False, skip_caps=True)
+	>>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', verbose=False, skip_caps=True, verify=True)
 	>>> wps.getcapabilities()
 	>>> wps.identification.type
 	'WPS'
