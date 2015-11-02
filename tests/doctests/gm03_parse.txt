@@ -21,7 +21,7 @@ Print testing some metadata elements
     >>> len(gm03.data.comprehensive.elements)
     9
     >>> sorted(list(gm03.data.comprehensive.elements.keys()))
-    ['address', 'contact', 'extent', 'extent_geographic_element', 'geographic_bounding_box', 'identification_point_of_contact', 'metadata', 'responsible_party']
+    ['address', 'contact', 'date', 'extent', 'extent_geographic_element', 'geographic_bounding_box', 'identification_point_of_contact', 'metadata', 'responsible_party']
     >>> gm03.data.comprehensive.metadata.file_identifier
     '41ac321f632e55cebf0508a2cea5d9023fd12d9ad46edd679f2c275127c88623fb9c9d29726bef7c'
     >>> gm03.data.comprehensive.metadata.date_stamp
