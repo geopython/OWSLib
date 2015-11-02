@@ -190,9 +190,9 @@ class Core(object):
         if val is not None:
             self.address = CI_Address(val)
 
-        val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Date', namespaces))
-        if val is not None:
-            self.date = CI_Date(val)
+        self.date = []
+        for cid in md.findall(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Date', namespaces)):
+            self.date.append(CI_Date(val))
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Telephone', namespaces))
         if val is not None:
