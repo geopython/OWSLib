@@ -208,7 +208,7 @@ class Core(object):
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Format', namespaces))
         if val is not None:
-            self.vertical_extent = MD_Format(val)
+            self.format = MD_Format(val)
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Metadata', namespaces))
         if val is not None:
