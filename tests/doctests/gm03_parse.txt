@@ -19,7 +19,7 @@ Print testing some metadata elements
     >>> hasattr(gm03.data, 'comprehensive')
     True
     >>> len(gm03.data.comprehensive.elements)
-    8
+    9
     >>> sorted(list(gm03.data.comprehensive.elements.keys()))
     ['address', 'contact', 'extent', 'extent_geographic_element', 'geographic_bounding_box', 'identification_point_of_contact', 'metadata', 'responsible_party']
     >>> gm03.data.comprehensive.metadata.file_identifier
