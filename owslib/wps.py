@@ -811,6 +811,8 @@ class InputOutput(object):
     
     def __init__(self, element):
                 
+        self.abstract = None
+
         # loop over sub-elements without requiring a specific namespace
         for subElement in element:
             
@@ -1147,9 +1149,10 @@ class Process(object):
         self.processVersion = elem.get( nspath('processVersion', ns=wpsns) )
         self.statusSupported = bool( elem.get( "statusSupported" ) )
         self.storeSupported = bool( elem.get( "storeSupported" ) )
+        self.abstract = None
         
         for child in elem:
-            
+
             # this element's namespace
             ns = getNamespace(child)
             
