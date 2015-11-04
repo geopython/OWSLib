@@ -813,6 +813,7 @@ class InputOutput(object):
                 
         # loop over sub-elements without requiring a specific namespace
         for subElement in element:
+            self.abstract = None
             
             # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">SUMMARIZE_TIMESTEP</ows:Identifier>
             if subElement.tag.endswith('Identifier'):
@@ -1149,7 +1150,8 @@ class Process(object):
         self.storeSupported = bool( elem.get( "storeSupported" ) )
         
         for child in elem:
-            
+            self.abstract = None
+
             # this element's namespace
             ns = getNamespace(child)
             
