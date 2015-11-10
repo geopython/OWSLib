@@ -190,13 +190,13 @@ class Core(object):
         if val is not None:
             self.address = CI_Address(val)
 
-        val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Date', namespaces))
-        if val is not None:
-            self.address = CI_Date(val)
+        self.date = []
+        for cid in md.findall(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Date', namespaces)):
+            self.date.append(CI_Date(val))
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Telephone', namespaces))
         if val is not None:
-            self.address = CI_Telephone(val)
+            self.telephone = CI_Telephone(val)
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.DQ_Scope', namespaces))
         if val is not None:
@@ -208,7 +208,7 @@ class Core(object):
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Format', namespaces))
         if val is not None:
-            self.vertical_extent = MD_Format(val)
+            self.format = MD_Format(val)
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Metadata', namespaces))
         if val is not None:
