@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.9.2 documentation &mdash; OWSLib 0.9.2 documentation</title>
+    <title>OWSLib 0.10.0 documentation &mdash; OWSLib 0.10.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.2',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="OWSLib 0.9.2 documentation" href="#" />
+    <link rel="top" title="OWSLib 0.10.0 documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -51,7 +51,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">OWSLib 0.9.2 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.10.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -62,7 +62,7 @@
           <div class="body">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.9.2 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.10.0 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
@@ -76,9 +76,9 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.9.2</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.10.0</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2015-09-23</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2015-11-11</td>
 </tr>
 </tbody>
 </table>
@@ -144,10 +144,13 @@
 <tr class="row-odd"><td><a class="reference external" href="http://www.dublincore.org/">Dublin Core</a></td>
 <td>1.1</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#wmts">WMTS</a></td>
+<tr class="row-even"><td><a class="reference external" href="http://www.geocat.ch/internet/geocat/en/home/documentation/gm03.html">Swiss GM03</a></td>
+<td>2.3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#wmts">WMTS</a></td>
 <td>1.0.0</td>
 </tr>
-<tr class="row-odd"><td><a class="reference external" href="http://his.cuahsi.org/wofws.html#waterml">WaterML</a></td>
+<tr class="row-even"><td><a class="reference external" href="http://his.cuahsi.org/wofws.html#waterml">WaterML</a></td>
 <td>1.0, 1.1</td>
 </tr>
 </tbody>
@@ -1256,6 +1259,72 @@ services)</p>
 <div class="section" id="fgdc">
 <h3>FGDC<a class="headerlink" href="#fgdc" title="Permalink to this headline">¶</a></h3>
 </div>
+<div class="section" id="swiss-gm03">
+<h3>Swiss GM03<a class="headerlink" href="#swiss-gm03" title="Permalink to this headline">¶</a></h3>
+<p>Imports</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="kn">import</span> <span class="n">resource_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.etree</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.gm03</span> <span class="kn">import</span> <span class="n">GM03</span>
+</pre></div>
+</div>
+<p>Print testing some metadata elements</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;gm03_example1.xml&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span> <span class="o">=</span> <span class="n">GM03</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">version</span>
+<span class="go">&#39;2.3&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">sender</span>
+<span class="go">&#39;geocat.ch&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;core&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;comprehensive&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span>
+<span class="go">9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">elements</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="go">[&#39;address&#39;, &#39;contact&#39;, &#39;date&#39;, &#39;extent&#39;, &#39;extent_geographic_element&#39;, &#39;geographic_bounding_box&#39;, &#39;identification_point_of_contact&#39;, &#39;metadata&#39;, &#39;responsible_party&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">file_identifier</span>
+<span class="go">&#39;41ac321f632e55cebf0508a2cea5d9023fd12d9ad46edd679f2c275127c88623fb9c9d29726bef7c&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">date_stamp</span>
+<span class="go">&#39;1999-12-31T12:00:00&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">language</span>
+<span class="go">&#39;de&#39;</span>
+</pre></div>
+</div>
+<p>Test TID searching</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tid</span>
+<span class="go">&#39;xN6509077498146737843&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_tid</span> <span class="o">=</span> <span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">get_element_by_tid</span><span class="p">(</span><span class="s">&#39;404&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">get_element_by_tid</span><span class="p">(</span><span class="n">search_tid</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_tid2</span> <span class="o">=</span> <span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">extent</span><span class="o">.</span><span class="n">data_identification</span><span class="o">.</span><span class="n">ref</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_tid2</span>
+<span class="go">&#39;xN8036063300808707346&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">get_element_by_tid</span><span class="p">(</span><span class="n">search_tid2</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">resource_file</span><span class="p">(</span><span class="s">&#39;gm03_example2.xml&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span> <span class="o">=</span> <span class="n">GM03</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">geographic_bounding_box</span><span class="o">.</span><span class="n">extent_type_code</span>
+<span class="go">&#39;false&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">geographic_bounding_box</span><span class="o">.</span><span class="n">north_bound_latitude</span>
+<span class="go">&#39;47.1865387201702&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">geographic_bounding_box</span><span class="o">.</span><span class="n">south_bound_latitude</span>
+<span class="go">&#39;47.1234508676764&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">geographic_bounding_box</span><span class="o">.</span><span class="n">east_bound_longitude</span>
+<span class="go">&#39;9.10597474389878&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gm03</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">comprehensive</span><span class="o">.</span><span class="n">geographic_bounding_box</span><span class="o">.</span><span class="n">west_bound_longitude</span>
+<span class="go">&#39;9.23798212070671&#39;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="wmts">
 <h3>WMTS<a class="headerlink" href="#wmts" title="Permalink to this headline">¶</a></h3>
 <p>Imports</p>
@@ -1626,7 +1695,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.9.2 documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.10.0 documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1651,6 +1720,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
 <li><a class="reference internal" href="#dublin-core">Dublin Core</a></li>
 <li><a class="reference internal" href="#nasa-dif">NASA DIF</a></li>
 <li><a class="reference internal" href="#fgdc">FGDC</a></li>
+<li><a class="reference internal" href="#swiss-gm03">Swiss GM03</a></li>
 <li><a class="reference internal" href="#wmts">WMTS</a></li>
 <li><a class="reference internal" href="#waterml">WaterML</a></li>
 </ul>
@@ -1702,12 +1772,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">OWSLib 0.9.2 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.10.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2015-09-23T20:06:51Z.
+      Last updated on 2015-11-11T12:09:57Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>

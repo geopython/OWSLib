@@ -60,6 +60,8 @@ Standards Support
 +-------------------+---------------------+
 | `Dublin Core`_    | 1.1                 |
 +-------------------+---------------------+
+| `Swiss GM03`_     | 2.3                 |
++-------------------+---------------------+
 | `WMTS`_           | 1.0.0               |
 +-------------------+---------------------+
 | `WaterML`_        | 1.0, 1.1            |
@@ -643,6 +645,11 @@ NASA DIF
 FGDC
 ----
 
+Swiss GM03
+----------
+
+.. include:: ../../tests/doctests/gm03_parse.txt
+
 WMTS
 ----
 
@@ -789,3 +796,4 @@ Credits
 .. _`ohloh`: http://www.ohloh.net/p/OWSLib
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
+.. _`Swiss GM03`: http://www.geocat.ch/internet/geocat/en/home/documentation/gm03.html
