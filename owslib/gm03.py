@@ -278,13 +278,13 @@ class Core(object):
         if val is not None:
             self.identifier = MD_Identifier(val)
 
-        val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Keywords', namespaces))
-        if val is not None:
-            self.keywords = MD_Keywords(val)
+        self.keywords = []
+        for kw in md.findall(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Keywords', namespaces)):
+            self.keywords.append(MD_Keywords(kw))
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_DataIdentification', namespaces))
         if val is not None:
-            self.data_identification = MD_Keywords(val)
+            self.data_identification = DataIdentification(val)
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.RS_Identifier', namespaces))
         if val is not None:

@@ -19,9 +19,9 @@ Print testing some metadata elements
     >>> hasattr(gm03.data, 'comprehensive')
     True
     >>> len(gm03.data.comprehensive.elements)
-    9
+    10
     >>> sorted(list(gm03.data.comprehensive.elements.keys()))
-    ['address', 'contact', 'date', 'extent', 'extent_geographic_element', 'geographic_bounding_box', 'identification_point_of_contact', 'metadata', 'responsible_party']
+    ['address', 'contact', 'date', 'extent', 'extent_geographic_element', 'geographic_bounding_box', 'identification_point_of_contact', 'keywords', 'metadata', 'responsible_party']
     >>> isinstance(gm03.data.comprehensive.date, list)
     True
     >>> len(gm03.data.comprehensive.date)
