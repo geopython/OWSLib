@@ -328,7 +328,7 @@ class Core(object):
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.spatialExtentEX_SpatialTemporalExtent', namespaces))
         if val is not None:
-            self.identification_point_of_contact = spatialExtentEX_SpatialTemporalExtent(val)
+            self.self.spatial_temporal_extent = spatialExtentEX_SpatialTemporalExtent(val)
 
     @property
     def elements(self):
