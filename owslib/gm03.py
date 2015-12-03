@@ -192,7 +192,7 @@ class Core(object):
 
         self.date = []
         for cid in md.findall(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Date', namespaces)):
-            self.date.append(CI_Date(val))
+            self.date.append(CI_Date(cid))
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Telephone', namespaces))
         if val is not None:
@@ -247,7 +247,11 @@ class Core(object):
             self.reference_system_metadata = referenceSystemInfoMD_Metadata(val)
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Citation', namespaces))
-        if val is not None:
+        if val is None:
+            val = md.find(util.nspath_eval('gm03:GM03_2_1Comprehensive.Comprehensive.CI_Citation', namespaces))
+            if val is not None:
+                self.citation = CI_Citation(val)
+        else:
             self.citation = CI_Citation(val)
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_Contact', namespaces))
@@ -278,13 +282,17 @@ class Core(object):
         if val is not None:
             self.identifier = MD_Identifier(val)
 
-        val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Keywords', namespaces))
-        if val is not None:
-            self.keywords = MD_Keywords(val)
+        self.keywords = []
+        for kw in md.findall(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Keywords', namespaces)):
+            self.keywords.append(MD_Keywords(kw))
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_DataIdentification', namespaces))
-        if val is not None:
-            self.data_identification = MD_Keywords(val)
+        if val is None:
+            val = md.find(util.nspath_eval('gm03:GM03_2_1Comprehensive.Comprehensive.MD_DataIdentification', namespaces))
+            if val is not None:
+                self.data_identification = MD_DataIdentification(val)
+        else:
+            self.data_identification = MD_DataIdentification(val)
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.RS_Identifier', namespaces))
         if val is not None:
@@ -316,11 +324,11 @@ class Core(object):
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_Metadatacontact', namespaces))
         if val is not None:
-            self.identification_point_of_contact = MD_Metadatacontact(val)
+            self.metadata_point_of_contact = MD_Metadatacontact(val)
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.spatialExtentEX_SpatialTemporalExtent', namespaces))
         if val is not None:
-            self.identification_point_of_contact = spatialExtentEX_SpatialTemporalExtent(val)
+            self.self.spatial_temporal_extent = spatialExtentEX_SpatialTemporalExtent(val)
 
     @property
     def elements(self):
@@ -677,7 +685,7 @@ class CI_Citation(_GenericObject):
 
         val = md.find(util.nspath_eval('gm03:title', namespaces))
         if val is not None:
-            self.title = PT_FreeText(md)
+            self.title = PT_FreeText(val)
 
         val = md.find(util.nspath_eval('gm03:MD_Authority', namespaces))
         self.authority = _GenericObjectProperty(val)
