@@ -22,6 +22,7 @@ from owslib.iso import MD_Metadata
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.util import log
+from owslib.feature.schema import get_schema
 
 import pyproj
 
@@ -261,6 +262,15 @@ class WebFeatureService_1_0_0(object):
                 return item
         raise KeyError("No operation named %s" % name)
 
+    def get_schema(self, typename):
+        """
+        Get layer schema compatible with :class:`fiona` schema object
+        """
+
+        return get_schema(self.url, typename, self.version)
+    
+
+
 class ServiceIdentification(object):
     ''' Implements IServiceIdentificationMetadata '''
     
@@ -428,4 +438,3 @@ class WFSCapabilitiesReader(object):
         if not isinstance(st, str) and not isinstance(st, bytes):
             raise ValueError("String must be of type string or bytes, not %s" % type(st))
         return etree.fromstring(st)
-    
