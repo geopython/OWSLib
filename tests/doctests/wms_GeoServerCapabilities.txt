@@ -69,7 +69,7 @@ Test nested layer
     'Parent Layer'
     
     >>> wms['parent_layer'].queryable
-    0
+    1
     
     >>> len(wms['parent_layer'].children)
     1
