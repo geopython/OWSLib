@@ -23,7 +23,7 @@ Initialize CSW client
     
     # Test new function getrecords2()
     >>> uuid = fes.PropertyIsEqualTo(propertyname='sys.siteuuid', literal='{%s}' % AOOS)
-    >>> timeRange = fes.PropertyIsBetween(propertyname='apiso:modified', lower='2009-02-01', upper='2012-02-01')
+    >>> timeRange = fes.PropertyIsBetween(propertyname='apiso:modified', lower='2009-02-01', upper='2015-02-01')
     >>> word = fes.PropertyIsLike(propertyname='csw:AnyText', literal='*salinity*', escapeChar='\\', singleChar='?', wildCard='*')
     >>> box = fes.BBox(bbox)
 
@@ -34,7 +34,7 @@ Initialize CSW client
     ##########################################################
     >>> filter_list = [[uuid, word, timeRange], [bbox, word, timeRange]]
     >>> c.getrecords2(filter_list)
-    >>> c.results == {'matches': 1, 'nextrecord': 0, 'returned': 1}
+    >>> c.results == {'matches': 75, 'nextrecord': 11, 'returned': 10}
     True
 
     ##########################################################

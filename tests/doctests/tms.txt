@@ -8,7 +8,7 @@ http://svn.osgeo.org/gdal/trunk/gdal/frmts/wms/WMSServerList.txt
 
 Find out what a TMS has to offer. Service metadata:
 
-    >>> service = tms.TileMapService('http://maps.opengeo.org/geowebcache/service/tms/1.0.0', timeout=120)
+    >>> service = tms.TileMapService('http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0', timeout=120)
     >>> service.identification.title
     'Tile Map Service'
     >>> service.identification.abstract
@@ -18,26 +18,26 @@ Find out what a TMS has to offer. Service metadata:
     >>> service.identification.version
     '1.0.0'
     >>> service.identification.url
-    'http://maps.opengeo.org/geowebcache'
+    'http://demo.opengeo.org/geoserver/gwc/'
     >>> len(service.contents) > 0
     True
-    >>> tm = service.contents['http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@png']
+    >>> tm = service.contents['http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/nasa%3Abluemarble@EPSG%3A4326@png']
     >>> tm.title
     'bluemarble'
 
 you can filter the contents by profile and srs:
     >>> len(service.items())
-    14
+    57
     >>> len(service.items('EPSG:900913'))
-    7
+    27
     >>> len(service.items(profile='global-mercator'))
-    7
+    27
     >>> len(service.items('EPSG:900913', profile='global-mercator'))
-    7
+    27
     >>> len(service.items('EPSG:4326', profile='global-mercator'))
     0
     >>> sorted(service.items('EPSG:4326'))[0]  # doctest: +ELLIPSIS
-    ('http://maps.opengeo.org/geowebcache/service/tms/1.0.0/blue@EPSG%3A4326@png', <owslib.tms.ContentMetadata object at ...>)
+    ('http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Adark@EPSG%3A4326@jpeg', <owslib.tms.ContentMetadata object at ...>)
 
 The details of the TileMap are fetched on demand
     >>> tm._tile_map == None
@@ -67,21 +67,21 @@ The details of the TileMap are fetched on demand
 
 You can get tiles by their x,y,z indices, the title of the tilemap, projection and mime-type
     >>> service.gettile(10,10,0, title='bluemarble', srs='EPSG:4326', mimetype='image/png').geturl()    #doctest: +SKIP
-    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@png/0/10/10.png'
+    'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/bluemarble@EPSG%3A4326@png/0/10/10.png'
     >>> service.gettile(10,10,1, title='bluemarble', srs='EPSG:4326', mimetype='image/jpeg').geturl()   #doctest: +SKIP
-    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A4326@jpeg/1/10/10.jpeg'
+    'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/bluemarble@EPSG%3A4326@jpeg/1/10/10.jpeg'
 
 if mimetype is ommited the tile is fetched from the first TileMap found:
     >>> service.gettile(10,10,1, title='bluemarble', srs='EPSG:900913').geturl()    #doctest: +SKIP
-    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/1/10/10.jpeg'
+    'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/1/10/10.jpeg'
 
 You can also specify the Tilemap by id:
-    >>> service.gettile(10,10,0, 'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg').geturl()    #doctest: +SKIP
-    'http://maps.opengeo.org/geowebcache/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/0/10/10.jpeg'
+    >>> service.gettile(10,10,0, 'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg').geturl()    #doctest: +SKIP
+    'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/bluemarble@EPSG%3A900913@jpeg/0/10/10.jpeg'
 
 An extensive test  with:
     >>> servers = [
-    ...     'http://maps.opengeo.org/geowebcache/service/tms/1.0.0',
+    ...     'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0',
     ...     'http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0',
     ...     'http://osm.omniscale.net/proxy/tms/1.0.0',
     ...     'http://apps.esdi-humboldt.cz/mapproxy/tms/1.0.0',

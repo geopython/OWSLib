@@ -19,9 +19,9 @@ Print testing some metadata elements
     >>> hasattr(gm03.data, 'comprehensive')
     True
     >>> len(gm03.data.comprehensive.elements)
-    10
+    13
     >>> sorted(list(gm03.data.comprehensive.elements.keys()))
-    ['address', 'contact', 'date', 'extent', 'extent_geographic_element', 'geographic_bounding_box', 'identification_point_of_contact', 'keywords', 'metadata', 'responsible_party']
+    ['address', 'citation', 'contact', 'data_identification', 'date', 'extent', 'extent_geographic_element', 'geographic_bounding_box', 'identification_point_of_contact', 'keywords', 'metadata', 'metadata_point_of_contact', 'responsible_party']
     >>> isinstance(gm03.data.comprehensive.date, list)
     True
     >>> len(gm03.data.comprehensive.date)
@@ -46,8 +46,7 @@ Test TID searching
     >>> search_tid2
     'xN8036063300808707346'
     >>> gm03.data.comprehensive.get_element_by_tid(search_tid2) is None
-    True
-
+    False
     >>> e = etree.parse(resource_file('gm03_example2.xml'))
     >>> gm03 = GM03(e)
     >>> gm03.data.comprehensive.geographic_bounding_box.extent_type_code
