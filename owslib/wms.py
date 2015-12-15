@@ -579,13 +579,6 @@ class ContentMetadata:
             self._children = value
         else:
             self._children.extend(value)
-        # If layer is a group and one of its children is queryable, the layer must be queryable.
-        if self._children and self.queryable == 0:
-            for child in self._children:
-                if child.queryable:
-                    self.queryable = child.queryable
-                    break
-
 
     def __str__(self):
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
