@@ -1,6 +1,7 @@
 Imports
 
     >>> from __future__ import (absolute_import, division, print_function, unicode_literals)
+    >>> from tests.utils import resource_file
     >>> from owslib import tms
 
 You can find a list of servers at
@@ -8,7 +9,8 @@ http://svn.osgeo.org/gdal/trunk/gdal/frmts/wms/WMSServerList.txt
 
 Find out what a TMS has to offer. Service metadata:
 
-    >>> service = tms.TileMapService('http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0', timeout=120)
+    >>> xml = open(resource_file('tms-geoserver.xml')).read()
+    >>> service = tms.TileMapService('http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0', timeout=120, xml=xml)
     >>> service.identification.title
     'Tile Map Service'
     >>> service.identification.abstract
