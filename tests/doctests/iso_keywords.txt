@@ -12,3 +12,15 @@ Print testing some metadata elements
     >>> md = MD_Metadata(e)
     >>> md.identificationinfo[0].title
     'Air temperature'
+
+    >>> len(md.identificationinfo[0].mdkeywords) == len(md.identificationinfo[0].keywords)
+    True
+
+    >>> len(md.identificationinfo[0].mdkeywords) > 0
+    True
+
+    >>> len(md.identificationinfo[0].mdkeywords[0].keywords) > 0
+    True
+
+    >>> md.identificationinfo[0].mdkeywords[0].thesaurus['title']
+    'GEMET - INSPIRE themes, version 1.0'
