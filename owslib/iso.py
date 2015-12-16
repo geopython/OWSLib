@@ -150,7 +150,6 @@ class MD_Metadata(object):
 class CI_Date(object):
     """ process CI_Date """
     def __init__(self, md=None):
-            self.cc_uuid = None
         if md is None:
             self.date = None
             self.type = None
@@ -446,7 +445,6 @@ class MD_DataIdentification(object):
                             mdkw['keywords'].append(val2)
 
                 self.keywords.append(mdkw)
-
 
             self.mdkeywords = []
             for mdkw in md.findall(util.nspath_eval('gmd:descriptiveKeywords/gmd:MD_Keywords', namespaces)):
