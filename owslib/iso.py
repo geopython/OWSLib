@@ -228,6 +228,42 @@ class CI_ResponsibleParty(object):
 
             self.role = _testCodeListValue(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
 
+
+class MD_Keywords(object):
+    """
+    Class for the metadata MD_Keywords element
+    """
+    def __init__(self, md=None):
+        if md is None:
+            self.keywords = []
+            self.type = None
+            self.thesaurus = None
+            self.kwdtype_codeList = 'http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_KeywordTypeCode'
+        else:
+            self.keywords = []
+            val = md.findall(util.nspath_eval('gmd:keyword/gco:CharacterString', namespaces))
+            for word in val:
+                self.keywords.append(util.testXMLValue(word))
+
+            self.type = None
+            val = md.find(util.nspath_eval('gmd:type/gmd:MD_KeywordTypeCode', namespaces))
+            self.type = util.testXMLAttribute(val, 'codeListValue')
+
+            self.thesaurus = None
+            val = md.find(util.nspath_eval('gmd:thesaurusName/gmd:CI_Citation', namespaces))
+            if val is not None:
+                self.thesaurus = {}
+
+                thesaurus = val.find(util.nspath_eval('gmd:title/gco:CharacterString', namespaces))
+                self.thesaurus['title'] = util.testXMLValue(thesaurus)
+
+                thesaurus = val.find(util.nspath_eval('gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces))
+                self.thesaurus['date'] = util.testXMLValue(thesaurus)
+
+                thesaurus = val.find(util.nspath_eval('gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces))
+                self.thesaurus['datetype'] = util.testXMLAttribute(thesaurus, 'codeListValue')
+
+
 class MD_DataIdentification(object):
     """ process MD_DataIdentification """
     def __init__(self, md=None, identtype=None):
@@ -259,6 +295,7 @@ class MD_DataIdentification(object):
             self.status = None
             self.contact = []
             self.keywords = []
+            self.mdkeywords = []
             self.topiccategory = []
             self.supplementalinformation = None
             self.extent = None
@@ -408,6 +445,10 @@ class MD_DataIdentification(object):
                             mdkw['keywords'].append(val2)
 
                 self.keywords.append(mdkw)
+
+            self.mdkeywords = []
+            for mdkw in md.findall(util.nspath_eval('gmd:descriptiveKeywords/gmd:MD_Keywords', namespaces)):
+                self.mdkeywords.append(MD_Keywords(mdkw))
 
             self.topiccategory = []
             for i in md.findall(util.nspath_eval('gmd:topicCategory/gmd:MD_TopicCategoryCode', namespaces)):
