@@ -13,14 +13,14 @@ Print testing some metadata elements
     >>> md.identificationinfo[0].title
     'Air temperature'
 
-    >>> len(md.identificationinfo[0].mdkeywords) == len(md.identificationinfo[0].keywords)
+    >>> len(md.identificationinfo[0].keywords2) == len(md.identificationinfo[0].keywords)
     True
 
-    >>> len(md.identificationinfo[0].mdkeywords) > 0
+    >>> len(md.identificationinfo[0].keywords2) > 0
     True
 
-    >>> len(md.identificationinfo[0].mdkeywords[0].keywords) > 0
+    >>> len(md.identificationinfo[0].keywords2[0].keywords) > 0
     True
 
-    >>> md.identificationinfo[0].mdkeywords[0].thesaurus['title']
+    >>> md.identificationinfo[0].keywords2[0].thesaurus['title']
     'GEMET - INSPIRE themes, version 1.0'
