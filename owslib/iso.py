@@ -11,6 +11,7 @@
 """ ISO metadata parser """
 
 from __future__ import (absolute_import, division, print_function)
+import warnings
 
 from owslib.etree import etree
 from owslib import util
@@ -102,12 +103,12 @@ class MD_Metadata(object):
                 self.referencesystem = None
 
             # TODO: merge .identificationinfo into .identification
-            #warnings.warn(
-            #    'the .identification and .serviceidentification properties will merge into '
-            #    '.identification being a list of properties.  This is currently implemented '
-            #    'in .identificationinfo.  '
-            #    'Please see https://github.com/geopython/OWSLib/issues/38 for more information',
-            #    FutureWarning)
+            warnings.warn(
+                'the .identification and .serviceidentification properties will merge into '
+                '.identification being a list of properties.  This is currently implemented '
+                'in .identificationinfo.  '
+                'Please see https://github.com/geopython/OWSLib/issues/38 for more information',
+                FutureWarning)
 
             val = md.find(util.nspath_eval('gmd:identificationInfo/gmd:MD_DataIdentification', namespaces))
             val2 = md.find(util.nspath_eval('gmd:identificationInfo/srv:SV_ServiceIdentification', namespaces))
@@ -228,6 +229,42 @@ class CI_ResponsibleParty(object):
 
             self.role = _testCodeListValue(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
 
+
+class MD_Keywords(object):
+    """
+    Class for the metadata MD_Keywords element
+    """
+    def __init__(self, md=None):
+        if md is None:
+            self.keywords = []
+            self.type = None
+            self.thesaurus = None
+            self.kwdtype_codeList = 'http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_KeywordTypeCode'
+        else:
+            self.keywords = []
+            val = md.findall(util.nspath_eval('gmd:keyword/gco:CharacterString', namespaces))
+            for word in val:
+                self.keywords.append(util.testXMLValue(word))
+
+            self.type = None
+            val = md.find(util.nspath_eval('gmd:type/gmd:MD_KeywordTypeCode', namespaces))
+            self.type = util.testXMLAttribute(val, 'codeListValue')
+
+            self.thesaurus = None
+            val = md.find(util.nspath_eval('gmd:thesaurusName/gmd:CI_Citation', namespaces))
+            if val is not None:
+                self.thesaurus = {}
+
+                thesaurus = val.find(util.nspath_eval('gmd:title/gco:CharacterString', namespaces))
+                self.thesaurus['title'] = util.testXMLValue(thesaurus)
+
+                thesaurus = val.find(util.nspath_eval('gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces))
+                self.thesaurus['date'] = util.testXMLValue(thesaurus)
+
+                thesaurus = val.find(util.nspath_eval('gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces))
+                self.thesaurus['datetype'] = util.testXMLAttribute(thesaurus, 'codeListValue')
+
+
 class MD_DataIdentification(object):
     """ process MD_DataIdentification """
     def __init__(self, md=None, identtype=None):
@@ -259,6 +296,7 @@ class MD_DataIdentification(object):
             self.status = None
             self.contact = []
             self.keywords = []
+            self.keywords2 = []
             self.topiccategory = []
             self.supplementalinformation = None
             self.extent = None
@@ -381,6 +419,13 @@ class MD_DataIdentification(object):
                 o = CI_ResponsibleParty(i)
                 self.contact.append(o)
 
+            warnings.warn(
+                'The .keywords and .keywords2 properties will merge into the '
+                '.keywords property in the future, with .keywords becoming a list '
+                'of MD_Keywords instances. This is currently implemented in .keywords2. '
+                'Please see https://github.com/geopython/OWSLib/issues/301 for more information',
+                FutureWarning)
+
             self.keywords = []
 
             for i in md.findall(util.nspath_eval('gmd:descriptiveKeywords', namespaces)):
@@ -408,6 +453,10 @@ class MD_DataIdentification(object):
                             mdkw['keywords'].append(val2)
 
                 self.keywords.append(mdkw)
+
+            self.keywords2 = []
+            for mdkw in md.findall(util.nspath_eval('gmd:descriptiveKeywords/gmd:MD_Keywords', namespaces)):
+                self.keywords2.append(MD_Keywords(mdkw))
 
             self.topiccategory = []
             for i in md.findall(util.nspath_eval('gmd:topicCategory/gmd:MD_TopicCategoryCode', namespaces)):
