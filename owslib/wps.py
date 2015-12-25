@@ -914,22 +914,29 @@ class InputOutput(object):
         #     <ows:DataType ows:reference="xs:anyURI" xmlns:ows="http://www.opengis.net/ows/1.1" />
         #     <ows:AnyValue xmlns:ows="http://www.opengis.net/ows/1.1" />
         # </LiteralData>
-        print(literalElementName)
+
         literal_data_element = element.find(literalElementName)
+
         if literal_data_element is not None:
             self.dataType = 'LiteralData'
             for sub_element in literal_data_element:
                 subns = getNamespace(sub_element)
                 if sub_element.tag.endswith('DataType'):
                     self.dataType = sub_element.get(
-                        nspath("reference", ns=subns)).split(':')[1]
-                elif sub_element.tag.endswith('AllowedValues'):
+                        nspath("reference", ns=subns)).split(':')[-1]
+
+            for sub_element in literal_data_element:
+
+                subns = getNamespace(sub_element)
+
+                if sub_element.tag.endswith('DefaultValue'):
+                    self.defaultValue = getTypedValue(
+                        self.dataType, sub_element.text)
+
+                if sub_element.tag.endswith('AllowedValues'):
                     for value in sub_element.findall(nspath('Value', ns=subns)):
                         self.allowedValues.append(
                             getTypedValue(self.dataType, value.text))
-                elif sub_element.tag.endswith('DefaultValue'):
-                    self.defaultValue = getTypedValue(
-                        self.dataType, sub_element.text)
                 elif sub_element.tag.endswith('AnyValue'):
                     self.anyValue = True
 
@@ -1004,6 +1011,40 @@ class InputOutput(object):
                         default_format_element.find('Encoding')),
                     schema=testXMLValue(default_format_element.find('Schema'))
                 )
+
+    def _parseBoundingBoxData(self, element, bboxElementName):
+        """
+        Method to parse the BoundingBoxData element.
+        """
+
+        # <BoundingBoxData>
+        #   <Default>
+        #     <CRS>epsg:4326</CRS>
+        #   </Default>
+        #   <Supported>
+        #     <CRS>epsg:4326</CRS>
+        #   </Supported>
+        # </BoundingBoxData>
+        # 
+        # <BoundingBoxOutput>
+        #   <Default>
+        #     <CRS>epsg:4326</CRS>
+        #   </Default>
+        #   <Supported>
+        #     <CRS>epsg:4326</CRS>
+        #   </Supported>
+        # </BoundingBoxOutput>
+
+        bbox_data_element = element.find(bboxElementName)
+        if bbox_data_element is not None:
+            self.dataType = 'BoudingBoxData'
+
+            for bbox_element in bbox_data_element.findall('Supported/CRS'):
+                self.supportedValues.append(bbox_element.text)
+
+            default_bbox_element = bbox_data_element.find('Default/CRS')
+            if default_bbox_element is not None:
+                self.defaultValue = default_bbox_element.text
 
 
 class Input(InputOutput):
