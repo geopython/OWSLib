@@ -489,16 +489,16 @@ def dump(obj, prefix=''):
 
     print("%s %s.%s : %s" % (prefix, obj.__module__, obj.__class__.__name__, obj.__dict__))
 
-def getTypedValue(type, value):
-    ''' Utility function to cast a string value to the appropriate XSD type. '''
-    
-    if type=='boolean':
-       return bool(value)
-    elif type=='integer':
-       return int(value)
-    elif type=='float':
+def getTypedValue(data_type, value):
+    '''Utility function to cast a string value to the appropriate XSD type. '''
+
+    if data_type == 'boolean':
+        return bool(value)
+    elif data_type == 'integer':
+        return int(value)
+    elif data_type == 'float':
         return float(value)
-    elif type=='string':
+    elif data_type == 'string':
         return str(value)
     else:
         return value # no type casting
