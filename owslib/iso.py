@@ -303,6 +303,7 @@ class MD_DataIdentification(object):
             self.bbox = None
             self.temporalextent_start = None
             self.temporalextent_end = None
+            self.spatialrepresentationtype = []
         else:
             self.identtype = identtype
             val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
@@ -418,6 +419,12 @@ class MD_DataIdentification(object):
             for i in md.findall(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty', namespaces)):
                 o = CI_ResponsibleParty(i)
                 self.contact.append(o)
+
+            self.spatialrepresentationtype = []
+            for val in md.findall(util.nspath_eval('gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode', namespaces)):
+                val = util.testXMLAttribute(val, 'codeListValue')
+                if val:
+                    self.spatialrepresentationtype.append(val)
 
             warnings.warn(
                 'The .keywords and .keywords2 properties will merge into the '
