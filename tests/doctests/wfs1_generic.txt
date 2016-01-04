@@ -114,3 +114,36 @@ WFS 1.1.0
     >>> feature = wfs.getfeature(typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json', srsname="urn:x-ogc:def:crs:EPSG:4326")
     >>> json.dumps(json.loads(feature.read()))
     '{...}'
+
+Test schema WFS 1.0.0
+
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.0.0')
+    >>> schema = wfs.get_schema('footprint')
+    >>> len(schema['properties'])
+    4
+    >>> schema['properties']['summary']
+    'string'
+    >>> schema['geometry']
+    'Polygon'
+
+Test schema WFS 1.1.0
+
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='1.1.0')
+    >>> schema = wfs.get_schema('footprint')
+    >>> len(schema['properties'])
+    4
+    >>> schema['properties']['summary']
+    'string'
+    >>> schema['geometry']
+    '3D Polygon'
+
+Test schema WFS 2.0.0
+
+    >>> wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288', version='2.0.0')
+    >>> schema = wfs.get_schema('footprint')
+    >>> len(schema['properties'])
+    4
+    >>> schema['properties']['summary']
+    'string'
+    >>> schema['geometry']
+    '3D Polygon'

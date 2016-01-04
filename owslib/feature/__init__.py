@@ -15,6 +15,7 @@ except ImportError:
     from urllib.parse import urlencode
 import logging
 from owslib.util import log
+from owslib.feature.schema import get_schema
 
 class WebFeatureService_(object):
     """Base class for WebFeatureService implementations"""
@@ -146,3 +147,13 @@ class WebFeatureService_(object):
         data = urlencode(request)
 
         return base_url+data
+
+
+    def get_schema(self, typename):
+        """
+        Get layer schema compatible with :class:`fiona` schema object
+        """
+
+        return get_schema(self.url, typename, self.version)
+    
+
