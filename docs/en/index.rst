@@ -622,7 +622,7 @@ ISO
 .. code-block:: python
 
   >>> from owslib.iso import *
-  >>> m=MD_Metadata(etree.parse('tests/resources/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml')
+  >>> m=MD_Metadata(etree.parse('tests/resources/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml'))
   >>> m.identification.topiccategory
   'farming'
   >>> 
