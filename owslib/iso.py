@@ -110,7 +110,6 @@ class MD_Metadata(object):
                 'Please see https://github.com/geopython/OWSLib/issues/38 for more information',
                 FutureWarning)
 
-
             val = md.find(util.nspath_eval('gmd:identificationInfo/gmd:MD_DataIdentification', namespaces))
             val2 = md.find(util.nspath_eval('gmd:identificationInfo/srv:SV_ServiceIdentification', namespaces))
 
@@ -279,6 +278,7 @@ class MD_DataIdentification(object):
             self.date = []
             self.datetype = []
             self.uselimitation = []
+            self.uselimitation_url = []
             self.accessconstraints = []
             self.classification = []
             self.otherconstraints = []
@@ -336,10 +336,19 @@ class MD_DataIdentification(object):
                 self.date.append(CI_Date(i))
 
             self.uselimitation = []
+            self.uselimitation_url = []
             for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString', namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.uselimitation.append(val)
+
+            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gmx:Anchor', namespaces)):
+                val = util.testXMLValue(i)
+                val1 = i.attrib.get(util.nspath_eval('xlink:href', namespaces))
+
+                if val is not None:
+                    self.uselimitation.append(val)
+                    self.uselimitation_url.append(val1)
 
             self.accessconstraints = []
             for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_RestrictionCode', namespaces)):
@@ -408,7 +417,6 @@ class MD_DataIdentification(object):
 
             val = md.find(util.nspath_eval('gmd:edition/gco:CharacterString', namespaces))
             self.edition = util.testXMLValue(val)
-
 
             val = md.find(util.nspath_eval('gmd:abstract/gco:CharacterString', namespaces))
             self.abstract = util.testXMLValue(val)
@@ -595,7 +603,7 @@ class DQ_DataQuality(object):
             val = md.find(util.nspath_eval('gmd:lineage/gmd:LI_Lineage/gmd:statement/gco:CharacterString', namespaces))
             self.lineage = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:lineage/gmx:Anchor', namespaces))
+            val = md.find(util.nspath_eval('gmd:lineage/gmd:LI_Lineage/gmd:statement/gmx:Anchor', namespaces))
             if val is not None:
                 self.lineage = util.testXMLValue(val)
                 self.lineage_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
