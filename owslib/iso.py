@@ -278,6 +278,7 @@ class MD_DataIdentification(object):
             self.date = []
             self.datetype = []
             self.uselimitation = []
+            self.uselimitation_url = []
             self.accessconstraints = []
             self.classification = []
             self.otherconstraints = []
@@ -292,6 +293,7 @@ class MD_DataIdentification(object):
             self.contributor = []
             self.edition = None
             self.abstract = None
+            self.abstract_url = None
             self.purpose = None
             self.status = None
             self.contact = []
@@ -334,10 +336,19 @@ class MD_DataIdentification(object):
                 self.date.append(CI_Date(i))
 
             self.uselimitation = []
+            self.uselimitation_url = []
             for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString', namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.uselimitation.append(val)
+
+            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gmx:Anchor', namespaces)):
+                val = util.testXMLValue(i)
+                val1 = i.attrib.get(util.nspath_eval('xlink:href', namespaces))
+
+                if val is not None:
+                    self.uselimitation.append(val)
+                    self.uselimitation_url.append(val1)
 
             self.accessconstraints = []
             for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_RestrictionCode', namespaces)):
@@ -409,6 +420,12 @@ class MD_DataIdentification(object):
 
             val = md.find(util.nspath_eval('gmd:abstract/gco:CharacterString', namespaces))
             self.abstract = util.testXMLValue(val)
+
+            val = md.find(util.nspath_eval('gmd:abstract/gmx:Anchor', namespaces))
+
+            if val is not None:
+                self.abstract = util.testXMLValue(val)
+                self.abstract_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
 
             val = md.find(util.nspath_eval('gmd:purpose/gco:CharacterString', namespaces))
             self.purpose = util.testXMLValue(val)
@@ -555,6 +572,7 @@ class DQ_DataQuality(object):
             self.conformancedatetype = []
             self.conformancedegree = []
             self.lineage = None
+            self.lineage_url = None
             self.specificationtitle = None
             self.specificationdate = []
         else:
@@ -585,6 +603,11 @@ class DQ_DataQuality(object):
             val = md.find(util.nspath_eval('gmd:lineage/gmd:LI_Lineage/gmd:statement/gco:CharacterString', namespaces))
             self.lineage = util.testXMLValue(val)
 
+            val = md.find(util.nspath_eval('gmd:lineage/gmd:LI_Lineage/gmd:statement/gmx:Anchor', namespaces))
+            if val is not None:
+                self.lineage = util.testXMLValue(val)
+                self.lineage_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
+
             val = md.find(util.nspath_eval('gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
             self.specificationtitle = util.testXMLValue(val)
 
@@ -610,11 +633,11 @@ class SV_ServiceIdentification(object):
             self.operations = []
             self.operateson = []
         else:
-            val=md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
             self.title=util.testXMLValue(val)
 
-            val=md.find(util.nspath_eval('gmd:abstract/gco:CharacterString', namespaces))
-            self.abstract=util.testXMLValue(val)
+            val = md.find(util.nspath_eval('gmd:abstract/gco:CharacterString', namespaces))
+            self.abstract = util.testXMLValue(val)
 
             self.contact = None
             val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty', namespaces))
@@ -857,4 +880,3 @@ class CodelistCatalogue(object):
             return ids
         else:
             return None
-
