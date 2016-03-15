@@ -195,7 +195,7 @@ class WebMapService(object):
         if kwargs:
             for kw in kwargs:
                 request[kw]=kwargs[kw]
-
+        print(request)
         return request
 
     def getmap(self, layers=None, styles=None, srs=None, bbox=None,
@@ -254,7 +254,7 @@ class WebMapService(object):
 
         request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
                format=format, size=size, time=time, transparent=transparent,
-               bgcolor=bgcolor, exceptions=exceptions, kwargs=kwargs)
+               bgcolor=bgcolor, exceptions=exceptions, **kwargs)
         
         data = urlencode(request)
         
