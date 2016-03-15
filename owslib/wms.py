@@ -195,7 +195,6 @@ class WebMapService(object):
         if kwargs:
             for kw in kwargs:
                 request[kw]=kwargs[kw]
-        print(request)
         return request
 
     def getmap(self, layers=None, styles=None, srs=None, bbox=None,
