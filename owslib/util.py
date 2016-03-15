@@ -139,7 +139,7 @@ class ResponseWrapper(object):
 
     # @TODO: __getattribute__ for poking at response
 
-def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30):
+def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, verify=False):
     """
     Function to open URLs.
 
@@ -150,6 +150,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     rkwargs = {}
 
     rkwargs['timeout'] = timeout
+    rkwargs['verify'] = verify    # verify ssl certificates
 
     auth = None
     if username and password:
