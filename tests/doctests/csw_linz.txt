@@ -14,11 +14,11 @@ Imports
     >>> c.provider.name
     'Land Information New Zealand'
     >>> prop = fes.PropertyIsLike('csw:AnyText', 'parcel boundaries')
-    >>> c.getrecords2([prop])
+    >>> c.getrecords2([prop], maxrecords=20)
     >>> c.results['matches']
     23
     >>> c.results['returned']
-    10
+    20
     >>> c.records['4d8c2d95-4ac2-1aa3-5b81-3cd4eff1ad0f'].title
     'NZ Strata Parcels'
     >>> c.records['4d8c2d95-4ac2-1aa3-5b81-3cd4eff1ad0f'].abstract
