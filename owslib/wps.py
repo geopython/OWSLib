@@ -87,7 +87,7 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 from __future__ import (absolute_import, division, print_function)
 
 from owslib.etree import etree
-from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
+from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
 from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue,
                          getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
@@ -1025,7 +1025,9 @@ class InputOutput(object):
         #     <CRS>epsg:4326</CRS>
         #   </Supported>
         # </BoundingBoxData>
-        # 
+        #
+        # OR
+        #
         # <BoundingBoxOutput>
         #   <Default>
         #     <CRS>epsg:4326</CRS>
@@ -1037,7 +1039,7 @@ class InputOutput(object):
 
         bbox_data_element = element.find(bboxElementName)
         if bbox_data_element is not None:
-            self.dataType = 'BoudingBoxData'
+            self.dataType = 'BoundingBoxData'
 
             for bbox_element in bbox_data_element.findall('Supported/CRS'):
                 self.supportedValues.append(bbox_element.text)
@@ -1113,9 +1115,12 @@ class Output(InputOutput):
 
         # <LiteralOutput>
         self._parseLiteralData(outputElement, 'LiteralOutput')
-
+        
         # <ComplexData> or <ComplexOutput>
         self._parseComplexData(outputElement, 'ComplexOutput')
+
+        # <BoundingBoxData>
+        self._parseBoundingBoxData(outputElement, 'BoundingBoxOutput')
 
         # <Data>
         # <ns0:Data>
@@ -1149,6 +1154,17 @@ class Output(InputOutput):
         #        </ns3:FeatureCollection>
         #     </ns0:ComplexData>
         # </ns0:Data>
+        #
+        #
+        # OWS BoundingBox:
+        #
+        # <wps:Data>
+        #   <wps:BoundingBoxData crs="EPSG:4326" dimensions="2">
+        #     <ows:LowerCorner>0.0 -90.0</ows:LowerCorner>
+        #     <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
+        #   </wps:BoundingBoxData>
+        # </wps:Data>
+        #
         dataElement = outputElement.find(nspath('Data', ns=wpsns))
         if dataElement is not None:
             complexDataElement = dataElement.find(
@@ -1166,6 +1182,19 @@ class Output(InputOutput):
                 self.dataType = literalDataElement.get('dataType')
                 if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
                     self.data.append(literalDataElement.text.strip())
+            bboxDataElement = dataElement.find(
+                nspath('BoundingBoxData', ns=wpsns))
+            if bboxDataElement is not None:
+                self.dataType = "BoundingBoxData"
+                bbox = BoundingBox(bboxDataElement)
+                if bbox is not None and bbox.minx is not None:
+                    bbox_value = None
+                    if bbox.crs is not None and bbox.crs.axisorder == 'yx':
+                        bbox_value = "{0},{1},{2},{3}".format(bbox.miny, bbox.minx, bbox.maxy, bbox.maxx)
+                    else:
+                        bbox_value = "{0},{1},{2},{3}".format(bbox.minx, bbox.miny, bbox.maxx, bbox.maxy)
+                    log.debug("bbox=%s", bbox_value)
+                    self.data.append(bbox_value)
 
     def retrieveData(self, username=None, password=None):
         """
