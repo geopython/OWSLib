@@ -324,6 +324,9 @@ class CatalogueServiceWeb(object):
             val = self.request.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
             if val is not None:
                 esn = util.testXMLValue(val)
+            val = self.request.attrib.get('outputSchema')
+            if val is not None:
+                outputschema = util.testXMLValue(val, True)
         else:
             # construct request
             node0 = self._setrootelement('csw:GetRecords')
