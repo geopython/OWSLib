@@ -67,17 +67,18 @@ class WebMapService(object):
             raise KeyError("No content named %s" % name)
 
     
-    def __init__(self, url, version='1.1.1', xml=None, username=None, password=None, parse_remote_metadata=False, timeout=30):
+    def __init__(self, url, version='1.1.1', xml=None, username=None, password=None, parse_remote_metadata=False, timeout=30, headers=None):
         """Initialize."""
         self.url = url
         self.username = username
         self.password = password
         self.version = version
         self.timeout = timeout
+        self.headers = headers
         self._capabilities = None
 
         # Authentication handled by Reader
-        reader = WMSCapabilitiesReader(self.version, url=self.url, un=self.username, pw=self.password)
+        reader = WMSCapabilitiesReader(self.version, url=self.url, un=self.username, pw=self.password, headers=self.headers)
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -95,7 +96,7 @@ class WebMapService(object):
     def _getcapproperty(self):
         if not self._capabilities:
             reader = WMSCapabilitiesReader(
-                self.version, url=self.url, un=self.username, pw=self.password
+                self.version, url=self.url, un=self.username, pw=self.password, headers=self.headers
                 )
             self._capabilities = ServiceMetadata(reader.read(self.url))
         return self._capabilities
@@ -152,7 +153,7 @@ class WebMapService(object):
         NOTE: this is effectively redundant now"""
         
         reader = WMSCapabilitiesReader(
-            self.version, url=self.url, un=self.username, pw=self.password
+            self.version, url=self.url, un=self.username, pw=self.password, headers=self.headers
             )
         u = self._open(reader.capabilities_url(self.url))
         # check for service exceptions, and return
@@ -258,7 +259,7 @@ class WebMapService(object):
         
         data = urlencode(request)
         
-        u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
+        u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout, headers=self.headers)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -304,7 +305,7 @@ class WebMapService(object):
 
         data = urlencode(request)
 
-        u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
+        u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout, headers=self.headers)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -647,13 +648,14 @@ class WMSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.1.1', url=None, un=None, pw=None):
+    def __init__(self, version='1.1.1', url=None, un=None, pw=None, headers=None):
         """Initialize"""
         self.version = version
         self._infoset = None
         self.url = url
         self.username = un
         self.password = pw
+        self.headers = headers
 
         #if self.username and self.password:
             ## Provide login information in order to use the WMS server
@@ -695,7 +697,7 @@ class WMSCapabilitiesReader:
 
         #now split it up again to use the generic openURL function...
         spliturl=getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password, timeout=timeout)
+        u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password, timeout=timeout, headers=self.headers)
         return etree.fromstring(u.read())
 
     def readString(self, st):
