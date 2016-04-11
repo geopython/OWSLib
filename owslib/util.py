@@ -139,14 +139,14 @@ class ResponseWrapper(object):
 
     # @TODO: __getattribute__ for poking at response
 
-def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30):
+def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None):
     """
     Function to open URLs.
 
     Uses requests library but with additional checks for OGC service exceptions and url formatting.
     Also handles cookies and simple user password authentication.
     """
-    headers = None
+    headers = headers if headers is not None else {}
     rkwargs = {}
 
     rkwargs['timeout'] = timeout
@@ -164,7 +164,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     if method.lower() == 'post':
         try:
             xml = etree.fromstring(data)
-            headers = {'Content-Type': 'text/xml'}
+            headers['Content-Type'] = 'text/xml'
         except (ParseError, UnicodeEncodeError):
             pass
 
