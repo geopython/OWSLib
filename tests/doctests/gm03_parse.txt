@@ -1,0 +1,61 @@
+
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from tests.utils import resource_file
+    >>> from owslib.etree import etree
+    >>> from owslib.gm03 import GM03
+
+Print testing some metadata elements
+
+    >>> e = etree.parse(resource_file('gm03_example1.xml'))
+    >>> gm03 = GM03(e)
+    >>> gm03.header.version
+    '2.3'
+    >>> gm03.header.sender
+    'geocat.ch'
+    >>> hasattr(gm03.data, 'core')
+    False
+    >>> hasattr(gm03.data, 'comprehensive')
+    True
+    >>> len(gm03.data.comprehensive.elements)
+    13
+    >>> sorted(list(gm03.data.comprehensive.elements.keys()))
+    ['address', 'citation', 'contact', 'data_identification', 'date', 'extent', 'extent_geographic_element', 'geographic_bounding_box', 'identification_point_of_contact', 'keywords', 'metadata', 'metadata_point_of_contact', 'responsible_party']
+    >>> isinstance(gm03.data.comprehensive.date, list)
+    True
+    >>> len(gm03.data.comprehensive.date)
+    1
+    >>> gm03.data.comprehensive.metadata.file_identifier
+    '41ac321f632e55cebf0508a2cea5d9023fd12d9ad46edd679f2c275127c88623fb9c9d29726bef7c'
+    >>> gm03.data.comprehensive.metadata.date_stamp
+    '1999-12-31T12:00:00'
+    >>> gm03.data.comprehensive.metadata.language
+    'de'
+
+Test TID searching
+
+    >>> gm03.data.comprehensive.metadata.tid
+    'xN6509077498146737843'
+    >>> search_tid = gm03.data.comprehensive.metadata.tid
+    >>> gm03.data.comprehensive.get_element_by_tid('404') is None
+    True
+    >>> gm03.data.comprehensive.get_element_by_tid(search_tid) is None
+    False
+    >>> search_tid2 = gm03.data.comprehensive.extent.data_identification.ref
+    >>> search_tid2
+    'xN8036063300808707346'
+    >>> gm03.data.comprehensive.get_element_by_tid(search_tid2) is None
+    False
+    >>> e = etree.parse(resource_file('gm03_example2.xml'))
+    >>> gm03 = GM03(e)
+    >>> gm03.data.comprehensive.geographic_bounding_box.extent_type_code
+    'false'
+    >>> gm03.data.comprehensive.geographic_bounding_box.north_bound_latitude
+    '47.1865387201702'
+    >>> gm03.data.comprehensive.geographic_bounding_box.south_bound_latitude
+    '47.1234508676764'
+    >>> gm03.data.comprehensive.geographic_bounding_box.east_bound_longitude
+    '9.10597474389878'
+    >>> gm03.data.comprehensive.geographic_bounding_box.west_bound_longitude
+    '9.23798212070671'

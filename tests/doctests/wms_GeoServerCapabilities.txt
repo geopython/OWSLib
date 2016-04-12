@@ -62,7 +62,27 @@ Test single item accessor
     >>> x = wms['opengeo:poi'].styles
     >>> x == {'point': {'legend': 'http://localhost:8080/geoserver/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=poi', 'title': 'A boring default style'}}
     True
+
+Test nested layer
+
+    >>> wms['parent_layer'].title
+    'Parent Layer'
     
+    >>> wms['parent_layer'].queryable
+    0
+    
+    >>> len(wms['parent_layer'].children)
+    1
+    
+    >>> wms['parent_layer'].children[0].title
+    'Child Layer'
+    
+    >>> len(wms['child_layer'].children)
+    0
+    
+    >>> wms['child_layer'].parent.title
+    'Parent Layer'
+
 Expect a KeyError for invalid names
 
     >>> wms['utterly bogus'].title

@@ -10,6 +10,9 @@ pytest-*
 pytest_cov-*
 .tox
 .*.swp
+*.*~
+.cache
+
 
 *.ipynb
 getmap_outputs/

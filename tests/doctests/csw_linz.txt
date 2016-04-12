@@ -1,0 +1,65 @@
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from owslib import fes    
+    >>> from owslib.dif import namespaces 
+    >>> from owslib.csw import CatalogueServiceWeb as cs
+    >>> from owslib.etree import etree
+
+    >>> c=cs('http://data.linz.govt.nz/services/csw/',timeout=30)
+    >>> c.identification.title
+    'LINZ Data Service'
+    >>> c.identification.version
+    '2.0.2'
+    >>> c.provider.name
+    'Land Information New Zealand'
+    >>> prop = fes.PropertyIsLike('csw:AnyText', 'parcel boundaries')
+    >>> c.getrecords2([prop], maxrecords=20)
+    >>> c.results['matches']
+    23
+    >>> c.results['returned']
+    20
+    >>> c.records['4d8c2d95-4ac2-1aa3-5b81-3cd4eff1ad0f'].title
+    'NZ Strata Parcels'
+    >>> c.records['4d8c2d95-4ac2-1aa3-5b81-3cd4eff1ad0f'].abstract
+    'This layer provides the **current** strata parcel polygons and their associated descriptive data as a single layer to facilitate their use independently of other primary parcels or non primary parcels.\n\nStrata parcels are portions of land where the vertical extent is limited. \n\nThe combination of this layer with the primary parcels layer provides all current parcels for New Zealand (i.e. excludes Historic and Pending parcels)\n\nIf you require approved or historic parcels see the [All Parcels Layer](http://data.linz.govt.nz/layer/1571-nz-all-parcels)\n\nThis layer has a nominal accuracy of 0.1-1m in urban areas and 1-100m in rural areas. For more detailed information about parcel accuracies please refer to the [Survey Boundary Marks](http://data.linz.govt.nz/layer/774-nz-survey-boundary-marks) layer which contains accuracies for each parcel node.\n\nThe originating data for parcel/title associations includes some non-official sources where the official data does not support a link. For more information [see](http://www.linz.govt.nz/about-linz/linz-data-service/dataset-information/cadastral-titles-data)'
+    >>> c.getrecordbyid(['4d8c2d95-4ac2-1aa3-5b81-3cd4eff1ad0f'])
+    >>> prop = fes.PropertyIsLike("csw:AnyText", "hydro")
+    >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd-bad')  #doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: 'Invalid outputSchema parameter value: http://www.isotc211.org/2005/gmd-bad'
+    >>> c.response  #doctest: +SKIP
+    >>> prop = fes.PropertyIsLike("csw:AnyText", "hydro")
+    >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd', maxrecords=2)
+    >>> c.results['returned']
+    2
+    >>> c.records['a60f479b-f0b0-b728-8ba3-d7f4187c126d'].identification.title
+    'Land elevation points (Hydro, 1:22k - 1:90k)'
+    >>> c.records['a60f479b-f0b0-b728-8ba3-d7f4187c126d'].identifier
+    'a60f479b-f0b0-b728-8ba3-d7f4187c126d'
+    >>> c.records['a60f479b-f0b0-b728-8ba3-d7f4187c126d'].stdname
+    'ISO19115'
+    >>> c.records['a60f479b-f0b0-b728-8ba3-d7f4187c126d'].stdver
+    '2003/Cor.1:2006'
+    >>> c.harvest('somefile','someuri')     #doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ExceptionReport: 'Harvest operations are not supported'
+    >>> c.response  #doctest: +SKIP
+    '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- pycsw 1.10.1 -->\n<ows:ExceptionReport xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dct="http://purl.org/dc/terms/" xmlns:ows="http://www.opengis.net/ows" xmlns:apiso="http://www.opengis.net/cat/csw/apiso/1.0" xmlns:gml="http://www.opengis.net/gml" xmlns:dif="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:ogc="http://www.opengis.net/ogc" xmlns:fgdc="http://www.opengis.net/cat/csw/csdgm" xmlns:inspire_ds="http://inspire.ec.europa.eu/schemas/inspire_ds/1.0" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:os="http://a9.com/-/spec/opensearch/1.1/" xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9" language="en-GB" version="1.2.0" xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd"><ows:Exception exceptionCode="OperationNotSupported" locator="request"><ows:ExceptionText>Harvest operations are not supported</ows:ExceptionText></ows:Exception></ows:ExceptionReport>'
+    >>> prop = fes.PropertyIsLike("csw:AnyText", "glacial")
+    >>> c.getrecords2([prop], outputschema='http://www.opengis.net/cat/csw/csdgm')
+    >>> c.results['matches'] > 0
+    True
+    >>> c.results['nextrecord']
+    0
+    >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2)
+    >>> c.results['returned']
+    2
+    >>> c.results['nextrecord']
+    0
+    >>> sort_by=fes.SortBy([fes.SortProperty("dc:title", "ASC")])
+    >>> c.getrecords2([prop], outputschema='http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/', maxrecords=2, sortby=sort_by)
+    >>> c.records['3cb46f76-e8d7-65ac-8b41-055675021f7b'].title
+    'NZ Ross Dependency Glacial Lake Polygons (ANT, 1:50k)'

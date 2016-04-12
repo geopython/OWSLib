@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TRANSFER xmlns="http://www.interlis.ch/INTERLIS2.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <HEADERSECTION SENDER="geocat.ch" VERSION="2.3">
+    <MODELS />
+  </HEADERSECTION>
+  <DATASECTION>
+    <GM03_2_1Comprehensive.Comprehensive BID="xw107831703a">
+      <GM03_2_1Core.Core.MD_Metadata TID="xN6509077498146737843">
+        <fileIdentifier>41ac321f632e55cebf0508a2cea5d9023fd12d9ad46edd679f2c275127c88623fb9c9d29726bef7c</fileIdentifier>
+        <language>de</language>
+        <characterSet>utf8</characterSet>
+        <dateStamp>1999-12-31T12:00:00</dateStamp>
+        <metadataStandardName>GM03Core</metadataStandardName>
+        <metadataStandardVersion>2.3</metadataStandardVersion>
+        <hierarchyLevel>
+          <GM03_2_1Core.Core.MD_ScopeCode_>
+            <value>dataset</value>
+          </GM03_2_1Core.Core.MD_ScopeCode_>
+        </hierarchyLevel>
+      </GM03_2_1Core.Core.MD_Metadata>
+      <GM03_2_1Core.Core.MD_Metadatacontact>
+        <contact REF="xN5427082179211945081" />
+        <MD_Metadata REF="xN6509077498146737843" />
+        <role>
+          <GM03_2_1Core.Core.CI_RoleCode_>
+            <value>custodian</value>
+          </GM03_2_1Core.Core.CI_RoleCode_>
+        </role>
+      </GM03_2_1Core.Core.MD_Metadatacontact>
+      <GM03_2_1Core.Core.CI_ResponsibleParty TID="xN5427082179211945081">
+        <electronicalMailAddress>
+          <GM03_2_1Core.Core.URL_>
+            <value>unbekannt</value>
+          </GM03_2_1Core.Core.URL_>
+        </electronicalMailAddress>
+        <organisationName>
+          <GM03_2_1Core.Core.PT_FreeText>
+            <textGroup>
+              <GM03_2_1Core.Core.PT_Group>
+                <language>de</language>
+                <plainText>Gemeinde Ebnat-Kappel (Datenherr); Gemeinde Ebnat-Kappel (Verwaltungsstelle)</plainText>
+              </GM03_2_1Core.Core.PT_Group>
+            </textGroup>
+          </GM03_2_1Core.Core.PT_FreeText>
+        </organisationName>
+        <linkage>
+          <GM03_2_1Core.Core.PT_FreeURL>
+            <URLGroup>
+              <GM03_2_1Core.Core.PT_URLGroup>
+                <language>de</language>
+                <plainURL>www.ebnatkappel.ch</plainURL>
+              </GM03_2_1Core.Core.PT_URLGroup>
+            </URLGroup>
+          </GM03_2_1Core.Core.PT_FreeURL>
+        </linkage>
+        <address REF="xN2635871268258132149" />
+        <contactInfo REF="xN2875432517461217663" />
+      </GM03_2_1Core.Core.CI_ResponsibleParty>
+      <GM03_2_1Core.Core.CI_Address TID="xN2635871268258132149" />
+      <GM03_2_1Core.Core.CI_Contact TID="xN2875432517461217663" />
+      <GM03_2_1Comprehensive.Comprehensive.MD_DataIdentification TID="xN8036063300808707346">
+        <abstract>
+          <GM03_2_1Core.Core.PT_FreeText>
+            <textGroup>
+              <GM03_2_1Core.Core.PT_Group>
+                <language>de</language>
+                <plainText>Der Unterhaltsdienst beinhaltete folgende Themen: Standorte Ruhebänke, Standorte Splittkasten, öffentliche Plätze, Standorte Abfalleimer, Standorte Robidog, Sammelstellen; Zusätzliche Hinweise:</plainText>
+              </GM03_2_1Core.Core.PT_Group>
+            </textGroup>
+          </GM03_2_1Core.Core.PT_FreeText>
+        </abstract>
+        <MD_Metadata REF="xN6509077498146737843" />
+        <citation REF="xN2836740537917903206" />
+        <language>
+          <CodeISO.LanguageCodeISO_>
+            <value>de</value>
+          </CodeISO.LanguageCodeISO_>
+        </language>
+        <characterSet>
+          <GM03_2_1Core.Core.MD_CharacterSetCode_>
+            <value>utf8</value>
+          </GM03_2_1Core.Core.MD_CharacterSetCode_>
+        </characterSet>
+      </GM03_2_1Comprehensive.Comprehensive.MD_DataIdentification>
+      <GM03_2_1Comprehensive.Comprehensive.CI_Citation TID="xN2836740537917903206">
+        <title>
+          <GM03_2_1Core.Core.PT_FreeText>
+            <textGroup>
+              <GM03_2_1Core.Core.PT_Group>
+                <language>de</language>
+                <plainText>Unterhaltsdienst</plainText>
+              </GM03_2_1Core.Core.PT_Group>
+            </textGroup>
+          </GM03_2_1Core.Core.PT_FreeText>
+        </title>
+      </GM03_2_1Comprehensive.Comprehensive.CI_Citation>
+      <GM03_2_1Core.Core.CI_Date TID="xw107831703aac27b1b1b1b3b1">
+        <date>1999-12-31</date>
+        <dateType>creation</dateType>
+        <CI_Citation REF="xN2836740537917903206" />
+      </GM03_2_1Core.Core.CI_Date>
+      <GM03_2_1Core.Core.MD_IdentificationpointOfContact>
+        <pointOfContact REF="xN5427082179211945081" />
+        <MD_Identification REF="xN8036063300808707346" />
+        <role>
+          <GM03_2_1Core.Core.CI_RoleCode_>
+            <value>custodian</value>
+          </GM03_2_1Core.Core.CI_RoleCode_>
+        </role>
+      </GM03_2_1Core.Core.MD_IdentificationpointOfContact>
+      <GM03_2_1Core.Core.EX_Extent TID="xN3674850297815639997">
+        <description>
+          <GM03_2_1Core.Core.PT_FreeText>
+            <textGroup>
+              <GM03_2_1Core.Core.PT_Group>
+                <language>de</language>
+                <plainText>Ebnat-Kappel</plainText>
+              </GM03_2_1Core.Core.PT_Group>
+            </textGroup>
+          </GM03_2_1Core.Core.PT_FreeText>
+        </description>
+        <MD_DataIdentification REF="xN8036063300808707346" />
+      </GM03_2_1Core.Core.EX_Extent>
+      <GM03_2_1Core.Core.EX_ExtentgeographicElement>
+        <EX_Extent REF="xN3674850297815639997" />
+        <geographicElement REF="xN1056366029451267545" />
+      </GM03_2_1Core.Core.EX_ExtentgeographicElement>
+      <GM03_2_1Core.Core.EX_GeographicBoundingBox TID="xN1056366029451267545">
+        <extentTypeCode>false</extentTypeCode>
+        <northBoundLatitude>47.2834366721671</northBoundLatitude>
+        <southBoundLatitude>47.1855371323622</southBoundLatitude>
+        <eastBoundLongitude>9.07380432424527</eastBoundLongitude>
+        <westBoundLongitude>9.19139891907917</westBoundLongitude>
+      </GM03_2_1Core.Core.EX_GeographicBoundingBox>
+    </GM03_2_1Comprehensive.Comprehensive>
+  </DATASECTION>
+</TRANSFER>

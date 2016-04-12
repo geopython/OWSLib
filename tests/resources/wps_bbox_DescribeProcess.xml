@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wps:ProcessDescriptions xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.openg
+is.net/wps/1.0.0/wpsDescribeProcess_response.xsd" service="WPS" version="1.0.0" xml:lang="en-CA">
+    <ProcessDescription wps:processVersion="0.1" storeSupported="true" statusSupported="true">
+        <ows:Identifier>bbox</ows:Identifier>
+        <ows:Title>Bounding Box</ows:Title>
+        <ows:Abstract>Testing BoundingBox Input/Output Parameter</ows:Abstract>
+        <ows:Metadata xlink:title="home" xlink:href="http://emu.readthedocs.org/en/latest/index.html"/>
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>bbox</ows:Identifier>
+                <ows:Title>Bounding Box</ows:Title>
+                <BoundingBoxData>
+                    <Default>
+                        <CRS>EPSG:4326</CRS>
+                    </Default>
+                    <Supported>
+                        <CRS>EPSG:4326</CRS>
+                        <CRS>EPSG:3035</CRS>
+                    </Supported>
+                </BoundingBoxData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>bbox</ows:Identifier>
+                <ows:Title>Bounding Box</ows:Title>
+                <BoundingBoxOutput>
+                    <Default>
+                        <CRS>EPSG:4326</CRS>
+                    </Default>
+                    <Supported>
+                        <CRS>EPSG:4326</CRS>
+                    </Supported>
+                </BoundingBoxOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+</wps:ProcessDescriptions>

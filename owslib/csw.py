@@ -33,6 +33,7 @@ from owslib import ows
 from owslib.iso import MD_Metadata
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
+from owslib.gm03 import GM03
 from owslib.namespaces import Namespaces
 from owslib.util import cleanup_namespaces, bind_url, add_namespaces, openURL
 
@@ -323,6 +324,9 @@ class CatalogueServiceWeb(object):
             val = self.request.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
             if val is not None:
                 esn = util.testXMLValue(val)
+            val = self.request.attrib.get('outputSchema')
+            if val is not None:
+                outputschema = util.testXMLValue(val, True)
         else:
             # construct request
             node0 = self._setrootelement('csw:GetRecords')
@@ -545,6 +549,11 @@ class CatalogueServiceWeb(object):
                 val = i.find(util.nspath_eval('dif:Entry_ID', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = DIF(i)
+        elif outputschema == namespaces['gm03']: # GM03
+            for i in self._exml.findall('.//'+util.nspath_eval('gm03:TRANSFER', namespaces)):
+                val = i.find(util.nspath_eval('gm03:fileIdentifier', namespaces))
+                identifier = self._setidentifierkey(util.testXMLValue(val))
+                self.records[identifier] = GM03(i)
         else: # process default
             for i in self._exml.findall('.//'+util.nspath_eval('csw:%s' % self._setesnel(esn), namespaces)):
                 val = i.find(util.nspath_eval('dc:identifier', namespaces))

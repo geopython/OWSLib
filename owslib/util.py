@@ -31,7 +31,6 @@ import cgi
 import re
 from copy import deepcopy
 import warnings
-import time
 import six
 import requests
 import codecs
@@ -141,14 +140,14 @@ class ResponseWrapper(object):
 
     # @TODO: __getattribute__ for poking at response
 
-def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30):
+def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None):
     """
     Function to open URLs.
 
     Uses requests library but with additional checks for OGC service exceptions and url formatting.
     Also handles cookies and simple user password authentication.
     """
-    headers = {}
+    headers = headers if headers is not None else {}
     rkwargs = {}
 
     rkwargs['timeout'] = timeout
@@ -166,7 +165,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     if method.lower() == 'post':
         try:
             xml = etree.fromstring(data)
-            headers['Content-Type'] = "text/xml"
+            headers['Content-Type'] = 'text/xml'
         except (ParseError, UnicodeEncodeError):
             pass
 
@@ -174,6 +173,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     elif method.lower() == 'get':
         rkwargs['params'] = data
+        
     else:
         raise ValueError("Unknown method ('%s'), expected 'get' or 'post'" % method)
 
@@ -182,6 +182,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     req = requests.request(method.upper(),
                            url_base,
+                           headers=headers,
                            **rkwargs)
 
     if req.status_code in [400, 401]:
@@ -498,16 +499,16 @@ def dump(obj, prefix=''):
 
     print("%s %s.%s : %s" % (prefix, obj.__module__, obj.__class__.__name__, obj.__dict__))
 
-def getTypedValue(type, value):
-    ''' Utility function to cast a string value to the appropriate XSD type. '''
-    
-    if type=='boolean':
-       return bool(value)
-    elif type=='integer':
-       return int(value)
-    elif type=='float':
+def getTypedValue(data_type, value):
+    '''Utility function to cast a string value to the appropriate XSD type. '''
+
+    if data_type == 'boolean':
+        return bool(value)
+    elif data_type == 'integer':
+        return int(value)
+    elif data_type == 'float':
         return float(value)
-    elif type=='string':
+    elif data_type == 'string':
         return str(value)
     else:
         return value # no type casting
@@ -546,10 +547,13 @@ def extract_xml_list(elements):
 Some people don't have seperate tags for their keywords and seperate them with
 a newline. This will extract out all of the keywords correctly.
 """
-    keywords = [re.split(r'[\n\r]+',f.text) for f in elements if f.text]
-    flattened = [item.strip() for sublist in keywords for item in sublist]
-    remove_blank = [_f for _f in flattened if _f]
-    return remove_blank
+    if elements:
+        keywords = [re.split(r'[\n\r]+',f.text) for f in elements if f.text]
+        flattened = [item.strip() for sublist in keywords for item in sublist]
+        remove_blank = [_f for _f in flattened if _f]
+        return remove_blank
+    else:
+        return []
 
 
 def strip_bom(raw_text):
@@ -615,3 +619,51 @@ except:  # 2.6
     from ordereddict import OrderedDict
 
 
+def which_etree():
+    """decipher which etree library is being used by OWSLib"""
+
+    which_etree = None
+
+    if 'lxml' in etree.__file__:
+        which_etree = 'lxml.etree'
+    elif 'xml/etree' in etree.__file__:
+        which_etree = 'xml.etree'
+    elif 'elementree' in etree.__file__:
+        which_etree = 'elementtree.ElementTree'
+
+    return which_etree
+
+def findall(root, xpath, attribute_name=None, attribute_value=None):
+    """Find elements recursively from given root element based on
+    xpath and possibly given attribute
+
+    :param root: Element root element where to start search
+    :param xpath: xpath defintion, like {http://foo/bar/namespace}ElementName
+    :param attribute_name: name of possible attribute of given element
+    :param attribute_value: value of the attribute
+    :return: list of elements or None
+    """
+
+    found_elements = []
+
+
+    # python 2.6 < does not support complicated XPATH expressions used lower
+    if (2, 6) == sys.version_info[0:2] and which_etree() != 'lxml.etree':
+
+        elements = root.getiterator(xpath)
+
+        if attribute_name is not None and attribute_value is not None:
+            for element in elements:
+                if element.attrib.get(attribute_name) == attribute_value:
+                    found_elements.append(element)
+        else:
+            found_elements = elements
+    # python at least 2.7 and/or lxml can do things much simplier
+    else:
+        if attribute_name is not None and attribute_value is not None:
+            xpath = '%s[@%s="%s"]' % (xpath, attribute_name, attribute_value)
+        found_elements = root.findall('.//' + xpath)
+
+    if found_elements == []:
+        found_elements = None
+    return found_elements

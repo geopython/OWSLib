@@ -60,6 +60,8 @@ Standards Support
 +-------------------+---------------------+
 | `Dublin Core`_    | 1.1                 |
 +-------------------+---------------------+
+| `Swiss GM03`_     | 2.3                 |
++-------------------+---------------------+
 | `WMTS`_           | 1.0.0               |
 +-------------------+---------------------+
 | `WaterML`_        | 1.0, 1.1            |
@@ -89,6 +91,19 @@ Git:
 .. code-block:: bash
 
   $ git clone git://github.com/geopython/OWSLib.git
+
+
+Anaconda:
+
+.. note::
+
+   The OWSLib conda packages are **not official** and provided on different conda channels: http://anaconda.org/search?q=type%3Aconda+owslib
+
+.. code-block:: bash
+
+  $ conda install -c birdhouse owslib
+  # or
+  $ conda install -c ioos owslib
 
 openSUSE:
 
@@ -200,6 +215,73 @@ Result:
 
 WFS
 ---
+Connect to a WFS and inspect its capabilities.
+
+::
+
+    >>> from owslib.wfs import WebFeatureService
+    >>> wfs11 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='1.1.0')
+    >>> wfs11.identification.title
+    'INSPIRE WFS 2.0 DemoServer Verwaltungsgrenzen Bayern
+
+    >>> [operation.name for operation in wfs11.operations]
+    ['GetCapabilities', 'DescribeFeatureType', 'GetFeature', 'GetGmlObject']
+
+List FeatureTypes
+
+::
+
+    >>> list(wfs11.contents)
+    ['bvv:vg_ex', 'bvv:bayern_ex', 'bvv:lkr_ex', 'bvv:regbez_ex', 'bvv:gmd_ex']
+
+Download GML using ``typename``, ``bbox`` and ``srsname``.
+
+::
+
+    >>> # OWSLib will switch the axis order from EN to NE automatically if designated by EPSG-Registry
+    >>> response = wfs11.getfeature(typename='bvv:gmd_ex', bbox=(4500000,5500000,4500500,5500500), srsname='urn:x-ogc:def:crs:EPSG:31468')
+
+Download GML using ``typename`` and ``filter``. OWSLib currently only
+support filter building for WFS 1.1 (FE.1.1).
+
+::
+
+    >>> from owslib.fes import *
+    >>> from owslib.etree import etree
+    >>> from owslib.wfs import WebFeatureService
+    >>> wfs11 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='1.1.0')
+
+    >>> filter = PropertyIsLike(propertyname='bez_gem', literal='Ingolstadt', wildCard='*')
+    >>> filterxml = etree.tostring(filter.toXML()).decode("utf-8")
+    >>> response = wfs11.getfeature(typename='bvv:gmd_ex', filter=filterxml)
+
+Save response to a file.
+
+::
+
+    >>> out = open('/tmp/data.gml', 'wb')
+    >>> out.write(bytes(response.read(), 'UTF-8'))
+    >>> out.close()
+
+Download GML using ``StoredQueries``\ (only available for WFS 2.0
+services)
+
+::
+
+    >>> from owslib.wfs import WebFeatureService
+    >>> wfs20 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='2.0.0')
+
+    >>> # List StoredQueries
+    >>> [storedquery.id for storedquery in wfs20.storedqueries]
+    ['bboxQuery', 'urn:ogc:def:query:OGC-WFS::GetFeatureById', 'GemeindeByGemeindeschluesselEpsg31468', 'DWithinQuery']
+
+    >>> # List Parameters for StoredQuery[1]
+    >>> parameter.name for parameter in wfs20.storedqueries[1].parameters]
+    ['ID']
+
+
+    >>> response = wfs20.getfeature(storedQueryID='urn:ogc:def:query:OGC-WFS::GetFeatureById', storedQueryParams={'ID':'gmd_ex.1'})
+
 
 WCS
 ---
@@ -225,7 +307,7 @@ Get supported resultType's:
   >>> csw.getdomain('GetRecords.resultType')
   >>> csw.results
   {'values': ['results', 'validate', 'hits'], 'parameter': 'GetRecords.resultType', 'type': 'csw:DomainValuesType'}
-  >>> 
+  >>>
 
 Search for bird data:
 
@@ -234,11 +316,11 @@ Search for bird data:
   >>> from owslib.fes import PropertyIsEqualTo, PropertyIsLike, BBox
   >>> birds_query = PropertyIsEqualTo('csw:AnyText', 'birds')
   >>> csw.getrecords2(constraints=[birds_query], maxrecords=20)
-  >>> csw.results    
+  >>> csw.results
   {'matches': 101, 'nextrecord': 21, 'returned': 20}
   >>> for rec in csw.records:
-  ...     print csw.records[rec].title    
-  ... 
+  ...     print csw.records[rec].title
+  ...
   ALLSPECIES
   NatureServe Canada References
   Bird Studies Canada - BirdMap WMS
@@ -259,7 +341,7 @@ Search for bird data:
   Parks Canada Geomatics Metadata Repository
   Breeding Bird Survey
   SCALE
-  >>> 
+  >>>
 
 Search for bird data in Canada:
 
@@ -269,7 +351,7 @@ Search for bird data in Canada:
   >>> csw.getrecords2(constraints=[birds_query, bbox_query])
   >>> csw.results
   {'matches': 3, 'nextrecord': 0, 'returned': 3}
-  >>> 
+  >>>
 
 Search for keywords like 'birds' or 'fowl'
 
@@ -280,7 +362,7 @@ Search for keywords like 'birds' or 'fowl'
   >>> csw.getrecords2(constraints=[birds_query_like, fowl_query_like])
   >>> csw.results
   {'matches': 107, 'nextrecord': 11, 'returned': 10}
-  >>> 
+  >>>
 
 Search for a specific record:
 
@@ -353,20 +435,20 @@ Inspect a remote WPS and retrieve the supported processes:
 	'Geo Data Portal WPS Processing'
 	>>> for operation in wps.operations:
 	...     operation.name
-	... 
+	...
 	'GetCapabilities'
 	'DescribeProcess'
 	'Execute'
 	>>> for process in wps.processes:
 	...     process.identifier, process.title
-	...     
+	...
 	('gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageIntersectionAlgorithm', 'Feature Coverage WCS Intersection')
 	('gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageOPeNDAPIntersectionAlgorithm', 'Feature Coverage OPeNDAP Intersection')
 	('gov.usgs.cida.gdp.wps.algorithm.FeatureCategoricalGridCoverageAlgorithm', 'Feature Categorical Grid Coverage')
 	('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', 'Feature Weighted Grid Statistics')
 	('gov.usgs.cida.gdp.wps.algorithm.FeatureGridStatisticsAlgorithm', 'Feature Grid Statistics')
 	('gov.usgs.cida.gdp.wps.algorithm.PRMSParameterGeneratorAlgorithm', 'PRMS Parameter Generator')
-	>>> 
+	>>>
 
 
 Determine how a specific process needs to be invoked - i.e. what are its input parameters, and output result:
@@ -383,7 +465,7 @@ Determine how a specific process needs to be invoked - i.e. what are its input p
 	'This algorithm generates area weighted statistics of a gridded dataset for a set of vector polygon features. Using the bounding-box that encloses ...
 	>>> for input in process.dataInputs:
 	...     printInputOutput(input)
-	... 
+	...
 	 identifier=FEATURE_COLLECTION, title=Feature Collection, abstract=A feature collection encoded as a WFS request or one of the supported GML profiles.,...
 	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd
 	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.1.1/feature.xsd
@@ -394,37 +476,37 @@ Determine how a specific process needs to be invoked - i.e. what are its input p
 	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.1.0/base/feature.xsd
 	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.1.1/base/feature.xsd
 	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.2.1/base/feature.xsd
-	 Default Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd 
+	 Default Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd
 	 minOccurs=1, maxOccurs=1
 	 identifier=DATASET_URI, title=Dataset URI, abstract=The base data web service URI for the dataset of interest., data type=anyURI
 	 Allowed Value: AnyValue
-	 Default Value: None 
+	 Default Value: None
 	 minOccurs=1, maxOccurs=1
 	 identifier=DATASET_ID, title=Dataset Identifier, abstract=The unique identifier for the data type or variable of interest., data type=string
 	 Allowed Value: AnyValue
-	 Default Value: None 
+	 Default Value: None
 	 minOccurs=1, maxOccurs=2147483647
 	 identifier=REQUIRE_FULL_COVERAGE, title=Require Full Coverage, abstract=If turned on, the service will require that the dataset of interest ....
 	 Allowed Value: True
-	 Default Value: True 
+	 Default Value: True
 	 minOccurs=1, maxOccurs=1
 	 identifier=TIME_START, title=Time Start, abstract=The date to begin analysis., data type=dateTime
 	 Allowed Value: AnyValue
-	 Default Value: None 
+	 Default Value: None
 	 minOccurs=0, maxOccurs=1
 	 identifier=TIME_END, title=Time End, abstract=The date to end analysis., data type=dateTime
 	 Allowed Value: AnyValue
-	 Default Value: None 
+	 Default Value: None
 	 minOccurs=0, maxOccurs=1
 	 identifier=FEATURE_ATTRIBUTE_NAME, title=Feature Attribute Name, abstract=The attribute that will be used to label column headers in processing output., ...
 	 Allowed Value: AnyValue
-	 Default Value: None 
+	 Default Value: None
 	 minOccurs=1, maxOccurs=1
 	 identifier=DELIMITER, title=Delimiter, abstract=The delimiter that will be used to separate columns in the processing output., data type=string
 	 Allowed Value: COMMA
 	 Allowed Value: TAB
 	 Allowed Value: SPACE
-	 Default Value: COMMA 
+	 Default Value: COMMA
 	 minOccurs=1, maxOccurs=1
 	 identifier=STATISTICS, title=Statistics, abstract=Statistics that will be returned for each feature in the processing output., data type=string
 	 Allowed Value: MEAN
@@ -434,29 +516,29 @@ Determine how a specific process needs to be invoked - i.e. what are its input p
 	 Allowed Value: STD_DEV
 	 Allowed Value: SUM
 	 Allowed Value: COUNT
-	 Default Value: None 
+	 Default Value: None
 	 minOccurs=1, maxOccurs=7
 	 identifier=GROUP_BY, title=Group By, abstract=If multiple features and statistics are selected, this will change whether the processing output ...
 	 Allowed Value: STATISTIC
 	 Allowed Value: FEATURE_ATTRIBUTE
-	 Default Value: None 
+	 Default Value: None
 	 minOccurs=1, maxOccurs=1
 	 identifier=SUMMARIZE_TIMESTEP, title=Summarize Timestep, abstract=If selected, processing output will include columns with summarized statistics ...
 	 Allowed Value: True
-	 Default Value: True 
+	 Default Value: True
 	 minOccurs=0, maxOccurs=1
 	 identifier=SUMMARIZE_FEATURE_ATTRIBUTE, title=Summarize Feature Attribute, abstract=If selected, processing output will include a final row of ...
 	 Allowed Value: True
-	 Default Value: True 
+	 Default Value: True
 	 minOccurs=0, maxOccurs=1
 	>>> for output in process.processOutputs:
 	...     printInputOutput(output)
-	... 
+	...
 	 identifier=OUTPUT, title=Output File, abstract=A delimited text file containing requested process output., data type=ComplexData
 	 Supported Value: mimeType=text/csv, encoding=UTF-8, schema=None
-	 Default Value: mimeType=text/csv, encoding=UTF-8, schema=None 
+	 Default Value: mimeType=text/csv, encoding=UTF-8, schema=None
 	 reference=None, mimeType=None
-	>>> 
+	>>>
 
 Submit a processing request (extraction of a climate index variable over a specific GML polygon, for a given period of time), monitor the execution until complete:
 
@@ -485,12 +567,12 @@ Submit a processing request (extraction of a climate index variable over a speci
 	Execution status=ProcessStarted
 	>>> from owslib.wps import monitorExecution
 	>>> monitorExecution(execution)
-	
+
 	Checking execution status... (location=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=6809217153012787208)
 	Execution status=ProcessSucceeded
 	Execution status: ProcessSucceeded
 	Output URL=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=6809217153012787208OUTPUT.3cbcd666-a912-456f-84a3-6ede450aca95
-	>>> 
+	>>>
 
 Alternatively, define the feature through an embedded query to a WFS server:
 
@@ -501,7 +583,7 @@ Alternatively, define the feature through an embedded query to a WFS server:
 	>>> query = WFSQuery("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
 	>>> featureCollection = WFSFeatureCollection(wfsUrl, query)
 	>>> # same process submission as above
-	... 
+	...
 
 You can also submit a pre-made request encoded as WPS XML:
 
@@ -512,7 +594,7 @@ You can also submit a pre-made request encoded as WPS XML:
 	Executing WPS request...
 	Execution status=ProcessStarted
 	>>> monitorExecution(execution)
-	
+
 	Checking execution status... (location=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=5103866488472745994)
 	Execution status=ProcessSucceeded
 	Execution status: ProcessSucceeded
@@ -540,10 +622,10 @@ ISO
 .. code-block:: python
 
   >>> from owslib.iso import *
-  >>> m=MD_Metadata(etree.parse('tests/resources/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml')
+  >>> m=MD_Metadata(etree.parse('tests/resources/9250AA67-F3AC-6C12-0CB9-0662231AA181_iso.xml'))
   >>> m.identification.topiccategory
   'farming'
-  >>> 
+  >>>
 
 ISO Codelists:
 
@@ -562,6 +644,11 @@ NASA DIF
 
 FGDC
 ----
+
+Swiss GM03
+----------
+
+.. include:: ../../tests/doctests/gm03_parse.txt
 
 WMTS
 ----
@@ -591,6 +678,24 @@ You can find out about software metrics at the OWSLib ohloh page at http://www.o
 
 Testing
 -------
+
+.. code-block:: bash
+
+   $ python setup.py test
+
+Or ...
+
+.. code-block:: bash
+
+    # install requirements
+    $ pip install -r requirements.txt
+    $ pip install -r requirements-dev.txt # needed for tests only
+
+    # run tests
+    python -m pytest
+
+    # additional pep8 tests
+    pep8 owslib/wmts.py
 
 Support
 =======
@@ -682,7 +787,7 @@ Credits
 .. _`OGC WMTS`: http://www.opengeospatial.org/standards/wmts
 .. _`OGC Filter`: http://www.opengeospatial.org/standards/filter
 .. _`OGC OWS Common`: http://www.opengeospatial.org/standards/common
-.. _`NASA DIF`: http://gcmd.nasa.gov/User/difguide/ 
+.. _`NASA DIF`: http://gcmd.nasa.gov/User/difguide/
 .. _`FGDC CSDGM`: http://www.fgdc.gov/metadata/csdgm
 .. _`ISO 19115`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=26020
 .. _`ISO 19139`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=32557
@@ -691,3 +796,4 @@ Credits
 .. _`ohloh`: http://www.ohloh.net/p/OWSLib
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
+.. _`Swiss GM03`: http://www.geocat.ch/internet/geocat/en/home/documentation/gm03.html
