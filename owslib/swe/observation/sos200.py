@@ -269,10 +269,10 @@ class SosObservationOffering(object):
             self.observation_models.append(testXMLValue(om))
 
     def __str__(self):
-        return 'Offering id: %s, name: %s' % (self.id, self.name)
-    
+        return ('Offering id: %s, name: %s' % (self.id, self.name)).encode('utf-8')
+
     def __repr__(self):
-        return "<SosObservationOffering '%s'>" % self.name
+        return ("<SosObservationOffering '%s'>" % self.name).encode('utf-8')
 
 class SosCapabilitiesReader(object):
     def __init__(self, version="2.0.0", url=None, username=None, password=None):
