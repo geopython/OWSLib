@@ -273,7 +273,8 @@ class WebMapService_1_3_0(object):
         if headers['content-type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = unicode(next(iter(se_tree.find('{http://www.opengis.net/ogc}ServiceException/text()')), '')).strip()
+            # TODO: test across versions
+            err_message = str(next(iter(se_tree.find('{http://www.opengis.net/ogc}ServiceException/text()')), '')).strip()
             raise ServiceException(err_message, se_xml)
         return u
 
