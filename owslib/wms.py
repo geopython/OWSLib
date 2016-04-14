@@ -14,6 +14,15 @@ Web Map Server (WFS) methods and metadata. Factory function.
 """
 
 from __future__ import (absolute_import, division, print_function)
+import cgi
+try:                    # Python 3
+    from urllib.parse import urlencode
+except ImportError:     # Python 2
+    from urllib import urlencode
+
+import warnings
+
+import six
 from owslib.map import wms111, wms130
 
 

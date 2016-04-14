@@ -572,7 +572,7 @@ def strip_bom(raw_text):
         codecs.BOM_UTF32_BE
     ]
 
-    if not isinstance(raw_text, unicode):
+    if not isinstance(raw_text, str):
         for bom in boms:
             if raw_text.startswith(bom):
                 return raw_text.replace(bom, '')

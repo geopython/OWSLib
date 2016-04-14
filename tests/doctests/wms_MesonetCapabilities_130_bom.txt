@@ -1,0 +1,44 @@
+
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from owslib.wms import WebMapService
+    >>> from tests.utils import resource_file, cast_tuple_int_list, cast_tuple_int_list_srs
+    >>> from operator import itemgetter
+
+Fake a request to a WMS Server (1.3.0) using saved doc from 
+http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?
+and modified to start with BOM
+
+    >>> xml = open(resource_file('wms_mesonet-caps-130.xml'), 'rb').read()
+    >>> wms = WebMapService('url', version='1.3.0', xml=xml)
+    
+Test capabilities
+-----------------
+
+    >>> wms.identification.type
+    'WMS'
+    >>> wms.identification.version
+    '1.3.0'
+    >>> wms.identification.title
+    'IEM WMS Service'
+    >>> wms.identification.abstract
+    'IEM generated CONUS composite of NWS WSR-88D level III base reflectivity.'
+    >>> wms.identification.keywords
+    []
+    >>> wms.identification.accessconstraints
+    'None'
+
+Test available content layers
+
+    >>> sorted(wms.contents.keys())
+    ['nexrad-n0r-wmst', 'nexrad_base_reflect', 'time_idx']
+
+    >>> sorted([wms[layer].id for layer in wms.contents])
+    ['nexrad-n0r-wmst', 'nexrad_base_reflect', 'time_idx']
+
+ 
+Test single item accessor
+    
+    >>> wms['time_idx'].title
+    'NEXRAD BASE REFLECT'
