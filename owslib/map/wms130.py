@@ -120,9 +120,6 @@ class WebMapService_1_3_0(object):
             xml = etree.tostring(self._capabilities)
         return xml
 
-    def getfeatureinfo(self):
-        raise NotImplementedError
-
     def getOperationByName(self, name):
         """Return a named content item."""
         for item in self.operations:
@@ -130,86 +127,11 @@ class WebMapService_1_3_0(object):
                 return item
         raise KeyError("No operation named %s" % name)
 
-    def getmap(self, layers=None,
-               styles=None,
-               srs=None,
-               bbox=None,
-               format=None,
-               size=None,
-               time=None,
-               elevation=None,
-               dimensions={},
-               transparent=False,
-               bgcolor='#FFFFFF',
-               exceptions='XML',
-               method='Get',
-               **kwargs
-               ):
-        """Request and return an image from the WMS as a file-like object.
+    def __build_getmap_request(self, layers=None, styles=None, srs=None, bbox=None,
+               format=None, size=None, time=None, dimensions={},
+               elevation=None, transparent=False,
+               bgcolor=None, exceptions=None, **kwargs):
 
-        Parameters
-        ----------
-        layers : list
-            List of content layer names.
-        styles : list
-            Optional list of named styles, must be the same length as the
-            layers list.
-        srs : string
-            A spatial reference system identifier.
-            Note: this is an invalid query parameter key for 1.3.0 but is being
-                  retained for standardization with 1.1.1.
-            Note: throws exception if the spatial ref is ESRI's "no reference"
-                  code (EPSG:0)
-        bbox : tuple
-            (left, bottom, right, top) in srs units (note, this order does not
-                change depending on axis order of the crs).
-
-            CRS:84: (long, lat)
-            EPSG:4326: (lat, long)
-        format : string
-            Output image format such as 'image/jpeg'.
-        size : tuple
-            (width, height) in pixels.
-
-        time : string or list or range
-            Optional. Time value of the specified layer as ISO-8601 (per value)
-        elevation : string or list or range
-            Optional. Elevation value of the specified layer.
-        dimensions: dict (dimension : string or list or range)
-            Optional. Any other Dimension option, as specified in the GetCapabilities
-
-        transparent : bool
-            Optional. Transparent background if True.
-        bgcolor : string
-            Optional. Image background color.
-        method : string
-            Optional. HTTP DCP method name: Get or Post.
-        **kwargs : extra arguments
-            anything else e.g. vendor specific parameters
-
-        Example
-        -------
-            >>> wms = WebMapService('http://webservices.nationalatlas.gov/wms/1million',
-                                    version='1.3.0')
-            >>> img = wms.getmap(layers=['airports1m'],\
-                                 styles=['default'],\
-                                 srs='EPSG:4326',\
-                                 bbox=(-176.646, 17.7016, -64.8017, 71.2854),\
-                                 size=(300, 300),\
-                                 format='image/jpeg',\
-                                 transparent=True)
-            >>> out = open('example.jpg.jpg', 'wb')
-            >>> out.write(img.read())
-            >>> out.close()
-
-        """
-
-        try:
-            base_url = next((m.get('url') for m in
-                            self.getOperationByName('GetMap').methods if
-                            m.get('type').lower() == method.lower()))
-        except StopIteration:
-            base_url = self.url
         request = {'version': self.version, 'request': 'GetMap'}
 
         # check layers and styles
@@ -229,6 +151,7 @@ class WebMapService_1_3_0(object):
         if srs.upper() == 'EPSG:0':
             # if it's esri's unknown spatial ref code, bail
             raise Exception('Undefined spatial reference (%s).' % srs)
+
         sref = Crs(srs)
         if sref.axisorder == 'yx':
             # remap the given bbox
@@ -242,7 +165,6 @@ class WebMapService_1_3_0(object):
         request['bgcolor'] = '0x' + bgcolor[1:7]
         request['exceptions'] = str(exceptions)
 
-        # the predefined dimensions
         if time is not None:
             request['time'] = str(time)
 
@@ -255,15 +177,46 @@ class WebMapService_1_3_0(object):
 
         if kwargs:
             for kw in kwargs:
-                request[kw] = kwargs[kw]
+                request[kw]=kwargs[kw]
+        return request
 
+    def getmap(self, layers=None,
+               styles=None,
+               srs=None,
+               bbox=None,
+               format=None,
+               size=None,
+               time=None,
+               elevation=None,
+               dimensions={},
+               transparent=False,
+               bgcolor='#FFFFFF',
+               exceptions='XML',
+               method='Get',
+               timeout=None,
+               **kwargs
+               ):
+
+        try:
+            base_url = next((m.get('url') for m in
+                            self.getOperationByName('GetMap').methods if
+                            m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
+        
+        request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
+               dimensions=dimensions, elevation=elevation,
+               format=format, size=size, time=time, transparent=transparent,
+               bgcolor=bgcolor, exceptions=exceptions, **kwargs)
+        
         data = urlencode(request)
 
         u = openURL(base_url,
                     data,
                     method,
                     username=self.username,
-                    password=self.password)
+                    password=self.password,
+                    timeout=timeout or self.timeout)
 
         # need to handle casing in the header keys
         headers = {}
@@ -273,11 +226,63 @@ class WebMapService_1_3_0(object):
         if headers['content-type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            # TODO: test across versions
             err_message = str(next(iter(se_tree.find('{http://www.opengis.net/ogc}ServiceException/text()')), '')).strip()
             raise ServiceException(err_message, se_xml)
         return u
 
+    def getfeatureinfo(self, layers=None,
+               styles=None,
+               srs=None,
+               bbox=None,
+               format=None,
+               size=None,
+               time=None,
+               elevation=None,
+               dimensions={},
+               transparent=False,
+               bgcolor='#FFFFFF',
+               exceptions='XML',
+               query_layers = None, xy=None, info_format=None, feature_count=20,
+               method='Get',
+               timeout=None,
+               **kwargs
+               ):
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
+
+        # GetMap-Request
+        request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
+               dimensions=dimensions, elevation=elevation,
+               format=format, size=size, time=time, transparent=transparent,
+               bgcolor=bgcolor, exceptions=exceptions, kwargs=kwargs)
+
+        # extend to GetFeatureInfo-Request
+        request['request'] = 'GetFeatureInfo'
+
+        if not query_layers:
+            __str_query_layers = ','.join(layers)
+        else:
+            __str_query_layers = ','.join(query_layers)
+
+        request['query_layers'] = __str_query_layers
+        request['i'] = str(xy[0])
+        request['j'] = str(xy[1])
+        request['info_format'] = info_format
+        request['feature_count'] = str(feature_count)
+
+        data = urlencode(request)
+
+        u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
+
+        # check for service exceptions, and return
+        if u.info()['Content-Type'] == 'XML':
+            se_xml = u.read()
+            se_tree = etree.fromstring(se_xml)
+            err_message = six.text_type(se_tree.find('ServiceException').text).strip()
+            raise ServiceException(err_message, se_xml)
+        return u
 
 class ServiceIdentification(object):
     def __init__(self, infoset, version):
