@@ -100,15 +100,6 @@ class WebMapService_1_1_1(object):
         # build metadata objects
         self._buildMetadata(parse_remote_metadata)
 
-    # def _getcapproperty(self):
-    #     if not self._capabilities:
-    #         reader = WMSCapabilitiesReader(
-    #             self.version, url=self.url,
-    #             un=self.username, pw=self.password
-    #         )
-    #         self._capabilities = ServiceMetadata(reader.read(self.url))
-    #     return self._capabilities
-
     def _buildMetadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
 
@@ -132,6 +123,7 @@ class WebMapService_1_1_1(object):
         # recursively gather content metadata for all layer elements.
         # To the WebMapService.contents store only metadata of named layers.
         def gather_layers(parent_elem, parent_metadata):
+            layers = []
             for index, elem in enumerate(parent_elem.findall('Layer')):
                 cm = ContentMetadata(elem, parent=parent_metadata,
                                      index=index + 1,
@@ -139,8 +131,10 @@ class WebMapService_1_1_1(object):
                 if cm.id:
                     if cm.id in self.contents:
                         warnings.warn('Content metadata for layer "%s" already exists. Using child layer' % cm.id)
+                    layers.append(cm)
                     self.contents[cm.id] = cm
-                gather_layers(elem, cm)
+                cm.children = gather_layers(elem, cm)
+            return layers
         gather_layers(caps, None)
 
         # exceptions
@@ -241,31 +235,40 @@ class WebMapService_1_1_1(object):
 
         Example
         -------
-            >>> wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
-            >>> img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'],\
+            wms = WebMapService('http://giswebservices.massgis.state.ma.us/geoserver/wms', version='1.1.1')
+            img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'],\
                                  styles=[''],\
                                  srs='EPSG:4326',\
                                  bbox=(-70.8, 42, -70, 42.8),\
                                  size=(300, 300),\
                                  format='image/jpeg',\
                                  transparent=True)
-            >>> out = open('example.jpg', 'wb')
-            >>> bytes_written = out.write(img.read())
-            >>> out.close()
+            out = open('example.jpg', 'wb')
+            bytes_written = out.write(img.read())
+            out.close()
 
-        """        
+        """
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
         request = {'version': self.version, 'request': 'GetMap'}
-        
-       request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
-               format=format, size=size, time=time, transparent=transparent,
-               bgcolor=bgcolor, exceptions=exceptions, **kwargs)
+
+        request = self.__build_getmap_request(
+            layers=layers,
+            styles=styles,
+            srs=srs,
+            bbox=bbox,
+            format=format,
+            size=size,
+            time=time,
+            transparent=transparent,
+            bgcolor=bgcolor,
+            exceptions=exceptions,
+            **kwargs)
 
         data = urlencode(request)
-        
+
         u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
 
         # check for service exceptions, and return
@@ -275,25 +278,44 @@ class WebMapService_1_1_1(object):
             err_message = six.text_type(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message, se_xml)
         return u
-        
-    def getfeatureinfo(self, layers=None, styles=None, srs=None, bbox=None,
-               format=None, size=None, time=None, transparent=False,
-               bgcolor='#FFFFFF',
-               exceptions='application/vnd.ogc.se_xml',
-               query_layers = None, xy=None, info_format=None, feature_count=20,
-               method='Get',
-               timeout=None,
-               **kwargs
-               ):
+
+    def getfeatureinfo(self,
+                       layers=None,
+                       styles=None,
+                       srs=None,
+                       bbox=None,
+                       format=None,
+                       size=None,
+                       time=None,
+                       transparent=False,
+                       bgcolor='#FFFFFF',
+                       exceptions='application/vnd.ogc.se_xml',
+                       query_layers=None,
+                       xy=None,
+                       info_format=None,
+                       feature_count=20,
+                       method='Get',
+                       timeout=None,
+                       **kwargs
+                       ):
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
 
         # GetMap-Request
-        request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
-               format=format, size=size, time=time, transparent=transparent,
-               bgcolor=bgcolor, exceptions=exceptions, kwargs=kwargs)
+        request = self.__build_getmap_request(
+            layers=layers,
+            styles=styles,
+            srs=srs,
+            bbox=bbox,
+            format=format,
+            size=size,
+            time=time,
+            transparent=transparent,
+            bgcolor=bgcolor,
+            exceptions=exceptions,
+            kwargs=kwargs)
 
         # extend to GetFeatureInfo-Request
         request['request'] = 'GetFeatureInfo'
@@ -333,10 +355,10 @@ class WebMapService_1_1_1(object):
             if item.name == name:
                 return item
         raise KeyError("No operation named %s" % name)
-    
+
 class ServiceIdentification(object):
     ''' Implements IServiceIdentificationMetadata '''
-    
+
     def __init__(self, infoset, version):
         self._root=infoset
         self.type = testXMLValue(self._root.find('Name'))
@@ -365,7 +387,7 @@ class ServiceProvider(object):
             self.contact = ContactMetadata(contact)
         else:
             self.contact = None
-            
+
     def getContentByName(self, name):
         """Return a named content item."""
         for item in self.contents:
@@ -379,23 +401,25 @@ class ServiceProvider(object):
             if item.name == name:
                 return item
         raise KeyError("No operation named %s" % name)
-        
+
 class ContentMetadata:
     """
     Abstraction for WMS layer metadata.
 
     Implements IContentMetadata.
     """
-    def __init__(self, elem, parent=None, index=0, parse_remote_metadata=False, timeout=30):
+    def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False, timeout=30):
         if elem.tag != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
-        
+
         self.parent = parent
         if parent:
             self.index = "%s.%d" % (parent.index, index)
         else:
             self.index = str(index)
-        
+
+        self._children = children
+
         self.id = self.name = testXMLValue(elem.find('Name'))
 
         # layer attributes
@@ -413,30 +437,30 @@ class ContentMetadata:
             self.title = title.strip()
 
         self.abstract = testXMLValue(elem.find('Abstract'))
-        
+
         # bboxes
         b = elem.find('BoundingBox')
         self.boundingBox = None
         if b is not None:
-            try: #sometimes the SRS attribute is (wrongly) not provided
-                srs=b.attrib['SRS']
+            try:  # sometimes the SRS attribute is (wrongly) not provided
+                srs = b.attrib['SRS']
             except KeyError:
-                srs=None
+                srs = None
             self.boundingBox = (
                 float(b.attrib['minx']),
                 float(b.attrib['miny']),
                 float(b.attrib['maxx']),
                 float(b.attrib['maxy']),
                 srs,
-                )
+            )
         elif self.parent:
             if hasattr(self.parent, 'boundingBox'):
                 self.boundingBox = self.parent.boundingBox
 
-        # ScaleHint 
-        sh = elem.find('ScaleHint') 
-        self.scaleHint = None 
-        if sh is not None: 
+        # ScaleHint
+        sh = elem.find('ScaleHint')
+        self.scaleHint = None
+        if sh is not None:
             if 'min' in sh.attrib and 'max' in sh.attrib:
                 self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
 
@@ -466,15 +490,15 @@ class ContentMetadata:
             self.boundingBoxWGS84 = self.parent.boundingBoxWGS84
         else:
             self.boundingBoxWGS84 = None
-            
-        #SRS options
+
+        # SRS options
         self.crsOptions = []
-            
-        #Copy any parent SRS options (they are inheritable properties)
+
+        # Copy any parent SRS options (they are inheritable properties)
         if self.parent:
             self.crsOptions = list(self.parent.crsOptions)
 
-        #Look for SRS option attached to this layer
+        # Look for SRS option attached to this layer
         if elem.find('SRS') is not None:
             ## some servers found in the wild use a single SRS
             ## tag containing a whitespace separated list of SRIDs
@@ -483,7 +507,7 @@ class ContentMetadata:
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
-                        
+
         #Get rid of duplicate entries
         self.crsOptions = list(set(self.crsOptions))
 
@@ -495,15 +519,15 @@ class ContentMetadata:
             # Comment by Jachym:
             # Do not set it to None, but to [], which will make the code
             # work further. Fixed by anthonybaxter
-            self.crsOptions=[]
-            
+            self.crsOptions = []
+
         #Styles
         self.styles = {}
-        
+
         #Copy any parent styles (they are inheritable properties)
         if self.parent:
             self.styles = self.parent.styles.copy()
- 
+
         #Get the styles for this layer (items with the same name are replaced)
         for s in elem.findall('Style'):
             name = s.find('Name')
@@ -529,14 +553,14 @@ class ContentMetadata:
                     self.timepositions=extent.text.split(',')
                     self.defaulttimeposition = extent.attrib.get("default")
                     break
-                
+
         # Elevations - available vertical levels
         self.elevations=None
         for extent in elem.findall('Extent'):
-            if extent.attrib.get("name").lower() =='elevation':
+            if extent.attrib.get("name").lower() == 'elevation':
                 if extent.text:
-                    self.elevations=extent.text.split(',')
-                    break                
+                    self.elevations = extent.text.split(',')
+                    break
 
         # MetadataURLs
         self.metadataUrls = []
@@ -569,7 +593,7 @@ class ContentMetadata:
                 'url': m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
             }
             self.dataUrls.append(dataUrl)
-                
+
         self.layers = []
         for child in elem.findall('Layer'):
             self.layers.append(ContentMetadata(child, self))
@@ -591,7 +615,7 @@ class ContentMetadata:
 
 class OperationMetadata:
     """Abstraction for WMS OperationMetadata.
-    
+
     Implements IOperationMetadata.
     """
     def __init__(self, elem):
@@ -611,14 +635,14 @@ class ContactMetadata:
     def __init__(self, elem):
         name = elem.find('ContactPersonPrimary/ContactPerson')
         if name is not None:
-            self.name=name.text
+            self.name = name.text
         else:
-            self.name=None
+            self.name = None
         email = elem.find('ContactElectronicMailAddress')
         if email is not None:
-            self.email=email.text
+            self.email = email.text
         else:
-            self.email=None
+            self.email = None
         self.address = self.city = self.region = None
         self.postcode = self.country = None
 

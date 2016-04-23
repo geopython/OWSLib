@@ -10,7 +10,7 @@
 # =============================================================================
 
 """
-Web Map Server (WFS) methods and metadata. Factory function.
+Web Map Server (WMS) methods and metadata. Factory function.
 """
 
 from __future__ import (absolute_import, division, print_function)

@@ -1,8 +1,17 @@
-# -*- coding: ISO-8859-15 -*-
+# -*- coding: iso-8859-15 -*-
+# =============================================================================
+# Copyright (c) 2004, 2006 Sean C. Gillies
+# Copyright (c) 2005 Nuxeo SARL <http://nuxeo.com>
+#
+# Authors : Sean Gillies <sgillies@frii.com>
+#           Julien Anguenot <ja@nuxeo.com>
+#
+# Contact email: sgillies@frii.com
+# =============================================================================
 
-'''
-API For Web Map Service version 1.3.0
-'''
+"""
+API For Web Map Service version 1.3.0.
+"""
 
 from __future__ import (absolute_import, division, print_function)
 
@@ -68,7 +77,7 @@ class WebMapService_1_3_0(object):
         self._buildMetadata(parse_remote_metadata)
 
     def _buildMetadata(self, parse_remote_metadata=False):
-        '''set up capabilities metadata objects: '''
+        '''set up capabilities metadata objects:'''
 
         # serviceIdentification metadata
         serviceelem = self._capabilities.find(nspath('Service',
@@ -92,14 +101,17 @@ class WebMapService_1_3_0(object):
         # recursively gather content metadata for all layer elements.
         # To the WebMapService.contents store only metadata of named layers.
         def gather_layers(parent_elem, parent_metadata):
+            layers = []
             for index, elem in enumerate(parent_elem.findall(nspath('Layer', WMS_NAMESPACE))):
-                cm = ContentMetadata(elem, parent=parent_metadata, index=index + 1,
+                cm = ContentMetadata(elem, parent=parent_metadata, index=index+1,
                                      parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
                         warnings.warn('Content metadata for layer "%s" already exists. Using child layer' % cm.id)
+                    layers.append(cm)
                     self.contents[cm.id] = cm
-                gather_layers(elem, cm)
+                cm.children = gather_layers(elem, cm)
+            return layers
         gather_layers(caps, None)
 
         # exceptions
@@ -240,18 +252,18 @@ class WebMapService_1_3_0(object):
 
         Example
         -------
-            >>> wms = WebMapService('http://webservices.nationalatlas.gov/wms/1million',
+            wms = WebMapService('http://webservices.nationalatlas.gov/wms/1million',\
                                     version='1.3.0')
-            >>> img = wms.getmap(layers=['airports1m'],\
+            img = wms.getmap(layers=['airports1m'],\
                                  styles=['default'],\
                                  srs='EPSG:4326',\
                                  bbox=(-176.646, 17.7016, -64.8017, 71.2854),\
                                  size=(300, 300),\
                                  format='image/jpeg',\
                                  transparent=True)
-            >>> out = open('example.jpg.jpg', 'wb')
-            >>> out.write(img.read())
-            >>> out.close()
+            out = open('example.jpg.jpg', 'wb')
+            out.write(img.read())
+            out.close()
 
         """
 
@@ -262,10 +274,20 @@ class WebMapService_1_3_0(object):
         except StopIteration:
             base_url = self.url
 
-        request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
-               dimensions=dimensions, elevation=elevation,
-               format=format, size=size, time=time, transparent=transparent,
-               bgcolor=bgcolor, exceptions=exceptions, **kwargs)
+        request = self.__build_getmap_request(
+            layers=layers,
+            styles=styles,
+            srs=srs,
+            bbox=bbox,
+            dimensions=dimensions,
+            elevation=elevation,
+            format=format,
+            size=size,
+            time=time,
+            transparent=transparent,
+            bgcolor=bgcolor,
+            exceptions=exceptions,
+            **kwargs)
 
         data = urlencode(request)
 
@@ -314,10 +336,20 @@ class WebMapService_1_3_0(object):
             base_url = self.url
 
         # GetMap-Request
-        request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
-               dimensions=dimensions, elevation=elevation,
-               format=format, size=size, time=time, transparent=transparent,
-               bgcolor=bgcolor, exceptions=exceptions, kwargs=kwargs)
+        request = self.__build_getmap_request(
+            layers=layers,
+            styles=styles,
+            srs=srs,
+            bbox=bbox,
+            dimensions=dimensions,
+            elevation=elevation,
+            format=format,
+            size=size,
+            time=time,
+            transparent=transparent,
+            bgcolor=bgcolor,
+            exceptions=exceptions,
+            kwargs=kwargs)
 
         # extend to GetFeatureInfo-Request
         request['request'] = 'GetFeatureInfo'
@@ -377,7 +409,7 @@ class ServiceProvider(object):
 
 
 class ContentMetadata(object):
-    def __init__(self, elem, parent=None, index=0, parse_remote_metadata=False, timeout=30):
+    def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False, timeout=30):
         if xmltag_split(elem.tag) != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
 
@@ -386,6 +418,8 @@ class ContentMetadata(object):
             self.index = "%s.%d" % (parent.index, index)
         else:
             self.index = str(index)
+
+        self._children = children
 
         self.id = self.name = testXMLValue(elem.find(nspath('Name', WMS_NAMESPACE)))
 
@@ -418,9 +452,9 @@ class ContentMetadata(object):
             maxx = b.find(nspath('eastBoundLongitude', WMS_NAMESPACE))
             maxy = b.find(nspath('northBoundLatitude', WMS_NAMESPACE))
             box = tuple(map(float, [minx.text if minx is not None else None,
-                              miny.text if miny is not None else None,
-                              maxx.text if maxx is not None else None,
-                              maxy.text if maxy is not None else None]))
+                            miny.text if miny is not None else None,
+                            maxx.text if maxx is not None else None,
+                            maxy.text if maxy is not None else None]))
 
             self.boundingBoxWGS84 = tuple(box)
         elif self.parent:
@@ -614,6 +648,19 @@ class ContentMetadata(object):
         for child in elem.findall(nspath('Layer', WMS_NAMESPACE)):
             self.layers.append(ContentMetadata(child, self))
 
+    @property
+    def children(self):
+        return self._children
+
+    @children.setter
+    def children(self, value):
+        if self._children is None:
+            self._children = value
+        else:
+            self._children.extend(value)
+
+    def __str__(self):
+        return 'Layer Name: %s Title: %s' % (self.name, self.title)
 
 class OperationMetadata(object):
     def __init__(self, elem):

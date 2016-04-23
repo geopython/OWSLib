@@ -54,7 +54,7 @@ Test single item accessor
     True
     
     >>> sorted(wms['T'].crsOptions)
-    ['CRS:84', 'EPSG:102100', 'EPSG:102113', 'EPSG:2163', 'EPSG:3785', 'EPSG:3857', 'EPSG:4267', 'EPSG:4269', 'EPSG:4326', 'EPSG:54004', 'EPSG:54008', 'EPSG:900913']
+    ['CRS:84', 'EPSG:27700', 'EPSG:32661', 'EPSG:32761', 'EPSG:3408', 'EPSG:3409', 'EPSG:3857', 'EPSG:41001', 'EPSG:4326']
 
     >>> len(wms['T'].styles) == 10
     True
@@ -71,8 +71,8 @@ Test single item accessor
     >>> len(wms['T'].timepositions)
     271
 
-    >>> wms['T'].defaulttimeposition is None
-    True
+    >>> wms['T'].defaulttimeposition
+    '2015-07-01T12:00:00Z'
 
     >>> wms['T'].parent is not None
     True
