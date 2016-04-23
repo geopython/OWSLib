@@ -5,6 +5,7 @@ wms
      include NotImplementedError for unsupported versions
      update Dimension handling. Retain original timeposition and elevation objects and add generic dimensions array for custom Dimensions.
      update GetMap dimension parameter handling (dim_{dimension name}) as the key).
+     _getcapproperty removed (unused?)
 
 util.py
      update openURL exception handling to include vnd_* exceptions (WMS 1.3.0 GetMap)

@@ -196,6 +196,64 @@ class WebMapService_1_3_0(object):
                timeout=None,
                **kwargs
                ):
+        """Request and return an image from the WMS as a file-like object.
+
+        Parameters
+        ----------
+        layers : list
+            List of content layer names.
+        styles : list
+            Optional list of named styles, must be the same length as the
+            layers list.
+        srs : string
+            A spatial reference system identifier.
+            Note: this is an invalid query parameter key for 1.3.0 but is being
+                  retained for standardization with 1.1.1.
+            Note: throws exception if the spatial ref is ESRI's "no reference"
+                  code (EPSG:0)
+        bbox : tuple
+            (left, bottom, right, top) in srs units (note, this order does not
+                change depending on axis order of the crs).
+
+            CRS:84: (long, lat)
+            EPSG:4326: (lat, long)
+        format : string
+            Output image format such as 'image/jpeg'.
+        size : tuple
+            (width, height) in pixels.
+
+        time : string or list or range
+            Optional. Time value of the specified layer as ISO-8601 (per value)
+        elevation : string or list or range
+            Optional. Elevation value of the specified layer.
+        dimensions: dict (dimension : string or list or range)
+            Optional. Any other Dimension option, as specified in the GetCapabilities
+
+        transparent : bool
+            Optional. Transparent background if True.
+        bgcolor : string
+            Optional. Image background color.
+        method : string
+            Optional. HTTP DCP method name: Get or Post.
+        **kwargs : extra arguments
+            anything else e.g. vendor specific parameters
+
+        Example
+        -------
+            >>> wms = WebMapService('http://webservices.nationalatlas.gov/wms/1million',
+                                    version='1.3.0')
+            >>> img = wms.getmap(layers=['airports1m'],\
+                                 styles=['default'],\
+                                 srs='EPSG:4326',\
+                                 bbox=(-176.646, 17.7016, -64.8017, 71.2854),\
+                                 size=(300, 300),\
+                                 format='image/jpeg',\
+                                 transparent=True)
+            >>> out = open('example.jpg.jpg', 'wb')
+            >>> out.write(img.read())
+            >>> out.close()
+
+        """
 
         try:
             base_url = next((m.get('url') for m in
@@ -203,12 +261,12 @@ class WebMapService_1_3_0(object):
                             m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
-        
+
         request = self.__build_getmap_request(layers=layers, styles=styles, srs=srs, bbox=bbox,
                dimensions=dimensions, elevation=elevation,
                format=format, size=size, time=time, transparent=transparent,
                bgcolor=bgcolor, exceptions=exceptions, **kwargs)
-        
+
         data = urlencode(request)
 
         u = openURL(base_url,
@@ -231,22 +289,25 @@ class WebMapService_1_3_0(object):
         return u
 
     def getfeatureinfo(self, layers=None,
-               styles=None,
-               srs=None,
-               bbox=None,
-               format=None,
-               size=None,
-               time=None,
-               elevation=None,
-               dimensions={},
-               transparent=False,
-               bgcolor='#FFFFFF',
-               exceptions='XML',
-               query_layers = None, xy=None, info_format=None, feature_count=20,
-               method='Get',
-               timeout=None,
-               **kwargs
-               ):
+                       styles=None,
+                       srs=None,
+                       bbox=None,
+                       format=None,
+                       size=None,
+                       time=None,
+                       elevation=None,
+                       dimensions={},
+                       transparent=False,
+                       bgcolor='#FFFFFF',
+                       exceptions='XML',
+                       query_layers=None,
+                       xy=None,
+                       info_format=None,
+                       feature_count=20,
+                       method='Get',
+                       timeout=None,
+                       **kwargs
+                       ):
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods if m.get('type').lower() == method.lower()))
         except StopIteration:

@@ -574,6 +574,17 @@ class ContentMetadata:
         for child in elem.findall('Layer'):
             self.layers.append(ContentMetadata(child, self))
 
+    @property
+    def children(self):
+        return self._children
+
+    @children.setter
+    def children(self, value):
+        if self._children is None:
+            self._children = value
+        else:
+            self._children.extend(value)
+
     def __str__(self):
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
 
@@ -635,68 +646,3 @@ class ContactMetadata:
         position = elem.find('ContactPosition')
         if position is not None: self.position = position.text
         else: self.position = None
-
-      
-class WMSCapabilitiesReader:
-    """Read and parse capabilities document into a lxml.etree infoset
-    """
-
-    def __init__(self, version='1.1.1', url=None, un=None, pw=None):
-        """Initialize"""
-        self.version = version
-        self._infoset = None
-        self.url = url
-        self.username = un
-        self.password = pw
-
-        #if self.username and self.password:
-            ## Provide login information in order to use the WMS server
-            ## Create an OpenerDirector with support for Basic HTTP 
-            ## Authentication...
-            #passman = HTTPPasswordMgrWithDefaultRealm()
-            #passman.add_password(None, self.url, self.username, self.password)
-            #auth_handler = HTTPBasicAuthHandler(passman)
-            #opener = build_opener(auth_handler)
-            #self._open = opener.open
-
-    def capabilities_url(self, service_url):
-        """Return a capabilities url
-        """
-        qs = []
-        if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
-
-        params = [x[0] for x in qs]
-
-        if 'service' not in params:
-            qs.append(('service', 'WMS'))
-        if 'request' not in params:
-            qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
-            qs.append(('version', self.version))
-
-        urlqs = urlencode(tuple(qs))
-        return service_url.split('?')[0] + '?' + urlqs
-
-    def read(self, service_url, timeout=30):
-        """Get and parse a WMS capabilities document, returning an
-        elementtree instance
-
-        service_url is the base url, to which is appended the service,
-        version, and request parameters
-        """
-        getcaprequest = self.capabilities_url(service_url)
-
-        #now split it up again to use the generic openURL function...
-        spliturl=getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password, timeout=timeout)
-        return etree.fromstring(u.read())
-
-    def readString(self, st):
-        """Parse a WMS capabilities document, returning an elementtree instance
-
-        string should be an XML capabilities document
-        """
-        if not isinstance(st, str) and not isinstance(st, bytes):
-            raise ValueError("String must be of type string or bytes, not %s" % type(st))
-        return etree.fromstring(st)
