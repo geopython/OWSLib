@@ -35,6 +35,7 @@ from owslib.util import log
 
 n = Namespaces()
 WMS_NAMESPACE = n.get_namespace("wms")
+OGC_NAMESPACE = n.get_namespace('ogc')
 
 
 class WebMapService_1_3_0(object):
@@ -71,7 +72,7 @@ class WebMapService_1_3_0(object):
         se = self._capabilities.find('ServiceException')
         if se is not None:
             err_message = str(se.text).strip()
-            raise ServiceException(err_message, xml)
+            raise ServiceException(err_message)
 
         # build metadata objects
         self._buildMetadata(parse_remote_metadata)
@@ -303,11 +304,12 @@ class WebMapService_1_3_0(object):
         for k, v in six.iteritems(u.info()):
             headers[k.lower()] = v
 
-        if headers['content-type'] in ['application/vnd.ogc.se_xml', 'text/xml']:
+        # handle the potential charset def
+        if headers['content-type'].split(';')[0] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = str(next(iter(se_tree.find('{http://www.opengis.net/ogc}ServiceException/text()')), '')).strip()
-            raise ServiceException(err_message, se_xml)
+            err_message = six.text_type(se_tree.find(nspath('ServiceException', OGC_NAMESPACE)).text).strip()
+            raise ServiceException(err_message)
         return u
 
     def getfeatureinfo(self, layers=None,
@@ -374,7 +376,7 @@ class WebMapService_1_3_0(object):
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = six.text_type(se_tree.find('ServiceException').text).strip()
-            raise ServiceException(err_message, se_xml)
+            raise ServiceException(err_message)
         return u
 
 class ServiceIdentification(object):

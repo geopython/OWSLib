@@ -28,26 +28,10 @@ import warnings
 import six
 
 from owslib.etree import etree
-from owslib.util import openURL, testXMLValue, extract_xml_list, xmltag_split, OrderedDict
+from owslib.util import openURL, testXMLValue, extract_xml_list, xmltag_split, OrderedDict, ServiceException
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.map.common import WMSCapabilitiesReader
-
-
-class ServiceException(Exception):
-    """WMS ServiceException
-
-    Attributes:
-        message -- short error message
-        xml  -- full xml error message from server
-    """
-
-    def __init__(self, message, xml):
-        self.message = message
-        self.xml = xml
-
-    def __str__(self):
-        return repr(self.message)
 
 
 class CapabilitiesError(Exception):
@@ -95,7 +79,7 @@ class WebMapService_1_1_1(object):
         se = self._capabilities.find('ServiceException')
         if se is not None:
             err_message = str(se.text).strip()
-            raise ServiceException(err_message, xml)
+            raise ServiceException(err_message)
 
         # build metadata objects
         self._buildMetadata(parse_remote_metadata)
@@ -162,7 +146,7 @@ class WebMapService_1_1_1(object):
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = str(se_tree.find('ServiceException').text).strip()
-            raise ServiceException(err_message, se_xml)
+            raise ServiceException(err_message)
         return u
 
     def __build_getmap_request(self, layers=None, styles=None, srs=None, bbox=None,
@@ -272,11 +256,11 @@ class WebMapService_1_1_1(object):
         u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
 
         # check for service exceptions, and return
-        if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
+        if u.info()['Content-Type'].split(';')[0] in ['application/vnd.ogc.se_xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = six.text_type(se_tree.find('ServiceException').text).strip()
-            raise ServiceException(err_message, se_xml)
+            raise ServiceException(err_message)
         return u
 
     def getfeatureinfo(self,
@@ -340,7 +324,7 @@ class WebMapService_1_1_1(object):
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = six.text_type(se_tree.find('ServiceException').text).strip()
-            raise ServiceException(err_message, se_xml)
+            raise ServiceException(err_message)
         return u
 
     def getServiceXML(self):
