@@ -12,7 +12,3 @@ pytest_cov-*
 .*.swp
 *.*~
 .cache
-
-
-*.ipynb
-getmap_outputs/
