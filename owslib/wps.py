@@ -111,6 +111,7 @@ DRAW_NAMESPACE = n.get_namespace("draw")
 
 GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
 DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/climate/derivative/xsd/draw.xsd'
+WFS_SCHEMA_LOCATION = 'http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
 
@@ -1115,7 +1116,7 @@ class Output(InputOutput):
 
         # <LiteralOutput>
         self._parseLiteralData(outputElement, 'LiteralOutput')
-        
+
         # <ComplexData> or <ComplexOutput>
         self._parseComplexData(outputElement, 'ComplexOutput')
 
@@ -1397,8 +1398,7 @@ class WFSFeatureCollection(FeatureCollection):
     FeatureCollection specified by a WFS query.
     All subclasses must implement the getQuery() method to provide the specific query portion of the XML.
     '''
-
-    def __init__(self, wfsUrl, wfsQuery):
+    def __init__(self, wfsUrl, wfsQuery, wfsMethod=None):
         '''
         wfsUrl: the WFS service URL
                 example: wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
@@ -1406,7 +1406,7 @@ class WFSFeatureCollection(FeatureCollection):
         '''
         self.url = wfsUrl
         self.query = wfsQuery
-
+        self.method = wfsMethod
     #    <wps:Reference xlink:href="http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs">
     #      <wps:Body>
     #        <wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" service="WFS" version="1.1.0" outputFormat="text/xml; subtype=gml/3.1.1" xsi:schemaLocation="http://www.opengis.net/wfs ../wfs/1.1.0/WFS.xsd">
@@ -1415,9 +1415,10 @@ class WFSFeatureCollection(FeatureCollection):
     #      </wps:Body>
     #   </wps:Reference>
     def getXml(self):
-
         root = etree.Element(nspath_eval('wps:Reference', namespaces),
                              attrib={nspath_eval("xlink:href", namespaces): self.url})
+        if self.method:
+            root.attrib['method'] = self.method
         bodyElement = etree.SubElement(
             root, nspath_eval('wps:Body', namespaces))
         getFeatureElement = etree.SubElement(
@@ -1425,7 +1426,7 @@ class WFSFeatureCollection(FeatureCollection):
                                              attrib={"service": "WFS",
                                                      "version": "1.1.0",
                                                      "outputFormat": "text/xml; subtype=gml/3.1.1",
-                                                     nspath_eval("xsi:schemaLocation", namespaces): "%s %s" % (namespaces['wfs'], '../wfs/1.1.0/WFS.xsd')})
+                                                     nspath_eval("xsi:schemaLocation", namespaces): "%s %s" % (namespaces['wfs'], WFS_SCHEMA_LOCATION)})
 
         #            <wfs:Query typeName="sample:CONUS_States">
         #                <wfs:PropertyName>the_geom</wfs:PropertyName>
