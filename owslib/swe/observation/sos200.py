@@ -135,9 +135,8 @@ class SensorObservationService_2_0_0(object):
             for kw in kwargs:
                 request[kw]=kwargs[kw]
 
-        data = urlencode(request)
 
-        response = openURL(base_url, data, method, username=self.username, password=self.password, **url_kwargs).read()
+        response = openURL(base_url, request, method, username=self.username, password=self.password, **url_kwargs).read()
         tr = etree.fromstring(response)
 
         if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
@@ -195,9 +194,8 @@ class SensorObservationService_2_0_0(object):
             for kw in kwargs:
                 request[kw]=kwargs[kw]
 
-        data = urlencode(request)
 
-        response = openURL(base_url, data, method, username=self.username, password=self.password, **url_kwargs).read()
+        response = openURL(base_url, request, method, username=self.username, password=self.password, **url_kwargs).read()
         try:
             tr = etree.fromstring(response)
             if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
