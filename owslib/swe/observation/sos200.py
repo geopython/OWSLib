@@ -108,6 +108,10 @@ class SensorObservationService_2_0_0(object):
             self.contents[off.id] = off
             self.offerings.append(off)
 
+        self.observed_properties = []
+        for op in self._capabilities.findall(nspath_eval('sos:contents/sos:Contents/swes:observableProperty', namespaces)):
+            observed_prop = testXMLValue(op)
+            self.observed_properties.append(observed_prop)
     def describe_sensor(self, outputFormat=None,
                               procedure=None,
                               method='Get',
