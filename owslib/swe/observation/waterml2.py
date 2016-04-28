@@ -13,14 +13,17 @@ from owslib.swe.common import Quantity
 from dateutil import parser
 from owslib.swe.observation.om import OM_Observation, Result
 
+
 def get_namespaces():
     ns = Namespaces()
     return ns.get_namespaces(["swe20", "xlink", "sos20", "om20", "gml32",
-        "xsi", "wml2"])
+                              "xsi", "wml2"])
 namespaces = get_namespaces()
+
 
 def nspv(path):
     return nspath_eval(path, namespaces)
+
 
 class MeasurementTimeseriesObservation(OM_Observation):
     ''' A timeseries observation that has a measurement timeseries as
@@ -40,10 +43,12 @@ class MeasurementTimeseriesObservation(OM_Observation):
     def get_result(self):
         return self.result
 
+
 class Timeseries(Result):
     ''' Generic time-series class '''
     def __init__(self, element):
         super(Timeseries, self).__init__(element)
+
 
 class MeasurementTimeseries(Timeseries):
     ''' A WaterML2.0 timeseries of measurements, with per-value metadata. '''
@@ -72,6 +77,7 @@ class MeasurementTimeseries(Timeseries):
         '''
         pass
 
+
 class TimeValuePair(object):
     ''' A time-value pair as specified by WaterML2.0
         Currently no support for tvp metadata.
@@ -89,10 +95,11 @@ class TimeValuePair(object):
         try:
             self.value = float(value_str)
         except:
-            raise ValueError(
-                "Error parsing time series point value: %s" % value_str)
+            self.value = float('nan')
+
     def __str__(self):
         return str(self.datetime) + "," + str(self.value)
+
 
 class TVPMetadata(object):
     def __init__(self, element):
@@ -105,12 +112,13 @@ class TVPMetadata(object):
             "wml2:nilReason")), nspv("xlink:href"))
         self.comment = testXMLValue(element.find(nspv(
             "wml2:comment")))
-        self.qualifier = testXMLValue(element.find(nspv(
+        self.qualifier = testXMLAttribute(element.find(nspv(
             "wml2:qualifier")), nspv("xlink:href"))
         self.processing = testXMLValue(element.find(nspv(
             "wml2:processing")), nspv("xlink:href"))
         self.source = testXMLValue(element.find(nspv(
             "wml2:source")), nspv("xlink:href"))
+
 
 class TVPMeasurementMetadata(TVPMetadata):
     ''' Measurement specific metadata. Still to do:
@@ -130,10 +138,12 @@ class TVPMeasurementMetadata(TVPMetadata):
         if accuracy is not None:
             self.accuracy = Quantity(element)
 
+
 class MeasurementTimeseriesDomainRange(Timeseries):
     ''' Class to implement domain range timeseries encoding '''
     def __init__(self, element):
         super(MeasurementTimeseriesDomainRange, self, element).__init__()
+
 
 class MonitoringPoint(object):
     ''' A WaterML2.0 Monitoring Point, which is a specialised O&M SamplingPoint
