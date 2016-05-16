@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.11.1 documentation &mdash; OWSLib 0.11.1 documentation</title>
+    <title>OWSLib 0.11.2 documentation &mdash; OWSLib 0.11.2 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.11.1',
+        VERSION:     '0.11.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="OWSLib 0.11.1 documentation" href="#" />
+    <link rel="top" title="OWSLib 0.11.2 documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -51,7 +51,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">OWSLib 0.11.1 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.11.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -62,7 +62,7 @@
           <div class="body">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.11.1 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.11.2 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
@@ -76,9 +76,9 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.11.1</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.11.2</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2016-05-12</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2016-05-15</td>
 </tr>
 </tbody>
 </table>
@@ -1339,8 +1339,8 @@ services)</p>
 <span class="go">&#39;1.0.0&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wmts</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">title</span>
 <span class="go">&#39;NASA Global Imagery Browse Services for EOSDIS&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">wmts</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">abstract</span><span class="p">)</span>
-<span class="go">&#39;Near real time imagery from multiple NASA instruments&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">bytearray</span><span class="p">(</span><span class="n">wmts</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">abstract</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+<span class="go">bytearray(b&#39;The Global Imagery Browse Services (GIBS) system is a core EOSDIS component which provides a scalable, responsive, highly available, and community standards based set of imagery services.  These services are designed with the goal of advancing user interactions with EOSDIS\xe2\x80\x99 inter-disciplinary data through enhanced visual representation and discovery.&#39;)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wmts</span><span class="o">.</span><span class="n">identification</span><span class="o">.</span><span class="n">keywords</span>
 <span class="go">[&#39;World&#39;, &#39;Global&#39;]</span>
 </pre></div>
@@ -1697,7 +1697,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.11.1 documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.11.2 documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1774,12 +1774,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">OWSLib 0.11.1 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.11.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2016-05-12T10:02:22Z.
+      Last updated on 2016-05-15T20:43:23Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
