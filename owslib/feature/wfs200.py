@@ -14,10 +14,10 @@ from owslib.etree import etree
 from owslib.util import nspath, testXMLValue, openURL
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
+from owslib.feature.common import WFSCapabilitiesReader
 from owslib.namespaces import Namespaces
 
 #other imports
-import cgi
 from six import PY2
 from six.moves import cStringIO as StringIO
 try:
@@ -45,9 +45,10 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30):
-        """ overridden __new__ method 
-        
+    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
+                username=None, password=None):
+        """ overridden __new__ method
+
         @type url: string
         @param url: url of WFS capabilities document
         @type xml: string
@@ -55,27 +56,33 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         @type parse_remote_metadata: boolean
         @param parse_remote_metadata: whether to fully process MetadataURL elements
         @param timeout: time (in seconds) after which requests should timeout
+        @param username: service authentication username
+        @param password: service authentication password
         @return: initialized WebFeatureService_2_0_0 object
         """
         obj=object.__new__(self)
-        obj.__init__(url, version, xml, parse_remote_metadata, timeout)
+        obj.__init__(url, version, xml, parse_remote_metadata, timeout,
+                     username=username, password=password)
         return obj
-    
+
     def __getitem__(self,name):
         ''' check contents dictionary to allow dict like access to service layers'''
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError("No content named %s" % name)
-    
-    
-    def __init__(self, url,  version, xml=None, parse_remote_metadata=False, timeout=30):
+
+
+    def __init__(self, url,  version, xml=None, parse_remote_metadata=False, timeout=30,
+                 username=None, password=None):
         """Initialize."""
         if log.isEnabledFor(logging.DEBUG):
             log.debug('building WFS %s'%url)
         self.url = url
         self.version = version
         self.timeout = timeout
+        self.username = username
+        self.password = password
         self._capabilities = None
         reader = WFSCapabilitiesReader(self.version)
         if xml:
@@ -83,56 +90,57 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         else:
             self._capabilities = reader.read(self.url)
         self._buildMetadata(parse_remote_metadata)
-    
+
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
-        
+
         #serviceIdentification metadata
         serviceidentelem=self._capabilities.find(nspath('ServiceIdentification'))
-        self.identification=ServiceIdentification(serviceidentelem)  
+        self.identification=ServiceIdentification(serviceidentelem)
         #need to add to keywords list from featuretypelist information:
         featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns=WFS_NAMESPACE))
         featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns=WFS_NAMESPACE))
-        for f in featuretypeelems:  
+        for f in featuretypeelems:
             kwds=f.findall(nspath('Keywords/Keyword',ns=OWS_NAMESPACE))
             if kwds is not None:
                 for kwd in kwds[:]:
                     if kwd.text not in self.identification.keywords:
                         self.identification.keywords.append(kwd.text)
-	
-   
+
+
         #TODO: update serviceProvider metadata, miss it out for now
         serviceproviderelem=self._capabilities.find(nspath('ServiceProvider'))
-        self.provider=ServiceProvider(serviceproviderelem)   
-        
-        #serviceOperations metadata 
+        self.provider=ServiceProvider(serviceproviderelem)
+
+        #serviceOperations metadata
         self.operations=[]
-        
+
         for elem in self._capabilities.find(nspath('OperationsMetadata'))[:]:
             if elem.tag !=nspath('ExtendedCapabilities'):
                 self.operations.append(OperationsMetadata(elem))
-                   
-        #serviceContents metadata: our assumption is that services use a top-level 
-        #layer as a metadata organizer, nothing more. 
-        
-        self.contents={} 
+
+        #serviceContents metadata: our assumption is that services use a top-level
+        #layer as a metadata organizer, nothing more.
+
+        self.contents={}
         featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns=WFS_NAMESPACE))
         features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType', ns=WFS_NAMESPACE))
         for feature in features:
             cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
-            self.contents[cm.id]=cm       
-        
+            self.contents[cm.id]=cm
+
         #exceptions
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
-      
+
     def getcapabilities(self):
-        """Request and return capabilities document from the WFS as a 
+        """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return openURL(reader.capabilities_url(self.url), timeout=self.timeout)
-    
+        return openURL(reader.capabilities_url(self.url), timeout=self.timeout,
+                       username=self.username, password=self.password)
+
     def items(self):
         '''supports dict-like items() access'''
         items=[]
@@ -160,7 +168,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         ----------
         typename : list
             List of typenames (string)
-        filter : string 
+        filter : string
             XML-encoded OGC filter expression.
         bbox : tuple
             (left, bottom, right, top) in the feature type's coordinates == (minx, miny, maxx, maxy)
@@ -201,7 +209,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
         # If method is 'Post', data will be None here
-        u = openURL(url, data, method, timeout=self.timeout)
+        u = openURL(url, data, method, timeout=self.timeout,
+                    username=self.username, password=self.password)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -244,9 +253,9 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetPropertyValue'}
         if query:
             request['query'] = str(query)
-        if valuereference: 
+        if valuereference:
             request['valueReference'] = str(valuereference)
-        if storedquery_id: 
+        if storedquery_id:
             request['storedQuery_id'] = str(storedquery_id)
         if typename:
             request['typename']=str(typename)
@@ -254,17 +263,18 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             for kw in kwargs.keys():
                 request[kw]=str(kwargs[kw])
         encoded_request=urlencode(request)
-        u = openURL(base_url + encoded_request)
+        u = openURL(base_url + encoded_request, timeout=self.timeout,
+                    username=self.username, password=self.password)
         return u.read()
-        
-        
+
+
     def _getStoredQueries(self):
         ''' gets descriptions of the stored queries available on the server '''
         sqs=[]
         #This method makes two calls to the WFS - one ListStoredQueries, and one DescribeStoredQueries. The information is then
         #aggregated in 'StoredQuery' objects
         method=nspath('Get')
-        
+
         #first make the ListStoredQueries response and save the results in a dictionary if form {storedqueryid:(title, returnfeaturetype)}
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('ListStoredQueries').methods if m.get('type').lower() == method.lower()))
@@ -273,9 +283,10 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         encoded_request = urlencode(request)
-        u = openURL(base_url, data=encoded_request, timeout=self.timeout)
+        u = openURL(base_url, data=encoded_request, timeout=self.timeout,
+                    username=self.username, password=self.password)
         tree=etree.fromstring(u.read())
-        tempdict={}       
+        tempdict={}
         for sqelem in tree[:]:
             title=rft=id=None
             id=sqelem.get('id')
@@ -285,17 +296,18 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                 elif elem.tag==nspath('ReturnFeatureType', WFS_NAMESPACE):
                     rft=elem.text
             tempdict[id]=(title,rft)        #store in temporary dictionary
-        
-        #then make the DescribeStoredQueries request and get the rest of the information about the stored queries 
+
+        #then make the DescribeStoredQueries request and get the rest of the information about the stored queries
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('DescribeStoredQueries').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         encoded_request = urlencode(request)
-        u = openURL(base_url, data=encoded_request, timeout=self.timeout)
+        u = openURL(base_url, data=encoded_request, timeout=self.timeout,
+                    username=self.username, password=self.password)
         tree=etree.fromstring(u.read())
-        tempdict2={} 
+        tempdict2={}
         for sqelem in tree[:]:
             params=[] #list to store parameters for the stored query description
             id =sqelem.get('id')
@@ -307,7 +319,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                     newparam=Parameter(elem.get('name'), elem.get('type'))
                     params.append(newparam)
             tempdict2[id]=(abstract, params) #store in another temporary dictionary
-        
+
         #now group the results into StoredQuery objects:
         for key in tempdict.keys():
             sqs.append(StoredQuery(key, tempdict[key][0], tempdict[key][1], tempdict2[key][0], tempdict2[key][1]))
@@ -329,16 +341,16 @@ class StoredQuery(object):
         self.returnfeaturetype=returntype
         self.abstract=abstract
         self.parameters=parameters
-        
+
 class Parameter(object):
     def __init__(self, name, type):
         self.name=name
         self.type=type
-        
-    
+
+
 class ContentMetadata:
     """Abstraction for WFS metadata.
-    
+
     Implements IMetadata.
     """
 
@@ -383,7 +395,7 @@ class ContentMetadata:
         self.verbOptions + [op.tag for op \
             in elem.findall(nspath('Operations/*',ns=WFS_NAMESPACE)) \
             if op.tag not in self.verbOptions]
-        
+
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.timepositions=None
@@ -410,57 +422,3 @@ class ContentMetadata:
                     metadataUrl['metadata'] = None
 
             self.metadataUrls.append(metadataUrl)
-
-
-class WFSCapabilitiesReader(object):
-    """Read and parse capabilities document into a lxml.etree infoset
-    """
-
-    def __init__(self, version='2.0.0'):
-        """Initialize"""
-        self.version = version
-        self._infoset = None
-
-    def capabilities_url(self, service_url):
-        """Return a capabilities url
-        """
-        qs = []
-        if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
-
-        params = [x[0] for x in qs]
-
-        if 'service' not in params:
-            qs.append(('service', 'WFS'))
-        if 'request' not in params:
-            qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
-            qs.append(('version', self.version))
-
-        urlqs = urlencode(tuple(qs))
-        return service_url.split('?')[0] + '?' + urlqs
-
-    def read(self, url, timeout=30):
-        """Get and parse a WFS capabilities document, returning an
-        instance of WFSCapabilitiesInfoset
-
-        Parameters
-        ----------
-        url : string
-            The URL to the WFS capabilities document.
-        timeout : number
-            A timeout value (in seconds) for the request.
-        """
-        request = self.capabilities_url(url)
-        u = openURL(request, timeout=timeout)
-        return etree.fromstring(u.read())
-
-    def readString(self, st):
-        """Parse a WFS capabilities document, returning an
-        instance of WFSCapabilitiesInfoset
-
-        string should be an XML capabilities document
-        """
-        if not isinstance(st, str) and not isinstance(st, bytes):
-            raise ValueError("String must be of type string or bytes, not %s" % type(st))
-        return etree.fromstring(st)

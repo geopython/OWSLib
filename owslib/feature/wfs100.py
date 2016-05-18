@@ -8,7 +8,6 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import cgi
 from six import PY2
 from six.moves import cStringIO as StringIO
 try:
@@ -23,6 +22,7 @@ from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.util import log
 from owslib.feature.schema import get_schema
+from owslib.feature.common import WFSCapabilitiesReader
 
 import pyproj
 
@@ -35,7 +35,7 @@ OGC_NAMESPACE = n.get_namespace("ogc")
 def nspath(path, ns=WFS_NAMESPACE):
     """
     Prefix the given path with the given namespace identifier.
-    
+
     Parameters
     ----------
     path : string
@@ -57,9 +57,10 @@ class WebFeatureService_1_0_0(object):
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30):
-        """ overridden __new__ method 
-        
+    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
+                username=None, password=None):
+        """ overridden __new__ method
+
         @type url: string
         @param url: url of WFS capabilities document
         @type xml: string
@@ -67,69 +68,77 @@ class WebFeatureService_1_0_0(object):
         @type parse_remote_metadata: boolean
         @param parse_remote_metadata: whether to fully process MetadataURL elements
         @param timeout: time (in seconds) after which requests should timeout
+        @param username: service authentication username
+        @param password: service authentication password
         @return: initialized WebFeatureService_1_0_0 object
         """
         obj=object.__new__(self)
-        obj.__init__(url, version, xml, parse_remote_metadata, timeout)
+        obj.__init__(url, version, xml, parse_remote_metadata, timeout,
+                     username=username, password=password)
         return obj
-    
+
     def __getitem__(self,name):
         ''' check contents dictionary to allow dict like access to service layers'''
         if name in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError("No content named %s" % name)
-    
-    
-    def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30):
+
+
+    def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30,
+                 username=None, password=None):
         """Initialize."""
         self.url = url
         self.version = version
         self.timeout = timeout
+        self.username = username
+        self.password = password
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version)
+        reader = WFSCapabilitiesReader(self.version, self.username, self.password)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
             self._capabilities = reader.read(self.url)
         self._buildMetadata(parse_remote_metadata)
-    
+
+
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
-        
+
         #serviceIdentification metadata
         serviceelem=self._capabilities.find(nspath('Service'))
-        self.identification=ServiceIdentification(serviceelem, self.version)  
-    
+        self.identification=ServiceIdentification(serviceelem, self.version)
+
         #serviceProvider metadata
-        self.provider=ServiceProvider(serviceelem)   
-        
-        #serviceOperations metadata 
+        self.provider=ServiceProvider(serviceelem)
+
+        #serviceOperations metadata
         self.operations=[]
         for elem in self._capabilities.find(nspath('Capability/Request'))[:]:
             self.operations.append(OperationMetadata(elem))
-                   
-        #serviceContents metadata: our assumption is that services use a top-level 
-        #layer as a metadata organizer, nothing more. 
-        
-        self.contents={} 
+
+        #serviceContents metadata: our assumption is that services use a top-level
+        #layer as a metadata organizer, nothing more.
+
+        self.contents={}
         featuretypelist=self._capabilities.find(nspath('FeatureTypeList'))
         features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType'))
         for feature in features:
             cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
-            self.contents[cm.id]=cm       
-        
+            self.contents[cm.id]=cm
+
         #exceptions
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
-      
+
     def getcapabilities(self):
-        """Request and return capabilities document from the WFS as a 
+        """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return openURL(reader.capabilities_url(self.url), timeout=self.timeout)
-    
+        return openURL(reader.capabilities_url(self.url), timeout=self.timeout,
+                       username=self.username, password=self.password)
+
     def items(self):
         '''supports dict-like items() access'''
         items=[]
@@ -153,12 +162,12 @@ class WebFeatureService_1_0_0(object):
                    srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get',
                    startindex=None):
         """Request and return feature data as a file-like object.
-        
+
         Parameters
         ----------
         typename : list
             List of typenames (string)
-        filter : string 
+        filter : string
             XML-encoded OGC filter expression.
         bbox : tuple
             (left, bottom, right, top) in the feature type's coordinates.
@@ -179,7 +188,7 @@ class WebFeatureService_1_0_0(object):
         startindex: int (optional)
             Start position to return feature set (paging in combination with maxfeatures)
 
-            
+
         There are 3 different modes of use
 
         1) typename and bbox (simple spatial query)
@@ -199,13 +208,13 @@ class WebFeatureService_1_0_0(object):
             request['bbox'] = ','.join([repr(x) for x in bbox])
         elif filter and typename:
             request['filter'] = str(filter)
-        
+
         if srsname:
             request['srsname'] = str(srsname)
-            
+
         assert len(typename) > 0
         request['typename'] = ','.join(typename)
-        
+
         if propertyname is not None:
             if not isinstance(propertyname, list):
                 propertyname = [propertyname]
@@ -220,9 +229,10 @@ class WebFeatureService_1_0_0(object):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=self.timeout)
-        
-        
+        u = openURL(base_url, data, method, timeout=self.timeout,
+                    username=self.username, password=self.password)
+
+
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
         # is data. We'll check anything smaller.
@@ -268,12 +278,12 @@ class WebFeatureService_1_0_0(object):
         """
 
         return get_schema(self.url, typename, self.version)
-    
+
 
 
 class ServiceIdentification(object):
     ''' Implements IServiceIdentificationMetadata '''
-    
+
     def __init__(self, infoset, version):
         self._root=infoset
         self.type = testXMLValue(self._root.find(nspath('Name')))
@@ -294,7 +304,7 @@ class ServiceProvider(object):
 
 class ContentMetadata:
     """Abstraction for WFS metadata.
-    
+
     Implements IMetadata.
     """
 
@@ -314,7 +324,7 @@ class ContentMetadata:
             self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
                     float(b.attrib['maxx']), float(b.attrib['maxy']), Crs(srs.text))
 
-        # transform wgs84 bbox from given default bboxt 
+        # transform wgs84 bbox from given default bboxt
         self.boundingBoxWGS84 = None
 
         if b is not None and srs is not None:
@@ -340,7 +350,7 @@ class ContentMetadata:
         self.verbOptions + [op.tag for op \
             in elem.findall(nspath('Operations/*')) \
             if op.tag not in self.verbOptions]
-        
+
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.timepositions=None
@@ -372,7 +382,7 @@ class ContentMetadata:
 
 class OperationMetadata:
     """Abstraction for WFS metadata.
-    
+
     Implements IMetadata.
     """
     def __init__(self, elem):
@@ -384,57 +394,3 @@ class OperationMetadata:
         for verb in elem.findall(nspath('DCPType/HTTP/*')):
             url = verb.attrib['onlineResource']
             self.methods.append({'type' : xmltag_split(verb.tag), 'url': url})
-
-
-class WFSCapabilitiesReader(object):
-    """Read and parse capabilities document into a lxml.etree infoset
-    """
-
-    def __init__(self, version='1.0'):
-        """Initialize"""
-        self.version = version
-        self._infoset = None
-
-    def capabilities_url(self, service_url):
-        """Return a capabilities url
-        """
-        qs = []
-        if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
-
-        params = [x[0] for x in qs]
-
-        if 'service' not in params:
-            qs.append(('service', 'WFS'))
-        if 'request' not in params:
-            qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
-            qs.append(('version', self.version))
-
-        urlqs = urlencode(tuple(qs))
-        return service_url.split('?')[0] + '?' + urlqs
-
-    def read(self, url, timeout=30):
-        """Get and parse a WFS capabilities document, returning an
-        instance of WFSCapabilitiesInfoset
-
-        Parameters
-        ----------
-        url : string
-            The URL to the WFS capabilities document.
-        timeout : number
-            A timeout value (in seconds) for the request.
-        """
-        request = self.capabilities_url(url)
-        u = openURL(request, timeout=timeout)
-        return etree.fromstring(u.read())
-
-    def readString(self, st):
-        """Parse a WFS capabilities document, returning an
-        instance of WFSCapabilitiesInfoset
-
-        string should be an XML capabilities document
-        """
-        if not isinstance(st, str) and not isinstance(st, bytes):
-            raise ValueError("String must be of type string or bytes, not %s" % type(st))
-        return etree.fromstring(st)

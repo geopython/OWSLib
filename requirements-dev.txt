@@ -1,3 +1,4 @@
+-r requirements.txt
 pep8
 pytest
 pytest-cov
