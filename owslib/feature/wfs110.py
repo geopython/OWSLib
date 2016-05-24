@@ -1,4 +1,4 @@
-# -*- coding: ISO-8859-15 -*-
+# -*- coding: utf-8 -*-
 # =============================================================================
 # Copyright (c) 2011 Tom Kralidis
 #
@@ -9,7 +9,6 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import cgi
 from six import PY2
 from six.moves import cStringIO as StringIO
 try:
@@ -24,8 +23,10 @@ from owslib.ows import *
 from owslib.fes import *
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
+from owslib.feature.common import WFSCapabilitiesReader
 from owslib.namespaces import Namespaces
 from owslib.util import log
+
 
 def get_namespaces():
     n = Namespaces()
@@ -37,7 +38,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30):
+    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
+                username=None, password=None):
         """ overridden __new__ method
 
         @type url: string
@@ -47,10 +49,13 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         @type parse_remote_metadata: boolean
         @param parse_remote_metadata: whether to fully process MetadataURL elements
         @param timeout: time (in seconds) after which requests should timeout
+        @param username: service authentication username
+        @param password: service authentication password
         @return: initialized WebFeatureService_1_1_0 object
         """
         obj=object.__new__(self)
-        obj.__init__(url, version, xml, parse_remote_metadata, timeout)
+        obj.__init__(url, version, xml, parse_remote_metadata, timeout,
+                     username=username, password=password)
         return obj
 
     def __getitem__(self,name):
@@ -61,11 +66,14 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             raise KeyError("No content named %s" % name)
 
 
-    def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30):
+    def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30,
+                 username=None, password=None):
         """Initialize."""
         self.url = url
         self.version = version
         self.timeout = timeout
+        self.username = username
+        self.password = password
         self._capabilities = None
         self.owscommon = OwsCommon('1.0.0')
         reader = WFSCapabilitiesReader(self.version)
@@ -111,7 +119,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return openURL(reader.capabilities_url(self.url), timeout=self.timeout)
+        return openURL(reader.capabilities_url(self.url), timeout=self.timeout,
+                       username=self.username, password=self.password)
 
     def items(self):
         '''supports dict-like items() access'''
@@ -222,7 +231,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=self.timeout)
+        u = openURL(base_url, data, method, timeout=self.timeout,
+                    username=self.username, password=self.password)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -324,57 +334,3 @@ class ContentMetadata:
         self.styles=None
         self.timepositions=None
         self.defaulttimeposition=None
-
-class WFSCapabilitiesReader(object):
-    """Read and parse capabilities document into a lxml.etree infoset
-    """
-
-    def __init__(self, version='1.0'):
-        """Initialize"""
-        self.version = version
-        self._infoset = None
-
-    def capabilities_url(self, service_url):
-        """Return a capabilities url
-        """
-        qs = []
-        if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
-
-        params = [x[0] for x in qs]
-
-        if 'service' not in params:
-            qs.append(('service', 'WFS'))
-        if 'request' not in params:
-            qs.append(('request', 'GetCapabilities'))
-        if 'version' not in params:
-            qs.append(('version', self.version))
-
-        urlqs = urlencode(tuple(qs))
-        return service_url.split('?')[0] + '?' + urlqs
-
-    def read(self, url, timeout=30):
-        """Get and parse a WFS capabilities document, returning an
-        instance of WFSCapabilitiesInfoset
-
-        Parameters
-        ----------
-        url : string
-            The URL to the WFS capabilities document.
-        timeout : number
-            A timeout value (in seconds) for the request.
-        """
-        request = self.capabilities_url(url)
-        u = openURL(request, timeout=timeout)
-        return etree.fromstring(u.read())
-
-    def readString(self, st):
-        """Parse a WFS capabilities document, returning an
-        instance of WFSCapabilitiesInfoset
-
-        string should be an XML capabilities document
-        """
-        if not isinstance(st, str) and not isinstance(st, bytes):
-            raise ValueError("String must be of type string or bytes, not %s" % type(st))
-        return etree.fromstring(st)
-
