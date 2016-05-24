@@ -3,3 +3,7 @@ pytest
 pytest-cov
 Pillow
 tox
+# install libraries to stop SSL related InsecurePlatformWarning
+pyopenssl        ; python_version < '2.7.9'
+ndg-httpsclient  ; python_version < '2.7.9'
+pyasn1           ; python_version < '2.7.9'
