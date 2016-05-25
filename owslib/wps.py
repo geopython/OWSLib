@@ -87,7 +87,8 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 from __future__ import (absolute_import, division, print_function)
 
 from owslib.etree import etree
-from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
+from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
+from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
 from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue,
                          getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
@@ -1113,7 +1114,9 @@ class Output(InputOutput):
         # />
         referenceElement = outputElement.find(nspath('Reference', ns=wpsns))
         if referenceElement is not None:
-            self.reference = referenceElement.get('href')
+            self.reference = referenceElement.get( nspath('href', XLINK_NAMESPACE) )
+            if self.reference is None:
+                self.reference = referenceElement.get('href')
             self.mimeType = referenceElement.get('mimeType')
 
         # <LiteralOutput>
