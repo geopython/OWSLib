@@ -307,6 +307,10 @@ class WebProcessingService(object):
     def _parseCapabilitiesMetadata(self, root):
         ''' Sets up capabilities metadata objects '''
 
+        # reset metdata
+        self.operations = []
+        self.processes = []
+        
         # use the WPS namespace defined in the document root
         wpsns = getNamespace(root)
 
