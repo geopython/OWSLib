@@ -1282,14 +1282,16 @@ class WPSException:
 class Metadata(object):
     """Initialize an OWS Metadata construct"""
     def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
+        self.url = None
+        self.title = None
+
         if elem is not None:
-            urlattrib=elem.attrib[nspath('href', XLINK_NAMESPACE)]
-            self.url = testXMLValue(urlattrib, True)
-            titleattrib=elem.attrib[nspath('title', XLINK_NAMESPACE)]
-            self.title = testXMLValue(titleattrib, True)
-        else:
-            self.url = None
-            self.title = None
+            urlattrib=elem.attrib.get(nspath('href', XLINK_NAMESPACE))
+            if urlattrib is not None:
+                self.url = testXMLValue(urlattrib, True)
+            titleattrib=elem.attrib.get(nspath('title', XLINK_NAMESPACE))
+            if titleattrib is not None:
+                self.title = testXMLValue(titleattrib, True)
 
 class Process(object):
 
