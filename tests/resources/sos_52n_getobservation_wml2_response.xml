@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sos:GetObservationResponse xmlns:sos="http://www.opengis.net/sos/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:om="http://www.opengis.net/om/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wml2="http://www.opengis.net/waterml/2.0" xsi:schemaLocation="http://www.opengis.net/waterml/2.0 http://schemas.opengis.net/waterml/2.0/waterml2.xsd http://www.opengis.net/sos/2.0 http://schemas.opengis.net/sos/2.0/sosGetObservation.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd http://www.opengis.net/gmlcov/1.0 http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd wml2dr http://schemas.opengis.net/waterml/2.0/domain-range-informative/timeseries-domain-range.xsd http://www.opengis.net/om/2.0 http://schemas.opengis.net/om/2.0/observation.xsd">
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_9556E2084893FEC9C6F407458B91F194C86359D6">
+      <om:phenomenonTime>
+        <gml:TimePeriod gml:id="phenomenonTime_1">
+          <gml:beginPosition>2014-07-01T00:01:42.000Z</gml:beginPosition>
+          <gml:endPosition>2014-07-01T01:16:41.000Z</gml:endPosition>
+        </gml:TimePeriod>
+      </om:phenomenonTime>
+      <om:resultTime>
+        <gml:TimeInstant gml:id="ti_C597E726F2C23BD5C20800061BCDFD0442EF6E44">
+          <gml:timePosition>2014-07-01T00:01:42.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:resultTime>
+      <om:procedure xlink:href="http://geoviqua.dev.52north.org/procedures/WXT520"/>
+      <om:observedProperty xlink:href="http://geoviqua.dev.52north.org/properties/AirTemperature"/>
+      <om:featureOfInterest xlink:href="http://geoviqua.dev.52north.org/stations/Vaisala-WXT520" xlink:title="Vaisala_WXT520"/>
+      <om:result>
+        <wml2:MeasurementTimeseries gml:id="timeseries.1">
+          <wml2:metadata>
+            <wml2:TimeseriesMetadata>
+              <wml2:temporalExtent xlink:href="#phenomenonTime_1"/>
+            </wml2:TimeseriesMetadata>
+          </wml2:metadata>
+          <wml2:defaultPointMetadata>
+            <wml2:DefaultTVPMeasurementMetadata>
+              <wml2:uom code="degC"/>
+              <wml2:interpolationType xlink:href="http://www.opengis.net/def/timeseriesType/WaterML/2.0/continuous" xlink:title="Instantaneous"/>
+            </wml2:DefaultTVPMeasurementMetadata>
+          </wml2:defaultPointMetadata>
+          <wml2:point>
+            <wml2:MeasurementTVP>
+              <wml2:time>2014-07-01T00:01:42.000Z</wml2:time>
+              <wml2:value>12.2</wml2:value>
+            </wml2:MeasurementTVP>
+          </wml2:point>
+          <wml2:point>
+            <wml2:MeasurementTVP>
+              <wml2:time>2014-07-01T00:16:42.000Z</wml2:time>
+              <wml2:value>12.3</wml2:value>
+            </wml2:MeasurementTVP>
+          </wml2:point>
+          <wml2:point>
+            <wml2:MeasurementTVP>
+              <wml2:time>2014-07-01T00:31:42.000Z</wml2:time>
+              <wml2:value>12.0</wml2:value>
+            </wml2:MeasurementTVP>
+          </wml2:point>
+          <wml2:point>
+            <wml2:MeasurementTVP>
+              <wml2:time>2014-07-01T00:46:42.000Z</wml2:time>
+              <wml2:value>11.9</wml2:value>
+            </wml2:MeasurementTVP>
+          </wml2:point>
+          <wml2:point>
+            <wml2:MeasurementTVP>
+              <wml2:time>2014-07-01T01:01:42.000Z</wml2:time>
+              <wml2:value>12.1</wml2:value>
+            </wml2:MeasurementTVP>
+          </wml2:point>
+          <wml2:point>
+            <wml2:MeasurementTVP>
+              <wml2:time>2014-07-01T01:16:41.000Z</wml2:time>
+              <wml2:value>12.5</wml2:value>
+            </wml2:MeasurementTVP>
+          </wml2:point>
+        </wml2:MeasurementTimeseries>
+      </om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+</sos:GetObservationResponse>

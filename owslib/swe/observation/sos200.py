@@ -2,20 +2,22 @@ from __future__ import (absolute_import, division, print_function)
 
 import cgi
 from owslib.etree import etree
-from datetime import datetime
-try:                    # Python 3
-    from urllib.parse import urlencode
-except ImportError:     # Python 2
-    from urllib import urlencode
+try:
+    from urllib.parse import urlencode  # Python 3
+except ImportError:
+    from urllib import urlencode  # Python 2
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200
-from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
+from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, extract_time
 from owslib.namespaces import Namespaces
+from owslib.swe.observation.om import MeasurementObservation
+from owslib.swe.observation.waterml2 import MeasurementTimeseriesObservation
+
 
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["fes","ogc","om","gml32","sa","sml","swe20","swes","xlink"])
+    ns = n.get_namespaces(["fes", "ogc", "xsi", "om20", "gml32", "sa", "sml", "swe20", "swes", "xlink"])
     ns["ows"] = n.get_namespace("ows110")
     ns["sos"] = n.get_namespace("sos20")
     return ns
@@ -29,13 +31,13 @@ class SensorObservationService_2_0_0(object):
         Implements ISensorObservationService.
     """
 
-    def __new__(self,url, version, xml=None, username=None, password=None):
+    def __new__(self, url, version, xml=None, username=None, password=None):
         """overridden __new__ method"""
-        obj=object.__new__(self)
+        obj = object.__new__(self)
         obj.__init__(url, version, xml, username, password)
         return obj
 
-    def __getitem__(self,id):
+    def __getitem__(self, id):
         ''' check contents dictionary to allow dict like access to service observational offerings'''
         if id in self.__getattribute__('contents').keys():
             return self.__getattribute__('contents')[id]
@@ -87,7 +89,7 @@ class SensorObservationService_2_0_0(object):
         self.provider = ows.ServiceProvider(service_provider_element)
 
         # ows:OperationsMetadata metadata
-        self.operations= []
+        self.operations = []
         for elem in self._capabilities.findall(nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
             self.operations.append(ows.OperationsMetadata(elem))
 
@@ -106,10 +108,14 @@ class SensorObservationService_2_0_0(object):
             self.contents[off.id] = off
             self.offerings.append(off)
 
-    def describe_sensor(self, outputFormat=None,
-                              procedure=None,
-                              method='Get',
-                              **kwargs):
+        self.observed_properties = []
+        for op in self._capabilities.findall(nspath_eval('sos:contents/sos:Contents/swes:observableProperty', namespaces)):
+            observed_prop = testXMLValue(op)
+            self.observed_properties.append(observed_prop)
+
+    def describe_sensor(self, outputFormat=None, procedure=None, method=None, **kwargs):
+
+        method = method or 'Get'
 
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('DescribeSensor').methods if m.get('type').lower() == method.lower()))
@@ -126,16 +132,14 @@ class SensorObservationService_2_0_0(object):
 
         url_kwargs = {}
         if 'timeout' in kwargs:
-            url_kwargs['timeout'] = kwargs.pop('timeout') # Client specified timeout value
+            url_kwargs['timeout'] = kwargs.pop('timeout')  # Client specified timeout value
 
         # Optional Fields
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
 
-        data = urlencode(request)
-
-        response = openURL(base_url, data, method, username=self.username, password=self.password, **url_kwargs).read()
+        response = openURL(base_url, request, method, username=self.username, password=self.password, **url_kwargs).read()
         tr = etree.fromstring(response)
 
         if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
@@ -143,12 +147,14 @@ class SensorObservationService_2_0_0(object):
 
         return response
 
-    def get_observation(self, responseFormat=None,
-                              offerings=None,
-                              observedProperties=None,
-                              eventTime=None,
-                              method='Get',
-                              **kwargs):
+    def get_observation(self,
+                        responseFormat=None,
+                        offerings=None,
+                        observedProperties=None,
+                        eventTime=None,
+                        procedure=None,
+                        method=None,
+                        **kwargs):
         """
         Parameters
         ----------
@@ -160,7 +166,11 @@ class SensorObservationService_2_0_0(object):
             anything else e.g. vendor specific parameters
         """
 
-        base_url = self.get_operation_by_name('GetObservation').methods[method]['url']
+        method = method or 'Get'
+        # Pluck out the get observation URL for HTTP method - methods is an
+        # array of dicts
+        methods = self.get_operation_by_name('GetObservation').methods
+        base_url = [ m['url'] for m in methods if m['type'] == method][0]
 
         request = {'service': 'SOS', 'version': self.version, 'request': 'GetObservation'}
 
@@ -180,18 +190,16 @@ class SensorObservationService_2_0_0(object):
 
         url_kwargs = {}
         if 'timeout' in kwargs:
-            url_kwargs['timeout'] = kwargs.pop('timeout') # Client specified timeout value
+            url_kwargs['timeout'] = kwargs.pop('timeout')  # Client specified timeout value
 
         if procedure is not None:
             request['procedure'] = procedure
 
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
 
-        data = urlencode(request)
-
-        response = openURL(base_url, data, method, username=self.username, password=self.password, **url_kwargs).read()
+        response = openURL(base_url, request, method, username=self.username, password=self.password, **url_kwargs).read()
         try:
             tr = etree.fromstring(response)
             if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
@@ -211,6 +219,7 @@ class SensorObservationService_2_0_0(object):
             if item.name.lower() == name.lower():
                 return item
         raise KeyError("No Operation named %s" % name)
+
 
 class SosObservationOffering(object):
     def __init__(self, element):
@@ -270,9 +279,10 @@ class SosObservationOffering(object):
 
     def __str__(self):
         return 'Offering id: %s, name: %s' % (self.id, self.name)
-    
+
     def __repr__(self):
         return "<SosObservationOffering '%s'>" % self.name
+
 
 class SosCapabilitiesReader(object):
     def __init__(self, version="2.0.0", url=None, username=None, password=None):
@@ -310,7 +320,7 @@ class SosCapabilitiesReader(object):
             version, and request parameters
         """
         getcaprequest = self.capabilities_url(service_url)
-        spliturl=getcaprequest.split('?')
+        spliturl = getcaprequest.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password)
         return etree.fromstring(u.read())
 
@@ -323,3 +333,52 @@ class SosCapabilitiesReader(object):
         if not isinstance(st, str) and not isinstance(st, bytes):
             raise ValueError("String must be of type string or bytes, not %s" % type(st))
         return etree.fromstring(st)
+
+
+class SOSGetObservationResponse(object):
+    """ The base response type from SOS2.0. Container for OM_Observation
+    objects.
+    """
+    def __init__(self, element):
+        obs_data = element.findall(
+            nspath_eval("sos:observationData/om20:OM_Observation", namespaces))
+        self.observations = []
+        decoder = ObservationDecoder()
+        for obs in obs_data:
+            parsed_obs = decoder.decode_observation(obs)
+            self.observations.append(parsed_obs)
+
+    def __iter__(self):
+        for obs in self.observations:
+            yield obs
+
+    def __getitem__(self, index):
+        return self.observations[index]
+
+
+class ObservationDecoder(object):
+    """ Class to handle decoding different Observation types.
+        The decode method inspects the type of om:result element and
+        returns the appropriate observation type, which handles parsing
+        of the result.
+    """
+    def decode_observation(self, element):
+        """ Returns a parsed observation of the appropriate type,
+        by inspecting the result element.
+
+        'element' input is the XML tree of the OM_Observation object
+        """
+        result_element = element.find(nspath_eval("om20:result", namespaces))
+        if len(result_element) == 0:
+            result_type = testXMLAttribute(
+                result_element, nspath_eval("xsi:type", namespaces))
+        else:
+            result_type = list(result_element)[0].tag
+
+        if result_type.find('MeasureType') != -1:
+            return MeasurementObservation(element)
+        elif (result_type ==
+                '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries'):
+            return MeasurementTimeseriesObservation(element)
+        else:
+            raise NotImplementedError('Result type {} not supported'.format(result_type))
