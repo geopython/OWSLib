@@ -26,6 +26,7 @@ except ImportError:     # Python 2
 import warnings
 
 import six
+import re
 
 from .etree import etree
 from .util import openURL, testXMLValue, extract_xml_list, xmltag_split, OrderedDict
@@ -521,7 +522,7 @@ class ContentMetadata:
         for extent in elem.findall('Extent'):
             if extent.attrib.get("name").lower() =='time':
                 if extent.text:
-                    self.timepositions=extent.text.split(',')
+                    self.timepositions=[tpos.strip() for tpos in extent.text.split(',')]
                     self.defaulttimeposition = extent.attrib.get("default")
                     break
                 
@@ -697,7 +698,7 @@ class WMSCapabilitiesReader:
         #now split it up again to use the generic openURL function...
         spliturl=getcaprequest.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password, timeout=timeout, headers=self.headers)
-        return etree.fromstring(u.read())
+        return self.readString(u.read())
 
     def readString(self, st):
         """Parse a WMS capabilities document, returning an elementtree instance
@@ -706,4 +707,6 @@ class WMSCapabilitiesReader:
         """
         if not isinstance(st, str) and not isinstance(st, bytes):
             raise ValueError("String must be of type string or bytes, not %s" % type(st))
-        return etree.fromstring(st)
+        # Remove the default namespace definition (xmlns="http://some/namespace")
+        xml = re.sub(r'\sxmlns="[^"]+"', '', st, count=1)
+        return etree.fromstring(xml)
