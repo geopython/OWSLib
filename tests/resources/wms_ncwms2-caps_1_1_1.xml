@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://schemas.opengis.net/wms/1.1.1/capabilities_1_1_1.dtd">
+<WMT_MS_Capabilities
+        version="1.1.1"
+        updateSequence="2016-07-29T19:46:56.942+02:00"
+        xmlns="http://www.opengis.net/wms"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+    <Service>
+        <Name>OGC:WMS</Name>
+        <Title>Birdhouse ncWMS2 Server</Title>
+        <Abstract>ncWMS2 Web Map Service used in Birdhouse</Abstract>
+        <KeywordList>
+        </KeywordList>
+        <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms"/>
+        <ContactInformation>
+            <ContactPersonPrimary>
+                <ContactPerson>Birdhouse Admin</ContactPerson>
+                <ContactOrganization>Birdhouse</ContactOrganization>
+            </ContactPersonPrimary>
+            <ContactVoiceTelephone></ContactVoiceTelephone>
+            <ContactElectronicMailAddress></ContactElectronicMailAddress>
+        </ContactInformation>
+        <Fees>none</Fees>
+        <AccessConstraints>none</AccessConstraints>
+    </Service>
+    <Capability>
+        <Request>
+            <GetCapabilities>
+                <Format>application/vnd.ogc.wms_xml</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms"/>
+                        </Get>
+                    </HTTP>
+                </DCPType>
+            </GetCapabilities>
+            <GetMap>
+                <Format>image/png</Format>
+                <Format>image/png;mode=32bit</Format>
+                <Format>image/gif</Format>
+                <Format>image/jpeg</Format>
+                <Format>application/vnd.google-earth.kmz</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms"/>
+                        </Get>
+                    </HTTP>
+                </DCPType>
+            </GetMap>
+            <GetFeatureInfo>
+                <Format>text/plain</Format>
+                <Format>text/xml</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms"/>
+                        </Get>
+                    </HTTP>
+                </DCPType>
+            </GetFeatureInfo>
+        </Request>
+        <Exception>
+            <Format>application/vnd.ogc.wms_xml</Format>
+        </Exception>
+        <Layer>
+            <Title>Birdhouse ncWMS2 Server</Title>
+            <SRS>EPSG:4326</SRS>
+            <SRS>CRS:84</SRS>
+            <SRS>EPSG:41001</SRS>
+            <SRS>EPSG:27700</SRS>
+            <SRS>EPSG:3408</SRS>
+            <SRS>EPSG:3409</SRS>
+            <SRS>EPSG:3857</SRS>
+            <SRS>EPSG:5041</SRS>
+            <SRS>EPSG:5042</SRS>
+            <SRS>EPSG:32661</SRS>
+            <SRS>EPSG:32761</SRS>
+            <Layer>
+                <Title>Dynamic service from outputs/tasmax_EUR-44_MPI-M-MPI-ESM-LR_historical_r1i1p1_MPI-CSC-REMO2009_v1_mon_200101-200512.nc</Title>
+    <Layer >
+        <Name>outputs/tasmax_EUR-44_MPI-M-MPI-ESM-LR_historical_r1i1p1_MPI-CSC-REMO2009_v1_mon_200101-200512.nc/lat</Name>
+        <Title>lat</Title>
+        <LatLonBoundingBox minx="-44.74485529448063" maxx="65.15145647131322" miny="21.91730606939339" maxy="66.702205074604"/>
+        <BoundingBox SRS="CRS:84" minx="-44.74485529448063" maxx="65.15145647131322" miny="21.91730606939339" maxy="66.702205074604"/>
+    
+        <Style>
+            <Name>default-scalar/default</Name>
+            <Title>default-scalar/default</Title>
+            <Abstract>default-scalar style, using the default palette.  Available palettes are:
+            default, 
+            default-inv, 
+            div-BrBG, 
+            div-BrBG-inv, 
+            div-BuRd, 
+            div-BuRd-inv, 
+            div-BuRd2, 
+            div-BuRd2-inv, 
+            div-PRGn, 
+            div-PRGn-inv, 
+            div-PiYG, 
+            div-PiYG-inv, 
+            div-PuOr, 
+            div-PuOr-inv, 
+            div-RdBu, 
+            div-RdBu-inv, 
+            div-RdGy, 
+            div-RdGy-inv, 
+            div-RdYlBu, 
+            div-RdYlBu-inv, 
+            div-RdYlGn, 
+            div-RdYlGn-inv, 
+            div-Spectral, 
+            div-Spectral-inv, 
+            psu-inferno, 
+            psu-inferno-inv, 
+            psu-magma, 
+            psu-magma-inv, 
+            psu-plasma, 
+            psu-plasma-inv, 
+            psu-viridis, 
+            psu-viridis-inv, 
+            seq-BkBu, 
+            seq-BkBu-inv, 
+            seq-BkGn, 
+            seq-BkGn-inv, 
+            seq-BkRd, 
+            seq-BkRd-inv, 
+            seq-BkYl, 
+            seq-BkYl-inv, 
+            seq-BlueHeat, 
+            seq-BlueHeat-inv, 
+            seq-Blues, 
+            seq-Blues-inv, 
+            seq-BuGn, 
+            seq-BuGn-inv, 
+            seq-BuPu, 
+            seq-BuPu-inv, 
+            seq-BuYl, 
+            seq-BuYl-inv, 
+            seq-GnBu, 
+            seq-GnBu-inv, 
+            seq-Greens, 
+            seq-Greens-inv, 
+            seq-Greys, 
+            seq-Greys-inv, 
+            seq-GreysRev, 
+            seq-GreysRev-inv, 
+            seq-Heat, 
+            seq-Heat-inv, 
+            seq-OrRd, 
+            seq-OrRd-inv, 
+            seq-Oranges, 
+            seq-Oranges-inv, 
+            seq-PuBu, 
+            seq-PuBu-inv, 
+            seq-PuBuGn, 
+            seq-PuBuGn-inv, 
+            seq-PuRd, 
+            seq-PuRd-inv, 
+            seq-Purples, 
+            seq-Purples-inv, 
+            seq-RdPu, 
+            seq-RdPu-inv, 
+            seq-Reds, 
+            seq-Reds-inv, 
+            seq-YlGn, 
+            seq-YlGn-inv, 
+            seq-YlGnBu, 
+            seq-YlGnBu-inv, 
+            seq-YlOrBr, 
+            seq-YlOrBr-inv, 
+            seq-YlOrRd, 
+            seq-YlOrRd-inv, 
+            seq-cubeYF, 
+            seq-cubeYF-inv, 
+            x-Ncview, 
+            x-Ncview-inv, 
+            x-Occam, 
+            x-Occam-inv, 
+            x-Rainbow, 
+            x-Rainbow-inv, 
+            x-Sst, 
+            x-Sst-inv, 
+            </Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=default&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>default-scalar/x-Rainbow</Name>
+            <Title>default-scalar/x-Rainbow</Title>
+            <Abstract>default-scalar style, using the x-Rainbow palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>default-scalar/x-Rainbow-inv</Name>
+            <Title>default-scalar/x-Rainbow-inv</Title>
+            <Abstract>default-scalar style, using the x-Rainbow-inv palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow-inv&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>contours</Name>
+            <Title>contours</Title>
+            <Abstract>contours style</Abstract>
+        </Style>
+        <Style>
+            <Name>raster/default</Name>
+            <Title>raster/default</Title>
+            <Abstract>raster style, using the default palette.  Available palettes are:
+            default, 
+            default-inv, 
+            div-BrBG, 
+            div-BrBG-inv, 
+            div-BuRd, 
+            div-BuRd-inv, 
+            div-BuRd2, 
+            div-BuRd2-inv, 
+            div-PRGn, 
+            div-PRGn-inv, 
+            div-PiYG, 
+            div-PiYG-inv, 
+            div-PuOr, 
+            div-PuOr-inv, 
+            div-RdBu, 
+            div-RdBu-inv, 
+            div-RdGy, 
+            div-RdGy-inv, 
+            div-RdYlBu, 
+            div-RdYlBu-inv, 
+            div-RdYlGn, 
+            div-RdYlGn-inv, 
+            div-Spectral, 
+            div-Spectral-inv, 
+            psu-inferno, 
+            psu-inferno-inv, 
+            psu-magma, 
+            psu-magma-inv, 
+            psu-plasma, 
+            psu-plasma-inv, 
+            psu-viridis, 
+            psu-viridis-inv, 
+            seq-BkBu, 
+            seq-BkBu-inv, 
+            seq-BkGn, 
+            seq-BkGn-inv, 
+            seq-BkRd, 
+            seq-BkRd-inv, 
+            seq-BkYl, 
+            seq-BkYl-inv, 
+            seq-BlueHeat, 
+            seq-BlueHeat-inv, 
+            seq-Blues, 
+            seq-Blues-inv, 
+            seq-BuGn, 
+            seq-BuGn-inv, 
+            seq-BuPu, 
+            seq-BuPu-inv, 
+            seq-BuYl, 
+            seq-BuYl-inv, 
+            seq-GnBu, 
+            seq-GnBu-inv, 
+            seq-Greens, 
+            seq-Greens-inv, 
+            seq-Greys, 
+            seq-Greys-inv, 
+            seq-GreysRev, 
+            seq-GreysRev-inv, 
+            seq-Heat, 
+            seq-Heat-inv, 
+            seq-OrRd, 
+            seq-OrRd-inv, 
+            seq-Oranges, 
+            seq-Oranges-inv, 
+            seq-PuBu, 
+            seq-PuBu-inv, 
+            seq-PuBuGn, 
+            seq-PuBuGn-inv, 
+            seq-PuRd, 
+            seq-PuRd-inv, 
+            seq-Purples, 
+            seq-Purples-inv, 
+            seq-RdPu, 
+            seq-RdPu-inv, 
+            seq-Reds, 
+            seq-Reds-inv, 
+            seq-YlGn, 
+            seq-YlGn-inv, 
+            seq-YlGnBu, 
+            seq-YlGnBu-inv, 
+            seq-YlOrBr, 
+            seq-YlOrBr-inv, 
+            seq-YlOrRd, 
+            seq-YlOrRd-inv, 
+            seq-cubeYF, 
+            seq-cubeYF-inv, 
+            x-Ncview, 
+            x-Ncview-inv, 
+            x-Occam, 
+            x-Occam-inv, 
+            x-Rainbow, 
+            x-Rainbow-inv, 
+            x-Sst, 
+            x-Sst-inv, 
+            </Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=default&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>raster/x-Rainbow</Name>
+            <Title>raster/x-Rainbow</Title>
+            <Abstract>raster style, using the x-Rainbow palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>raster/x-Rainbow-inv</Name>
+            <Title>raster/x-Rainbow-inv</Title>
+            <Abstract>raster style, using the x-Rainbow-inv palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow-inv&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+</Layer>
+    <Layer >
+        <Name>outputs/tasmax_EUR-44_MPI-M-MPI-ESM-LR_historical_r1i1p1_MPI-CSC-REMO2009_v1_mon_200101-200512.nc/lon</Name>
+        <Title>lon</Title>
+        <LatLonBoundingBox minx="-44.74485529448063" maxx="65.15145647131322" miny="21.91730606939339" maxy="66.702205074604"/>
+        <BoundingBox SRS="CRS:84" minx="-44.74485529448063" maxx="65.15145647131322" miny="21.91730606939339" maxy="66.702205074604"/>
+    
+        <Style>
+            <Name>default-scalar/default</Name>
+            <Title>default-scalar/default</Title>
+            <Abstract>default-scalar style, using the default palette.  Available palettes are:
+            default, 
+            default-inv, 
+            div-BrBG, 
+            div-BrBG-inv, 
+            div-BuRd, 
+            div-BuRd-inv, 
+            div-BuRd2, 
+            div-BuRd2-inv, 
+            div-PRGn, 
+            div-PRGn-inv, 
+            div-PiYG, 
+            div-PiYG-inv, 
+            div-PuOr, 
+            div-PuOr-inv, 
+            div-RdBu, 
+            div-RdBu-inv, 
+            div-RdGy, 
+            div-RdGy-inv, 
+            div-RdYlBu, 
+            div-RdYlBu-inv, 
+            div-RdYlGn, 
+            div-RdYlGn-inv, 
+            div-Spectral, 
+            div-Spectral-inv, 
+            psu-inferno, 
+            psu-inferno-inv, 
+            psu-magma, 
+            psu-magma-inv, 
+            psu-plasma, 
+            psu-plasma-inv, 
+            psu-viridis, 
+            psu-viridis-inv, 
+            seq-BkBu, 
+            seq-BkBu-inv, 
+            seq-BkGn, 
+            seq-BkGn-inv, 
+            seq-BkRd, 
+            seq-BkRd-inv, 
+            seq-BkYl, 
+            seq-BkYl-inv, 
+            seq-BlueHeat, 
+            seq-BlueHeat-inv, 
+            seq-Blues, 
+            seq-Blues-inv, 
+            seq-BuGn, 
+            seq-BuGn-inv, 
+            seq-BuPu, 
+            seq-BuPu-inv, 
+            seq-BuYl, 
+            seq-BuYl-inv, 
+            seq-GnBu, 
+            seq-GnBu-inv, 
+            seq-Greens, 
+            seq-Greens-inv, 
+            seq-Greys, 
+            seq-Greys-inv, 
+            seq-GreysRev, 
+            seq-GreysRev-inv, 
+            seq-Heat, 
+            seq-Heat-inv, 
+            seq-OrRd, 
+            seq-OrRd-inv, 
+            seq-Oranges, 
+            seq-Oranges-inv, 
+            seq-PuBu, 
+            seq-PuBu-inv, 
+            seq-PuBuGn, 
+            seq-PuBuGn-inv, 
+            seq-PuRd, 
+            seq-PuRd-inv, 
+            seq-Purples, 
+            seq-Purples-inv, 
+            seq-RdPu, 
+            seq-RdPu-inv, 
+            seq-Reds, 
+            seq-Reds-inv, 
+            seq-YlGn, 
+            seq-YlGn-inv, 
+            seq-YlGnBu, 
+            seq-YlGnBu-inv, 
+            seq-YlOrBr, 
+            seq-YlOrBr-inv, 
+            seq-YlOrRd, 
+            seq-YlOrRd-inv, 
+            seq-cubeYF, 
+            seq-cubeYF-inv, 
+            x-Ncview, 
+            x-Ncview-inv, 
+            x-Occam, 
+            x-Occam-inv, 
+            x-Rainbow, 
+            x-Rainbow-inv, 
+            x-Sst, 
+            x-Sst-inv, 
+            </Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=default&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>default-scalar/x-Rainbow</Name>
+            <Title>default-scalar/x-Rainbow</Title>
+            <Abstract>default-scalar style, using the x-Rainbow palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>default-scalar/x-Rainbow-inv</Name>
+            <Title>default-scalar/x-Rainbow-inv</Title>
+            <Abstract>default-scalar style, using the x-Rainbow-inv palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow-inv&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>contours</Name>
+            <Title>contours</Title>
+            <Abstract>contours style</Abstract>
+        </Style>
+        <Style>
+            <Name>raster/default</Name>
+            <Title>raster/default</Title>
+            <Abstract>raster style, using the default palette.  Available palettes are:
+            default, 
+            default-inv, 
+            div-BrBG, 
+            div-BrBG-inv, 
+            div-BuRd, 
+            div-BuRd-inv, 
+            div-BuRd2, 
+            div-BuRd2-inv, 
+            div-PRGn, 
+            div-PRGn-inv, 
+            div-PiYG, 
+            div-PiYG-inv, 
+            div-PuOr, 
+            div-PuOr-inv, 
+            div-RdBu, 
+            div-RdBu-inv, 
+            div-RdGy, 
+            div-RdGy-inv, 
+            div-RdYlBu, 
+            div-RdYlBu-inv, 
+            div-RdYlGn, 
+            div-RdYlGn-inv, 
+            div-Spectral, 
+            div-Spectral-inv, 
+            psu-inferno, 
+            psu-inferno-inv, 
+            psu-magma, 
+            psu-magma-inv, 
+            psu-plasma, 
+            psu-plasma-inv, 
+            psu-viridis, 
+            psu-viridis-inv, 
+            seq-BkBu, 
+            seq-BkBu-inv, 
+            seq-BkGn, 
+            seq-BkGn-inv, 
+            seq-BkRd, 
+            seq-BkRd-inv, 
+            seq-BkYl, 
+            seq-BkYl-inv, 
+            seq-BlueHeat, 
+            seq-BlueHeat-inv, 
+            seq-Blues, 
+            seq-Blues-inv, 
+            seq-BuGn, 
+            seq-BuGn-inv, 
+            seq-BuPu, 
+            seq-BuPu-inv, 
+            seq-BuYl, 
+            seq-BuYl-inv, 
+            seq-GnBu, 
+            seq-GnBu-inv, 
+            seq-Greens, 
+            seq-Greens-inv, 
+            seq-Greys, 
+            seq-Greys-inv, 
+            seq-GreysRev, 
+            seq-GreysRev-inv, 
+            seq-Heat, 
+            seq-Heat-inv, 
+            seq-OrRd, 
+            seq-OrRd-inv, 
+            seq-Oranges, 
+            seq-Oranges-inv, 
+            seq-PuBu, 
+            seq-PuBu-inv, 
+            seq-PuBuGn, 
+            seq-PuBuGn-inv, 
+            seq-PuRd, 
+            seq-PuRd-inv, 
+            seq-Purples, 
+            seq-Purples-inv, 
+            seq-RdPu, 
+            seq-RdPu-inv, 
+            seq-Reds, 
+            seq-Reds-inv, 
+            seq-YlGn, 
+            seq-YlGn-inv, 
+            seq-YlGnBu, 
+            seq-YlGnBu-inv, 
+            seq-YlOrBr, 
+            seq-YlOrBr-inv, 
+            seq-YlOrRd, 
+            seq-YlOrRd-inv, 
+            seq-cubeYF, 
+            seq-cubeYF-inv, 
+            x-Ncview, 
+            x-Ncview-inv, 
+            x-Occam, 
+            x-Occam-inv, 
+            x-Rainbow, 
+            x-Rainbow-inv, 
+            x-Sst, 
+            x-Sst-inv, 
+            </Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=default&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>raster/x-Rainbow</Name>
+            <Title>raster/x-Rainbow</Title>
+            <Abstract>raster style, using the x-Rainbow palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>raster/x-Rainbow-inv</Name>
+            <Title>raster/x-Rainbow-inv</Title>
+            <Abstract>raster style, using the x-Rainbow-inv palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow-inv&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+</Layer>
+    <Layer >
+        <Name>outputs/tasmax_EUR-44_MPI-M-MPI-ESM-LR_historical_r1i1p1_MPI-CSC-REMO2009_v1_mon_200101-200512.nc/tasmax</Name>
+        <Title>tasmax</Title>
+        <LatLonBoundingBox minx="-44.74485529448063" maxx="65.15145647131322" miny="21.91730606939339" maxy="66.702205074604"/>
+        <BoundingBox SRS="CRS:84" minx="-44.74485529448063" maxx="65.15145647131322" miny="21.91730606939339" maxy="66.702205074604"/>
+        <Dimension name="time" units="unknown"/>
+        <Dimension name="elevation" units="$zDomain.verticalCrs.units"/>
+    
+        <Extent name="time" multipleValues="1" current="1" default="">
+            2001-01-16T12:00:00.000Z,2001-02-15T00:00:00.000Z,2001-03-16T12:00:00.000Z/2001-07-16T12:00:00.000Z/P30DT12H,2001-08-16T12:00:00.000Z/2001-12-16T12:00:00.000Z/P30DT12H,2002-01-16T12:00:00.000Z,2002-02-15T00:00:00.000Z,2002-03-16T12:00:00.000Z/2002-07-16T12:00:00.000Z/P30DT12H,2002-08-16T12:00:00.000Z/2002-12-16T12:00:00.000Z/P30DT12H,2003-01-16T12:00:00.000Z,2003-02-15T00:00:00.000Z,2003-03-16T12:00:00.000Z/2003-07-16T12:00:00.000Z/P30DT12H,2003-08-16T12:00:00.000Z/2003-12-16T12:00:00.000Z/P30DT12H,2004-01-16T12:00:00.000Z,2004-02-15T12:00:00.000Z,2004-03-16T12:00:00.000Z/2004-07-16T12:00:00.000Z/P30DT12H,2004-08-16T12:00:00.000Z/2004-12-16T12:00:00.000Z/P30DT12H,2005-01-16T12:00:00.000Z,2005-02-15T00:00:00.000Z,2005-03-16T12:00:00.000Z/2005-07-16T12:00:00.000Z/P30DT12H,2005-08-16T12:00:00.000Z/2005-12-16T12:00:00.000Z/P30DT12H
+        </Extent>
+        <Extent name="elevation" default="2.0">
+            2.0        </Extent>
+        <Style>
+            <Name>default-scalar/default</Name>
+            <Title>default-scalar/default</Title>
+            <Abstract>default-scalar style, using the default palette.  Available palettes are:
+            default, 
+            default-inv, 
+            div-BrBG, 
+            div-BrBG-inv, 
+            div-BuRd, 
+            div-BuRd-inv, 
+            div-BuRd2, 
+            div-BuRd2-inv, 
+            div-PRGn, 
+            div-PRGn-inv, 
+            div-PiYG, 
+            div-PiYG-inv, 
+            div-PuOr, 
+            div-PuOr-inv, 
+            div-RdBu, 
+            div-RdBu-inv, 
+            div-RdGy, 
+            div-RdGy-inv, 
+            div-RdYlBu, 
+            div-RdYlBu-inv, 
+            div-RdYlGn, 
+            div-RdYlGn-inv, 
+            div-Spectral, 
+            div-Spectral-inv, 
+            psu-inferno, 
+            psu-inferno-inv, 
+            psu-magma, 
+            psu-magma-inv, 
+            psu-plasma, 
+            psu-plasma-inv, 
+            psu-viridis, 
+            psu-viridis-inv, 
+            seq-BkBu, 
+            seq-BkBu-inv, 
+            seq-BkGn, 
+            seq-BkGn-inv, 
+            seq-BkRd, 
+            seq-BkRd-inv, 
+            seq-BkYl, 
+            seq-BkYl-inv, 
+            seq-BlueHeat, 
+            seq-BlueHeat-inv, 
+            seq-Blues, 
+            seq-Blues-inv, 
+            seq-BuGn, 
+            seq-BuGn-inv, 
+            seq-BuPu, 
+            seq-BuPu-inv, 
+            seq-BuYl, 
+            seq-BuYl-inv, 
+            seq-GnBu, 
+            seq-GnBu-inv, 
+            seq-Greens, 
+            seq-Greens-inv, 
+            seq-Greys, 
+            seq-Greys-inv, 
+            seq-GreysRev, 
+            seq-GreysRev-inv, 
+            seq-Heat, 
+            seq-Heat-inv, 
+            seq-OrRd, 
+            seq-OrRd-inv, 
+            seq-Oranges, 
+            seq-Oranges-inv, 
+            seq-PuBu, 
+            seq-PuBu-inv, 
+            seq-PuBuGn, 
+            seq-PuBuGn-inv, 
+            seq-PuRd, 
+            seq-PuRd-inv, 
+            seq-Purples, 
+            seq-Purples-inv, 
+            seq-RdPu, 
+            seq-RdPu-inv, 
+            seq-Reds, 
+            seq-Reds-inv, 
+            seq-YlGn, 
+            seq-YlGn-inv, 
+            seq-YlGnBu, 
+            seq-YlGnBu-inv, 
+            seq-YlOrBr, 
+            seq-YlOrBr-inv, 
+            seq-YlOrRd, 
+            seq-YlOrRd-inv, 
+            seq-cubeYF, 
+            seq-cubeYF-inv, 
+            x-Ncview, 
+            x-Ncview-inv, 
+            x-Occam, 
+            x-Occam-inv, 
+            x-Rainbow, 
+            x-Rainbow-inv, 
+            x-Sst, 
+            x-Sst-inv, 
+            </Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=default&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>default-scalar/x-Rainbow</Name>
+            <Title>default-scalar/x-Rainbow</Title>
+            <Abstract>default-scalar style, using the x-Rainbow palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>default-scalar/x-Rainbow-inv</Name>
+            <Title>default-scalar/x-Rainbow-inv</Title>
+            <Abstract>default-scalar style, using the x-Rainbow-inv palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow-inv&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>contours</Name>
+            <Title>contours</Title>
+            <Abstract>contours style</Abstract>
+        </Style>
+        <Style>
+            <Name>raster/default</Name>
+            <Title>raster/default</Title>
+            <Abstract>raster style, using the default palette.  Available palettes are:
+            default, 
+            default-inv, 
+            div-BrBG, 
+            div-BrBG-inv, 
+            div-BuRd, 
+            div-BuRd-inv, 
+            div-BuRd2, 
+            div-BuRd2-inv, 
+            div-PRGn, 
+            div-PRGn-inv, 
+            div-PiYG, 
+            div-PiYG-inv, 
+            div-PuOr, 
+            div-PuOr-inv, 
+            div-RdBu, 
+            div-RdBu-inv, 
+            div-RdGy, 
+            div-RdGy-inv, 
+            div-RdYlBu, 
+            div-RdYlBu-inv, 
+            div-RdYlGn, 
+            div-RdYlGn-inv, 
+            div-Spectral, 
+            div-Spectral-inv, 
+            psu-inferno, 
+            psu-inferno-inv, 
+            psu-magma, 
+            psu-magma-inv, 
+            psu-plasma, 
+            psu-plasma-inv, 
+            psu-viridis, 
+            psu-viridis-inv, 
+            seq-BkBu, 
+            seq-BkBu-inv, 
+            seq-BkGn, 
+            seq-BkGn-inv, 
+            seq-BkRd, 
+            seq-BkRd-inv, 
+            seq-BkYl, 
+            seq-BkYl-inv, 
+            seq-BlueHeat, 
+            seq-BlueHeat-inv, 
+            seq-Blues, 
+            seq-Blues-inv, 
+            seq-BuGn, 
+            seq-BuGn-inv, 
+            seq-BuPu, 
+            seq-BuPu-inv, 
+            seq-BuYl, 
+            seq-BuYl-inv, 
+            seq-GnBu, 
+            seq-GnBu-inv, 
+            seq-Greens, 
+            seq-Greens-inv, 
+            seq-Greys, 
+            seq-Greys-inv, 
+            seq-GreysRev, 
+            seq-GreysRev-inv, 
+            seq-Heat, 
+            seq-Heat-inv, 
+            seq-OrRd, 
+            seq-OrRd-inv, 
+            seq-Oranges, 
+            seq-Oranges-inv, 
+            seq-PuBu, 
+            seq-PuBu-inv, 
+            seq-PuBuGn, 
+            seq-PuBuGn-inv, 
+            seq-PuRd, 
+            seq-PuRd-inv, 
+            seq-Purples, 
+            seq-Purples-inv, 
+            seq-RdPu, 
+            seq-RdPu-inv, 
+            seq-Reds, 
+            seq-Reds-inv, 
+            seq-YlGn, 
+            seq-YlGn-inv, 
+            seq-YlGnBu, 
+            seq-YlGnBu-inv, 
+            seq-YlOrBr, 
+            seq-YlOrBr-inv, 
+            seq-YlOrRd, 
+            seq-YlOrRd-inv, 
+            seq-cubeYF, 
+            seq-cubeYF-inv, 
+            x-Ncview, 
+            x-Ncview-inv, 
+            x-Occam, 
+            x-Occam-inv, 
+            x-Rainbow, 
+            x-Rainbow-inv, 
+            x-Sst, 
+            x-Sst-inv, 
+            </Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=default&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>raster/x-Rainbow</Name>
+            <Title>raster/x-Rainbow</Title>
+            <Abstract>raster style, using the x-Rainbow palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+        <Style>
+            <Name>raster/x-Rainbow-inv</Name>
+            <Title>raster/x-Rainbow-inv</Title>
+            <Abstract>raster style, using the x-Rainbow-inv palette</Abstract>
+            <LegendURL width="110" height="264">
+                <Format>image/png</Format>
+                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/ncWMS2/wms?REQUEST=GetLegendGraphic&amp;PALETTE=x-Rainbow-inv&amp;COLORBARONLY=true&amp;WIDTH=110&amp;HEIGHT=264"/>
+            </LegendURL>
+        </Style>
+</Layer>
+            </Layer>
+        </Layer>
+    </Capability>
+</WMT_MS_Capabilities>

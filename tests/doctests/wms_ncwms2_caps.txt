@@ -1,0 +1,48 @@
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from tests.utils import cast_tuple_int_list, cast_tuple_int_list_srs, resource_file
+    >>> from owslib.wms import WebMapService
+    
+Fake a request to a WMS Server using saved doc from ncWMS2 with dynamic dataset.
+http://localhost:8080/ncWMS2/wms?dataset=outputs/tasmax_EUR-44_MPI-M-MPI-ESM-LR_historical_r1i1p1_MPI-CSC-REMO2009_v1_mon_200101-200512.nc&request=GetCapabilities&version=1.1.1
+
+    >>> xml = open(resource_file('wms_ncwms2-caps_1_1_1.xml'), 'rb').read() 
+    >>> wms = WebMapService('url', version='1.1.1', xml=xml)
+    
+Test capabilities
+
+    >>> wms.identification.type
+    'OGC:WMS'
+
+    >>> wms.identification.title
+    'Birdhouse ncWMS2 Server'
+
+    >>> wms.identification.abstract
+    'ncWMS2 Web Map Service used in Birdhouse'
+    
+    >>> wms.provider.url
+    'http://localhost:8080/ncWMS2/wms'
+    
+Test available content layers
+
+    >>> 'outputs/tasmax_EUR-44_MPI-M-MPI-ESM-LR_historical_r1i1p1_MPI-CSC-REMO2009_v1_mon_200101-200512.nc/tasmax' in wms.contents.keys()
+    True
+    
+Test single item accessor
+
+    >>> wms['outputs/tasmax_EUR-44_MPI-M-MPI-ESM-LR_historical_r1i1p1_MPI-CSC-REMO2009_v1_mon_200101-200512.nc/tasmax'].title
+    'tasmax'
+    
+    >>> wms['outputs/tasmax_EUR-44_MPI-M-MPI-ESM-LR_historical_r1i1p1_MPI-CSC-REMO2009_v1_mon_200101-200512.nc/tasmax'].timepositions
+    ['2001-01-16T12:00:00.000Z', '2001-02-15T00:00:00.000Z', '2001-03-16T12:00:00.000Z/2001-07-16T12:00:00.000Z/P30DT12H', '2001-08-16T12:00:00.000Z/2001-12-16T12:00:00.000Z/P30DT12H', '2002-01-16T12:00:00.000Z', '2002-02-15T00:00:00.000Z', '2002-03-16T12:00:00.000Z/2002-07-16T12:00:00.000Z/P30DT12H', '2002-08-16T12:00:00.000Z/2002-12-16T12:00:00.000Z/P30DT12H', '2003-01-16T12:00:00.000Z', '2003-02-15T00:00:00.000Z', '2003-03-16T12:00:00.000Z/2003-07-16T12:00:00.000Z/P30DT12H', '2003-08-16T12:00:00.000Z/2003-12-16T12:00:00.000Z/P30DT12H', '2004-01-16T12:00:00.000Z', '2004-02-15T12:00:00.000Z', '2004-03-16T12:00:00.000Z/2004-07-16T12:00:00.000Z/P30DT12H', '2004-08-16T12:00:00.000Z/2004-12-16T12:00:00.000Z/P30DT12H', '2005-01-16T12:00:00.000Z', '2005-02-15T00:00:00.000Z', '2005-03-16T12:00:00.000Z/2005-07-16T12:00:00.000Z/P30DT12H', '2005-08-16T12:00:00.000Z/2005-12-16T12:00:00.000Z/P30DT12H']
+
+Test operations
+
+    >>> [op.name for op in wms.operations]
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo']
+    
+    
+
+
+
