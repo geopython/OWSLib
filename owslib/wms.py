@@ -708,5 +708,9 @@ class WMSCapabilitiesReader:
         if not isinstance(st, str) and not isinstance(st, bytes):
             raise ValueError("String must be of type string or bytes, not %s" % type(st))
         # Remove the default namespace definition (xmlns="http://some/namespace")
-        xml = re.sub(r'\sxmlns="[^"]+"', '', st, count=1)
+        xml = st
+        if isinstance(xml, str):
+            xml = re.sub('\\sxmlns="[^"]+"', '', xml, count=1)
+        elif isinstance(xml, bytes):
+            xml = re.sub(b'\\sxmlns="[^"]+"', b'', xml, count=1)
         return etree.fromstring(xml)
