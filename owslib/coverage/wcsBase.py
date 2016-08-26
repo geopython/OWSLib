@@ -158,6 +158,9 @@ class DescribeCoverageReader(object):
         if self.version == '1.0.0':
             if 'coverage' not in params:
                 qs.append(('coverage', self.identifier))
+        elif self.version == '2.0.0':
+            if 'CoverageID' not in params:
+                qs.append(('CoverageID', self.identifier))
         elif self.version == '1.1.0' or self.version == '1.1.1':
             #NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
             #or identifiers (see tables 9, 10 of specification)  

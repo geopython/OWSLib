@@ -82,15 +82,11 @@ class WebCoverageService_2_0_0(WCSBase):
           
         #serviceContents metadata
         self.contents={}
-        for elem in self._capabilities.findall(ns('ContentMetadata/')+ns('CoverageOfferingBrief')): 
+        for elem in self._capabilities.findall(nsWCS2('Contents/')+nsWCS2('CoverageSummary')):
             cm=ContentMetadata(elem, self)
             self.contents[cm.id]=cm
         
-        #Some WCS servers (wrongly) advertise 'Content' OfferingBrief instead.
-        if self.contents=={}:
-            for elem in self._capabilities.findall(ns('ContentMetadata/')+ns('ContentOfferingBrief')): 
-                cm=ContentMetadata(elem, self)
-                self.contents[cm.id]=cm
+
         
         #exceptions
         self.exceptions = [f.text for f \
@@ -285,7 +281,7 @@ class ContentMetadata(object):
         #self._parent=parent
         self._elem=elem
         self._service=service
-        self.id=elem.find(ns('name')).text
+        self.id=elem.find(nsWCS2('CoverageId')).text
         self.title = testXMLValue(elem.find(ns('label')))
         self.abstract= testXMLValue(elem.find(ns('description')))
         self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]        
@@ -309,12 +305,13 @@ class ContentMetadata(object):
     def _getGrid(self):
         if not hasattr(self, 'descCov'):
                 self.descCov=self._service.getDescribeCoverage(self.id)
-        gridelem= self.descCov.find(ns('CoverageOffering/')+ns('domainSet/')+ns('spatialDomain/')+'{http://www.opengis.net/gml}RectifiedGrid')
+        gridelem= self.descCov.find(nsWCS2('CoverageDescription/')+'{http://www.opengis.net/gml/3.2}domainSet/'+'{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors')
         if gridelem is not None:
-            grid=RectifiedGrid(gridelem)
+            grid=ReferenceableGridByVectors(gridelem)
         else:
-            gridelem=self.descCov.find(ns('CoverageOffering/')+ns('domainSet/')+ns('spatialDomain/')+'{http://www.opengis.net/gml}Grid')
-            grid=Grid(gridelem)
+            # HERE I LOOK FOR RECTIFIEDGRID
+            gridelem=self.descCov.find(nsWCS2('CoverageDescription/')+'{http://www.opengis.net/gml/3.2}domainSet/'+'{http://www.opengis.net/gml/3.2}RectifiedGrid')
+            grid=RectifiedGrid(gridelem)
         return grid
     grid=property(_getGrid, None)
         
@@ -414,23 +411,34 @@ class Grid(object):
         self.dimension=None
         self.lowlimits=[]
         self.highlimits=[]
+
         if grid is not None:
             self.dimension=int(grid.get('dimension'))
-            self.lowlimits= grid.find('{http://www.opengis.net/gml}limits/{http://www.opengis.net/gml}GridEnvelope/{http://www.opengis.net/gml}low').text.split(' ')
-            self.highlimits = grid.find('{http://www.opengis.net/gml}limits/{http://www.opengis.net/gml}GridEnvelope/{http://www.opengis.net/gml}high').text.split(' ')
-            for axis in grid.findall('{http://www.opengis.net/gml}axisName'):
-                self.axislabels.append(axis.text)
+            self.lowlimits= grid.find('{http://www.opengis.net/gml/3.2}limits/{http://www.opengis.net/gml/3.2}GridEnvelope/{http://www.opengis.net/gml/3.2}low').text.split(' ')
+            self.highlimits = grid.find('{http://www.opengis.net/gml/3.2}limits/{http://www.opengis.net/gml/3.2}GridEnvelope/{http://www.opengis.net/gml/3.2}high').text.split(' ')
+            for axis in grid.findall('{http://www.opengis.net/gml/3.2}axisLabels')[0].text.split(' '):
+                self.axislabels.append(axis)
       
 
 class RectifiedGrid(Grid):
     ''' RectifiedGrid class, extends Grid with additional offset vector information '''
     def __init__(self, rectifiedgrid):
         super(RectifiedGrid,self).__init__(rectifiedgrid)
-        self.origin=rectifiedgrid.find('{http://www.opengis.net/gml}origin/{http://www.opengis.net/gml}pos').text.split()
+        self.origin=rectifiedgrid.find('{http://www.opengis.net/gml/3.2}origin/{http://www.opengis.net/gml/3.2}Point/{http://www.opengis.net/gml/3.2}pos').text.split()
         self.offsetvectors=[]
-        for offset in rectifiedgrid.findall('{http://www.opengis.net/gml}offsetVector'):
+        for offset in rectifiedgrid.findall('{http://www.opengis.net/gml/3.2}offsetVector'):
             self.offsetvectors.append(offset.text.split())
-        
+
+
+class ReferenceableGridByVectors(Grid):
+    ''' ReferenceableGridByVectors class, extends Grid with additional vector information '''
+    def __init__(self, refereceablegridbyvectors):
+        super(ReferenceableGridByVectors,self).__init__(refereceablegridbyvectors)
+        self.origin=refereceablegridbyvectors.find('{http://www.opengis.net/gml/3.3/rgrid}origin/{http://www.opengis.net/gml/3.2}Point/{http://www.opengis.net/gml/3.2}pos').text.split()
+        self.offsetvectors=[]
+        for offset in refereceablegridbyvectors.findall('{http://www.opengis.net/gml/3.3/rgrid}generalGridAxis/{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}offsetVector'):
+            self.offsetvectors.append(offset.text.split())
+
 class AxisDescription(object):
     ''' Class to represent the AxisDescription element optionally found as part of the RangeSet and used to 
     define ordinates of additional dimensions such as wavelength bands or pressure levels'''
