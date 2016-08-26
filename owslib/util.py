@@ -146,6 +146,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     Uses requests library but with additional checks for OGC service exceptions and url formatting.
     Also handles cookies and simple user password authentication.
     """
+    print(url_base)
     headers = None
     rkwargs = {}
 
