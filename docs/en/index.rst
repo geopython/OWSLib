@@ -97,13 +97,13 @@ Anaconda:
 
 .. note::
 
-   The OWSLib conda packages are **not official** and provided on different conda channels: http://anaconda.org/search?q=type%3Aconda+owslib
+   The OWSLib conda packages are provided by the community, not OSGEO, and therefore there may be 
+   multiple packages available.  To search all conda channels: http://anaconda.org/search?q=type%3Aconda+owslib
+   However usually conda-forge will be the most up-to-date. 
 
 .. code-block:: bash
 
-  $ conda install -c birdhouse owslib
-  # or
-  $ conda install -c ioos owslib
+  $ conda install -c conda-forge owslib
 
 openSUSE:
 
