@@ -98,10 +98,10 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             self.operations.append(OperationsMetadata(elem, self.owscommon.namespace))
         self.constraints = {}
         for elem in self._capabilities.findall(util.nspath_eval('ows:OperationsMetadata/ows:Constraint', namespaces)):
-            self.constraints[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
+            self.constraints[elem.attrib['name']] = Constraint(elem, self.owscommon.namespace)
         self.parameters = {}
         for elem in self._capabilities.findall(util.nspath_eval('ows:OperationsMetadata/ows:Parameter', namespaces)):
-            self.parameters[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
+            self.parameters[elem.attrib['name']] = Parameter(elem, self.owscommon.namespace)
 
         # FilterCapabilities
         val = self._capabilities.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))

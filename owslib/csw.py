@@ -109,7 +109,7 @@ class CatalogueServiceWeb(object):
                     self.constraints[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
                 self.parameters = {}
                 for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Parameter', namespaces)):
-                    self.parameters[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
+                    self.parameters[elem.attrib['name']] = ows.Parameter(elem, self.owscommon.namespace)
         
                 # FilterCapabilities
                 val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
