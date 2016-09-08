@@ -119,10 +119,10 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             if elem.tag !=nspath('ExtendedCapabilities'):
                 self.operations.append(OperationsMetadata(elem))
         self.constraints = {}
-        for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Constraint', namespaces)):
+        for elem in self._capabilities.findall(util.nspath_eval('OperationsMetadata/Constraint', namespaces)):
             self.constraints[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
         self.parameters = {}
-        for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Parameter', namespaces)):
+        for elem in self._capabilities.findall(util.nspath_eval('OperationsMetadata/Parameter', namespaces)):
             self.parameters[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
 
         #serviceContents metadata: our assumption is that services use a top-level
