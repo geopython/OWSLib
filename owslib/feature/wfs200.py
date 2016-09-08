@@ -118,6 +118,12 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         for elem in self._capabilities.find(nspath('OperationsMetadata'))[:]:
             if elem.tag !=nspath('ExtendedCapabilities'):
                 self.operations.append(OperationsMetadata(elem))
+        self.constraints = {}
+        for elem in self._capabilities.findall(nspath('OperationsMetadata/Constraint', ns=WFS_NAMESPACE)):
+            self.constraints[elem.attrib['name']] = Constraint(elem, self.owscommon.namespace)
+        self.parameters = {}
+        for elem in self._capabilities.findall(nspath('OperationsMetadata/Parameter', ns=WFS_NAMESPACE)):
+            self.parameters[elem.attrib['name']] = Parameter(elem, self.owscommon.namespace)
 
         #serviceContents metadata: our assumption is that services use a top-level
         #layer as a metadata organizer, nothing more.
