@@ -161,6 +161,19 @@ class Constraint(object):
             return "Constraint: %s" % self.name
 
 
+class Parameter(object):
+    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
+        self.name    = elem.attrib.get('name')
+        self.values  = [i.text for i in elem.findall(util.nspath('Value', namespace))]
+        self.values += [i.text for i in elem.findall(util.nspath('AllowedValues/Value', namespace))]
+
+    def __repr__(self):
+        if self.values:
+            return "Parameter: %s - %s" % (self.name, self.values)
+        else:
+            return "Parameter: %s" % self.name
+
+
 class OperationsMetadata(object):
     """Initialize an OWS OperationMetadata construct"""
     def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):

@@ -13,6 +13,8 @@ Properties
     >>> c.identification.title
     'pycsw OGC CITE demo and Reference Implementation'
 
+    >>> c.constraints['MaxRecordDefault'].values[0]
+    '10'
 
 GetRecords
 
