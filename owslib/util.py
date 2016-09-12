@@ -199,7 +199,7 @@ def openURL(url_base, data=None, method=None, cookies=None, username=None, passw
     if req.status_code in [400, 401]:
         raise ServiceException(req.text)
 
-    if req.status_code in [404]:    # add more if needed
+    if req.status_code in [404, 403]:    # add more if needed
         req.raise_for_status()
 
     # check for service exceptions without the http header set

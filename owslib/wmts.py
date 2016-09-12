@@ -129,7 +129,7 @@ class WebMapTileService(object):
 
     def __init__(self, url, version='1.0.0', xml=None, username=None,
                  password=None, parse_remote_metadata=False,
-                 vendor_kwargs=None):
+                 vendor_kwargs=None, headers=None):
         """Initialize.
 
         Parameters
@@ -150,6 +150,8 @@ class WebMapTileService(object):
         vendor_kwargs : dict
             Optional vendor-specific parameters to be included in all
             requests.
+        headers : dict
+            Additional http header fields to be sent with all requests.
 
         """
         self.url = url
@@ -157,11 +159,12 @@ class WebMapTileService(object):
         self.password = password
         self.version = version
         self.vendor_kwargs = vendor_kwargs
+        self.headers = headers
         self._capabilities = None
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(self.version, url=self.url,
-                                        un=self.username, pw=self.password)
+                                        un=self.username, pw=self.password, headers=headers)
 
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
@@ -442,7 +445,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             resurl = self.buildTileResource(
                 layer, style, format, tilematrixset, tilematrix,
                 row, column, **vendor_kwargs)
-            u = openURL(resurl, username=self.username, password=self.password)
+            u = openURL(resurl, username=self.username, password=self.password, headers=self.headers)
             return u
 
         # KVP implemetation
@@ -469,7 +472,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             except StopIteration:
                 pass
         u = openURL(base_url, data, username=self.username,
-                    password=self.password)
+                    password=self.password, headers=self.headers)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -763,13 +766,14 @@ class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None):
         """Initialize"""
         self.version = version
         self._infoset = None
         self.url = url
         self.username = un
         self.password = pw
+        self.headers = headers
 
     def capabilities_url(self, service_url, vendor_kwargs=None):
         """Return a capabilities url
@@ -805,7 +809,7 @@ class WMTSCapabilitiesReader:
         # now split it up again to use the generic openURL function...
         spliturl = getcaprequest.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get',
-                    username=self.username, password=self.password)
+                    username=self.username, password=self.password, headers=self.headers)
         return etree.fromstring(u.read())
 
     def readString(self, st):
