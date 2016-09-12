@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.11.2 documentation &mdash; OWSLib 0.11.2 documentation</title>
+    <title>OWSLib 0.12.0 documentation &mdash; OWSLib 0.12.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.11.2',
+        VERSION:     '0.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="OWSLib 0.11.2 documentation" href="#" />
+    <link rel="top" title="OWSLib 0.12.0 documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -51,7 +51,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">OWSLib 0.11.2 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -62,7 +62,7 @@
           <div class="body">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.11.2 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.12.0 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
@@ -76,9 +76,9 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.11.2</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.12.0</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2016-05-15</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2016-09-12</td>
 </tr>
 </tbody>
 </table>
@@ -151,7 +151,7 @@
 <td>1.0.0</td>
 </tr>
 <tr class="row-even"><td><a class="reference external" href="http://his.cuahsi.org/wofws.html#waterml">WaterML</a></td>
-<td>1.0, 1.1</td>
+<td>1.0, 1.1, 2.0</td>
 </tr>
 </tbody>
 </table>
@@ -178,11 +178,11 @@
 <p>Anaconda:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The OWSLib conda packages are <strong>not official</strong> and provided on different conda channels: <a class="reference external" href="http://anaconda.org/search?q=type%3Aconda+owslib">http://anaconda.org/search?q=type%3Aconda+owslib</a></p>
+<p class="last">The OWSLib conda packages are provided by the community, not OSGEO, and therefore there may be
+multiple packages available.  To search all conda channels: <a class="reference external" href="http://anaconda.org/search?q=type%3Aconda+owslib">http://anaconda.org/search?q=type%3Aconda+owslib</a>
+However usually conda-forge will be the most up-to-date.</p>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>conda install -c birdhouse owslib
-<span class="c"># or</span>
-<span class="nv">$ </span>conda install -c ioos owslib
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>conda install -c conda-forge owslib
 </pre></div>
 </div>
 <p>openSUSE:</p>
@@ -354,7 +354,7 @@ services)</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">csw</span><span class="o">.</span><span class="n">results</span>
 <span class="go">{&#39;matches&#39;: 101, &#39;nextrecord&#39;: 21, &#39;returned&#39;: 20}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">csw</span><span class="o">.</span><span class="n">records</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">csw</span><span class="o">.</span><span class="n">records</span><span class="p">[</span><span class="n">rec</span><span class="p">]</span><span class="o">.</span><span class="n">title</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">csw</span><span class="o">.</span><span class="n">records</span><span class="p">[</span><span class="n">rec</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">ALLSPECIES</span>
 <span class="go">NatureServe Canada References</span>
@@ -608,8 +608,8 @@ services)</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="sos">
-<h3>SOS<a class="headerlink" href="#sos" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="sos-1-0">
+<h3>SOS 1.0<a class="headerlink" href="#sos-1-0" title="Permalink to this headline">¶</a></h3>
 <p>GetCapabilities</p>
 <p>Imports</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
@@ -1059,6 +1059,68 @@ services)</p>
 </pre></div>
 </div>
 </div></blockquote>
+</div>
+<div class="section" id="sos-2-0">
+<h3>SOS 2.0<a class="headerlink" href="#sos-2-0" title="Permalink to this headline">¶</a></h3>
+<p>Examples of service metadata and GetObservation</p>
+<p>Using the GetObservation response decoder for O&amp;M and WaterML2.0 results</p>
+<p># SOS version 2.0 tests using the 52North installation for IOOS: <a class="reference external" href="http://ioossos.axiomalaska.com/">http://ioossos.axiomalaska.com/</a></p>
+<p># Imports
+&gt;&gt;&gt; from owslib.sos import SensorObservationService
+&gt;&gt;&gt; from owslib.swe.observation.sos200 import SOSGetObservationResponse
+&gt;&gt;&gt; from owslib.etree import etree</p>
+<p># Setup
+#&gt;&gt;&gt; service = SensorObservationService(&#8216;<a class="reference external" href="http://geoviqua.dev.52north.org/SOS-Q/sos/kvp',version='2.0.0">http://geoviqua.dev.52north.org/SOS-Q/sos/kvp&#8217;,version=&#8216;2.0.0</a>&#8216;)
+&gt;&gt;&gt; service = SensorObservationService(&#8216;<a class="reference external" href="http://ioossos.axiomalaska.com/52n-sos-ioos-stable/sos/kvp',version='2.0.0">http://ioossos.axiomalaska.com/52n-sos-ioos-stable/sos/kvp&#8217;,version=&#8216;2.0.0</a>&#8216;)</p>
+<p># <a class="reference external" href="http://ioossos.axiomalaska.com/52n-sos-ioos-stable/sos/kvp?service=SOS&amp;request=GetObservation&amp;namespaces=xmlns(om%2Chttp%3A%2F%2Fwww.opengis.net%2Fom%2F2.0)&amp;temporalFilter=om%3AphenomenonTime%2Clatest&amp;version=2.0.0">http://ioossos.axiomalaska.com/52n-sos-ioos-stable/sos/kvp?service=SOS&amp;request=GetObservation&amp;namespaces=xmlns(om%2Chttp%3A%2F%2Fwww.opengis.net%2Fom%2F2.0)&amp;temporalFilter=om%3AphenomenonTime%2Clatest&amp;version=2.0.0</a></p>
+<p># Check allowed params for get observation
+&gt;&gt;&gt; get_obs=service.get_operation_by_name(&#8216;GetObservation&#8217;)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span><span class="n">responseFormat</span><span class="o">=</span><span class="s">&#39;http://www.opengis.net/om/2.0&#39;</span><span class="p">,</span> <span class="n">offerings</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;urn:ioos:station:test:8&#39;</span><span class="p">],</span> <span class="n">observedProperties</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;http://mmisw.org/ont/cf/parameter/sea_water_temperature&#39;</span><span class="p">],</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml_tree</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parsed_response</span> <span class="o">=</span> <span class="n">SOSGetObservationResponse</span><span class="p">(</span><span class="n">xml_tree</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">parsed_response</span><span class="p">)</span>
+<span class="go">&lt;class &#39;owslib.swe.observation.sos200.SOSGetObservationResponse&#39;&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">=</span><span class="n">parsed_response</span><span class="o">.</span><span class="n">observations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>## Value changes each call so can&#8217;t be tested
+## &gt;&gt;&gt; o.get_result().value</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span><span class="o">.</span><span class="n">uom</span>
+<span class="go">&#39;urn:ogc:def:uom:udunits:2:Cel&#39;</span>
+</pre></div>
+</div>
+<p># This O&amp;M structure of the results splits each point into an O&amp;M object, resulting in 400 results
+&gt;&gt;&gt; len(parsed_response.observations)
+400
+&gt;&gt;&gt; type(parsed_response.observations[0])
+&lt;class &#8216;owslib.swe.observation.om.MeasurementObservation&#8217;&gt;</p>
+<p># Get observation for a specific offering (in this case corresponds to a station) and observed property (sea water temperature)
+&gt;&gt;&gt; response = service.get_observation(responseFormat=&#8217;<a class="reference external" href="http://www.opengis.net/waterml/2.0">http://www.opengis.net/waterml/2.0</a>&#8216;, offerings=[&#8216;<a class="reference external" href="urn:ioos:station:test:8">urn:ioos:station:test:8</a>&#8216;], observedProperties=[&#8216;<a class="reference external" href="http://mmisw.org/ont/cf/parameter/sea_water_temperature">http://mmisw.org/ont/cf/parameter/sea_water_temperature</a>&#8216;], timeout=60)
+&gt;&gt;&gt; xml_tree = etree.fromstring(response)
+&gt;&gt;&gt; parsed_response = SOSGetObservationResponse(xml_tree)
+&gt;&gt;&gt; type(parsed_response)
+&lt;class &#8216;owslib.swe.observation.sos200.SOSGetObservationResponse&#8217;&gt;</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">parsed_response</span><span class="o">.</span><span class="n">observations</span><span class="p">)</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">parsed_response</span><span class="o">.</span><span class="n">observations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">&lt;class &#39;owslib.swe.observation.waterml2.MeasurementTimeseriesObservation&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">parsed_response</span><span class="o">.</span><span class="n">observations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_result</span><span class="p">())</span>
+<span class="go">&lt;class &#39;owslib.swe.observation.waterml2.MeasurementTimeseries&#39;&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">measurement_timeseries</span> <span class="o">=</span> <span class="n">parsed_response</span><span class="o">.</span><span class="n">observations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">measurement_timeseries</span><span class="p">)</span>
+<span class="go">20</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="sensorml">
 <h3>SensorML<a class="headerlink" href="#sensorml" title="Permalink to this headline">¶</a></h3>
@@ -1697,7 +1759,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.11.2 documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.12.0 documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1715,7 +1777,8 @@ POSSIBILITY OF SUCH DAMAGE.</p>
 <li><a class="reference internal" href="#csw">CSW</a></li>
 <li><a class="reference internal" href="#wmc">WMC</a></li>
 <li><a class="reference internal" href="#wps">WPS</a></li>
-<li><a class="reference internal" href="#sos">SOS</a></li>
+<li><a class="reference internal" href="#sos-1-0">SOS 1.0</a></li>
+<li><a class="reference internal" href="#sos-2-0">SOS 2.0</a></li>
 <li><a class="reference internal" href="#sensorml">SensorML</a></li>
 <li><a class="reference internal" href="#iso">ISO</a></li>
 <li><a class="reference internal" href="#crs-handling">CRS Handling</a></li>
@@ -1774,12 +1837,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">OWSLib 0.11.2 documentation</a> &raquo;</li> 
+        <li><a href="#">OWSLib 0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Tom Kralidis.
-      Last updated on 2016-05-15T20:43:23Z.
+      Last updated on 2016-09-12T07:08:58Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
