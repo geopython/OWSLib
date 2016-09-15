@@ -108,7 +108,7 @@ class WebCoverageService_2_0_0(WCSBase):
             sval = value
         return sval
   
-    def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  crs=None, width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
+    def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  subsets=None,crs=None, width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -117,7 +117,14 @@ class WebCoverageService_2_0_0(WCSBase):
 
         is equivalent to:
         http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIME=2792-06-01T00:00:00.0&FORMAT=cf-netcdf
-           
+        
+        example 2.0.1 URL
+        http://earthserver.pml.ac.uk/rasdaman/ows?&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage
+        &COVERAGEID=V2_monthly_CCI_chlor_a_insitu_test&SUBSET=Lat(40,50)&SUBSET=Long(-10,0)&SUBSET=ansi(144883,145000)&FORMAT=application/netcdf
+
+        cvg=wcs.getCoverage(identifier=['myID'], format='application/netcdf', subsets=[('axisName',min,max),('axisName',min,max),('axisName',min,max)])
+
+
         """
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
@@ -133,14 +140,13 @@ class WebCoverageService_2_0_0(WCSBase):
         #process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service':'WCS'}
         assert len(identifier) > 0
-        request['Coverage']=identifier
+        request['CoverageID']=identifier[0]
         #request['identifier'] = ','.join(identifier)
-        if bbox:
-            request['BBox']=','.join([self.__makeString(x) for x in bbox])
-        else:
-            request['BBox']=None
-        if time:
-            request['time']=','.join(time)
+
+        if subsets:
+            for subset in subsets:
+                request['subset']=subset[0]+'('+self.__makeString(subset[1])+','+self.__makeString(subset[2])+')'
+
         if crs:
             request['crs']=crs
         request['format']=format
@@ -148,12 +154,6 @@ class WebCoverageService_2_0_0(WCSBase):
             request['width']=width
         if height:
             request['height']=height
-        if resx:
-            request['resx']=resx
-        if resy:
-            request['resy']=resy
-        if resz:
-            request['resz']=resz
         
         #anything else e.g. vendor specific parameters must go through kwargs
         if kwargs:
@@ -162,6 +162,7 @@ class WebCoverageService_2_0_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
+        print('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
         
@@ -279,6 +280,7 @@ class ContentMetadata(object):
         #TODO - examine the parent for bounding box info.
         
         #self._parent=parent
+        print("getting content metadata")
         self._elem=elem
         self._service=service
         self.id=elem.find(nsWCS2('CoverageId')).text
@@ -351,12 +353,13 @@ class ContentMetadata(object):
         if not hasattr(self, 'descCov'):
             self.descCov=self._service.getDescribeCoverage(self.id)
 
-        for envelope in self.descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('spatialDomain/')+'{http://www.opengis.net/gml}Envelope'):
+        for envelope in self.descCov.findall(nsWCS2('CoverageDescription/')+'{http://www.opengis.net/gml/3.2}boundedBy/'+'{http://www.opengis.net/gml/3.2}Envelope'):
             bbox = {}
             bbox['nativeSrs'] = envelope.attrib['srsName']
-            gmlpositions = envelope.findall('{http://www.opengis.net/gml}pos')
-            lc=gmlpositions[0].text.split()
-            uc=gmlpositions[1].text.split()
+            lc = envelope.find('{http://www.opengis.net/gml/3.2}lowerCorner')
+            lc =lc.text.split()
+            uc = envelope.find('{http://www.opengis.net/gml/3.2}upperCorner')
+            uc =uc.text.split()
             bbox['bbox'] = (
                 float(lc[0]),float(lc[1]),
                 float(uc[0]), float(uc[1])
