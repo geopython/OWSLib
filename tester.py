@@ -17,13 +17,19 @@ print t.contents
 
 # print t.contents['CCI_V2_monthly_chlor_a_bias'].boundingboxes 
 
-
+print t.contents['CCI_V2_monthly_chlor_a_bias'].supportedFormats
 
 #        http://earthserver.pml.ac.uk/rasdaman/ows?&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage
 #        &COVERAGEID=V2_monthly_CCI_chlor_a_insitu_test&SUBSET=Lat(40,50)&SUBSET=Long(-10,0)&SUBSET=ansi(144883,145000)&FORMAT=application/netcdf
-#         cvg=wcs.getCoverage(identifier=['myID'], format='application/netcdf', subsets=[('axisName',min,max),('axisName',min,max),('axisName',min,max)])
+# #         cvg=wcs.getCoverage(identifier=['myID'], format='application/netcdf', subsets=[('axisName',min,max),('axisName',min,max),('axisName',min,max)])
 
-cov = t.getCoverage(identifier=['CCI_V2_monthly_chlor_a_bias'], format='application/netcdf', subsets=[('Long',-10,0), ('Lat',40,50),('ansi',144883,145000)])
+# cov = t.getCoverage(identifier=['CCI_V2_monthly_chlor_a_bias'], format='application/netcdf', subsets=[('Long',-10,0), ('Lat',40,50),('ansi',145883,146000)])
+
+
+# filename = 'wcs200test.nc'
+# f=open(filename, 'wb')
+# bytes_written = f.write(cov.read())
+# f.close()
 
 
 # s = WebCoverageService('http://ows.eox.at/cite/mapserver?', version='2.0.0')

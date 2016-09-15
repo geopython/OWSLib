@@ -388,7 +388,7 @@ class ContentMetadata(object):
     def _getSupportedFormatsProperty(self):
         # gets supported formats info
         frmts =[]
-        for elem in self._service.getDescribeCoverage(self.id).findall(ns('CoverageOffering/')+ns('supportedFormats/')+ns('formats')):
+        for elem in self._service._capabilities.findall(nsWCS2('ServiceMetadata/')+nsWCS2('formatSupported')):
             frmts.append(elem.text)
         return frmts
     supportedFormats=property(_getSupportedFormatsProperty, None)
