@@ -1,0 +1,92 @@
+
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from owslib.wms import WebMapService
+    >>> from tests.utils import resource_file, cast_tuple_int_list, cast_tuple_int_list_srs
+    >>> from operator import itemgetter
+
+Fake a request to a WMS Server (1.3.0) using saved doc from 
+http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?
+
+    >>> xml = open(resource_file('wms_mesonet-caps-130.xml'), 'rb').read()
+    >>> wms = WebMapService('url', version='1.3.0', xml=xml)
+    
+Test capabilities
+-----------------
+
+    >>> wms.identification.type
+    'WMS'
+    >>> wms.identification.version
+    '1.3.0'
+    >>> wms.identification.title
+    'IEM WMS Service'
+    >>> wms.identification.abstract
+    'IEM generated CONUS composite of NWS WSR-88D level III base reflectivity.'
+    >>> wms.identification.keywords
+    []
+    >>> wms.identification.accessconstraints
+    'None'
+
+Test available content layers
+
+    >>> sorted(wms.contents.keys())
+    ['nexrad-n0r-wmst', 'nexrad_base_reflect', 'time_idx']
+
+    >>> sorted([wms[layer].id for layer in wms.contents])
+    ['nexrad-n0r-wmst', 'nexrad_base_reflect', 'time_idx']
+
+ 
+Test single item accessor
+    
+    >>> wms['time_idx'].title
+    'NEXRAD BASE REFLECT'
+
+    >>> wms['time_idx'].keywords
+    []
+    
+    >>> cast_tuple_int_list_srs(wms['time_idx'].boundingBox)
+    [-126, 24, -66, 50, 'EPSG:4326']
+
+    >>> cast_tuple_int_list(wms['time_idx'].boundingBoxWGS84)
+    [-126, 24, -66, 50]
+    
+    >>> sorted(wms['time_idx'].crsOptions)
+    ['EPSG:102100', 'EPSG:3857', 'EPSG:4326', 'EPSG:900913']
+
+    >>> wms['time_idx'].styles
+    {}
+
+    >>> wms['time_idx'].timepositions
+    ['1995-01-01/2015-12-31/PT5M']
+
+    >>> wms['time_idx'].defaulttimeposition
+    '2006-06-23T03:10:00Z'
+
+    >>> wms['nexrad_base_reflect'].timepositions
+
+    >>> wms['nexrad_base_reflect'].defaulttimeposition
+
+Expect a KeyError for invalid names
+
+    >>> wms['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wms.operations]
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic', 'GetStyles']
+
+    >>> x = sorted(wms.getOperationByName('GetMap').methods, key=itemgetter('type'))
+    >>> x == [{'type': 'Get', 'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}, {'type': 'Post', 'url': 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?'}]
+    True
+
+    >>> wms.getOperationByName('GetMap').formatOptions
+    ['image/png', 'image/jpeg', 'image/gif', 'image/png; mode=8bit', 'application/x-pdf', 'image/svg+xml', 'image/tiff']
+
+Test exceptions
+
+    >>> wms.exceptions
+    ['XML', 'INIMAGE', 'BLANK']
