@@ -143,10 +143,7 @@ class WebCoverageService_2_0_0(WCSBase):
         request['CoverageID']=identifier[0]
         #request['identifier'] = ','.join(identifier)
 
-        if subsets:
-            for subset in subsets:
-                request['subset']=subset[0]+'('+self.__makeString(subset[1])+','+self.__makeString(subset[2])+')'
-
+        
         if crs:
             request['crs']=crs
         request['format']=format
@@ -162,6 +159,13 @@ class WebCoverageService_2_0_0(WCSBase):
         
         #encode and request
         data = urlencode(request)
+
+        if subsets:
+            for subset in subsets:
+                data = data + "&"+ urlencode({"subset":subset[0]+'('+self.__makeString(subset[1])+','+self.__makeString(subset[2])+')'})
+
+
+
         print('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
@@ -280,7 +284,7 @@ class ContentMetadata(object):
         #TODO - examine the parent for bounding box info.
         
         #self._parent=parent
-        print("getting content metadata")
+        #print("getting content metadata")
         self._elem=elem
         self._service=service
         self.id=elem.find(nsWCS2('CoverageId')).text
