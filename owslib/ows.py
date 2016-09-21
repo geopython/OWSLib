@@ -69,9 +69,13 @@ class ServiceIdentification(object):
         val = self._root.find(util.nspath('ServiceTypeVersion', namespace))
         self.version = util.testXMLValue(val)
 
+        self.versions = []
+        for v in self._root.findall(util.nspath('ServiceTypeVersion', namespace)):
+            self.versions.append(util.testXMLValue(v))
+        
         self.profiles = []
         for p in self._root.findall(util.nspath('Profile', namespace)):
-            self.profiles.append(util.testXMLValue(val))
+            self.profiles.append(util.testXMLValue(p))
 
 class ServiceProvider(object):
     """Initialize an OWS Common ServiceProvider construct"""
