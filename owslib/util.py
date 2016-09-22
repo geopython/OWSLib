@@ -11,7 +11,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import sys
 from dateutil import parser
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
@@ -634,3 +634,14 @@ def findall(root, xpath, attribute_name=None, attribute_value=None):
     if found_elements == []:
         found_elements = None
     return found_elements
+
+
+def datetime_from_ansi(ansi):
+    """Converts an ansiDate (expressed as a number = the nuber of days since the datum origin of ansi) to a python datetime object."""
+
+    datumOrigin = datetime(1600,12,31,0,0,0)
+
+    return datumOrigin + timedelta(ansi)
+
+def is_vector_grid(grid_elem):
+    pass

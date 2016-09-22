@@ -27,7 +27,7 @@ from owslib.crs import Crs
 import os, errno
 
 import logging
-from owslib.util import log
+from owslib.util import log, datetime_from_ansi
 
 #  function to save writing out WCS namespace in full each time
 def ns(tag):
@@ -72,7 +72,7 @@ class WebCoverageService_2_0_0(WCSBase):
         
         #serviceProvider metadata
         serviceproviderelem=self._capabilities.find(ns('ServiceProvider'))
-        self.provider=ServiceProvider(serviceproviderelem)     
+        self.provider=ServiceProvider(serviceproviderelem, namespace=self.ows_common.namespace)     
         
         #serviceOperations metadata
         self.operations=[]
@@ -185,95 +185,6 @@ class WebCoverageService_2_0_0(WCSBase):
         raise KeyError("No operation named %s" % name)
 
 
-# class OperationMetadata(object):
-#     """Abstraction for WCS metadata.   
-#     Implements IMetadata.
-#     """
-#     def __init__(self, elem):
-#         """."""
-#         self.name = elem.tag.split('}')[1]          
-        
-#         #self.formatOptions = [f.text for f in elem.findall('{http://www.opengis.net/wcs/1.1/ows}Parameter/{http://www.opengis.net/wcs/1.1/ows}AllowedValues/{http://www.opengis.net/wcs/1.1/ows}Value')]
-#         self.methods = []
-#         for resource in elem.findall(ns('DCPType/')+ns('HTTP/')+ns('Get/')+ns('OnlineResource')):
-#             url = resource.attrib['{http://www.w3.org/1999/xlink}href']
-#             self.methods.append({'type': 'Get', 'url': url})
-#         for resource in elem.findall(ns('DCPType/')+ns('HTTP/')+ns('Post/')+ns('OnlineResource')):
-#             url = resource.attrib['{http://www.w3.org/1999/xlink}href']
-#             self.methods.append({'type': 'Post', 'url': url})
-
-
-# class ServiceIdentification(object):
-#     """ Abstraction for ServiceIdentification metadata """
-#     def __init__(self,elem):
-#         # properties              
-#         self.type='OGC:WCS'
-#         self.version='2.0.0'
-#         self.service = testXMLValue(elem.find(ns('Title')))
-#         self.abstract = testXMLValue(elem.find(ns('Abstract')))
-#         self.title = testXMLValue(elem.find(ns('label')))     
-#         self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]
-#         #note: differs from 'rights' in interface
-
-#         if elem.find(ns('fees')):
-#             self.fees = elem.find(ns('fees')).text
-#         else:
-#             self.fees = 'None Mentioned'
-#         if elem.find(ns('accessConstraints')):
-#             self.accessConstraints = elem.find(ns('accessConstraints')).text
-#         else:
-#             self.accessConstraints = 'None Mentioned'
-       
-# class ServiceProvider(object):
-#     """ Abstraction for WCS ResponsibleParty 
-#     Implements IServiceProvider"""
-#     def __init__(self,elem):
-#         #it's not uncommon for the service provider info to be missing
-#         #so handle case where None is passed in
-#         if elem is None:
-#             self.name=None
-#             self.url=None
-#             self.contact = None
-#         else:
-#             self.name=testXMLValue(elem.find(ns('organisationName')))
-#             self.url=self.name #there is no definitive place for url  WCS, repeat organisationName
-#             self.contact=ContactMetadata(elem)
-
-class ContactMetadata(object):
-    ''' implements IContactMetadata'''
-    def __init__(self, elem):
-        try:
-            self.name = elem.find(ns('individualName')).text
-        except AttributeError:
-            self.name = None
-        try:
-            self.organization=elem.find(ns('organisationName')).text 
-        except AttributeError:
-            self.organization = None
-        try:
-            self.address = elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('deliveryPoint')).text
-        except AttributeError:
-            self.address = None
-        try:
-            self.city= elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('city')).text
-        except AttributeError:
-            self.city = None
-        try:
-            self.region=elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('administrativeArea')).text
-        except AttributeError:
-            self.region = None
-        try:
-            self.postcode=elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('postalCode')).text
-        except AttributeError:
-            self.postcode=None
-        try:
-            self.country=elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('country')).text
-        except AttributeError:
-            self.country = None
-        try:
-            self.email=elem.find(ns('contactInfo')+'/'+ns('address')+'/'+ns('electronicMailAddress')).text
-        except AttributeError:
-            self.email = None
 
 class ContentMetadata(object):
     """
@@ -339,11 +250,26 @@ class ContentMetadata(object):
     timelimits=property(_getTimeLimits, None)   
     
     def _getTimePositions(self):
+
         timepositions=[]
         if not hasattr(self, 'descCov'):
             self.descCov=self._service.getDescribeCoverage(self.id)
-        for pos in self.descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
-                timepositions.append(pos.text)
+
+        gridelem= self.descCov.find(nsWCS2('CoverageDescription/')+'{http://www.opengis.net/gml/3.2}domainSet/'+'{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors')
+        if gridelem is not None:
+            # irregular time
+            pass
+        else:
+            # regular time
+            t_grid = self.grid
+            start_pos = float(t_grid.origin[2])
+            step = float(t_grid.offsetvectors[2][2])
+            no_steps = int(t_grid.highlimits[2])
+            for x in xrange(1,no_steps):
+                t_pos = start_pos + (step * x)
+                t_date = datetime_from_ansi(t_pos)
+                timepositions.append(t_date)
+
         return timepositions
     timepositions=property(_getTimePositions, None)
            
