@@ -265,7 +265,7 @@ class ContentMetadata(object):
             start_pos = float(t_grid.origin[2])
             step = float(t_grid.offsetvectors[2][2])
             no_steps = int(t_grid.highlimits[2])
-            for x in xrange(1,no_steps):
+            for x in xrange(no_steps):
                 t_pos = start_pos + (step * x)
                 t_date = datetime_from_ansi(t_pos)
                 timepositions.append(t_date)
