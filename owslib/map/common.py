@@ -22,6 +22,7 @@ class WMSCapabilitiesReader(object):
         self.username = un
         self.password = pw
         self.headers = headers
+        self.request = None
 
         #if self.username and self.password:
             ## Provide login information in order to use the WMS server
@@ -59,10 +60,10 @@ class WMSCapabilitiesReader(object):
         service_url is the base url, to which is appended the service,
         version, and request parameters
         """
-        getcaprequest = self.capabilities_url(service_url)
+        self.request = self.capabilities_url(service_url)
 
         # now split it up again to use the generic openURL function...
-        spliturl = getcaprequest.split('?')
+        spliturl = self.request.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get',
                     username=self.username,
                     password=self.password,

@@ -11,6 +11,8 @@ MESONET
 GetMap 1.1.1
     >>> url = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi'
     >>> wms = WebMapService(url, version='1.1.1')
+    >>> wms.request
+    'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?service=WMS&request=GetCapabilities&version=1.1.1'
     >>> rsp = wms.getmap(layers=['nexrad_base_reflect'], styles=['default'], srs='EPSG:4326', bbox=(-126, 24, -66, 50), size=(250, 250), format='image/jpeg', transparent=True)
     >>> type(rsp)
     <class '...ResponseWrapper'>

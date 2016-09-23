@@ -79,6 +79,8 @@ class WebMapService_1_1_1(object):
         else:  # read from server
             self._capabilities = reader.read(self.url, timeout=self.timeout)
 
+        self.request = reader.request
+
         # avoid building capabilities metadata if the
         # response is a ServiceExceptionReport
         se = self._capabilities.find('ServiceException')
