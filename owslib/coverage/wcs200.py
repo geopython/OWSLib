@@ -162,7 +162,10 @@ class WebCoverageService_2_0_0(WCSBase):
 
         if subsets:
             for subset in subsets:
-                data = data + "&"+ urlencode({"subset":subset[0]+'('+self.__makeString(subset[1])+','+self.__makeString(subset[2])+')'})
+                if not self.is_number(subset[1]):
+                    data = data + "&"+ urlencode({"subset":subset[0]+'("'+self.__makeString(subset[1])+'","'+self.__makeString(subset[2])+'")'})
+                else:
+                    data = data + "&"+ urlencode({"subset":subset[0]+'('+self.__makeString(subset[1])+','+self.__makeString(subset[2])+')'})
 
 
 
@@ -175,7 +178,12 @@ class WebCoverageService_2_0_0(WCSBase):
 
         return u
     
-
+    def is_number(self,s):
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
                
     def getOperationByName(self, name):
         """Return a named operation item."""
@@ -258,7 +266,18 @@ class ContentMetadata(object):
         gridelem= self.descCov.find(nsWCS2('CoverageDescription/')+'{http://www.opengis.net/gml/3.2}domainSet/'+'{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors')
         if gridelem is not None:
             # irregular time
-            pass
+            print("finding irregular times")
+            cooeficients = []
+            t_grid = self.grid
+            start_pos = float(t_grid.origin[2])
+            grid_axes = gridelem.findall('{http://www.opengis.net/gml/3.3/rgrid}generalGridAxis')
+            for elem in grid_axes:
+                if elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}gridAxesSpanned').text == "ansi":
+                    cooeficients = elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}coefficients').text.split(' ')
+            for x in cooeficients:
+                t_pos = int(start_pos) + int(x)
+                t_date = datetime_from_ansi(t_pos)
+                timepositions.append(t_date)
         else:
             # regular time
             t_grid = self.grid
