@@ -28,7 +28,9 @@ import warnings
 import six
 
 from owslib.etree import etree
-from owslib.util import openURL, testXMLValue, extract_xml_list, xmltag_split, OrderedDict, ServiceException
+from owslib.util import (openURL, testXMLValue, extract_xml_list,
+                         xmltag_split, OrderedDict, ServiceException,
+                         bind_url)
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.map.common import WMSCapabilitiesReader
@@ -156,7 +158,7 @@ class WebMapService_1_1_1(object):
                format=None, size=None, time=None, transparent=False,
                bgcolor=None, exceptions=None, **kwargs):
 
-        request = {'version': self.version, 'request': 'GetMap'}
+        request = {'service': 'WMS', 'version': self.version, 'request': 'GetMap'}
 
         # check layers and styles
         assert len(layers) > 0
@@ -256,6 +258,8 @@ class WebMapService_1_1_1(object):
 
         data = urlencode(request)
 
+        self.request = bind_url(base_url) + data
+
         u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
 
         # check for service exceptions, and return
@@ -319,6 +323,8 @@ class WebMapService_1_1_1(object):
         request['feature_count'] = str(feature_count)
 
         data = urlencode(request)
+
+        self.request = bind_url(base_url) + data
 
         u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
 
