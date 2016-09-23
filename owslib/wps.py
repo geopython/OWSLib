@@ -392,12 +392,12 @@ class WPSReader(object):
             # split URL into base url and query string to use utility function
             spliturl = request_url.split('?')
             u = openURL(spliturl[0], spliturl[1],
-                        method='Get', username=username, password=password, headers=None)
+                        method='Get', username=username, password=password, headers=headers)
             return etree.fromstring(u.read())
 
         elif method == 'Post':
             u = openURL(url, data, method='Post',
-                        username=username, password=password, headers=None)
+                        username=username, password=password, headers=headers)
             return etree.fromstring(u.read())
 
         else:
@@ -476,7 +476,7 @@ class WPSExecuteReader(WPSReader):
         url: the URL to submit the GET/POST request to.
         """
 
-        return self._readFromUrl(url, data, method, username=username, password=password, headers=None)
+        return self._readFromUrl(url, data, method, username=username, password=password, headers=headers)
 
 
 class WPSExecution():
