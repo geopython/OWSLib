@@ -36,8 +36,8 @@ def get_schema(url, typename, version='1.0.0', timeout=30):
     :param int timeout: request timeout
     """
 
-    url = _get_describefeaturetype_url(url, version, typename)
-    res = openURL(url, timeout=timeout)
+    url = _get_describefeaturetype_url(url, version, typename, username=None, password=None)
+    res = openURL(url, timeout=timeout, username=username, password=password)
     root = etree.fromstring(res.read())
     type_element = findall(root, '{%s}element' % XS_NAMESPACE,
                            attribute_name='name', attribute_value=typename)[0]
@@ -142,4 +142,3 @@ def _get_describefeaturetype_url(url, version, typename):
 
     urlqs = urlencode(tuple(query_string))
     return url.split('?')[0] + '?' + urlqs
-
