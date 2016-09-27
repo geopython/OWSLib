@@ -1378,7 +1378,15 @@ class ComplexDataInput(IComplexDataInput, ComplexData):
             attrib['mimeType'] = self.mimeType
         complexDataElement = etree.SubElement(
             dataElement, nspath_eval('wps:ComplexData', namespaces), attrib=attrib)
-        complexDataElement.text = self.value
+        # complexDataElement.text = self.value
+        # If ComplexDataInput is valid XML, append the XML in the ComplexData node of the request
+        try:
+            xml_input_data = etree.fromstring(self.value)
+            complexDataElement.append(xml_input_data)
+        # If not valid XML, append the text in a CDATA
+        except etree.XMLSyntaxError:
+            complexDataElement.text = etree.CDATA( self.value )
+
         return dataElement
 
 
