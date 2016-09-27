@@ -3,24 +3,22 @@ Imports
 
     >>> from __future__ import (absolute_import, division, print_function)
     >>> from owslib.wms import WebMapService
-    >>> from tests.utils import resource_file
+    >>> from tests.utils import resource_file, cast_tuple_int_list, cast_tuple_int_list_srs
     >>> from operator import itemgetter
 
-Fake a request to a WMS Server using saved doc from 
+Fake a request to a WMS Server (1.3.0) using saved doc from 
 http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?
 
-    >>> xml = open(resource_file('wms_mesonet-caps.xml'), 'rb').read()
-    >>> wms = WebMapService('url', version='1.1.1', xml=xml)
-    >>> wms.request is None
-    True
+    >>> xml = open(resource_file('wms_mesonet-caps-130.xml'), 'rb').read()
+    >>> wms = WebMapService('url', version='1.3.0', xml=xml)
     
 Test capabilities
 -----------------
 
     >>> wms.identification.type
-    'OGC:WMS'
+    'WMS'
     >>> wms.identification.version
-    '1.1.1'
+    '1.3.0'
     >>> wms.identification.title
     'IEM WMS Service'
     >>> wms.identification.abstract
@@ -47,11 +45,11 @@ Test single item accessor
     >>> wms['time_idx'].keywords
     []
     
-    >>> wms['time_idx'].boundingBox
-    (-126.0, 24.0, -66.0, 50.0, 'EPSG:4326')
+    >>> cast_tuple_int_list_srs(wms['time_idx'].boundingBox)
+    [-126, 24, -66, 50, 'EPSG:4326']
 
-    >>> wms['time_idx'].boundingBoxWGS84
-    (-126.0, 24.0, -66.0, 50.0)
+    >>> cast_tuple_int_list(wms['time_idx'].boundingBoxWGS84)
+    [-126, 24, -66, 50]
     
     >>> sorted(wms['time_idx'].crsOptions)
     ['EPSG:102100', 'EPSG:3857', 'EPSG:4326', 'EPSG:900913']
@@ -60,7 +58,7 @@ Test single item accessor
     {}
 
     >>> wms['time_idx'].timepositions
-    ['1995-01-01/2013-12-31/PT5M']
+    ['1995-01-01/2015-12-31/PT5M']
 
     >>> wms['time_idx'].defaulttimeposition
     '2006-06-23T03:10:00Z'
@@ -91,4 +89,4 @@ Test operations
 Test exceptions
 
     >>> wms.exceptions
-    ['application/vnd.ogc.se_xml', 'application/vnd.ogc.se_inimage', 'application/vnd.ogc.se_blank']
+    ['XML', 'INIMAGE', 'BLANK']

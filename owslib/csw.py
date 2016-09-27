@@ -104,6 +104,12 @@ class CatalogueServiceWeb(object):
                 self.operations = []
                 for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
                     self.operations.append(ows.OperationsMetadata(elem, self.owscommon.namespace))
+                self.constraints = {}
+                for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Constraint', namespaces)):
+                    self.constraints[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
+                self.parameters = {}
+                for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Parameter', namespaces)):
+                    self.parameters[elem.attrib['name']] = ows.Parameter(elem, self.owscommon.namespace)
         
                 # FilterCapabilities
                 val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
@@ -529,7 +535,7 @@ class CatalogueServiceWeb(object):
 
     def _parseinsertresult(self):
         self.results['insertresults'] = []
-        for i in self._exml.findall(util.nspath_eval('csw:InsertResult', namespaces)):
+        for i in self._exml.findall('.//'+util.nspath_eval('csw:InsertResult', namespaces)):
             for j in i.findall(util.nspath_eval('csw:BriefRecord/dc:identifier', namespaces)):
                 self.results['insertresults'].append(util.testXMLValue(j))
 
@@ -561,7 +567,7 @@ class CatalogueServiceWeb(object):
                 self.records[identifier] = CswRecord(i)
 
     def _parsetransactionsummary(self):
-        val = self._exml.find(util.nspath_eval('csw:TransactionSummary', namespaces))
+        val = self._exml.find(util.nspath_eval('csw:TransactionResponse/csw:TransactionSummary', namespaces))
         if val is not None:
             rid = val.attrib.get('requestId')
             self.results['requestid'] = util.testXMLValue(rid, True)
