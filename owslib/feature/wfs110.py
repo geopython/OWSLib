@@ -76,7 +76,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.password = password
         self._capabilities = None
         self.owscommon = OwsCommon('1.0.0')
-        reader = WFSCapabilitiesReader(self.version)
+        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
         if xml:
             self._capabilities = reader.readString(xml)
         else:

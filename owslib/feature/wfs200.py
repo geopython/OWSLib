@@ -84,7 +84,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         self.username = username
         self.password = password
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version)
+        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
