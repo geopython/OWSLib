@@ -448,11 +448,11 @@ class MD_DataIdentification(object):
             for i in md.findall(util.nspath_eval('gmd:graphicOverview/gmd:MD_BrowseGraphic', namespaces)):
                 go = {}
                 val = i.find(util.nspath_eval('gmd:fileName/gco:CharacterString', namespaces))
-                if not val or val is None:
+                if val is None:
                     val = i.find(util.nspath_eval('gmd:fileName/gmx:FileName/@src', namespaces))
                 go['filename'] = util.testXMLValue(val)
                 val = i.find(util.nspath_eval('gmd:fileDescription/gco:CharacterString', namespaces))
-                if not val or val is None:
+                if val is None:
                     val = i.find(util.nspath_eval('gmd:fileName/gmx:FileName', namespaces))
                 go['description'] = util.testXMLValue(val)
                 val = i.find(util.nspath_eval('gmd:fileType/gco:CharacterString', namespaces))
@@ -711,11 +711,11 @@ class SV_ServiceIdentification(object):
             for i in md.findall(util.nspath_eval('gmd:graphicOverview/gmd:MD_BrowseGraphic', namespaces)):
                 go = {}
                 val = i.find(util.nspath_eval('gmd:fileName/gco:CharacterString', namespaces))
-                if not val or val is None:
+                if val is None:
                     val = i.find(util.nspath_eval('gmd:fileName/gmx:FileName/@src', namespaces))
                 go['filename'] = util.testXMLValue(val)
                 val = i.find(util.nspath_eval('gmd:fileDescription/gco:CharacterString', namespaces))
-                if not val or val is None:
+                if val is None:
                     val = i.find(util.nspath_eval('gmd:fileName/gmx:FileName', namespaces))
                 go['description'] = util.testXMLValue(val)
                 val = i.find(util.nspath_eval('gmd:fileType/gco:CharacterString', namespaces))
