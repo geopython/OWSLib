@@ -27,7 +27,7 @@ from owslib.crs import Crs
 import os, errno
 
 import logging
-from owslib.util import log, datetime_from_ansi
+from owslib.util import log, datetime_from_ansi, datetime_from_iso
 
 #  function to save writing out WCS namespace in full each time
 def ns(tag):
@@ -268,15 +268,15 @@ class ContentMetadata(object):
             # irregular time
             print("finding irregular times")
             cooeficients = []
-            t_grid = self.grid
-            start_pos = float(t_grid.origin[2])
+            #t_grid = self.grid
+            #start_pos = float(t_grid.origin[2])
             grid_axes = gridelem.findall('{http://www.opengis.net/gml/3.3/rgrid}generalGridAxis')
             for elem in grid_axes:
                 if elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}gridAxesSpanned').text == "ansi":
-                    cooeficients = elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}coefficients').text.split(' ')
+                   cooeficients = elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}coefficients').text.split(' ')
             for x in cooeficients:
-                t_pos = int(start_pos) + int(x)
-                t_date = datetime_from_ansi(t_pos)
+                #t_pos = int(start_pos) + int(x)
+                t_date = datetime_from_iso(x)
                 timepositions.append(t_date)
         else:
             # regular time
