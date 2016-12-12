@@ -128,13 +128,19 @@ class WebFeatureService_(object):
             request['query'] = str(filter)
         if typename:
             typename = [typename] if type(typename) == type("") else typename
-            request['typename'] = ','.join(typename)
+            if int(self.version.split('.')[0]) >= 2:
+                request['typenames'] = ','.join(typename)
+            else:
+                request['typename'] = ','.join(typename)
         if propertyname: 
             request['propertyname'] = ','.join(propertyname)
         if featureversion: 
             request['featureversion'] = str(featureversion)
         if maxfeatures: 
-            request['maxfeatures'] = str(maxfeatures)
+            if int(self.version.split('.')[0]) >= 2:
+                request['count'] = str(maxfeatures)
+            else:
+                request['maxfeatures'] = str(maxfeatures)
         if startindex:
             request['startindex'] = str(startindex)
         if storedQueryID: 
