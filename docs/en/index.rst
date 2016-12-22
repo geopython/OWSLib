@@ -382,7 +382,7 @@ Transaction: insert
 
 .. code-block:: python
 
-  >>> csw.transaction(ttype='insert', typename='gmd:MD_Metadata', record=open(file.xml).read())
+  >>> csw.transaction(ttype='insert', typename='gmd:MD_Metadata', record=open("file.xml").read())
 
 Transaction: update
 
