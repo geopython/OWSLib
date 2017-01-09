@@ -86,6 +86,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
 
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         # ServiceIdentification
         val = self._capabilities.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
         self.identification=ServiceIdentification(val,self.owscommon.namespace)

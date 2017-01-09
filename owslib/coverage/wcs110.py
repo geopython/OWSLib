@@ -74,6 +74,8 @@ class WebCoverageService_1_1_0(WCSBase):
 
         #build metadata objects:
         
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         #serviceIdentification metadata
         elem=self._capabilities.find(self.ns.WCS_OWS('ServiceIdentification'))
         if elem is None:

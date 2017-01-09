@@ -15,6 +15,9 @@ http://giswebservices.massgis.state.ma.us/geoserver/wms
 Test capabilities
 -----------------
 
+
+    >>> wms.updateSequence is not None
+    True
     >>> wms.identification.type
     'OGC:WMS'
     >>> wms.identification.version

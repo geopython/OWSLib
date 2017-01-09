@@ -80,6 +80,9 @@ class SensorObservationService_2_0_0(object):
         """
             Set up capabilities metadata objects
         """
+
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         # ows:ServiceIdentification metadata
         service_id_element = self._capabilities.find(nspath_eval('ows:ServiceIdentification', namespaces))
         self.identification = ows.ServiceIdentification(service_id_element)
