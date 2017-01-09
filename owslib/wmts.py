@@ -191,6 +191,8 @@ class WebMapTileService(object):
     def _buildMetadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
 
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         # serviceIdentification metadata
         serviceident = self._capabilities.find(_SERVICE_IDENTIFICATION_TAG)
         self.identification = ServiceIdentification(serviceident)

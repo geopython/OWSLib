@@ -309,6 +309,8 @@ class WebProcessingService(object):
         # use the WPS namespace defined in the document root
         wpsns = getNamespace(root)
 
+        self.updateSequence = root.attrib.get('updateSequence')
+
         # loop over children WITHOUT requiring a specific namespace
         for element in root:
 

@@ -87,6 +87,8 @@ class WebMapService_1_3_0(object):
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects:'''
 
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         # serviceIdentification metadata
         serviceelem = self._capabilities.find(nspath('Service',
                                               ns=WMS_NAMESPACE))

@@ -7,6 +7,8 @@ Imports
 Properties
 
     >>> c = cs('http://demo.pycsw.org/cite/csw')
+    >>> c.updateSequence is not None
+    True
     >>> c.version
     '2.0.2'
     

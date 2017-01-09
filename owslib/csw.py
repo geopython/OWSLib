@@ -88,6 +88,8 @@ class CatalogueServiceWeb(object):
             self._invoke()
     
             if self.exceptionreport is None:
+                self.updateSequence = self._exml.getroot().attrib.get('updateSequence')
+
                 # ServiceIdentification
                 val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
                 if val is not None:

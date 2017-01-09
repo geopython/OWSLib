@@ -94,6 +94,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
 
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         #serviceIdentification metadata
         serviceidentelem=self._capabilities.find(nspath('ServiceIdentification'))
         self.identification=ServiceIdentification(serviceidentelem)
