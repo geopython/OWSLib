@@ -447,7 +447,7 @@ class CatalogueServiceWeb(object):
                     node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
                     etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = propertyname
                     etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = propertyvalue
-                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql, identifier)
+                    self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
 
         if ttype == 'delete':
             self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
