@@ -150,7 +150,7 @@ class WebFeatureService_(object):
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
 
-        data = urlencode(request)
+        data = urlencode(request, doseq=True)
 
         return base_url+data
 
