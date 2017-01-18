@@ -8,6 +8,9 @@ from dateutil import parser
 from datetime import timedelta
 
 from owslib.etree import etree
+from sys import modules
+
+import inspect
 
 def get_namespaces():
     ns = Namespaces()
@@ -17,6 +20,7 @@ namespaces = get_namespaces()
 def nspv(path):
     return nspath_eval(path, namespaces)
 
+from sys import modules
 def make_pair(string, cast=None):
     if string is None:
         return None
@@ -69,8 +73,15 @@ class NamedObject(object):
         # No call to super(), the type object will process that.
         self.name           = testXMLAttribute(element, "name")
         try:
-            self.content    = eval(element[-1].tag.split("}")[-1])(element[-1])
-        except IndexError:
+            # attempt to find a class with the same name as the XML tag parsed
+            # which is also contained within this module.
+            # Ideally the classes should be explicitly whitelisted, but I
+            # don't know what the set of possible classes to dispatch to should
+            # be
+            self.content = obj_mapping[element[-1].tag.split("}")[-1]](
+                                                                    element[-1])
+
+        except (IndexError, KeyError):
             self.content    = None
         except BaseException:
             raise
@@ -416,3 +427,7 @@ class XMLEncoding(AbstractEncoding):
 class BinaryEncoding(AbstractEncoding):
     def __init__(self, element):
         raise NotImplementedError
+
+# TODO: Individually whitelist valid classes which correspond to XML tags
+obj_mapping = {name: obj for name, obj in inspect.getmembers(modules[__name__],
+                                                             inspect.isclass)}
