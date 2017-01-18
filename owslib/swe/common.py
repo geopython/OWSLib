@@ -268,6 +268,10 @@ def get_time(value, referenceTime, uom):
         elif value.lower() == "-inf":
             value  = NegativeInfiniteDateTime()
 
+    # Usually due to not finding the element
+    except TypeError:
+        value = None
+
     return value
 
 class Time(AbstractSimpleComponent):
@@ -284,8 +288,10 @@ class Time(AbstractSimpleComponent):
         # Attributes
         self.localFrame         = testXMLAttribute(element,"localFrame")                                    # anyURI, optional
         try:
-            self.referenceTime  = parser.parse(testXMLAttribute(element,"referenceTime"))                   # dateTime, optional
-        except (AttributeError, ValueError):
+            self.referenceTime  = parser.parse(testXMLAttribute(element,
+                                                                "referenceTime")
+                                               ) # dateTime, optional
+        except (AttributeError, ValueError, TypeError):
             self.referenceTime  = None
 
         value                   = testXMLValue(element.find(nspv("swe20:value")))                           # TimePosition, min=0, max=1
@@ -306,7 +312,7 @@ class TimeRange(AbstractSimpleComponent):
         self.localFrame         = testXMLAttribute(element,"localFrame")                                # anyURI, optional
         try:
             self.referenceTime  = parser.parse(testXMLAttribute(element,"referenceTime"))               # dateTime, optional
-        except (AttributeError, ValueError):
+        except (AttributeError, ValueError, TypeError):
             self.referenceTime  = None
 
         values                  = make_pair(testXMLValue(element.find(nspv("swe20:value"))))            # TimePosition, min=0, max=1
