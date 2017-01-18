@@ -10,6 +10,7 @@ from datetime import timedelta
 from owslib.etree import etree
 
 import inspect
+from sys import modules
 
 def get_namespaces():
     ns = Namespaces()
@@ -19,7 +20,6 @@ namespaces = get_namespaces()
 def nspv(path):
     return nspath_eval(path, namespaces)
 
-from sys import modules
 def make_pair(string, cast=None):
     if string is None:
         return None
