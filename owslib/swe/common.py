@@ -8,7 +8,6 @@ from dateutil import parser
 from datetime import timedelta
 
 from owslib.etree import etree
-from sys import modules
 
 import inspect
 
