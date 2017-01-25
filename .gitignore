@@ -12,5 +12,6 @@ pytest_cov-*
 .*.swp
 *.*~
 .cache
+tags
 
 
