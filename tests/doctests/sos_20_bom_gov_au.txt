@@ -1,0 +1,46 @@
+# SOS version 2.0 tests on http://www.bom.gov.au/waterdata/services
+
+# Imports
+>>> from owslib.sos import SensorObservationService
+
+# Setup
+>>> service = SensorObservationService('http://www.bom.gov.au/waterdata/services', version='2.0.0')
+>>> id = service.identification
+
+# Check basic service metadata
+>>> id.service
+'SOS'
+
+>>> id.title
+'KISTERS KiWIS SOS2'
+
+>>> id.keywords
+[]
+
+>>> service.provider.name
+'Provider Name'
+
+>>> service.provider.contact.name
+'Name'
+
+>>> service.provider.contact.position
+
+>>> len(service.operations)
+5
+
+>>> service.get_operation_by_name('GetObservation').methods[0]['url'] = 'http://www.bom.gov.au/waterdata/services'
+>>> response = service.get_observation(featureOfInterest='http://bom.gov.au/waterdata/services/stations/181.1',
+...                                    offerings=['http://bom.gov.au/waterdata/services/tstypes/Pat4_PC_1'],
+...                                    observedProperties=['http://bom.gov.au/waterdata/services/parameters/Water Course Discharge'],
+...                                    eventTime='om:phenomenonTime,2016-01-01T00:00:00+10/2016-03-05T00:00:00+10')
+
+# Process WaterML Response
+>>> from owslib.etree import etree
+>>> from owslib.swe.observation.sos200 import SOSGetObservationResponse
+>>> from owslib.swe.observation.waterml2 import MeasurementTimeseriesObservation
+
+>>> et = etree.fromstring(response)
+>>> parsed_response = SOSGetObservationResponse(et)
+>>> assert len(parsed_response.observations) > 0
+>>> for o in parsed_response.observations:
+...     assert isinstance(o, MeasurementTimeseriesObservation)

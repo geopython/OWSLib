@@ -1,0 +1,78 @@
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from owslib.wms import WebMapService
+    >>> from tests.utils import resource_file, cast_tuple_int_list, cast_tuple_int_list_srs
+    >>> from operator import itemgetter
+
+Fake a request to a WMS Server (1.3.0) using saved doc from 
+http://dataserver.nccs.nasa.gov/thredds/wms/seasonal/ocn_ana_3D_ll
+
+    >>> xml = open(resource_file('wms_nccs_nasa_getcap_130.xml'), 'rb').read()
+    >>> wms = WebMapService('url', version='1.3.0', xml=xml)
+
+
+Test capabilities
+-----------------
+
+    >>> wms.identification.type
+    'WMS'
+    >>> wms.identification.version
+    '1.3.0'
+    >>> wms.identification.title
+    'Data Catalog'
+    >>> wms.identification.abstract
+    'Scientific Data'
+    >>> wms.identification.keywords
+    ['meteorology', 'atmosphere', 'climate', 'ocean', 'earth science']
+    >>> wms.identification.accessconstraints
+    'none'
+
+Test available content layers
+
+    >>> len(wms.contents.keys())
+    7
+
+    >>> 'T' in [wms[layer].id for layer in wms.contents]
+    True
+
+Test single item accessor
+    
+    >>> wms['T'].title
+    'potential_temperature'
+
+    >>> wms['T'].keywords
+    []
+    
+    >>> cast_tuple_int_list_srs(wms['T'].boundingBox)
+    [-180, -90, 179, 90, 'CRS:84']
+
+    >>> cast_tuple_int_list(wms['T'].boundingBoxWGS84)
+    [-180, -90, 179, 90]
+
+    >>> [crs for crs in wms['T'].crs_list if crs[4] == 'EPSG:3785'] is not []
+    True
+    
+    >>> sorted(wms['T'].crsOptions)
+    ['CRS:84', 'EPSG:27700', 'EPSG:32661', 'EPSG:32761', 'EPSG:3408', 'EPSG:3409', 'EPSG:3857', 'EPSG:41001', 'EPSG:4326']
+
+    >>> len(wms['T'].styles) == 10
+    True
+
+    >>> 'boxfill/rainbow' in wms['T'].styles
+    True
+
+    >>> wms['T'].styles['boxfill/rainbow']['legend_format']
+    'image/png'
+
+    >>> len(wms['T'].elevations)
+    40
+
+    >>> len(wms['T'].timepositions)
+    271
+
+    >>> wms['T'].defaulttimeposition
+    '2015-07-01T12:00:00Z'
+
+    >>> wms['T'].parent is not None
+    True

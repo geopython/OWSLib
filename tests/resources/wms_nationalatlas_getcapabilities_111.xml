@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://schemas.opengis.net/wms/1.1.1/WMS_MS_Capabilities.dtd"
+ [
+ <!ELEMENT VendorSpecificCapabilities EMPTY>
+ ]>  <!-- end of DOCTYPE declaration -->
+
+<WMT_MS_Capabilities version="1.1.1">
+
+<!-- MapServer version 6.0.0 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG SUPPORTS=PROJ SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=ICONV SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=SOS_SERVER SUPPORTS=THREADS SUPPORTS=GEOS INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE -->
+
+<Service>
+  <Name>OGC:WMS</Name>
+  <Title>1 Million Scale WMS Layers from the National Atlas of the United States</Title>
+  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+  <ContactInformation>
+    <ContactPersonPrimary>
+      <ContactPerson></ContactPerson>
+      <ContactOrganization>National Atlas of the United States</ContactOrganization>
+    </ContactPersonPrimary>
+      <ContactPosition>WMS Support Staff</ContactPosition>
+  <ContactElectronicMailAddress>atlasmail@usgs.gov</ContactElectronicMailAddress>
+  </ContactInformation>
+  <Fees>none</Fees>
+  <AccessConstraints>none</AccessConstraints>
+</Service>
+
+<Capability>
+  <Request>
+    <GetCapabilities>
+      <Format>application/vnd.ogc.wms_xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetCapabilities>
+    <GetMap>
+      <Format>image/png</Format>
+      <Format>image/jpeg</Format>
+      <Format>image/gif</Format>
+      <Format>image/png; mode=8bit</Format>
+      <Format>image/tiff</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetMap>
+    <GetFeatureInfo>
+      <Format>text/plain</Format>
+      <Format>application/vnd.ogc.gml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetFeatureInfo>
+    <DescribeLayer>
+      <Format>text/xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Post>
+        </HTTP>
+      </DCPType>
+    </DescribeLayer>
+    <GetLegendGraphic>
+      <Format>image/png</Format>
+      <Format>image/jpeg</Format>
+      <Format>image/gif</Format>
+      <Format>image/png; mode=8bit</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetLegendGraphic>
+    <GetStyles>
+      <Format>text/xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webservices.nationalatlas.gov/wms?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetStyles>
+  </Request>
+  <Exception>
+    <Format>application/vnd.ogc.se_xml</Format>
+    <Format>application/vnd.ogc.se_inimage</Format>
+    <Format>application/vnd.ogc.se_blank</Format>
+  </Exception>
+  <VendorSpecificCapabilities />
+  <UserDefinedSymbolization SupportSLD="1" UserLayer="0" UserStyle="1" RemoteWFS="0"/>
+  <Layer>
+    <Name>one_million</Name>
+    <Title>1 Million Scale WMS Layers from the National Atlas of the United States</Title>
+    <Abstract>one_million</Abstract>
+    <SRS>CRS:84</SRS>
+    <SRS>EPSG:4326</SRS>
+    <SRS>EPSG:2163</SRS>
+    <SRS>EPSG:102100</SRS>
+    <SRS>EPSG:4269</SRS>
+    <SRS>EPSG:4267</SRS>
+    <SRS>EPSG:54004</SRS>
+    <SRS>EPSG:54008</SRS>
+    <SRS>EPSG:3785</SRS>
+    <SRS>EPSG:3857</SRS>
+    <SRS>EPSG:102113</SRS>
+    <SRS>EPSG:900913</SRS>
+    <LatLonBoundingBox minx="-179.133" miny="18.9155" maxx="179.788" maxy="71.398" />
+    <BoundingBox SRS="CRS:84"
+                minx="-179.133" miny="18.9155" maxx="179.788" maxy="71.398" />
+    <BoundingBox SRS="EPSG:4326"
+                minx="-179.133" miny="18.9155" maxx="179.788" maxy="71.398" />
+    <BoundingBox SRS="EPSG:2163"
+                minx="-8.01362e+06" miny="-2.87546e+06" maxx="8.01713e+06" maxy="1.08097e+07" />
+    <BoundingBox SRS="EPSG:102100"
+                minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07" maxy="1.15398e+07" />
+    <BoundingBox SRS="EPSG:4269"
+                minx="-179.133" miny="18.9155" maxx="179.788" maxy="71.398" />
+    <BoundingBox SRS="EPSG:4267"
+                minx="-179.133" miny="18.9155" maxx="179.788" maxy="71.398" />
+    <BoundingBox SRS="EPSG:54004"
+                minx="-1.9941e+07" miny="2.13115e+06" maxx="2.00139e+07" maxy="1.14992e+07" />
+    <BoundingBox SRS="EPSG:54008"
+                minx="-1.88708e+07" miny="2.09231e+06" maxx="1.89398e+07" maxy="7.92496e+06" />
+    <BoundingBox SRS="EPSG:3785"
+                minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07" maxy="1.15398e+07" />
+    <BoundingBox SRS="EPSG:3857"
+                minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07" maxy="1.15398e+07" />
+    <BoundingBox SRS="EPSG:102113"
+                minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07" maxy="1.15398e+07" />
+    <BoundingBox SRS="EPSG:900913"
+                minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07" maxy="1.15398e+07" />
+    <Attribution>
+        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://nationalatlas.gov/infodocs/wms_intro.html"/>
+    </Attribution>
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>airports1m</Name>
+        <Title>1 Million Scale - Airports</Title>
+        <LatLonBoundingBox minx="-176.646" miny="17.7016" maxx="-64.8017" maxy="71.2854" />
+        <BoundingBox SRS="CRS:84"
+                    minx="-176.646" miny="17.7016" maxx="-64.8017" maxy="71.2854" />
+        <BoundingBox SRS="EPSG:4326"
+                    minx="-176.646" miny="17.7016" maxx="-64.8017" maxy="71.2854" />
+        <BoundingBox SRS="EPSG:2163"
+                    minx="-7.13345e+06" miny="-3.00665e+06" maxx="3.72355e+06" maxy="4.23839e+06" />
+        <BoundingBox SRS="EPSG:102100"
+                    minx="-1.96641e+07" miny="2.00265e+06" maxx="-7.21369e+06" maxy="1.15006e+07" />
+        <BoundingBox SRS="EPSG:4269"
+                    minx="-176.646" miny="17.7016" maxx="-64.8017" maxy="71.2854" />
+        <BoundingBox SRS="EPSG:4267"
+                    minx="-176.646" miny="17.7016" maxx="-64.8017" maxy="71.2854" />
+        <BoundingBox SRS="EPSG:54004"
+                    minx="-1.96641e+07" miny="1.98966e+06" maxx="-7.21369e+06" maxy="1.14601e+07" />
+        <BoundingBox SRS="EPSG:54008"
+                    minx="-1.87389e+07" miny="1.95795e+06" maxx="-2.32152e+06" maxy="7.9124e+06" />
+        <BoundingBox SRS="EPSG:3785"
+                    minx="-1.96641e+07" miny="2.00265e+06" maxx="-7.21369e+06" maxy="1.15006e+07" />
+        <BoundingBox SRS="EPSG:3857"
+                    minx="-1.96641e+07" miny="2.00265e+06" maxx="-7.21369e+06" maxy="1.15006e+07" />
+        <BoundingBox SRS="EPSG:102113"
+                    minx="-1.96641e+07" miny="2.00265e+06" maxx="-7.21369e+06" maxy="1.15006e+07" />
+        <BoundingBox SRS="EPSG:900913"
+                    minx="-1.96641e+07" miny="2.00265e+06" maxx="-7.21369e+06" maxy="1.15006e+07" />
+        <Style>
+          <Name>default</Name>
+          <Title>default</Title>
+          <LegendURL width="71" height="21">
+             <Format>image/png</Format>
+             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://webservices.nationalatlas.gov/wms?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=airports1m&amp;format=image/png&amp;STYLE=default"/>
+          </LegendURL>
+        </Style>
+    </Layer>
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>amtrak1m</Name>
+        <Title>1 Million Scale - Railroad and Bus Passenger Stations</Title>
+        <LatLonBoundingBox minx="-124.212" miny="25.8498" maxx="-68.6706" maxy="48.7205" />
+        <BoundingBox SRS="CRS:84"
+                    minx="-124.212" miny="25.8498" maxx="-68.6706" maxy="48.7205" />
+        <BoundingBox SRS="EPSG:4326"
+                    minx="-124.212" miny="25.8498" maxx="-68.6706" maxy="48.7205" />
+        <BoundingBox SRS="EPSG:2163"
+                    minx="-2.41969e+06" miny="-2.11947e+06" maxx="3.09811e+06" maxy="862008" />
+        <BoundingBox SRS="EPSG:102100"
+                    minx="-1.38272e+07" miny="2.9805e+06" maxx="-7.64438e+06" maxy="6.22757e+06" />
+        <BoundingBox SRS="EPSG:4269"
+                    minx="-124.212" miny="25.8498" maxx="-68.6706" maxy="48.7205" />
+        <BoundingBox SRS="EPSG:4267"
+                    minx="-124.212" miny="25.8498" maxx="-68.6706" maxy="48.7205" />
+        <BoundingBox SRS="EPSG:54004"
+                    minx="-1.38272e+07" miny="2.96187e+06" maxx="-7.64438e+06" maxy="6.19544e+06" />
+        <BoundingBox SRS="EPSG:54008"
+                    minx="-1.24516e+07" miny="2.8602e+06" maxx="-5.05281e+06" maxy="5.39854e+06" />
+        <BoundingBox SRS="EPSG:3785"
+                    minx="-1.38272e+07" miny="2.9805e+06" maxx="-7.64438e+06" maxy="6.22757e+06" />
+        <BoundingBox SRS="EPSG:3857"
+                    minx="-1.38272e+07" miny="2.9805e+06" maxx="-7.64438e+06" maxy="6.22757e+06" />
+        <BoundingBox SRS="EPSG:102113"
+                    minx="-1.38272e+07" miny="2.9805e+06" maxx="-7.64438e+06" maxy="6.22757e+06" />
+        <BoundingBox SRS="EPSG:900913"
+                    minx="-1.38272e+07" miny="2.9805e+06" maxx="-7.64438e+06" maxy="6.22757e+06" />
+        <Style>
+          <Name>default</Name>
+          <Title>default</Title>
+          <LegendURL width="71" height="21">
+             <Format>image/png</Format>
+             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://webservices.nationalatlas.gov/wms?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=amtrak1m&amp;format=image/png&amp;STYLE=default"/>
+          </LegendURL>
+        </Style>
+    </Layer>
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>coast1m</Name>
+        <Title>1 Million Scale - Coastlines</Title>
+        <LatLonBoundingBox minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="CRS:84"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:4326"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:2163"
+                    minx="-8.13616e+06" miny="-3.00973e+06" maxx="8.13829e+06" maxy="1.0882e+07" />
+        <BoundingBox SRS="EPSG:102100"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:4269"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:4267"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:54004"
+                    minx="-1.99426e+07" miny="1.98651e+06" maxx="2.00128e+07" maxy="1.14961e+07" />
+        <BoundingBox SRS="EPSG:54008"
+                    minx="-1.90071e+07" miny="1.95494e+06" maxx="1.90741e+07" maxy="7.92398e+06" />
+        <BoundingBox SRS="EPSG:3785"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:3857"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:102113"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:900913"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <Style>
+          <Name>default</Name>
+          <Title>default</Title>
+          <LegendURL width="71" height="21">
+             <Format>image/png</Format>
+             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://webservices.nationalatlas.gov/wms?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=coast1m&amp;format=image/png&amp;STYLE=default"/>
+          </LegendURL>
+        </Style>
+    </Layer>
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>cdl</Name>
+        <Title>1 Million Scale - 113th Congressional Districts</Title>
+        <LatLonBoundingBox minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="CRS:84"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:4326"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:2163"
+                    minx="-8.13616e+06" miny="-3.00973e+06" maxx="8.13829e+06" maxy="1.0882e+07" />
+        <BoundingBox SRS="EPSG:102100"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:4269"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:4267"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:54004"
+                    minx="-1.99426e+07" miny="1.98651e+06" maxx="2.00128e+07" maxy="1.14961e+07" />
+        <BoundingBox SRS="EPSG:54008"
+                    minx="-1.90071e+07" miny="1.95494e+06" maxx="1.90741e+07" maxy="7.92398e+06" />
+        <BoundingBox SRS="EPSG:3785"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:3857"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:102113"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:900913"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <Style>
+          <Name>default</Name>
+          <Title>default</Title>
+          <LegendURL width="71" height="21">
+             <Format>image/png</Format>
+             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://webservices.nationalatlas.gov/wms?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=cdl&amp;format=image/png&amp;STYLE=default"/>
+          </LegendURL>
+        </Style>
+    </Layer>
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>cdp</Name>
+        <Title>1 Million Scale - 113th Congressional Districts by Party</Title>
+        <LatLonBoundingBox minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="CRS:84"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:4326"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:2163"
+                    minx="-8.13616e+06" miny="-3.00973e+06" maxx="8.13829e+06" maxy="1.0882e+07" />
+        <BoundingBox SRS="EPSG:102100"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:4269"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:4267"
+                    minx="-179.147" miny="17.6744" maxx="179.778" maxy="71.3892" />
+        <BoundingBox SRS="EPSG:54004"
+                    minx="-1.99426e+07" miny="1.98651e+06" maxx="2.00128e+07" maxy="1.14961e+07" />
+        <BoundingBox SRS="EPSG:54008"
+                    minx="-1.90071e+07" miny="1.95494e+06" maxx="1.90741e+07" maxy="7.92398e+06" />
+        <BoundingBox SRS="EPSG:3785"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:3857"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:102113"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <BoundingBox SRS="EPSG:900913"
+                    minx="-1.99426e+07" miny="1.99947e+06" maxx="2.00128e+07" maxy="1.15367e+07" />
+        <Style>
+          <Name>default</Name>
+          <Title>default</Title>
+          <LegendURL width="71" height="21">
+             <Format>image/png</Format>
+             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://webservices.nationalatlas.gov/wms?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=cdp&amp;format=image/png&amp;STYLE=default"/>
+          </LegendURL>
+        </Style>
+    </Layer>
+  </Layer>
+</Capability>
+</WMT_MS_Capabilities>

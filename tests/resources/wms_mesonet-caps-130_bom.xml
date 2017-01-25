@@ -1,0 +1,149 @@
+ÿþ<?xml version='1.0' encoding="ISO-8859-1" standalone="no" ?>
+<WMS_Capabilities version="1.3.0"  xmlns="http://www.opengis.net/wms"   xmlns:sld="http://www.opengis.net/sld"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   xmlns:ms="http://mapserver.gis.umn.edu/mapserver"   xsi:schemaLocation="http://www.opengis.net/wms http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd  http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/sld_capabilities.xsd  http://mapserver.gis.umn.edu/mapserver http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?service=WMS&amp;version=1.3.0&amp;request=GetSchemaExtension">
+
+<!-- MapServer version 6.4.1 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG SUPPORTS=PROJ SUPPORTS=GD SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=CAIRO SUPPORTS=ICONV SUPPORTS=FRIBIDI SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=FASTCGI SUPPORTS=GEOS INPUT=JPEG INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE -->
+
+<Service>
+  <Name>WMS</Name>
+  <Title>IEM WMS Service</Title>
+  <Abstract>IEM generated CONUS composite of NWS WSR-88D level III base reflectivity.</Abstract>
+  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/>
+  <ContactInformation>
+    <ContactPersonPrimary>
+      <ContactPerson>Daryl Herzmann</ContactPerson>
+      <ContactOrganization>Iowa State University</ContactOrganization>
+    </ContactPersonPrimary>
+  </ContactInformation>
+  <AccessConstraints>None</AccessConstraints>
+  <MaxWidth>2048</MaxWidth>
+  <MaxHeight>2048</MaxHeight>
+</Service>
+
+<Capability>
+  <Request>
+    <GetCapabilities>
+      <Format>text/xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetCapabilities>
+    <GetMap>
+      <Format>image/png</Format>
+      <Format>image/jpeg</Format>
+      <Format>image/gif</Format>
+      <Format>image/png; mode=8bit</Format>
+      <Format>application/x-pdf</Format>
+      <Format>image/svg+xml</Format>
+      <Format>image/tiff</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetMap>
+    <GetFeatureInfo>
+      <Format>text/plain</Format>
+      <Format>application/vnd.ogc.gml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetFeatureInfo>
+    <sld:DescribeLayer>
+      <Format>text/xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Post>
+        </HTTP>
+      </DCPType>
+    </sld:DescribeLayer>
+    <sld:GetLegendGraphic>
+      <Format>image/png</Format>
+      <Format>image/jpeg</Format>
+      <Format>image/gif</Format>
+      <Format>image/png; mode=8bit</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Post>
+        </HTTP>
+      </DCPType>
+    </sld:GetLegendGraphic>
+    <ms:GetStyles>
+      <Format>text/xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?"/></Post>
+        </HTTP>
+      </DCPType>
+    </ms:GetStyles>
+  </Request>
+  <Exception>
+    <Format>XML</Format>
+    <Format>INIMAGE</Format>
+    <Format>BLANK</Format>
+  </Exception>
+  <sld:UserDefinedSymbolization SupportSLD="1" UserLayer="0" UserStyle="1" RemoteWFS="0" InlineFeature="0" RemoteWCS="0"/>
+  <Layer>
+    <Name>nexrad_base_reflect</Name>
+    <Title>IEM WMS Service</Title>
+    <Abstract>IEM generated CONUS composite of NWS WSR-88D level III base reflectivity.</Abstract>
+    <CRS>EPSG:4326</CRS>
+    <CRS>EPSG:900913</CRS>
+    <CRS>EPSG:102100</CRS>
+    <CRS>EPSG:3857</CRS>
+    <EX_GeographicBoundingBox>
+        <westBoundLongitude>-126</westBoundLongitude>
+        <eastBoundLongitude>-66</eastBoundLongitude>
+        <southBoundLatitude>24</southBoundLatitude>
+        <northBoundLatitude>50</northBoundLatitude>
+    </EX_GeographicBoundingBox>
+    <BoundingBox CRS="EPSG:4326"
+                minx="24" miny="-126" maxx="50" maxy="-66" />
+    <MinScaleDenominator>90000</MinScaleDenominator>
+    <MaxScaleDenominator>4.65e+06</MaxScaleDenominator>
+    <Layer queryable="0" opaque="0" cascaded="0">
+        <Name>time_idx</Name>
+        <Title>NEXRAD BASE REFLECT</Title>
+        <CRS>EPSG:4326</CRS>
+        <CRS>EPSG:900913</CRS>
+        <CRS>EPSG:102100</CRS>
+        <CRS>EPSG:3857</CRS>
+        <EX_GeographicBoundingBox>
+            <westBoundLongitude>-126</westBoundLongitude>
+            <eastBoundLongitude>-66</eastBoundLongitude>
+            <southBoundLatitude>24</southBoundLatitude>
+            <northBoundLatitude>50</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="EPSG:4326"
+                    minx="24" miny="-126" maxx="50" maxy="-66" />
+        <Dimension name="time" units="ISO8601" default="2006-06-23T03:10:00Z" nearestValue="0">1995-01-01/2015-12-31/PT5M</Dimension>
+    </Layer>
+    <Layer queryable="0" opaque="0" cascaded="0">
+        <Name>nexrad-n0r-wmst</Name>
+        <Title>NEXRAD BASE REFLECT</Title>
+        <CRS>EPSG:4326</CRS>
+        <CRS>EPSG:900913</CRS>
+        <CRS>EPSG:102100</CRS>
+        <CRS>EPSG:3857</CRS>
+        <EX_GeographicBoundingBox>
+            <westBoundLongitude>-126</westBoundLongitude>
+            <eastBoundLongitude>-66</eastBoundLongitude>
+            <southBoundLatitude>24</southBoundLatitude>
+            <northBoundLatitude>50</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="EPSG:4326"
+                    minx="24" miny="-126" maxx="50" maxy="-66" />
+        <Dimension name="time" units="ISO8601" default="2006-06-23T03:10:00Z" nearestValue="0">1995-01-01/2015-12-31/PT5M</Dimension>
+    </Layer>
+  </Layer>
+</Capability>
+</WMS_Capabilities>

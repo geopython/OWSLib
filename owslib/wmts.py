@@ -88,7 +88,8 @@ _TILE_MATRIX_LIMITS_TAG = _WMTS_NS + 'TileMatrixLimits'
 _TILE_MATRIX_TAG = _WMTS_NS + 'TileMatrix'
 _TILE_WIDTH_TAG = _WMTS_NS + 'TileWidth'
 _TOP_LEFT_CORNER_TAG = _WMTS_NS + 'TopLeftCorner'
-
+_KEYWORDS_TAG = _OWS_NS + 'Keywords'
+_KEYWORD_TAG = _OWS_NS + 'Keyword'
 _HREF_TAG = _XLINK_NS + 'href'
 
 
@@ -189,6 +190,8 @@ class WebMapTileService(object):
 
     def _buildMetadata(self, parse_remote_metadata=False):
         ''' set up capabilities metadata objects '''
+
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
 
         # serviceIdentification metadata
         serviceident = self._capabilities.find(_SERVICE_IDENTIFICATION_TAG)
@@ -736,6 +739,8 @@ class ContentMetadata:
 
         self.formats = [f.text for f in elem.findall(_FORMAT_TAG)]
 
+        self.keywords = [f.text for f in elem.findall(
+                         _KEYWORDS_TAG+'/'+_KEYWORD_TAG)]
         self.infoformats = [f.text for f in elem.findall(_INFO_FORMAT_TAG)]
 
         self.layers = []

@@ -26,7 +26,7 @@
     >>> for service in services:
     ...     type(service)
     <class 'owslib.csw.CatalogueServiceWeb'>
-    <class 'owslib.wms.WebMapService'>
+    <class 'owslib.map.wms111.WebMapService_1_1_1'>
     <class 'owslib.coverage.wcs100.WebCoverageService_1_0_0'>
     <class 'owslib.feature.wfs100.WebFeatureService_1_0_0'>
 
