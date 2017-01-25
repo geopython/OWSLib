@@ -2,7 +2,7 @@ import owslib
 from owslib.wcs import WebCoverageService
 
 
-# t = WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows?', version='2.0.0')
+t = WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows?', version='2.0.0')
 
 # print t.contents['CCI_V2_release_chlor_a'].supportedFormats
 
@@ -17,10 +17,10 @@ from owslib.wcs import WebCoverageService
 
 # print t.provider.name
 
-def dump(obj):
-	for attr in dir(obj):
-		if "_" not in attr:
-			print "obj.%s = %s" % (attr, getattr(obj, attr))
+# def dump(obj):
+# 	for attr in dir(obj):
+# 		if "_" not in attr:
+# 			print "obj.%s = %s" % (attr, getattr(obj, attr))
 
 
 
@@ -55,15 +55,24 @@ def dump(obj):
 # bytes_written = f.write(cov.read())
 # f.close()
 
+cov = t.getCoverage(identifier=['OCCCI_V3_monthly_rrs_510_rmsd'], format='application/netcdf', subsets=[('Long',100), ('ansi',144883)])
 
-s = WebCoverageService('http://earthserver.ecmwf.int/rasdaman/ows?', version='2.0.0')
-# print s.contents
 
-print s.contents['temp2m']
+filename = 'wcs200test_slice.nc'
+f=open(filename, 'wb')
+bytes_written = f.write(cov.read())
+f.close()
 
-# dump(s.contents['temp2m'].grid)
-for x in s.contents['temp2m'].timepositions[0:100]:
-	print x.isoformat()
+
+
+# s = WebCoverageService('http://earthserver.ecmwf.int/rasdaman/ows?', version='2.0.0')
+# # print s.contents
+
+# print s.contents['temp2m']
+
+# # dump(s.contents['temp2m'].grid)
+# for x in s.contents['temp2m'].timepositions[0:100]:
+# 	print x.isoformat()
 
 # print s.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.dimension
 # print s.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.lowlimits
