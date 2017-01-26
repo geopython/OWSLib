@@ -184,6 +184,9 @@ class WebCoverageService_2_0_0(WCSBase):
         return u
 
     def is_number(self,s):
+        """simple helper to test if value is number as requests with numbers dont
+        need quote marks
+        """
         try:
             float(s)
             return True
@@ -246,6 +249,7 @@ class ContentMetadata(object):
     grid=property(_getGrid, None)
 
      #timelimits are the start/end times, timepositions are all timepoints. WCS servers can declare one or both or neither of these.
+     # in wcs 2.0 this can be gathered from the Envelope tag
     def _getTimeLimits(self):
         timepoints, timelimits=[],[]
         b=self._elem.find(ns('lonLatEnvelope'))
@@ -271,13 +275,13 @@ class ContentMetadata(object):
         gridelem= self.descCov.find(nsWCS2('CoverageDescription/')+'{http://www.opengis.net/gml/3.2}domainSet/'+'{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors')
         if gridelem is not None:
             # irregular time
-            print("finding irregular times")
+            #print("finding irregular times")
             cooeficients = []
             #t_grid = self.grid
             #start_pos = float(t_grid.origin[2])
             grid_axes = gridelem.findall('{http://www.opengis.net/gml/3.3/rgrid}generalGridAxis')
             for elem in grid_axes:
-                if elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}gridAxesSpanned').text == "ansi":
+                if elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}gridAxesSpanned').text in ["ansi", "unix"]:
                    cooeficients = elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}coefficients').text.split(' ')
             for x in cooeficients:
                 #t_pos = int(start_pos) + int(x)

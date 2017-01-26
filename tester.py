@@ -4,7 +4,9 @@ from owslib.wcs import WebCoverageService
 
 t = WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows?', version='2.0.0')
 
-# print t.contents['CCI_V2_release_chlor_a'].supportedFormats
+
+
+print t.contents['CCI_V2_release_chlor_a'].supportedFormats
 
 # for x in t.contents['CCI_V2_release_chlor_a'].timepositions:
 #  	print x.isoformat()
@@ -55,10 +57,10 @@ t = WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows?', version='2.
 # bytes_written = f.write(cov.read())
 # f.close()
 
-cov = t.getCoverage(identifier=['OCCCI_V3_monthly_rrs_510_rmsd'], format='application/netcdf', subsets=[('Long',100), ('ansi',144883)])
+cov = t.getCoverage(identifier=['OCCCI_V3_monthly_rrs_510_rmsd'], format='application/netcdf', subsets=[('Long',100), ('ansi',"2005-05-01T00:00:00Z")])
 
 
-filename = 'wcs200test_slice.nc'
+filename = 'wcs200test_slice2.nc'
 f=open(filename, 'wb')
 bytes_written = f.write(cov.read())
 f.close()
