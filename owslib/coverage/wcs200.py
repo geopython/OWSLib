@@ -174,7 +174,6 @@ class WebCoverageService_2_0_0(WCSBase):
                         data = data + "&"+ urlencode({"subset":subset[0]+'('+self.__makeString(subset[1])+')'})
 
 
-        print('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
 

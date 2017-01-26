@@ -10,7 +10,7 @@ Imports
     >>> from owslib.wcs import WebCoverageService
     >>> from tests.utils import scratch_file
 
-    >>> wcs=WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows', version='2.0.0')
+    >>> wcs=WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows', version='2.0.1')
     >>> wcs.url
     'http://earthserver.pml.ac.uk/rasdaman/ows'
     >>> wcs.version
@@ -81,17 +81,17 @@ Print the ids of all layers (actually just the first 3):
 
 
 #Now we have enough information to build a getCoverage request:
-#    >>> covID='Temperature_tropopause'
-#    >>> timeRange=['2009-01-08T06:00:00',  '2009-01-08T12:00:00']  #Okay, you should be able to select a range of times, but the server doesn't seem to like it.
-#    >>> timeRange=[cvg.timepositions[10]] #So for now I'll just  choose one timestep (from cvg.timepositions)
-#    >>> bb=(-140, -15, 30, 55) # chosen from cvg.boundingBoxWGS84
-#    >>> formatType='NetCDF3' # chosen from cvg.supportedFormats
+    >>> covID='OCCCI_V3_monthly_chlor_a'
+    >>> time_subset = ("ansi", "2004-06-01T00:00:00Z")
+    >>> lat_subset = ('Lat',40,50)
+    >>> long_subset = ('Long',-10,0)
+    >>> formatType='NetCDF3' # chosen from cvg.supportedFormats
 
 #Make the actual getCoverage request.
-#    >>> output=wcs.getCoverage(identifier=covID,time=timeRange,bbox=bb, format=formatType)
+    >>> output=wcs.getCoverage(identifier=['OCCCI_V3_monthly_chlor_a'], format='application/netcdf', subsets=[long_subset, lat_subset, time_subset])
 
 #Then write this to a netcdf file.
-#    >>> filename = scratch_file('threddstest.nc')
-#    >>> f=open(filename, 'wb')
-#    >>> bytes_written = f.write(output.read())
-#    >>> f.close()
+    >>> filename = scratch_file('wcs2test.nc')
+    >>> f=open(filename, 'wb')
+    >>> bytes_written = f.write(output.read())
+    >>> f.close()
