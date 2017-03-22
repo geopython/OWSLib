@@ -1309,8 +1309,8 @@ class Process(object):
         """ Initialization method extracts all available metadata from an XML document (passed in as etree object) """
 
         # <ns0:ProcessDescriptions service="WPS" version="1.0.0"
-        #                          xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd"
-        #                          xml:lang="en-US" xmlns:ns0="http://www.opengis.net/wps/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        #   xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd"  # noqa
+        #   xml:lang="en-US" xmlns:ns0="http://www.opengis.net/wps/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">  # noqa
         # OR:
         # <ns0:Process ns0:processVersion="1.0.0">
         self._root = elem
@@ -1330,38 +1330,54 @@ class Process(object):
             # this element's namespace
             ns = getNamespace(child)
 
-            # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
+            # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">
+            #   gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
+            # </ows:Identifier>
             if child.tag.endswith('Identifier'):
                 self.identifier = testXMLValue(child)
 
-            # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Feature Weighted Grid Statistics</ows:Title>
+            # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">
+            #   Feature Weighted Grid Statistics
+            # </ows:Title>
             elif child.tag.endswith('Title'):
                 self.title = testXMLValue(child)
 
-            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">This algorithm generates area weighted statistics of a gridded dataset for a set of vector polygon features. Using the bounding-box that encloses the feature data and the time range, if provided, a subset of the gridded dataset is requested from the remote gridded data server. Polygon representations are generated for cells in the retrieved grid. The polygon grid-cell representations are then projected to the feature data coordinate reference system. The grid-cells are used to calculate per grid-cell feature coverage fractions. Area-weighted statistics are then calculated for each feature using the grid values and fractions as weights. If the gridded dataset has a time range the last step is repeated for each time step within the time range or all time steps if a time range was not supplied.</ows:Abstract>
+            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">
+            #   This algorithm generates area weighted statistics of a gridded dataset for
+            #   a set of vector polygon features. Using the bounding-box that encloses
+            #   the feature data and the time range, if provided, a subset of the gridded dataset
+            #   is requested from the remote gridded data server.
+            #   Polygon representations are generated for cells in the retrieved grid.
+            #   The polygon grid-cell representations are then projected to the feature data
+            #   coordinate reference system. The grid-cells are used to calculate per grid-cell
+            #   feature coverage fractions. Area-weighted statistics are then calculated for each feature
+            #   using the grid values and fractions as weights. If the gridded dataset has a time range
+            #   the last step is repeated for each time step within the time range or all time steps
+            #   if a time range was not supplied.
+            # </ows:Abstract>
             elif child.tag.endswith('Abstract'):
                 self.abstract = testXMLValue(child)
 
             # <ows:Metadata xlink:title="Documentation" xlink:href="http://emu.readthedocs.org/en/latest/"/>
             elif child.tag.endswith('Metadata'):
                 self.metadata.append(Metadata(child))
-           
-        if self.verbose == True:
+
+        if self.verbose is True:
             dump(self)
 
         # <DataInputs>
         self.dataInputs = []
         for inputElement in elem.findall('DataInputs/Input'):
             self.dataInputs.append(Input(inputElement))
-            if self.verbose == True:
+            if self.verbose is True:
                 dump(self.dataInputs[-1], prefix='\tInput: ')
 
         # <ProcessOutputs>
         self.processOutputs = []
         for outputElement in elem.findall('ProcessOutputs/Output'):
             self.processOutputs.append(Output(outputElement))
-            if self.verbose == True:
-                dump(self.processOutputs[-1],  prefix='\tOutput: ')
+            if self.verbose is True:
+                dump(self.processOutputs[-1], prefix='\tOutput: ')
 
 
 class ComplexDataInput(IComplexDataInput, ComplexData):
