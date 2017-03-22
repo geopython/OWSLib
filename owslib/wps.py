@@ -868,22 +868,22 @@ class InputOutput(object):
         self.metadata = []
 
         # loop over sub-elements without requiring a specific namespace
-        for subElement in element:
+        for child in element:
 
             # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">SUMMARIZE_TIMESTEP</ows:Identifier>
-            if subElement.tag.endswith('Identifier'):
-                self.identifier = testXMLValue(subElement)
+            if child.tag.endswith('Identifier'):
+                self.identifier = testXMLValue(child)
 
             # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Summarize Timestep</ows:Title>
-            elif subElement.tag.endswith('Title'):
-                self.title = testXMLValue(subElement)
+            elif child.tag.endswith('Title'):
+                self.title = testXMLValue(child)
 
             # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">
             #   If selected, processing output will include columns with summarized statistics for all
             #   feature attribute values for each timestep
             # </ows:Abstract>
-            elif subElement.tag.endswith('Abstract'):
-                self.abstract = testXMLValue(subElement)
+            elif child.tag.endswith('Abstract'):
+                self.abstract = testXMLValue(child)
 
             # <ows:Metadata xlink:title="Documentation" xlink:href="http://emu.readthedocs.org/en/latest/"/>
             elif child.tag.endswith('Metadata'):
