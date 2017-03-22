@@ -865,6 +865,7 @@ class InputOutput(object):
     def __init__(self, element):
 
         self.abstract = None
+        self.metadata = []
 
         # loop over sub-elements without requiring a specific namespace
         for subElement in element:
@@ -877,9 +878,16 @@ class InputOutput(object):
             elif subElement.tag.endswith('Title'):
                 self.title = testXMLValue(subElement)
 
-            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">If selected, processing output will include columns with summarized statistics for all feature attribute values for each timestep</ows:Abstract>
+            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">
+            #   If selected, processing output will include columns with summarized statistics for all
+            #   feature attribute values for each timestep
+            # </ows:Abstract>
             elif subElement.tag.endswith('Abstract'):
                 self.abstract = testXMLValue(subElement)
+
+            # <ows:Metadata xlink:title="Documentation" xlink:href="http://emu.readthedocs.org/en/latest/"/>
+            elif child.tag.endswith('Metadata'):
+                self.metadata.append(Metadata(child))
 
         self.allowedValues = []
         self.supportedValues = []
