@@ -600,7 +600,8 @@ class ContentMetadata(object):
         self.defaulttimeposition = None
         time_dimension = None
         for dim in elem.findall(nspath('Dimension', WMS_NAMESPACE)):
-            if dim.attrib.get('name') is not None:
+            dim_name = dim.attrib.get('name')
+            if dim_name is not None and dim_name.lower() == 'time':
                 time_dimension = dim
         if time_dimension is not None:
             self.timepositions = time_dimension.text.split(',') if time_dimension.text else None
