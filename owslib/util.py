@@ -133,7 +133,7 @@ class ResponseWrapper(object):
         return self._response.content
 
     def geturl(self):
-        return self._response.url
+        return self._response.url.replace('&&', '&')
 
     # @TODO: __getattribute__ for poking at response
 
