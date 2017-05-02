@@ -27,7 +27,7 @@ def get_namespaces():
 namespaces = get_namespaces()
 
 
-class MD_Metadata(object):
+class CHE_MD_Metadata(object):
     """ Process gmd:MD_Metadata """
     def __init__(self, md=None):
 

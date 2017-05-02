@@ -1,8 +1,8 @@
     >>> from owslib.etree import etree
-    >>> from owslib.iso_che import MD_Metadata
+    >>> from owslib.iso_che import CHE_MD_Metadata
     >>> from tests.utils import resource_file
 
-    >>> m = MD_Metadata(etree.parse(resource_file('iso_che.xml')))
+    >>> m = CHE_MD_Metadata(etree.parse(resource_file('iso_che.xml')))
 
     >>> m.language
     'ger'
