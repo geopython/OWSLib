@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <che:CHE_MD_Metadata xmlns:che="http://www.geocat.ch/2008/che" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:geonet="http://www.fao.org/geonetwork" gco:isoType="gmd:MD_Metadata">
+    <gmd:fileIdentifier>
+      <gco:CharacterString>3d2981af-d5db-4122-8db6-1ea41ed44b3f</gco:CharacterString>
+    </gmd:fileIdentifier>
+    <gmd:language xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gco:CharacterString>ger</gco:CharacterString>
+    </gmd:language>
+    <gmd:characterSet xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" />
+    </gmd:characterSet>
+    <gmd:hierarchyLevel xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" />
+    </gmd:hierarchyLevel>
+    <gmd:contact xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:show="embed">
+      <che:CHE_CI_ResponsibleParty gco:isoType="gmd:CI_ResponsibleParty">
+        <gmd:organisationName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+          <gco:CharacterString>Grundbuch- und Vermessungsamt</gco:CharacterString>
+          <gmd:PT_FreeText>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#EN">Grundbuch- und Vermessungsamt</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#DE">Grundbuch- und Vermessungsamt</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#FR">Grundbuch- und Vermessungsamt</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#IT">Grundbuch- und Vermessungsamt</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#RM">Grundbuch- und Vermessungsamt</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+          </gmd:PT_FreeText>
+        </gmd:organisationName>
+        <gmd:contactInfo>
+          <gmd:CI_Contact>
+            <gmd:phone>
+              <che:CHE_CI_Telephone gco:isoType="gmd:CI_Telephone">
+                <gmd:voice>
+                  <gco:CharacterString>041 728 56 00</gco:CharacterString>
+                </gmd:voice>
+                <gmd:facsimile>
+                  <gco:CharacterString>041 728 56 09</gco:CharacterString>
+                </gmd:facsimile>
+              </che:CHE_CI_Telephone>
+            </gmd:phone>
+            <gmd:address>
+              <che:CHE_CI_Address gco:isoType="gmd:CI_Address">
+                <gmd:city>
+                  <gco:CharacterString>Zug</gco:CharacterString>
+                </gmd:city>
+                <gmd:administrativeArea>
+                  <gco:CharacterString>Zug</gco:CharacterString>
+                </gmd:administrativeArea>
+                <gmd:postalCode>
+                  <gco:CharacterString>6301</gco:CharacterString>
+                </gmd:postalCode>
+                <gmd:country>
+                  <gco:CharacterString>CH</gco:CharacterString>
+                </gmd:country>
+                <gmd:electronicMailAddress>
+                  <gco:CharacterString>info.gva@zg.ch</gco:CharacterString>
+                </gmd:electronicMailAddress>
+                <che:streetName>
+                  <gco:CharacterString>Aabachstrasse</gco:CharacterString>
+                </che:streetName>
+                <che:streetNumber>
+                  <gco:CharacterString>5</gco:CharacterString>
+                </che:streetNumber>
+                <che:postBox>
+                  <gco:CharacterString>857</gco:CharacterString>
+                </che:postBox>
+              </che:CHE_CI_Address>
+            </gmd:address>
+            <gmd:onlineResource>
+              <gmd:CI_OnlineResource>
+                <gmd:linkage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="che:PT_FreeURL_PropertyType">
+                  <che:PT_FreeURL>
+                    <che:URLGroup>
+                      <che:LocalisedURL locale="#EN">http://www.zg.ch/gva</che:LocalisedURL>
+                    </che:URLGroup>
+                    <che:URLGroup>
+                      <che:LocalisedURL locale="#DE">http://www.zg.ch/gva</che:LocalisedURL>
+                    </che:URLGroup>
+                    <che:URLGroup>
+                      <che:LocalisedURL locale="#FR">http://www.zg.ch/gva</che:LocalisedURL>
+                    </che:URLGroup>
+                    <che:URLGroup>
+                      <che:LocalisedURL locale="#IT">http://www.zg.ch/gva</che:LocalisedURL>
+                    </che:URLGroup>
+                    <che:URLGroup>
+                      <che:LocalisedURL locale="#RM">http://www.zg.ch/gva</che:LocalisedURL>
+                    </che:URLGroup>
+                  </che:PT_FreeURL>
+                </gmd:linkage>
+                <gmd:protocol>
+                  <gco:CharacterString>text/html</gco:CharacterString>
+                </gmd:protocol>
+              </gmd:CI_OnlineResource>
+            </gmd:onlineResource>
+            <gmd:hoursOfService>
+              <gco:CharacterString>08.00-11.45, 14.00-17.00, montags bis 18.00</gco:CharacterString>
+            </gmd:hoursOfService>
+          </gmd:CI_Contact>
+        </gmd:contactInfo>
+        <gmd:role>
+          <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode" codeListValue="distributor" />
+        </gmd:role>
+        <che:organisationAcronym xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+          <gco:CharacterString>GVA</gco:CharacterString>
+          <gmd:PT_FreeText>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#EN">GVA</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#DE">GVA</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#FR">GVA</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#IT">GVA</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#RM">GVA</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+          </gmd:PT_FreeText>
+        </che:organisationAcronym>
+      </che:CHE_CI_ResponsibleParty>
+    </gmd:contact>
+    <gmd:dateStamp xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gco:DateTime>2017-01-24T12:15:29</gco:DateTime>
+    </gmd:dateStamp>
+    <gmd:metadataStandardName xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gco:CharacterString>GM03 2+</gco:CharacterString>
+    </gmd:metadataStandardName>
+    <gmd:metadataStandardVersion xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gco:CharacterString>1.0</gco:CharacterString>
+    </gmd:metadataStandardVersion>
+    <gmd:locale xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gmd:PT_Locale id="DE">
+        <gmd:languageCode>
+          <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="ger" />
+        </gmd:languageCode>
+        <gmd:characterEncoding>
+          <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" />
+        </gmd:characterEncoding>
+      </gmd:PT_Locale>
+    </gmd:locale>
+    <gmd:locale xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gmd:PT_Locale id="FR">
+        <gmd:languageCode>
+          <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="fre" />
+        </gmd:languageCode>
+        <gmd:characterEncoding>
+          <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" />
+        </gmd:characterEncoding>
+      </gmd:PT_Locale>
+    </gmd:locale>
+    <gmd:locale xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gmd:PT_Locale id="IT">
+        <gmd:languageCode>
+          <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="ita" />
+        </gmd:languageCode>
+        <gmd:characterEncoding>
+          <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" />
+        </gmd:characterEncoding>
+      </gmd:PT_Locale>
+    </gmd:locale>
+    <gmd:locale xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gmd:PT_Locale id="EN">
+        <gmd:languageCode>
+          <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" />
+        </gmd:languageCode>
+        <gmd:characterEncoding>
+          <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" />
+        </gmd:characterEncoding>
+      </gmd:PT_Locale>
+    </gmd:locale>
+    <gmd:referenceSystemInfo xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <gmd:MD_ReferenceSystem>
+        <gmd:referenceSystemIdentifier>
+          <gmd:RS_Identifier>
+            <gmd:code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>CH-Landeskoordinaten</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">CH-Landeskoordinaten</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:code>
+          </gmd:RS_Identifier>
+        </gmd:referenceSystemIdentifier>
+      </gmd:MD_ReferenceSystem>
+    </gmd:referenceSystemInfo>
+    <gmd:identificationInfo xmlns:comp="http://www.geocat.ch/2003/05/gateway/GM03Comprehensive" xmlns:xalan="http://xml.apache.org/xalan">
+      <che:CHE_MD_DataIdentification gco:isoType="gmd:MD_DataIdentification">
+        <gmd:citation>
+          <gmd:CI_Citation>
+            <gmd:title xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Gewässerschutzkarte</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Gewässerschutzkarte</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:title>
+            <gmd:date>
+              <gmd:CI_Date>
+                <gmd:date>
+                  <gco:Date>2017-01-24</gco:Date>
+                </gmd:date>
+                <gmd:dateType>
+                  <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" />
+                </gmd:dateType>
+              </gmd:CI_Date>
+            </gmd:date>
+            <gmd:date>
+              <gmd:CI_Date>
+                <gmd:date>
+                  <gco:Date>2005-06-14</gco:Date>
+                </gmd:date>
+                <gmd:dateType>
+                  <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" />
+                </gmd:dateType>
+              </gmd:CI_Date>
+            </gmd:date>
+          </gmd:CI_Citation>
+        </gmd:citation>
+        <gmd:abstract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+          <gco:CharacterString>Die Gewässerschutzkarte mit den darin aufgeführten besonders gefährdeten Gewässerschutzbereichen, Grundwasserschutzzonen und -arealen dient der nachhaltigen Bewirtschaftung der natürlichen Wasserressourcen. Sie ist damit das entscheidende planerische Instrument für den planerischen Gewässerschutz und wird von den Kantonen erstellt.</gco:CharacterString>
+          <gmd:PT_FreeText>
+            <gmd:textGroup>
+              <gmd:LocalisedCharacterString locale="#DE">Die Gewässerschutzkarte mit den darin aufgeführten besonders gefährdeten Gewässerschutzbereichen, Grundwasserschutzzonen und -arealen dient der nachhaltigen Bewirtschaftung der natürlichen Wasserressourcen. Sie ist damit das entscheidende planerische Instrument für den planerischen Gewässerschutz und wird von den Kantonen erstellt.</gmd:LocalisedCharacterString>
+            </gmd:textGroup>
+          </gmd:PT_FreeText>
+        </gmd:abstract>
+        <gmd:status>
+          <gmd:MD_ProgressCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ProgressCode" codeListValue="onGoing" />
+        </gmd:status>
+        <gmd:pointOfContact xmlns:xlink="http://www.w3.org/1999/xlink" xlink:show="embed">
+          <che:CHE_CI_ResponsibleParty gco:isoType="gmd:CI_ResponsibleParty">
+            <gmd:organisationName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Amt für Umweltschutz</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">Amt für Umweltschutz</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Amt für Umweltschutz</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">Amt für Umweltschutz</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">Amt für Umweltschutz</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM">Amt für Umweltschutz</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:organisationName>
+            <gmd:contactInfo>
+              <gmd:CI_Contact>
+                <gmd:phone>
+                  <che:CHE_CI_Telephone gco:isoType="gmd:CI_Telephone">
+                    <gmd:voice>
+                      <gco:CharacterString>041 728 53 70</gco:CharacterString>
+                    </gmd:voice>
+                    <gmd:facsimile>
+                      <gco:CharacterString>041 728 53 79</gco:CharacterString>
+                    </gmd:facsimile>
+                  </che:CHE_CI_Telephone>
+                </gmd:phone>
+                <gmd:address>
+                  <che:CHE_CI_Address gco:isoType="gmd:CI_Address">
+                    <gmd:city>
+                      <gco:CharacterString>Zug</gco:CharacterString>
+                    </gmd:city>
+                    <gmd:administrativeArea>
+                      <gco:CharacterString>Zug</gco:CharacterString>
+                    </gmd:administrativeArea>
+                    <gmd:postalCode>
+                      <gco:CharacterString>6301</gco:CharacterString>
+                    </gmd:postalCode>
+                    <gmd:country>
+                      <gco:CharacterString>CH</gco:CharacterString>
+                    </gmd:country>
+                    <gmd:electronicMailAddress>
+                      <gco:CharacterString>info.afu@zg.ch</gco:CharacterString>
+                    </gmd:electronicMailAddress>
+                    <che:streetName>
+                      <gco:CharacterString>Aabachstrasse</gco:CharacterString>
+                    </che:streetName>
+                    <che:streetNumber>
+                      <gco:CharacterString>5</gco:CharacterString>
+                    </che:streetNumber>
+                  </che:CHE_CI_Address>
+                </gmd:address>
+                <gmd:onlineResource>
+                  <gmd:CI_OnlineResource>
+                    <gmd:linkage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="che:PT_FreeURL_PropertyType">
+                      <che:PT_FreeURL>
+                        <che:URLGroup>
+                          <che:LocalisedURL locale="#EN">http://www.zg.ch/afu/</che:LocalisedURL>
+                        </che:URLGroup>
+                        <che:URLGroup>
+                          <che:LocalisedURL locale="#DE">http://www.zg.ch/afu/</che:LocalisedURL>
+                        </che:URLGroup>
+                        <che:URLGroup>
+                          <che:LocalisedURL locale="#FR">http://www.zg.ch/afu/</che:LocalisedURL>
+                        </che:URLGroup>
+                        <che:URLGroup>
+                          <che:LocalisedURL locale="#IT">http://www.zg.ch/afu/</che:LocalisedURL>
+                        </che:URLGroup>
+                        <che:URLGroup>
+                          <che:LocalisedURL locale="#RM">http://www.zg.ch/afu/</che:LocalisedURL>
+                        </che:URLGroup>
+                      </che:PT_FreeURL>
+                    </gmd:linkage>
+                    <gmd:protocol>
+                      <gco:CharacterString>text/html</gco:CharacterString>
+                    </gmd:protocol>
+                  </gmd:CI_OnlineResource>
+                </gmd:onlineResource>
+              </gmd:CI_Contact>
+            </gmd:contactInfo>
+            <gmd:role>
+              <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#CI_RoleCode" codeListValue="owner" />
+            </gmd:role>
+            <che:organisationAcronym xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>AFU</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">AFU</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">AFU</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">AFU</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">AFU</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM">AFU</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </che:organisationAcronym>
+          </che:CHE_CI_ResponsibleParty>
+        </gmd:pointOfContact>
+        <gmd:graphicOverview>
+          <gmd:MD_BrowseGraphic>
+            <gmd:fileName>
+              <gco:CharacterString>http://www.geocat.ch/geonetwork/srv/ger//resources.get?uuid=3d2981af-d5db-4122-8db6-1ea41ed44b3f&amp;fname=GSK_Geocat.bmp</gco:CharacterString>
+            </gmd:fileName>
+            <gmd:fileDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>large_thumbnail</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">large_thumbnail</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:fileDescription>
+            <gmd:fileType>
+              <gco:CharacterString>bmp</gco:CharacterString>
+            </gmd:fileType>
+          </gmd:MD_BrowseGraphic>
+        </gmd:graphicOverview>
+        <gmd:resourceFormat xmlns:xlink="http://www.w3.org/1999/xlink" xlink:show="embed">
+          <gmd:MD_Format>
+            <gmd:name>
+              <gco:CharacterString>INTERLIS</gco:CharacterString>
+            </gmd:name>
+            <gmd:version>
+              <gco:CharacterString>1</gco:CharacterString>
+            </gmd:version>
+          </gmd:MD_Format>
+        </gmd:resourceFormat>
+        <gmd:descriptiveKeywords xmlns:xlink="http://www.w3.org/1999/xlink">
+          <gmd:MD_Keywords>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Grundwasser</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">groundwater</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Grundwasser</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">acqua sotterranea</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">eaux souterraines</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Gewässer</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">water (geographic)</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Gewässer</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">acque (geografia)</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">eaux (géographie)</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Grundwasserschutz</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">groundwater protection</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Grundwasserschutz</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">protezione delle acque sotterranee</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">protection des réserves d'eau souterraines</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Gewässerschutz</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">water pollution prevention</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Gewässerschutz</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">protezione delle acque</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">prévention de la pollution de l'eau</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Population</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">population (ecological)</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Population</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">popolazione (ecologia)</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">population (écologique)</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Ressourcennutzung</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">resource utilisation</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Ressourcennutzung</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">utilizzazione di risorse</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">utilisation des ressources</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:type>
+              <gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_KeywordTypeCode" codeListValue="_none_" />
+            </gmd:type>
+            <gmd:thesaurusName>
+              <gmd:CI_Citation>
+                <gmd:title>
+                  <gco:CharacterString>GEMET concepts</gco:CharacterString>
+                </gmd:title>
+                <gmd:date>
+                  <gmd:CI_Date>
+                    <gmd:date>
+                      <gco:Date>2015-11-16</gco:Date>
+                    </gmd:date>
+                    <gmd:dateType>
+                      <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+                    </gmd:dateType>
+                  </gmd:CI_Date>
+                </gmd:date>
+                <gmd:identifier>
+                  <gmd:MD_Identifier>
+                    <gmd:code>
+                      <gmx:Anchor xmlns:gmx="http://www.isotc211.org/2005/gmx" xlink:href="https://www.geocat.ch:443/geonetwork/srv/eng/thesaurus.download?ref=external._none_.gemet">geonetwork.thesaurus.external._none_.gemet</gmx:Anchor>
+                    </gmd:code>
+                  </gmd:MD_Identifier>
+                </gmd:identifier>
+              </gmd:CI_Citation>
+            </gmd:thesaurusName>
+          </gmd:MD_Keywords>
+        </gmd:descriptiveKeywords>
+        <gmd:descriptiveKeywords xmlns:xlink="http://www.w3.org/1999/xlink">
+          <gmd:MD_Keywords>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Bauzone</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">Construction zone</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Bauzone</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">zona edificabile</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">Zone à bâtir</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Nutzungsplanung</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">Land use planning</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Nutzungsplanung</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">Pianificazione dell'utilizzazione</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">Planification de l'utilisation du sol</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Grundwasserschutzzone</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">groundwater protection zone</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Grundwasserschutzzone</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">zona di protezione delle acque sotterranee</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">zone de protection des eaux souterraines</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Richtplanung</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">Structural planning</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Richtplanung</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">Pianificazione direttrice</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">Planification directrice</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Gewässerschutzbereich</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">water protection sector</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Gewässerschutzbereich</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">settore di protezione delle acque</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">secteur de protection des eaux</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:keyword xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Grundwasserschutzareal</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">groundwater protection area</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Grundwasserschutzareal</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">area di protezione delle acque sotterranee</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">périmètre de protection des eaux souterraines</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM" />
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:keyword>
+            <gmd:type>
+              <gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_KeywordTypeCode" codeListValue="_none_" />
+            </gmd:type>
+            <gmd:thesaurusName>
+              <gmd:CI_Citation>
+                <gmd:title>
+                  <gco:CharacterString>geocat.ch Thesaurus</gco:CharacterString>
+                </gmd:title>
+                <gmd:date>
+                  <gmd:CI_Date>
+                    <gmd:date>
+                      <gco:Date>2017-03-22</gco:Date>
+                    </gmd:date>
+                    <gmd:dateType>
+                      <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+                    </gmd:dateType>
+                  </gmd:CI_Date>
+                </gmd:date>
+                <gmd:identifier>
+                  <gmd:MD_Identifier>
+                    <gmd:code>
+                      <gmx:Anchor xmlns:gmx="http://www.isotc211.org/2005/gmx" xlink:href="https://www.geocat.ch:443/geonetwork/srv/eng/thesaurus.download?ref=local._none_.geocat.ch">geonetwork.thesaurus.local._none_.geocat.ch</gmx:Anchor>
+                    </gmd:code>
+                  </gmd:MD_Identifier>
+                </gmd:identifier>
+              </gmd:CI_Citation>
+            </gmd:thesaurusName>
+          </gmd:MD_Keywords>
+        </gmd:descriptiveKeywords>
+        <gmd:spatialRepresentationType>
+          <gmd:MD_SpatialRepresentationTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_SpatialRepresentationTypeCode" codeListValue="paperMap" />
+        </gmd:spatialRepresentationType>
+        <gmd:language>
+          <gco:CharacterString>ger</gco:CharacterString>
+        </gmd:language>
+        <gmd:characterSet>
+          <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" />
+        </gmd:characterSet>
+        <gmd:topicCategory />
+        <gmd:topicCategory />
+        <gmd:topicCategory />
+        <gmd:topicCategory />
+        <gmd:topicCategory />
+        <gmd:topicCategory />
+        <gmd:topicCategory />
+        <gmd:topicCategory>
+          <gmd:MD_TopicCategoryCode>environment</gmd:MD_TopicCategoryCode>
+        </gmd:topicCategory>
+        <gmd:topicCategory>
+          <gmd:MD_TopicCategoryCode>environment_EnvironmentalProtection</gmd:MD_TopicCategoryCode>
+        </gmd:topicCategory>
+        <gmd:topicCategory>
+          <gmd:MD_TopicCategoryCode>economy</gmd:MD_TopicCategoryCode>
+        </gmd:topicCategory>
+        <gmd:topicCategory>
+          <gmd:MD_TopicCategoryCode>planningCadastre</gmd:MD_TopicCategoryCode>
+        </gmd:topicCategory>
+        <gmd:topicCategory>
+          <gmd:MD_TopicCategoryCode>planningCadastre_Planning</gmd:MD_TopicCategoryCode>
+        </gmd:topicCategory>
+        <gmd:extent xmlns:xlink="http://www.w3.org/1999/xlink" xlink:show="embed">
+          <gmd:EX_Extent>
+            <gmd:description xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+              <gco:CharacterString>Zug</gco:CharacterString>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#EN">Zug</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#DE">Zug</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#FR">Zug</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#IT">Zug</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#RM">Zug</gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+              </gmd:PT_FreeText>
+            </gmd:description>
+            <gmd:geographicElement>
+              <gmd:EX_GeographicDescription>
+                <gmd:geographicIdentifier>
+                  <gmd:MD_Identifier>
+                    <gmd:code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
+                      <gco:CharacterString>ZG</gco:CharacterString>
+                      <gmd:PT_FreeText>
+                        <gmd:textGroup>
+                          <gmd:LocalisedCharacterString locale="#EN">ZG</gmd:LocalisedCharacterString>
+                        </gmd:textGroup>
+                        <gmd:textGroup>
+                          <gmd:LocalisedCharacterString locale="#DE">ZG</gmd:LocalisedCharacterString>
+                        </gmd:textGroup>
+                        <gmd:textGroup>
+                          <gmd:LocalisedCharacterString locale="#FR">ZG</gmd:LocalisedCharacterString>
+                        </gmd:textGroup>
+                        <gmd:textGroup>
+                          <gmd:LocalisedCharacterString locale="#IT">ZG</gmd:LocalisedCharacterString>
+                        </gmd:textGroup>
+                        <gmd:textGroup>
+                          <gmd:LocalisedCharacterString locale="#RM">ZG</gmd:LocalisedCharacterString>
+                        </gmd:textGroup>
+                      </gmd:PT_FreeText>
+                    </gmd:code>
+                  </gmd:MD_Identifier>
+                </gmd:geographicIdentifier>
+              </gmd:EX_GeographicDescription>
+            </gmd:geographicElement>
+            <gmd:geographicElement>
+              <gmd:EX_BoundingPolygon>
+                <gmd:extentTypeCode>
+                  <gco:Boolean>1</gco:Boolean>
+                </gmd:extentTypeCode>
+                <gmd:polygon>
+                  <gml:MultiSurface gml:id="N5b6930ec90a846568ac26eaa0aeb0069">
+                    <gml:surfaceMember>
+                      <gml:Polygon gml:id="N5b6930ec90a846568ac26eaa0aeb0069.1">
+                        <gml:exterior>
+                          <gml:LinearRing>
+                            <gml:posList>8.522 47.09 8.493 47.1 8.494 47.114 8.48 47.126 8.467 47.119 8.468 47.119 8.454 47.114 8.449 47.131 8.43 47.123 8.42 47.123 8.415 47.124 8.412 47.141 8.414 47.157 8.412 47.173 8.402 47.177 8.4 47.184 8.405 47.195 8.396 47.22 8.396 47.229 8.408 47.242 8.41 47.248 8.414 47.244 8.417 47.234 8.422 47.223 8.447 47.223 8.448 47.22 8.48 47.209 8.489 47.211 8.498 47.212 8.512 47.216 8.513 47.219 8.529 47.219 8.539 47.223 8.543 47.222 8.574 47.217 8.577 47.219 8.587 47.212 8.595 47.212 8.599 47.202 8.603 47.203 8.607 47.205 8.615 47.199 8.628 47.18 8.624 47.173 8.633 47.172 8.661 47.17 8.661 47.161 8.666 47.16 8.692 47.163 8.696 47.163 8.701 47.151 8.688 47.146 8.684 47.141 8.687 47.136 8.681 47.125 8.649 47.103 8.645 47.096 8.637 47.093 8.612 47.095 8.608 47.092 8.587 47.086 8.564 47.082 8.563 47.093 8.547 47.094 8.522 47.09</gml:posList>
+                          </gml:LinearRing>
+                        </gml:exterior>
+                      </gml:Polygon>
+                    </gml:surfaceMember>
+                  </gml:MultiSurface>
+                </gmd:polygon>
+              </gmd:EX_BoundingPolygon>
+            </gmd:geographicElement>
+            <gmd:geographicElement>
+              <gmd:EX_GeographicBoundingBox>
+                <gmd:extentTypeCode>
+                  <gco:Boolean>1</gco:Boolean>
+                </gmd:extentTypeCode>
+                <!--native coords: 672510.0,215128.0,695748.0,233506.0-->
+                <gmd:westBoundLongitude>
+                  <gco:Decimal>8.396</gco:Decimal>
+                </gmd:westBoundLongitude>
+                <gmd:eastBoundLongitude>
+                  <gco:Decimal>8.701</gco:Decimal>
+                </gmd:eastBoundLongitude>
+                <gmd:southBoundLatitude>
+                  <gco:Decimal>47.082</gco:Decimal>
+                </gmd:southBoundLatitude>
+                <gmd:northBoundLatitude>
+                  <gco:Decimal>47.248</gco:Decimal>
+                </gmd:northBoundLatitude>
+              </gmd:EX_GeographicBoundingBox>
+            </gmd:geographicElement>
+          </gmd:EX_Extent>
+        </gmd:extent>
+      </che:CHE_MD_DataIdentification>
+    </gmd:identificationInfo>
+    <gmd:distributionInfo>
+      <gmd:MD_Distribution>
+        <gmd:distributionFormat xmlns:xlink="http://www.w3.org/1999/xlink" xlink:show="embed">
+          <gmd:MD_Format>
+            <gmd:name>
+              <gco:CharacterString>N/A</gco:CharacterString>
+            </gmd:name>
+            <gmd:version>
+              <gco:CharacterString>N/A</gco:CharacterString>
+            </gmd:version>
+          </gmd:MD_Format>
+        </gmd:distributionFormat>
+        <gmd:transferOptions>
+          <gmd:MD_DigitalTransferOptions>
+            <gmd:onLine>
+              <gmd:CI_OnlineResource>
+                <gmd:linkage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="che:PT_FreeURL_PropertyType">
+                  <che:PT_FreeURL>
+                    <che:URLGroup>
+                      <che:LocalisedURL locale="#DE">http://www.zugmap.ch/?link=gewaesserschutzkarte</che:LocalisedURL>
+                    </che:URLGroup>
+                  </che:PT_FreeURL>
+                </gmd:linkage>
+                <gmd:protocol>
+                  <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
+                </gmd:protocol>
+              </gmd:CI_OnlineResource>
+            </gmd:onLine>
+          </gmd:MD_DigitalTransferOptions>
+        </gmd:transferOptions>
+      </gmd:MD_Distribution>
+    </gmd:distributionInfo>
+    <geonet:info>
+      <id>788</id>
+      <schema>iso19139.che</schema>
+      <createDate>2009-05-28T12:00:00</createDate>
+      <changeDate>2017-01-24T12:15:29</changeDate>
+      <isTemplate>n</isTemplate>
+      <title />
+      <source>7ea582d4-9ddf-422e-b28f-29760a4c0147</source>
+      <uuid>3d2981af-d5db-4122-8db6-1ea41ed44b3f</uuid>
+      <isHarvested>n</isHarvested>
+      <popularity>693</popularity>
+      <rating>0</rating>
+      <displayOrder>null</displayOrder>
+      <isPublishedToAll>true</isPublishedToAll>
+      <view>true</view>
+      <notify>true</notify>
+      <download>true</download>
+      <dynamic>true</dynamic>
+      <featured>true</featured>
+      <groupOwner>5</groupOwner>
+      <groupLogoUuid>b3302e3c-b6a7-4b71-aa10-1be70ddf742b</groupLogoUuid>
+      <groupWebsite>http://www.zugis.ch</groupWebsite>
+      <ownername>zug</ownername>
+      <valid_details>
+        <type>xsd</type>
+        <status>
+          1
+          <ratio />
+        </status>
+      </valid_details>
+      <valid_details>
+        <type>schematron-rules-inspire-strict</type>
+        <status>
+          0
+          <ratio>2/2</ratio>
+        </status>
+      </valid_details>
+      <valid_details>
+        <type>schematron-rules-aap</type>
+        <status>
+          1
+          <ratio>0/0</ratio>
+        </status>
+      </valid_details>
+      <valid_details>
+        <type>schematron-rules-iso</type>
+        <status>
+          1
+          <ratio>0/51</ratio>
+        </status>
+      </valid_details>
+      <valid_details>
+        <type>schematron-rules-iso-che</type>
+        <status>
+          1
+          <ratio>0/40</ratio>
+        </status>
+      </valid_details>
+      <valid_details>
+        <type>schematron-rules-inspire</type>
+        <status>
+          0
+          <ratio>5/10</ratio>
+        </status>
+      </valid_details>
+      <valid_details>
+        <type>schematron-rules-geonetwork</type>
+        <status>
+          1
+          <ratio>0/28</ratio>
+        </status>
+      </valid_details>
+      <valid_details>
+        <type>schematron-rules-url-check</type>
+        <status>
+          1
+          <ratio>0/11</ratio>
+        </status>
+      </valid_details>
+      <valid>0</valid>
+      <baseUrl>https://www.geocat.ch:443null</baseUrl>
+      <locService>/srv/en</locService>
+    </geonet:info>
+  </che:CHE_MD_Metadata>
+
