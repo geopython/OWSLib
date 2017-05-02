@@ -44,6 +44,7 @@ class MD_Metadata(object):
             self.datetimestamp = None
             self.stdname = None
             self.stdver = None
+            self.locales = []
             self.referencesystem = None
             self.identification = None
             self.serviceidentification = None
@@ -96,6 +97,10 @@ class MD_Metadata(object):
             val = md.find(util.nspath_eval('gmd:metadataStandardVersion/gco:CharacterString', namespaces))
             self.stdver = util.testXMLValue(val)
 
+            self.locales = []
+            for i in md.findall(util.nspath_eval('gmd:locale/gmd:PT_Locale', namespaces)):
+                self.locales.append(PT_Locale(i))
+
             val = md.find(util.nspath_eval('gmd:referenceSystemInfo/gmd:MD_ReferenceSystem', namespaces))
             if val is not None:
                 self.referencesystem = MD_ReferenceSystem(val)
@@ -147,6 +152,28 @@ class MD_Metadata(object):
                 self.dataquality = DQ_DataQuality(val)
             else:
                 self.dataquality = None
+
+    def get_default_locale(self):
+        """ get default gmd:PT_Locale based on gmd:language """
+
+        for loc in self.locales:
+            if loc.languagecode == self.language:
+                return loc
+        return None
+
+
+class PT_Locale(object):
+    """ process PT_Locale """
+
+    def __init__(self, md=None):
+        if md is None:
+            self.id = None
+            self.languagecode = None
+            self.charset = None
+        else:
+            self.id = md.attrib.get('id')
+            self.languagecode = md.find(util.nspath_eval('gmd:languageCode/gmd:LanguageCode', namespaces)).attrib.get('codeListValue')
+            self.charset = md.find(util.nspath_eval('gmd:characterEncoding/gmd:MD_CharacterSetCode', namespaces)).attrib.get('codeListValue')
 
 class CI_Date(object):
     """ process CI_Date """
