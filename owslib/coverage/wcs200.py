@@ -284,6 +284,7 @@ class ContentMetadata(object):
                    cooeficients = elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}coefficients').text.split(' ')
             for x in cooeficients:
                 #t_pos = int(start_pos) + int(x)
+                x = x.replace('"', '')
                 t_date = datetime_from_iso(x)
                 timepositions.append(t_date)
         else:
