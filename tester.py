@@ -1,13 +1,12 @@
-import owslib
 from owslib.wcs import WebCoverageService
 
 
-# t = WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows?', version='2.0.0')
+t = WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows?', version='2.0.0')
 
-# print t.contents['CCI_V2_release_chlor_a'].supportedFormats
+print t.contents['CCI_V2_release_chlor_a'].supportedFormats
 
-# for x in t.contents['CCI_V2_release_chlor_a'].timepositions:
-#  	print x.isoformat()
+for x in t.contents['CCI_V2_release_chlor_a'].timepositions:
+ 	print x.isoformat()
 
 # print t.provider
 
@@ -56,14 +55,14 @@ def dump(obj):
 # f.close()
 
 
-s = WebCoverageService('http://earthserver.ecmwf.int/rasdaman/ows?', version='2.0.0')
-# print s.contents
+# s = WebCoverageService('http://earthserver.ecmwf.int/rasdaman/ows?', version='2.0.0')
+# # print s.contents
 
-print s.contents['temp2m']
-
-# dump(s.contents['temp2m'].grid)
-for x in s.contents['temp2m'].timepositions[0:100]:
-	print x.isoformat()
+# print s.contents['temp2m']
+# print "-"*20
+# # dump(s.contents['temp2m'].grid)
+# for x in s.contents['temp2m'].timepositions[0:100]:
+# 	print x.isoformat()
 
 # print s.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.dimension
 # print s.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.lowlimits
