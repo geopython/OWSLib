@@ -664,8 +664,12 @@ def findall(root, xpath, attribute_name=None, attribute_value=None):
 
 
 def datetime_from_iso(iso):
-    """returns a datetime object from dates in the format 2001-07-01T00:00:00Z """
-    return datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ")
+    """returns a datetime object from dates in the format 2001-07-01T00:00:00Z or 2001-07-01T00:00:00.000Z """
+    try:
+        iso_datetime = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ")
+    except:
+        iso_datetime = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%S.%fZ")
+    return iso_datetime
 
 def datetime_from_ansi(ansi):
     """Converts an ansiDate (expressed as a number = the nuber of days since the datum origin of ansi) to a python datetime object."""
