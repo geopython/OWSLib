@@ -1,0 +1,57 @@
+# SOS version 2.0 tests using the 52North installation for IOOS: http://ioossos.axiomalaska.com/
+
+# Imports
+>>> from owslib.sos import SensorObservationService
+>>> from owslib.swe.observation.sos200 import SOSGetObservationResponse
+>>> from owslib.etree import etree
+
+# Setup
+#>>> service = SensorObservationService('http://geoviqua.dev.52north.org/SOS-Q/sos/kvp',version='2.0.0')
+>>> service = SensorObservationService('http://ioossos.axiomalaska.com/52n-sos-ioos-stable/sos/kvp',version='2.0.0')
+
+# http://ioossos.axiomalaska.com/52n-sos-ioos-stable/sos/kvp?service=SOS&request=GetObservation&namespaces=xmlns(om%2Chttp%3A%2F%2Fwww.opengis.net%2Fom%2F2.0)&temporalFilter=om%3AphenomenonTime%2Clatest&version=2.0.0
+
+# Check allowed params for get observation
+>>> get_obs=service.get_operation_by_name('GetObservation')
+
+>>> response = service.get_observation(responseFormat='http://www.opengis.net/om/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'], timeout=60)
+
+>>> xml_tree = etree.fromstring(response)
+
+>>> parsed_response = SOSGetObservationResponse(xml_tree)
+
+>>> type(parsed_response)
+<class 'owslib.swe.observation.sos200.SOSGetObservationResponse'>
+
+>>> o=parsed_response.observations[0]
+
+## Value changes each call so can't be tested
+## >>> o.get_result().value
+
+>>> o.get_result().uom
+'urn:ogc:def:uom:udunits:2:Cel'
+
+# This O&M structure of the results splits each point into an O&M object, resulting in 400 results
+>>> len(parsed_response.observations)
+400
+>>> type(parsed_response.observations[0])
+<class 'owslib.swe.observation.om.MeasurementObservation'>
+
+# Get observation for a specific offering (in this case corresponds to a station) and observed property (sea water temperature)
+>>> response = service.get_observation(responseFormat='http://www.opengis.net/waterml/2.0', offerings=['urn:ioos:station:test:8'], observedProperties=['http://mmisw.org/ont/cf/parameter/sea_water_temperature'], timeout=60)
+>>> xml_tree = etree.fromstring(response)
+>>> parsed_response = SOSGetObservationResponse(xml_tree)
+>>> type(parsed_response)
+<class 'owslib.swe.observation.sos200.SOSGetObservationResponse'>
+
+>>> len(parsed_response.observations)
+20
+>>> type(parsed_response.observations[0])
+<class 'owslib.swe.observation.waterml2.MeasurementTimeseriesObservation'>
+>>> type(parsed_response.observations[0].get_result())
+<class 'owslib.swe.observation.waterml2.MeasurementTimeseries'>
+
+>>> measurement_timeseries = parsed_response.observations[0].get_result()
+>>> len(measurement_timeseries)
+20
+

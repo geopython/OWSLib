@@ -3,7 +3,7 @@
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2007 STFC <http://www.stfc.ac.uk>
 #
-# Authors : 
+# Authors :
 #          Oliver Clements <olcl@pml.ac.uk>
 #
 # Contact email: olcl@pml.ac.uk
@@ -46,10 +46,10 @@ class WebCoverageService_2_0_0(WCSBase):
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError("No content named %s" % name)
-    
+
     def __init__(self,url,xml, cookies):
         self.version='2.0.0'
-        self.url = url   
+        self.url = url
         self.cookies=cookies
         self.ows_common = OwsCommon(version='2.0.0')
         # initialize from saved capability document or access the server
@@ -63,43 +63,43 @@ class WebCoverageService_2_0_0(WCSBase):
         se = self._capabilities.find('ServiceException')
 
         if se is not None:
-            err_message = str(se.text).strip()  
-            raise ServiceException(err_message, xml) 
+            err_message = str(se.text).strip()
+            raise ServiceException(err_message, xml)
 
         #serviceIdentification metadata
         subelem=self._capabilities.find(ns('ServiceIdentification'))
-        self.identification=ServiceIdentification(subelem, namespace=self.ows_common.namespace)                               
-        
+        self.identification=ServiceIdentification(subelem, namespace=self.ows_common.namespace)
+
         #serviceProvider metadata
         serviceproviderelem=self._capabilities.find(ns('ServiceProvider'))
-        self.provider=ServiceProvider(serviceproviderelem, namespace=self.ows_common.namespace)     
-        
+        self.provider=ServiceProvider(serviceproviderelem, namespace=self.ows_common.namespace)
+
         #serviceOperations metadata
         self.operations=[]
         for elem in self._capabilities.find(ns('OperationsMetadata'))[:]:
             if elem.tag !=ns('ExtendedCapabilities'):
                 self.operations.append(OperationsMetadata(elem, namespace=self.ows_common.namespace))
-          
+
         #serviceContents metadata
         self.contents={}
         for elem in self._capabilities.findall(nsWCS2('Contents/')+nsWCS2('CoverageSummary')):
             cm=ContentMetadata(elem, self)
             self.contents[cm.id]=cm
-        
 
-        
+
+
         #exceptions
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
-    
-    
+
+
     def items(self):
         '''supports dict-like items() access'''
         items=[]
         for item in self.contents:
             items.append((item,self.contents[item]))
         return items
-    
+
     def __makeString(self,value):
         #using repr unconditionally breaks things in some circumstances if a value is already a string
         if type(value) is not str:
@@ -107,7 +107,7 @@ class WebCoverageService_2_0_0(WCSBase):
         else:
             sval = value
         return sval
-  
+
     def getCoverage(self, identifier=None, bbox=None, time=None, format = None,  subsets=None,crs=None, width=None, height=None, resx=None, resy=None, resz=None,parameter=None,method='Get',**kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
@@ -117,7 +117,7 @@ class WebCoverageService_2_0_0(WCSBase):
 
         is equivalent to:
         http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIME=2792-06-01T00:00:00.0&FORMAT=cf-netcdf
-        
+
         example 2.0.1 URL
         http://earthserver.pml.ac.uk/rasdaman/ows?&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage
         &COVERAGEID=V2_monthly_CCI_chlor_a_insitu_test&SUBSET=Lat(40,50)&SUBSET=Long(-10,0)&SUBSET=ansi(144883,145000)&FORMAT=application/netcdf
@@ -128,22 +128,22 @@ class WebCoverageService_2_0_0(WCSBase):
         """
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s'%(identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
-                
+
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetCoverage').methods if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
-        
+
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: base url of server: %s'%base_url)
-        
+
         #process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service':'WCS'}
         assert len(identifier) > 0
         request['CoverageID']=identifier[0]
         #request['identifier'] = ','.join(identifier)
 
-        
+
         if crs:
             request['crs']=crs
         request['format']=format
@@ -151,40 +151,47 @@ class WebCoverageService_2_0_0(WCSBase):
             request['width']=width
         if height:
             request['height']=height
-        
+
         #anything else e.g. vendor specific parameters must go through kwargs
         if kwargs:
             for kw in kwargs:
                 request[kw]=kwargs[kw]
-        
+
         #encode and request
         data = urlencode(request)
-
+        # need to edit here to allow subset(axis,low,high) and subset(axis,low)
         if subsets:
             for subset in subsets:
-                if not self.is_number(subset[1]):
-                    data = data + "&"+ urlencode({"subset":subset[0]+'("'+self.__makeString(subset[1])+'","'+self.__makeString(subset[2])+'")'})
+                if len(subset) > 2:
+                    if not self.is_number(subset[1]):
+                        data = data + "&"+ urlencode({"subset":subset[0]+'("'+self.__makeString(subset[1])+'","'+self.__makeString(subset[2])+'")'})
+                    else:
+                        data = data + "&"+ urlencode({"subset":subset[0]+'('+self.__makeString(subset[1])+','+self.__makeString(subset[2])+')'})
                 else:
-                    data = data + "&"+ urlencode({"subset":subset[0]+'('+self.__makeString(subset[1])+','+self.__makeString(subset[2])+')'})
+                    if not self.is_number(subset[1]):
+                        data = data + "&"+ urlencode({"subset":subset[0]+'("'+self.__makeString(subset[1])+'")'})
+                    else:
+                        data = data + "&"+ urlencode({"subset":subset[0]+'('+self.__makeString(subset[1])+')'})
 
 
-
-        print('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
-        
-        
+
+
         u=openURL(base_url, data, method, self.cookies)
 
         return u
-    
+
     def is_number(self,s):
+        """simple helper to test if value is number as requests with numbers dont
+        need quote marks
+        """
         try:
             float(s)
             return True
         except ValueError:
             return False
-               
+
     def getOperationByName(self, name):
         """Return a named operation item."""
         for item in self.operations:
@@ -201,7 +208,7 @@ class ContentMetadata(object):
     def __init__(self, elem, service):
         """Initialize. service is required so that describeCoverage requests may be made"""
         #TODO - examine the parent for bounding box info.
-        
+
         #self._parent=parent
         #print("getting content metadata")
         self._elem=elem
@@ -209,10 +216,10 @@ class ContentMetadata(object):
         self.id=elem.find(nsWCS2('CoverageId')).text
         self.title = testXMLValue(elem.find(ns('label')))
         self.abstract= testXMLValue(elem.find(ns('description')))
-        self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]        
+        self.keywords = [f.text for f in elem.findall(ns('keywords')+'/'+ns('keyword'))]
         self.boundingBox=None #needed for iContentMetadata harmonisation
-        self.boundingBoxWGS84 = None        
-        b = elem.find(ns('lonLatEnvelope')) 
+        self.boundingBoxWGS84 = None
+        b = elem.find(ns('lonLatEnvelope'))
         if b is not None:
             gmlpositions=b.findall('{http://www.opengis.net/gml}pos')
             lc=gmlpositions[0].text
@@ -239,8 +246,9 @@ class ContentMetadata(object):
             grid=RectifiedGrid(gridelem)
         return grid
     grid=property(_getGrid, None)
-        
+
      #timelimits are the start/end times, timepositions are all timepoints. WCS servers can declare one or both or neither of these.
+     # in wcs 2.0 this can be gathered from the Envelope tag
     def _getTimeLimits(self):
         timepoints, timelimits=[],[]
         b=self._elem.find(ns('lonLatEnvelope'))
@@ -255,8 +263,8 @@ class ContentMetadata(object):
         if timepoints:
                 timelimits=[timepoints[0].text,timepoints[1].text]
         return timelimits
-    timelimits=property(_getTimeLimits, None)   
-    
+    timelimits=property(_getTimeLimits, None)
+
     def _getTimePositions(self):
 
         timepositions=[]
@@ -266,16 +274,17 @@ class ContentMetadata(object):
         gridelem= self.descCov.find(nsWCS2('CoverageDescription/')+'{http://www.opengis.net/gml/3.2}domainSet/'+'{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors')
         if gridelem is not None:
             # irregular time
-            print("finding irregular times")
+            #print("finding irregular times")
             cooeficients = []
             #t_grid = self.grid
             #start_pos = float(t_grid.origin[2])
             grid_axes = gridelem.findall('{http://www.opengis.net/gml/3.3/rgrid}generalGridAxis')
             for elem in grid_axes:
-                if elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}gridAxesSpanned').text == "ansi":
+                if elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}gridAxesSpanned').text in ["ansi", "unix"]:
                    cooeficients = elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}coefficients').text.split(' ')
             for x in cooeficients:
                 #t_pos = int(start_pos) + int(x)
+                x = x.replace('"', '')
                 t_date = datetime_from_iso(x)
                 timepositions.append(t_date)
         else:
@@ -291,8 +300,8 @@ class ContentMetadata(object):
 
         return timepositions
     timepositions=property(_getTimePositions, None)
-           
-            
+
+
     def _getOtherBoundingBoxes(self):
         ''' incomplete, should return other bounding boxes not in WGS84
             #TODO: find any other bounding boxes. Need to check for gml:EnvelopeWithTimePeriod.'''
@@ -315,9 +324,9 @@ class ContentMetadata(object):
             )
             bboxes.append(bbox)
 
-        return bboxes        
+        return bboxes
     boundingboxes=property(_getOtherBoundingBoxes,None)
-    
+
     def _getSupportedCRSProperty(self):
         # gets supported crs info
         crss=[]
@@ -332,8 +341,8 @@ class ContentMetadata(object):
                 crss.append(Crs(crs))
         return crss
     supportedCRS=property(_getSupportedCRSProperty, None)
-       
-       
+
+
     def _getSupportedFormatsProperty(self):
         # gets supported formats info
         frmts =[]
@@ -341,7 +350,7 @@ class ContentMetadata(object):
             frmts.append(elem.text)
         return frmts
     supportedFormats=property(_getSupportedFormatsProperty, None)
-    
+
     def _getAxisDescriptionsProperty(self):
         #gets any axis descriptions contained in the rangeset (requires a DescribeCoverage call to server).
         axisDescs =[]
@@ -349,13 +358,13 @@ class ContentMetadata(object):
             axisDescs.append(AxisDescription(elem)) #create a 'AxisDescription' object.
         return axisDescs
     axisDescriptions=property(_getAxisDescriptionsProperty, None)
-        
-        
-          
+
+
+
 #Adding classes to represent gml:grid and gml:rectifiedgrid. One of these is used for the cvg.grid property
-#(where cvg is a member of the contents dictionary)     
+#(where cvg is a member of the contents dictionary)
 #There is no simple way to convert the offset values in a rectifiedgrid grid to real values without CRS understanding, therefore this is beyond the current scope of owslib, so the representation here is purely to provide access to the information in the GML.
-   
+
 class Grid(object):
     ''' Simple grid class to provide axis and value information for a gml grid '''
     def __init__(self, grid):
@@ -370,7 +379,7 @@ class Grid(object):
             self.highlimits = grid.find('{http://www.opengis.net/gml/3.2}limits/{http://www.opengis.net/gml/3.2}GridEnvelope/{http://www.opengis.net/gml/3.2}high').text.split(' ')
             for axis in grid.findall('{http://www.opengis.net/gml/3.2}axisLabels')[0].text.split(' '):
                 self.axislabels.append(axis)
-      
+
 
 class RectifiedGrid(Grid):
     ''' RectifiedGrid class, extends Grid with additional offset vector information '''
@@ -392,7 +401,7 @@ class ReferenceableGridByVectors(Grid):
             self.offsetvectors.append(offset.text.split())
 
 class AxisDescription(object):
-    ''' Class to represent the AxisDescription element optionally found as part of the RangeSet and used to 
+    ''' Class to represent the AxisDescription element optionally found as part of the RangeSet and used to
     define ordinates of additional dimensions such as wavelength bands or pressure levels'''
     def __init__(self, axisdescElem):
         self.name=self.label=None
@@ -404,4 +413,4 @@ class AxisDescription(object):
                 self.label = elem.text
             elif elem.tag == ns('values'):
                 for child in elem.getchildren():
-                    self.values.append(child.text)     
+                    self.values.append(child.text)

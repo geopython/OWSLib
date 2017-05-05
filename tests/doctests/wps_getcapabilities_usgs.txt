@@ -17,6 +17,8 @@ Execute fake invocation of GetCapabilities operation by parsing cached response 
     >>> wps.getcapabilities(xml=xml)
 
 Check WPS description
+    >>> wps.updateSequence is not None
+    True
     >>> wps.identification.type
     'WPS'
     >>> wps.identification.title

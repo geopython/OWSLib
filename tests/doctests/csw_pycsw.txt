@@ -7,12 +7,16 @@ Imports
 Properties
 
     >>> c = cs('http://demo.pycsw.org/cite/csw')
+    >>> c.updateSequence is not None
+    True
     >>> c.version
     '2.0.2'
     
     >>> c.identification.title
     'pycsw OGC CITE demo and Reference Implementation'
 
+    >>> c.constraints['MaxRecordDefault'].values[0]
+    '10'
 
 GetRecords
 

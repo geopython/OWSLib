@@ -1,0 +1,67 @@
+Web Coverage Service: #This is an example that shows how to the OWSLib wcs client to make requests from the NSIDC WCS.
+====================
+
+Version 1.1.0
+========
+
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from owslib.wcs import WebCoverageService
+    >>> from tests.utils import resource_file, scratch_file
+
+    >>> xml = open(resource_file('wcs_nsidc.xml')).read()
+    >>> wcs=WebCoverageService('http://nsidc.org/cgi-bin/atlas_north', version='1.1.0', xml=xml)
+    >>> wcs.url
+    'http://nsidc.org/cgi-bin/atlas_north'
+    >>> wcs.version
+    '1.1.0'
+    >>> wcs.identification.service
+    'WCS'
+    >>> wcs.identification.version
+    '1.1.0'
+    >>> wcs.identification.type
+    'OGC WCS'
+    >>> wcs.identification.title
+    'Atlas of the Cryosphere: Northern Hemisphere'
+    >>> wcs.identification.abstract
+    "The National Snow and Ice Data Center (NSIDC) Atlas of the Cryosphere is a map server that provides data and information pertinent to the frozen regions of Earth, including monthly climatologies of sea ice extent and concentration, snow cover extent, and snow water equivalent, in addition to glacier outlines, permafrost extent and classification, ice sheet elevation and accumulation, and more. In order to support polar projections, the Atlas is divided into two separate map servers: one for the Northern Hemisphere and one for the Southern Hemisphere. In addition to providing map images and source data through Open Geospatial Consortium, Inc. (OGC) protocols (WMS, WFS, and WCS), a dynamic web interface for exploring these data is also available at http://nsidc.org/data/atlas. If you have questions, comments or suggestions, please contact NSIDC User Services at +1.303.492.6199 or nsidc@nsidc.org. The development of this map server application was supported by NASA's Earth Observing System (EOS) Program under contract NAS5-03099 and was developed using MapServer, an Open Source development environment for building spatially-enabled internet applications. To cite the Atlas of the Cryosphere: Maurer, J. 2007. Atlas of the Cryosphere. Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Available at http://nsidc.org/data/atlas/."
+    >>> wcs.identification.keywords
+    ['Arctic', 'Cryosphere', 'Earth Science', 'Ice Extent', 'Ice Sheets', 'Northern Hemisphere', 'Oceans', 'Polar', 'Sea Ice', 'Sea Ice Concentration', 'Snow/Ice', 'Snow Cover', 'Snow Melt', 'Snow Water Equivalent']
+    >>> wcs.identification.fees
+    'none'
+    >>> wcs.identification.accessConstraints
+    'none'
+
+#There is no 'ResponsibleParty' information in the NCEP/NAM capabilities document, so wcs.provider is empty.
+#but if there was you could do:
+#wcs.provider.url
+#and..
+#wcs.provider.contact.organization
+#wcs.provider.contact.email
+#wcs.provider.contact.address
+#etc... for region, city, postcode, country
+
+Print the ids of all layers (actually just the first 3):
+   >>> sorted(wcs.contents.keys())
+   ['greenland_accumulation', 'greenland_bedrock_elevation', 'greenland_elevation', 'greenland_ice_thickness', 'greenland_surface_melt', 'sea_ice_concentration_01', 'sea_ice_concentration_02', 'sea_ice_concentration_03', 'sea_ice_concentration_04', 'sea_ice_concentration_05', 'sea_ice_concentration_06', 'sea_ice_concentration_07', 'sea_ice_concentration_08', 'sea_ice_concentration_09', 'sea_ice_concentration_10', 'sea_ice_concentration_11', 'sea_ice_concentration_12', 'seasonal_snow_classification', 'snow_extent_01', 'snow_extent_02', 'snow_extent_03', 'snow_extent_04', 'snow_extent_05', 'snow_extent_06', 'snow_extent_07', 'snow_extent_08', 'snow_extent_09', 'snow_extent_10', 'snow_extent_11', 'snow_extent_12', 'snow_water_equivalent_01', 'snow_water_equivalent_02', 'snow_water_equivalent_03', 'snow_water_equivalent_04', 'snow_water_equivalent_05', 'snow_water_equivalent_06', 'snow_water_equivalent_07', 'snow_water_equivalent_08', 'snow_water_equivalent_09', 'snow_water_equivalent_10', 'snow_water_equivalent_11', 'snow_water_equivalent_12']
+
+
+#To further interrogate a single "coverage" get the coverageMetadata object
+#You can either do:
+    >>> cvg= wcs.contents['sea_ice_concentration_09'] #to get it from the dictonary
+
+#or even simpler you can do:
+    >>> cvg=wcs['sea_ice_concentration_09']
+
+    >>> cvg.boundingBoxWGS84
+    (-179.999998745864, 34.9037152643753, 178.959571606408, 53.7717181062498)
+
+    >>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
+    False
+
+    >>> [y for y in (x.getcode() for x in cvg.supportedCRS) if y]
+    ['EPSG:32661', 'EPSG:4326', 'EPSG:3408', 'EPSG:3410', 'EPSG:3411', 'EPSG:3413', 'EPSG:3571', 'EPSG:3572', 'EPSG:3573', 'EPSG:3574', 'EPSG:3575', 'EPSG:3576', 'EPSG:3973', 'EPSG:3975', 'EPSG:32624', 'EPSG:3857', 'EPSG:900913']
+
+    >>> cvg.supportedFormats
+    ['image/tiff']

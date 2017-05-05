@@ -87,7 +87,7 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 from __future__ import (absolute_import, division, print_function)
 
 from owslib.etree import etree
-from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata
+from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
 from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue,
                          getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
@@ -111,6 +111,7 @@ DRAW_NAMESPACE = n.get_namespace("draw")
 
 GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
 DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/climate/derivative/xsd/draw.xsd'
+WFS_SCHEMA_LOCATION = 'http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
 
@@ -307,6 +308,8 @@ class WebProcessingService(object):
 
         # use the WPS namespace defined in the document root
         wpsns = getNamespace(root)
+
+        self.updateSequence = root.attrib.get('updateSequence')
 
         # loop over children WITHOUT requiring a specific namespace
         for element in root:
@@ -1025,7 +1028,9 @@ class InputOutput(object):
         #     <CRS>epsg:4326</CRS>
         #   </Supported>
         # </BoundingBoxData>
-        # 
+        #
+        # OR
+        #
         # <BoundingBoxOutput>
         #   <Default>
         #     <CRS>epsg:4326</CRS>
@@ -1037,7 +1042,7 @@ class InputOutput(object):
 
         bbox_data_element = element.find(bboxElementName)
         if bbox_data_element is not None:
-            self.dataType = 'BoudingBoxData'
+            self.dataType = 'BoundingBoxData'
 
             for bbox_element in bbox_data_element.findall('Supported/CRS'):
                 self.supportedValues.append(bbox_element.text)
@@ -1117,6 +1122,9 @@ class Output(InputOutput):
         # <ComplexData> or <ComplexOutput>
         self._parseComplexData(outputElement, 'ComplexOutput')
 
+        # <BoundingBoxData>
+        self._parseBoundingBoxData(outputElement, 'BoundingBoxOutput')
+
         # <Data>
         # <ns0:Data>
         #        <ns0:ComplexData mimeType="text/plain">
@@ -1149,6 +1157,17 @@ class Output(InputOutput):
         #        </ns3:FeatureCollection>
         #     </ns0:ComplexData>
         # </ns0:Data>
+        #
+        #
+        # OWS BoundingBox:
+        #
+        # <wps:Data>
+        #   <wps:BoundingBoxData crs="EPSG:4326" dimensions="2">
+        #     <ows:LowerCorner>0.0 -90.0</ows:LowerCorner>
+        #     <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
+        #   </wps:BoundingBoxData>
+        # </wps:Data>
+        #
         dataElement = outputElement.find(nspath('Data', ns=wpsns))
         if dataElement is not None:
             complexDataElement = dataElement.find(
@@ -1166,6 +1185,19 @@ class Output(InputOutput):
                 self.dataType = literalDataElement.get('dataType')
                 if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
                     self.data.append(literalDataElement.text.strip())
+            bboxDataElement = dataElement.find(
+                nspath('BoundingBoxData', ns=wpsns))
+            if bboxDataElement is not None:
+                self.dataType = "BoundingBoxData"
+                bbox = BoundingBox(bboxDataElement)
+                if bbox is not None and bbox.minx is not None:
+                    bbox_value = None
+                    if bbox.crs is not None and bbox.crs.axisorder == 'yx':
+                        bbox_value = "{0},{1},{2},{3}".format(bbox.miny, bbox.minx, bbox.maxy, bbox.maxx)
+                    else:
+                        bbox_value = "{0},{1},{2},{3}".format(bbox.minx, bbox.miny, bbox.maxx, bbox.maxy)
+                    log.debug("bbox=%s", bbox_value)
+                    self.data.append(bbox_value)
 
     def retrieveData(self, username=None, password=None):
         """
@@ -1368,8 +1400,7 @@ class WFSFeatureCollection(FeatureCollection):
     FeatureCollection specified by a WFS query.
     All subclasses must implement the getQuery() method to provide the specific query portion of the XML.
     '''
-
-    def __init__(self, wfsUrl, wfsQuery):
+    def __init__(self, wfsUrl, wfsQuery, wfsMethod=None):
         '''
         wfsUrl: the WFS service URL
                 example: wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
@@ -1377,7 +1408,7 @@ class WFSFeatureCollection(FeatureCollection):
         '''
         self.url = wfsUrl
         self.query = wfsQuery
-
+        self.method = wfsMethod
     #    <wps:Reference xlink:href="http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs">
     #      <wps:Body>
     #        <wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" service="WFS" version="1.1.0" outputFormat="text/xml; subtype=gml/3.1.1" xsi:schemaLocation="http://www.opengis.net/wfs ../wfs/1.1.0/WFS.xsd">
@@ -1386,9 +1417,10 @@ class WFSFeatureCollection(FeatureCollection):
     #      </wps:Body>
     #   </wps:Reference>
     def getXml(self):
-
         root = etree.Element(nspath_eval('wps:Reference', namespaces),
                              attrib={nspath_eval("xlink:href", namespaces): self.url})
+        if self.method:
+            root.attrib['method'] = self.method
         bodyElement = etree.SubElement(
             root, nspath_eval('wps:Body', namespaces))
         getFeatureElement = etree.SubElement(
@@ -1396,7 +1428,7 @@ class WFSFeatureCollection(FeatureCollection):
                                              attrib={"service": "WFS",
                                                      "version": "1.1.0",
                                                      "outputFormat": "text/xml; subtype=gml/3.1.1",
-                                                     nspath_eval("xsi:schemaLocation", namespaces): "%s %s" % (namespaces['wfs'], '../wfs/1.1.0/WFS.xsd')})
+                                                     nspath_eval("xsi:schemaLocation", namespaces): "%s %s" % (namespaces['wfs'], WFS_SCHEMA_LOCATION)})
 
         #            <wfs:Query typeName="sample:CONUS_States">
         #                <wfs:PropertyName>the_geom</wfs:PropertyName>

@@ -33,6 +33,7 @@ from copy import deepcopy
 import warnings
 import six
 import requests
+import codecs
 
 """
 Utility functions and classes
@@ -129,25 +130,22 @@ class ResponseWrapper(object):
         return self._response.headers
 
     def read(self):
-        if not self._response.encoding:
-            return self._response.content           # bytes
-
-        return self._response.text.encode('utf-8')  # str
+        return self._response.content
 
     def geturl(self):
         return self._response.url
 
     # @TODO: __getattribute__ for poking at response
 
-def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30):
+def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None):
     """
     Function to open URLs.
 
     Uses requests library but with additional checks for OGC service exceptions and url formatting.
     Also handles cookies and simple user password authentication.
     """
-    #print(url_base)
-    headers = None
+
+    headers = headers if headers is not None else {}
     rkwargs = {}
 
     rkwargs['timeout'] = timeout
@@ -165,7 +163,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     if method.lower() == 'post':
         try:
             xml = etree.fromstring(data)
-            headers = {'Content-Type': 'text/xml'}
+            headers['Content-Type'] = 'text/xml'
         except (ParseError, UnicodeEncodeError):
             pass
 
@@ -188,18 +186,28 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     if req.status_code in [400, 401]:
         raise ServiceException(req.text)
 
-    if req.status_code in [404]:    # add more if needed
+    if req.status_code in [404, 500, 502, 503, 504]:    # add more if needed
         req.raise_for_status()
 
     # check for service exceptions without the http header set
-    if 'Content-Type' in req.headers and req.headers['Content-Type'] in ['text/xml', 'application/xml']:
+    if 'Content-Type' in req.headers and req.headers['Content-Type'] in ['text/xml', 'application/xml', 'application/vnd.ogc.se_xml']:
         #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
         se_tree = etree.fromstring(req.content)
-        serviceException=se_tree.find('{http://www.opengis.net/ows}Exception')
-        if serviceException is None:
-            serviceException=se_tree.find('ServiceException')
-        if serviceException is not None:
-            raise ServiceException(str(serviceException.text).strip())
+
+        # to handle the variety of namespaces and terms across services
+        # and versions, especially for "legacy" responses like WMS 1.3.0
+        possible_errors = [
+            '{http://www.opengis.net/ows}Exception',
+            '{http://www.opengis.net/ows/1.1}Exception',
+            '{http://www.opengis.net/ogc}ServiceException',
+            'ServiceException'
+        ]
+
+        for possible_error in possible_errors:
+            serviceException = se_tree.find(possible_error)
+            if serviceException is not None:
+                # and we need to deal with some message nesting
+                raise ServiceException('\n'.join([str(t).strip() for t in serviceException.itertext() if str(t).strip()]))
 
     return ResponseWrapper(req)
 
@@ -379,10 +387,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
         rkwargs['auth'] = (username, password)
 
     up = requests.post(url, request, headers=headers, **rkwargs)
-    if not up.encoding:
-        return up.content           # bytes
-
-    return up.text.encode('utf-8')  # str
+    return up.content
 
 def element_to_string(element, encoding=None, xml_declaration=False):
     """
@@ -546,6 +551,29 @@ a newline. This will extract out all of the keywords correctly.
         return []
 
 
+def strip_bom(raw_text):
+    """ return the raw (assumed) xml response without the BOM
+    """
+    boms = [
+        codecs.BOM,
+        codecs.BOM_BE,
+        codecs.BOM_LE,
+        codecs.BOM_UTF8,
+        codecs.BOM_UTF16,
+        codecs.BOM_UTF16_LE,
+        codecs.BOM_UTF16_BE,
+        codecs.BOM_UTF32,
+        codecs.BOM_UTF32_LE,
+        codecs.BOM_UTF32_BE
+    ]
+
+    if not isinstance(raw_text, str):
+        for bom in boms:
+            if raw_text.startswith(bom):
+                return raw_text.replace(bom, '')
+    return raw_text
+
+
 def bind_url(url):
     """binds an HTTP GET query string endpiont"""
     if url.find('?') == -1: # like http://host/wms
@@ -637,8 +665,12 @@ def findall(root, xpath, attribute_name=None, attribute_value=None):
 
 
 def datetime_from_iso(iso):
-    """returns a datetime object from dates in the format 2001-07-01T00:00:00Z """
-    return datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ")
+    """returns a datetime object from dates in the format 2001-07-01T00:00:00Z or 2001-07-01T00:00:00.000Z """
+    try:
+        iso_datetime = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ")
+    except:
+        iso_datetime = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%S.%fZ")
+    return iso_datetime
 
 def datetime_from_ansi(ansi):
     """Converts an ansiDate (expressed as a number = the nuber of days since the datum origin of ansi) to a python datetime object."""

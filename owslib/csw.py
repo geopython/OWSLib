@@ -88,6 +88,8 @@ class CatalogueServiceWeb(object):
             self._invoke()
     
             if self.exceptionreport is None:
+                self.updateSequence = self._exml.getroot().attrib.get('updateSequence')
+
                 # ServiceIdentification
                 val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
                 if val is not None:
@@ -104,6 +106,12 @@ class CatalogueServiceWeb(object):
                 self.operations = []
                 for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
                     self.operations.append(ows.OperationsMetadata(elem, self.owscommon.namespace))
+                self.constraints = {}
+                for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Constraint', namespaces)):
+                    self.constraints[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
+                self.parameters = {}
+                for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Parameter', namespaces)):
+                    self.parameters[elem.attrib['name']] = ows.Parameter(elem, self.owscommon.namespace)
         
                 # FilterCapabilities
                 val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
@@ -324,6 +332,9 @@ class CatalogueServiceWeb(object):
             val = self.request.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
             if val is not None:
                 esn = util.testXMLValue(val)
+            val = self.request.attrib.get('outputSchema')
+            if val is not None:
+                outputschema = util.testXMLValue(val, True)
         else:
             # construct request
             node0 = self._setrootelement('csw:GetRecords')
@@ -436,7 +447,7 @@ class CatalogueServiceWeb(object):
                     node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
                     etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = propertyname
                     etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = propertyvalue
-                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql, identifier)
+                    self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
 
         if ttype == 'delete':
             self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
@@ -526,7 +537,7 @@ class CatalogueServiceWeb(object):
 
     def _parseinsertresult(self):
         self.results['insertresults'] = []
-        for i in self._exml.findall(util.nspath_eval('csw:InsertResult', namespaces)):
+        for i in self._exml.findall('.//'+util.nspath_eval('csw:InsertResult', namespaces)):
             for j in i.findall(util.nspath_eval('csw:BriefRecord/dc:identifier', namespaces)):
                 self.results['insertresults'].append(util.testXMLValue(j))
 
@@ -558,7 +569,7 @@ class CatalogueServiceWeb(object):
                 self.records[identifier] = CswRecord(i)
 
     def _parsetransactionsummary(self):
-        val = self._exml.find(util.nspath_eval('csw:TransactionSummary', namespaces))
+        val = self._exml.find(util.nspath_eval('csw:TransactionResponse/csw:TransactionSummary', namespaces))
         if val is not None:
             rid = val.attrib.get('requestId')
             self.results['requestid'] = util.testXMLValue(rid, True)

@@ -9,6 +9,9 @@ from datetime import timedelta
 
 from owslib.etree import etree
 
+import inspect
+from sys import modules
+
 def get_namespaces():
     ns = Namespaces()
     return ns.get_namespaces(["swe20", "xlink"])
@@ -69,8 +72,15 @@ class NamedObject(object):
         # No call to super(), the type object will process that.
         self.name           = testXMLAttribute(element, "name")
         try:
-            self.content    = eval(element[-1].tag.split("}")[-1])(element[-1])
-        except IndexError:
+            # attempt to find a class with the same name as the XML tag parsed
+            # which is also contained within this module.
+            # Ideally the classes should be explicitly whitelisted, but I
+            # don't know what the set of possible classes to dispatch to should
+            # be
+            self.content = obj_mapping[element[-1].tag.split("}")[-1]](
+                                                                    element[-1])
+
+        except (IndexError, KeyError):
             self.content    = None
         except BaseException:
             raise
@@ -268,6 +278,10 @@ def get_time(value, referenceTime, uom):
         elif value.lower() == "-inf":
             value  = NegativeInfiniteDateTime()
 
+    # Usually due to not finding the element
+    except TypeError:
+        value = None
+
     return value
 
 class Time(AbstractSimpleComponent):
@@ -284,8 +298,10 @@ class Time(AbstractSimpleComponent):
         # Attributes
         self.localFrame         = testXMLAttribute(element,"localFrame")                                    # anyURI, optional
         try:
-            self.referenceTime  = parser.parse(testXMLAttribute(element,"referenceTime"))                   # dateTime, optional
-        except (AttributeError, ValueError):
+            self.referenceTime  = parser.parse(testXMLAttribute(element,
+                                                                "referenceTime")
+                                               ) # dateTime, optional
+        except (AttributeError, ValueError, TypeError):
             self.referenceTime  = None
 
         value                   = testXMLValue(element.find(nspv("swe20:value")))                           # TimePosition, min=0, max=1
@@ -306,7 +322,7 @@ class TimeRange(AbstractSimpleComponent):
         self.localFrame         = testXMLAttribute(element,"localFrame")                                # anyURI, optional
         try:
             self.referenceTime  = parser.parse(testXMLAttribute(element,"referenceTime"))               # dateTime, optional
-        except (AttributeError, ValueError):
+        except (AttributeError, ValueError, TypeError):
             self.referenceTime  = None
 
         values                  = make_pair(testXMLValue(element.find(nspv("swe20:value"))))            # TimePosition, min=0, max=1
@@ -410,3 +426,7 @@ class XMLEncoding(AbstractEncoding):
 class BinaryEncoding(AbstractEncoding):
     def __init__(self, element):
         raise NotImplementedError
+
+# TODO: Individually whitelist valid classes which correspond to XML tags
+obj_mapping = {name: obj for name, obj in inspect.getmembers(modules[__name__],
+                                                             inspect.isclass)}

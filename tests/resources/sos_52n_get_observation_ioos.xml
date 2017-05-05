@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sos:GetObservationResponse xmlns:sos="http://www.opengis.net/sos/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:om="http://www.opengis.net/om/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sos/2.0 http://schemas.opengis.net/sos/2.0/sosGetObservation.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd http://www.opengis.net/om/2.0 http://schemas.opengis.net/om/2.0/observation.xsd">
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_A8C1BC58D6D4EAD0409FFF41C49726B8C65AC9C1">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1581">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1581"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-75.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">25.12</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_7A280CB9B3F3C9323CD90C0127720695A016E86D">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1521">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1521"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-60.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">16.37</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_844947E9478EC18A253D9B9F6B42449ACFF9DC46">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1561">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1561"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-70.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">16.49</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_892EFC8F32CAE841373AD2B59064A5D8D5F6A56E">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1281">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1281"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height0.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">20.49</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_22EA2EC80AE83B7C14305E89B33AEB37F1C57873">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1661">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1661"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-95.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">6.35</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_EC200BE05D635934ADA3D694F59F27DCD1A99F7F">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1441">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1441"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-40.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">12.05</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_A8A8853B9DB05CE2C71CB8E98472F09C912A37AD">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1481">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1481"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-50.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">8.82</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_DD07D0456CC863A055EBE092A9F555EBF6F9F425">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1381">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1381"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-25.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">11.5</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_AFB6503D41E3D0E7BF24FB7D4CA765D0F95796D5">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1401">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1401"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-30.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">24.76</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_551F96D71BFB485D0C06D6053B62CA7DC30EC8E4">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1461">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1461"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-45.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">17.74</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_4F9642997647ADF39DDE6F1EBF47A39F30F7BB61">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1261">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1261"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:air_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/air_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">6.03</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_73067292651E2F6EF0FC60E8CCB2FDD6147F75F5">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1301">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1301"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-5.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">20.86</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_BF8738F4C9542266B2E5D25FAC8A171F5643E83B">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1501">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1501"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-55.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">13.63</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_49A558E6DF45E490DFCE159823AF2FE66EABC180">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1621">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1621"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-85.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">8.47</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_25D5BDFFD596A0A3AD7BB53B1310E19D94414B7E">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1361">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1361"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-20.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">8.08</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_99E78EB5B525AA8D0D7823B2DB55B42835FC3CD3">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1321">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1321"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-10.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">30.38</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_25F20DE415EBB4A3983267DB9CAA48142301BDD3">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1421">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1421"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-35.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">13.18</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_9677ED62B69B869240F268FF2E475B574EC43249">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1641">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1641"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-90.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">6.82</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_39E48859E1374DEDC60DB5880638D729CDCC805D">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1541">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1541"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-65.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">18.35</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_EEB115B304F9370C8B95199C1BE4284845180C5C">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1341">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1341"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-15.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">19.34</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+  <sos:observationData>
+    <om:OM_Observation gml:id="o_782008D03AFCCEA45503F4A1DF3EAB3126198133">
+      <om:type xlink:href="http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"/>
+      <om:phenomenonTime>
+        <gml:TimeInstant gml:id="phenomenonTime_1601">
+          <gml:timePosition>2014-07-07T22:00:00.000Z</gml:timePosition>
+        </gml:TimeInstant>
+      </om:phenomenonTime>
+      <om:resultTime xlink:href="#phenomenonTime_1601"/>
+      <om:procedure xlink:href="urn:ioos:sensor:test:3:sea_water_temperature"/>
+      <om:observedProperty xlink:href="http://mmisw.org/ont/cf/parameter/sea_water_temperature"/>
+      <om:featureOfInterest xlink:href="urn:ioos:station:test:3(height-80.0m)"/>
+      <om:result xmlns:ns="http://www.opengis.net/gml/3.2" uom="urn:ogc:def:uom:udunits:2:Cel" xsi:type="ns:MeasureType">11.58</om:result>
+    </om:OM_Observation>
+  </sos:observationData>
+</sos:GetObservationResponse>

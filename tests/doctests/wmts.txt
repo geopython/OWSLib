@@ -14,8 +14,8 @@ Find out what a WMTS has to offer. Service metadata:
     '1.0.0'
     >>> wmts.identification.title
     'NASA Global Imagery Browse Services for EOSDIS'
-    >>> str.strip(wmts.identification.abstract)
-    'Near real time imagery from multiple NASA instruments'
+    >>> bytearray(wmts.identification.abstract, 'utf-8')
+    bytearray(b'The Global Imagery Browse Services (GIBS) system is a core EOSDIS component which provides a scalable, responsive, highly available, and community standards based set of imagery services.  These services are designed with the goal of advancing user interactions with EOSDIS\xe2\x80\x99 inter-disciplinary data through enhanced visual representation and discovery.')
     >>> wmts.identification.keywords
     ['World', 'Global']
 

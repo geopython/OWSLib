@@ -1,0 +1,97 @@
+Web Coverage Service: #This is an example that shows how to the OWSLib wcs client to make requests from a WCS 2.0 compliant server.
+====================
+
+Version 2.0
+========
+
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from owslib.wcs import WebCoverageService
+    >>> from tests.utils import scratch_file
+
+    >>> wcs=WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows', version='2.0.1')
+    >>> wcs.url
+    'http://earthserver.pml.ac.uk/rasdaman/ows'
+    >>> wcs.version
+    '2.0.0'
+    >>> wcs.identification.service
+    'OGC WCS'
+    >>> wcs.identification.version
+    '2.0.1'
+    >>> wcs.identification.title
+    'rasdaman'
+    >>> wcs.identification.abstract
+    'rasdaman server - free download from www.rasdaman.org'
+    >>> wcs.identification.keywords
+    []
+    >>> wcs.identification.fees
+    >>> wcs.identification.accessconstraints
+
+# add block for provider info once updated
+#wcs.provider.url
+#and..
+#wcs.provider.contact.organization
+#wcs.provider.contact.email
+#wcs.provider.contact.address
+#etc... for region, city, postcode, country
+
+Print the ids of all layers (actually just the first 3):
+   >>> sorted(wcs.contents.keys())[0:3]
+   ['CCI_V2_monthly_Rrs_412', 'CCI_V2_monthly_Rrs_443', 'CCI_V2_monthly_Rrs_490']
+
+#To further interrogate a single "coverage" get the coverageMetadata object
+#You can either do:
+    >>> cvg= wcs.contents['CCI_V2_monthly_Rrs_412'] #to get it from the dictonary
+
+#or even simpler you can do:
+    >>> cvg=wcs['CCI_V2_monthly_Rrs_412']
+    
+    # seems to not be an equivelent in wcs 2.0
+    #>>> cvg.boundingBoxWGS84
+    #(-153.58891112103777, 11.747698396806157, -48.598408556239576, 57.484319872365305)
+
+    >>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
+    True
+    
+    # seems to not be an equivelent in wcs 2.0
+    #>>> [y for y in (x.getcode() for x in cvg.supportedCRS) if y]
+    #['EPSG:9802']
+
+    >>> cvg.supportedFormats
+    ['application/netcdf', 'image/tiff', 'image/jp2', 'image/png', 'image/jpeg']
+
+    >>> cvg.grid.axislabels
+    ['Lat', 'Long', 'ansi']
+
+    >>> cvg.grid.dimension
+    3
+
+    >>> cvg.grid.lowlimits
+    ['0', '0', '0']
+
+    >>> cvg.grid.highlimits
+    ['8639', '4319', '195']
+
+    >>> cvg.grid.origin
+    ['89.9791564941', '-179.979202271', '144909.99930555557']
+
+    >>> cvg.grid.offsetvectors
+    [['-0.0416666619561', '0', '0'], ['0', '0.0416666749093', '0'], ['0', '0', '1']]
+
+
+#Now we have enough information to build a getCoverage request:
+    >>> covID='OCCCI_V3_monthly_chlor_a'
+    >>> time_subset = ("ansi", "2004-06-01T00:00:00Z")
+    >>> lat_subset = ('Lat',40,50)
+    >>> long_subset = ('Long',-10,0)
+    >>> formatType='NetCDF3' # chosen from cvg.supportedFormats
+
+#Make the actual getCoverage request.
+    >>> output=wcs.getCoverage(identifier=['OCCCI_V3_monthly_chlor_a'], format='application/netcdf', subsets=[long_subset, lat_subset, time_subset])
+
+#Then write this to a netcdf file.
+    >>> filename = scratch_file('wcs2test.nc')
+    >>> f=open(filename, 'wb')
+    >>> bytes_written = f.write(output.read())
+    >>> f.close()
