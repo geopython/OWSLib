@@ -68,11 +68,7 @@ f.close()
 # # print s.contents
 
 # print s.contents['temp2m']
-<<<<<<< HEAD
-# print "-"*20
-=======
 
->>>>>>> e086b36f51a6d043c571a51831affe11d8abafaa
 # # dump(s.contents['temp2m'].grid)
 # for x in s.contents['temp2m'].timepositions[0:100]:
 # 	print x.isoformat()
