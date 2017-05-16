@@ -147,6 +147,26 @@ Test single item accessor
     >>> wmts['geonode:GH_Areas_Protegidas4326'].resourceURLs
     []
 
+Test several layers styles
+    >>> wmts.contents['geonode:MANGROVES'].styles
+    {'MANGROVES': {'isDefault': True}}
+    >>> wmts.contents['geonode:asfalto'].styles
+    {'asfalto': {'isDefault': True}}
+    >>> wmts.contents['geonode:hotspots_revisited_2004_polygons'].styles
+    {'hotspots_revisited_2004_polygons': {'abstract': 'TEST Abstract: hotspots revisited 2004 polygons',
+      'format': 'image/png',
+      'height': '100',
+      'isDefault': True,
+      'keywords': ['testkeywords1', 'test keywords 2', 'test keywords 3'],
+      'legend': 'http://www.maps.bob/etopo2/legend.png',
+      'title': 'TEST Title: hotspots revisited 2004 polygons',
+      'width': '100'}}
+    >>> wmts.contents['geonode:asfalto'].styles
+    {'asfalto': {'format': 'image/png',
+      'isDefault': True,
+      'legend': 'http://www.maps.bob/etopo2/legend.png',
+      'title': 'TEST Title: hotspots revisited 2004 polygons'}}
+
 Test operations
     # TODO
 

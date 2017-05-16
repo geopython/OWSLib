@@ -44,3 +44,9 @@ Fetch a tile (using some defaults):
 Test a WMTS without a ServiceProvider tag in Capababilities XML
 
     >>> wmts = WebMapTileService('http://data.geus.dk/arcgis/rest/services/OneGeologyGlobal/S071_G2500_OneGeology/MapServer/WMTS/1.0.0/WMTSCapabilities.xml')
+
+Test styles for several layers
+    >>> wmts1.contents['MLS_SO2_147hPa_Night'].styles
+    {'default': {'isDefault': True, 'title': 'default'}}
+    >>> wmts1.contents['MLS_SO2_147hPa_Night'].styles
+    {'default': {'isDefault': True, 'title': 'default'}}

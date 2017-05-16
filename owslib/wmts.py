@@ -52,6 +52,9 @@ _OWS_NS = '{http://www.opengis.net/ows/1.1}'
 _WMTS_NS = '{http://www.opengis.net/wmts/1.0}'
 _XLINK_NS = '{http://www.w3.org/1999/xlink}'
 
+# OpenGIS Web Map Tile Service (WMTS) Implementation Standard
+# Version 1.0.0, document 07-057r7
+
 _ABSTRACT_TAG = _OWS_NS + 'Abstract'
 _IDENTIFIER_TAG = _OWS_NS + 'Identifier'
 _LOWER_CORNER_TAG = _OWS_NS + 'LowerCorner'
@@ -77,7 +80,11 @@ _MIN_TILE_ROW_TAG = _WMTS_NS + 'MinTileRow'
 _RESOURCE_URL_TAG = _WMTS_NS + 'ResourceURL'
 _SCALE_DENOMINATOR_TAG = _WMTS_NS + 'ScaleDenominator'
 _SERVICE_METADATA_URL_TAG = _WMTS_NS + 'ServiceMetadataURL'
+
+# Table 7, page 20-21, Parts of Style data structure
 _STYLE_TAG = _WMTS_NS + 'Style'
+_STYLE_LEGEND_URL = _WMTS_NS + 'LegendURL'
+
 _THEME_TAG = _WMTS_NS + 'Theme'
 _THEMES_TAG = _WMTS_NS + 'Themes'
 _TILE_HEIGHT_TAG = _WMTS_NS + 'TileHeight'
@@ -729,12 +736,33 @@ class ContentMetadata:
             style = {}
             isdefaulttext = s.attrib.get('isDefault')
             style['isDefault'] = (isdefaulttext == "true")
-            identifier = s.find(_IDENTIFIER_TAG)
+            identifier = s.find(_IDENTIFIER_TAG)  # one and mandatory
             if identifier is None:
                 raise ValueError('%s missing identifier' % (s,))
+
             title = s.find(_TITLE_TAG)
             if title is not None:
-                style['title'] = title.text
+                style['title'] = testXMLValue(title)
+
+            abstract = s.find(_ABSTRACT_TAG)
+            if abstract is not None:
+                style['abstract'] = testXMLValue(abstract)
+
+            legendURL = s.find(_STYLE_LEGEND_URL)
+            if legendURL is not None:
+                style['legend'] = legendURL.attrib[_HREF_TAG]
+                if 'width' in legendURL.attrib.keys():
+                    style['width'] = legendURL.attrib.get('width')
+                if 'height' in legendURL.attrib.keys():
+                    style['height'] = legendURL.attrib.get('height')
+                if 'format' in legendURL.attrib.keys():
+                    style['format'] = legendURL.attrib.get('format')
+
+            keywords = [f.text for f in s.findall(
+                        _KEYWORDS_TAG+'/'+_KEYWORD_TAG)]
+            if keywords:  # keywords is a list []
+                style['keywords'] = keywords
+
             self.styles[identifier.text] = style
 
         self.formats = [f.text for f in elem.findall(_FORMAT_TAG)]
