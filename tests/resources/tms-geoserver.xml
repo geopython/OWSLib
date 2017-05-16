@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TileMapService version="1.0.0" services="http://demo.opengeo.org/geoserver/gwc/">
+  <Title>Tile Map Service</Title>
+  <Abstract>A Tile Map Service served by GeoWebCache</Abstract>
+  <TileMaps>
+    <TileMap title="streams" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Astreams@EPSG%3A4326@png"/>
+    <TileMap title="streams" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Astreams@EPSG%3A4326@jpeg"/>
+    <TileMap title="streams" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Astreams@EPSG%3A900913@png"/>
+    <TileMap title="streams" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Astreams@EPSG%3A900913@jpeg"/>
+    <TileMap title="archsites" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Aarchsites@EPSG%3A4326@png"/>
+    <TileMap title="archsites" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Aarchsites@EPSG%3A4326@jpeg"/>
+    <TileMap title="archsites" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Aarchsites@EPSG%3A900913@png"/>
+    <TileMap title="archsites" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Aarchsites@EPSG%3A900913@jpeg"/>
+    <TileMap title="USA Population" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/topp%3Astates@EPSG%3A4326@png"/>
+    <TileMap title="USA Population" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/topp%3Astates@EPSG%3A4326@jpeg"/>
+    <TileMap title="USA Population" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/topp%3Astates@EPSG%3A900913@png"/>
+    <TileMap title="USA Population" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/topp%3Astates@EPSG%3A900913@jpeg"/>
+    <TileMap title="wps4693812227741231645tiff1648145287719090274" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps4693812227741231645tiff1648145287719090274@EPSG%3A4326@png"/>
+    <TileMap title="wps4693812227741231645tiff1648145287719090274" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps4693812227741231645tiff1648145287719090274@EPSG%3A4326@jpeg"/>
+    <TileMap title="wps4693812227741231645tiff1648145287719090274" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps4693812227741231645tiff1648145287719090274@EPSG%3A900913@png"/>
+    <TileMap title="wps4693812227741231645tiff1648145287719090274" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps4693812227741231645tiff1648145287719090274@EPSG%3A900913@jpeg"/>
+    <TileMap title="Dark Base Map" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Adark@EPSG%3A4326@png"/>
+    <TileMap title="Dark Base Map" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Adark@EPSG%3A4326@jpeg"/>
+    <TileMap title="Dark Base Map" srs="EPSG:4326" profile="local" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Adark@GoogleCRS84Quad@png"/>
+    <TileMap title="Dark Base Map" srs="EPSG:4326" profile="local" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Adark@GoogleCRS84Quad@jpeg"/>
+    <TileMap title="restricted" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Arestricted@EPSG%3A4326@png"/>
+    <TileMap title="restricted" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Arestricted@EPSG%3A4326@jpeg"/>
+    <TileMap title="restricted" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Arestricted@EPSG%3A900913@png"/>
+    <TileMap title="restricted" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Arestricted@EPSG%3A900913@jpeg"/>
+    <TileMap title="Natural Earth 1" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3ANE1_HR_LC_SR_W_DR@EPSG%3A4326@png"/>
+    <TileMap title="Natural Earth 1" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3ANE1_HR_LC_SR_W_DR@EPSG%3A4326@jpeg"/>
+    <TileMap title="Natural Earth 1" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3ANE1_HR_LC_SR_W_DR@EPSG%3A900913@png"/>
+    <TileMap title="Natural Earth 1" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3ANE1_HR_LC_SR_W_DR@EPSG%3A900913@jpeg"/>
+    <TileMap title="roads" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Aroads@EPSG%3A4326@png"/>
+    <TileMap title="roads" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Aroads@EPSG%3A4326@jpeg"/>
+    <TileMap title="roads" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Aroads@EPSG%3A900913@png"/>
+    <TileMap title="roads" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Aroads@EPSG%3A900913@jpeg"/>
+    <TileMap title="osm:osm" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/osm%3Aosm@EPSG%3A900913@png"/>
+    <TileMap title="bluemarble" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/nasa%3Abluemarble@EPSG%3A4326@png"/>
+    <TileMap title="bluemarble" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/nasa%3Abluemarble@EPSG%3A4326@jpeg"/>
+    <TileMap title="bluemarble" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/nasa%3Abluemarble@EPSG%3A900913@png"/>
+    <TileMap title="bluemarble" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/nasa%3Abluemarble@EPSG%3A900913@jpeg"/>
+    <TileMap title="wps4623406955417507685tiff1569225987181868248" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps4623406955417507685tiff1569225987181868248@EPSG%3A4326@png"/>
+    <TileMap title="wps4623406955417507685tiff1569225987181868248" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps4623406955417507685tiff1569225987181868248@EPSG%3A4326@jpeg"/>
+    <TileMap title="wps4623406955417507685tiff1569225987181868248" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps4623406955417507685tiff1569225987181868248@EPSG%3A900913@png"/>
+    <TileMap title="wps4623406955417507685tiff1569225987181868248" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps4623406955417507685tiff1569225987181868248@EPSG%3A900913@jpeg"/>
+    <TileMap title="wps5380428517378077718tiff6289779593078582304" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps5380428517378077718tiff6289779593078582304@EPSG%3A4326@png"/>
+    <TileMap title="wps5380428517378077718tiff6289779593078582304" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps5380428517378077718tiff6289779593078582304@EPSG%3A4326@jpeg"/>
+    <TileMap title="wps5380428517378077718tiff6289779593078582304" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps5380428517378077718tiff6289779593078582304@EPSG%3A900913@png"/>
+    <TileMap title="wps5380428517378077718tiff6289779593078582304" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Awps5380428517378077718tiff6289779593078582304@EPSG%3A900913@jpeg"/>
+    <TileMap title="bugsites" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Abugsites@EPSG%3A4326@png"/>
+    <TileMap title="bugsites" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Abugsites@EPSG%3A4326@jpeg"/>
+    <TileMap title="bugsites" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Abugsites@EPSG%3A900913@png"/>
+    <TileMap title="bugsites" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/og%3Abugsites@EPSG%3A900913@jpeg"/>
+    <TileMap title="Natural Earth Base Map" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Ane@EPSG%3A4326@png"/>
+    <TileMap title="Natural Earth Base Map" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Ane@EPSG%3A4326@jpeg"/>
+    <TileMap title="Natural Earth Base Map" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Ane@EPSG%3A900913@png"/>
+    <TileMap title="Natural Earth Base Map" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne%3Ane@EPSG%3A900913@jpeg"/>
+    <TileMap title="parks" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Aparks@EPSG%3A4326@jpeg"/>
+    <TileMap title="parks" srs="EPSG:4326" profile="global-geodetic" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Aparks@EPSG%3A4326@png"/>
+    <TileMap title="parks" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Aparks@EPSG%3A900913@jpeg"/>
+    <TileMap title="parks" srs="EPSG:900913" profile="global-mercator" href="http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Aparks@EPSG%3A900913@png"/>
+  </TileMaps>
+</TileMapService>
