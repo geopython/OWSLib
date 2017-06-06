@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 import cgi
+import sys
 from owslib.etree import etree
 from datetime import datetime
 try:                    # Python 3
@@ -278,10 +279,16 @@ class SosObservationOffering(object):
             self.response_modes.append(testXMLValue(rm))
 
     def __str__(self):
-        return 'Offering id: %s, name: %s' % (self.id, self.name)
+        if sys.version_info>=(3,0):
+            return 'Offering id: %s, name: %s' % (self.id, self.name)
+        else:
+            return ('Offering id: %s, name: %s' % (self.id, self.name)).encode('utf-8', 'ignore')
 
     def __repr__(self):
-        return "<SosObservationOffering '%s'>" % self.name
+        if sys.version_info>=(3,0):
+            return "<SosObservationOffering '%s'>" % self.name
+        else:
+            return ("<SosObservationOffering '%s'>" % self.name).encode('utf-8', 'ignore')
 
 class SosCapabilitiesReader(object):
     def __init__(self, version="1.0.0", url=None, username=None, password=None):
