@@ -137,7 +137,8 @@ class ResponseWrapper(object):
 
     # @TODO: __getattribute__ for poking at response
 
-def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None):
+def openURL(url_base, data=None, method='Get', cookies=None,
+            username=None, password=None, timeout=30, headers=None, proxies=None):
     """
     Function to open URLs.
 
@@ -170,7 +171,6 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     elif method.lower() == 'get':
         rkwargs['params'] = data
-        
     else:
         raise ValueError("Unknown method ('%s'), expected 'get' or 'post'" % method)
 
@@ -180,17 +180,19 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     req = requests.request(method.upper(),
                            url_base,
                            headers=headers,
+                           proxies=proxies,
                            **rkwargs)
 
     if req.status_code in [400, 401]:
         raise ServiceException(req.text)
 
-    if req.status_code in [404, 500, 502, 503, 504]:    # add more if needed
+    if req.status_code in [404, 500, 502, 503, 504]:  # add more if needed
         req.raise_for_status()
 
     # check for service exceptions without the http header set
-    if 'Content-Type' in req.headers and req.headers['Content-Type'] in ['text/xml', 'application/xml', 'application/vnd.ogc.se_xml']:
-        #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
+    if 'Content-Type' in req.headers and req.headers['Content-Type'] in ['text/xml', 'application/xml',
+                                                                         'application/vnd.ogc.se_xml']:
+        # just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
         se_tree = etree.fromstring(req.content)
 
         # to handle the variety of namespaces and terms across services
@@ -206,7 +208,8 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
             serviceException = se_tree.find(possible_error)
             if serviceException is not None:
                 # and we need to deal with some message nesting
-                raise ServiceException('\n'.join([str(t).strip() for t in serviceException.itertext() if str(t).strip()]))
+                raise ServiceException(
+                    '\n'.join([str(t).strip() for t in serviceException.itertext() if str(t).strip()]))
 
     return ResponseWrapper(req)
 
