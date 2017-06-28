@@ -68,7 +68,7 @@ class CatalogueServiceWeb(object):
 
         """
 
-        self.url = url
+        self.url = util.clean_ows_url(url)
         self.lang = lang
         self.version = version
         self.timeout = timeout

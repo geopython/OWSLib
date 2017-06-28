@@ -14,6 +14,7 @@ Sensor Observation Service (SOS) methods and metadata. Factory function.
 from __future__ import (absolute_import, division, print_function)
 
 from .swe.observation import sos100, sos200
+from .util import clean_ows_url
 
 
 def SensorObservationService(url,
@@ -30,11 +31,14 @@ def SensorObservationService(url,
     :param password: password for the username
     :return: a version specific SensorObservationService object
     """
+
+    clean_url = clean_ows_url(url)
+
     if version in ['1.0', '1.0.0']:
         return sos100.SensorObservationService_1_0_0.__new__(
-            sos100.SensorObservationService_1_0_0, url, version,
+            sos100.SensorObservationService_1_0_0, clean_url, version,
             xml, username, password)
     elif version in ['2.0', '2.0.0']:
         return sos200.SensorObservationService_2_0_0.__new__(
-            sos200.SensorObservationService_2_0_0, url, version,
+            sos200.SensorObservationService_2_0_0, clean_url, version,
             xml, username, password)
