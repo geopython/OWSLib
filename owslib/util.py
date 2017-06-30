@@ -576,6 +576,9 @@ def clean_ows_url(url):
     source: https://stackoverflow.com/a/11640565
     """
 
+    if url is None or not url.startswith('http'):
+        return url
+
     filtered_kvp = {}
     basic_service_elements = ('service', 'version', 'request')
 
