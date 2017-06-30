@@ -25,7 +25,7 @@ Service Provider:
     'National Aeronautics and Space Administration'
 
     >>> wmts.provider.url
-    'http://earthdata.nasa.gov/'
+    'https://earthdata.nasa.gov/'
     
 Available Layers:
 
@@ -41,12 +41,13 @@ Fetch a tile (using some defaults):
     >>> bytes_written = out.write(tile.read())
     >>> out.close()
 
-Test a WMTS without a ServiceProvider tag in Capababilities XML
+Test styles for several layers
+    >>> wmts.contents['MLS_SO2_147hPa_Night'].styles
+    {'default': {'isDefault': True, 'title': 'default'}}
+    >>> wmts.contents['MLS_SO2_147hPa_Night'].styles
+    {'default': {'isDefault': True, 'title': 'default'}}
+
+ Test a WMTS without a ServiceProvider tag in Capababilities XML
 
     >>> wmts = WebMapTileService('http://data.geus.dk/arcgis/rest/services/OneGeologyGlobal/S071_G2500_OneGeology/MapServer/WMTS/1.0.0/WMTSCapabilities.xml')
 
-Test styles for several layers
-    >>> wmts1.contents['MLS_SO2_147hPa_Night'].styles
-    {'default': {'isDefault': True, 'title': 'default'}}
-    >>> wmts1.contents['MLS_SO2_147hPa_Night'].styles
-    {'default': {'isDefault': True, 'title': 'default'}}
