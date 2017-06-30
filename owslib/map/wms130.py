@@ -599,6 +599,7 @@ class ContentMetadata(object):
         self.timepositions = None
         self.defaulttimeposition = None
         time_dimension = None
+
         for dim in elem.findall(nspath('Dimension', WMS_NAMESPACE)):
             dim_name = dim.attrib.get('name')
             if dim_name is not None and dim_name.lower() == 'time':
@@ -611,7 +612,7 @@ class ContentMetadata(object):
         self.elevations = None
         elev_dimension = None
         for dim in elem.findall(nspath('Dimension', WMS_NAMESPACE)):
-            if dim.attrib.get('elevation') is not None:
+            if dim.attrib.get('name') == 'elevation':
                 elev_dimension = dim
         if elev_dimension is not None:
             self.elevations = [e.strip() for e in elev_dimension.text.split(',')] if elev_dimension.text else None
