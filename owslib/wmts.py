@@ -42,7 +42,7 @@ except ImportError:      # Python 2
     from urllib import urlencode
     from urlparse import urlparse, urlunparse, parse_qs, ParseResult
 from .etree import etree
-from .util import openURL, testXMLValue, getXMLInteger
+from .util import clean_ows_url, openURL, testXMLValue, getXMLInteger
 from .fgdc import Metadata
 from .iso import MD_Metadata
 from .ows import ServiceProvider, ServiceIdentification, OperationsMetadata
@@ -159,7 +159,7 @@ class WebMapTileService(object):
             requests.
 
         """
-        self.url = url
+        self.url = clean_ows_url(url)
         self.username = username
         self.password = password
         self.version = version
