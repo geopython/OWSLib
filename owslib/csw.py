@@ -649,7 +649,7 @@ class CatalogueServiceWeb(object):
                             # Well, just use the first one.
                             request_url = post_verbs[0].get('url')
                     elif len(post_verbs) == 1:
-                        request_post_url = post_verbs[0].get('url')
+                        request_url = post_verbs[0].get('url')
             except:  # no such luck, just go with request_url
                 pass
 
