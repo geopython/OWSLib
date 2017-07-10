@@ -13,8 +13,8 @@ try:
     ElementType = etree._Element
 except ImportError:
     import xml.etree.ElementTree as etree
+    ElementType = etree.Element
     try:
         from xml.etree.ElementTree import ParseError
     except ImportError:
         from xml.parsers.expat import ExpatError as ParseError
-        ElementType = etree.Element
