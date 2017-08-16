@@ -688,14 +688,14 @@ class WPSExecution():
         """
 
         if self.isSucceded():
-            content = ''
+            content = b''
             for output in self.processOutputs:
 
                 output_content = output.retrieveData(
                     self.username, self.password)
 
                 # ExecuteResponse contains reference to server-side output
-                if output_content is not "":
+                if output_content is not b'':
                     content = content + output_content
                     if filepath is None:
                         filepath = output.fileName
