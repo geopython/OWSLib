@@ -925,8 +925,9 @@ class InputOutput(object):
             for sub_element in literal_data_element:
                 subns = getNamespace(sub_element)
                 if sub_element.tag.endswith('DataType'):
-                    self.dataType = sub_element.get(
-                        nspath("reference", ns=subns)).split(':')[-1]
+                    reference = sub_element.get(nspath("reference", ns=subns)) or sub_element.text
+                    if reference and ':' in reference:
+                        self.dataType = reference.split(':')[-1]
 
             for sub_element in literal_data_element:
 
