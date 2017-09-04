@@ -1353,8 +1353,8 @@ class BoundingBoxDataInput(object):
         else:
             # convenience method for string input
             self.data = [float(number) for number in data.split(',')]
-        self.lower_corner = (data[0], data[1])
-        self.upper_corner = (data[2], data[3])
+        self.lower_corner = (self.data[0], self.data[1])
+        self.upper_corner = (self.data[2], self.data[3])
         self.dimensions = dimensions
         self.crs = crs or 'epsg:4326'
 
