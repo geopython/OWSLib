@@ -89,7 +89,7 @@ from __future__ import (absolute_import, division, print_function)
 from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
-from owslib.util import (testXMLValue, build_get_url, dump, getTypedValue,
+from owslib.util import (testXMLValue, build_get_url, clean_ows_url, dump, getTypedValue,
                          getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
@@ -151,11 +151,18 @@ def is_literaldata(val):
     return is_str
 
 
+def is_boundingboxdata(val):
+    """
+    Checks if the provided value is an implementation of ``BoundingBoxDataInput``.
+    """
+    return isinstance(val, BoundingBoxDataInput)
+
+
 def is_complexdata(val):
     """
-    Checks if the provided value is an implementation of IComplexData.
+    Checks if the provided value is an implementation of ``IComplexDataInput``.
     """
-    return hasattr(val, 'getXml')
+    return isinstance(val, IComplexDataInput)
 
 
 class IComplexDataInput(object):
@@ -188,7 +195,7 @@ class WebProcessingService(object):
         """
 
         # fields passed in from object initializer
-        self.url = url
+        self.url = clean_ows_url(url)
         self.username = username
         self.password = password
         self.version = version
@@ -584,6 +591,8 @@ class WPSExecution():
             elif is_complexdata(val):
                 log.debug("complexdata %s", key)
                 inputElement.append(val.getXml())
+            elif is_boundingboxdata(val):
+                inputElement.append(val.get_xml())
             else:
                 raise Exception(
                     'input type of "%s" parameter is unknown' % key)
@@ -688,14 +697,14 @@ class WPSExecution():
         """
 
         if self.isSucceded():
-            content = ''
+            content = b''
             for output in self.processOutputs:
 
                 output_content = output.retrieveData(
                     self.username, self.password)
 
                 # ExecuteResponse contains reference to server-side output
-                if output_content is not "":
+                if output_content is not b'':
                     content = content + output_content
                     if filepath is None:
                         filepath = output.fileName
@@ -925,8 +934,9 @@ class InputOutput(object):
             for sub_element in literal_data_element:
                 subns = getNamespace(sub_element)
                 if sub_element.tag.endswith('DataType'):
-                    self.dataType = sub_element.get(
-                        nspath("reference", ns=subns)).split(':')[-1]
+                    reference = sub_element.get(nspath("reference", ns=subns)) or sub_element.text
+                    if reference and ':' in reference:
+                        self.dataType = reference.split(':')[-1]
 
             for sub_element in literal_data_element:
 
@@ -1122,7 +1132,7 @@ class Output(InputOutput):
         # <ComplexData> or <ComplexOutput>
         self._parseComplexData(outputElement, 'ComplexOutput')
 
-        # <BoundingBoxData>
+        # <BoundingBoxOutput>
         self._parseBoundingBoxData(outputElement, 'BoundingBoxOutput')
 
         # <Data>
@@ -1162,10 +1172,10 @@ class Output(InputOutput):
         # OWS BoundingBox:
         #
         # <wps:Data>
-        #   <wps:BoundingBoxData crs="EPSG:4326" dimensions="2">
+        #   <ows:BoundingBox crs="EPSG:4326" dimensions="2">
         #     <ows:LowerCorner>0.0 -90.0</ows:LowerCorner>
         #     <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
-        #   </wps:BoundingBoxData>
+        #   </ows:BoundingBox>
         # </wps:Data>
         #
         dataElement = outputElement.find(nspath('Data', ns=wpsns))
@@ -1185,19 +1195,15 @@ class Output(InputOutput):
                 self.dataType = literalDataElement.get('dataType')
                 if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
                     self.data.append(literalDataElement.text.strip())
-            bboxDataElement = dataElement.find(
-                nspath('BoundingBoxData', ns=wpsns))
+            bboxDataElement = dataElement.find(nspath('BoundingBox', ns=namespaces['ows']))
+            if not bboxDataElement:
+                # TODO: just a workaround for data-inputs in lineage
+                bboxDataElement = dataElement.find(nspath('BoundingBoxData', ns=namespaces['wps']))
             if bboxDataElement is not None:
                 self.dataType = "BoundingBoxData"
                 bbox = BoundingBox(bboxDataElement)
-                if bbox is not None and bbox.minx is not None:
-                    bbox_value = None
-                    if bbox.crs is not None and bbox.crs.axisorder == 'yx':
-                        bbox_value = "{0},{1},{2},{3}".format(bbox.miny, bbox.minx, bbox.maxy, bbox.maxx)
-                    else:
-                        bbox_value = "{0},{1},{2},{3}".format(bbox.minx, bbox.miny, bbox.maxx, bbox.maxy)
-                    log.debug("bbox=%s", bbox_value)
-                    self.data.append(bbox_value)
+                if bbox:
+                    self.data.append(bbox)
 
     def retrieveData(self, username=None, password=None):
         """
@@ -1331,6 +1337,55 @@ class Process(object):
             self.processOutputs.append(Output(outputElement))
             if self.verbose == True:
                 dump(self.processOutputs[-1],  prefix='\tOutput: ')
+
+
+class BoundingBoxDataInput(object):
+    """
+    Data input class for ``wps:BoundingBoxData``.
+
+    :param list data: Coordinates of lower and upper corner. Example [10, 50, 20, 60]
+    with lower corner=[10, 50] and upper corner=[20, 60].
+    :param string crs: Name of coordinate reference system. Default: "epsg:4326".
+    """
+    def __init__(self, data, crs=None, dimensions=2):
+        if isinstance(data, list):
+            self.data = data
+        else:
+            # convenience method for string input
+            self.data = [float(number) for number in data.split(',')]
+        self.lower_corner = (self.data[0], self.data[1])
+        self.upper_corner = (self.data[2], self.data[3])
+        self.dimensions = dimensions
+        self.crs = crs or 'epsg:4326'
+
+    def get_xml(self):
+        """
+        Method that returns the object data as an XML snippet,
+        to be inserted into the WPS request document sent to the server.
+        """
+        '''
+        <wps:Data>
+            <wps:BoundingBoxData crs="EPSG:4326" dimenstions="2">
+                <ows:LowerCorner>51.9 7.0</ows:LowerCorner>
+                <ows:UpperCorner>53.0 8.0</ows:UpperCorner>
+            </wps:BoundingBoxData>
+        </wps:Data>
+        '''
+        data_el = etree.Element(nspath_eval('wps:Data', namespaces))
+        attrib = dict()
+        if self.crs:
+            attrib['crs'] = self.crs
+        if self.dimensions:
+            attrib['dimensions'] = str(self.dimensions)
+        bbox_el = etree.SubElement(
+            data_el, nspath_eval('wps:BoundingBoxData', namespaces), attrib=attrib)
+        lc_el = etree.SubElement(
+            bbox_el, nspath_eval('ows:LowerCorner', namespaces))
+        lc_el.text = "{0[0]} {0[1]}".format(self.lower_corner)
+        uc_el = etree.SubElement(
+            bbox_el, nspath_eval('ows:UpperCorner', namespaces))
+        uc_el.text = "{0[0]} {0[1]}".format(self.upper_corner)
+        return data_el
 
 
 class ComplexDataInput(IComplexDataInput, ComplexData):

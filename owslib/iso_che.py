@@ -21,12 +21,13 @@ from owslib.namespaces import Namespaces
 def get_namespaces():
     n = Namespaces()
     ns = n.get_namespaces(["gco","gmd","gml","gml32","gmx","gts","srv","xlink"])
+    ns["che"] = 'http://www.geocat.ch/2008/che'
     ns[None] = n.get_namespace("gmd")
     return ns
 namespaces = get_namespaces()
 
 
-class MD_Metadata(object):
+class CHE_MD_Metadata(object):
     """ Process gmd:MD_Metadata """
     def __init__(self, md=None):
 
@@ -84,7 +85,7 @@ class MD_Metadata(object):
             self.hierarchy = _testCodeListValue(md.find(util.nspath_eval('gmd:hierarchyLevel/gmd:MD_ScopeCode', namespaces)))
 
             self.contact = []
-            for i in md.findall(util.nspath_eval('gmd:contact/gmd:CI_ResponsibleParty', namespaces)):
+            for i in md.findall(util.nspath_eval('gmd:contact/che:CHE_CI_ResponsibleParty', namespaces)):
                 o = CI_ResponsibleParty(i)
                 self.contact.append(o)
 
@@ -115,7 +116,7 @@ class MD_Metadata(object):
                 'Please see https://github.com/geopython/OWSLib/issues/38 for more information',
                 FutureWarning)
 
-            val = md.find(util.nspath_eval('gmd:identificationInfo/gmd:MD_DataIdentification', namespaces))
+            val = md.find(util.nspath_eval('gmd:identificationInfo/che:CHE_MD_DataIdentification', namespaces))
             val2 = md.find(util.nspath_eval('gmd:identificationInfo/srv:SV_ServiceIdentification', namespaces))
 
             if val is not None:
@@ -133,7 +134,7 @@ class MD_Metadata(object):
                 if len(idinfo) > 0:
                     val = list(idinfo)[0]
                     tagval = util.xmltag_split(val.tag)
-                    if tagval == 'MD_DataIdentification':
+                    if tagval == 'CHE_MD_DataIdentification':
                         self.identificationinfo.append(MD_DataIdentification(val, 'dataset'))
                     elif tagval == 'MD_ServiceIdentification':
                         self.identificationinfo.append(MD_DataIdentification(val, 'service'))
@@ -174,6 +175,7 @@ class PT_Locale(object):
             self.id = md.attrib.get('id')
             self.languagecode = md.find(util.nspath_eval('gmd:languageCode/gmd:LanguageCode', namespaces)).attrib.get('codeListValue')
             self.charset = md.find(util.nspath_eval('gmd:characterEncoding/gmd:MD_CharacterSetCode', namespaces)).attrib.get('codeListValue')
+    
 
 class CI_Date(object):
     """ process CI_Date """
@@ -223,30 +225,39 @@ class CI_ResponsibleParty(object):
             val = md.find(util.nspath_eval('gmd:positionName/gco:CharacterString', namespaces))
             self.position = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:phone/gmd:CI_Telephone/gmd:voice/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:phone/che:CHE_CI_Telephone/gmd:voice/gco:CharacterString', namespaces))
 
             self.phone = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:phone/gmd:CI_Telephone/gmd:facsimile/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:phone/che:CHE_CI_Telephone/gmd:facsimile/gco:CharacterString', namespaces))
             self.fax = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/gmd:deliveryPoint/gco:CharacterString', namespaces))
             self.address = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/gmd:city/gco:CharacterString', namespaces))
             self.city = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:administrativeArea/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/gmd:administrativeArea/gco:CharacterString', namespaces))
             self.region = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/gmd:postalCode/gco:CharacterString', namespaces))
             self.postcode = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/gmd:country/gco:CharacterString', namespaces))
             self.country = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/gmd:electronicMailAddress/gco:CharacterString', namespaces))
             self.email = util.testXMLValue(val)
+
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/che:streetName/gco:CharacterString', namespaces))
+            self.streetname = util.testXMLValue(val)
+
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/che:streetNumber/gco:CharacterString', namespaces))
+            self.streetnumber = util.testXMLValue(val)
+
+            val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:address/che:CHE_CI_Address/che:postBox/gco:CharacterString', namespaces))
+            self.postbox = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval('gmd:contactInfo/gmd:CI_Contact/gmd:onlineResource/gmd:CI_OnlineResource', namespaces))
             if val is not None:
@@ -430,7 +441,7 @@ class MD_DataIdentification(object):
             self.creator = []
             self.publisher = []
             self.contributor = []
-            for val in md.findall(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty', namespaces)):
+            for val in md.findall(util.nspath_eval('gmd:pointOfContact/che:CHE_CI_ResponsibleParty', namespaces)):
                 role = val.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces))
                 if role is not None:
                     clv = _testCodeListValue(role)
@@ -460,7 +471,7 @@ class MD_DataIdentification(object):
             self.status = _testCodeListValue(md.find(util.nspath_eval('gmd:status/gmd:MD_ProgressCode', namespaces)))
 
             self.contact = []
-            for i in md.findall(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty', namespaces)):
+            for i in md.findall(util.nspath_eval('gmd:pointOfContact/che:CHE_CI_ResponsibleParty', namespaces)):
                 o = CI_ResponsibleParty(i)
                 self.contact.append(o)
 
@@ -555,7 +566,7 @@ class MD_Distributor(object):
             self.online = []
         else:
             self.contact = None
-            val = md.find(util.nspath_eval('gmd:MD_Distributor/gmd:distributorContact/gmd:CI_ResponsibleParty', namespaces))
+            val = md.find(util.nspath_eval('gmd:MD_Distributor/gmd:distributorContact/che:CHE_CI_ResponsibleParty', namespaces))
             if val is not None:
                 self.contact = CI_ResponsibleParty(val)
 
@@ -667,7 +678,7 @@ class SV_ServiceIdentification(object):
             self.abstract = util.testXMLValue(val)
 
             self.contact = None
-            val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty', namespaces))
+            val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/che:CHE_CI_ResponsibleParty', namespaces))
             if val is not None:
                 self.contact = CI_ResponsibleParty(val)
 
@@ -727,7 +738,9 @@ class CI_OnlineResource(object):
             self.description = None
             self.function = None
         else:
-            val = md.find(util.nspath_eval('gmd:linkage/gmd:URL', namespaces))
+            val = md.find(util.nspath_eval('gmd:linkage/che:PT_FreeURL/che:URLGroup/che:LocalisedURL', namespaces))
+            if val is None:
+                val = md.find(util.nspath_eval('gmd:linkage/gmd:URL', namespaces))
             self.url = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval('gmd:protocol/gco:CharacterString', namespaces))

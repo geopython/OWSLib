@@ -299,10 +299,13 @@ class ContentMetadata:
         self.boundingBoxWGS84 = None
         b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)), namespaces['ows'])
         if b is not None:
-            self.boundingBoxWGS84 = (
-                    float(b.minx), float(b.miny),
-                    float(b.maxx), float(b.maxy),
-                    )
+            try:
+                self.boundingBoxWGS84 = (
+                        float(b.minx), float(b.miny),
+                        float(b.maxx), float(b.maxy),
+                        )
+            except TypeError:
+                self.boundingBoxWGS84 = None
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
         dsrs = testXMLValue(elem.find(nspath_eval('wfs:DefaultSRS', namespaces)))
