@@ -12,5 +12,4 @@ pytest_cov-*
 .*.swp
 *.*~
 .cache
-
-
+.DS_Store
