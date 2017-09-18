@@ -68,7 +68,7 @@ class CatalogueServiceWeb(object):
 
         """
 
-        self.url = url
+        self.url = util.clean_ows_url(url)
         self.lang = lang
         self.version = version
         self.timeout = timeout
@@ -88,6 +88,8 @@ class CatalogueServiceWeb(object):
             self._invoke()
     
             if self.exceptionreport is None:
+                self.updateSequence = self._exml.getroot().attrib.get('updateSequence')
+
                 # ServiceIdentification
                 val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
                 if val is not None:
@@ -445,7 +447,7 @@ class CatalogueServiceWeb(object):
                     node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
                     etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = propertyname
                     etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = propertyvalue
-                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql, identifier)
+                    self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
 
         if ttype == 'delete':
             self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
@@ -647,7 +649,7 @@ class CatalogueServiceWeb(object):
                             # Well, just use the first one.
                             request_url = post_verbs[0].get('url')
                     elif len(post_verbs) == 1:
-                        request_post_url = post_verbs[0].get('url')
+                        request_url = post_verbs[0].get('url')
             except:  # no such luck, just go with request_url
                 pass
 

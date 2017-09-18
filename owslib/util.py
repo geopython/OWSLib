@@ -15,11 +15,7 @@ from datetime import datetime
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
-try:                    # Python 3
-    from urllib.parse import urlsplit, urlencode
-except ImportError:     # Python 2
-    from urlparse import urlsplit
-    from urllib import urlencode
+from six.moves.urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
 
 try:
     from StringIO import StringIO  # Python 2
@@ -133,7 +129,7 @@ class ResponseWrapper(object):
         return self._response.content
 
     def geturl(self):
-        return self._response.url
+        return self._response.url.replace('&&', '&')
 
     # @TODO: __getattribute__ for poking at response
 
@@ -571,6 +567,38 @@ def strip_bom(raw_text):
             if raw_text.startswith(bom):
                 return raw_text.replace(bom, '')
     return raw_text
+
+
+def clean_ows_url(url):
+    """
+    clean an OWS URL of basic service elements
+
+    source: https://stackoverflow.com/a/11640565
+    """
+
+    if url is None or not url.startswith('http'):
+        return url
+
+    filtered_kvp = {}
+    basic_service_elements = ('service', 'version', 'request')
+
+    parsed = urlparse(url)
+    qd = parse_qs(parsed.query, keep_blank_values=True)
+
+    for key, value in qd.items():
+        if key.lower() not in basic_service_elements:
+            filtered_kvp[key] = value
+
+    newurl = urlunparse([
+        parsed.scheme,
+        parsed.netloc,
+        parsed.path,
+        parsed.params,
+        urlencode(filtered_kvp, doseq=True),
+        parsed.fragment
+    ])
+
+    return newurl
 
 
 def bind_url(url):

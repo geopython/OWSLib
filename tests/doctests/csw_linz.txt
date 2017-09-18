@@ -34,13 +34,13 @@ Imports
     >>> c.getrecords2([prop], outputschema='http://www.isotc211.org/2005/gmd', maxrecords=2)
     >>> c.results['returned']
     2
-    >>> c.records['a60f479b-f0b0-b728-8ba3-d7f4187c126d'].identification.title
-    'Land elevation points (Hydro, 1:22k - 1:90k)'
-    >>> c.records['a60f479b-f0b0-b728-8ba3-d7f4187c126d'].identifier
-    'a60f479b-f0b0-b728-8ba3-d7f4187c126d'
-    >>> c.records['a60f479b-f0b0-b728-8ba3-d7f4187c126d'].stdname
+    >>> c.records['e4625e24-899e-4aed-c9d0-e4e341bf9d4b'].identification.title
+    'Unsurveyed area polygon (Hydro, 1:1.5mil and smaller)'
+    >>> c.records['e4625e24-899e-4aed-c9d0-e4e341bf9d4b'].identifier
+    'e4625e24-899e-4aed-c9d0-e4e341bf9d4b'
+    >>> c.records['e4625e24-899e-4aed-c9d0-e4e341bf9d4b'].stdname
     'ISO19115'
-    >>> c.records['a60f479b-f0b0-b728-8ba3-d7f4187c126d'].stdver
+    >>> c.records['e4625e24-899e-4aed-c9d0-e4e341bf9d4b'].stdver
     '2003/Cor.1:2006'
     >>> c.harvest('somefile','someuri')     #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):

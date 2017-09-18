@@ -76,7 +76,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.password = password
         self._capabilities = None
         self.owscommon = OwsCommon('1.0.0')
-        reader = WFSCapabilitiesReader(self.version)
+        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -85,6 +85,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
+
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
 
         # ServiceIdentification
         val = self._capabilities.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
@@ -297,10 +299,13 @@ class ContentMetadata:
         self.boundingBoxWGS84 = None
         b = BoundingBox(elem.find(nspath_eval('ows:WGS84BoundingBox', namespaces)), namespaces['ows'])
         if b is not None:
-            self.boundingBoxWGS84 = (
-                    float(b.minx), float(b.miny),
-                    float(b.maxx), float(b.maxy),
-                    )
+            try:
+                self.boundingBoxWGS84 = (
+                        float(b.minx), float(b.miny),
+                        float(b.maxx), float(b.maxy),
+                        )
+            except TypeError:
+                self.boundingBoxWGS84 = None
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath_eval('wfs:OtherSRS', namespaces))]
         dsrs = testXMLValue(elem.find(nspath_eval('wfs:DefaultSRS', namespaces)))

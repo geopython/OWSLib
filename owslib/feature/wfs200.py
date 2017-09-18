@@ -84,7 +84,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         self.username = username
         self.password = password
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version)
+        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -93,6 +93,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
+
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
 
         #serviceIdentification metadata
         serviceidentelem=self._capabilities.find(nspath('ServiceIdentification'))
@@ -375,19 +377,22 @@ class ContentMetadata:
         self.boundingBoxWGS84 = None
         b = elem.find(nspath('WGS84BoundingBox',ns=OWS_NAMESPACE))
         if b is not None:
-            lc = b.find(nspath("LowerCorner",ns=OWS_NAMESPACE))
-            uc = b.find(nspath("UpperCorner",ns=OWS_NAMESPACE))
-            ll = [float(s) for s in lc.text.split()]
-            ur = [float(s) for s in uc.text.split()]
-            self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
+            try:
+                lc = b.find(nspath("LowerCorner",ns=OWS_NAMESPACE))
+                uc = b.find(nspath("UpperCorner",ns=OWS_NAMESPACE))
+                ll = [float(s) for s in lc.text.split()]
+                ur = [float(s) for s in uc.text.split()]
+                self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
 
-        # there is no such think as bounding box
-        # make copy of the WGS84BoundingBox
-        self.boundingBox = (self.boundingBoxWGS84[0],
-                            self.boundingBoxWGS84[1],
-                            self.boundingBoxWGS84[2],
-                            self.boundingBoxWGS84[3],
-                            Crs("epsg:4326"))
+                # there is no such think as bounding box
+                # make copy of the WGS84BoundingBox
+                self.boundingBox = (self.boundingBoxWGS84[0],
+                                    self.boundingBoxWGS84[1],
+                                    self.boundingBoxWGS84[2],
+                                    self.boundingBoxWGS84[3],
+                                    Crs("epsg:4326"))
+            except AttributeError:
+                self.boundingBoxWGS84 = None
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('OtherCRS',ns=WFS_NAMESPACE))]
         defaultCrs =  elem.findall(nspath('DefaultCRS',ns=WFS_NAMESPACE))
