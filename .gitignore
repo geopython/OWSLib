@@ -12,5 +12,7 @@ pytest_cov-*
 .*.swp
 *.*~
 .cache
+.DS_Store
+.vscode
 tags
 *.nc
