@@ -1,12 +1,14 @@
 from owslib.wcs import WebCoverageService
 
 
-t = WebCoverageService('http://earthserver.pml.ac.uk/rasdaman/ows?', version='2.0.0')
+#t = WebCoverageService('https://eodataservice.org/rasdaman/ows?', version='2.0.0')
 
-print t.contents['CCI_V2_release_chlor_a'].supportedFormats
+eoxt = WebCoverageService('http://ows.eox.at/cite/mapserver?', version="2.0.1")
 
-for x in t.contents['CCI_V2_release_chlor_a'].timepositions:
- 	print x.isoformat()
+#print t.contents['CCI_V2_release_chlor_a'].supportedFormats
+
+# for x in eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].timepositions:
+# 	print x.isoformat()
 
 # print t.provider
 
@@ -31,22 +33,22 @@ for x in t.contents['CCI_V2_release_chlor_a'].timepositions:
 # print t.contents
 
 
-# print t.contents['CCI_V2_monthly_chlor_a_bias'].grid.dimension
-# print t.contents['CCI_V2_monthly_chlor_a_bias'].grid.lowlimits
-# print t.contents['CCI_V2_monthly_chlor_a_bias'].grid.highlimits
-# print t.contents['CCI_V2_monthly_chlor_a_bias'].grid.axislabels
-# print t.contents['CCI_V2_monthly_chlor_a_bias'].grid.origin
-# print t.contents['CCI_V2_monthly_chlor_a_bias'].grid.offsetvectors
+print eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.dimension
+print eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.lowlimits
+print eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.highlimits
+print eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.axislabels
+print eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.origin
+print eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].grid.offsetvectors
 
 # print t.contents['CCI_V2_monthly_chlor_a_bias'].boundingboxes 
 
-# print t.contents['CCI_V2_monthly_chlor_a_bias'].supportedFormats
+print eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'].supportedFormats
 
 #        http://earthserver.pml.ac.uk/rasdaman/ows?&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage
 #        &COVERAGEID=V2_monthly_CCI_chlor_a_insitu_test&SUBSET=Lat(40,50)&SUBSET=Long(-10,0)&SUBSET=ansi(144883,145000)&FORMAT=application/netcdf
 # #         cvg=wcs.getCoverage(identifier=['myID'], format='application/netcdf', subsets=[('axisName',min,max),('axisName',min,max),('axisName',min,max)])
 
-# cov = t.getCoverage(identifier=['CCI_V2_monthly_chlor_a_bias'], format='application/netcdf', subsets=[('Long',-10,0), ('Lat',40,50),('ansi',"2000-01-31T00:00:00Z","2000-02-29T00:00:00Z")])
+# cov = t.getCoverage(identifier=['CCI_V2_release_chlor_a'], format='application/netcdf', subsets=[('Long',-10,0), ('Lat',40,50),('ansi',"2011-02-28T23:59:00","2011-03-31T23:59:00")])
 
 
 # filename = 'wcs200test.nc'
@@ -54,10 +56,10 @@ for x in t.contents['CCI_V2_release_chlor_a'].timepositions:
 # bytes_written = f.write(cov.read())
 # f.close()
 
-cov = t.getCoverage(identifier=['OCCCI_V3_monthly_rrs_510_rmsd'], format='application/netcdf', subsets=[('Long',100), ('ansi',"2005-05-01T00:00:00Z")])
+cov = eoxt.getCoverage(identifier=['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'], format='image/tiff')#, subsets=[('Long',-10,-5),('Lat',-40,-50)])
 
 
-filename = 'wcs200test_slice2.nc'
+filename = 'eoxtest_slice2.tif'
 f=open(filename, 'wb')
 bytes_written = f.write(cov.read())
 f.close()

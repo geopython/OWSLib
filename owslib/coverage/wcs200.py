@@ -137,11 +137,9 @@ class WebCoverageService_2_0_0(WCSBase):
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: base url of server: %s'%base_url)
 
-        #process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service':'WCS'}
         assert len(identifier) > 0
         request['CoverageID']=identifier[0]
-        #request['identifier'] = ','.join(identifier)
 
 
         if crs:
@@ -159,7 +157,6 @@ class WebCoverageService_2_0_0(WCSBase):
 
         #encode and request
         data = urlencode(request)
-        # need to edit here to allow subset(axis,low,high) and subset(axis,low)
         if subsets:
             for subset in subsets:
                 if len(subset) > 2:
@@ -176,7 +173,6 @@ class WebCoverageService_2_0_0(WCSBase):
 
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
-
 
         u=openURL(base_url, data, method, self.cookies)
 
@@ -208,9 +204,6 @@ class ContentMetadata(object):
     def __init__(self, elem, service):
         """Initialize. service is required so that describeCoverage requests may be made"""
         #TODO - examine the parent for bounding box info.
-
-        #self._parent=parent
-        #print("getting content metadata")
         self._elem=elem
         self._service=service
         self.id=elem.find(nsWCS2('CoverageId')).text
@@ -273,30 +266,31 @@ class ContentMetadata(object):
 
         gridelem= self.descCov.find(nsWCS2('CoverageDescription/')+'{http://www.opengis.net/gml/3.2}domainSet/'+'{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors')
         if gridelem is not None:
-            # irregular time
-            #print("finding irregular times")
+            # irregular time axis
             cooeficients = []
-            #t_grid = self.grid
-            #start_pos = float(t_grid.origin[2])
+
             grid_axes = gridelem.findall('{http://www.opengis.net/gml/3.3/rgrid}generalGridAxis')
             for elem in grid_axes:
                 if elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}gridAxesSpanned').text in ["ansi", "unix"]:
                    cooeficients = elem.find('{http://www.opengis.net/gml/3.3/rgrid}GeneralGridAxis/{http://www.opengis.net/gml/3.3/rgrid}coefficients').text.split(' ')
             for x in cooeficients:
-                #t_pos = int(start_pos) + int(x)
                 x = x.replace('"', '')
                 t_date = datetime_from_iso(x)
                 timepositions.append(t_date)
         else:
             # regular time
-            t_grid = self.grid
-            start_pos = float(t_grid.origin[2])
-            step = float(t_grid.offsetvectors[2][2])
-            no_steps = int(t_grid.highlimits[2])
-            for x in xrange(no_steps):
-                t_pos = start_pos + (step * x)
-                t_date = datetime_from_ansi(t_pos)
-                timepositions.append(t_date)
+            if(len(self.grid.origin)>2):
+                t_grid = self.grid
+                start_pos = float(t_grid.origin[2])
+                step = float(t_grid.offsetvectors[2][2])
+                no_steps = int(t_grid.highlimits[2])
+                for x in xrange(no_steps):
+                    t_pos = start_pos + (step * x)
+                    t_date = datetime_from_ansi(t_pos)
+                    timepositions.append(t_date)
+            else:
+                # no time axis
+                timepositions = None
 
         return timepositions
     timepositions=property(_getTimePositions, None)
