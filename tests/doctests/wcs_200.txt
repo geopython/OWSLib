@@ -59,7 +59,7 @@ Print the ids of all layers (actually just the first 3):
     #['EPSG:9802']
 
     >>> cvg.supportedFormats
-    ['application/netcdf', 'image/tiff', 'image/jp2', 'image/png', 'image/jpeg']
+    ['application/gml+xml', 'text/csv', 'application/json', 'image/tiff', 'application/netcdf', 'image/png', 'image/jp2', 'image/jpeg']
 
     >>> cvg.grid.axislabels
     ['Lat', 'Long', 'ansi']
@@ -74,7 +74,7 @@ Print the ids of all layers (actually just the first 3):
     ['8639', '4319', '195']
 
     >>> cvg.grid.origin
-    ['89.9791564941', '-179.979202271', '144909.99930555557']
+    ['89.9791564941', '-179.979202271', '"1997-09-30T23:59:00.000Z"']
 
     >>> cvg.grid.offsetvectors
     [['-0.0416666619561', '0', '0'], ['0', '0.0416666749093', '0'], ['0', '0', '1']]
@@ -88,10 +88,10 @@ Print the ids of all layers (actually just the first 3):
     >>> formatType='NetCDF3' # chosen from cvg.supportedFormats
 
 #Make the actual getCoverage request.
-    >>> output=wcs.getCoverage(identifier=['OCCCI_V3_monthly_chlor_a'], format='application/netcdf', subsets=[long_subset, lat_subset, time_subset])
+    >>> output=wcs.getCoverage(identifier=['OCCCI_V3_monthly_chlor_a'], format='application/gml+xml', subsets=[long_subset, lat_subset, time_subset])
 
 #Then write this to a netcdf file.
-    >>> filename = scratch_file('wcs2test.nc')
+    >>> filename = scratch_file('wcs2test.xml')
     >>> f=open(filename, 'wb')
     >>> bytes_written = f.write(output.read())
     >>> f.close()
