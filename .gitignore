@@ -16,3 +16,4 @@ pytest_cov-*
 .vscode
 tags
 *.nc
+*.tif
