@@ -56,10 +56,10 @@ print eoxt.contents['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861
 # bytes_written = f.write(cov.read())
 # f.close()
 
-cov = eoxt.getCoverage(identifier=['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'], format='image/tiff')#, subsets=[('Long',-10,-5),('Lat',-40,-50)])
+cov = eoxt.getCoverage(identifier=['MER_FRS_1PNUPA20090701_124435_000005122080_00224_38354_6861_RGB'], format='image/png', subsets=[('Long',-50,-40),('Lat',-30,-4)])#,('ansi',"2008-04-01T00:00:00.000Z")])
 
 
-filename = 'eoxtest_slice2.tif'
+filename = 'eox_test.png'
 f=open(filename, 'wb')
 bytes_written = f.write(cov.read())
 f.close()
