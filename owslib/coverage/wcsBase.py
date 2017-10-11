@@ -161,6 +161,9 @@ class DescribeCoverageReader(object):
         elif self.version == '2.0.0':
             if 'CoverageID' not in params:
                 qs.append(('CoverageID', self.identifier))
+        elif self.version == '2.0.1':
+            if 'CoverageID' not in params:
+                qs.append(('CoverageID', self.identifier))
         elif self.version == '1.1.0' or self.version == '1.1.1':
             #NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
             #or identifiers (see tables 9, 10 of specification)  
@@ -170,6 +173,7 @@ class DescribeCoverageReader(object):
                 qs.append(('identifier', self.identifier))
                 qs.append(('format', 'text/xml'))
         urlqs = urlencode(tuple(qs))
+        print(service_url.split('?')[0] + '?' + urlqs)
         return service_url.split('?')[0] + '?' + urlqs
 
     def read(self, service_url, timeout=30):
@@ -182,7 +186,9 @@ class DescribeCoverageReader(object):
         @rtype: elementtree tree
         @return: An elementtree tree representation of the capabilities document
         """
+        
         request = self.descCov_url(service_url)
+        print(request)
         u = openURL(request, cookies=self.cookies, timeout=timeout)
         return etree.fromstring(u.read())
 
