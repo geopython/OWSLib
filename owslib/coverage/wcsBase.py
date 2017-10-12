@@ -173,7 +173,6 @@ class DescribeCoverageReader(object):
                 qs.append(('identifier', self.identifier))
                 qs.append(('format', 'text/xml'))
         urlqs = urlencode(tuple(qs))
-        print(service_url.split('?')[0] + '?' + urlqs)
         return service_url.split('?')[0] + '?' + urlqs
 
     def read(self, service_url, timeout=30):
@@ -188,7 +187,6 @@ class DescribeCoverageReader(object):
         """
         
         request = self.descCov_url(service_url)
-        print(request)
         u = openURL(request, cookies=self.cookies, timeout=timeout)
         return etree.fromstring(u.read())
 
