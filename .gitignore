@@ -13,3 +13,8 @@ pytest_cov-*
 *.*~
 .cache
 .DS_Store
+.vscode
+tags
+*.nc
+*.tif
+tester.py

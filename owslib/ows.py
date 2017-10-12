@@ -29,7 +29,7 @@ n = Namespaces()
 
 OWS_NAMESPACE_1_0_0 = n.get_namespace("ows")
 OWS_NAMESPACE_1_1_0 = n.get_namespace("ows110")
-OWS_NAMESPACE_2_0   = n.get_namespace("ows200")
+OWS_NAMESPACE_2_0_0 = n.get_namespace("ows200")
 XSI_NAMESPACE       = n.get_namespace("xsi")
 XLINK_NAMESPACE     = n.get_namespace("xlink")
 
@@ -41,8 +41,10 @@ class OwsCommon(object):
         self.version = version
         if version == '1.0.0':
             self.namespace = OWS_NAMESPACE_1_0_0
-        else:
+        elif version == '1.1.0':
             self.namespace = OWS_NAMESPACE_1_1_0
+        else:
+            self.namespace = OWS_NAMESPACE_2_0_0
     
 class ServiceIdentification(object):
     """Initialize an OWS Common ServiceIdentification construct"""
@@ -100,16 +102,16 @@ class ServiceContact(object):
     """Initialize an OWS Common ServiceContact construct"""
     def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
         self._root = infoset
-        val = self._root.find(util.nspath('ProviderName', namespace))
-        self.name = util.testXMLValue(val)
+        # val = self._root.find(util.nspath('ProviderName', namespace))
+        # self.name = util.testXMLValue(val)
         
-        self.organization=util.testXMLValue(self._root.find(util.nspath('ContactPersonPrimary/ContactOrganization', namespace)))
+        # self.organization=util.testXMLValue(self._root.find(util.nspath('ContactPersonPrimary/ContactOrganization', namespace)))
         
-        val = self._root.find(util.nspath('ProviderSite', namespace))
-        if val is not None:
-            self.site = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
-        else:
-            self.site = None
+        # val = self._root.find(util.nspath('ProviderSite', namespace))
+        # if val is not None:
+        #     self.site = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
+        # else:
+        #     self.site = None
 
         val = self._root.find(util.nspath('ServiceContact/Role', namespace))
         self.role = util.testXMLValue(val)
