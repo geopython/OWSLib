@@ -244,19 +244,19 @@ class ContentMetadata(object):
      #timelimits are the start/end times, timepositions are all timepoints. WCS servers can declare one or both or neither of these.
      # in wcs 2.0 this can be gathered from the Envelope tag
     def _getTimeLimits(self):
-        timepoints, timelimits=[],[]
-        b=self._elem.find(ns('lonLatEnvelope'))
-        if b is not None:
-            timepoints=b.findall('{http://www.opengis.net/gml}timePosition')
-        else:
-            #have to make a describeCoverage request...
-            if not hasattr(self, 'descCov'):
-                self.descCov=self._service.getDescribeCoverage(self.id)
-            for pos in self.descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
-                timepoints.append(pos)
-        if timepoints:
-                timelimits=[timepoints[0].text,timepoints[1].text]
-        return timelimits
+        # timepoints, timelimits=[],[]
+        # b=self._elem.find(ns('lonLatEnvelope'))
+        # if b is not None:
+        #     timepoints=b.findall('{http://www.opengis.net/gml}timePosition')
+        # else:
+        #     #have to make a describeCoverage request...
+        #     if not hasattr(self, 'descCov'):
+        #         self.descCov=self._service.getDescribeCoverage(self.id)
+        #     for pos in self.descCov.findall(ns('CoverageOffering/')+ns('domainSet/')+ns('temporalDomain/')+'{http://www.opengis.net/gml}timePosition'):
+        #         timepoints.append(pos)
+        # if timepoints:
+        #         timelimits=[timepoints[0].text,timepoints[1].text]
+        return [self.timepositions[0],self.timepositions[-1]]
     timelimits=property(_getTimeLimits, None)
 
     def _getTimePositions(self):
