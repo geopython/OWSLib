@@ -25,7 +25,8 @@ from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
 from owslib.crs import Crs
 import os, errno
-
+import dateutil.parser as parser
+from datetime import timedelta
 import logging
 from owslib.util import log, datetime_from_ansi, datetime_from_iso
 
@@ -281,13 +282,17 @@ class ContentMetadata(object):
             # regular time
             if(len(self.grid.origin)>2):
                 t_grid = self.grid
-                start_pos = float(t_grid.origin[2])
+                t_date = t_grid.origin[2]
+                start_pos = parser.parse(t_date, fuzzy=True)
                 step = float(t_grid.offsetvectors[2][2])
+                
+                start_pos = start_pos + timedelta(days=(step/2))
                 no_steps = int(t_grid.highlimits[2])
                 for x in xrange(no_steps):
-                    t_pos = start_pos + (step * x)
-                    t_date = datetime_from_ansi(t_pos)
-                    timepositions.append(t_date)
+                    t_pos = start_pos +  timedelta(days=(step * x))
+                    #t_date = datetime_from_ansi(t_pos)
+                    #t_date = t_pos.isoformat()
+                    timepositions.append(t_pos)
             else:
                 # no time axis
                 timepositions = None
