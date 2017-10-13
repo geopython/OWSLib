@@ -288,7 +288,7 @@ class ContentMetadata(object):
                 
                 start_pos = start_pos + timedelta(days=(step/2))
                 no_steps = int(t_grid.highlimits[2])
-                for x in xrange(no_steps):
+                for x in range(no_steps):
                     t_pos = start_pos +  timedelta(days=(step * x))
                     #t_date = datetime_from_ansi(t_pos)
                     #t_date = t_pos.isoformat()
