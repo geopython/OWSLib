@@ -141,7 +141,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         """
         Helper method to make sure the StringIO being returned will work.
 
-        Differences between Python 2.6/2.7/3.x mean we have a lot of cases to handle.
+        Differences between Python 2.7/3.x mean we have a lot of cases to handle.
         """
         if PY2:
             return StringIO(strval)

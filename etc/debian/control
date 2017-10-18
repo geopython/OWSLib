@@ -2,12 +2,12 @@ Source: owslib
 Section: python
 Priority: optional
 Maintainer: Angelos Tzotsos <gcpp.kalxas@gmail.com>
-Build-Depends: debhelper (>= 7.0.50), python-setuptools (>= 0.6), python-support (>=0.6), python-all-dev (>= 2.3.5-11), python (>= 2.6.6-3)
+Build-Depends: debhelper (>= 7.0.50), python-setuptools (>= 0.6), python-support (>=0.6), python-all-dev (>= 2.3.5-11), python (>= 2.7)
 Standards-Version: 3.9.3
-X-Python-Version: >= 2.5
+X-Python-Version: >= 2.7
 Homepage: http://geopython.github.com/OWSLib/
 
 Package: python-owslib
 Architecture: all
-Depends: ${misc:Depends}, debconf, python (>=2.5), python-lxml
+Depends: ${misc:Depends}, debconf, python (>=2.7), python-lxml
 Description: OWSLib is a Python package for client programming with Open Geospatial Consortium (OGC) web service (hence OWS) interface standards, and their related content models.
