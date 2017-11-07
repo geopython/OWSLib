@@ -667,6 +667,7 @@ class CatalogueServiceWeb(object):
                     # of typenames
                     ns_keys = [x.split(':')[0] for x in ns.split(' ')]
                     self.request = add_namespaces(self.request, ns_keys)
+            self.request = add_namespaces(self.request, 'ows')
 
             self.request = util.element_to_string(self.request, encoding='utf-8')
 
