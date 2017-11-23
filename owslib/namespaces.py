@@ -58,7 +58,8 @@ class Namespaces(object):
         'xlink' :   'http://www.w3.org/1999/xlink',
         'xs'    :   'http://www.w3.org/2001/XMLSchema',
         'xs2'   :   'http://www.w3.org/XML/Schema',
-        'xsi'   :   'http://www.w3.org/2001/XMLSchema-instance'
+        'xsi'   :   'http://www.w3.org/2001/XMLSchema-instance',
+		'wml2'  :   'http://www.opengis.net/waterml/2.0'
     }    
 
     def get_namespace(self, key):
