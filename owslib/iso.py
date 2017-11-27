@@ -979,6 +979,8 @@ class FC_FeatureAttribute(object):
             self.xml = None
             self.membername = None
             self.definition = None
+            self.code = None
+            self.valuetype = None
             self.listedvalues = []
         else:
             if hasattr(fa, 'getroot'):  # standalone document
@@ -991,6 +993,12 @@ class FC_FeatureAttribute(object):
 
             val = fa.find(util.nspath_eval('gfc:definition/gco:CharacterString', namespaces))
             self.definition = util.testXMLValue(val)
+
+            val = fa.find(util.nspath_eval('gfc:code/gco:CharacterString', namespaces))
+            self.code = util.testXMLValue(val)
+
+            val = fa.find(util.nspath_eval('gfc:valueType/gco:TypeName/gco:aName/gco:CharacterString', namespaces))
+            self.valuetype = util.testXMLValue(val)
 
             self.listedvalues = []
             for i in fa.findall(util.nspath_eval('gfc:listedValue/gfc:FC_ListedValue', namespaces)):
