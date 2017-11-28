@@ -363,11 +363,13 @@ class ContentMetadata:
         for m in elem.findall(nspath('MetadataURL')):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
-                'format': testXMLValue(m.find('Format')),
+                'format': testXMLValue(m.attrib['format'], attrib=True),
                 'url': testXMLValue(m)
             }
 
-            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
+            if metadataUrl['url'] is not None \
+                    and metadataUrl['format'] == 'XML' \
+                    and parse_remote_metadata:  # download URL
                 try:
                     content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.parse(content)
