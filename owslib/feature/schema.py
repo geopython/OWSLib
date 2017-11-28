@@ -39,6 +39,9 @@ def get_schema(url, typename, version='1.0.0', timeout=30, username=None, passwo
     url = _get_describefeaturetype_url(url, version, typename)
     res = openURL(url, timeout=timeout, username=username, password=password)
     root = etree.fromstring(res.read())
+
+    if ':' in typename:
+        typename = typename.split(':')[1]
     type_element = findall(root, '{%s}element' % XS_NAMESPACE,
                            attribute_name='name', attribute_value=typename)[0]
     complex_type = type_element.attrib['type'].split(":")[1]
