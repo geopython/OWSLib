@@ -49,6 +49,7 @@ class MD_Metadata(object):
             self.identification = None
             self.serviceidentification = None
             self.identificationinfo = []
+            self.contentinfo = []
             self.distribution = None
             self.dataquality = None
         else:
@@ -139,6 +140,10 @@ class MD_Metadata(object):
                         self.identificationinfo.append(MD_DataIdentification(val, 'service'))
                     elif tagval == 'SV_ServiceIdentification':
                         self.identificationinfo.append(SV_ServiceIdentification(val))
+
+            self.contentinfo = []
+            for contentinfo in md.findall(util.nspath_eval('gmd:contentInfo/gmd:MD_FeatureCatalogueDescription', namespaces)):
+                self.contentinfo.append(MD_FeatureCatalogueDescription(contentinfo))
 
             val = md.find(util.nspath_eval('gmd:distributionInfo/gmd:MD_Distribution', namespaces))
 
@@ -255,7 +260,6 @@ class CI_ResponsibleParty(object):
               self.onlineresource = None
 
             self.role = _testCodeListValue(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
-
 
 class MD_Keywords(object):
     """
@@ -907,6 +911,50 @@ class CodelistCatalogue(object):
             return ids
         else:
             return None
+
+class MD_FeatureCatalogueDescription(object):
+    """Process gmd:MD_FeatureCatalogueDescription"""
+    def __init__(self, fcd=None):
+        if fcd is None:
+            self.xml = None
+            self.language = []
+            self.includedwithdataset = None
+            self.featuretypenames = []
+            self.featurecatalogues = []
+        else:
+            if hasattr(fcd, 'getroot'):  # standalone document
+                self.xml = etree.tostring(fcd.getroot())
+            else:  # part of a larger document
+                self.xml = etree.tostring(fcd)
+
+            self.language = []
+            for i in fcd.findall(util.nspath_eval('gmd:language/gco:CharacterString', namespaces)):
+                val = util.testXMLValue(i)
+                if val is not None:
+                    self.language.append(val)
+
+            val = fcd.find(util.nspath_eval('gmd:includedWithDataset/gco:Boolean', namespaces))
+            val = util.testXMLValue(val)
+            if val is not None:
+                self.includedwithdataset = util.getTypedValue('boolean', val)
+
+            self.featuretypenames = []
+            for i in fcd.findall(util.nspath_eval('gmd:featureTypes/gco:LocalName', namespaces)):
+                val = util.testXMLValue(i)
+                if val is not None:
+                    self.featuretypenames.append(val)
+            for i in fcd.findall(util.nspath_eval('gmd:featureTypes/gco:ScopedName', namespaces)):
+                val = util.testXMLValue(i)
+                if val is not None:
+                    self.featuretypenames.append(val)
+
+            self.featurecatalogues = []
+            for i in fcd.findall(util.nspath_eval('gmd:featureCatalogueCitation', namespaces)):
+                val = i.attrib['uuidref']
+                val = util.testXMLValue(val, attrib=True)
+                if val is not None:
+                    self.featurecatalogues.append(val)
+
 
 class FC_FeatureCatalogue(object):
     """Process gfc:FC_FeatureCatalogue"""
