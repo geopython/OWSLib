@@ -548,7 +548,7 @@ class CatalogueServiceWeb(object):
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
             for i in self._exml.findall('.//'+util.nspath_eval('gfc:FC_FeatureCatalogue', namespaces)):
-                identifier = i.attrib['uuid']
+                identifier = self._setidentifierkey(util.testXMLValue(i.attrib['uuid'], attrib=True))
                 self.records[identifier] = FC_FeatureCatalogue(i)
         elif outputschema == namespaces['fgdc']: # fgdc csdgm
             for i in self._exml.findall('.//metadata'):
