@@ -986,7 +986,8 @@ class FC_FeatureCatalogue(object):
                 self.versiondate = util.testXMLValue(val)
 
             o = fc.find(util.nspath_eval('gfc:producer/gmd:CI_ResponsibleParty', namespaces))
-            self.producer = CI_ResponsibleParty(o)
+            if o is not None:
+                self.producer = CI_ResponsibleParty(o)
 
             self.featuretypes = []
             for i in fc.findall(util.nspath_eval('gfc:featureType/gfc:FC_FeatureType', namespaces)):
