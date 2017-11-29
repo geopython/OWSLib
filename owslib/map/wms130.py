@@ -15,6 +15,8 @@ API For Web Map Service version 1.3.0.
 
 from __future__ import (absolute_import, division, print_function)
 
+from owslib import util
+
 try:                    # Python 3
     from urllib.parse import urlencode
 except ImportError:     # Python 2
@@ -637,20 +639,10 @@ class ContentMetadata(object):
                 'format': testXMLValue(m.find(nspath('Format', WMS_NAMESPACE))),
                 'url': testXMLValue(m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
-
-            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
-                try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
-                    doc = etree.parse(content)
-                    if metadataUrl['type'] is not None:
-                        if metadataUrl['type'] == 'FGDC':
-                            metadataUrl['metadata'] = Metadata(doc)
-                        if metadataUrl['type'] == 'TC211':
-                            metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception:
-                    metadataUrl['metadata'] = None
-
             self.metadataUrls.append(metadataUrl)
+
+        if parse_remote_metadata:
+            self.parse_remote_metadata(timeout)
 
         # DataURLs
         self.dataUrls = []
@@ -673,6 +665,28 @@ class ContentMetadata(object):
         self.layers = []
         for child in elem.findall(nspath('Layer', WMS_NAMESPACE)):
             self.layers.append(ContentMetadata(child, self))
+
+    def parse_remote_metadata(self, timeout=30):
+        for metadataUrl in self.metadataUrls:
+            if metadataUrl['url'] is not None \
+                    and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
+                try:
+                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    doc = etree.fromstring(content.read())
+
+                    mdelem = doc.find('.//metadata')
+                    if mdelem:
+                        metadataUrl['metadata'] = Metadata(
+                            mdelem) if mdelem else None
+                        continue
+
+                    mdelem = doc.find('.//' + util.nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
+                             or doc.find('.//' + util.nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                    if mdelem:
+                        metadataUrl['metadata'] = MD_Metadata(mdelem) if mdelem else None
+                        continue
+                except Exception:
+                    metadataUrl['metadata'] = None
 
     @property
     def children(self):
