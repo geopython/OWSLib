@@ -676,14 +676,13 @@ class ContentMetadata(object):
 
                     mdelem = doc.find('.//metadata')
                     if mdelem:
-                        metadataUrl['metadata'] = Metadata(
-                            mdelem) if mdelem else None
+                        metadataUrl['metadata'] = Metadata(mdelem)
                         continue
 
                     mdelem = doc.find('.//' + util.nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
                              or doc.find('.//' + util.nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
                     if mdelem:
-                        metadataUrl['metadata'] = MD_Metadata(mdelem) if mdelem else None
+                        metadataUrl['metadata'] = MD_Metadata(mdelem)
                         continue
                 except Exception:
                     metadataUrl['metadata'] = None
