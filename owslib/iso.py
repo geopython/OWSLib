@@ -940,6 +940,7 @@ class MD_FeatureCatalogueDescription(object):
                 if val is not None:
                     self.language.append(val)
 
+            self.includedwithdataset = None
             val = fcd.find(util.nspath_eval('gmd:includedWithDataset/gco:Boolean', namespaces))
             val = util.testXMLValue(val)
             if val is not None:
@@ -991,9 +992,10 @@ class FC_FeatureCatalogue(object):
                 val = fc.find(util.nspath_eval('gmx:versionDate/gco:DateTime', namespaces))
                 self.versiondate = util.testXMLValue(val)
 
-            o = fc.find(util.nspath_eval('gfc:producer/gmd:CI_ResponsibleParty', namespaces))
-            if o is not None:
-                self.producer = CI_ResponsibleParty(o)
+            self.producer = None
+            prod = fc.find(util.nspath_eval('gfc:producer/gmd:CI_ResponsibleParty', namespaces))
+            if prod is not None:
+                self.producer = CI_ResponsibleParty(prod)
 
             self.featuretypes = []
             for i in fc.findall(util.nspath_eval('gfc:featureType/gfc:FC_FeatureType', namespaces)):
@@ -1009,7 +1011,6 @@ class FC_FeatureType(object):
             self.definition = None
             self.isabstract = None
             self.aliases = []
-            self.featurecatalogue = None
             self.attributes = []
         else:
             if hasattr(ft, 'getroot'):  # standalone document
