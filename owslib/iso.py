@@ -917,6 +917,7 @@ class MD_FeatureCatalogueDescription(object):
     def __init__(self, fcd=None):
         if fcd is None:
             self.xml = None
+            self.compliancecode = None
             self.language = []
             self.includedwithdataset = None
             self.featuretypenames = []
@@ -926,6 +927,12 @@ class MD_FeatureCatalogueDescription(object):
                 self.xml = etree.tostring(fcd.getroot())
             else:  # part of a larger document
                 self.xml = etree.tostring(fcd)
+
+            self.compliancecode = None
+            val = fcd.find(util.nspath_eval('gmd:complianceCode/gco:Boolean', namespaces))
+            val = util.testXMLValue(val)
+            if val is not None:
+                self.compliancecode = util.getTypedValue('boolean', val)
 
             self.language = []
             for i in fcd.findall(util.nspath_eval('gmd:language/gco:CharacterString', namespaces)):
@@ -954,7 +961,6 @@ class MD_FeatureCatalogueDescription(object):
                 val = util.testXMLValue(val, attrib=True)
                 if val is not None:
                     self.featurecatalogues.append(val)
-
 
 class FC_FeatureCatalogue(object):
     """Process gfc:FC_FeatureCatalogue"""
@@ -1001,6 +1007,9 @@ class FC_FeatureType(object):
             self.identifier = None
             self.typename = None
             self.definition = None
+            self.isabstract = None
+            self.aliases = []
+            self.featurecatalogue = None
             self.attributes = []
         else:
             if hasattr(ft, 'getroot'):  # standalone document
@@ -1016,6 +1025,16 @@ class FC_FeatureType(object):
 
             val = ft.find(util.nspath_eval('gfc:definition/gco:CharacterString', namespaces))
             self.definition = util.testXMLValue(val)
+
+            self.isabstract = None
+            val = ft.find(util.nspath_eval('gfc:isAbstract/gco:Boolean', namespaces))
+            val = util.testXMLValue(val)
+            if val is not None:
+                self.isabstract = util.getTypedValue('boolean', val)
+
+            self.aliases = []
+            for i in ft.findall(util.nspath_eval('gfc:aliases/gco:LocalName', namespaces)):
+                self.aliases.append(util.testXMLValue(i))
 
             self.attributes = []
             for i in ft.findall(util.nspath_eval('gfc:carrierOfCharacteristics/gfc:FC_FeatureAttribute', namespaces)):
