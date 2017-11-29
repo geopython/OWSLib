@@ -30,7 +30,7 @@ from owslib.util import log
 
 def get_namespaces():
     n = Namespaces()
-    return n.get_namespaces(["gml","ogc","ows","wfs"])
+    return n.get_namespaces(["gmd", "gml", "gmi", "ogc","ows","wfs"])
 namespaces = get_namespaces()
 
 class WebFeatureService_1_1_0(WebFeatureService_):
@@ -326,24 +326,31 @@ class ContentMetadata:
                 'format': testXMLValue(m.attrib['format'], attrib=True),
                 'url': testXMLValue(m)
             }
-
-            if metadataUrl['url'] is not None \
-                    and metadataUrl['format'] == 'text/xml' \
-                    and parse_remote_metadata:  # download URL
-                try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
-                    doc = etree.parse(content)
-                    if metadataUrl['type'] is not None:
-                        if metadataUrl['type'] == 'FGDC':
-                            metadataUrl['metadata'] = Metadata(doc)
-                        if metadataUrl['type'] in ['TC211', '19115', '19139']:
-                            metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception:
-                    metadataUrl['metadata'] = None
-
             self.metadataUrls.append(metadataUrl)
+
+        if parse_remote_metadata:
+            self.parse_remote_metadata(timeout)
 
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.timepositions=None
         self.defaulttimeposition=None
+
+    def parse_remote_metadata(self, timeout=30):
+        """Parse remote metadata for MetadataURL of format 'text/xml' and add it as metadataUrl['metadata']"""
+        for metadataUrl in self.metadataUrls:
+            if metadataUrl['url'] is not None \
+                    and metadataUrl['format'] == 'text/xml':
+                try:
+                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    doc = etree.fromstring(content.read())
+
+                    if metadataUrl['type'] is not None:
+                        if metadataUrl['type'] == 'FGDC':
+                            mdelem = doc.find('.//metadata')
+                            metadataUrl['metadata'] = Metadata(mdelem) if mdelem else None
+                        elif metadataUrl['type'] in ['TC211', '19115', '19139']:
+                            mdelem = doc.find('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)) or doc.find('.//'+util.nspath_eval('gmi:MI_Metadata', namespaces))
+                            metadataUrl['metadata'] = MD_Metadata(mdelem) if mdelem else None
+                except:
+                    metadataUrl['metadata'] = None

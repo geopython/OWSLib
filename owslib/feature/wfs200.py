@@ -9,6 +9,9 @@
 from __future__ import (absolute_import, division, print_function)
 
 #owslib imports:
+from owslib import util
+from owslib.fgdc import Metadata
+from owslib.iso import MD_Metadata
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
 from owslib.util import nspath, testXMLValue, openURL
@@ -414,20 +417,32 @@ class ContentMetadata:
 
         # MetadataURLs
         self.metadataUrls = []
-        for m in elem.findall('MetadataURL'):
+        for m in elem.findall(nspath('MetadataURL', ns=WFS_NAMESPACE)):
             metadataUrl = {
                 'url': testXMLValue(m.attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
+            self.metadataUrls.append(metadataUrl)
 
-            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
+        if parse_remote_metadata:
+            self.parse_remote_metadata(timeout)
+
+    def parse_remote_metadata(self, timeout=30):
+        """Parse remote metadata for MetadataURL and add it as metadataUrl['metadata']"""
+        for metadataUrl in self.metadataUrls:
+            if metadataUrl['url'] is not None:
                 try:
                     content = openURL(metadataUrl['url'], timeout=timeout)
-                    doc = etree.parse(content)
-                    try:  # FGDC
-                        metadataUrl['metadata'] = Metadata(doc)
-                    except:  # ISO
-                        metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception:
-                    metadataUrl['metadata'] = None
+                    doc = etree.fromstring(content.read())
 
-            self.metadataUrls.append(metadataUrl)
+                    mdelem = doc.find('.//metadata')
+                    if mdelem:
+                        metadataUrl['metadata'] = Metadata(mdelem) if mdelem else None
+                        continue
+
+                    mdelem = doc.find('.//' + util.nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
+                             or doc.find('.//' + util.nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                    if mdelem:
+                        metadataUrl['metadata'] = MD_Metadata(mdelem) if mdelem else None
+                        continue
+                except:
+                    metadataUrl['metadata'] = None
