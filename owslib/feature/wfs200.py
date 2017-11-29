@@ -416,9 +416,7 @@ class ContentMetadata:
         self.metadataUrls = []
         for m in elem.findall('MetadataURL'):
             metadataUrl = {
-                'type': testXMLValue(m.attrib['type'], attrib=True),
-                'format': m.find('Format').text.strip(),
-                'url': testXMLValue(m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
+                'url': testXMLValue(m.attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
 
             if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
