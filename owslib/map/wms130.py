@@ -667,6 +667,7 @@ class ContentMetadata(object):
             self.layers.append(ContentMetadata(child, self))
 
     def parse_remote_metadata(self, timeout=30):
+        """Parse remote metadata for MetadataURL and add it as metadataUrl['metadata']"""
         for metadataUrl in self.metadataUrls:
             if metadataUrl['url'] is not None \
                     and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
