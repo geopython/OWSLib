@@ -345,12 +345,11 @@ class ContentMetadata:
                     content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.fromstring(content.read())
 
-                    if metadataUrl['type'] is not None:
-                        if metadataUrl['type'] == 'FGDC':
-                            mdelem = doc.find('.//metadata')
-                            metadataUrl['metadata'] = Metadata(mdelem) if mdelem else None
-                        elif metadataUrl['type'] in ['TC211', '19115', '19139']:
-                            mdelem = doc.find('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)) or doc.find('.//'+util.nspath_eval('gmi:MI_Metadata', namespaces))
-                            metadataUrl['metadata'] = MD_Metadata(mdelem) if mdelem else None
+                    if metadataUrl['type'] == 'FGDC':
+                        mdelem = doc.find('.//metadata')
+                        metadataUrl['metadata'] = Metadata(mdelem) if mdelem else None
+                    elif metadataUrl['type'] in ['TC211', '19115', '19139']:
+                        mdelem = doc.find('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)) or doc.find('.//'+util.nspath_eval('gmi:MI_Metadata', namespaces))
+                        metadataUrl['metadata'] = MD_Metadata(mdelem) if mdelem else None
                 except:
                     metadataUrl['metadata'] = None
