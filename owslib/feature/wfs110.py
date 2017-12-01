@@ -340,7 +340,7 @@ class ContentMetadata:
         """Parse remote metadata for MetadataURL of format 'text/xml' and add it as metadataUrl['metadata']"""
         for metadataUrl in self.metadataUrls:
             if metadataUrl['url'] is not None \
-                    and metadataUrl['format'] == 'text/xml':
+                    and metadataUrl['format'].lower() == 'text/xml':
                 try:
                     content = openURL(metadataUrl['url'], timeout=timeout)
                     doc = etree.fromstring(content.read())
