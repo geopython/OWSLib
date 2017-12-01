@@ -30,7 +30,7 @@ from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
-from owslib.map.common import WMSCapabilitiesReader
+from owslib.map.common import WMSCapabilitiesReader, AbstractContentMetadata
 
 from owslib.util import log
 
@@ -422,7 +422,7 @@ class ServiceProvider(object):
             self.contact = None
 
 
-class ContentMetadata(object):
+class ContentMetadata(AbstractContentMetadata):
     def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False, timeout=30):
         if xmltag_split(elem.tag) != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))

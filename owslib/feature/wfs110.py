@@ -23,7 +23,8 @@ from owslib.ows import *
 from owslib.fes import *
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
-from owslib.feature.common import WFSCapabilitiesReader
+from owslib.feature.common import WFSCapabilitiesReader, \
+    AbstractContentMetadata
 from owslib.namespaces import Namespaces
 from owslib.util import log
 
@@ -282,7 +283,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
 
 
-class ContentMetadata:
+class ContentMetadata(AbstractContentMetadata):
     """Abstraction for WFS metadata.
 
     Implements IMetadata.

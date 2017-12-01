@@ -17,7 +17,8 @@ from owslib.etree import etree
 from owslib.util import nspath, testXMLValue, openURL
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
-from owslib.feature.common import WFSCapabilitiesReader
+from owslib.feature.common import WFSCapabilitiesReader, \
+    AbstractContentMetadata
 from owslib.namespaces import Namespaces
 
 #other imports
@@ -359,7 +360,7 @@ class Parameter(object):
         self.type=type
 
 
-class ContentMetadata:
+class ContentMetadata(AbstractContentMetadata):
     """Abstraction for WFS metadata.
 
     Implements IMetadata.

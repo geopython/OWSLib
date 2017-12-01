@@ -25,7 +25,8 @@ from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.util import log
 from owslib.feature.schema import get_schema
-from owslib.feature.common import WFSCapabilitiesReader
+from owslib.feature.common import WFSCapabilitiesReader, \
+    AbstractContentMetadata
 
 import pyproj
 
@@ -307,7 +308,7 @@ class ServiceProvider(object):
         self.url = testXMLValue(self._root.find(nspath('OnlineResource')))
         self.keywords = extract_xml_list(self._root.find(nspath('Keywords')))
 
-class ContentMetadata:
+class ContentMetadata(AbstractContentMetadata):
     """Abstraction for WFS metadata.
 
     Implements IMetadata.

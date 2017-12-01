@@ -33,7 +33,7 @@ from owslib.util import (openURL, testXMLValue, extract_xml_list,
                          bind_url, nspath_eval)
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
-from owslib.map.common import WMSCapabilitiesReader
+from owslib.map.common import WMSCapabilitiesReader, AbstractContentMetadata
 from owslib.namespaces import Namespaces
 
 n = Namespaces()
@@ -401,7 +401,7 @@ class ServiceProvider(object):
                 return item
         raise KeyError("No operation named %s" % name)
 
-class ContentMetadata:
+class ContentMetadata(AbstractContentMetadata):
     """
     Abstraction for WMS layer metadata.
 

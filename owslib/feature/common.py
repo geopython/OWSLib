@@ -64,3 +64,8 @@ class WFSCapabilitiesReader(object):
         if not isinstance(st, str) and not isinstance(st, bytes):
             raise ValueError("String must be of type string or bytes, not %s" % type(st))
         return etree.fromstring(st)
+
+
+class AbstractContentMetadata(object):
+    def get_metadata(self):
+        return [m['metadata'] for m in self.metadataUrls if m.get('metadata', None) is not None]
