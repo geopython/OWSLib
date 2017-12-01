@@ -673,13 +673,13 @@ class ContentMetadata(object):
                     doc = etree.fromstring(content.read())
 
                     mdelem = doc.find('.//metadata')
-                    if mdelem:
+                    if mdelem is not None:
                         metadataUrl['metadata'] = Metadata(mdelem)
                         continue
 
                     mdelem = doc.find('.//' + nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
                              or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
-                    if mdelem:
+                    if mdelem is not None:
                         metadataUrl['metadata'] = MD_Metadata(mdelem)
                         continue
                 except Exception:
