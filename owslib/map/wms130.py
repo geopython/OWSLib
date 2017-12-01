@@ -15,8 +15,6 @@ API For Web Map Service version 1.3.0.
 
 from __future__ import (absolute_import, division, print_function)
 
-from owslib import util
-
 try:                    # Python 3
     from urllib.parse import urlencode
 except ImportError:     # Python 2
@@ -27,8 +25,7 @@ import six
 from owslib.etree import etree
 from owslib.util import (openURL, ServiceException, testXMLValue,
                          extract_xml_list, xmltag_split, OrderedDict, nspath,
-                         bind_url)
-from owslib.util import nspath
+                         nspath_eval, bind_url)
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
@@ -680,8 +677,8 @@ class ContentMetadata(object):
                         metadataUrl['metadata'] = Metadata(mdelem)
                         continue
 
-                    mdelem = doc.find('.//' + util.nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
-                             or doc.find('.//' + util.nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                    mdelem = doc.find('.//' + nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
+                             or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
                     if mdelem:
                         metadataUrl['metadata'] = MD_Metadata(mdelem)
                         continue
