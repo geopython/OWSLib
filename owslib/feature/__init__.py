@@ -82,7 +82,7 @@ class WebFeatureService_(object):
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams=None,
-                   outputFormat=None, method='Get', startindex=None):
+                   outputFormat=None, method='Get', startindex=None, sortby=None):
         """Formulate proper GetFeature request using KVP encoding
         ----------
         typename : list
@@ -105,6 +105,10 @@ class WebFeatureService_(object):
             Requested response format of the request.
         startindex: int (optional)
             Start position to return feature set (paging in combination with maxfeatures)
+        sortby: list (optional)
+            List of property names whose values should be used to order
+            (upon presentation) the set of feature instances that
+            satify the query.
 
         There are 3 different modes of use
 
@@ -134,6 +138,8 @@ class WebFeatureService_(object):
                 request['typename'] = ','.join(typename)
         if propertyname: 
             request['propertyname'] = ','.join(propertyname)
+        if sortby:
+            request['sortby'] = ','.join(sortby)
         if featureversion: 
             request['featureversion'] = str(featureversion)
         if maxfeatures: 
