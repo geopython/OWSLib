@@ -151,7 +151,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname='*', maxfeatures=None,
                    srsname=None, outputFormat=None, method='Get',
-                   startindex=None):
+                   startindex=None, sortby=None):
         """Request and return feature data as a file-like object.
 
         Parameters
@@ -178,6 +178,10 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             Requested response format of the request.
         startindex: int (optional)
             Start position to return feature set (paging in combination with maxfeatures)
+        sortby: list (optional)
+            List of property names whose values should be used to order
+            (upon presentation) the set of feature instances that
+            satify the query.
 
         There are 3 different modes of use
 
@@ -227,6 +231,11 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             if not isinstance(propertyname, list):
                 propertyname = [propertyname]
             request['propertyname'] = ','.join(propertyname)
+
+        if sortby is not None:
+            if not isinstance(sortby, list):
+                sortby = [sortby]
+            request['sortby'] = ','.join(sortby)
 
         if featureversion is not None:
             request['featureversion'] = str(featureversion)
