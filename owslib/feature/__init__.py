@@ -34,7 +34,7 @@ class WebFeatureService_(object):
 
         # srs of the bbox is specified in the bbox as fifth paramter
         if len(bbox) == 5:
-            srs = self.getSRS(bbox[4],typename[0])
+            srs = Crs(bbox[4])
         # take default srs
         else:
             srs = self.contents[typename[0]].crsOptions[0]
@@ -75,9 +75,11 @@ class WebFeatureService_(object):
             # GetCaps document (the 'id' attribute in the Crs object).
             return self.contents[typename].crsOptions[index]
         except ValueError:
-            options = ", ".join(map(lambda x: x.id, self.contents[typename].crsOptions))
-            log.warning("Requested srsName '%s' not available for requested typename '%s'. \
-                         Options are: %s. " % (srs.getcode(), typename, options))
+            options = ", ".join(map(lambda crs: crs.id,
+                                self.contents[typename].crsOptions))
+            log.warning("Requested srsName %r is not declared as being "
+                        "allowed for requested typename %r. "
+                        "Options are: %r.", srs.getcode(), typename, options)
             return None
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
