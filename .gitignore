@@ -13,5 +13,4 @@ pytest_cov-*
 *.*~
 .cache
 tags
-
-
+.DS_Store

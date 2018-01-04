@@ -1,0 +1,28 @@
+    >>> from owslib.etree import etree
+    >>> from owslib.iso_che import CHE_MD_Metadata
+    >>> from tests.utils import resource_file
+
+    >>> m = CHE_MD_Metadata(etree.parse(resource_file('iso_che.xml')))
+
+    >>> m.language
+    'ger'
+    >>> [loc.id for loc in m.locales]
+    ['DE', 'FR', 'IT', 'EN']
+    >>> m.get_default_locale().id
+    'DE'
+    >>> m.identification.title
+    u'Gew\xe4sserschutzkarte'
+    >>> m.identification.contact[0].organization
+    u'Amt f\xfcr Umweltschutz'
+    >>> m.identification.bbox.minx
+    8.396
+    >>> m.contact[0].organization
+    'Grundbuch- und Vermessungsamt'
+    >>> m.contact[0].streetname
+    'Aabachstrasse'
+    >>> m.contact[0].streetnumber
+    '5'
+    >>> m.contact[0].postbox
+    '857'
+    >>> [link.url for link in m.distribution.online]
+    ['http://www.zugmap.ch/?link=gewaesserschutzkarte']

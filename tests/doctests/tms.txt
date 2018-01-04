@@ -8,7 +8,7 @@ http://svn.osgeo.org/gdal/trunk/gdal/frmts/wms/WMSServerList.txt
 
 Find out what a TMS has to offer. Service metadata:
 
-    >>> service = tms.TileMapService('http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0', timeout=120)
+    >>> service = tms.TileMapService('http://odims.ospar.org/geoserver/gwc/service/tms/1.0.0', timeout=120)
     >>> service.identification.title
     'Tile Map Service'
     >>> service.identification.abstract
@@ -18,32 +18,32 @@ Find out what a TMS has to offer. Service metadata:
     >>> service.identification.version
     '1.0.0'
     >>> service.identification.url
-    'http://demo.opengeo.org/geoserver/gwc/'
+    'http://odims.ospar.org/geoserver/gwc/'
     >>> len(service.contents) > 0
     True
-    >>> tm = service.contents['http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/nasa%3Abluemarble@EPSG%3A4326@png']
+    >>> tm = service.contents['http://odims.ospar.org/geoserver/gwc/service/tms/1.0.0/geonode%3Aospar_offshore_renewables_2010_01@EPSG%3A4326@png']
     >>> tm.title
-    'bluemarble'
+    'ospar_offshore_renewables_2010_01'
 
 you can filter the contents by profile and srs:
     >>> len(service.items())
-    57
+    664
     >>> len(service.items('EPSG:900913'))
-    27
+    332
     >>> len(service.items(profile='global-mercator'))
-    27
+    332
     >>> len(service.items('EPSG:900913', profile='global-mercator'))
-    27
+    332
     >>> len(service.items('EPSG:4326', profile='global-mercator'))
     0
     >>> sorted(service.items('EPSG:4326'))[0]  # doctest: +ELLIPSIS
-    ('http://demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/maps%3Adark@EPSG%3A4326@jpeg', <owslib.tms.ContentMetadata object at ...>)
+    ('http://odims.ospar.org/geoserver/gwc/service/tms/1.0.0/geonode%3AMarine_protected_area__OSPAR____Global_view__polygon_@EPSG%3A4326@gif', <owslib.tms.ContentMetadata object at ...>)
 
 The details of the TileMap are fetched on demand
     >>> tm._tile_map == None
     True
     >>> tm.title
-    'bluemarble'
+    'ospar_offshore_renewables_2010_01'
     >>> tm.abstract
     >>> tm._tile_map == None
     False

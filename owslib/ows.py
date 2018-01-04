@@ -17,9 +17,14 @@ Currently supports version 1.1.0 (06-121r3).
 
 from __future__ import (absolute_import, division, print_function)
 
+import logging
+
 from owslib.etree import etree
 from owslib import crs, util
 from owslib.namespaces import Namespaces
+
+LOGGER = logging.getLogger(__name__)
+
 n = Namespaces()
 
 OWS_NAMESPACE_1_0_0 = n.get_namespace("ows")
@@ -215,9 +220,10 @@ class BoundingBox(object):
         self.maxy = None
 
         val = elem.attrib.get('crs')
-        if val is not None:
+        try:
             self.crs = crs.Crs(val)
-        else:
+        except (AttributeError, ValueError):
+            LOGGER.warning('Invalid CRS %r. Expected integer')
             self.crs = None
 
         val = elem.attrib.get('dimensions')

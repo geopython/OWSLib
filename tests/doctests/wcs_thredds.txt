@@ -49,7 +49,7 @@ Print the ids of all layers (actually just the first 3):
     >>> cvg=wcs['Temperature_tropopause']
 
     >>> cvg.boundingBoxWGS84
-    (-153.58891112103777, 11.747698396806157, -48.598408556239576, 57.484319872365305)
+    (-153.58889168336785, 11.747698754311253, -48.59839139638086, 57.48431804715324)
 
     >>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
     True
@@ -73,11 +73,10 @@ Print the ids of all layers (actually just the first 3):
     ['92', '64']
 
     >>> cvg.grid.origin
-    ['-4223.61279296875', '-832.2073364257812']
+    ['-4223.61181640625', '-832.2075805664062']
 
     >>> cvg.grid.offsetvectors
-    [['81.27100405485734', '0.0'], ['0.0', '81.27100086212158']]
-
+    [['81.27100140115489', '0.0'], ['0.0', '81.27100467681885']]
 
 #Now we have enough information to build a getCoverage request:
     >>> covID='Temperature_tropopause'
