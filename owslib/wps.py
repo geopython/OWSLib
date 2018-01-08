@@ -1123,7 +1123,14 @@ class Output(InputOutput):
         # />
         referenceElement = outputElement.find(nspath('Reference', ns=wpsns))
         if referenceElement is not None:
-            self.reference = referenceElement.get('href')
+            # extract xlink namespace
+            xlinkns = get_namespaces()['xlink']
+            xlink_href = '{{{}}}href'.format(xlinkns)
+
+            if xlink_href in referenceElement.keys():
+                self.reference = referenceElement.get(xlink_href)
+            else:
+                self.reference = referenceElement.get('href')
             self.mimeType = referenceElement.get('mimeType')
 
         # <LiteralOutput>
