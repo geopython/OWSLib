@@ -90,10 +90,12 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         # ServiceIdentification
         val = self._capabilities.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
-        self.identification=ServiceIdentification(val,self.owscommon.namespace)
+        if val is not None:
+            self.identification=ServiceIdentification(val,self.owscommon.namespace)
         # ServiceProvider
         val = self._capabilities.find(util.nspath_eval('ows:ServiceProvider', namespaces))
-        self.provider=ServiceProvider(val,self.owscommon.namespace)
+        if val is not None:
+            self.provider=ServiceProvider(val,self.owscommon.namespace)
         # ServiceOperations metadata
         self.operations=[]
         for elem in self._capabilities.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
