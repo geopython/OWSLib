@@ -1591,7 +1591,7 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
         dataElement = etree.Element(nspath_eval('wps:Data', namespaces))
         complexDataElement = etree.SubElement(
             dataElement, nspath_eval('wps:ComplexData', namespaces),
-                                              attrib={"mimeType": "text/xml", "encoding": "UTF-8", "schema": GML_SCHEMA_LOCATION})
+                                              attrib={"mimeType": "text/xml", "schema": GML_SCHEMA_LOCATION})
         featureMembersElement = etree.SubElement(
             complexDataElement, nspath_eval('gml:featureMembers', namespaces),
                                                  attrib={nspath_eval("xsi:schemaLocation", namespaces): "%s %s" % (DRAW_NAMESPACE, DRAW_SCHEMA_LOCATION)})
