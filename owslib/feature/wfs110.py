@@ -202,17 +202,12 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             typename = [typename]
 
         if srsname is not None:
-            # check, if desired SRS is supported by the service for this typename
-            if typename is not None:
-                # convert srsname string to Crs object found in GetCaps
-                srsnameobj = self.getSRS(srsname, typename[0])
-                if srsnameobj is not None:
-                    request['srsname'] = srsnameobj.id
-                else:
-                    options = ", ".join(map(lambda x: x.id, self.contents[typename[0]].crsOptions))
-                    raise ServiceException("SRSNAME %s not supported.  Options: %s" % (srsname, options))
-            else:
-                request['srsname'] = str(srsname)
+            request['srsname'] = str(srsname)
+
+            # Check, if desired SRS is supported by the service for each
+            # typename. Warning will be thrown if that SRS is not allowed."
+            for name in typename:
+                _ = self.getSRS(srsname, name)
 
         # check featureid
         if featureid:
