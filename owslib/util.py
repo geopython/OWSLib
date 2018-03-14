@@ -10,6 +10,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 import sys
+from collections import OrderedDict
 from dateutil import parser
 from datetime import datetime
 import pytz
@@ -537,13 +538,10 @@ def extract_xml_list(elements):
 Some people don't have seperate tags for their keywords and seperate them with
 a newline. This will extract out all of the keywords correctly.
 """
-    if elements:
-        keywords = [re.split(r'[\n\r]+',f.text) for f in elements if f.text]
-        flattened = [item.strip() for sublist in keywords for item in sublist]
-        remove_blank = [_f for _f in flattened if _f]
-        return remove_blank
-    else:
-        return []
+    keywords = (re.split(r'[\n\r]+',f.text) for f in elements if f.text)
+    flattened = (item.strip() for sublist in keywords for item in sublist)
+    remove_blank = [_f for _f in flattened if _f]
+    return remove_blank
 
 
 def strip_bom(raw_text):
@@ -634,13 +632,6 @@ except AttributeError:
 log = logging.getLogger('owslib')
 log.addHandler(NullHandler())
 
-# OrderedDict
-try:  # 2.7
-    from collections import OrderedDict
-except:  # 2.6
-    from ordereddict import OrderedDict
-
-
 def which_etree():
     """decipher which etree library is being used by OWSLib"""
 
@@ -668,23 +659,9 @@ def findall(root, xpath, attribute_name=None, attribute_value=None):
 
     found_elements = []
 
-
-    # python 2.6 < does not support complicated XPATH expressions used lower
-    if (2, 6) == sys.version_info[0:2] and which_etree() != 'lxml.etree':
-
-        elements = root.getiterator(xpath)
-
-        if attribute_name is not None and attribute_value is not None:
-            for element in elements:
-                if element.attrib.get(attribute_name) == attribute_value:
-                    found_elements.append(element)
-        else:
-            found_elements = elements
-    # python at least 2.7 and/or lxml can do things much simplier
-    else:
-        if attribute_name is not None and attribute_value is not None:
-            xpath = '%s[@%s="%s"]' % (xpath, attribute_name, attribute_value)
-        found_elements = root.findall('.//' + xpath)
+    if attribute_name is not None and attribute_value is not None:
+        xpath = '%s[@%s="%s"]' % (xpath, attribute_name, attribute_value)
+    found_elements = root.findall('.//' + xpath)
 
     if found_elements == []:
         found_elements = None

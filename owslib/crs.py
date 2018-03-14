@@ -1783,7 +1783,11 @@ class Crs(object):
         elif len(values) == 2:  # it's an authority:code code
             self.encoding = "code"
             self.authority = values[0].upper()
-            self.code = int(values[1])
+
+            try:
+                self.code = int(values[1])
+            except:
+                self.code = values[1]
 
         # if the user has not forced the axisorder,
         # scan the list of codes that have an axis ordering of

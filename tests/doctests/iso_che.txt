@@ -14,6 +14,8 @@
     u'Gew\xe4sserschutzkarte'
     >>> m.identification.contact[0].organization
     u'Amt f\xfcr Umweltschutz'
+    >>> m.identification.bbox.minx
+    8.396
     >>> m.contact[0].organization
     'Grundbuch- und Vermessungsamt'
     >>> m.contact[0].streetname
