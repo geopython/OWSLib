@@ -20,7 +20,7 @@ from owslib.namespaces import Namespaces
 # default variables
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["gco","gmd","gml","gml32","gmx","gts","srv","xlink"])
+    ns = n.get_namespaces(["gco","gfc","gmd","gml","gml32","gmx","gts","srv","xlink"])
     ns[None] = n.get_namespace("gmd")
     return ns
 namespaces = get_namespaces()
@@ -49,6 +49,7 @@ class MD_Metadata(object):
             self.identification = None
             self.serviceidentification = None
             self.identificationinfo = []
+            self.contentinfo = []
             self.distribution = None
             self.dataquality = None
         else:
@@ -139,6 +140,10 @@ class MD_Metadata(object):
                         self.identificationinfo.append(MD_DataIdentification(val, 'service'))
                     elif tagval == 'SV_ServiceIdentification':
                         self.identificationinfo.append(SV_ServiceIdentification(val))
+
+            self.contentinfo = []
+            for contentinfo in md.findall(util.nspath_eval('gmd:contentInfo/gmd:MD_FeatureCatalogueDescription', namespaces)):
+                self.contentinfo.append(MD_FeatureCatalogueDescription(contentinfo))
 
             val = md.find(util.nspath_eval('gmd:distributionInfo/gmd:MD_Distribution', namespaces))
 
@@ -256,7 +261,6 @@ class CI_ResponsibleParty(object):
 
             self.role = _testCodeListValue(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
 
-
 class MD_Keywords(object):
     """
     Class for the metadata MD_Keywords element
@@ -364,12 +368,16 @@ class MD_DataIdentification(object):
 
             self.uselimitation = []
             self.uselimitation_url = []
-            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString', namespaces)):
+            for i in \
+                    md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useLimitation/gco:CharacterString', namespaces)) + \
+                    md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString', namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.uselimitation.append(val)
 
-            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gmx:Anchor', namespaces)):
+            for i in \
+                    md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useLimitation/gmx:Anchor', namespaces)) + \
+                    md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gmx:Anchor', namespaces)):
                 val = util.testXMLValue(i)
                 val1 = i.attrib.get(util.nspath_eval('xlink:href', namespaces))
 
@@ -907,3 +915,187 @@ class CodelistCatalogue(object):
             return ids
         else:
             return None
+
+class MD_FeatureCatalogueDescription(object):
+    """Process gmd:MD_FeatureCatalogueDescription"""
+    def __init__(self, fcd=None):
+        if fcd is None:
+            self.xml = None
+            self.compliancecode = None
+            self.language = []
+            self.includedwithdataset = None
+            self.featuretypenames = []
+            self.featurecatalogues = []
+        else:
+            if hasattr(fcd, 'getroot'):  # standalone document
+                self.xml = etree.tostring(fcd.getroot())
+            else:  # part of a larger document
+                self.xml = etree.tostring(fcd)
+
+            self.compliancecode = None
+            val = fcd.find(util.nspath_eval('gmd:complianceCode/gco:Boolean', namespaces))
+            val = util.testXMLValue(val)
+            if val is not None:
+                self.compliancecode = util.getTypedValue('boolean', val)
+
+            self.language = []
+            for i in fcd.findall(util.nspath_eval('gmd:language/gco:CharacterString', namespaces)):
+                val = util.testXMLValue(i)
+                if val is not None:
+                    self.language.append(val)
+
+            self.includedwithdataset = None
+            val = fcd.find(util.nspath_eval('gmd:includedWithDataset/gco:Boolean', namespaces))
+            val = util.testXMLValue(val)
+            if val is not None:
+                self.includedwithdataset = util.getTypedValue('boolean', val)
+
+            self.featuretypenames = []
+            for i in fcd.findall(util.nspath_eval('gmd:featureTypes/gco:LocalName', namespaces)):
+                val = util.testXMLValue(i)
+                if val is not None:
+                    self.featuretypenames.append(val)
+            for i in fcd.findall(util.nspath_eval('gmd:featureTypes/gco:ScopedName', namespaces)):
+                val = util.testXMLValue(i)
+                if val is not None:
+                    self.featuretypenames.append(val)
+
+            self.featurecatalogues = []
+            for i in fcd.findall(util.nspath_eval('gmd:featureCatalogueCitation', namespaces)):
+                val = i.attrib['uuidref']
+                val = util.testXMLValue(val, attrib=True)
+                if val is not None:
+                    self.featurecatalogues.append(val)
+
+class FC_FeatureCatalogue(object):
+    """Process gfc:FC_FeatureCatalogue"""
+    def __init__(self, fc=None):
+        if fc is None:
+            self.xml = None
+            self.identifier = None
+            self.name = None
+            self.versiondate = None
+            self.producer = None
+            self.featuretypes = []
+        else:
+            if hasattr(fc, 'getroot'):  # standalone document
+                self.xml = etree.tostring(fc.getroot())
+            else:  # part of a larger document
+                self.xml = etree.tostring(fc)
+
+            val = fc.attrib['uuid']
+            self.identifier = util.testXMLValue(val, attrib=True)
+
+            val = fc.find(util.nspath_eval('gmx:name/gco:CharacterString', namespaces))
+            self.name = util.testXMLValue(val)
+
+            val = fc.find(util.nspath_eval('gmx:versionDate/gco:Date', namespaces))
+            self.versiondate = util.testXMLValue(val)
+
+            if not self.versiondate:
+                val = fc.find(util.nspath_eval('gmx:versionDate/gco:DateTime', namespaces))
+                self.versiondate = util.testXMLValue(val)
+
+            self.producer = None
+            prod = fc.find(util.nspath_eval('gfc:producer/gmd:CI_ResponsibleParty', namespaces))
+            if prod is not None:
+                self.producer = CI_ResponsibleParty(prod)
+
+            self.featuretypes = []
+            for i in fc.findall(util.nspath_eval('gfc:featureType/gfc:FC_FeatureType', namespaces)):
+                self.featuretypes.append(FC_FeatureType(i))
+
+class FC_FeatureType(object):
+    """Process gfc:FC_FeatureType"""
+    def __init__(self, ft=None):
+        if ft is None:
+            self.xml = None
+            self.identifier = None
+            self.typename = None
+            self.definition = None
+            self.isabstract = None
+            self.aliases = []
+            self.attributes = []
+        else:
+            if hasattr(ft, 'getroot'):  # standalone document
+                self.xml = etree.tostring(ft.getroot())
+            else:  # part of a larger document
+                self.xml = etree.tostring(ft)
+
+            val = ft.attrib['uuid']
+            self.identifier = util.testXMLValue(val, attrib=True)
+
+            val = ft.find(util.nspath_eval('gfc:typeName/gco:LocalName', namespaces))
+            self.typename = util.testXMLValue(val)
+
+            val = ft.find(util.nspath_eval('gfc:definition/gco:CharacterString', namespaces))
+            self.definition = util.testXMLValue(val)
+
+            self.isabstract = None
+            val = ft.find(util.nspath_eval('gfc:isAbstract/gco:Boolean', namespaces))
+            val = util.testXMLValue(val)
+            if val is not None:
+                self.isabstract = util.getTypedValue('boolean', val)
+
+            self.aliases = []
+            for i in ft.findall(util.nspath_eval('gfc:aliases/gco:LocalName', namespaces)):
+                self.aliases.append(util.testXMLValue(i))
+
+            self.attributes = []
+            for i in ft.findall(util.nspath_eval('gfc:carrierOfCharacteristics/gfc:FC_FeatureAttribute', namespaces)):
+                self.attributes.append(FC_FeatureAttribute(i))
+
+class FC_FeatureAttribute(object):
+    """Process gfc:FC_FeatureAttribute"""
+    def __init__(self, fa=None):
+        if fa is None:
+            self.xml = None
+            self.membername = None
+            self.definition = None
+            self.code = None
+            self.valuetype = None
+            self.listedvalues = []
+        else:
+            if hasattr(fa, 'getroot'):  # standalone document
+                self.xml = etree.tostring(fa.getroot())
+            else:  # part of a larger document
+                self.xml = etree.tostring(fa)
+
+            val = fa.find(util.nspath_eval('gfc:memberName/gco:LocalName', namespaces))
+            self.membername = util.testXMLValue(val)
+
+            val = fa.find(util.nspath_eval('gfc:definition/gco:CharacterString', namespaces))
+            self.definition = util.testXMLValue(val)
+
+            val = fa.find(util.nspath_eval('gfc:code/gco:CharacterString', namespaces))
+            self.code = util.testXMLValue(val)
+
+            val = fa.find(util.nspath_eval('gfc:valueType/gco:TypeName/gco:aName/gco:CharacterString', namespaces))
+            self.valuetype = util.testXMLValue(val)
+
+            self.listedvalues = []
+            for i in fa.findall(util.nspath_eval('gfc:listedValue/gfc:FC_ListedValue', namespaces)):
+                self.listedvalues.append(FC_ListedValue(i))
+
+class FC_ListedValue(object):
+    """Process gfc:FC_ListedValue"""
+    def __init__(self, lv=None):
+        if lv is None:
+            self.xml = None
+            self.label = None
+            self.code = None
+            self.definition = None
+        else:
+            if hasattr(lv, 'getroot'):  # standalone document
+                self.xml = etree.tostring(lv.getroot())
+            else:  # part of a larger document
+                self.xml = etree.tostring(lv)
+
+            val = lv.find(util.nspath_eval('gfc:label/gco:CharacterString', namespaces))
+            self.label = util.testXMLValue(val)
+
+            val = lv.find(util.nspath_eval('gfc:code/gco:CharacterString', namespaces))
+            self.code = util.testXMLValue(val)
+
+            val = lv.find(util.nspath_eval('gfc:definition/gco:CharacterString', namespaces))
+            self.definition = util.testXMLValue(val)

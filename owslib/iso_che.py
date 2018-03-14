@@ -539,11 +539,11 @@ class MD_DataIdentification(object):
             extents.extend(md.findall(util.nspath_eval('srv:extent', namespaces)))
             for extent in extents:
                 if val is None:
-                    for e in extent.findall(util.nspath_eval('gmd:EX_Extent/gmd:geographicElement', namespaces)):
-                        if e.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None or e.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces)) is not None:
-                            val = e
-                            break
-                    self.extent = EX_Extent(val)
+                    for e_ in extent.findall(util.nspath_eval('gmd:EX_Extent/gmd:geographicElement', namespaces)):
+                        if e_.find(util.nspath_eval('gmd:EX_GeographicBoundingBox', namespaces)) is not None or e_.find(util.nspath_eval('gmd:EX_BoundingPolygon', namespaces)) is not None:
+                            self.extent = EX_Extent(e_)
+                            if self.extent.boundingBox is not None:
+                                break
                     self.bbox = self.extent.boundingBox  # for backwards compatibility
 
                 if val2 is None:

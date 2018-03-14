@@ -34,7 +34,7 @@ class WebFeatureService_(object):
 
         # srs of the bbox is specified in the bbox as fifth paramter
         if len(bbox) == 5:
-            srs = self.getSRS(bbox[4],typename[0])
+            srs = Crs(bbox[4])
         # take default srs
         else:
             srs = self.contents[typename[0]].crsOptions[0]
@@ -75,14 +75,16 @@ class WebFeatureService_(object):
             # GetCaps document (the 'id' attribute in the Crs object).
             return self.contents[typename].crsOptions[index]
         except ValueError:
-            options = ", ".join(map(lambda x: x.id, self.contents[typename].crsOptions))
-            log.warning("Requested srsName '%s' not available for requested typename '%s'. \
-                         Options are: %s. " % (srs.getcode(), typename, options))
+            options = ", ".join(map(lambda crs: crs.id,
+                                self.contents[typename].crsOptions))
+            log.warning("Requested srsName %r is not declared as being "
+                        "allowed for requested typename %r. "
+                        "Options are: %r.", srs.getcode(), typename, options)
             return None
 
     def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams=None,
-                   outputFormat=None, method='Get', startindex=None):
+                   outputFormat=None, method='Get', startindex=None, sortby=None):
         """Formulate proper GetFeature request using KVP encoding
         ----------
         typename : list
@@ -105,6 +107,10 @@ class WebFeatureService_(object):
             Requested response format of the request.
         startindex: int (optional)
             Start position to return feature set (paging in combination with maxfeatures)
+        sortby: list (optional)
+            List of property names whose values should be used to order
+            (upon presentation) the set of feature instances that
+            satify the query.
 
         There are 3 different modes of use
 
@@ -134,6 +140,8 @@ class WebFeatureService_(object):
                 request['typename'] = ','.join(typename)
         if propertyname: 
             request['propertyname'] = ','.join(propertyname)
+        if sortby:
+            request['sortby'] = ','.join(sortby)
         if featureversion: 
             request['featureversion'] = str(featureversion)
         if maxfeatures: 

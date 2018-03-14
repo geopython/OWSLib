@@ -98,21 +98,23 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
         #serviceIdentification metadata
         serviceidentelem=self._capabilities.find(nspath('ServiceIdentification'))
-        self.identification=ServiceIdentification(serviceidentelem)
+        if serviceidentelem is not None:
+            self.identification=ServiceIdentification(serviceidentelem)
         #need to add to keywords list from featuretypelist information:
         featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns=WFS_NAMESPACE))
         featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns=WFS_NAMESPACE))
-        for f in featuretypeelems:
-            kwds=f.findall(nspath('Keywords/Keyword',ns=OWS_NAMESPACE))
-            if kwds is not None:
-                for kwd in kwds[:]:
-                    if kwd.text not in self.identification.keywords:
-                        self.identification.keywords.append(kwd.text)
-
+        if serviceidentelem is not None:
+            for f in featuretypeelems:
+                kwds=f.findall(nspath('Keywords/Keyword',ns=OWS_NAMESPACE))
+                if kwds is not None:
+                    for kwd in kwds[:]:
+                        if kwd.text not in self.identification.keywords:
+                            self.identification.keywords.append(kwd.text)
 
         #TODO: update serviceProvider metadata, miss it out for now
         serviceproviderelem=self._capabilities.find(nspath('ServiceProvider'))
-        self.provider=ServiceProvider(serviceproviderelem)
+        if serviceproviderelem:
+            self.provider=ServiceProvider(serviceproviderelem)
 
         #serviceOperations metadata
         self.operations=[]
@@ -160,7 +162,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """
         Helper method to make sure the StringIO being returned will work.
 
-        Differences between Python 2.6/2.7/3.x mean we have a lot of cases to handle.
+        Differences between Python 2.7/3.x mean we have a lot of cases to handle.
         """
         if PY2:
             return StringIO(strval)
@@ -169,7 +171,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams=None,
-                   method='Get', outputFormat=None, startindex=None):
+                   method='Get', outputFormat=None, startindex=None, sortby=None):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
         Parameters
@@ -194,6 +196,10 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             Requested response format of the request.
         startindex: int (optional)
             Start position to return feature set (paging in combination with maxfeatures)
+        sortby: list (optional)
+            List of property names whose values should be used to order
+            (upon presentation) the set of feature instances that
+            satify the query.
 
         There are 3 different modes of use
 
@@ -209,7 +215,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid,
                                                  featureversion, propertyname,
                                                  maxfeatures, storedQueryID,
-                                                 storedQueryParams, outputFormat, 'Get', startindex)
+                                                 storedQueryParams, outputFormat, 'Get',
+                                                 startindex, sortby)
             if log.isEnabledFor(logging.DEBUG):
                 log.debug('GetFeature WFS GET url %s'% url)
         else:

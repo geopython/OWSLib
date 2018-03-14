@@ -1123,7 +1123,14 @@ class Output(InputOutput):
         # />
         referenceElement = outputElement.find(nspath('Reference', ns=wpsns))
         if referenceElement is not None:
-            self.reference = referenceElement.get('href')
+            # extract xlink namespace
+            xlinkns = get_namespaces()['xlink']
+            xlink_href = '{{{}}}href'.format(xlinkns)
+
+            if xlink_href in referenceElement.keys():
+                self.reference = referenceElement.get(xlink_href)
+            else:
+                self.reference = referenceElement.get('href')
             self.mimeType = referenceElement.get('mimeType')
 
         # <LiteralOutput>
@@ -1584,7 +1591,7 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
         dataElement = etree.Element(nspath_eval('wps:Data', namespaces))
         complexDataElement = etree.SubElement(
             dataElement, nspath_eval('wps:ComplexData', namespaces),
-                                              attrib={"mimeType": "text/xml", "encoding": "UTF-8", "schema": GML_SCHEMA_LOCATION})
+                                              attrib={"mimeType": "text/xml", "schema": GML_SCHEMA_LOCATION})
         featureMembersElement = etree.SubElement(
             complexDataElement, nspath_eval('gml:featureMembers', namespaces),
                                                  attrib={nspath_eval("xsi:schemaLocation", namespaces): "%s %s" % (DRAW_NAMESPACE, DRAW_SCHEMA_LOCATION)})
