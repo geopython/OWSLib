@@ -102,16 +102,16 @@ class ServiceContact(object):
     """Initialize an OWS Common ServiceContact construct"""
     def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
         self._root = infoset
-        # val = self._root.find(util.nspath('ProviderName', namespace))
-        # self.name = util.testXMLValue(val)
+        val = self._root.find(util.nspath('ProviderName', namespace))
+        self.name = util.testXMLValue(val)
         
-        # self.organization=util.testXMLValue(self._root.find(util.nspath('ContactPersonPrimary/ContactOrganization', namespace)))
+        self.organization=util.testXMLValue(self._root.find(util.nspath('ContactPersonPrimary/ContactOrganization', namespace)))
         
-        # val = self._root.find(util.nspath('ProviderSite', namespace))
-        # if val is not None:
-        #     self.site = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
-        # else:
-        #     self.site = None
+        val = self._root.find(util.nspath('ProviderSite', namespace))
+        if val is not None:
+            self.site = util.testXMLValue(val.attrib.get(util.nspath('href', XLINK_NAMESPACE)), True)
+        else:
+            self.site = None
 
         val = self._root.find(util.nspath('ServiceContact/Role', namespace))
         self.role = util.testXMLValue(val)

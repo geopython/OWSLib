@@ -14,7 +14,7 @@ Imports
     >>> wcs.url
     'http://earthserver.pml.ac.uk/rasdaman/ows'
     >>> wcs.version
-    '2.0.0'
+    '2.0.1'
     >>> wcs.identification.service
     'OGC WCS'
     >>> wcs.identification.version
@@ -59,7 +59,8 @@ Print the ids of all layers (actually just the first 3):
     #['EPSG:9802']
 
     >>> cvg.supportedFormats
-    ['application/gml+xml', 'text/csv', 'application/json', 'image/tiff', 'application/netcdf', 'image/png', 'image/jp2', 'image/jpeg']
+    ['application/gml+xml', 'image/jpeg', 'image/png', 'image/tiff', 'image/bmp', 'image/jp2', 'application/netcdf', 'text/csv', 'application/json', 'application/dem', 'application/x-ogc-dted', 'application/x-ogc-ehdr', 'application/x-ogc-elas', 'application/x-ogc-envi', 'application/x-ogc-ers', 'application/x-ogc-fit', 'application/x-ogc-fits', 'image/gif', 'application/x-netcdf-gmt', 'application/x-ogc-gs7bg', 'application/x-ogc-gsag', 'application/x-ogc-gsbg', 'application/x-ogc-gta', 'application/x-ogc-hf2', 'application/x-erdas-hfa', 'application/x-ogc-ida', 'application/x-ogc-ingr', 'application/x-ogc-isis2', 'application/x-erdas-lan', 'application/x-ogc-mff2', 'application/x-ogc-nitf', 'application/x-ogc-paux', 'application/x-ogc-pcidsk', 'application/x-ogc-pcraster', 'application/x-ogc-pdf', 'application/x-ogc-pnm', 'text/x-r', 'application/x-ogc-rmf', 'image/x-sgi', 'application/x-ogc-vrt', 'image/xpm', 'application/x-ogc-zmap']
+
 
     >>> cvg.grid.axislabels
     ['Lat', 'Long', 'ansi']
@@ -71,7 +72,7 @@ Print the ids of all layers (actually just the first 3):
     ['0', '0', '0']
 
     >>> cvg.grid.highlimits
-    ['8639', '4319', '195']
+    ['4319', '8639', '195']
 
     >>> cvg.grid.origin
     ['89.9791564941', '-179.979202271', '"1997-09-30T23:59:00.000Z"']
