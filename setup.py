@@ -17,9 +17,6 @@ class PyTest(TestCommand):
 readme = open('README.txt').read()
 reqs = [line.strip() for line in open('requirements.txt')]
 
-if sys.version[:3] < '2.7':
-    reqs += [line.strip() for line in open('requirements-2.6.txt')]
-
 setup(name              = 'OWSLib',
       version           = owslib.__version__,
       description       = 'OGC Web Service utility library',

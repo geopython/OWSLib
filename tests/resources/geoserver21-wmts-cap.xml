@@ -470,6 +470,19 @@ http://www.lme.noaa.gov/index.php?option=com_content&amp;view=article&amp;id=177
     <ows:Identifier>geonode:hotspots_revisited_2004_polygons</ows:Identifier>
     <Style isDefault="true">
       <ows:Identifier>hotspots_revisited_2004_polygons</ows:Identifier>
+      <!--
+        NOTE: tags has been copied here to test the styles LegendURL.
+        LegendURL copied and modified from 07-057r7_Web_Map_Tile_Service_Standard.pdf, page 33
+      -->
+      <ows:Title>TEST Title: hotspots revisited 2004 polygons</ows:Title>
+      <ows:Abstract>TEST Abstract: hotspots revisited 2004 polygons</ows:Abstract>
+      <ows:Keywords>
+        <ows:Keyword>testkeywords1</ows:Keyword>
+        <ows:Keyword>test keywords 2</ows:Keyword>
+        <ows:Keyword>test keywords 3</ows:Keyword>
+      </ows:Keywords>
+      <LegendURL format="image/png" width="100" height="100" xlink:href="http://www.maps.bob/etopo2/legend.png" />
+      <!-- END customization -->
     </Style>
     <Format>image/png</Format>
     <Format>image/jpeg</Format>
@@ -864,6 +877,13 @@ http://www.lme.noaa.gov/index.php?option=com_content&amp;view=article&amp;id=177
     <ows:Identifier>geonode:asfalto</ows:Identifier>
     <Style isDefault="true">
       <ows:Identifier>asfalto</ows:Identifier>
+      <!--
+        NOTE: tags has been copied here to test the styles LegendURL.
+        LegendURL copied and modified from 07-057r7_Web_Map_Tile_Service_Standard.pdf, page 33
+      -->
+      <ows:Title>TEST Title: hotspots revisited 2004 polygons</ows:Title>
+      <LegendURL format="image/png" xlink:href="http://www.maps.bob/etopo2/legend.png" />
+      <!-- END customization -->
     </Style>
     <Format>image/png</Format>
     <Format>image/jpeg</Format>

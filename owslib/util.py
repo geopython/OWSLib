@@ -10,16 +10,13 @@
 from __future__ import (absolute_import, division, print_function)
 
 import sys
+from collections import OrderedDict
 from dateutil import parser
 from datetime import datetime
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
-try:                    # Python 3
-    from urllib.parse import urlsplit, urlencode
-except ImportError:     # Python 2
-    from urlparse import urlsplit
-    from urllib import urlencode
+from six.moves.urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
 
 try:
     from StringIO import StringIO  # Python 2
@@ -133,7 +130,7 @@ class ResponseWrapper(object):
         return self._response.content
 
     def geturl(self):
-        return self._response.url
+        return self._response.url.replace('&&', '&')
 
     # @TODO: __getattribute__ for poking at response
 
@@ -541,13 +538,10 @@ def extract_xml_list(elements):
 Some people don't have seperate tags for their keywords and seperate them with
 a newline. This will extract out all of the keywords correctly.
 """
-    if elements:
-        keywords = [re.split(r'[\n\r]+',f.text) for f in elements if f.text]
-        flattened = [item.strip() for sublist in keywords for item in sublist]
-        remove_blank = [_f for _f in flattened if _f]
-        return remove_blank
-    else:
-        return []
+    keywords = (re.split(r'[\n\r]+',f.text) for f in elements if f.text)
+    flattened = (item.strip() for sublist in keywords for item in sublist)
+    remove_blank = [_f for _f in flattened if _f]
+    return remove_blank
 
 
 def strip_bom(raw_text):
@@ -571,6 +565,38 @@ def strip_bom(raw_text):
             if raw_text.startswith(bom):
                 return raw_text.replace(bom, '')
     return raw_text
+
+
+def clean_ows_url(url):
+    """
+    clean an OWS URL of basic service elements
+
+    source: https://stackoverflow.com/a/11640565
+    """
+
+    if url is None or not url.startswith('http'):
+        return url
+
+    filtered_kvp = {}
+    basic_service_elements = ('service', 'version', 'request')
+
+    parsed = urlparse(url)
+    qd = parse_qs(parsed.query, keep_blank_values=True)
+
+    for key, value in qd.items():
+        if key.lower() not in basic_service_elements:
+            filtered_kvp[key] = value
+
+    newurl = urlunparse([
+        parsed.scheme,
+        parsed.netloc,
+        parsed.path,
+        parsed.params,
+        urlencode(filtered_kvp, doseq=True),
+        parsed.fragment
+    ])
+
+    return newurl
 
 
 def bind_url(url):
@@ -606,13 +632,6 @@ except AttributeError:
 log = logging.getLogger('owslib')
 log.addHandler(NullHandler())
 
-# OrderedDict
-try:  # 2.7
-    from collections import OrderedDict
-except:  # 2.6
-    from ordereddict import OrderedDict
-
-
 def which_etree():
     """decipher which etree library is being used by OWSLib"""
 
@@ -640,23 +659,9 @@ def findall(root, xpath, attribute_name=None, attribute_value=None):
 
     found_elements = []
 
-
-    # python 2.6 < does not support complicated XPATH expressions used lower
-    if (2, 6) == sys.version_info[0:2] and which_etree() != 'lxml.etree':
-
-        elements = root.getiterator(xpath)
-
-        if attribute_name is not None and attribute_value is not None:
-            for element in elements:
-                if element.attrib.get(attribute_name) == attribute_value:
-                    found_elements.append(element)
-        else:
-            found_elements = elements
-    # python at least 2.7 and/or lxml can do things much simplier
-    else:
-        if attribute_name is not None and attribute_value is not None:
-            xpath = '%s[@%s="%s"]' % (xpath, attribute_name, attribute_value)
-        found_elements = root.findall('.//' + xpath)
+    if attribute_name is not None and attribute_value is not None:
+        xpath = '%s[@%s="%s"]' % (xpath, attribute_name, attribute_value)
+    found_elements = root.findall('.//' + xpath)
 
     if found_elements == []:
         found_elements = None
