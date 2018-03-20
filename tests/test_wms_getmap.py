@@ -81,11 +81,14 @@ def test_wms_getmap_130_service_exception():
     else:
         assert False
 
+SERVICE_URL_NATIONAL_MAP = 'http://services.nationalmap.gov/ArcGIS/services/geonames/MapServer/WMSServer'
 
 @pytest.mark.online
+@pytest.mark.skipif(not requests.get(SERVICE_URL_NATIONAL_MAP).ok,
+                    reason="WMS service is unreachable")
 def test_getmap_130_national_map():
     """National Map"""
-    url = 'http://services.nationalmap.gov/ArcGIS/services/geonames/MapServer/WMSServer'
+    url = SERVICE_URL_NATIONAL_MAP
     wms = WebMapService(url, version='1.3.0')
     rsp = wms.getmap(
         layers=['3'],
