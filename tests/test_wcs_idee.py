@@ -1,4 +1,3 @@
-from __future__ import (absolute_import, division, print_function)
 from tests.utils import cast_tuple_int_list, scratch_file
 from owslib.wcs import WebCoverageService
 

@@ -1,4 +1,3 @@
-from __future__ import (absolute_import, division, print_function)
 from owslib.wms import WebMapService
 from owslib.util import ServiceException
 from owslib.util import ResponseWrapper
