@@ -13,6 +13,9 @@ Fake a request to a WFS Server using saved doc from.
 
 Test capabilities
 
+    >>> wfs.updateSequence is not None
+    True
+
 Service Identification:
 
     >>> wfs.identification.type

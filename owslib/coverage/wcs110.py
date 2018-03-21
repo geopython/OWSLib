@@ -36,7 +36,7 @@ class Namespaces_1_1_0():
         return '{http://www.opengis.net/wcs/1.1/ows}'+tag
     
     def OWS(self, tag):
-        return '{http://www.opengis.net/ows/1.1}'+tag
+        return '{http://www.opengis.net/ows}'+tag
     
 
 class WebCoverageService_1_1_0(WCSBase):
@@ -74,6 +74,8 @@ class WebCoverageService_1_1_0(WCSBase):
 
         #build metadata objects:
         
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         #serviceIdentification metadata
         elem=self._capabilities.find(self.ns.WCS_OWS('ServiceIdentification'))
         if elem is None:
@@ -250,15 +252,20 @@ class ServiceIdentification(object):
         self.keywords = [f.text for f in elem.findall(nmSpc.OWS('Keywords') + '/' + nmSpc.OWS('Keyword'))]
         #self.link = elem.find(nmSpc.WCS('Service') + '/' + nmSpc.WCS('OnlineResource')).attrib.get('{http://www.w3.org/1999/xlink}href', '')
                
+        if elem.find(nmSpc.OWS('ServiceType')) is not None:
+            self.type = elem.find(nmSpc.OWS('ServiceType')).text
+        if elem.find(nmSpc.OWS('ServiceTypeVersion')) is not None:
+            self.version = elem.find(nmSpc.OWS('ServiceTypeVersion')).text
+
         if elem.find(nmSpc.WCS_OWS('Fees')) is not None:            
             self.fees=elem.find(nmSpc.WCS_OWS('Fees')).text
         else:
-            self.fees=None
-        
+            self.fees=elem.find(nmSpc.OWS('Fees')).text
+
         if  elem.find(nmSpc.WCS_OWS('AccessConstraints')) is not None:
             self.accessConstraints=elem.find(nmSpc.WCS_OWS('AccessConstraints')).text
         else:
-            self.accessConstraints=None       
+            self.accessConstraints=elem.find(nmSpc.OWS('AccessConstraints')).text
        
 class ServiceProvider(object):
     """ Abstraction for ServiceProvider metadata 

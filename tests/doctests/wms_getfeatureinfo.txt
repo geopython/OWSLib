@@ -16,6 +16,8 @@ True
 True
 
 >>> res3 = wms.getfeatureinfo(layers=['bvv:lkr_ex','bvv:gmd_ex'], srs='EPSG:31468', bbox=(4500000,5500000,4500500,5500500), size=(500,500), format='image/jpeg', query_layers=['bvv:lkr_ex'], info_format="text/html", xy=(250,250))
+>>> wms.request
+'http://geoserv.weichand.de:8080/geoserver/wms?SERVICE=WMS&layers=bvv%3Alkr_ex%2Cbvv%3Agmd_ex&styles=&feature_count=20&y=250&query_layers=bvv%3Alkr_ex&service=WMS&srs=EPSG%3A31468&format=image%2Fjpeg&request=GetFeatureInfo&bgcolor=0xFFFFFF&height=500&width=500&version=1.1.1&bbox=4500000%2C5500000%2C4500500%2C5500500&kwargs=%7B%7D&exceptions=application%2Fvnd.ogc.se_xml&x=250&info_format=text%2Fhtml&transparent=FALSE'
 >>> html_string3 = res3.read().decode("utf-8")
 >>> ('lkr_ex' in html_string3)
 True

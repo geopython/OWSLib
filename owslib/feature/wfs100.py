@@ -105,6 +105,8 @@ class WebFeatureService_1_0_0(object):
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
 
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         #serviceIdentification metadata
         serviceelem=self._capabilities.find(nspath('Service'))
         self.identification=ServiceIdentification(serviceelem, self.version)
@@ -150,7 +152,7 @@ class WebFeatureService_1_0_0(object):
         """
         Helper method to make sure the StringIO being returned will work.
 
-        Differences between Python 2.6/2.7/3.x mean we have a lot of cases to handle.
+        Differences between Python 2.7/3.x mean we have a lot of cases to handle.
         """
         if PY2:
             return StringIO(strval)

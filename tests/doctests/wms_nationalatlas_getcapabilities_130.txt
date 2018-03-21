@@ -1,0 +1,105 @@
+Imports
+
+    >>> from __future__ import (absolute_import, division, print_function)
+    >>> from owslib.wms import WebMapService
+    >>> from tests.utils import resource_file, cast_tuple_int_list, cast_tuple_int_list_srs
+    >>> from operator import itemgetter
+
+Fake a request to a WMS Server (1.3.0) using saved doc from 
+http://webservices.nationalatlas.gov/wms?
+
+    >>> xml = open(resource_file('wms_nationalatlas_getcapabilities_130.xml'), 'rb').read()
+    >>> wms = WebMapService('url', version='1.3.0', xml=xml)
+    
+Test capabilities
+-----------------
+
+    >>> wms.identification.type
+    'WMS'
+    >>> wms.identification.version
+    '1.3.0'
+    >>> wms.identification.title
+    '1 Million Scale WMS Layers from the National Atlas of the United States'
+    >>> wms.identification.abstract
+    'Test Data for 1 Million Scale'
+    >>> wms.identification.keywords
+    ['United States', 'National Atlas']
+    >>> wms.identification.accessconstraints
+    'none'
+
+Test available content layers
+
+    >>> len(wms.contents.keys())
+    20
+
+    >>> 'elevation' in [wms[layer].id for layer in wms.contents]
+    True
+
+Test single item accessor
+    
+    >>> wms['elevation'].title
+    '1 Million Scale - Elevation 100 Meter Resolution'
+
+    >>> wms['elevation'].keywords
+    []
+    
+    >>> cast_tuple_int_list_srs(wms['elevation'].boundingBox)
+    [-179, 17, 180, 71, 'CRS:84']
+
+    >>> cast_tuple_int_list(wms['elevation'].boundingBoxWGS84)
+    [-179, 17, 180, 71]
+
+    >>> [crs for crs in wms['elevation'].crs_list if crs[4] == 'EPSG:3785'] is not []
+    True
+
+    >>> epsg3785 = [crs for crs in wms['elevation'].crs_list if crs[4] == 'EPSG:3785'][0]
+    >>> cast_tuple_int_list_srs(epsg3785)
+    [-20037300, 1927710, 20037500, 11736700, 'EPSG:3785']
+    
+    >>> sorted(wms['elevation'].crsOptions)
+    ['CRS:84', 'EPSG:102100', 'EPSG:102113', 'EPSG:2163', 'EPSG:3785', 'EPSG:3857', 'EPSG:4267', 'EPSG:4269', 'EPSG:4326', 'EPSG:54004', 'EPSG:54008', 'EPSG:900913']
+
+    >>> len(wms['elevation'].styles) == 1
+    True
+
+    >>> 'elevi0100g' in wms['elevation'].styles
+    True
+
+    >>> wms['elevation'].styles['elevi0100g']['legend_format']
+    'image/gif'
+
+    >>> wms['elevation'].timepositions is None
+    True
+
+    >>> wms['elevation'].defaulttimeposition is None
+    True
+
+    >>> wms['elevation'].parent is not None
+    True
+
+Expect a KeyError for invalid names
+
+    >>> wms['utterly bogus'].title
+    Traceback (most recent call last):
+    ...
+    KeyError: 'No content named utterly bogus'
+
+Test operations
+
+    >>> [op.name for op in wms.operations]
+    ['GetCapabilities', 'GetMap', 'GetFeatureInfo', 'DescribeLayer', 'GetLegendGraphic', 'GetStyles']
+
+    >>> x = sorted(wms.getOperationByName('GetMap').methods, key=itemgetter('type'))
+    >>> x == [{'type': 'Get', 'url': 'http://webservices.nationalatlas.gov/wms?'}, {'type': 'Post', 'url': 'http://webservices.nationalatlas.gov/wms?'}]
+    True
+
+    >>> wms.getOperationByName('GetMap').formatOptions
+    ['image/png', 'image/jpeg', 'image/gif', 'image/png; mode=8bit', 'image/tiff']
+
+Test exceptions
+
+    >>> wms.exceptions
+    ['XML', 'INIMAGE', 'BLANK']
+
+
+    

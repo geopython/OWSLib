@@ -1,0 +1,1120 @@
+<?xml version='1.0' encoding="ISO-8859-1" standalone="no" ?>
+<WMS_Capabilities version="1.3.0" xmlns="http://www.opengis.net/wms"
+    xmlns:sld="http://www.opengis.net/sld" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ms="http://mapserver.gis.umn.edu/mapserver"
+    xsi:schemaLocation="http://www.opengis.net/wms http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd  http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/sld_capabilities.xsd  http://mapserver.gis.umn.edu/mapserver http://webservices.nationalatlas.gov/wms?service=WMS&amp;version=1.3.0&amp;request=GetSchemaExtension">
+
+    <!-- MapServer version 6.0.0 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG SUPPORTS=PROJ SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=ICONV SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=SOS_SERVER SUPPORTS=THREADS SUPPORTS=GEOS INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE -->
+
+    <Service>
+        <Name>WMS</Name>
+        <Title>1 Million Scale WMS Layers from the National Atlas of the United States</Title>
+        <Abstract>Test Data for 1 Million Scale</Abstract>
+        <KeywordList>
+            <Keyword>United States</Keyword>
+            <Keyword>National Atlas</Keyword>
+        </KeywordList>
+        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+        <ContactInformation>
+            <ContactPersonPrimary>
+                <ContactPerson/>
+                <ContactOrganization>National Atlas of the United States</ContactOrganization>
+            </ContactPersonPrimary><ContactPosition>WMS Support Staff</ContactPosition>
+            <ContactElectronicMailAddress>atlasmail@usgs.gov</ContactElectronicMailAddress>
+        </ContactInformation>
+        <Fees>none</Fees>
+        <AccessConstraints>none</AccessConstraints>
+        <MaxWidth>2048</MaxWidth>
+        <MaxHeight>2048</MaxHeight>
+    </Service>
+
+    <Capability>
+        <Request>
+            <GetCapabilities>
+                <Format>text/xml</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Get>
+                        <Post>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Post>
+                    </HTTP>
+                </DCPType>
+            </GetCapabilities>
+            <GetMap>
+                <Format>image/png</Format>
+                <Format>image/jpeg</Format>
+                <Format>image/gif</Format>
+                <Format>image/png; mode=8bit</Format>
+                <Format>image/tiff</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Get>
+                        <Post>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Post>
+                    </HTTP>
+                </DCPType>
+            </GetMap>
+            <GetFeatureInfo>
+                <Format>text/plain</Format>
+                <Format>application/vnd.ogc.gml</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Get>
+                        <Post>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Post>
+                    </HTTP>
+                </DCPType>
+            </GetFeatureInfo>
+            <sld:DescribeLayer>
+                <Format>text/xml</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Get>
+                        <Post>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Post>
+                    </HTTP>
+                </DCPType>
+            </sld:DescribeLayer>
+            <sld:GetLegendGraphic>
+                <Format>image/png</Format>
+                <Format>image/jpeg</Format>
+                <Format>image/gif</Format>
+                <Format>image/png; mode=8bit</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Get>
+                        <Post>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Post>
+                    </HTTP>
+                </DCPType>
+            </sld:GetLegendGraphic>
+            <ms:GetStyles>
+                <Format>text/xml</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Get>
+                        <Post>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:href="http://webservices.nationalatlas.gov/wms?"/>
+                        </Post>
+                    </HTTP>
+                </DCPType>
+            </ms:GetStyles>
+        </Request>
+        <Exception>
+            <Format>XML</Format>
+            <Format>INIMAGE</Format>
+            <Format>BLANK</Format>
+        </Exception>
+        <sld:UserDefinedSymbolization SupportSLD="1" UserLayer="0" UserStyle="1" RemoteWFS="0"
+            InlineFeature="0" RemoteWCS="0"/>
+        <Layer>
+            <Name>one_million</Name>
+            <Title>1 Million Scale WMS Layers from the National Atlas of the United States</Title>
+            <Abstract>one_million</Abstract>
+            <CRS>CRS:84</CRS>
+            <CRS>EPSG:4326</CRS>
+            <CRS>EPSG:2163</CRS>
+            <CRS>EPSG:102100</CRS>
+            <CRS>EPSG:4269</CRS>
+            <CRS>EPSG:4267</CRS>
+            <CRS>EPSG:54004</CRS>
+            <CRS>EPSG:54008</CRS>
+            <CRS>EPSG:3785</CRS>
+            <CRS>EPSG:3857</CRS>
+            <CRS>EPSG:102113</CRS>
+            <CRS>EPSG:900913</CRS>
+            <EX_GeographicBoundingBox>
+                <westBoundLongitude>-179.133</westBoundLongitude>
+                <eastBoundLongitude>179.788</eastBoundLongitude>
+                <southBoundLatitude>18.9155</southBoundLatitude>
+                <northBoundLatitude>71.398</northBoundLatitude>
+            </EX_GeographicBoundingBox>
+            <BoundingBox CRS="CRS:84" minx="-179.133" miny="18.9155" maxx="179.788" maxy="71.398"/>
+            <BoundingBox CRS="EPSG:4326" minx="18.9155" miny="-179.133" maxx="71.398" maxy="179.788"/>
+            <BoundingBox CRS="EPSG:2163" minx="-8.01362e+06" miny="-2.87546e+06" maxx="8.01713e+06"
+                maxy="1.08097e+07"/>
+            <BoundingBox CRS="EPSG:102100" minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07"
+                maxy="1.15398e+07"/>
+            <BoundingBox CRS="EPSG:4269" minx="18.9155" miny="-179.133" maxx="71.398" maxy="179.788"/>
+            <BoundingBox CRS="EPSG:4267" minx="18.9155" miny="-179.133" maxx="71.398" maxy="179.788"/>
+            <BoundingBox CRS="EPSG:54004" minx="-1.9941e+07" miny="2.13115e+06" maxx="2.00139e+07"
+                maxy="1.14992e+07"/>
+            <BoundingBox CRS="EPSG:54008" minx="-1.88708e+07" miny="2.09231e+06" maxx="1.89398e+07"
+                maxy="7.92496e+06"/>
+            <BoundingBox CRS="EPSG:3785" minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07"
+                maxy="1.15398e+07"/>
+            <BoundingBox CRS="EPSG:3857" minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07"
+                maxy="1.15398e+07"/>
+            <BoundingBox CRS="EPSG:102113" minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07"
+                maxy="1.15398e+07"/>
+            <BoundingBox CRS="EPSG:900913" minx="-1.9941e+07" miny="2.14499e+06" maxx="2.00139e+07"
+                maxy="1.15398e+07"/>
+            <Attribution>
+                <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                    xlink:href="http://nationalatlas.gov/infodocs/wms_intro.html"/>
+            </Attribution>
+            <Layer queryable="1" opaque="0" cascaded="0">
+                <Name>airports1m</Name>
+                <Title>1 Million Scale - Airports</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-176.646</westBoundLongitude>
+                    <eastBoundLongitude>-64.8017</eastBoundLongitude>
+                    <southBoundLatitude>17.7016</southBoundLatitude>
+                    <northBoundLatitude>71.2854</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-176.646" miny="17.7016" maxx="-64.8017"
+                    maxy="71.2854"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.7016" miny="-176.646" maxx="71.2854"
+                    maxy="-64.8017"/>
+                <BoundingBox CRS="EPSG:2163" minx="-7.13345e+06" miny="-3.00665e+06"
+                    maxx="3.72355e+06" maxy="4.23839e+06"/>
+                <BoundingBox CRS="EPSG:102100" minx="-1.96641e+07" miny="2.00265e+06"
+                    maxx="-7.21369e+06" maxy="1.15006e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.7016" miny="-176.646" maxx="71.2854"
+                    maxy="-64.8017"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.7016" miny="-176.646" maxx="71.2854"
+                    maxy="-64.8017"/>
+                <BoundingBox CRS="EPSG:54004" minx="-1.96641e+07" miny="1.98966e+06"
+                    maxx="-7.21369e+06" maxy="1.14601e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.87389e+07" miny="1.95795e+06"
+                    maxx="-2.32152e+06" maxy="7.9124e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-1.96641e+07" miny="2.00265e+06"
+                    maxx="-7.21369e+06" maxy="1.15006e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-1.96641e+07" miny="2.00265e+06"
+                    maxx="-7.21369e+06" maxy="1.15006e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-1.96641e+07" miny="2.00265e+06"
+                    maxx="-7.21369e+06" maxy="1.15006e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-1.96641e+07" miny="2.00265e+06"
+                    maxx="-7.21369e+06" maxy="1.15006e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=airports1m&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="1" opaque="0" cascaded="0">
+                <Name>amtrak1m</Name>
+                <Title>1 Million Scale - Railroad and Bus Passenger Stations</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-124.212</westBoundLongitude>
+                    <eastBoundLongitude>-68.6706</eastBoundLongitude>
+                    <southBoundLatitude>25.8498</southBoundLatitude>
+                    <northBoundLatitude>48.7205</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-124.212" miny="25.8498" maxx="-68.6706"
+                    maxy="48.7205"/>
+                <BoundingBox CRS="EPSG:4326" minx="25.8498" miny="-124.212" maxx="48.7205"
+                    maxy="-68.6706"/>
+                <BoundingBox CRS="EPSG:2163" minx="-2.41969e+06" miny="-2.11947e+06"
+                    maxx="3.09811e+06" maxy="862008"/>
+                <BoundingBox CRS="EPSG:102100" minx="-1.38272e+07" miny="2.9805e+06"
+                    maxx="-7.64438e+06" maxy="6.22757e+06"/>
+                <BoundingBox CRS="EPSG:4269" minx="25.8498" miny="-124.212" maxx="48.7205"
+                    maxy="-68.6706"/>
+                <BoundingBox CRS="EPSG:4267" minx="25.8498" miny="-124.212" maxx="48.7205"
+                    maxy="-68.6706"/>
+                <BoundingBox CRS="EPSG:54004" minx="-1.38272e+07" miny="2.96187e+06"
+                    maxx="-7.64438e+06" maxy="6.19544e+06"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.24516e+07" miny="2.8602e+06"
+                    maxx="-5.05281e+06" maxy="5.39854e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-1.38272e+07" miny="2.9805e+06"
+                    maxx="-7.64438e+06" maxy="6.22757e+06"/>
+                <BoundingBox CRS="EPSG:3857" minx="-1.38272e+07" miny="2.9805e+06"
+                    maxx="-7.64438e+06" maxy="6.22757e+06"/>
+                <BoundingBox CRS="EPSG:102113" minx="-1.38272e+07" miny="2.9805e+06"
+                    maxx="-7.64438e+06" maxy="6.22757e+06"/>
+                <BoundingBox CRS="EPSG:900913" minx="-1.38272e+07" miny="2.9805e+06"
+                    maxx="-7.64438e+06" maxy="6.22757e+06"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=amtrak1m&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="1" opaque="0" cascaded="0">
+                <Name>coast1m</Name>
+                <Title>1 Million Scale - Coastlines</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.147</westBoundLongitude>
+                    <eastBoundLongitude>179.778</eastBoundLongitude>
+                    <southBoundLatitude>17.6744</southBoundLatitude>
+                    <northBoundLatitude>71.3892</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.147" miny="17.6744" maxx="179.778"
+                    maxy="71.3892"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.13616e+06" miny="-3.00973e+06"
+                    maxx="8.13829e+06" maxy="1.0882e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:54004" minx="-1.99426e+07" miny="1.98651e+06"
+                    maxx="2.00128e+07" maxy="1.14961e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.90071e+07" miny="1.95494e+06"
+                    maxx="1.90741e+07" maxy="7.92398e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+
+                <Dimension name="elevation" units="meters" default="500" multipleValues="1" nearestValue="0" current="true" unitSymbol="m">500, 490, 480</Dimension>
+                <Dimension name="time" units="ISO8601" default="2006-06-23T03:10:00Z" nearestValue="0">1995-01-01/2013-12-31/PT5M</Dimension>
+                <MetadataURL type="FGDC">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="9250AA67-F3AC-6C12-0CB9-0662231AA181_fgdc.xml"/>
+                </MetadataURL>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=coast1m&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="1" opaque="0" cascaded="0">
+                <Name>cdl</Name>
+                <Title>1 Million Scale - 113th Congressional Districts</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.147</westBoundLongitude>
+                    <eastBoundLongitude>179.778</eastBoundLongitude>
+                    <southBoundLatitude>17.6744</southBoundLatitude>
+                    <northBoundLatitude>71.3892</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.147" miny="17.6744" maxx="179.778"
+                    maxy="71.3892"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.13616e+06" miny="-3.00973e+06"
+                    maxx="8.13829e+06" maxy="1.0882e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:54004" minx="-1.99426e+07" miny="1.98651e+06"
+                    maxx="2.00128e+07" maxy="1.14961e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.90071e+07" miny="1.95494e+06"
+                    maxx="1.90741e+07" maxy="7.92398e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=cdl&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="1" opaque="0" cascaded="0">
+                <Name>cdp</Name>
+                <Title>1 Million Scale - 113th Congressional Districts by Party</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.147</westBoundLongitude>
+                    <eastBoundLongitude>179.778</eastBoundLongitude>
+                    <southBoundLatitude>17.6744</southBoundLatitude>
+                    <northBoundLatitude>71.3892</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.147" miny="17.6744" maxx="179.778"
+                    maxy="71.3892"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.13616e+06" miny="-3.00973e+06"
+                    maxx="8.13829e+06" maxy="1.0882e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:54004" minx="-1.99426e+07" miny="1.98651e+06"
+                    maxx="2.00128e+07" maxy="1.14961e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.90071e+07" miny="1.95494e+06"
+                    maxx="1.90741e+07" maxy="7.92398e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=cdp&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>elevation</Name>
+                <Title>1 Million Scale - Elevation 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.0592</southBoundLatitude>
+                    <northBoundLatitude>71.9541</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.0592" maxx="180" maxy="71.9541"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.0592" miny="-179.998" maxx="71.9541"
+                    maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19679e+06" miny="-3.07581e+06"
+                    maxx="8.19748e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17367e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.0592" miny="-179.998" maxx="71.9541"
+                    maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.0592" miny="-179.998" maxx="71.9541"
+                    maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91518e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88685e+06"
+                    maxx="1.91614e+07" maxy="7.98701e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17367e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17367e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17367e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17367e+07"/>
+                <Style>
+                    <Name>elevi0100g</Name>
+                    <Title>elevi0100g</Title>
+                    <LegendURL width="190" height="526">
+                        <Format>image/gif</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://nationalatlas.gov/images/elevi0100g.gif"/>
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>elsli0100g</Name>
+                <Title>1 Million Scale - Color-Sliced Elevation 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.0592</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.0592" maxx="180" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19679e+06" miny="-3.07581e+06"
+                    maxx="8.19748e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91518e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88685e+06"
+                    maxx="1.91614e+07" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=elsli0100g&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>impervious</Name>
+                <Title>1 Million Scale - Impervious Surface 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>-62.6641</eastBoundLongitude>
+                    <southBoundLatitude>17.06</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.06" maxx="-62.6641" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.06" miny="-179.998" maxx="71.954"
+                    maxy="-62.6641"/>
+                <BoundingBox CRS="EPSG:2163" minx="-7.36962e+06" miny="-3.07607e+06"
+                    maxx="3.95469e+06" maxy="4.36977e+06"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.06" miny="-179.998" maxx="71.954"
+                    maxy="-62.6641"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.06" miny="-179.998" maxx="71.954"
+                    maxy="-62.6641"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91528e+06"
+                    maxx="-6.97574e+06" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88695e+06"
+                    maxx="-2.16752e+06" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <Style>
+                    <Name>impei0100a</Name>
+                    <Title>impei0100a</Title>
+                    <LegendURL width="144" height="430">
+                        <Format>image/gif</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://nationalatlas.gov/images/impei0100a.gif"/>
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>landcov100m</Name>
+                <Title>1 Million Scale - Land Cover 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.06</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.06" maxx="180" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.06" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19671e+06" miny="-3.07572e+06"
+                    maxx="8.1974e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.06" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.06" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91528e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88695e+06"
+                    maxx="1.91613e+07" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=landcov100m&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>landwatermask</Name>
+                <Title>1 Million Scale - Land/Water Mask 100 Meter Resolution</Title>
+                <Abstract>This Land/Water Mask is a 100-meter resolution image of the conterminous United States, Alaska, Hawaii, Puerto Rico and the U.S. Virgin Islands, with separate values for oceans and for land areas of the United States, Canada, Mexico, the Bahamas and Cuba, Russia, and the British Virgin Islands.</Abstract>
+                <KeywordList>
+                    <Keyword>Land Surface</Keyword>
+                    <Keyword> Oceans</Keyword>
+                    <Keyword> imageryBaseMapsEarthCover</Keyword>
+                    <Keyword> Mask</Keyword>
+                    <Keyword> Land/water</Keyword>
+                    <Keyword> United States</Keyword>
+                    <Keyword> US</Keyword>
+                    <Keyword> USA</Keyword>
+                    <Keyword> Alabama</Keyword>
+                    <Keyword> Arizona</Keyword>
+                    <Keyword> Arkansas</Keyword>
+                    <Keyword> California</Keyword>
+                    <Keyword> Colorado</Keyword>
+                    <Keyword> Connecticut</Keyword>
+                    <Keyword> Delaware</Keyword>
+                    <Keyword> District of Columbia</Keyword>
+                    <Keyword> Florida</Keyword>
+                    <Keyword> Georgia</Keyword>
+                    <Keyword> Idaho</Keyword>
+                    <Keyword> Illinois</Keyword>
+                    <Keyword> Indiana</Keyword>
+                    <Keyword> Iowa</Keyword>
+                    <Keyword> Kansas</Keyword>
+                    <Keyword> Kentucky</Keyword>
+                    <Keyword> Louisiana</Keyword>
+                    <Keyword> Maine</Keyword>
+                    <Keyword> Maryland</Keyword>
+                    <Keyword> Massachusetts</Keyword>
+                    <Keyword> Michigan</Keyword>
+                    <Keyword> Minnesota</Keyword>
+                    <Keyword> Mississippi</Keyword>
+                    <Keyword> Missouri</Keyword>
+                    <Keyword> Montana</Keyword>
+                    <Keyword> Nebraska</Keyword>
+                    <Keyword> Nevada</Keyword>
+                    <Keyword> New Hampshire</Keyword>
+                    <Keyword> New Jersey</Keyword>
+                    <Keyword> New Mexico</Keyword>
+                    <Keyword> New York</Keyword>
+                    <Keyword> North Carolina</Keyword>
+                    <Keyword> North Dakota</Keyword>
+                    <Keyword> Ohio</Keyword>
+                    <Keyword> Oklahoma</Keyword>
+                    <Keyword> Oregon</Keyword>
+                    <Keyword> Pennsylvania</Keyword>
+                    <Keyword> Rhode Island</Keyword>
+                    <Keyword> South Carolina</Keyword>
+                    <Keyword> South Dakota</Keyword>
+                    <Keyword> Tennessee</Keyword>
+                    <Keyword> Texas</Keyword>
+                    <Keyword> Utah</Keyword>
+                    <Keyword> Vermont</Keyword>
+                    <Keyword> Virginia</Keyword>
+                    <Keyword> Washington</Keyword>
+                    <Keyword> West Virginia</Keyword>
+                    <Keyword> Wisconsin</Keyword>
+                    <Keyword> Wyoming</Keyword>
+                    <Keyword> Alaska</Keyword>
+                    <Keyword> Hawaii</Keyword>
+                    <Keyword> Puerto Rico</Keyword>
+                    <Keyword> Virgin Islands</Keyword>
+                    <Keyword> U.S. Virgin Islands</Keyword>
+                </KeywordList>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.0592</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.0592" maxx="180" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19679e+06" miny="-3.07581e+06"
+                    maxx="8.19748e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91518e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88685e+06"
+                    maxx="1.91614e+07" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <MetadataURL type="FGDC">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple"
+                        xlink:href="http://nationalatlas.gov/metadata/mask48i0100a.xml"/>
+                </MetadataURL>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=landwatermask&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="1" opaque="0" cascaded="0">
+                <Name>national1m</Name>
+                <Title>1 Million Scale - National Boundary</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.147</westBoundLongitude>
+                    <eastBoundLongitude>179.778</eastBoundLongitude>
+                    <southBoundLatitude>17.6744</southBoundLatitude>
+                    <northBoundLatitude>71.3892</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.147" miny="17.6744" maxx="179.778"
+                    maxy="71.3892"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.13616e+06" miny="-3.00973e+06"
+                    maxx="8.13829e+06" maxy="1.0882e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:54004" minx="-1.99426e+07" miny="1.98651e+06"
+                    maxx="2.00128e+07" maxy="1.14961e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.90071e+07" miny="1.95494e+06"
+                    maxx="1.90741e+07" maxy="7.92398e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=national1m&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>naturalearth</Name>
+                <Title>1 Million Scale - Natural Earth Shaded Relief 100 Meter Resolution</Title>
+                <Abstract>This map layer contains a natural-earth image of the conterminous United States, Alaska, Hawaii, Puerto Rico and the U.S. Virgin Islands.  The image is land cover in natural colors combined with shaded relief, which produces a naturalistic rendition of the Earth&#39;s surface.</Abstract>
+                <KeywordList>
+                    <Keyword>Elevation</Keyword>
+                    <Keyword> Land cover</Keyword>
+                    <Keyword> Land cover characteristics</Keyword>
+                    <Keyword> Satellite image</Keyword>
+                    <Keyword> Topographic</Keyword>
+                    <Keyword> Topography</Keyword>
+                    <Keyword> Natural earth</Keyword>
+                    <Keyword> United States</Keyword>
+                    <Keyword> US</Keyword>
+                    <Keyword> USA</Keyword>
+                    <Keyword> Alabama</Keyword>
+                    <Keyword> Arizona</Keyword>
+                    <Keyword> Arkansas</Keyword>
+                    <Keyword> California</Keyword>
+                    <Keyword> Colorado</Keyword>
+                    <Keyword> Connecticut</Keyword>
+                    <Keyword> Delaware</Keyword>
+                    <Keyword> District of Columbia</Keyword>
+                    <Keyword> Florida</Keyword>
+                    <Keyword> Georgia</Keyword>
+                    <Keyword> Idaho</Keyword>
+                    <Keyword> Illinois</Keyword>
+                    <Keyword> Indiana</Keyword>
+                    <Keyword> Iowa</Keyword>
+                    <Keyword> Kansas</Keyword>
+                    <Keyword> Kentucky</Keyword>
+                    <Keyword> Louisiana</Keyword>
+                    <Keyword> Maine</Keyword>
+                    <Keyword> Maryland</Keyword>
+                    <Keyword> Massachusetts</Keyword>
+                    <Keyword> Michigan</Keyword>
+                    <Keyword> Minnesota</Keyword>
+                    <Keyword> Mississippi</Keyword>
+                    <Keyword> Missouri</Keyword>
+                    <Keyword> Montana</Keyword>
+                    <Keyword> Nebraska</Keyword>
+                    <Keyword> Nevada</Keyword>
+                    <Keyword> New Hampshire</Keyword>
+                    <Keyword> New Jersey</Keyword>
+                    <Keyword> New Mexico</Keyword>
+                    <Keyword> New York</Keyword>
+                    <Keyword> North Carolina</Keyword>
+                    <Keyword> North Dakota</Keyword>
+                    <Keyword> Ohio</Keyword>
+                    <Keyword> Oklahoma</Keyword>
+                    <Keyword> Oregon</Keyword>
+                    <Keyword> Pennsylvania</Keyword>
+                    <Keyword> Rhode Island</Keyword>
+                    <Keyword> South Carolina</Keyword>
+                    <Keyword> South Dakota</Keyword>
+                    <Keyword> Tennessee</Keyword>
+                    <Keyword> Texas</Keyword>
+                    <Keyword> Utah</Keyword>
+                    <Keyword> Vermont</Keyword>
+                    <Keyword> Virginia</Keyword>
+                    <Keyword> Washington</Keyword>
+                    <Keyword> West Virginia</Keyword>
+                    <Keyword> Wisconsin</Keyword>
+                    <Keyword> Wyoming</Keyword>
+                    <Keyword> Alaska</Keyword>
+                    <Keyword> Hawaii</Keyword>
+                    <Keyword> Puerto Rico</Keyword>
+                    <Keyword> Virgin Islands</Keyword>
+                    <Keyword> U.S. Virgin Islands</Keyword>
+                </KeywordList>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.0592</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.0592" maxx="180" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19679e+06" miny="-3.07581e+06"
+                    maxx="8.19748e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91518e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88685e+06"
+                    maxx="1.91614e+07" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <MetadataURL type="FGDC">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple"
+                        xlink:href="http://nationalatlas.gov/metadata/nate48i0100a.xml"/>
+                </MetadataURL>
+                <Style>
+                    <Name>natei0100g</Name>
+                    <Title>natei0100g</Title>
+                    <LegendURL width="275" height="645">
+                        <Format>image/jpeg</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://nationalatlas.gov/images/natei0100g.jpg"/>
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="1" opaque="0" cascaded="0">
+                <Name>ports1m</Name>
+                <Title>1 Million Scale - Ports</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-166.532</westBoundLongitude>
+                    <eastBoundLongitude>-64.7707</eastBoundLongitude>
+                    <southBoundLatitude>17.706</southBoundLatitude>
+                    <northBoundLatitude>66.8998</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-166.532" miny="17.706" maxx="-64.7707"
+                    maxy="66.8998"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.706" miny="-166.532" maxx="66.8998"
+                    maxy="-64.7707"/>
+                <BoundingBox CRS="EPSG:2163" minx="-6.4645e+06" miny="-3.00625e+06"
+                    maxx="3.7265e+06" maxy="3.66602e+06"/>
+                <BoundingBox CRS="EPSG:102100" minx="-1.85383e+07" miny="2.00317e+06"
+                    maxx="-7.21024e+06" maxy="1.01276e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.706" miny="-166.532" maxx="66.8998"
+                    maxy="-64.7707"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.706" miny="-166.532" maxx="66.8998"
+                    maxy="-64.7707"/>
+                <BoundingBox CRS="EPSG:54004" minx="-1.85383e+07" miny="1.99018e+06"
+                    maxx="-7.21024e+06" maxy="1.00882e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.76656e+07" miny="1.95845e+06"
+                    maxx="-2.83691e+06" maxy="7.42318e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-1.85383e+07" miny="2.00317e+06"
+                    maxx="-7.21024e+06" maxy="1.01276e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-1.85383e+07" miny="2.00317e+06"
+                    maxx="-7.21024e+06" maxy="1.01276e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-1.85383e+07" miny="2.00317e+06"
+                    maxx="-7.21024e+06" maxy="1.01276e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-1.85383e+07" miny="2.00317e+06"
+                    maxx="-7.21024e+06" maxy="1.01276e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=ports1m&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>satvi0100g</Name>
+                <Title>1 Million Scale - Satellite View 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.0592</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.0592" maxx="180" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19679e+06" miny="-3.07581e+06"
+                    maxx="8.19748e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91518e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88685e+06"
+                    maxx="1.91614e+07" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>srcoi0100g</Name>
+                <Title>1 Million Scale - Color Shaded Relief 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.0592</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.0592" maxx="180" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19679e+06" miny="-3.07581e+06"
+                    maxx="8.19748e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91518e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88685e+06"
+                    maxx="1.91614e+07" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=srcoi0100g&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>srgri0100g</Name>
+                <Title>1 Million Scale - Gray Shaded Relief 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.0592</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.0592" maxx="180" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19679e+06" miny="-3.07581e+06"
+                    maxx="8.19748e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91518e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88685e+06"
+                    maxx="1.91614e+07" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+            </Layer>
+            <Layer queryable="1" opaque="0" cascaded="0">
+                <Name>states1m</Name>
+                <Title>1 Million Scale - States</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.147</westBoundLongitude>
+                    <eastBoundLongitude>179.778</eastBoundLongitude>
+                    <southBoundLatitude>17.6744</southBoundLatitude>
+                    <northBoundLatitude>71.3892</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.147" miny="17.6744" maxx="179.778"
+                    maxy="71.3892"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.13616e+06" miny="-3.00973e+06"
+                    maxx="8.13829e+06" maxy="1.0882e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.6744" miny="-179.147" maxx="71.3892"
+                    maxy="179.778"/>
+                <BoundingBox CRS="EPSG:54004" minx="-1.99426e+07" miny="1.98651e+06"
+                    maxx="2.00128e+07" maxy="1.14961e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.90071e+07" miny="1.95494e+06"
+                    maxx="1.90741e+07" maxy="7.92398e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-1.99426e+07" miny="1.99947e+06"
+                    maxx="2.00128e+07" maxy="1.15367e+07"/>
+                <Style>
+                    <Name>default</Name>
+                    <Title>default</Title>
+                    <LegendURL width="71" height="21">
+                        <Format>image/png</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://webservices.nationalatlas.gov/wms?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=states1m&amp;format=image/png&amp;STYLE=default"
+                        />
+                    </LegendURL>
+                </Style>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>svsri0100g</Name>
+                <Title>1 Million Scale - Satellite View with Shaded Relief 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>180</eastBoundLongitude>
+                    <southBoundLatitude>17.0592</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.0592" maxx="180" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:2163" minx="-8.19679e+06" miny="-3.07581e+06"
+                    maxx="8.19748e+06" maxy="1.09171e+07"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.0592" miny="-179.998" maxx="71.954" maxy="180"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91518e+06"
+                    maxx="2.00375e+07" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88685e+06"
+                    maxx="1.91614e+07" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92771e+06"
+                    maxx="2.00375e+07" maxy="1.17366e+07"/>
+            </Layer>
+            <Layer queryable="0" opaque="0" cascaded="0">
+                <Name>treecanopy</Name>
+                <Title>1 Million Scale - Tree Canopy 100 Meter Resolution</Title>
+                <EX_GeographicBoundingBox>
+                    <westBoundLongitude>-179.998</westBoundLongitude>
+                    <eastBoundLongitude>-62.6641</eastBoundLongitude>
+                    <southBoundLatitude>17.06</southBoundLatitude>
+                    <northBoundLatitude>71.954</northBoundLatitude>
+                </EX_GeographicBoundingBox>
+                <BoundingBox CRS="CRS:84" minx="-179.998" miny="17.06" maxx="-62.6641" maxy="71.954"/>
+                <BoundingBox CRS="EPSG:4326" minx="17.06" miny="-179.998" maxx="71.954"
+                    maxy="-62.6641"/>
+                <BoundingBox CRS="EPSG:2163" minx="-7.36962e+06" miny="-3.07607e+06"
+                    maxx="3.95469e+06" maxy="4.36977e+06"/>
+                <BoundingBox CRS="EPSG:102100" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:4269" minx="17.06" miny="-179.998" maxx="71.954"
+                    maxy="-62.6641"/>
+                <BoundingBox CRS="EPSG:4267" minx="17.06" miny="-179.998" maxx="71.954"
+                    maxy="-62.6641"/>
+                <BoundingBox CRS="EPSG:54004" minx="-2.00373e+07" miny="1.91528e+06"
+                    maxx="-6.97574e+06" maxy="1.1696e+07"/>
+                <BoundingBox CRS="EPSG:54008" minx="-1.91612e+07" miny="1.88695e+06"
+                    maxx="-2.16752e+06" maxy="7.987e+06"/>
+                <BoundingBox CRS="EPSG:3785" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:3857" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:102113" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <BoundingBox CRS="EPSG:900913" minx="-2.00373e+07" miny="1.92781e+06"
+                    maxx="-6.97574e+06" maxy="1.17366e+07"/>
+                <Style>
+                    <Name>treei0100a</Name>
+                    <Title>treei0100a</Title>
+                    <LegendURL width="109" height="430">
+                        <Format>image/gif</Format>
+                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xlink:type="simple"
+                            xlink:href="http://nationalatlas.gov/images/treei0100a.gif"/>
+                    </LegendURL>
+                </Style>
+            </Layer>
+        </Layer>
+    </Capability>
+</WMS_Capabilities>

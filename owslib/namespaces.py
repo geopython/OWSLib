@@ -18,6 +18,7 @@ class Namespaces(object):
         'fes'   :   'http://www.opengis.net/fes/2.0',
         'fgdc'  :   'http://www.opengis.net/cat/csw/csdgm',
         'gco'   :   'http://www.isotc211.org/2005/gco',
+        'gfc'   :   'http://www.isotc211.org/2005/gfc',
         'gm03'  :   'http://www.interlis.ch/INTERLIS2.3',
         'gmd'   :   'http://www.isotc211.org/2005/gmd',
         'gmi'   :   'http://www.isotc211.org/2005/gmi',
@@ -49,16 +50,17 @@ class Namespaces(object):
         'swe20' :   'http://www.opengis.net/swe/2.0',
         'swes'  :   'http://www.opengis.net/swes/2.0',
         'tml'   :   'ttp://www.opengis.net/tml',
-        'wml2'  :   'http://www.opengis.net/waterml/2.0',
         'wfs'   :   'http://www.opengis.net/wfs',
         'wfs20' :   'http://www.opengis.net/wfs/2.0',
         'wcs'   :   'http://www.opengis.net/wcs',
+        'wms'   :   'http://www.opengis.net/wms',
         'wps'   :   'http://www.opengis.net/wps/1.0.0',
         'wps100':   'http://www.opengis.net/wps/1.0.0',
         'xlink' :   'http://www.w3.org/1999/xlink',
         'xs'    :   'http://www.w3.org/2001/XMLSchema',
         'xs2'   :   'http://www.w3.org/XML/Schema',
-        'xsi'   :   'http://www.w3.org/2001/XMLSchema-instance'
+        'xsi'   :   'http://www.w3.org/2001/XMLSchema-instance',
+        'wml2'  :   'http://www.opengis.net/waterml/2.0'
     }    
 
     def get_namespace(self, key):

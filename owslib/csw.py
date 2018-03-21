@@ -30,7 +30,7 @@ from owslib.etree import etree
 from owslib import fes
 from owslib import util
 from owslib import ows
-from owslib.iso import MD_Metadata
+from owslib.iso import MD_Metadata, FC_FeatureCatalogue
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.gm03 import GM03
@@ -68,7 +68,7 @@ class CatalogueServiceWeb(object):
 
         """
 
-        self.url = url
+        self.url = util.clean_ows_url(url)
         self.lang = lang
         self.version = version
         self.timeout = timeout
@@ -88,6 +88,8 @@ class CatalogueServiceWeb(object):
             self._invoke()
     
             if self.exceptionreport is None:
+                self.updateSequence = self._exml.getroot().attrib.get('updateSequence')
+
                 # ServiceIdentification
                 val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
                 if val is not None:
@@ -104,6 +106,12 @@ class CatalogueServiceWeb(object):
                 self.operations = []
                 for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
                     self.operations.append(ows.OperationsMetadata(elem, self.owscommon.namespace))
+                self.constraints = {}
+                for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Constraint', namespaces)):
+                    self.constraints[elem.attrib['name']] = ows.Constraint(elem, self.owscommon.namespace)
+                self.parameters = {}
+                for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Parameter', namespaces)):
+                    self.parameters[elem.attrib['name']] = ows.Parameter(elem, self.owscommon.namespace)
         
                 # FilterCapabilities
                 val = self._exml.find(util.nspath_eval('ogc:Filter_Capabilities', namespaces))
@@ -439,7 +447,7 @@ class CatalogueServiceWeb(object):
                     node2 = etree.SubElement(node1, util.nspath_eval('csw:RecordProperty', namespaces))
                     etree.SubElement(node2, util.nspath_eval('csw:Name', namespaces)).text = propertyname
                     etree.SubElement(node2, util.nspath_eval('csw:Value', namespaces)).text = propertyvalue
-                    self._setconstraint(node1, qtype, propertyname, keywords, bbox, cql, identifier)
+                    self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
 
         if ttype == 'delete':
             self._setconstraint(node1, None, propertyname, keywords, bbox, cql, identifier)
@@ -539,6 +547,9 @@ class CatalogueServiceWeb(object):
                 val = i.find(util.nspath_eval('gmd:fileIdentifier/gco:CharacterString', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
+            for i in self._exml.findall('.//'+util.nspath_eval('gfc:FC_FeatureCatalogue', namespaces)):
+                identifier = self._setidentifierkey(util.testXMLValue(i.attrib['uuid'], attrib=True))
+                self.records[identifier] = FC_FeatureCatalogue(i)
         elif outputschema == namespaces['fgdc']: # fgdc csdgm
             for i in self._exml.findall('.//metadata'):
                 val = i.find('idinfo/datasetid')
@@ -641,7 +652,7 @@ class CatalogueServiceWeb(object):
                             # Well, just use the first one.
                             request_url = post_verbs[0].get('url')
                     elif len(post_verbs) == 1:
-                        request_post_url = post_verbs[0].get('url')
+                        request_url = post_verbs[0].get('url')
             except:  # no such luck, just go with request_url
                 pass
 
@@ -659,6 +670,7 @@ class CatalogueServiceWeb(object):
                     # of typenames
                     ns_keys = [x.split(':')[0] for x in ns.split(' ')]
                     self.request = add_namespaces(self.request, ns_keys)
+            self.request = add_namespaces(self.request, 'ows')
 
             self.request = util.element_to_string(self.request, encoding='utf-8')
 

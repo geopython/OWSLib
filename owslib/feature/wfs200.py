@@ -84,7 +84,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         self.username = username
         self.password = password
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version)
+        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -94,23 +94,27 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     def _buildMetadata(self, parse_remote_metadata=False):
         '''set up capabilities metadata objects: '''
 
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         #serviceIdentification metadata
         serviceidentelem=self._capabilities.find(nspath('ServiceIdentification'))
-        self.identification=ServiceIdentification(serviceidentelem)
+        if serviceidentelem is not None:
+            self.identification=ServiceIdentification(serviceidentelem)
         #need to add to keywords list from featuretypelist information:
         featuretypelistelem=self._capabilities.find(nspath('FeatureTypeList', ns=WFS_NAMESPACE))
         featuretypeelems=featuretypelistelem.findall(nspath('FeatureType', ns=WFS_NAMESPACE))
-        for f in featuretypeelems:
-            kwds=f.findall(nspath('Keywords/Keyword',ns=OWS_NAMESPACE))
-            if kwds is not None:
-                for kwd in kwds[:]:
-                    if kwd.text not in self.identification.keywords:
-                        self.identification.keywords.append(kwd.text)
-
+        if serviceidentelem is not None:
+            for f in featuretypeelems:
+                kwds=f.findall(nspath('Keywords/Keyword',ns=OWS_NAMESPACE))
+                if kwds is not None:
+                    for kwd in kwds[:]:
+                        if kwd.text not in self.identification.keywords:
+                            self.identification.keywords.append(kwd.text)
 
         #TODO: update serviceProvider metadata, miss it out for now
         serviceproviderelem=self._capabilities.find(nspath('ServiceProvider'))
-        self.provider=ServiceProvider(serviceproviderelem)
+        if serviceproviderelem:
+            self.provider=ServiceProvider(serviceproviderelem)
 
         #serviceOperations metadata
         self.operations=[]
@@ -118,6 +122,12 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         for elem in self._capabilities.find(nspath('OperationsMetadata'))[:]:
             if elem.tag !=nspath('ExtendedCapabilities'):
                 self.operations.append(OperationsMetadata(elem))
+        self.constraints = {}
+        for elem in self._capabilities.findall(nspath('OperationsMetadata/Constraint', ns=WFS_NAMESPACE)):
+            self.constraints[elem.attrib['name']] = Constraint(elem, self.owscommon.namespace)
+        self.parameters = {}
+        for elem in self._capabilities.findall(nspath('OperationsMetadata/Parameter', ns=WFS_NAMESPACE)):
+            self.parameters[elem.attrib['name']] = Parameter(elem, self.owscommon.namespace)
 
         #serviceContents metadata: our assumption is that services use a top-level
         #layer as a metadata organizer, nothing more.
@@ -152,7 +162,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """
         Helper method to make sure the StringIO being returned will work.
 
-        Differences between Python 2.6/2.7/3.x mean we have a lot of cases to handle.
+        Differences between Python 2.7/3.x mean we have a lot of cases to handle.
         """
         if PY2:
             return StringIO(strval)
@@ -161,7 +171,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams=None,
-                   method='Get', outputFormat=None, startindex=None):
+                   method='Get', outputFormat=None, startindex=None, sortby=None):
         """Request and return feature data as a file-like object.
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
         Parameters
@@ -186,6 +196,10 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             Requested response format of the request.
         startindex: int (optional)
             Start position to return feature set (paging in combination with maxfeatures)
+        sortby: list (optional)
+            List of property names whose values should be used to order
+            (upon presentation) the set of feature instances that
+            satify the query.
 
         There are 3 different modes of use
 
@@ -201,7 +215,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (url) = self.getGETGetFeatureRequest(typename, filter, bbox, featureid,
                                                  featureversion, propertyname,
                                                  maxfeatures, storedQueryID,
-                                                 storedQueryParams, outputFormat, 'Get', startindex)
+                                                 storedQueryParams, outputFormat, 'Get',
+                                                 startindex, sortby)
             if log.isEnabledFor(logging.DEBUG):
                 log.debug('GetFeature WFS GET url %s'% url)
         else:
@@ -369,19 +384,22 @@ class ContentMetadata:
         self.boundingBoxWGS84 = None
         b = elem.find(nspath('WGS84BoundingBox',ns=OWS_NAMESPACE))
         if b is not None:
-            lc = b.find(nspath("LowerCorner",ns=OWS_NAMESPACE))
-            uc = b.find(nspath("UpperCorner",ns=OWS_NAMESPACE))
-            ll = [float(s) for s in lc.text.split()]
-            ur = [float(s) for s in uc.text.split()]
-            self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
+            try:
+                lc = b.find(nspath("LowerCorner",ns=OWS_NAMESPACE))
+                uc = b.find(nspath("UpperCorner",ns=OWS_NAMESPACE))
+                ll = [float(s) for s in lc.text.split()]
+                ur = [float(s) for s in uc.text.split()]
+                self.boundingBoxWGS84 = (ll[0],ll[1],ur[0],ur[1])
 
-        # there is no such think as bounding box
-        # make copy of the WGS84BoundingBox
-        self.boundingBox = (self.boundingBoxWGS84[0],
-                            self.boundingBoxWGS84[1],
-                            self.boundingBoxWGS84[2],
-                            self.boundingBoxWGS84[3],
-                            Crs("epsg:4326"))
+                # there is no such think as bounding box
+                # make copy of the WGS84BoundingBox
+                self.boundingBox = (self.boundingBoxWGS84[0],
+                                    self.boundingBoxWGS84[1],
+                                    self.boundingBoxWGS84[2],
+                                    self.boundingBoxWGS84[3],
+                                    Crs("epsg:4326"))
+            except AttributeError:
+                self.boundingBoxWGS84 = None
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('OtherCRS',ns=WFS_NAMESPACE))]
         defaultCrs =  elem.findall(nspath('DefaultCRS',ns=WFS_NAMESPACE))

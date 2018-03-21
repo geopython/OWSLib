@@ -27,7 +27,7 @@ class SensorObservationService_1_0_0(object):
         Implements ISensorObservationService.
     """
 
-    def __new__(self,url, version, xml=None, username=None, password=None):
+    def __new__(self, url, version, xml=None, username=None, password=None):
         """overridden __new__ method"""
         obj=object.__new__(self)
         obj.__init__(url, version, xml, username, password)
@@ -75,6 +75,9 @@ class SensorObservationService_1_0_0(object):
         """
             Set up capabilities metadata objects
         """
+
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         # ows:ServiceIdentification metadata
         service_id_element = self._capabilities.find(nspath_eval('ows:ServiceIdentification', namespaces))
         self.identification = ows.ServiceIdentification(service_id_element)

@@ -57,6 +57,8 @@ class WebCoverageService_1_0_0(WCSBase):
             err_message = str(se.text).strip()  
             raise ServiceException(err_message, xml) 
 
+        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+
         #serviceIdentification metadata
         subelem=self._capabilities.find(ns('Service'))
         self.identification=ServiceIdentification(subelem)                               

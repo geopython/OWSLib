@@ -17,9 +17,14 @@ Currently supports version 1.1.0 (06-121r3).
 
 from __future__ import (absolute_import, division, print_function)
 
+import logging
+
 from owslib.etree import etree
 from owslib import crs, util
 from owslib.namespaces import Namespaces
+
+LOGGER = logging.getLogger(__name__)
+
 n = Namespaces()
 
 OWS_NAMESPACE_1_0_0 = n.get_namespace("ows")
@@ -69,9 +74,13 @@ class ServiceIdentification(object):
         val = self._root.find(util.nspath('ServiceTypeVersion', namespace))
         self.version = util.testXMLValue(val)
 
+        self.versions = []
+        for v in self._root.findall(util.nspath('ServiceTypeVersion', namespace)):
+            self.versions.append(util.testXMLValue(v))
+        
         self.profiles = []
         for p in self._root.findall(util.nspath('Profile', namespace)):
-            self.profiles.append(util.testXMLValue(val))
+            self.profiles.append(util.testXMLValue(p))
 
 class ServiceProvider(object):
     """Initialize an OWS Common ServiceProvider construct"""
@@ -161,6 +170,19 @@ class Constraint(object):
             return "Constraint: %s" % self.name
 
 
+class Parameter(object):
+    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
+        self.name    = elem.attrib.get('name')
+        self.values  = [i.text for i in elem.findall(util.nspath('Value', namespace))]
+        self.values += [i.text for i in elem.findall(util.nspath('AllowedValues/Value', namespace))]
+
+    def __repr__(self):
+        if self.values:
+            return "Parameter: %s - %s" % (self.name, self.values)
+        else:
+            return "Parameter: %s" % self.name
+
+
 class OperationsMetadata(object):
     """Initialize an OWS OperationMetadata construct"""
     def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
@@ -198,9 +220,10 @@ class BoundingBox(object):
         self.maxy = None
 
         val = elem.attrib.get('crs')
-        if val is not None:
+        try:
             self.crs = crs.Crs(val)
-        else:
+        except (AttributeError, ValueError):
+            LOGGER.warning('Invalid CRS %r. Expected integer')
             self.crs = None
 
         val = elem.attrib.get('dimensions')
