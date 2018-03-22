@@ -498,7 +498,7 @@ def getTypedValue(data_type, value):
     '''Utility function to cast a string value to the appropriate XSD type. '''
 
     if data_type == 'boolean':
-        return bool(value)
+        return True if value.lower() == 'true' else False
     elif data_type == 'integer':
         return int(value)
     elif data_type == 'float':

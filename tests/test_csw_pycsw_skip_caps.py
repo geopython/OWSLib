@@ -5,6 +5,7 @@ from owslib.csw import CatalogueServiceWeb as cs
 
 SERVICE_URL = 'http://demo.pycsw.org/cite/csw'
 
+
 @pytest.mark.online
 @pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
                     reason='service is unreachable')
