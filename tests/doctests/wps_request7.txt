@@ -11,7 +11,7 @@ Imports
 Process input/ouutput arguments
 
     >>> processid = "wordcount"
-    >>> textdoc = ComplexDataInput("http://emu.readthedocs.org/en/latest/index.html")
+    >>> textdoc = ComplexDataInput("http://emu.readthedocs.io/en/latest/index.html")
     >>> inputs = [ ("text",textdoc),]
 
 Build XML request for WPS process execution
