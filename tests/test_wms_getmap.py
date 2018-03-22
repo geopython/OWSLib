@@ -29,6 +29,8 @@ def test_wms_getmap_111():
 
 
 @pytest.mark.online
+@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+                    reason="WMS service is unreachable")
 def test_wms_getmap_111_service_exception():
     """GetMap 1.1.1 ServiceException for an invalid CRS"""
     wms = WebMapService(SERVICE_URL, version='1.1.1')
@@ -48,6 +50,8 @@ def test_wms_getmap_111_service_exception():
 
 
 @pytest.mark.online
+@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+                    reason="WMS service is unreachable")
 def test_wms_getmap_130():
     """GetMap 1.3.0"""
     wms = WebMapService(SERVICE_URL, version='1.3.0')
@@ -63,6 +67,8 @@ def test_wms_getmap_130():
 
 
 @pytest.mark.online
+@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+                    reason="WMS service is unreachable")
 def test_wms_getmap_130_service_exception():
     """GetMap 1.3.0 ServiceException for an invalid CRS"""
     wms = WebMapService(SERVICE_URL, version='1.3.0')
@@ -80,13 +86,17 @@ def test_wms_getmap_130_service_exception():
     else:
         assert False
 
+
 SERVICE_URL_NATIONAL_MAP = 'http://services.nationalmap.gov/ArcGIS/services/geonames/MapServer/WMSServer'
 
+
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL_NATIONAL_MAP).ok,
-                    reason="WMS service is unreachable")
+@pytest.mark.skip(reason="this is a flaky test")
+# @pytest.mark.skipif(not requests.get(SERVICE_URL_NATIONAL_MAP).ok,
+#                     reason="WMS service is unreachable")
 def test_getmap_130_national_map():
     """National Map"""
+    # TODO: use flaky tests or fix it: https://pypi.python.org/pypi/pytest-ignore-flaky
     url = SERVICE_URL_NATIONAL_MAP
     wms = WebMapService(url, version='1.3.0')
     rsp = wms.getmap(
