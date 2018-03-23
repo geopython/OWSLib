@@ -79,6 +79,6 @@ def sorted_url_query(url):
 def service_ok(url, timeout=2):
     try:
         ok = requests.get(url, timeout=timeout).ok
-    except requests.exceptions.ReadTimeOut:
+    except requests.exceptions.ReadTimeout:
         ok = False
     return ok
