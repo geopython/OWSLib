@@ -1,12 +1,14 @@
+from tests.utils import service_ok
+
 import pytest
-import requests
 
 from owslib.csw import CatalogueServiceWeb
 
 SERVICE_URL = 'http://gis.armf.bg:8080/geoserver/csw'
 
+
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
 def test_csw_geoserver():
     c = CatalogueServiceWeb(SERVICE_URL)

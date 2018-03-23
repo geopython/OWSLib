@@ -1,16 +1,17 @@
+from tests.utils import service_ok
+
 from owslib.wms import WebMapService
 from owslib.util import ServiceException
 from owslib.util import ResponseWrapper
 
 
-import requests
 import pytest
 
 SERVICE_URL = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi'
 
 
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WMS service is unreachable")
 def test_wms_getmap_111():
     """MESONET GetMap 1.1.1"""
@@ -29,7 +30,7 @@ def test_wms_getmap_111():
 
 
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WMS service is unreachable")
 def test_wms_getmap_111_service_exception():
     """GetMap 1.1.1 ServiceException for an invalid CRS"""
@@ -50,7 +51,7 @@ def test_wms_getmap_111_service_exception():
 
 
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WMS service is unreachable")
 def test_wms_getmap_130():
     """GetMap 1.3.0"""
@@ -67,7 +68,7 @@ def test_wms_getmap_130():
 
 
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WMS service is unreachable")
 def test_wms_getmap_130_service_exception():
     """GetMap 1.3.0 ServiceException for an invalid CRS"""
@@ -92,8 +93,8 @@ SERVICE_URL_NATIONAL_MAP = 'http://services.nationalmap.gov/ArcGIS/services/geon
 
 @pytest.mark.online
 @pytest.mark.skip(reason="this is a flaky test")
-# @pytest.mark.skipif(not requests.get(SERVICE_URL_NATIONAL_MAP).ok,
-#                     reason="WMS service is unreachable")
+# @pytest.mark.skipif(not service_ok(SERVICE_URL_NATIONAL_MAP),
+#                    reason="WMS service is unreachable")
 def test_getmap_130_national_map():
     """National Map"""
     # TODO: use flaky tests or fix it: https://pypi.python.org/pypi/pytest-ignore-flaky

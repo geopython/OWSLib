@@ -1,14 +1,14 @@
 from tests.utils import cast_tuple_int_list, scratch_file
+from tests.utils import service_ok
 from owslib.wcs import WebCoverageService
 
-import requests
 import pytest
 
 SERVICE_URL = 'http://www.idee.es/wcs/IDEE-WCS-UTM30N/wcsServlet'
 
 
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WCS service is unreachable")
 def test_wcs_idee():
     """
