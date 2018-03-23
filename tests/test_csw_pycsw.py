@@ -1,5 +1,6 @@
+from tests.utils import service_ok
+
 import pytest
-import requests
 
 from owslib.csw import CatalogueServiceWeb as cs
 
@@ -7,7 +8,7 @@ SERVICE_URL = 'http://demo.pycsw.org/cite/csw'
 
 
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
 def test_csw_pycsw():
     c = cs(SERVICE_URL)

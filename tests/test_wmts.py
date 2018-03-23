@@ -1,10 +1,18 @@
 from tests.utils import scratch_file
+from tests.utils import service_ok
+
+import pytest
+
+SERVICE_URL = 'http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi'
 
 
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
+                    reason="WMTS service is unreachable")
 def test_wmts():
     # Find out what a WMTS has to offer. Service metadata:
     from owslib.wmts import WebMapTileService
-    wmts = WebMapTileService("http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi")
+    wmts = WebMapTileService(SERVICE_URL)
     assert wmts.identification.type == 'OGC WMTS'
     assert wmts.identification.version == '1.0.0'
     assert wmts.identification.title == 'NASA Global Imagery Browse Services for EOSDIS'
@@ -30,6 +38,14 @@ def test_wmts():
     assert wmts.contents['MLS_SO2_147hPa_Night'].styles['default']['isDefault'] is True
     # assert wmts.contents['MLS_SO2_147hPa_Night'].styles == {'default': {'isDefault': True, 'title': 'default'}}
     assert wmts.contents['MLS_SO2_147hPa_Night'].styles['default']['isDefault'] is True
+
+
+SERVICE_URL_ARCGIS = 'http://data.geus.dk/arcgis/rest/services/OneGeologyGlobal/S071_G2500_OneGeology/MapServer/WMTS/1.0.0/WMTSCapabilities.xml'  # noqa
+
+
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL_ARCGIS),
+                    reason="WMTS service is unreachable")
+def test_wmts_without_serviceprovider_tag():
     # Test a WMTS without a ServiceProvider tag in Capababilities XML
-    wmts = WebMapTileService(
-        'http://data.geus.dk/arcgis/rest/services/OneGeologyGlobal/S071_G2500_OneGeology/MapServer/WMTS/1.0.0/WMTSCapabilities.xml')  # noqa
+    wmts = WebMapTileService(SERVICE_URL_ARCGIS)

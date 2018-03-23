@@ -1,14 +1,15 @@
+from tests.utils import service_ok
+
 from owslib import fes, csw
 from owslib.dif import namespaces
 
-import requests
 import pytest
 
 SERVICE_URL = 'http://www.ngdc.noaa.gov/geoportal/csw'
 
 
 @pytest.mark.online
-@pytest.mark.skipif(not requests.get(SERVICE_URL).ok,
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="CSW service is unreachable")
 def test_csw_ngdc():
     "rewritten doctest/cws_ngdc.txt"
