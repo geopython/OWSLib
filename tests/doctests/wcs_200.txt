@@ -38,14 +38,14 @@ Imports
 
 Print the ids of all layers (actually just the first 3):
    >>> sorted(wcs.contents.keys())[0:3]
-   ['CCI_V2_monthly_Rrs_412', 'CCI_V2_monthly_Rrs_443', 'CCI_V2_monthly_Rrs_490']
+   ['CCI_V2_monthly_chlor_a', 'OCCCI_V1_0_chlor_a_monthly', 'OCCCI_V2_0_Rrs_bands_5_day']
 
 #To further interrogate a single "coverage" get the coverageMetadata object
 #You can either do:
-    >>> cvg= wcs.contents['CCI_V2_monthly_Rrs_412'] #to get it from the dictonary
+    >>> cvg= wcs.contents['CCI_V2_monthly_chlor_a'] #to get it from the dictonary
 
 #or even simpler you can do:
-    >>> cvg=wcs['CCI_V2_monthly_Rrs_412']
+    >>> cvg=wcs['CCI_V2_monthly_chlor_a']
     
     # seems to not be an equivelent in wcs 2.0
     #>>> cvg.boundingBoxWGS84
@@ -82,14 +82,14 @@ Print the ids of all layers (actually just the first 3):
 
 
 #Now we have enough information to build a getCoverage request:
-    >>> covID='OCCCI_V3_monthly_chlor_a'
+    >>> covID='OCCCI_V3_1_chlor_a_monthly'
     >>> time_subset = ("ansi", "2004-06-01T00:00:00Z")
     >>> lat_subset = ('Lat',40,50)
     >>> long_subset = ('Long',-10,0)
     >>> formatType='NetCDF3' # chosen from cvg.supportedFormats
 
 #Make the actual getCoverage request.
-    >>> output=wcs.getCoverage(identifier=['OCCCI_V3_monthly_chlor_a'], format='application/gml+xml', subsets=[long_subset, lat_subset, time_subset])
+    >>> output=wcs.getCoverage(identifier=['OCCCI_V3_1_chlor_a_monthly'], format='application/gml+xml', subsets=[long_subset, lat_subset, time_subset])
 
 #Then write this to a netcdf file.
     >>> filename = scratch_file('wcs2test.xml')
