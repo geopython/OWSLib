@@ -92,28 +92,26 @@ def _construct_schema(elements, nsmap):
         gml_key = 'gml'
         schema_key = 'xsd'
 
+    mappings = {
+        'PointPropertyType': 'Point',
+        'PolygonPropertyType': 'Polygon',
+        'LineStringPropertyType': 'LineString',
+        'MultiPointPropertyType': 'MultiPoint',
+        'MultiLineStringPropertyType': 'MultiLineString',
+        'MultiPolygonPropertyType': 'MultiPolygon',
+        'MultiGeometryPropertyType': 'MultiGeometry',
+        'GeometryPropertyType': 'GeometryCollection',
+        'SurfacePropertyType': '3D Polygon',
+        'MultiSurfacePropertyType': '3D MultiPolygon'
+    }
+
     for element in elements:
         data_type = element.attrib['type'].replace(gml_key + ':', '')
         name = element.attrib['name']
 
-        if data_type == 'PointPropertyType':
-            schema['geometry'] = 'Point'
-        elif data_type == 'PolygonPropertyType':
-            schema['geometry'] = 'Polygon'
-        elif data_type == 'LineStringPropertyType':
-            schema['geometry'] = 'LineString'
-        elif data_type == 'MultiPointPropertyType':
-            schema['geometry'] = 'MultiPoint'
-        elif data_type == 'MultiLineStringPropertyType':
-            schema['geometry'] = 'MultiLineString'
-        elif data_type == 'MultiPolygonPropertyType':
-            schema['geometry'] = 'MultiPolygon'
-        elif data_type == 'MultiGeometryPropertyType':
-            schema['geometry'] = 'MultiGeometry'
-        elif data_type == 'GeometryPropertyType':
-            schema['geometry'] = 'GeometryCollection'
-        elif data_type == 'SurfacePropertyType':
-            schema['geometry'] = '3D Polygon'
+        if data_type in mappings:
+            schema['geometry'] = mappings[data_type]
+            schema['geometry_column'] = name
         else:
             schema['properties'][name] = data_type.replace(schema_key+':', '')
 
