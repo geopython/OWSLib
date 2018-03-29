@@ -368,12 +368,16 @@ class MD_DataIdentification(object):
 
             self.uselimitation = []
             self.uselimitation_url = []
-            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString', namespaces)):
+            for i in \
+                    md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useLimitation/gco:CharacterString', namespaces)) + \
+                    md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString', namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.uselimitation.append(val)
 
-            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gmx:Anchor', namespaces)):
+            for i in \
+                    md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useLimitation/gmx:Anchor', namespaces)) + \
+                    md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gmx:Anchor', namespaces)):
                 val = util.testXMLValue(i)
                 val1 = i.attrib.get(util.nspath_eval('xlink:href', namespaces))
 
