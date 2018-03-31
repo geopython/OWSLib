@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "https://www.dov.vlaanderen.be:443/geoserver/schemas/wms/1.1.1/WMS_MS_Capabilities.dtd">
+<WMT_MS_Capabilities version="1.1.1" updateSequence="24195">
+  <Service>
+    <Name>OGC:WMS</Name>
+    <Title>DOV View Service</Title>
+    <Abstract>Interne View Service van Databank Ondergrond Vlaanderen.</Abstract>
+    <KeywordList>
+      <Keyword>WMS</Keyword>
+      <Keyword>INSPIRE</Keyword>
+      <Keyword>View Service</Keyword>
+      <Keyword>Dov</Keyword>
+      <Keyword>OneGeology</Keyword>
+      <Keyword>MD_LANG@DUT</Keyword>
+      <Keyword>MD_DATE@2012-11-13</Keyword>
+      <Keyword>tertiair</Keyword>
+      <Keyword>boring</Keyword>
+      <Keyword>sondering</Keyword>
+    </KeywordList>
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.dov.vlaanderen.be/geoserver"/>
+    <ContactInformation>
+      <ContactPersonPrimary>
+        <ContactPerson>ir Marleen Van Damme</ContactPerson>
+        <ContactOrganization>Vlaamse Overheid - DOV</ContactOrganization>
+      </ContactPersonPrimary>
+      <ContactPosition>DOV-coördinator</ContactPosition>
+      <ContactAddress>
+        <AddressType/>
+        <Address>Technologiepark 905</Address>
+        <City>Zwijnaarde</City>
+        <StateOrProvince>Oost-Vlaanderen</StateOrProvince>
+        <PostCode>9052</PostCode>
+        <Country>Belgium</Country>
+      </ContactAddress>
+      <ContactVoiceTelephone/>
+      <ContactFacsimileTelephone/>
+      <ContactElectronicMailAddress>marleen.vandamme@lne.vlaanderen.be</ContactElectronicMailAddress>
+    </ContactInformation>
+    <Fees>No fees</Fees>
+    <AccessConstraints>none</AccessConstraints>
+  </Service>
+  <Capability>
+    <Request>
+      <GetCapabilities>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?SERVICE=WMS&amp;"/>
+            </Get>
+            <Post>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?SERVICE=WMS&amp;"/>
+            </Post>
+          </HTTP>
+        </DCPType>
+      </GetCapabilities>
+      <GetMap>
+        <Format>image/png</Format>
+        <Format>application/atom xml</Format>
+        <Format>application/atom+xml</Format>
+        <Format>application/json;type=utfgrid</Format>
+        <Format>application/openlayers</Format>
+        <Format>application/pdf</Format>
+        <Format>application/rss xml</Format>
+        <Format>application/rss+xml</Format>
+        <Format>application/vnd.google-earth.kml</Format>
+        <Format>application/vnd.google-earth.kml xml</Format>
+        <Format>application/vnd.google-earth.kml+xml</Format>
+        <Format>application/vnd.google-earth.kml+xml;mode=networklink</Format>
+        <Format>application/vnd.google-earth.kmz</Format>
+        <Format>application/vnd.google-earth.kmz xml</Format>
+        <Format>application/vnd.google-earth.kmz+xml</Format>
+        <Format>application/vnd.google-earth.kmz;mode=networklink</Format>
+        <Format>atom</Format>
+        <Format>image/geotiff</Format>
+        <Format>image/geotiff8</Format>
+        <Format>image/gif</Format>
+        <Format>image/gif;subtype=animated</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/png8</Format>
+        <Format>image/png; mode=8bit</Format>
+        <Format>image/svg</Format>
+        <Format>image/svg xml</Format>
+        <Format>image/svg+xml</Format>
+        <Format>image/tiff</Format>
+        <Format>image/tiff8</Format>
+        <Format>image/vnd.jpeg-png</Format>
+        <Format>kml</Format>
+        <Format>kmz</Format>
+        <Format>openlayers</Format>
+        <Format>rss</Format>
+        <Format>text/html; subtype=openlayers</Format>
+        <Format>utfgrid</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetMap>
+      <GetFeatureInfo>
+        <Format>text/plain</Format>
+        <Format>application/vnd.ogc.gml</Format>
+        <Format>text/xml</Format>
+        <Format>application/vnd.ogc.gml/3.1.1</Format>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+        <Format>text/html</Format>
+        <Format>application/json</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?SERVICE=WMS&amp;"/>
+            </Get>
+            <Post>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?SERVICE=WMS&amp;"/>
+            </Post>
+          </HTTP>
+        </DCPType>
+      </GetFeatureInfo>
+      <DescribeLayer>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </DescribeLayer>
+      <GetLegendGraphic>
+        <Format>image/png</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/gif</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetLegendGraphic>
+      <GetStyles>
+        <Format>application/vnd.ogc.sld+xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?SERVICE=WMS&amp;"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetStyles>
+    </Request>
+    <Exception>
+      <Format>application/vnd.ogc.se_xml</Format>
+      <Format>application/vnd.ogc.se_inimage</Format>
+      <Format>application/vnd.ogc.se_blank</Format>
+      <Format>application/json</Format>
+    </Exception>
+    <UserDefinedSymbolization SupportSLD="1" UserLayer="1" UserStyle="1" RemoteWFS="1"/>
+    <Layer>
+      <Title>DOV View Service</Title>
+      <Abstract>Interne View Service van Databank Ondergrond Vlaanderen.</Abstract>
+      <!--Limited list of EPSG projections:-->
+      <SRS>EPSG:25831</SRS>
+      <SRS>EPSG:3043</SRS>
+      <SRS>EPSG:31370</SRS>
+      <SRS>EPSG:32631</SRS>
+      <SRS>EPSG:3812</SRS>
+      <SRS>EPSG:3857</SRS>
+      <SRS>EPSG:4258</SRS>
+      <SRS>EPSG:4326</SRS>
+      <SRS>EPSG:900913</SRS>
+      <LatLonBoundingBox minx="2.4985990253931107" miny="49.35896492737394" maxx="5.959258812134792" maxy="52.81962471411561"/>
+      <Layer queryable="1" opaque="0">
+        <Name>meetnetten</Name>
+        <Title>Grondwatermeetnetten</Title>
+        <Abstract>In de Databank Ondergrond Vlaanderen zijn verschillende grondwatermeetnetten opgenomen. Deze meetnetten staan in functie van uitgebreide monitoringprogramma's met de bedoeling een goed beeld te krijgen van de beschikbare grondwaterkwantiteit en grondwaterkwaliteit van de watervoerende lagen in Vlaanderen.</Abstract>
+        <KeywordList>
+          <Keyword>DOV_PATHNAME@001#DOV:150#Grondwateronderzoek:010#</Keyword>
+          <Keyword>DOV_EXPERTISE@C#D#E#F</Keyword>
+          <Keyword>grondwater</Keyword>
+          <Keyword>meetnet(werk)</Keyword>
+          <Keyword>Geologie</Keyword>
+          <Keyword>Toegevoegd GDI-Vl</Keyword>
+          <Keyword>Herbruikbaar</Keyword>
+          <Keyword>Vlaamse Open data</Keyword>
+          <Keyword>Kosteloos</Keyword>
+          <Keyword>Lijst M&amp;R INSPIRE</Keyword>
+          <Keyword>Metadata INSPIRE-conform</Keyword>
+          <Keyword>Metadata GDI-Vl-conform</Keyword>
+        </KeywordList>
+        <SRS>EPSG:31370</SRS>
+        <LatLonBoundingBox minx="2.4985990253931107" miny="49.35896492737394" maxx="5.959258812134792" maxy="52.81962471411561"/>
+        <BoundingBox SRS="EPSG:31370" minx="22512.0" miny="154145.0" maxx="258199.43" maxy="242848.38"/>
+        <Style>
+          <Name>meetnetten</Name>
+          <Title>Grondwatermeetnetten</Title>
+          <LegendURL width="313" height="160">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=meetnetten"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>meetnetten_label</Name>
+          <Title>Grondwatermeetnetten (met labels)</Title>
+          <LegendURL width="313" height="160">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be:443/geoserver/gw_meetnetten/meetnetten/wms?request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=meetnetten&amp;style=meetnetten_label"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="50001.0"/>
+      </Layer>
+    </Layer>
+  </Capability>
+</WMT_MS_Capabilities>
