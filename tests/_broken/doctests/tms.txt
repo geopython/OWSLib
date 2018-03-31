@@ -18,7 +18,7 @@ Find out what a TMS has to offer. Service metadata:
     >>> service.identification.version
     '1.0.0'
     >>> service.identification.url
-    'http://odims.ospar.org/geoserver/gwc/'
+    'https://odims.ospar.org/geoserver/gwc/'
     >>> len(service.contents) > 0
     True
     >>> tm = service.contents['http://odims.ospar.org/geoserver/gwc/service/tms/1.0.0/geonode%3Aospar_offshore_renewables_2010_01@EPSG%3A4326@png']
@@ -110,9 +110,3 @@ An extensive test  with:
 #    ...         tm.boundingBox
 #    ...         tm.origin
 #    ...         tm.type
-
-
-
-
-
-

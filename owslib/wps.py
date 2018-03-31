@@ -87,7 +87,8 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 from __future__ import (absolute_import, division, print_function)
 
 from owslib.etree import etree
-from owslib.ows import DEFAULT_OWS_NAMESPACE, ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
+from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
+from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
 from owslib.util import (testXMLValue, build_get_url, clean_ows_url, dump, getTypedValue,
                          getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
@@ -312,6 +313,10 @@ class WebProcessingService(object):
 
     def _parseCapabilitiesMetadata(self, root):
         ''' Sets up capabilities metadata objects '''
+
+        # reset metdata
+        self.operations = []
+        self.processes = []
 
         # use the WPS namespace defined in the document root
         wpsns = getNamespace(root)
@@ -869,21 +874,29 @@ class InputOutput(object):
     def __init__(self, element):
 
         self.abstract = None
+        self.metadata = []
 
         # loop over sub-elements without requiring a specific namespace
-        for subElement in element:
+        for child in element:
 
             # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">SUMMARIZE_TIMESTEP</ows:Identifier>
-            if subElement.tag.endswith('Identifier'):
-                self.identifier = testXMLValue(subElement)
+            if child.tag.endswith('Identifier'):
+                self.identifier = testXMLValue(child)
 
             # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Summarize Timestep</ows:Title>
-            elif subElement.tag.endswith('Title'):
-                self.title = testXMLValue(subElement)
+            elif child.tag.endswith('Title'):
+                self.title = testXMLValue(child)
 
-            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">If selected, processing output will include columns with summarized statistics for all feature attribute values for each timestep</ows:Abstract>
-            elif subElement.tag.endswith('Abstract'):
-                self.abstract = testXMLValue(subElement)
+            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">
+            #   If selected, processing output will include columns with summarized statistics for all
+            #   feature attribute values for each timestep
+            # </ows:Abstract>
+            elif child.tag.endswith('Abstract'):
+                self.abstract = testXMLValue(child)
+
+            # <ows:Metadata xlink:title="Documentation" xlink:href="http://emu.readthedocs.org/en/latest/"/>
+            elif child.tag.endswith('Metadata'):
+                self.metadata.append(Metadata(child))
 
         self.allowedValues = []
         self.supportedValues = []
@@ -1123,7 +1136,14 @@ class Output(InputOutput):
         # />
         referenceElement = outputElement.find(nspath('Reference', ns=wpsns))
         if referenceElement is not None:
-            self.reference = referenceElement.get('href')
+            # extract xlink namespace
+            xlinkns = get_namespaces()['xlink']
+            xlink_href = '{{{}}}href'.format(xlinkns)
+
+            if xlink_href in referenceElement.keys():
+                self.reference = referenceElement.get(xlink_href)
+            else:
+                self.reference = referenceElement.get('href')
             self.mimeType = referenceElement.get('mimeType')
 
         # <LiteralOutput>
@@ -1279,6 +1299,25 @@ class WPSException:
             self.text = ""
 
 
+class Metadata(object):
+    """Initialize an OWS Metadata construct"""
+    def __init__(self, elem, namespace=DEFAULT_OWS_NAMESPACE):
+        self.url = None
+        self.title = None
+        self.role = None
+
+        if elem is not None:
+            urlattrib = elem.attrib.get(nspath('href', XLINK_NAMESPACE))
+            if urlattrib is not None:
+                self.url = testXMLValue(urlattrib, True)
+            titleattrib = elem.attrib.get(nspath('title', XLINK_NAMESPACE))
+            if titleattrib is not None:
+                self.title = testXMLValue(titleattrib, True)
+            roleattrib = elem.attrib.get(nspath('role', XLINK_NAMESPACE))
+            if roleattrib is not None:
+                self.role = testXMLValue(roleattrib, True)
+
+
 class Process(object):
 
     """
@@ -1289,8 +1328,8 @@ class Process(object):
         """ Initialization method extracts all available metadata from an XML document (passed in as etree object) """
 
         # <ns0:ProcessDescriptions service="WPS" version="1.0.0"
-        #                          xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd"
-        #                          xml:lang="en-US" xmlns:ns0="http://www.opengis.net/wps/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        #   xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd"  # noqa
+        #   xml:lang="en-US" xmlns:ns0="http://www.opengis.net/wps/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">  # noqa
         # OR:
         # <ns0:Process ns0:processVersion="1.0.0">
         self._root = elem
@@ -1303,40 +1342,61 @@ class Process(object):
         self.statusSupported = bool(elem.get("statusSupported"))
         self.storeSupported = bool(elem.get("storeSupported"))
         self.abstract = None
+        self.metadata = []
 
         for child in elem:
 
             # this element's namespace
             ns = getNamespace(child)
 
-            # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm</ows:Identifier>
+            # <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">
+            #   gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
+            # </ows:Identifier>
             if child.tag.endswith('Identifier'):
                 self.identifier = testXMLValue(child)
 
-            # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">Feature Weighted Grid Statistics</ows:Title>
+            # <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">
+            #   Feature Weighted Grid Statistics
+            # </ows:Title>
             elif child.tag.endswith('Title'):
                 self.title = testXMLValue(child)
 
-            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">This algorithm generates area weighted statistics of a gridded dataset for a set of vector polygon features. Using the bounding-box that encloses the feature data and the time range, if provided, a subset of the gridded dataset is requested from the remote gridded data server. Polygon representations are generated for cells in the retrieved grid. The polygon grid-cell representations are then projected to the feature data coordinate reference system. The grid-cells are used to calculate per grid-cell feature coverage fractions. Area-weighted statistics are then calculated for each feature using the grid values and fractions as weights. If the gridded dataset has a time range the last step is repeated for each time step within the time range or all time steps if a time range was not supplied.</ows:Abstract>
+            # <ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1">
+            #   This algorithm generates area weighted statistics of a gridded dataset for
+            #   a set of vector polygon features. Using the bounding-box that encloses
+            #   the feature data and the time range, if provided, a subset of the gridded dataset
+            #   is requested from the remote gridded data server.
+            #   Polygon representations are generated for cells in the retrieved grid.
+            #   The polygon grid-cell representations are then projected to the feature data
+            #   coordinate reference system. The grid-cells are used to calculate per grid-cell
+            #   feature coverage fractions. Area-weighted statistics are then calculated for each feature
+            #   using the grid values and fractions as weights. If the gridded dataset has a time range
+            #   the last step is repeated for each time step within the time range or all time steps
+            #   if a time range was not supplied.
+            # </ows:Abstract>
             elif child.tag.endswith('Abstract'):
                 self.abstract = testXMLValue(child)
 
-        if self.verbose == True:
+            # <ows:Metadata xlink:title="Documentation" xlink:href="http://emu.readthedocs.org/en/latest/"/>
+            elif child.tag.endswith('Metadata'):
+                self.metadata.append(Metadata(child))
+
+        if self.verbose is True:
             dump(self)
 
         # <DataInputs>
         self.dataInputs = []
         for inputElement in elem.findall('DataInputs/Input'):
             self.dataInputs.append(Input(inputElement))
-            if self.verbose == True:
+            if self.verbose is True:
                 dump(self.dataInputs[-1], prefix='\tInput: ')
 
         # <ProcessOutputs>
         self.processOutputs = []
         for outputElement in elem.findall('ProcessOutputs/Output'):
             self.processOutputs.append(Output(outputElement))
-            if self.verbose == True:
-                dump(self.processOutputs[-1],  prefix='\tOutput: ')
+            if self.verbose is True:
+                dump(self.processOutputs[-1], prefix='\tOutput: ')
 
 
 class BoundingBoxDataInput(object):
@@ -1584,7 +1644,7 @@ class GMLMultiPolygonFeatureCollection(FeatureCollection):
         dataElement = etree.Element(nspath_eval('wps:Data', namespaces))
         complexDataElement = etree.SubElement(
             dataElement, nspath_eval('wps:ComplexData', namespaces),
-                                              attrib={"mimeType": "text/xml", "encoding": "UTF-8", "schema": GML_SCHEMA_LOCATION})
+                                              attrib={"mimeType": "text/xml", "schema": GML_SCHEMA_LOCATION})
         featureMembersElement = etree.SubElement(
             complexDataElement, nspath_eval('gml:featureMembers', namespaces),
                                                  attrib={nspath_eval("xsi:schemaLocation", namespaces): "%s %s" % (DRAW_NAMESPACE, DRAW_SCHEMA_LOCATION)})

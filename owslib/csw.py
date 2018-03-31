@@ -30,7 +30,7 @@ from owslib.etree import etree
 from owslib import fes
 from owslib import util
 from owslib import ows
-from owslib.iso import MD_Metadata
+from owslib.iso import MD_Metadata, FC_FeatureCatalogue
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.gm03 import GM03
@@ -547,6 +547,9 @@ class CatalogueServiceWeb(object):
                 val = i.find(util.nspath_eval('gmd:fileIdentifier/gco:CharacterString', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
+            for i in self._exml.findall('.//'+util.nspath_eval('gfc:FC_FeatureCatalogue', namespaces)):
+                identifier = self._setidentifierkey(util.testXMLValue(i.attrib['uuid'], attrib=True))
+                self.records[identifier] = FC_FeatureCatalogue(i)
         elif outputschema == namespaces['fgdc']: # fgdc csdgm
             for i in self._exml.findall('.//metadata'):
                 val = i.find('idinfo/datasetid')
