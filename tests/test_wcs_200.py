@@ -1,4 +1,4 @@
-from tests.utils import cast_tuple_int_list, scratch_file
+from tests.utils import scratch_file
 from tests.utils import service_ok
 from owslib.wcs import WebCoverageService
 
