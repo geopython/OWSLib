@@ -38,7 +38,7 @@ Imports
 
 Print the ids of all layers (actually just the first 3):
    >>> sorted(wcs.contents.keys())[0:3]
-   ['CCI_V2_monthly_chlor_a', 'OCCCI_V1_0_chlor_a_monthly', 'OCCCI_V2_0_Rrs_bands_5_day']
+   ['CCI_V2_monthly_chlor_a', 'OCCCI_V1_0_chlor_a_daily', 'OCCCI_V1_0_chlor_a_monthly']
 
 #To further interrogate a single "coverage" get the coverageMetadata object
 #You can either do:
@@ -75,10 +75,11 @@ Print the ids of all layers (actually just the first 3):
     ['4319', '8639', '195']
 
     >>> cvg.grid.origin
-    ['89.9791564941', '-179.979202271', '"1997-09-30T23:59:00.000Z"']
+    ['89.97915599999999999999999999959', '-179.979200000000000000000000024445', '"1997-09-04T00:00:00.000Z"']
+
 
     >>> cvg.grid.offsetvectors
-    [['-0.0416666619561', '0', '0'], ['0', '0.0416666749093', '0'], ['0', '0', '1']]
+    [['-0.04166666172725167862931234082', '0', '0'], ['0', '0.04166667438360921402940155111', '0'], ['0', '0', '1']]
 
 
 #Now we have enough information to build a getCoverage request:
