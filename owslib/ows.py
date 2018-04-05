@@ -29,7 +29,7 @@ n = Namespaces()
 
 OWS_NAMESPACE_1_0_0 = n.get_namespace("ows")
 OWS_NAMESPACE_1_1_0 = n.get_namespace("ows110")
-OWS_NAMESPACE_2_0   = n.get_namespace("ows200")
+OWS_NAMESPACE_2_0_0 = n.get_namespace("ows200")
 XSI_NAMESPACE       = n.get_namespace("xsi")
 XLINK_NAMESPACE     = n.get_namespace("xlink")
 
@@ -41,8 +41,10 @@ class OwsCommon(object):
         self.version = version
         if version == '1.0.0':
             self.namespace = OWS_NAMESPACE_1_0_0
-        else:
+        elif version == '1.1.0':
             self.namespace = OWS_NAMESPACE_1_1_0
+        else:
+            self.namespace = OWS_NAMESPACE_2_0_0
     
 class ServiceIdentification(object):
     """Initialize an OWS Common ServiceIdentification construct"""

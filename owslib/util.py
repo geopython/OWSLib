@@ -12,7 +12,7 @@ from __future__ import (absolute_import, division, print_function)
 import sys
 from collections import OrderedDict
 from dateutil import parser
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
@@ -144,6 +144,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
     :param verify: (optional) whether the SSL cert will be verified. A CA_BUNDLE path can also be provided. Defaults to ``True``.
     """
+
     headers = headers if headers is not None else {}
     rkwargs = {}
 
@@ -670,3 +671,22 @@ def findall(root, xpath, attribute_name=None, attribute_value=None):
     if found_elements == []:
         found_elements = None
     return found_elements
+
+
+def datetime_from_iso(iso):
+    """returns a datetime object from dates in the format 2001-07-01T00:00:00Z or 2001-07-01T00:00:00.000Z """
+    try:
+        iso_datetime = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ")
+    except:
+        iso_datetime = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%S.%fZ")
+    return iso_datetime
+
+def datetime_from_ansi(ansi):
+    """Converts an ansiDate (expressed as a number = the nuber of days since the datum origin of ansi) to a python datetime object."""
+
+    datumOrigin = datetime(1600,12,31,0,0,0)
+
+    return datumOrigin + timedelta(ansi)
+
+def is_vector_grid(grid_elem):
+    pass
