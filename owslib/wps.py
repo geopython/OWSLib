@@ -188,7 +188,7 @@ class WebProcessingService(object):
     Implements IWebProcessingService.
     """
 
-    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False):
+    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False, auth_token=None, headers=None):
         """
         Initialization method resets the object status.
         By default it will execute a GetCapabilities invocation to the remote service,
@@ -201,6 +201,8 @@ class WebProcessingService(object):
         self.password = password
         self.version = version
         self.verbose = verbose
+        self.auth_token = auth_token
+        self.headers = headers
 
         # fields populated by method invocations
         self._capabilities = None
@@ -208,6 +210,7 @@ class WebProcessingService(object):
         self.provider = None
         self.operations = []
         self.processes = []
+
 
         if not skip_caps:
             self.getcapabilities()
@@ -266,10 +269,13 @@ class WebProcessingService(object):
         response: optional pre-built XML response document, prevents submission of request to live WPS server
         """
 
+        if self.headers is None and self.auth_token is not None:
+            self.headers = {'Access_token': self.auth_token, 'Authorization': self.auth_token}
+
         # instantiate a WPSExecution object
         log.info('Executing WPS request...')
         execution = WPSExecution(version=self.version, url=self.url,
-                                 username=self.username, password=self.password, verbose=self.verbose)
+                                 username=self.username, password=self.password, verbose=self.verbose, headers=self.headers)
 
         # build XML request from parameters
         if request is None:
@@ -384,7 +390,7 @@ class WPSReader(object):
         self.version = version
         self.verbose = verbose
 
-    def _readFromUrl(self, url, data, method='Get', username=None, password=None):
+    def _readFromUrl(self, url, data, method='Get', username=None, password=None, headers=None):
         """
         Method to get and parse a WPS document, returning an elementtree instance.
         url: WPS service base url.
@@ -399,13 +405,13 @@ class WPSReader(object):
 
             # split URL into base url and query string to use utility function
             spliturl = request_url.split('?')
-            u = openURL(spliturl[0], spliturl[
-                        1], method='Get', username=username, password=password)
+            u = openURL(spliturl[0], spliturl[1],
+                        method='Get', username=username, password=password, headers=headers)
             return etree.fromstring(u.read())
 
         elif method == 'Post':
             u = openURL(url, data, method='Post',
-                        username=username, password=password)
+                        username=username, password=password, headers=headers)
             return etree.fromstring(u.read())
 
         else:
@@ -478,13 +484,13 @@ class WPSExecuteReader(WPSReader):
         # superclass initializer
         super(WPSExecuteReader, self).__init__(verbose=verbose)
 
-    def readFromUrl(self, url, data={}, method='Get', username=None, password=None):
+    def readFromUrl(self, url, data={}, method='Get', username=None, password=None, headers=None):
         """
         Reads a WPS status document from a remote service and returns the XML etree object.
         url: the URL to submit the GET/POST request to.
         """
 
-        return self._readFromUrl(url, data, method, username=username, password=password)
+        return self._readFromUrl(url, data, method, username=username, password=password, headers=headers)
 
 
 class WPSExecution():
@@ -493,7 +499,7 @@ class WPSExecution():
     Class that represents a single WPS process executed on a remote WPS service.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False):
+    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False, headers=None):
 
         # initialize fields
         self.url = url
@@ -501,6 +507,7 @@ class WPSExecution():
         self.username = username
         self.password = password
         self.verbose = verbose
+        self.headers = headers
 
         # request document
         self.request = None
@@ -743,7 +750,7 @@ class WPSExecution():
         self.request = request
         reader = WPSExecuteReader(verbose=self.verbose)
         response = reader.readFromUrl(
-            self.url, request, method='Post', username=self.username, password=self.password)
+            self.url, request, method='Post', username=self.username, password=self.password, headers=self.headers)
         self.response = response
         return response
 
@@ -1488,7 +1495,15 @@ class ComplexDataInput(IComplexDataInput, ComplexData):
             attrib['mimeType'] = self.mimeType
         complexDataElement = etree.SubElement(
             dataElement, nspath_eval('wps:ComplexData', namespaces), attrib=attrib)
-        complexDataElement.text = self.value
+        # complexDataElement.text = self.value
+        # If ComplexDataInput is valid XML, append the XML in the ComplexData node of the request
+        try:
+            xml_input_data = etree.fromstring(self.value)
+            complexDataElement.append(xml_input_data)
+        # If not valid XML, append the text in a CDATA
+        except etree.XMLSyntaxError:
+            complexDataElement.text = etree.CDATA( self.value )
+
         return dataElement
 
 

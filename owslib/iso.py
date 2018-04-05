@@ -337,6 +337,7 @@ class MD_DataIdentification(object):
             self.temporalextent_start = None
             self.temporalextent_end = None
             self.spatialrepresentationtype = []
+            self.graphicoverview = []
         else:
             self.identtype = identtype
             val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
@@ -478,6 +479,21 @@ class MD_DataIdentification(object):
                 if val:
                     self.spatialrepresentationtype.append(val)
 
+            self.graphicoverview = []
+            for i in md.findall(util.nspath_eval('gmd:graphicOverview/gmd:MD_BrowseGraphic', namespaces)):
+                go = {}
+                val = i.find(util.nspath_eval('gmd:fileName/gco:CharacterString', namespaces))
+                if val is None:
+                    val = i.find(util.nspath_eval('gmd:fileName/gmx:FileName/@src', namespaces))
+                go['filename'] = util.testXMLValue(val)
+                val = i.find(util.nspath_eval('gmd:fileDescription/gco:CharacterString', namespaces))
+                if val is None:
+                    val = i.find(util.nspath_eval('gmd:fileName/gmx:FileName', namespaces))
+                go['description'] = util.testXMLValue(val)
+                val = i.find(util.nspath_eval('gmd:fileType/gco:CharacterString', namespaces))
+                go['filetype'] = util.testXMLValue(val)
+                self.graphicoverview.append(go)
+            
             warnings.warn(
                 'The .keywords and .keywords2 properties will merge into the '
                 '.keywords property in the future, with .keywords becoming a list '
@@ -667,6 +683,7 @@ class SV_ServiceIdentification(object):
             self.couplingtype = None
             self.operations = []
             self.operateson = []
+            self.graphicoverview = []
         else:
             val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
             self.title=util.testXMLValue(val)
@@ -724,6 +741,21 @@ class SV_ServiceIdentification(object):
                 tmp['href'] = i.attrib.get(util.nspath_eval('xlink:href', namespaces))
                 tmp['title'] = i.attrib.get(util.nspath_eval('xlink:title', namespaces))
                 self.operateson.append(tmp)
+            
+            self.graphicoverview = []
+            for i in md.findall(util.nspath_eval('gmd:graphicOverview/gmd:MD_BrowseGraphic', namespaces)):
+                go = {}
+                val = i.find(util.nspath_eval('gmd:fileName/gco:CharacterString', namespaces))
+                if val is None:
+                    val = i.find(util.nspath_eval('gmd:fileName/gmx:FileName/@src', namespaces))
+                go['filename'] = util.testXMLValue(val)
+                val = i.find(util.nspath_eval('gmd:fileDescription/gco:CharacterString', namespaces))
+                if val is None:
+                    val = i.find(util.nspath_eval('gmd:fileName/gmx:FileName', namespaces))
+                go['description'] = util.testXMLValue(val)
+                val = i.find(util.nspath_eval('gmd:fileType/gco:CharacterString', namespaces))
+                go['filetype'] = util.testXMLValue(val)
+                self.graphicoverview.append(go)
 
 class CI_OnlineResource(object):
     """ process CI_OnlineResource """
