@@ -9,12 +9,16 @@
 from __future__ import (absolute_import, division, print_function)
 
 #owslib imports:
+from owslib import util
+from owslib.fgdc import Metadata
+from owslib.iso import MD_Metadata
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
 from owslib.util import nspath, testXMLValue, openURL
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
-from owslib.feature.common import WFSCapabilitiesReader
+from owslib.feature.common import WFSCapabilitiesReader, \
+    AbstractContentMetadata
 from owslib.namespaces import Namespaces
 
 #other imports
@@ -363,7 +367,7 @@ class Parameter(object):
         self.type=type
 
 
-class ContentMetadata:
+class ContentMetadata(AbstractContentMetadata):
     """Abstraction for WFS metadata.
 
     Implements IMetadata.
@@ -421,22 +425,32 @@ class ContentMetadata:
 
         # MetadataURLs
         self.metadataUrls = []
-        for m in elem.findall('MetadataURL'):
+        for m in elem.findall(nspath('MetadataURL', ns=WFS_NAMESPACE)):
             metadataUrl = {
-                'type': testXMLValue(m.attrib['type'], attrib=True),
-                'format': m.find('Format').text.strip(),
-                'url': testXMLValue(m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
+                'url': testXMLValue(m.attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
+            self.metadataUrls.append(metadataUrl)
 
-            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
+        if parse_remote_metadata:
+            self.parse_remote_metadata(timeout)
+
+    def parse_remote_metadata(self, timeout=30):
+        """Parse remote metadata for MetadataURL and add it as metadataUrl['metadata']"""
+        for metadataUrl in self.metadataUrls:
+            if metadataUrl['url'] is not None:
                 try:
                     content = openURL(metadataUrl['url'], timeout=timeout)
-                    doc = etree.parse(content)
-                    try:  # FGDC
-                        metadataUrl['metadata'] = Metadata(doc)
-                    except:  # ISO
-                        metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception:
-                    metadataUrl['metadata'] = None
+                    doc = etree.fromstring(content.read())
 
-            self.metadataUrls.append(metadataUrl)
+                    mdelem = doc.find('.//metadata')
+                    if mdelem is not None:
+                        metadataUrl['metadata'] = Metadata(mdelem)
+                        continue
+
+                    mdelem = doc.find('.//' + util.nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
+                             or doc.find('.//' + util.nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                    if mdelem is not None:
+                        metadataUrl['metadata'] = MD_Metadata(mdelem)
+                        continue
+                except:
+                    metadataUrl['metadata'] = None

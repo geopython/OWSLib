@@ -10,6 +10,9 @@ from __future__ import (absolute_import, division, print_function)
 
 from six import PY2
 from six.moves import cStringIO as StringIO
+
+from owslib import util
+
 try:
     from urllib import urlencode
 except ImportError:
@@ -22,7 +25,8 @@ from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.util import log
 from owslib.feature.schema import get_schema
-from owslib.feature.common import WFSCapabilitiesReader
+from owslib.feature.common import WFSCapabilitiesReader, \
+    AbstractContentMetadata
 
 import pyproj
 
@@ -304,7 +308,7 @@ class ServiceProvider(object):
         self.url = testXMLValue(self._root.find(nspath('OnlineResource')))
         self.keywords = extract_xml_list(self._root.find(nspath('Keywords')))
 
-class ContentMetadata:
+class ContentMetadata(AbstractContentMetadata):
     """Abstraction for WFS metadata.
 
     Implements IMetadata.
@@ -363,23 +367,34 @@ class ContentMetadata:
         for m in elem.findall(nspath('MetadataURL')):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
-                'format': testXMLValue(m.find('Format')),
+                'format': testXMLValue(m.attrib['format'], attrib=True),
                 'url': testXMLValue(m)
             }
+            self.metadataUrls.append(metadataUrl)
 
-            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
+    def parse_remote_metadata(self, timeout=30):
+        """Parse remote metadata for MetadataURL of format 'XML' and add it as metadataUrl['metadata']"""
+        for metadataUrl in self.metadataUrls:
+            if metadataUrl['url'] is not None \
+                    and metadataUrl['format'].lower() == 'xml':
                 try:
                     content = openURL(metadataUrl['url'], timeout=timeout)
-                    doc = etree.parse(content)
-                    if metadataUrl['type'] is not None:
-                        if metadataUrl['type'] == 'FGDC':
-                            metadataUrl['metadata'] = Metadata(doc)
-                        if metadataUrl['type'] == 'TC211':
-                            metadataUrl['metadata'] = MD_Metadata(doc)
+                    doc = etree.fromstring(content.read())
+                    if metadataUrl['type'] == 'FGDC':
+                        mdelem = doc.find('.//metadata')
+                        if mdelem is not None:
+                            metadataUrl['metadata'] = Metadata(mdelem)
+                        else:
+                            metadataUrl['metadata'] = None
+                    elif metadataUrl['type'] == 'TC211':
+                        mdelem = doc.find('.//' + util.nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
+                                 or doc.find('.//' + util.nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                        if mdelem is not None:
+                            metadataUrl['metadata'] = MD_Metadata(mdelem)
+                        else:
+                            metadataUrl['metadata'] = None
                 except Exception:
                     metadataUrl['metadata'] = None
-
-            self.metadataUrls.append(metadataUrl)
 
 
 class OperationMetadata:

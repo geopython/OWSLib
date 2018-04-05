@@ -23,14 +23,15 @@ from owslib.ows import *
 from owslib.fes import *
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
-from owslib.feature.common import WFSCapabilitiesReader
+from owslib.feature.common import WFSCapabilitiesReader, \
+    AbstractContentMetadata
 from owslib.namespaces import Namespaces
 from owslib.util import log
 
 
 def get_namespaces():
     n = Namespaces()
-    return n.get_namespaces(["gml","ogc","ows","wfs"])
+    return n.get_namespaces(["gmd", "gml", "gmi", "ogc","ows","wfs"])
 namespaces = get_namespaces()
 
 class WebFeatureService_1_1_0(WebFeatureService_):
@@ -288,7 +289,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
 
 
-class ContentMetadata:
+class ContentMetadata(AbstractContentMetadata):
     """Abstraction for WFS metadata.
 
     Implements IMetadata.
@@ -329,25 +330,39 @@ class ContentMetadata:
         for m in elem.findall(nspath_eval('wfs:MetadataURL', namespaces)):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
-                'format': testXMLValue(m.find('Format')),
+                'format': testXMLValue(m.attrib['format'], attrib=True),
                 'url': testXMLValue(m)
             }
-
-            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
-                try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
-                    doc = etree.parse(content)
-                    if metadataUrl['type'] is not None:
-                        if metadataUrl['type'] == 'FGDC':
-                            metadataUrl['metadata'] = Metadata(doc)
-                        if metadataUrl['type'] in ['TC211', '19115', '19139']:
-                            metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception:
-                    metadataUrl['metadata'] = None
-
             self.metadataUrls.append(metadataUrl)
+
+        if parse_remote_metadata:
+            self.parse_remote_metadata(timeout)
 
         #others not used but needed for iContentMetadata harmonisation
         self.styles=None
         self.timepositions=None
         self.defaulttimeposition=None
+
+    def parse_remote_metadata(self, timeout=30):
+        """Parse remote metadata for MetadataURL of format 'text/xml' and add it as metadataUrl['metadata']"""
+        for metadataUrl in self.metadataUrls:
+            if metadataUrl['url'] is not None \
+                    and metadataUrl['format'].lower() == 'text/xml':
+                try:
+                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    doc = etree.fromstring(content.read())
+
+                    if metadataUrl['type'] == 'FGDC':
+                        mdelem = doc.find('.//metadata')
+                        if mdelem is not None:
+                            metadataUrl['metadata'] = Metadata(mdelem)
+                        else:
+                            metadataUrl['metadata'] = None
+                    elif metadataUrl['type'] in ['TC211', '19115', '19139']:
+                        mdelem = doc.find('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)) or doc.find('.//'+util.nspath_eval('gmi:MI_Metadata', namespaces))
+                        if mdelem is not None:
+                            metadataUrl['metadata'] = MD_Metadata(mdelem)
+                        else:
+                            metadataUrl['metadata'] = None
+                except:
+                    metadataUrl['metadata'] = None
