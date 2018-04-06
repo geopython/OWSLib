@@ -188,7 +188,8 @@ class WebProcessingService(object):
     Implements IWebProcessingService.
     """
 
-    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False):
+    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False,
+                 headers=None, verify=True, cert=None):
         """
         Initialization method resets the object status.
         By default it will execute a GetCapabilities invocation to the remote service,
@@ -201,6 +202,9 @@ class WebProcessingService(object):
         self.password = password
         self.version = version
         self.verbose = verbose
+        self.headers = headers
+        self.verify = verify
+        self.cert = cert
 
         # fields populated by method invocations
         self._capabilities = None
@@ -226,7 +230,8 @@ class WebProcessingService(object):
             self._capabilities = reader.readFromString(xml)
         else:
             self._capabilities = reader.readFromUrl(
-                self.url, username=self.username, password=self.password)
+                self.url, username=self.username, password=self.password,
+                headers=self.headers, verify=self.verify, cert=self.cert)
 
         log.debug(element_to_string(self._capabilities))
 
@@ -247,7 +252,8 @@ class WebProcessingService(object):
             rootElement = reader.readFromString(xml)
         else:
             # read from server
-            rootElement = reader.readFromUrl(self.url, identifier)
+            rootElement = reader.readFromUrl(self.url, identifier,
+                                             headers=self.headers, verify=self.verify, cert=self.cert)
 
         log.info(element_to_string(rootElement))
 
@@ -269,7 +275,8 @@ class WebProcessingService(object):
         # instantiate a WPSExecution object
         log.info('Executing WPS request...')
         execution = WPSExecution(version=self.version, url=self.url,
-                                 username=self.username, password=self.password, verbose=self.verbose)
+                                 username=self.username, password=self.password, verbose=self.verbose,
+                                 headers=self.headers, verify=self.verify, cert=self.cert)
 
         # build XML request from parameters
         if request is None:
@@ -384,7 +391,8 @@ class WPSReader(object):
         self.version = version
         self.verbose = verbose
 
-    def _readFromUrl(self, url, data, method='Get', username=None, password=None):
+    def _readFromUrl(self, url, data, method='Get', username=None, password=None,
+                     headers=None, verify=True, cert=None):
         """
         Method to get and parse a WPS document, returning an elementtree instance.
         url: WPS service base url.
@@ -400,12 +408,14 @@ class WPSReader(object):
             # split URL into base url and query string to use utility function
             spliturl = request_url.split('?')
             u = openURL(spliturl[0], spliturl[
-                        1], method='Get', username=username, password=password)
+                        1], method='Get', username=username, password=password,
+                        headers=headers, verify=verify, cert=cert)
             return etree.fromstring(u.read())
 
         elif method == 'Post':
             u = openURL(url, data, method='Post',
-                        username=username, password=password)
+                        username=username, password=password,
+                        headers=headers, verify=verify, cert=cert)
             return etree.fromstring(u.read())
 
         else:
@@ -433,7 +443,8 @@ class WPSCapabilitiesReader(WPSReader):
         super(WPSCapabilitiesReader, self).__init__(
             version=version, verbose=verbose)
 
-    def readFromUrl(self, url, username=None, password=None):
+    def readFromUrl(self, url, username=None, password=None,
+                    headers=None, verify=True, cert=None):
         """
         Method to get and parse a WPS capabilities document, returning an elementtree instance.
         url: WPS service base url, to which is appended the HTTP parameters: service, version, and request.
@@ -442,7 +453,8 @@ class WPSCapabilitiesReader(WPSReader):
         return self._readFromUrl(url,
                                  {'service': 'WPS', 'request':
                                      'GetCapabilities', 'version': self.version},
-                                 username=username, password=password)
+                                 username=username, password=password,
+                                 headers=headers, verify=verify, cert=cert)
 
 
 class WPSDescribeProcessReader(WPSReader):
@@ -456,7 +468,8 @@ class WPSDescribeProcessReader(WPSReader):
         super(WPSDescribeProcessReader, self).__init__(
             version=version, verbose=verbose)
 
-    def readFromUrl(self, url, identifier, username=None, password=None):
+    def readFromUrl(self, url, identifier, username=None, password=None,
+                    headers=None, verify=True, cert=None):
         """
         Reads a WPS DescribeProcess document from a remote service and returns the XML etree object
         url: WPS service base url, to which is appended the HTTP parameters: 'service', 'version', and 'request', and 'identifier'.
@@ -465,7 +478,8 @@ class WPSDescribeProcessReader(WPSReader):
         return self._readFromUrl(url,
                                  {'service': 'WPS', 'request': 'DescribeProcess',
                                      'version': self.version, 'identifier': identifier},
-                                 username=username, password=password)
+                                 username=username, password=password,
+                                 headers=headers, verify=verify, cert=cert)
 
 
 class WPSExecuteReader(WPSReader):
@@ -478,13 +492,15 @@ class WPSExecuteReader(WPSReader):
         # superclass initializer
         super(WPSExecuteReader, self).__init__(verbose=verbose)
 
-    def readFromUrl(self, url, data={}, method='Get', username=None, password=None):
+    def readFromUrl(self, url, data={}, method='Get', username=None, password=None,
+                    headers=None, verify=True, cert=None):
         """
         Reads a WPS status document from a remote service and returns the XML etree object.
         url: the URL to submit the GET/POST request to.
         """
 
-        return self._readFromUrl(url, data, method, username=username, password=password)
+        return self._readFromUrl(url, data, method, username=username, password=password,
+                                 headers=headers, verify=verify, cert=cert)
 
 
 class WPSExecution():
@@ -493,7 +509,8 @@ class WPSExecution():
     Class that represents a single WPS process executed on a remote WPS service.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False):
+    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False,
+                 headers=None, verify=True, cert=None):
 
         # initialize fields
         self.url = url
@@ -501,6 +518,9 @@ class WPSExecution():
         self.username = username
         self.password = password
         self.verbose = verbose
+        self.headers = headers
+        self.verify = verify
+        self.cert = cert
 
         # request document
         self.request = None
@@ -653,8 +673,12 @@ class WPSExecution():
                 self.statusLocation = url
             log.info('\nChecking execution status... (location=%s)' %
                      self.statusLocation)
-            response = reader.readFromUrl(
-                self.statusLocation, username=self.username, password=self.password)
+            try:
+                response = reader.readFromUrl(
+                    self.statusLocation, username=self.username, password=self.password,
+                    headers=self.headers, verify=self.verify, cert=self.cert)
+            except Exception:
+                log.error("Could not read status document.")
         else:
             response = reader.readFromString(response)
 
@@ -706,7 +730,8 @@ class WPSExecution():
             for output in self.processOutputs:
 
                 output_content = output.retrieveData(
-                    self.username, self.password)
+                    self.username, self.password,
+                    headers=self.headers, verify=self.verify, cert=self.cert)
 
                 # ExecuteResponse contains reference to server-side output
                 if output_content is not b'':
@@ -743,7 +768,8 @@ class WPSExecution():
         self.request = request
         reader = WPSExecuteReader(verbose=self.verbose)
         response = reader.readFromUrl(
-            self.url, request, method='Post', username=self.username, password=self.password)
+            self.url, request, method='Post', username=self.username, password=self.password,
+            headers=self.headers, verify=self.verify, cert=self.cert)
         self.response = response
         return response
 
@@ -1225,7 +1251,7 @@ class Output(InputOutput):
                 if bbox:
                     self.data.append(bbox)
 
-    def retrieveData(self, username=None, password=None):
+    def retrieveData(self, username=None, password=None, headers=None, verify=True, cert=None):
         """
         Method to retrieve data from server-side reference:
         returns "" if the reference is not known.
@@ -1243,18 +1269,21 @@ class Output(InputOutput):
         if '?' in url:
             spliturl = url.split('?')
             u = openURL(spliturl[0], spliturl[
-                        1], method='Get', username=username, password=password)
+                        1], method='Get', username=username, password=password,
+                        headers=headers, verify=verify, cert=cert)
             # extract output filepath from URL query string
             self.fileName = spliturl[1].split('=')[1]
         else:
             u = openURL(
-                url, '', method='Get', username=username, password=password)
+                url, '', method='Get', username=username, password=password,
+                headers=headers, verify=verify, cert=cert)
             # extract output filepath from base URL
             self.fileName = url.split('/')[-1]
 
         return u.read()
 
-    def writeToDisk(self, path=None, username=None, password=None):
+    def writeToDisk(self, path=None, username=None, password=None,
+                    headers=None, verify=True, cert=None):
         """
         Method to write an output of a WPS process to disk:
         it either retrieves the referenced file from the server, or write out the content of response embedded output.
@@ -1264,7 +1293,7 @@ class Output(InputOutput):
         """
 
         # Check if ExecuteResponse contains reference to server-side output
-        content = self.retrieveData(username, password)
+        content = self.retrieveData(username, password, headers=headers, verify=verify, cert=cert)
 
         # ExecuteResponse contain embedded output
         if content is "" and len(self.data) > 0:
