@@ -134,7 +134,8 @@ class ResponseWrapper(object):
 
     # @TODO: __getattribute__ for poking at response
 
-def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None, verify=True):
+def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None,
+            verify=True, cert=None):
     """
     Function to open URLs.
 
@@ -142,7 +143,10 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     Also handles cookies and simple user password authentication.
 
     :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
-    :param verify: (optional) whether the SSL cert will be verified. A CA_BUNDLE path can also be provided. Defaults to ``True``.
+    :param verify: (optional) whether the SSL cert will be verified. A CA_BUNDLE path can also be provided.
+                   Defaults to ``True``.
+    :param cert: (optional) A file with a client side certificate for SSL authentication
+                 to send with the :class:`Request`.
     """
 
     headers = headers if headers is not None else {}
@@ -182,6 +186,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
                            url_base,
                            headers=headers,
                            verify=verify,
+                           cert=cert,
                            **rkwargs)
 
     if req.status_code in [400, 401]:
