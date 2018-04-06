@@ -67,3 +67,23 @@ Changes
 ------------------
 - Change license to BSD.
 - Added service contact metadata.
+
+0.1.0 (2006-10-19)
+------------------
+- New and improved metadata API.
+- Wrappers for GetCapabilities, WMS GetMap, and WFS GetFeature requests.
+- Doctests.
+
+0.0.1 (2006-07-30)
+------------------
+- Brought OWSLib up out of the PCL trunk into its own space.
+- Updated the testing frameworm.
+- Initial test coverage:
+
+ Name   Stmts   Exec   Cover   Missing
+====== ======= ====== ======= =========
+wms       105     68     64%     36, 41-48, 61-63, 114-118, 125-155, 172, 203-205
+wfs        74     69     93%    146, 166, 199-201
+wmc       111      0      0%     33-220
+TOTAL     290    137     47%
+====== ======= ====== ======= =========

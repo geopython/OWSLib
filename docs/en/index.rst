@@ -97,9 +97,9 @@ Anaconda:
 
 .. note::
 
-   The OWSLib conda packages are provided by the community, not OSGEO, and therefore there may be 
+   The OWSLib conda packages are provided by the community, not OSGEO, and therefore there may be
    multiple packages available.  To search all conda channels: http://anaconda.org/search?q=type%3Aconda+owslib
-   However usually conda-forge will be the most up-to-date. 
+   However usually conda-forge will be the most up-to-date.
 
 .. code-block:: bash
 
@@ -320,7 +320,7 @@ Search for bird data:
   {'matches': 101, 'nextrecord': 21, 'returned': 20}
   >>> for rec in csw.records:
   ...     print(csw.records[rec].title)
-  ... 
+  ...
   ALLSPECIES
   NatureServe Canada References
   Bird Studies Canada - BirdMap WMS
@@ -783,7 +783,7 @@ POSSIBILITY OF SUCH DAMAGE.
 Credits
 =======
 
-.. include:: ../../CREDITS.txt
+.. include:: ../../AUTHORS.rst
 
 .. _`Open Geospatial Consortium`: http://www.opengeospatial.org/
 .. _`OGC WMS`: http://www.opengeospatial.org/standards/wms

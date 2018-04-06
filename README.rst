@@ -1,6 +1,14 @@
 OWSLib
 ======
 
+.. image:: https://travis-ci.org/geopython/OWSLib.svg?branch=master
+   :target: https://travis-ci.org/geopython/OWSLib
+   :alt: Travis Build
+
+.. image:: https://img.shields.io/github/license/geopython/OWSLib.svg
+    :target: https://github.com/geopython/OWSLib/blob/master/LICENSE.txt
+    :alt: GitHub license
+
 OWSLib is a Python package for client programming with Open Geospatial
 Consortium (OGC) web service (hence OWS) interface standards, and their
 related content models.
@@ -14,6 +22,11 @@ Dependencies
 ------------
 
 OWSLib requires elementtree (standard in 2.5 as xml.etree) or lxml.
+
+Installation
+------------
+
+See http://geopython.github.io/OWSLib/#installation
 
 Usage
 -----
