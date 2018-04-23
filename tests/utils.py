@@ -76,9 +76,13 @@ def sorted_url_query(url):
     return sorted(urlparse(url).query.split("&"))
 
 
-def service_ok(url, timeout=2):
+def service_ok(url, timeout=5):
     try:
         ok = requests.get(url, timeout=timeout).ok
     except requests.exceptions.ReadTimeout:
+        ok = False
+    except requests.exceptions.ConnectTimeout:
+        ok = False
+    except Exception:
         ok = False
     return ok
