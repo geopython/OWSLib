@@ -20,9 +20,9 @@ Imports
     >>> wcs.identification.version
     '2.0.1'
     >>> wcs.identification.title
-    'rasdaman'
+    'Marine Science Data Service'
     >>> wcs.identification.abstract
-    'rasdaman server - free download from www.rasdaman.org'
+    'Marine Science Data Service'
     >>> wcs.identification.keywords
     []
     >>> wcs.identification.fees
@@ -46,14 +46,14 @@ Print the ids of all layers (actually just the first 3):
 
 #or even simpler you can do:
     >>> cvg=wcs['CCI_V2_monthly_chlor_a']
-    
+
     # seems to not be an equivelent in wcs 2.0
     #>>> cvg.boundingBoxWGS84
     #(-153.58891112103777, 11.747698396806157, -48.598408556239576, 57.484319872365305)
 
     >>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
     True
-    
+
     # seems to not be an equivelent in wcs 2.0
     #>>> [y for y in (x.getcode() for x in cvg.supportedCRS) if y]
     #['EPSG:9802']
