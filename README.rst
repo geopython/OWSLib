@@ -9,6 +9,10 @@ OWSLib
     :target: https://github.com/geopython/OWSLib/blob/master/LICENSE.txt
     :alt: GitHub license
 
+.. image:: https://badges.gitter.im/geopython/OWSLib.svg
+    :target: https://gitter.im/geopython/OWSLib?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+    :alt: Join the chat at https://gitter.im/geopython/OWSLib
+
 OWSLib is a Python package for client programming with Open Geospatial
 Consortium (OGC) web service (hence OWS) interface standards, and their
 related content models.
