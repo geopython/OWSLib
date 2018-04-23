@@ -18,18 +18,19 @@ from owslib.etree import etree
 from owslib import util
 from owslib.namespaces import Namespaces
 
+from owslib.util import log
+
 def decode_atomxml(xmldata):
     """
     here parse atom xml to an instance of OWC:Context
-    
     :param xmldata:
     :return: OWCContext
     """
 
+
 def encode_atomxml(obj):
     """
     encode instance of OWCContext into atom xml encoding
-    
     :param obj:
     :return: atomxml
     """

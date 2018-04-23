@@ -260,7 +260,7 @@ class WebProcessingService(object):
         # build metadata objects
         return self._parseProcessMetadata(rootElement)
 
-    def execute(self, identifier, inputs, output=None, request=None, response=None):
+    def execute(self, identifier, inputs, output=None, async=True, request=None, response=None):
         """
         Submits a WPS process execution request.
         Returns a WPSExecution object, which can be used to monitor the status of the job, and ultimately retrieve the result.
@@ -268,6 +268,7 @@ class WebProcessingService(object):
         identifier: the requested process identifier
         inputs: list of process inputs as (key, value) tuples (where value is either a string for LiteralData, or an object for ComplexData)
         output: optional identifier for process output reference (if not provided, output will be embedded in the response)
+        async: flag if process is run sync or async.
         request: optional pre-built XML request document, prevents building of request from other arguments
         response: optional pre-built XML response document, prevents submission of request to live WPS server
         """
@@ -280,7 +281,7 @@ class WebProcessingService(object):
 
         # build XML request from parameters
         if request is None:
-            requestElement = execution.buildRequest(identifier, inputs, output)
+            requestElement = execution.buildRequest(identifier, inputs, output, async=async)
             request = etree.tostring(requestElement)
             execution.request = request
         log.debug(request)
@@ -539,7 +540,7 @@ class WPSExecution():
         self.dataInputs = []
         self.processOutputs = []
 
-    def buildRequest(self, identifier, inputs=[], output=None):
+    def buildRequest(self, identifier, inputs=[], output=None, async=True):
         """
         Method to build a WPS process request.
         identifier: the requested process identifier
@@ -548,6 +549,10 @@ class WPSExecution():
             - ComplexData inputs are expressed as (key, object) tuples, where key is the input identifier,
               and the object must contain a 'getXml()' method that returns an XML infoset to be included in the WPS request
         output: optional identifier if process output is to be returned as a hyperlink reference
+        output: array of outputs which should be returned:
+                expressed as tuples (key, as_ref) where key is the output identifier and as_ref is True
+                if output should be returned as reference.
+        async: flag if process is run sync or async.
         """
 
         #<wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0"
@@ -635,7 +640,8 @@ class WPSExecution():
             responseDocumentElement = etree.SubElement(
                 responseFormElement, nspath_eval(
                     'wps:ResponseDocument', namespaces),
-                                                       attrib={'storeExecuteResponse': 'true', 'status': 'true'})
+                attrib={'storeExecuteResponse': str(async).lower(), 'status': str(async).lower()})
+            # keeping backward compability of output parameter
             if isinstance(output, str):
                 self._add_output(
                     responseDocumentElement, output, asReference=True)
@@ -651,7 +657,7 @@ class WPSExecution():
     def _add_output(self, element, identifier, asReference=False):
         outputElement = etree.SubElement(
             element, nspath_eval('wps:Output', namespaces),
-                                                       attrib={'asReference': str(asReference).lower()})
+            attrib={'asReference': str(asReference).lower()})
         outputIdentifierElement = etree.SubElement(
             outputElement, nspath_eval('ows:Identifier', namespaces)).text = identifier
 
