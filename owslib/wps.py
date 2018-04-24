@@ -260,7 +260,7 @@ class WebProcessingService(object):
         # build metadata objects
         return self._parseProcessMetadata(rootElement)
 
-    def execute(self, identifier, inputs, output=None, async=True, request=None, response=None):
+    def execute(self, identifier, inputs, output=None, async=True, lineage=False, request=None, response=None):
         """
         Submits a WPS process execution request.
         Returns a WPSExecution object, which can be used to monitor the status of the job, and ultimately retrieve the result.
@@ -269,6 +269,8 @@ class WebProcessingService(object):
         inputs: list of process inputs as (key, value) tuples (where value is either a string for LiteralData, or an object for ComplexData)
         output: optional identifier for process output reference (if not provided, output will be embedded in the response)
         async: flag if process is run sync or async.
+        lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
+                 OutputDefinitions elements.
         request: optional pre-built XML request document, prevents building of request from other arguments
         response: optional pre-built XML response document, prevents submission of request to live WPS server
         """
@@ -281,7 +283,7 @@ class WebProcessingService(object):
 
         # build XML request from parameters
         if request is None:
-            requestElement = execution.buildRequest(identifier, inputs, output, async=async)
+            requestElement = execution.buildRequest(identifier, inputs, output, async=async, lineage=lineage)
             request = etree.tostring(requestElement)
             execution.request = request
         log.debug(request)
@@ -540,7 +542,7 @@ class WPSExecution():
         self.dataInputs = []
         self.processOutputs = []
 
-    def buildRequest(self, identifier, inputs=[], output=None, async=True):
+    def buildRequest(self, identifier, inputs=[], output=None, async=True, lineage=False):
         """
         Method to build a WPS process request.
         identifier: the requested process identifier
@@ -553,6 +555,8 @@ class WPSExecution():
                 expressed as tuples (key, as_ref) where key is the output identifier and as_ref is True
                 if output should be returned as reference.
         async: flag if process is run sync or async.
+        lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
+                 OutputDefinitions elements.
         """
 
         #<wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0"
@@ -628,7 +632,7 @@ class WPSExecution():
                     'input type of "%s" parameter is unknown' % key)
 
         # <wps:ResponseForm>
-        #   <wps:ResponseDocument storeExecuteResponse="true" status="true">
+        #   <wps:ResponseDocument storeExecuteResponse="true" status="true" lineage="false">
         #     <wps:Output asReference="true">
         #       <ows:Identifier>OUTPUT</ows:Identifier>
         #     </wps:Output>
@@ -640,7 +644,9 @@ class WPSExecution():
             responseDocumentElement = etree.SubElement(
                 responseFormElement, nspath_eval(
                     'wps:ResponseDocument', namespaces),
-                attrib={'storeExecuteResponse': str(async).lower(), 'status': str(async).lower()})
+                attrib={'storeExecuteResponse': str(async).lower(),
+                        'status': str(async).lower(),
+                        'lineage': str(lineage).lower()})
             # keeping backward compability of output parameter
             if isinstance(output, str):
                 self._add_output(
