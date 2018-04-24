@@ -479,21 +479,42 @@ def getNamespace(element):
     else:
         return ""
 
-def build_get_url(base_url, params):
-    ''' Utility function to build a full HTTP GET URL from the service base URL and a dictionary of HTTP parameters. '''
 
-    qs = []
+def build_get_url(base_url, params, overwrite=False):
+    ''' Utility function to build a full HTTP GET URL from the service base URL and a dictionary of HTTP parameters.
+
+    TODO: handle parameters case-insensitive?
+
+    @param overwrite: boolean flag to allow overwrite of parameters of the base_url (default: False)
+    '''
+
+    qs_base = []
     if base_url.find('?') != -1:
-        qs = cgi.parse_qsl(base_url.split('?')[1])
+        qs_base = cgi.parse_qsl(base_url.split('?')[1])
+
+    qs_params = []
+    for key, value in six.iteritems(params):
+        qs_params.append((key, value))
+
+    qs = qs_add = []
+    if overwrite is True:
+        # all params and additional base
+        qs = qs_params
+        qs_add = qs_base
+    else:
+        # all base and additional params
+        qs = qs_base
+        qs_add = qs_params
 
     pars = [x[0] for x in qs]
 
-    for key,value in six.iteritems(params):
+    for key, value in qs_add:
         if key not in pars:
-            qs.append( (key,value) )
+            qs.append((key, value))
 
     urlqs = urlencode(tuple(qs))
     return base_url.split('?')[0] + '?' + urlqs
+
 
 def dump(obj, prefix=''):
     '''Utility function to print to standard output a generic object with all its attributes.'''
