@@ -90,7 +90,7 @@ from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
-from owslib.util import (testXMLValue, build_get_url, clean_ows_url, dump, getTypedValue,
+from owslib.util import (testXMLValue, testXMLAttribute, build_get_url, clean_ows_url, dump, getTypedValue,
                          getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
@@ -301,6 +301,13 @@ class WebProcessingService(object):
 
         return execution
 
+    def getOperationByName(self, name):
+        """Return a named content item."""
+        for item in self.operations:
+            if item.name == name:
+                return item
+        raise KeyError("No operation named %s" % name)
+
     def _parseProcessMetadata(self, rootElement):
         """
         Method to parse a <ProcessDescriptions> XML element and returned the constructed Process object
@@ -405,7 +412,7 @@ class WPSReader(object):
 
         if method == 'Get':
             # full HTTP request url
-            request_url = build_get_url(url, data)
+            request_url = build_get_url(url, data, overwrite=True)
             log.debug(request_url)
 
             # split URL into base url and query string to use utility function
@@ -541,6 +548,7 @@ class WPSExecution():
         self.statusLocation = None
         self.dataInputs = []
         self.processOutputs = []
+        self.creationTime = None
 
     def buildRequest(self, identifier, inputs=[], output=None, async=True, lineage=False):
         """
@@ -695,15 +703,20 @@ class WPSExecution():
             response = reader.readFromString(response)
 
         # store latest response
-        self.response = etree.tostring(response)
-        log.debug(self.response)
+        try:
+            xml = etree.tostring(response)
+        except Exception:
+            log.error("Could not parse XML response.")
+        else:
+            self.response = xml
+            log.debug(self.response)
 
-        self.parseResponse(response)
+            self.parseResponse(response)
 
-        # sleep given number of seconds
-        if self.isComplete() == False:
-            log.info('Sleeping %d seconds...' % sleepSecs)
-            sleep(sleepSecs)
+            # sleep given number of seconds
+            if self.isComplete() is False:
+                log.info('Sleeping %d seconds...' % sleepSecs)
+                sleep(sleepSecs)
 
     def getStatus(self):
         return self.status
@@ -859,6 +872,9 @@ class WPSExecution():
         # </ns0:Status>
         statusEl = root.find(nspath('Status/*', ns=wpsns))
         self.status = statusEl.tag.split('}')[1]
+        # creationTime attribute
+        element = root.find(nspath('Status', ns=wpsns))
+        self.creationTime = testXMLAttribute(element, 'creationTime')
         # get progress info
         try:
             percentCompleted = int(statusEl.get('percentCompleted'))
