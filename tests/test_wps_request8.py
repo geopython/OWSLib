@@ -16,7 +16,7 @@ def test_wps_request8():
 
     # Build XML request for WPS process execution
     execution = WPSExecution()
-    requestElement = execution.buildRequest(processid, inputs, output=outputs, async=True)
+    requestElement = execution.buildRequest(processid, inputs, output=outputs, async=True, lineage=True)
     request = etree.tostring(requestElement)
 
     # Compare to cached XML request
