@@ -19,3 +19,4 @@ pytest_cov-*
 *.tif
 tester.py
 tags
+.idea/

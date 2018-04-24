@@ -1,0 +1,166 @@
+{
+  "type": "FeatureCollection",
+  "id": "http://ows-9.compusult.net/wes/serviceManagerCSW/csw/0006276a-4f6e-47c1-94bb-f604245fac57/",
+  "bbox": [-180.0, -90.0, 180.0, 90.0],
+  "properties": {
+    "lang": "en",
+    "title": "Compusult CSW",
+    "subtitle": "An ATOM record version of Compusult's CSW using OWS-Context",
+    "generator": {
+      "title": "Web Enterprise Suite"
+    },
+    "updated": "2013-01-02T15:24:24.446-03:30",
+    "authors": [],
+    "categories": [],
+    "links": {
+      "profiles": [
+        {
+          "rel": "profile",
+          "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
+          "title": "This file is compliant with version 1.0 of OGC Context"
+        }
+      ]
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "http://ows-9.compusult.net/wes/serviceManagerCSW/csw/http://ows-9.compusult.net/wes/serviceManagerCSW/csw/9496276a-4f6e-47c1-94bb-f604245fac57/",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -180.0,
+              -90.0
+            ],
+            [
+              180.0,
+              -90.0
+            ],
+            [
+              180.0,
+              90.0
+            ],
+            [
+              -180.0,
+              90.0
+            ],
+            [
+              -180.0,
+              -90.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "gml:AbstractFeature",
+        "updated": "2013-01-02T15:24:24.446-03:30",
+        "rights": "Copyright (c) 2012. Some rights reserved. This feed licensed under a Creative Commons Attribution 3.0 License.",
+        "authors": [
+          {
+            "name": "interactive-instruments"
+          }
+        ],
+        "categories": [{
+          "scheme" : "http://www.earthobservations.org/category",
+          "term" : "GEOSSDataCore",
+          "label" : "GEOSS Data Collection of Open Resources for Everyone"
+        }],
+        "links": {
+          "alternates" : [{
+            "href" : "http://www.acme.com/products/algal20090123090856.html",
+            "type" : "text/html",
+            "title" : "Information for the entry 2009-01-23 09:08:56"
+          }],
+          "previews" : [],
+          "data" : [],
+          "via" : [{
+            "href" : "http://www.acme.com/products/algal20090123090856.xml",
+            "type" : "application/xml",
+            "length" : 435,
+            "lang" : "es",
+            "title" : "XML metadata file for the entry 2009-01-23 09:08:56"
+          }]
+        },
+        "active": false,
+        "minscaledenominator": 100.0,
+        "maxscaledenominator": 1000000.0,
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecords",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "http://ows-9.compusult.net/wes/serviceManagerCSW/csw",
+                "request": {
+                  "type": "application/xml",
+                  "content": "<csw:GetRecords maxRecords=\"10\" outputFormat=\"application/xml\" outputSchema=\"http://www.isotc211.org/2005/gmd\" resultType=\"results\" service=\"CSW\" startPosition=\"1\" version=\"2.0.2\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:csw=\"http://www.opengis.net/cat/csw/2.0.2\"><csw:Query typeNames=\"csw:Record Service Association\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:csw=\"http://www.opengis.net/cat/csw/2.0.2\"><csw:ElementSetName typeNames=\"csw:Record\" xmlns:csw=\"http://www.opengis.net/cat/csw/2.0.2\">full</csw:ElementSetName><csw:Constraint version=\"1.1.0\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:csw=\"http://www.opengis.net/cat/csw/2.0.2\"><ogc:Filter xmlns:ogc=\"http://www.opengis.net/ogc\"><ogc:PropertyIsEqualTo xmlns:ogc=\"http://www.opengis.net/ogc\"><ogc:PropertyName xmlns:ogc=\"http://www.opengis.net/ogc\">csw:Record/@id</ogc:PropertyName><ogc:Literal xmlns:ogc=\"http://www.opengis.net/ogc\">9496276a-4f6e-47c1-94bb-f604245fac57</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></csw:Constraint></csw:Query></csw:GetRecords>"
+                },
+                "result": {}
+              }
+            ],
+            "contents": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wfs",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&service=WFS"
+              },
+              {
+                "code": "GetFeature",
+                "method": "GET",
+                "type": "text/xml; subtype=gml/3.1.1",
+                "href": "http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&service=WFS&typename=gml:AbstractFeature&outputFormat=text/xml; subtype=gml/3.1.1&version=1.1.0"
+              },
+              {
+                "code": "GetFeature",
+                "method": "GET",
+                "type": "text/xml; subtype=gml/3.2.1",
+                "href": "http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&service=WFS&typename=gml:AbstractFeature&outputFormat=text/xml; subtype=gml/3.2.1&version=1.1.0"
+              },
+              {
+                "code": "GetFeature",
+                "method": "GET",
+                "type": "application/vnd.google-earth.kml+xml",
+                "href": "http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&request=GetFeature&service=WFS&typename=gml:AbstractFeature&outputFormat=application/vnd.google-earth.kml+xml&version=1.1.0"
+              }
+            ],
+            "contents": [
+              {
+                "type": "application/gml+xml",
+                "href": "http://data.roads.wherever.com/wfs?service=WFS&request=GetFeature&typename=my_srf:RoadCollection",
+                "title": "ID_ROADS1:M30"
+              }
+            ],
+            "styles" : [{
+              "name": "Simple Line",
+              "title": "SLD Cook Book: Simple Line",
+              "abstract": "SLD Cook Book: Simple Line extracted from http://docs.geoserver.org/latest/en/user/_downloads/line_simpleline.sld",
+              "default": true,
+              "legendURL": "http://docs.geoserver.org/latest/en/user/_images/line_simpleline1.png",
+              "content": {
+                "type": "application/vnd.ogc.sld+xml",
+                "content" : "<StyledLayerDescriptor version=\"1.0.0\"\n xmlns=\"http://www.opengis.net/sld\" xmlns:ogc=\"http://www.opengis.net/ogc\"\n xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n xsi:schemaLocation=\"http://www.opengis.net/sld\n   ../../../sld/1.1/StyledLayerDescriptor.xsd\">\n<NamedLayer><Name>Simple Line</Name>\n<UserStyle><Title>SLD Cook Book: Simple Line</Title>\n<FeatureTypeStyle><Rule><LineSymbolizer><Stroke>\n<CssParameter name=\"stroke\">#000000</CssParameter>\n<CssParameter name=\"strokewidth\">3</CssParameter></Stroke></LineSymbolizer></Rule></FeatureTypeStyle>\n</UserStyle></NamedLayer></StyledLayerDescriptor>",
+                "uuid": "012c7aeb-a822-49d7-8a66-e77fa7137240"
+              },
+              "uuid": "b9ea2498-fb32-40ef-91ef-0ba00060fe64"
+              }]
+          }
+        ]
+      }
+    }
+  ]
+}
