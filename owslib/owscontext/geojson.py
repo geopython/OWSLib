@@ -18,14 +18,27 @@ import json
 from datetime import datetime
 
 
-def skip_nulls(o):
+def skip_nulls(dict_obj):
     """
     removes dict key/val pairs where value is None, not needed in the JSON
-    :param o:
+    :param o: needs to be dict
     :return:
     """
-    reduced = {k: v for k, v in o.items() if v is not None}
+    reduced = {k: v for k, v in dict_obj.items() if v is not None}
     return reduced
+
+
+def skip_nulls_rec(dict_obj):
+    result = {}
+    for k, v in dict_obj.items():
+        if v is None:
+            pass
+        else:
+            if not isinstance(v, dict):
+                result.update({k: v})
+            else:
+                result.update(skip_nulls_rec(v))
+    return result
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -47,7 +60,7 @@ def decode_json(jsondata):
     here parse json to an instance of OWC:Context
 
     :param jsondata:
-    :return: OWCContext
+    :return: dict
     """
     return json.loads(jsondata, object_hook=skip_nulls)
 
@@ -59,6 +72,6 @@ def encode_json(obj):
     :param obj:
     :return: JSON
     """
-    jsdata = json.dumps(vars(skip_nulls(obj)), cls=DateTimeEncoder)
+    jsdata = json.dumps(skip_nulls_rec(obj), cls=DateTimeEncoder)
 
     return jsdata

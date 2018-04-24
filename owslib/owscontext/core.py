@@ -12,7 +12,7 @@ Conceptual model base classes: http://www.opengeospatial.org/standards/owc
 OGC OWS Context Conceptual Model 1.0 (12-080r2)
 """
 
-from __future__ import absolute_import, division, print_function
+from __future__ import (absolute_import, division, print_function)
 
 from datetime import datetime
 
@@ -37,7 +37,7 @@ class TimeIntervalFormat(object):
         self.start = start
         self.end = end
 
-    def to_str(self):
+    def __str__(self):
         return self.start.isoformat() + "Z/" + self.end.isoformat() + "Z"
 
 
@@ -120,8 +120,12 @@ class OwcContext(object):
 
         # TODO check and validate? how much?
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        """
+
+        :return: dict of obj
+        """
+        return {
             "type": "FeatureCollection",
             "id": self.id,
             "bbox": self.area_of_interest,
@@ -131,35 +135,41 @@ class OwcContext(object):
                 "abstract": self.subtitle,
                 "updated": self.update_date,
                 "date":
-                    None if self.time_interval_of_interest is None
-                    else self.time_interval_of_interest.to_str(),
+                    None if self.time_interval_of_interest is None else
+                    str(self.time_interval_of_interest),
                 "rights": self.rights,
                 "authors":
-                    [] if len(self.authors) <= 0
-                    else [obj.encode_json() for obj in self.authors],
+                    [] if len(self.authors) <= 0 else
+                    [obj.to_dict() for obj in self.authors],
                 "publisher": self.publisher,
                 "display":
-                    None if self.creator_display is None
-                    else self.creator_display.encode_json(),
+                    None if self.creator_display is None else
+                    self.creator_display.to_dict(),
                 "generator":
-                    None if self.creator_application is None
-                    else self.creator_application.encode_json(),
+                    None if self.creator_application is None else
+                    self.creator_application.to_dict(),
                 "categories":
-                    [] if len(self.keywords) <= 0
-                    else [obj.encode_json() for obj in self.keywords],
+                    [] if len(self.keywords) <= 0 else
+                    [obj.to_dict() for obj in self.keywords],
                 "links": {
                     "profiles":
-                        [] if len(self.spec_reference) <= 0
-                        else [obj.encode_json() for obj in self.spec_reference],
+                        [] if len(self.spec_reference) <= 0 else
+                        [obj.to_dict() for obj in self.spec_reference],
                     "via":
-                        [] if len(self.context_metadata) <= 0
-                        else [obj.encode_json() for obj in self.context_metadata]
+                        [] if len(self.context_metadata) <= 0 else
+                        [obj.to_dict() for obj in self.context_metadata]
                     },
                 "features":
-                    [] if len(self.resources) <= 0
-                    else [obj.encode_json() for obj in self.resources]
+                    [] if len(self.resources) <= 0 else
+                    [obj.to_dict() for obj in self.resources]
             }
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcResource(object):
@@ -251,8 +261,8 @@ class OwcResource(object):
         self.max_scale_denominator = max_scale_denominator
         self.folder = folder
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "type": "Feature",
             "id": self.id,
             "geometry": self.geospatial_extent,
@@ -261,42 +271,48 @@ class OwcResource(object):
                 "abstract": self.subtitle,
                 "updated": self.update_date,
                 "date":
-                    None if self.temporal_extent is None
-                    else self.temporal_extent.to_str(),
+                    None if self.temporal_extent is None else
+                    str(self.temporal_extent),
                 "authors":
-                    [] if len(self.authors) <= 0
-                    else [obj.encode_json() for obj in self.authors],
+                    [] if len(self.authors) <= 0 else
+                    [obj.to_dict() for obj in self.authors],
                 "publisher": self.publisher,
                 "rights": self.rights,
                 "categories":
-                    [] if len(self.keywords) <= 0
-                    else [obj.encode_json() for obj in self.keywords],
+                    [] if len(self.keywords) <= 0 else
+                    [obj.to_dict() for obj in self.keywords],
                 "links": {
                     "alternates":
-                        [] if len(self.content_description) <= 0
-                        else [obj.encode_json() for obj in
-                              self.content_description],
+                        [] if len(self.content_description) <= 0 else
+                        [obj.to_dict() for obj in
+                         self.content_description],
                     "previews":
-                        [] if len(self.preview) <= 0
-                        else [obj.encode_json() for obj in self.preview],
+                        [] if len(self.preview) <= 0 else
+                        [obj.to_dict() for obj in self.preview],
                     "data":
-                        [] if len(self.content_by_ref) <= 0
-                        else [obj.encode_json() for obj in
-                              self.content_by_ref],
+                        [] if len(self.content_by_ref) <= 0 else
+                        [obj.to_dict() for obj in
+                         self.content_by_ref],
                     "via":
-                        [] if len(self.resource_metadata) <= 0
-                        else [obj.encode_json() for obj in
-                              self.resource_metadata]
+                        [] if len(self.resource_metadata) <= 0 else
+                        [obj.to_dict() for obj in
+                         self.resource_metadata]
                     },
                 "offerings":
-                    [] if len(self.offerings) <= 0
-                    else [obj.encode_json() for obj in self.offerings],
+                    [] if len(self.offerings) <= 0 else
+                    [obj.to_dict() for obj in self.offerings],
                 "active": self.active,
                 "minscaledenominator": self.min_scale_denominator,
                 "maxscaledenominator": self.max_scale_denominator,
                 "folder": self.folder
             }
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcCreator(object):
@@ -351,12 +367,18 @@ class OwcCreatorApplication(object):
         self.uri = uri
         self.version = version
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "title": self.title,
             "uri": self.uri,
             "version": self.version
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcCreatorDisplay(object):
@@ -384,12 +406,18 @@ class OwcCreatorDisplay(object):
         self.pixel_height = pixel_height
         self.mm_per_pixel = mm_per_pixel
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "pixelWidth": self.pixel_width,
             "pixelHeight": self.pixel_height,
             "mm_per_pixel": self.mm_per_pixel
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcLink(object):
@@ -446,15 +474,21 @@ class OwcLink(object):
         self.title = title
         self.length = length
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "href": self.href,
             "type": self.mimetype,
             "length": self.length,
             "lang": self.lang,
             "title": self.title,
             "rel": self.rel
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcCategory(object):
@@ -478,12 +512,18 @@ class OwcCategory(object):
         self.scheme = scheme
         self.label = label
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "scheme": self.scheme,
             "term": self.term,
             "label": self.label
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcAuthor(object):
@@ -507,12 +547,18 @@ class OwcAuthor(object):
         self.email = email
         self.uri = uri
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "name": self.name,
             "email": self.email,
             "uri": self.uri
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcOffering(object):
@@ -543,16 +589,22 @@ class OwcOffering(object):
         self.contents = contents
         self.styles = styles
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "code": self.offering_code,
-            "operations": [] if len(self.operations) <= 0
-            else [obj.encode_json() for obj in self.operations],
-            "contents": [] if len(self.contents) <= 0
-            else [obj.encode_json() for obj in self.contents],
-            "styles": [] if len(self.styles) <= 0
-            else [obj.encode_json() for obj in self.styles]
-        })
+            "operations": [] if len(self.operations) <= 0 else
+            [obj.to_dict() for obj in self.operations],
+            "contents": [] if len(self.contents) <= 0 else
+            [obj.to_dict() for obj in self.contents],
+            "styles": [] if len(self.styles) <= 0 else
+            [obj.to_dict() for obj in self.styles]
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcOperation(object):
@@ -591,17 +643,23 @@ class OwcOperation(object):
         self.request = request
         self.result = result
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "code": self.operations_code,
             "method": self.http_method,
             "type": self.mimetype,
             "href": self.request_url,
             "request":
-                None if self.request is None else self.request.encode_json(),
+                None if self.request is None else self.request.to_dict(),
             "result":
-                None if self.result is None else self.result.encode_json()
-        })
+                None if self.result is None else self.result.to_dict()
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcStyleSet(object):
@@ -640,16 +698,22 @@ class OwcStyleSet(object):
         self.legend_url = legend_url
         self.content = content
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "name": self.name,
             "title": self.title,
             "abstract": self.subtitle,
             "default": self.is_default,
             "legendURL": self.legend_url,
             "content":
-                None if self.content is None else self.content.encode_json()
-        })
+                None if self.content is None else self.content.to_dict()
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
 
 
 class OwcContent(object):
@@ -679,10 +743,16 @@ class OwcContent(object):
         self.url = url
         self.title = title
 
-    def to_json(self):
-        return encode_json({
+    def to_dict(self):
+        return {
             "type": self.mimetype,
             "url": self.url,
             "content": self.content,
             "title": self.title
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_json(self):
+        return encode_json(self.to_dict())
