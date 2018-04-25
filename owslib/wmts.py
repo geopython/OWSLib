@@ -190,7 +190,7 @@ class WebMapTileService(object):
         if not self._capabilities:
             reader = WMTSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
-                )
+            )
             xml = reader.read(self.url, self.vendor_kwargs)
             self._capabilities = ServiceMetadata(xml)
         return self._capabilities
@@ -225,7 +225,7 @@ class WebMapTileService(object):
         def gather_layers(parent_elem, parent_metadata):
             for index, elem in enumerate(parent_elem.findall(_LAYER_TAG)):
                 cm = ContentMetadata(
-                    elem, parent=parent_metadata, index=index+1,
+                    elem, parent=parent_metadata, index=index + 1,
                     parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
@@ -709,8 +709,7 @@ class ContentMetadata:
         # probably be shared code
 
         self._tilematrixsets = [f.text.strip() for f in
-                                elem.findall(_TILE_MATRIX_SET_LINK_TAG + '/' +
-                                             _TILE_MATRIX_SET_TAG)]
+                                elem.findall(_TILE_MATRIX_SET_LINK_TAG + '/' + _TILE_MATRIX_SET_TAG)]
 
         link_elements = elem.findall(_TILE_MATRIX_SET_LINK_TAG)
         tile_matrix_set_links = TileMatrixSetLink.from_elements(link_elements)
@@ -759,7 +758,7 @@ class ContentMetadata:
                     style['format'] = legendURL.attrib.get('format')
 
             keywords = [f.text for f in s.findall(
-                        _KEYWORDS_TAG+'/'+_KEYWORD_TAG)]
+                        _KEYWORDS_TAG + '/' + _KEYWORD_TAG)]
             if keywords:  # keywords is a list []
                 style['keywords'] = keywords
 
@@ -768,7 +767,7 @@ class ContentMetadata:
         self.formats = [f.text for f in elem.findall(_FORMAT_TAG)]
 
         self.keywords = [f.text for f in elem.findall(
-                         _KEYWORDS_TAG+'/'+_KEYWORD_TAG)]
+                         _KEYWORDS_TAG + '/' + _KEYWORD_TAG)]
         self.infoformats = [f.text for f in elem.findall(_INFO_FORMAT_TAG)]
 
         self.layers = []
