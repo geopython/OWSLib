@@ -19,6 +19,7 @@ from datetime import datetime
 
 # from owslib.util import log
 
+
 def skip_nulls(dict_obj):
     """
     drops key/val pairs where js value is null, not needed in the JSON
@@ -36,15 +37,11 @@ def skip_nulls_rec(dict_obj):
     :param o: needs to be dict
     :return: the trimed dict, or exceptionally the value if it wasn't a dict
     """
-    # log.debug("skip_nulls_rec(dict_obj): %r.", dict_obj)
     if not isinstance(dict_obj, dict):
         return dict_obj
     else:
         result = {}
         for k, v in dict_obj.items():
-            # if k == "date":
-            #     ts = datetime.now().timestamp()
-            #     log.debug("%s k: %s v: %s.", ts, k, v)
             if v is None:
                 pass
             else:
@@ -52,7 +49,6 @@ def skip_nulls_rec(dict_obj):
                     tmp = skip_nulls_rec(v)
                     result.update({k: tmp})
                 elif isinstance(v, list):
-                    # log.debug("test isinstance(v, list): %r.", v)
                     tmp = [skip_nulls_rec(o) for o in v]
                     result.update({k: tmp})
                 else:
@@ -75,9 +71,6 @@ def extract_p(path, dict_obj, default):
         try:
             # dict.get() might make KeyError exception unnecessary
             tmp_iter = tmp_iter.get(key, default)
-            if key == "date":
-                ts = datetime.now().timestamp()
-                # log.debug("%s k: %s v: %s.", ts, key, tmp_iter)
         except KeyError:
             return default
     return tmp_iter

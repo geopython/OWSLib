@@ -18,7 +18,8 @@ from owslib.etree import etree
 from owslib import util
 from owslib.namespaces import Namespaces
 
-from owslib.util import log
+# from owslib.util import log
+
 
 def decode_atomxml(xmldata):
     """

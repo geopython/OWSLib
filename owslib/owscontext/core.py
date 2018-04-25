@@ -14,7 +14,7 @@ OGC OWS Context Conceptual Model 1.0 (12-080r2)
 
 from __future__ import (absolute_import, division, print_function)
 
-from owslib.util import log
+# from owslib.util import log
 from datetime import datetime
 
 from owslib.owscontext.atom import encode_atomxml, decode_atomxml
@@ -178,6 +178,7 @@ class OwcContext(object):
         return str(self.to_dict())
 
     def to_json(self):
+        # TODO add spec url conversion from generic to geojson
         return encode_json(self.to_dict())
 
     @classmethod
@@ -196,8 +197,10 @@ class OwcContext(object):
             authors=[OwcAuthor.from_dict(do) for do in
                      extract_p('properties.authors', d, [])],
             publisher=extract_p('properties.publisher', d, None),
-            creator_application=build_from_xp('properties.generator', d, OwcCreatorApplication, None),
-            creator_display=build_from_xp('properties.display', d, OwcCreatorDisplay, None),
+            creator_application=build_from_xp(
+                'properties.generator', d, OwcCreatorApplication, None),
+            creator_display=build_from_xp(
+                'properties.display', d, OwcCreatorDisplay, None),
             rights=extract_p('properties.rights', d, None),
             time_interval_of_interest=extract_p('properties.date', d, None),
             keywords=[OwcCategory.from_dict(do) for do in
@@ -209,6 +212,8 @@ class OwcContext(object):
     @classmethod
     def from_json(cls, jsondata):
         d = decode_json(jsondata)
+        # TODO add spec url conversion from geojson to generic
+        # TODO should validate if geojson Type == FeatureCollection?
         return cls.from_dict(d)
 
 
@@ -357,8 +362,6 @@ class OwcResource(object):
 
     @classmethod
     def from_dict(cls, d):
-        # ts=datetime.now().timestamp()
-        # log.debug("%s date from dict: %s :: %r", ts, extract_p('properties.date', d, None), d)
         return OwcResource(
             id=d['id'],
             geospatial_extent=extract_p('geometry', d, None),
@@ -394,8 +397,7 @@ class OwcResource(object):
     @classmethod
     def from_json(cls, jsondata):
         d = decode_json(jsondata)
-        # log.debug("d = decode_json(jsondata) 1 :: %s", jsondata)
-        # log.debug("d = decode_json(jsondata) 2 :: %r", d)
+        # TODO should validate if geojson Type == Feature?
         return cls.from_dict(d)
 
 

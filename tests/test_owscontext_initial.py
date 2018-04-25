@@ -11,16 +11,15 @@ initial test setup for Ows Context
 from __future__ import (absolute_import, division, print_function)
 
 from tests.utils import resource_file, setup_logging
-from tests.utils import scratch_file
 
 from owslib.owscontext import core, common, geojson
 from datetime import datetime
 
-logger = setup_logging(loglevel='DEBUG')
+logger = setup_logging(loglevel='INFO')
 
 def setup_module(module):
     """Setup for the owc test module"""
-    logger.info('Setup')
+    logger.debug('Setup logging in debug')
     # Do actual setup stuff here if necessary
     pass
 
@@ -88,7 +87,7 @@ def test_encode_json_small():
     assert len(owc1.keywords) == 0
 
     jsdata = owc1.to_json()
-    # logger.debug(jsdata)
+    logger.debug(jsdata)
     assert len(jsdata) > 0
 
 
@@ -100,7 +99,7 @@ def test_decode_json_small():
     owc2 = core.OwcContext.from_json(jsdata)
     assert owc2 is not None
     assert isinstance(owc2, core.OwcContext)
-    # logger.debug(owc2.to_dict())
+    logger.debug(owc2.to_dict())
     assert owc2.id == "http://ows.com/id1"
     assert owc2.language == "en"
     assert owc2.title == "my context collection 1"
@@ -111,7 +110,7 @@ def test_load_parse():
     jsondata = open(resource_file('owc1.geojson'), 'rb').read().decode('utf-8')
     # logger.debug(jsondata)
     my_dict = geojson.decode_json(jsondata)
-    # logger.debug(str(my_dict))
+    logger.debug(str(my_dict))
     assert my_dict is not None
 
 
@@ -149,7 +148,7 @@ def test_decode_full_json3():
     jsondata3 = open(resource_file('owc3.geojson'), 'rb').read().decode('utf-8')
     owc3 = core.OwcContext.from_json(jsondata3)
     assert owc3 is not None
-    # logger.debug(owc3.to_json())
+    logger.debug(owc3.to_json())
     re_owc3 = core.OwcContext.from_json(owc3.to_json())
     assert owc3.to_dict() == re_owc3.to_dict()
 
