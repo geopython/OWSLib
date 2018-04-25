@@ -15,6 +15,7 @@ install:
 script:
   - python -m pytest
   #- flake8 owslib/wmts.py
+  - flake8 owslib/wps.py
 after_success:
   - coveralls
 notifications:
