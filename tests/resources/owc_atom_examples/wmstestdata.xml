@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:georss="http://www.georss.org/georss" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" 
+	xml:lang="en">
+	<link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+	<id>http://www.opengis.net/owc/1.0/examples/geotiff</id>
+	<title>Shapefiles from WMS 1.3 CITE tests</title>
+	<author>
+		<name>Raj Singh</name>
+	</author>
+	<updated>2013-12-10T17:26:23Z</updated>
+	<georss:where>
+		<gml:Envelope srsName="EPSG:4326" srsDimension="2">
+			<gml:lowerCorner>-0.00421353 -0.00379659</gml:lowerCorner>
+			<gml:upperCorner>0.00628647 0.00350506</gml:upperCorner>
+		</gml:Envelope>
+	</georss:where>
+	<entry>
+		<id>http://www.rajsingh.org/wmstestdata/shapefile/Buildings</id>
+		<title>Buildings</title>
+		<updated>2013-12-10T17:26:23Z</updated>
+		<dc:publisher>OGC</dc:publisher>
+		<content type="text">Buildings from http://www.rajsingh.org/wmstestdata/shapefile/</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/shapefile">
+			<owc:content type="application/x-shapefile" href="http://www.rajsingh.org/wmstestdata/shapefile/Buildings.zip"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://www.rajsingh.org/wmstestdata/shapefile/Lakes</id>
+		<title>Lakes</title>
+		<updated>2013-12-10T17:26:23Z</updated>
+		<dc:publisher>OGC</dc:publisher>
+		<content type="text">Lakes from http://www.rajsingh.org/wmstestdata/shapefile/</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/shapefile">
+			<owc:content type="application/x-shapefile" href="http://www.rajsingh.org/wmstestdata/shapefile/Lakes.zip"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://www.rajsingh.org/wmstestdata/shapefile/Forests</id>
+		<title>Forests</title>
+		<updated>2013-12-10T17:26:23Z</updated>
+		<dc:publisher>OGC</dc:publisher>
+		<content type="text">Forests from http://www.rajsingh.org/wmstestdata/shapefile/</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/shapefile">
+			<owc:content type="application/x-shapefile" href="http://www.rajsingh.org/wmstestdata/shapefile/Forests.zip"/>
+		</owc:offering>
+	</entry>
+</feed>
+
