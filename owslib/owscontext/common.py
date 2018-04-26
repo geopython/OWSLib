@@ -164,6 +164,9 @@ def extract_p(path, dict_obj, default):
     :param default: a default return value if key error
     :return: extracted value
     """
+    if dict_obj is None:
+        return default
+
     keys = path.split('.')
     tmp_iter = dict_obj
     for key in keys:
