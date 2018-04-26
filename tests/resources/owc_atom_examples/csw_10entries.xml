@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:georss="http://www.georss.org/georss" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" 
+	xml:lang="en">
+										  
+	<link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+	<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/0006276a-4f6e-47c1-94bb-f604245fac57</id>
+	<title>Compusult CSW</title>
+	<subtitle>An ATOM record version of Compusult's CSW using OWS-Context</subtitle>
+	<generator uri="http://www.compusult.net">Web Enterprise Suite</generator>
+	<updated>2013-01-02T15:24:24.446-03:30</updated>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/http://ows-9.compusult.net/wes/serviceManagerCSW/csw/9496276a-4f6e-47c1-94bb-f604245fac57</id>
+		<title>gml:AbstractFeature</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope srsName="EPSG:4326">
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>9496276a-4f6e-47c1-94bb-f604245fac57</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=gml:AbstractFeature&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=gml:AbstractFeature&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=gml:AbstractFeature&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/f26a459a-b141-48cd-ab15-ea5eeaddeea0</id>
+		<title>tds:AircraftHangarGeopoint</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>f26a459a-b141-48cd-ab15-ea5eeaddeea0</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:AircraftHangarGeopoint&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:AircraftHangarGeopoint&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:AircraftHangarGeopoint&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/971d101a-c95d-481f-af52-a30b5d378c10</id>
+		<title>tds:AircraftHangarGeosurface</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>971d101a-c95d-481f-af52-a30b5d378c10</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:AircraftHangarGeosurface&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:AircraftHangarGeosurface&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:AircraftHangarGeosurface&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/73afa126-de25-4dc2-952d-2a403d248cb6</id>
+		<title>tds:AmphitheatreGeosurface</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>73afa126-de25-4dc2-952d-2a403d248cb6</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:AmphitheatreGeosurface&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:AmphitheatreGeosurface&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:AmphitheatreGeosurface&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/eb3d21b9-a855-4d3d-9e3c-6d61df8cb5aa</id>
+		<title>tds:ApronGeosurface</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>eb3d21b9-a855-4d3d-9e3c-6d61df8cb5aa</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:ApronGeosurface&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:ApronGeosurface&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:ApronGeosurface&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/e441301b-eccb-4536-b992-3e48c1745474</id>
+		<title>tds:BridgeGeocurve</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>e441301b-eccb-4536-b992-3e48c1745474</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BridgeGeocurve&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BridgeGeocurve&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:BridgeGeocurve&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/ff1bfa9a-b476-42d8-90ed-3be0b1436162</id>
+		<title>tds:BrushGeosurface</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>ff1bfa9a-b476-42d8-90ed-3be0b1436162</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BrushGeosurface&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BrushGeosurface&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:BrushGeosurface&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/b8bc014f-b272-410f-9176-3156fbcc3837</id>
+		<title>tds:BuildingGeopoint</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>b8bc014f-b272-410f-9176-3156fbcc3837</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BuildingGeopoint&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BuildingGeopoint&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:BuildingGeopoint&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/d6ec724b-858f-46ef-8d54-12734a665ee3</id>
+		<title>tds:BuildingGeosurface</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>d6ec724b-858f-46ef-8d54-12734a665ee3</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BuildingGeosurface&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BuildingGeosurface&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:BuildingGeosurface&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://ows-9.compusult.net/wes/serviceManagerCSW/csw/c68b9261-85c3-4266-9f1c-7ccd7498434d</id>
+		<title>tds:BuiltUpAreaGeosurface</title>
+		<content/>
+		<updated>2013-01-02T15:24:24.446-03:30</updated>
+		<author>
+			<name>interactive-instruments</name>
+		</author>
+		<dc:publisher>Compusult Limited</dc:publisher>
+		<rights>
+					    Copyright (c) 2012.  Some rights reserved.  This feed
+					    licensed under a Creative Commons Attribution 3.0 License.
+					  </rights>
+		<georss:where>
+			<gml:Envelope>
+				<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+				<gml:upperCorner>90.0 180.0</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/csw">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetRecords" method="POST" type="application/xml" href="http://ows-9.compusult.net/wes/serviceManagerCSW/csw">
+				<owc:request type="application/xml">
+					<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+						xmlns:gmd="http://www.isotc211.org/2005/gmd/" xmlns:gml="http://www.opengis.net/gml"
+						xmlns:ogc="http://www.opengis.net/ogc" 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" maxRecords="10"
+						outputFormat="application/xml" outputSchema="http://www.isotc211.org/2005/gmd"
+						resultType="results" service="CSW"
+						startPosition="1" version="2.0.2">
+						<csw:Query typeNames="csw:Record Service Association">
+							<csw:ElementSetName typeNames="csw:Record">full</csw:ElementSetName>
+							<csw:Constraint version="1.1.0">
+								<ogc:Filter>
+									<ogc:PropertyIsEqualTo>
+										<ogc:PropertyName>csw:Record/@id</ogc:PropertyName>
+										<ogc:Literal>c68b9261-85c3-4266-9f1c-7ccd7498434d</ogc:Literal>
+									</ogc:PropertyIsEqualTo>
+								</ogc:Filter>
+							</csw:Constraint>
+						</csw:Query>
+					</csw:GetRecords>					
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wfs">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetCapabilities&amp;service=WFS"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.1.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BuiltUpAreaGeosurface&amp;outputFormat=text/xml; subtype=gml/3.1.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="text/xml; subtype=gml/3.2.1" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?request=GetFeature&amp;service=WFS&amp;typename=tds:BuiltUpAreaGeosurface&amp;outputFormat=text/xml; subtype=gml/3.2.1&amp;version=1.1.0"/>
+			<owc:operation code="GetFeature" method="GET" type="application/vnd.google-earth.kml+xml" href="http://services.interactive-instruments.de/xsprojects/ows8-tds/cgi-bin/ltds/wfs?&amp;request=GetFeature&amp;service=WFS&amp;typename=tds:BuiltUpAreaGeosurface&amp;outputFormat=application/vnd.google-earth.kml+xml&amp;version=1.1.0"/>
+		</owc:offering>
+	</entry>
+</feed>

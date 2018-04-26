@@ -14,37 +14,14 @@ OGC OWS Context Conceptual Model 1.0 (12-080r2)
 
 from __future__ import (absolute_import, division, print_function)
 
-# from owslib.util import log
-from datetime import datetime
-
-from owslib.owscontext.atom import encode_atomxml, decode_atomxml
-from owslib.owscontext.geojson import encode_json, decode_json,\
-    extract_p, build_from_xp
+from owslib.owscontext.atom import decode_atomxml
 from owslib.owscontext.common import GENERIC_OWCSPEC_URL
-
-
-class TimeIntervalFormat(object):
-    """
-    little helper to have time intervals
-    """
-
-    def __init__(self,
-                 start,
-                 end=None):
-        """
-        constructor:
-
-        :param start: datetime
-        :param end: datetime
-        """
-        self.start = start
-        self.end = end
-
-    def __str__(self):
-        if self.end is None:
-            return self.start.isoformat() + "Z"
-        else:
-            return self.start.isoformat() + "Z/" + self.end.isoformat() + "Z"
+# from owslib.util import log
+# TODO make dates from (currently) string to datetime instances
+from owslib.owscontext.common import TimeIntervalFormat
+from owslib.owscontext.common import try_float, try_int, \
+    extract_p, build_from_xp
+from owslib.owscontext.geojson import encode_json, decode_json
 
 
 class OwcContext(object):
@@ -145,7 +122,7 @@ class OwcContext(object):
                 "updated": self.update_date,
                 "date":
                     None if self.time_interval_of_interest is None else
-                    self.time_interval_of_interest,
+                    self.time_interval_of_interest.__str__(),
                 "rights": self.rights,
                 "authors":
                     [] if len(self.authors) <= 0 else
@@ -181,8 +158,13 @@ class OwcContext(object):
         # TODO add spec url conversion from generic to geojson
         return encode_json(self.to_dict())
 
+    def to_atomxml(self):
+        # TODO add spec url conversion from generic to atom
+        return encode_json(self.to_dict())
+
     @classmethod
     def from_dict(cls, d):
+        # TODO parse bbox??
         return OwcContext(
             id=d['id'],
             spec_reference=[OwcLink.from_dict(do) for do in
@@ -202,7 +184,8 @@ class OwcContext(object):
             creator_display=build_from_xp(
                 'properties.display', d, OwcCreatorDisplay, None),
             rights=extract_p('properties.rights', d, None),
-            time_interval_of_interest=extract_p('properties.date', d, None),
+            time_interval_of_interest=TimeIntervalFormat.from_string(
+                extract_p('properties.date', d, None)),
             keywords=[OwcCategory.from_dict(do) for do in
                       extract_p('properties.categories', d, [])],
             resources=[OwcResource.from_dict(do) for do in
@@ -214,6 +197,21 @@ class OwcContext(object):
         d = decode_json(jsondata)
         # TODO add spec url conversion from geojson to generic
         # TODO should validate if geojson Type == FeatureCollection?
+        return cls.from_dict(d)
+
+    @classmethod
+    def from_atomxml(cls, xml_bytes):
+        """
+        lets see if we can reuse the dict structure builder from geojson
+        :param xmlstring:
+        :return: OwcContext
+        """
+        # TODO add spec url conversion from atom to generic
+        # TODO should validate anything?
+        # TODO ValueError: Unicode strings with encoding declaration
+        # are not supported. Please use bytes input or XML fragments
+        # without declaration -> Decide, currently bytes
+        d = decode_atomxml(xml_bytes)
         return cls.from_dict(d)
 
 
@@ -308,6 +306,7 @@ class OwcResource(object):
         self.folder = folder
 
     def to_dict(self):
+        # TODO parse geometry??
         return {
             "type": "Feature",
             "id": self.id,
@@ -318,7 +317,7 @@ class OwcResource(object):
                 "updated": self.update_date,
                 "date":
                     None if self.temporal_extent is None else
-                    self.temporal_extent,
+                    self.temporal_extent.__str__(),
                 "authors":
                     [] if len(self.authors) <= 0 else
                     [obj.to_dict() for obj in self.authors],
@@ -372,7 +371,8 @@ class OwcResource(object):
                      extract_p('properties.authors', d, [])],
             publisher=extract_p('properties.publisher', d, None),
             rights=extract_p('properties.rights', d, None),
-            temporal_extent=extract_p('properties.date', d, None),
+            temporal_extent=TimeIntervalFormat.from_string(
+                extract_p('properties.date', d, None)),
             keywords=[OwcCategory.from_dict(do) for do in
                       extract_p('properties.categories', d, [])],
             resource_metadata=[OwcLink.from_dict(do) for do in
@@ -387,10 +387,10 @@ class OwcResource(object):
             offerings=[OwcOffering.from_dict(do) for do in
                        extract_p('properties.offerings', d, [])],
             active=extract_p('properties.active', d, False),
-            min_scale_denominator=extract_p(
-                'properties.minscaledenominator', d, None),
-            max_scale_denominator=extract_p(
-                'properties.maxscaledenominator', d, None),
+            min_scale_denominator=try_float(extract_p(
+                'properties.minscaledenominator', d, None)),
+            max_scale_denominator=try_float(extract_p(
+                'properties.maxscaledenominator', d, None)),
             folder=extract_p('properties.folder', d, None),
         )
 
@@ -509,7 +509,7 @@ class OwcCreatorDisplay(object):
         return {
             "pixelWidth": self.pixel_width,
             "pixelHeight": self.pixel_height,
-            "mm_per_pixel": self.mm_per_pixel
+            "mmPerPixel": self.mm_per_pixel
         }
 
     def __str__(self):
@@ -521,9 +521,9 @@ class OwcCreatorDisplay(object):
     @classmethod
     def from_dict(cls, d):
         return OwcCreatorDisplay(
-            pixel_width=extract_p('pixelWidth', d, None),
-            pixel_height=extract_p('pixelHeight', d, None),
-            mm_per_pixel=extract_p('mm_per_pixel', d, None)
+            pixel_width=try_int(extract_p('pixelWidth', d, None)),
+            pixel_height=try_int(extract_p('pixelHeight', d, None)),
+            mm_per_pixel=try_float(extract_p('mmPerPixel', d, None))
         )
 
     @classmethod
@@ -610,7 +610,7 @@ class OwcLink(object):
             mimetype=extract_p('type', d, None),
             lang=extract_p('lang', d, None),
             title=extract_p('title', d, None),
-            length=extract_p('length', d, None)
+            length=try_int(extract_p('length', d, None))
         )
 
     @classmethod

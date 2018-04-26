@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:georss="http://www.georss.org/georss" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xml:lang="en">
+	<link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+	<id>http://www.opengis.net/owc/1.0/examples/gml</id>
+	<!-- title -->
+	<title>Context Example :: Examples of GML</title>
+	<updated>2012-02-21T11:58:23Z</updated>
+	<author>
+		<name>John Doe</name>
+		<email>JohnDoe@example.com</email>
+		<uri>http://example.com/~johndoe</uri>
+	</author>
+	<dc:publisher>ACME Project</dc:publisher>
+	<generator uri="http://mysite.com/mycontext.php" version="1.0">
+	ACME OWS Context Server
+	</generator>
+	<rights>
+	Copyright (c) 2012.  Some rights reserved.  This feed
+	licensed under a Creative Commons Attribution 3.0 License.
+	</rights>
+	<georss:where>
+		<gml:Envelope srsName="EPSG:4326">
+			<gml:lowerCorner>-90.0 -180.0</gml:lowerCorner>
+			<gml:upperCorner>90.0 180.0</gml:upperCorner>
+		</gml:Envelope>
+	</georss:where>
+	<dc:date>2009-01-23T09:08:56.000Z/2009-01-23T09:14:08.000Z</dc:date>
+	<link rel="via" type="application/xml" href="http://www.acme.com/collections/xxx.xml" title="ex XML metadata"/>
+	<category scheme="http://www.acme.com/category" term="Common Operating Picture" label="COP"/>
+	<entry>
+		<id>http://www.opengis.net/owc/1.0/examples/gml/1</id>
+		<!-- resource/title -->
+		<title>Some Useful Road</title>
+		<!-- updateDate -->
+		<updated>2012-05-10T14:35:00.400Z</updated>
+		<!-- resource/abstract -->
+		<content type="html">
+		  Some Useful Road
+		</content>
+		<owc:offering code="http://www.opengis.net/spec/owc/1.0/conf/atom/gml">
+			<owc:content type="application/gml+xml">
+				<my_srf:RoadCollection gml:id="ID_ROADS1" xmlns:my_srf="http://www.opengis.net/owc/1.0/examples/example1" xmlns:gml="http://www.opengis.net/gml/3.2" xsi:schemaLocation="http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd
+															http://www.opengis.net/owc/1.0/examples/gml/1 road.xsd">
+					<my_srf:road>
+						<my_srf:Road gml:id="ID_ROAD1">
+							<my_srf:position>
+								<gml:LineString gml:id="ID_LINEROAD1">
+									<gml:pos>300 200</gml:pos>
+									<gml:pos>350 222</gml:pos>
+								</gml:LineString>
+							</my_srf:position>
+							<my_srf:width>4.1</my_srf:width>
+							<my_srf:name>M30</my_srf:name>
+						</my_srf:Road>
+					</my_srf:road>
+				</my_srf:RoadCollection>
+			</owc:content>
+		</owc:offering>
+	</entry>
+</feed>

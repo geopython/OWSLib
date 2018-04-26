@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:georss="http://www.georss.org/georss" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" 
+	xml:lang="ca-CA">
+	<link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+	<id>http://www.opengis.net/owc/1.0/examples/WMS_scale</id>
+	<title>Ortofotoimatge de Barcelona 1:5 000 [ICC]</title>	
+	<subtitle type="html">
+              Finestra l'ortofotoimatge de Catalunya 1:5 000 [ICC]
+   </subtitle>
+   <author>
+         <name>Joan Maso</name>
+   </author>
+	<updated>2012-11-04T17:26:23Z</updated>
+	<!-- creatorDisplay  -->
+	<owc:display>
+		<owc:pixelWidth>600</owc:pixelWidth>
+		<owc:pixelHeight>400</owc:pixelHeight>
+	</owc:display>
+	<!-- areaOfInterest  Geographic Area of interest of the users of the content pointed or embedded in context document -->
+	<georss:where>
+		<gml:Envelope srsName="EPSG:23031" srsDimension="2">
+			<gml:lowerCorner>414475 4567125</gml:lowerCorner>
+			<gml:upperCorner>451575 4588025</gml:upperCorner>
+		</gml:Envelope>
+	</georss:where>
+	<generator uri="http://www.creaf.uab.cat/MiraMon">MiraMon</generator>
+	<entry>
+		<id>http://shagrat.icc.es/lizardtech/iserv/ows/orto5m</id>
+		<title>Ortofotoimatge de Barcelona 1:5 000 [ICC]</title>
+		<author>
+			<name>ICC</name>
+			<email>icc@icc.cat</email>
+		</author>
+		<updated>2011-11-01T00:00:00Z</updated>
+		<dc:publisher>CREAF</dc:publisher>
+		<georss:where>
+			<gml:Envelope srsName="EPSG:23031" srsDimension="2">
+				<gml:lowerCorner>414475 4567125</gml:lowerCorner>
+				<gml:upperCorner>451575 4588025</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<content type="text">Ortofotoimatge de Barcelona 1:5 000 de l'Institut Cartogràfic de Catalunya (la més actual disponible)</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wms">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://shagrat.icc.es/lizardtech/iserv/ows?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetMap" method="GET" type="image/jpeg" href="http://shagrat.icc.es/lizardtech/iserv/ows?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:23031&amp;BBOX=414475,4567125,451575,4588025&amp;WIDTH=600&amp;HEIGHT=400&amp;LAYERS=orto5m&amp;FORMAT=image/jpeg&amp;STYLES="/>
+		</owc:offering>
+		<owc:minScaleDenominator>2500</owc:minScaleDenominator>
+		<owc:maxScaleDenominator>25000</owc:maxScaleDenominator>
+	</entry>
+	<entry>
+		<id>http://shagrat.icc.es/lizardtech/iserv/ows/orto5m</id>
+		<title>Ortofotoimatge de Barcelona 1:25 000 [ICC]</title>
+		<author>
+     		<name>ICC</name>
+	    	<email>icc@icc.cat</email>
+	 	</author>
+		<updated>2011-11-01T00:00:00Z</updated>
+		<dc:publisher>CREAF</dc:publisher>
+		<georss:where>
+			<gml:Envelope srsName="EPSG:23031" srsDimension="2">
+				<gml:lowerCorner>414475 4567125</gml:lowerCorner>
+				<gml:upperCorner>451575 4588025</gml:upperCorner>
+			</gml:Envelope>
+		</georss:where>
+		<content type="text">Ortofotoimatge de Barcelona 1:25 000 de l'Institut Cartogràfic de Catalunya (la més actual disponible)</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wms">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://shagrat.icc.es/lizardtech/iserv/ows?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetMap" method="GET" type="image/jpeg" href="http://shagrat.icc.es/lizardtech/iserv/ows?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:23031&amp;BBOX=414475,4567125,451575,4588025&amp;WIDTH=600&amp;HEIGHT=400&amp;LAYERS=orto25m&amp;FORMAT=image/jpeg&amp;STYLES="/>
+		</owc:offering>
+		<owc:minScaleDenominator>25000</owc:minScaleDenominator>
+		<owc:maxScaleDenominator>250000</owc:maxScaleDenominator>
+	</entry>
+</feed>

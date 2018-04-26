@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:georss="http://www.georss.org/georss" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" 
+	xml:lang="en">
+	<link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+	<title>Satellite Image and Countries borders Over France and England</title>
+	<id>https://github.com/Terradue/trax/tree/master/owc/bin/../examples/meris_borders.atom/</id>
+	<subtitle type="text">Two WMS layers giving  from different servers</subtitle>
+	<updated>2012-09-12T12:46:22</updated>
+	<author>
+		<name>Pedro Gonçalves</name>
+	</author>
+	<dc:publisher>Terradue srl.</dc:publisher>
+	<generator uri="https://github.com/Terradue/trax/" version="1.0">
+        OGC Context CITE Testing XSLT (Extensible Stylesheet Language Transformations)   
+  </generator>
+	<owc:display>
+		<owc:pixelWidth>300</owc:pixelWidth>
+		<owc:pixelHeight>500</owc:pixelHeight>
+		<owc:mmPerPixel>0.28</owc:mmPerPixel>
+	</owc:display>
+	<rights>
+         Terradue Srl.
+         Copyright (c) 2012. Some rights reserved.  This feed is
+         licensed under a Creative Commons Attribution 3.0 License. 
+  </rights>
+	<georss:where>
+		<gml:Envelope srsName="EPSG:23031" srsDimension="2">
+			<gml:lowerCorner>355000 4539000</gml:lowerCorner>
+			<gml:upperCorner>475000 4619000</gml:upperCorner>
+		</gml:Envelope>
+	</georss:where>
+	<!--
+     Add this the link with the self relation
+     Change the href to the location of the file
+     <link rel="self" type="application/atom+xml" href="http://some.server/path/file.atom"/>
+  -->
+	<category term="wms" label="This file is compliant with version 1.0 of OGC Context"/>
+	<category term="maps" label="This file contains maps"/>
+	<link rel="via" type="application/xml" href="http://www.opengis.uab.cat/wms/satcat/metadades/EPSG_23031/Cat_20110301.htm" title="HMTL metadata in Catalan"/>
+	<entry>
+		<id>http://geoserver.sourceforge.net/html/index.php/</id>
+		<title>MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif</title>
+		<author>
+			<name>GeoServer Administrator</name>
+			<email>info@genesi-dec.eu</email>
+		</author>
+		<dc:publisher>ESA</dc:publisher>
+		<updated>2012-09-12T12:46:16Z</updated>
+		<dc:rights>Fee:NONE / Contraints:NONE</dc:rights>
+		<georss:where>
+			<gml:Polygon>
+				<gml:exterior>
+					<gml:LinearRing>
+						<gml:posList>45 -2 45 8 55 8 55 -2 45 -2</gml:posList>
+					</gml:LinearRing>
+				</gml:exterior>
+			</gml:Polygon>
+		</georss:where>
+		<link rel="enclosure" type="image/png" length="12345" title="WMS output for MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif" href="http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=500&amp;HEIGHT=500&amp;LAYERS=385d7d71-650a-414b-b8c7-739e2c0b5e76:MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+		<link rel="icon" type="image/png" title="Preview for MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif" href="http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=100&amp;HEIGHT=100&amp;LAYERS=385d7d71-650a-414b-b8c7-739e2c0b5e76:MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif&amp;STYLES=raster&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+		<link rel="via" type="application/vnd.ogc.wms_xml" title="Original GetCapabilities document" href="http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities"/>
+		<content type="html">
+        &lt;br/&gt;
+	&lt;img border='1' align='right' height='100'src='http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=100&amp;HEIGHT=100&amp;LAYERS=385d7d71-650a-414b-b8c7-739e2c0b5e76:MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif&amp;STYLES=raster&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml'/&gt;
+	
+	&lt;br/&gt;
+	This resource is available from a OGC WMS 1.1.1 Service 
+	&lt;ul&gt;
+	&lt;li&gt;
+	&lt;a href='http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=500&amp;HEIGHT=500&amp;LAYERS=385d7d71-650a-414b-b8c7-739e2c0b5e76:MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml'&gt;
+	GetMap &lt;/a&gt; request in image/png
+	&lt;a href='http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities'&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+	GetCapabilities &lt;/a&gt; request.
+	&lt;/li&gt;
+	&lt;/ul&gt;
+	Generated from session 385d7d71-650a-414b-b8c7-739e2c0b5e76 on Mon Sep 10 17:49:17 UTC 2012
+	&lt;p style='font-size:small'&gt;OGC Context CITE Testing XSLT (Extensible Stylesheet Language Transformations) by Terradue Srl.&lt;/p&gt;
+	</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wms">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetMap" method="GET" type="image/png" href="http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=500&amp;HEIGHT=500&amp;LAYERS=385d7d71-650a-414b-b8c7-739e2c0b5e76:MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+		</owc:offering>
+	</entry>
+	<entry>
+		<id>http://nsidc.org/</id>
+		<title>countries</title>
+		<author>
+			<name>NSIDC User Services</name>
+			<email>nsidc@nsidc.org</email>
+		</author>
+		<dc:creator>Socioeconomic Data and Applications Center</dc:creator>
+		<dc:publisher>National Snow and Ice Data Center</dc:publisher>
+		<updated>2012-09-12T12:46:17Z</updated>
+		<dc:rights>Fee:none / Contraints:none</dc:rights>
+		<georss:where>
+			<gml:Polygon>
+				<gml:exterior>
+					<gml:LinearRing>
+						<gml:posList>45 -2 45 8 55 8 55 -2 45 -2</gml:posList>
+					</gml:LinearRing>
+				</gml:exterior>
+			</gml:Polygon>
+		</georss:where>
+		<link rel="enclosure" type="image/png" title="WMS output for countries" length="12345" href="http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=500&amp;HEIGHT=500&amp;LAYERS=country_borders&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+		<link rel="icon" type="image/png" title="Preview for countries" href="http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=100&amp;HEIGHT=100&amp;LAYERS=country_borders&amp;STYLES=&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+		<link rel="via" type="application/vnd.ogc.wms_xml" title="Original GetCapabilities document" href="http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.1&amp;REQUEST=GetCapabilities"/>
+		<!--
+	This resource seems to have an invalid MIME-type: 
+	"shapefile"
+	The link element will use the generic application/octet-stream MIME-type to ensure valid ATOM feed
+	-->
+		<link rel="related" href="http://sedac.ciesin.columbia.edu/gpw/global.jsp?file=gpwv3&amp;data=c_ntlbnd&amp;type=shp&amp;year=2000" type="application/octet-stream"/>
+		<content type="html">
+        &lt;br/&gt;
+	&lt;img border='1' align='right' height='100'src='http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=100&amp;HEIGHT=100&amp;LAYERS=country_borders&amp;STYLES=&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml'/&gt;
+	
+	&lt;b&gt;&lt;a href='http://sedac.ciesin.columbia.edu'&gt;Socioeconomic Data and Applications Center&lt;/a&gt;&lt;/b&gt;
+
+	&lt;img src='http://sedac.ciesin.columbia.edu/images/logo.jpg' hspace='20' align='left' width='53' height='60'&gt;
+
+	&lt;br/&gt;
+	This resource is available from a OGC WMS 1.1.1 Service 
+	&lt;ul&gt;
+	&lt;li&gt;
+	&lt;a href='http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=500&amp;HEIGHT=500&amp;LAYERS=country_borders&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml'&gt;
+	GetMap &lt;/a&gt; request in image/png
+	&lt;a href='http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.1&amp;REQUEST=GetCapabilities'&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+	GetCapabilities &lt;/a&gt; request.
+	&lt;/li&gt;
+	&lt;li&gt;
+	DataURL is available &lt;a href='http://sedac.ciesin.columbia.edu/gpw/global.jsp?file=gpwv3&amp;data=c_ntlbnd&amp;type=shp&amp;year=2000'&gt;
+	shapefile
+	&lt;/a&gt;
+	&lt;/li&gt;
+	&lt;/ul&gt;
+	Center for International Earth Science Information Network (CIESIN), Columbia University; and Centro Internacional de Agricultura Tropical (CIAT). 2005. Gridded Population of the World Version 3 (GPWv3): National Boundaries.  Palisades, NY, USA: Socioeconomic Data and Applications Center (SEDAC), Columbia University. Available at http://sedac.ciesin.columbia.edu/gpw. 19 January 2007. Background: National boundaries derived from the Gridded Population of the World (GPW) country-level land area grids at 2.5 arc-minute resolution. Permanent ice and all but large lakes have been merged with neighbouring polygons to make a layer more appropriate for cartographic visualization of the data. Does not include Antarctica.
+	&lt;p style='font-size:small'&gt;OGC Context CITE Testing XSLT (Extensible Stylesheet Language Transformations) by Terradue Srl.&lt;/p&gt;
+	</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wms">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://nsidc.org/cgi-bin/atlas_north?VERSION=1.3.0&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="GetMap" method="GET" type="image/png" href="http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-2,45,8,55&amp;WIDTH=500&amp;HEIGHT=500&amp;LAYERS=country_borders&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+		</owc:offering>
+	</entry>
+</feed>

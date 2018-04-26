@@ -12,8 +12,8 @@
     "authors": [
       {
         "name": "Alex Kmoch",
-        "email": "alexander.kmoch@ut.ee",
-        "uri": "https://www.ut.ee/en/alexander-kmoch"
+        "email": "a.kmoch@gns.cri.nz",
+        "uri": "https://www.gns.cri.nz"
       }
     ],
     "display": {
@@ -75,16 +75,16 @@
               -50
             ],
             [
-              180,
-              -50
-            ],
-            [
-              180,
-              -31
-            ],
-            [
               164,
               -31
+            ],
+            [
+              180,
+              -31
+            ],
+            [
+              180,
+              -50
             ],
             [
               164,

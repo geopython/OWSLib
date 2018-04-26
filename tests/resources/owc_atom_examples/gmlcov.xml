@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:georss="http://www.georss.org/georss" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" 
+	xml:lang="en">
+	<link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+	<id>http://www.opengis.net/owc/1.0/examples/gmlcov</id>
+	<title>GMLCOV Example</title>
+	<subtitle type="html">
+              GMLCOV Example
+   </subtitle>
+	<author>
+		<name>Joan Masó</name>
+	</author>
+	<updated>2012-11-04T17:26:23Z</updated>
+	<entry>
+		<id>http://www.opengis.net/spec/owc-atom/1.0/req/gmlcov/1</id>
+		<title>GMLCOV Example</title>
+		<updated>2011-11-01T00:00:00Z</updated>
+		<dc:publisher>CREAF</dc:publisher>
+		<content type="text">GMLCOV example</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/gmlcov">
+			<owc:content type="application/gml+xml">
+				<gmlcov:GridCoverage  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+					xmlns:gml='http://www.opengis.net/gml/3.2'
+					xmlns='http://www.opengis.net/gml/3.2'
+					xmlns:swe='http://www.opengis.net/swe/2.0'
+					xmlns:gmlcov='http://www.opengis.net/gmlcov/1.0'
+					xmlns:xlink='http://www.w3.org/1999/xlink'
+					xsi:schemaLocation='http://www.opengis.net/gmlcov/1.0 http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd'
+					gml:id='C0001'>
+					<gml:boundedBy>
+						<gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4326" axisLabels="Lat Long" uomLabels="deg deg" srsDimension="2">
+							<gml:lowerCorner>-90 -180</gml:lowerCorner>
+							<gml:upperCorner>90 180</gml:upperCorner>
+						</gml:Envelope>
+					</gml:boundedBy>
+					<gml:domainSet>
+						<gml:Grid gml:id="gr0001_C0001" dimension="2">
+							<gml:limits>
+								<gml:GridEnvelope>
+									<gml:low>0 0</gml:low>
+									<gml:high>202 259</gml:high>
+								</gml:GridEnvelope>
+							</gml:limits>
+							<gml:axisLabels>Lat Long</gml:axisLabels>
+						</gml:Grid>
+					</gml:domainSet>
+					<gml:rangeSet>
+					<File>
+					    <rangeParameters xlink:href="ftp://ftp.remotesensing.org/pub/geotiff/samples/gdal_eg/cea.tif" xlink:role="http://www.opengis.net/spec/GMLCOV_geotiff-coverages/1.0/conf/geotiff-coverage" xlink:arcrole="fileReference"/>
+					    <fileReference>ftp://ftp.remotesensing.org/pub/geotiff/samples/gdal_eg/cea.tif</fileReference>
+					    <fileStructure/>
+					    <mimeType>image/tiff</mimeType>
+					</File>
+					</gml:rangeSet>
+					<gmlcov:rangeType>
+					<swe:DataRecord>
+						<swe:field name="gray">
+							<swe:Quantity definition="http://opengis.net/def/property/OGC/0/Radiance">
+								<swe:description>Gray Channel</swe:description>
+								<swe:uom code="W/cm2"/>
+							</swe:Quantity>
+						</swe:field>
+					   </swe:DataRecord>
+					</gmlcov:rangeType>
+				</gmlcov:GridCoverage>
+			</owc:content>
+		</owc:offering>
+	</entry>
+</feed>

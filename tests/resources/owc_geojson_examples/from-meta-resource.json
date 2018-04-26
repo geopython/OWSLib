@@ -1,0 +1,62 @@
+{
+  "type": "Feature",
+  "id": "http://portal.smart-project.info/context/resource/abdb00fb-cd9b-4052-93c4-15bafd01b52a_copy_bf7bc0f3-3c6b-4350-9c19-7d7f534302d2",
+  "properties": {
+    "title": "test1",
+    "abstract": "abstra",
+    "updated": "2017-10-22T12:00:00Z",
+    "authors": [
+      {
+        "name": "Alex",
+        "email": "alex@gmail.com",
+        "uri": "http://www.gns.de"
+      }
+    ],
+    "publisher": "publisher",
+    "rights": "Check with source agency",
+    "links": {
+      "alternates": [],
+      "previews": [],
+      "data": [],
+      "via": [
+        {
+          "href": "http://portal.smart-project.info/context/resource/abdb00fb-cd9b-4052-93c4-15bafd01b52a_copy_bf7bc0f3-3c6b-4350-9c19-7d7f534302d2",
+          "type": "application/json",
+          "rel": "via"
+        },
+        {
+          "href": "https://portal.smart-project.info/pycsw/csw?request=GetRecordById&service=CSW&version=2.0.2&elementSetName=full&outputSchema=http://www.isotc211.org/2005/gmd&id=abdb00fb-cd9b-4052-93c4-15bafd01b52a",
+          "type": "application/xml",
+          "rel": "via"
+        }
+      ]
+    },
+    "offerings": [
+      {
+        "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+        "operations": [
+          {
+            "code": "GetCapabilities",
+            "method": "GET",
+            "type": "application/xml",
+            "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+          },
+          {
+            "code": "GetRecordById",
+            "method": "GET",
+            "type": "application/xml",
+            "href": "https://portal.smart-project.info/pycsw/csw?request=GetRecordById&service=CSW&version=2.0.2&elementSetName=full&outputSchema=http://www.isotc211.org/2005/gmd&id=abdb00fb-cd9b-4052-93c4-15bafd01b52a"
+          }
+        ],
+        "contents": [],
+        "styles": []
+      }
+    ],
+    "categories": [
+      {
+        "term": "hydr"
+      }
+    ],
+    "minscaledenominator": 1000000
+  }
+}

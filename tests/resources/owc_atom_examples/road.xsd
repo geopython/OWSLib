@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml/3.2" 
+		xmlns:xmp="http://www.opengis.net/owc/1.0/examples/gml/1" targetNamespace="http://www.opengis.net/owc/1.0/examples/gml/1" elementFormDefault="qualified" version="1.0">
+	<import namespace="http://www.opengis.net/gml/3.2" schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd"/>
+	<!--XML Schema document created by ShapeChange-->
+	<element name="RoadCollection" type="xmp:RoadCollectionType" substitutionGroup="gml:AbstractFeature"/>
+	<complexType name="RoadCollectionType">
+		<complexContent>
+			<extension base="gml:AbstractFeatureType">
+				<sequence>
+					<element name="road" type="xmp:RoadPropertyType" minOccurs="0" maxOccurs="unbounded"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="RoadCollectionPropertyType">
+		<sequence minOccurs="0">
+			<element ref="xmp:RoadCollection"/>
+		</sequence>
+		<attributeGroup ref="gml:AssociationAttributeGroup"/>
+		<attributeGroup ref="gml:OwnershipAttributeGroup"/>
+	</complexType>
+	<element name="Road" type="xmp:RoadType" substitutionGroup="gml:AbstractFeature"/>
+	<complexType name="RoadType">
+		<complexContent>
+			<extension base="gml:AbstractFeatureType">
+				<sequence>
+					<element name="position" type="gml:CurvePropertyType"/>
+					<element name="width" type="double"/>
+					<element name="name" type="string"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="RoadPropertyType">
+		<sequence minOccurs="0">
+			<element ref="xmp:Road"/>
+		</sequence>
+		<attributeGroup ref="gml:AssociationAttributeGroup"/>
+		<attributeGroup ref="gml:OwnershipAttributeGroup"/>
+	</complexType>
+	<element name="SpringCollection" type="xmp:SpringCollectionType" substitutionGroup="gml:AbstractFeature"/>
+	<complexType name="SpringCollectionType">
+		<complexContent>
+			<extension base="gml:AbstractFeatureType">
+				<sequence>
+					<element name="spring" type="xmp:SpringPropertyType" minOccurs="0" maxOccurs="unbounded"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="SpringCollectionPropertyType">
+		<sequence minOccurs="0">
+			<element ref="xmp:SpringCollection"/>
+		</sequence>
+		<attributeGroup ref="gml:AssociationAttributeGroup"/>
+		<attributeGroup ref="gml:OwnershipAttributeGroup"/>
+	</complexType>
+	<complexType name="SpringPropertyType">
+		<sequence minOccurs="0">
+			<element ref="xmp:Spring"/>
+		</sequence>
+		<attributeGroup ref="gml:AssociationAttributeGroup"/>
+		<attributeGroup ref="gml:OwnershipAttributeGroup"/>
+	</complexType>
+	<element name="Spring" type="xmp:SpringType" substitutionGroup="gml:AbstractFeature"/>
+	<complexType name="SpringType">
+		<complexContent>
+			<extension base="gml:AbstractFeatureType">
+				<sequence>
+					<element name="position" type="gml:PointPropertyType"/>
+					<element name="flow" type="integer"/>
+					<element name="name" type="string"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<element name="Field" type="xmp:FieldType" substitutionGroup="gml:AbstractFeature"/>
+	<complexType name="FieldType">
+		<complexContent>
+			<extension base="gml:AbstractFeatureType">
+				<sequence>
+					<element name="posicio" type="gml:SurfacePropertyType"/>
+					<element name="produccio" type="double"/>
+					<element name="propietari" type="string"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="FieldPropertyType">
+		<sequence minOccurs="0">
+			<element ref="xmp:Field"/>
+		</sequence>
+		<attributeGroup ref="gml:AssociationAttributeGroup"/>
+		<attributeGroup ref="gml:OwnershipAttributeGroup"/>
+	</complexType>
+	<element name="FieldCollection" type="xmp:FieldCollectionType" substitutionGroup="gml:AbstractFeature"/>
+	<complexType name="FieldCollectionType">
+		<complexContent>
+			<extension base="gml:AbstractFeatureType">
+				<sequence>
+					<element name="field" type="xmp:FieldPropertyType" minOccurs="0" maxOccurs="unbounded"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="FieldCollectionPropertyType">
+		<sequence minOccurs="0">
+			<element ref="xmp:FieldCollection"/>
+		</sequence>
+		<attributeGroup ref="gml:AssociationAttributeGroup"/>
+		<attributeGroup ref="gml:OwnershipAttributeGroup"/>
+	</complexType>
+</schema>
