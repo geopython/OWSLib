@@ -65,11 +65,13 @@ class TileMapService(object):
 
 
     def _getcapproperty(self):
+        # TODO: deprecated function. See ticket #453.
         if not self._capabilities:
             reader = TMSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
                 )
-            self._capabilities = ServiceMetadata(reader.read(self.url))
+            # self._capabilities = ServiceMetadata(reader.read(self.url))
+            self._capabilities = reader.read(self.url, timeout=self.timeout)
         return self._capabilities
 
 

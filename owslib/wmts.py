@@ -187,12 +187,14 @@ class WebMapTileService(object):
         self._buildMetadata(parse_remote_metadata)
 
     def _getcapproperty(self):
+        # TODO: deprecated function. See ticket #453.
         if not self._capabilities:
             reader = WMTSCapabilitiesReader(
                 self.version, url=self.url, un=self.username, pw=self.password
             )
-            xml = reader.read(self.url, self.vendor_kwargs)
-            self._capabilities = ServiceMetadata(xml)
+            # xml = reader.read(self.url, self.vendor_kwargs)
+            # self._capabilities = ServiceMetadata(xml)
+            self._capabilities = reader.read(self.url, self.vendor_kwargs)
         return self._capabilities
 
     def _buildMetadata(self, parse_remote_metadata=False):
