@@ -14,7 +14,7 @@ OGC OWS Context Conceptual Model 1.0 (12-080r2)
 
 from __future__ import (absolute_import, division, print_function)
 
-from owslib.owscontext.atom import decode_atomxml
+from owslib.owscontext.atom import decode_atomxml, encode_atomxml
 from owslib.owscontext.common import GENERIC_OWCSPEC_URL
 # from owslib.util import log
 # TODO make dates from (currently) string to datetime instances
@@ -160,7 +160,7 @@ class OwcContext(object):
 
     def to_atomxml(self):
         # TODO add spec url conversion from generic to atom
-        return encode_json(self.to_dict())
+        return encode_atomxml(self.to_dict())
 
     @classmethod
     def from_dict(cls, d):
@@ -381,12 +381,12 @@ class OwcResource(object):
                                  for do in extract_p(
                     'properties.links.alternates', d, [])],
             preview=[OwcLink.from_dict(do) for do in
-                     extract_p('properties.links.preview', d, [])],
+                     extract_p('properties.links.previews', d, [])],
             content_by_ref=[OwcLink.from_dict(do) for do in
                             extract_p('properties.links.data', d, [])],
             offerings=[OwcOffering.from_dict(do) for do in
                        extract_p('properties.offerings', d, [])],
-            active=extract_p('properties.active', d, False),
+            active=extract_p('properties.active', d, None),
             min_scale_denominator=try_float(extract_p(
                 'properties.minscaledenominator', d, None)),
             max_scale_denominator=try_float(extract_p(
