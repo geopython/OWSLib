@@ -126,6 +126,11 @@ WFS_SCHEMA_LOCATION = 'http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
 
+# WPS execution modes
+AUTO = 'auto'
+SYNC = 'sync'
+ASYNC = 'async'
+
 
 def get_namespaces():
     ns = n.get_namespaces(["ogc", "wfs", "wps", "gml", "xsi", "xlink"])
@@ -272,7 +277,7 @@ class WebProcessingService(object):
         # build metadata objects
         return self._parseProcessMetadata(rootElement)
 
-    def execute(self, identifier, inputs, output=None, async=True, lineage=False, request=None, response=None):
+    def execute(self, identifier, inputs, output=None, mode=ASYNC, lineage=False, request=None, response=None):
         """
         Submits a WPS process execution request.
         Returns a WPSExecution object, which can be used to monitor the status of the job, and ultimately
@@ -283,7 +288,7 @@ class WebProcessingService(object):
                 an object for ComplexData)
         output: optional identifier for process output reference (if not provided, output will be
                 embedded in the response)
-        async: flag if process is run sync or async.
+        mode: execution mode: SYNC, ASYNC or AUTO. Default: ASYNC
         lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
                  OutputDefinitions elements.
         request: optional pre-built XML request document, prevents building of request from other arguments
@@ -298,7 +303,7 @@ class WebProcessingService(object):
 
         # build XML request from parameters
         if request is None:
-            requestElement = execution.buildRequest(identifier, inputs, output, async=async, lineage=lineage)
+            requestElement = execution.buildRequest(identifier, inputs, output, mode=mode, lineage=lineage)
             request = etree.tostring(requestElement)
             execution.request = request
         log.debug(request)
@@ -567,7 +572,7 @@ class WPSExecution():
         self.processOutputs = []
         self.creationTime = None
 
-    def buildRequest(self, identifier, inputs=[], output=None, async=True, lineage=False):
+    def buildRequest(self, identifier, inputs=[], output=None, mode=ASYNC, lineage=False):
         """
         Method to build a WPS process request.
         identifier: the requested process identifier
@@ -581,10 +586,18 @@ class WPSExecution():
         output: array of outputs which should be returned:
                 expressed as tuples (key, as_ref) where key is the output identifier and as_ref is True
                 if output should be returned as reference.
-        async: flag if process is run sync or async.
+        mode: execution mode: SYNC, ASYNC or AUTO.
         lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
                  OutputDefinitions elements.
         """
+        # TODO: auto mode needs to implemented for WPS 2.0.0
+        if mode is SYNC:
+            _async = False
+        elif mode is AUTO:
+            log.warn("Auto mode not available in WPS 1.0.0. Using async mode.")
+            _async = True
+        else:
+            _async = True
 
         # <wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0"
         #             xmlns:ows="http://www.opengis.net/ows/1.1"
@@ -671,8 +684,8 @@ class WPSExecution():
             responseDocumentElement = etree.SubElement(
                 responseFormElement, nspath_eval(
                     'wps:ResponseDocument', namespaces),
-                attrib={'storeExecuteResponse': str(async).lower(),
-                        'status': str(async).lower(),
+                attrib={'storeExecuteResponse': str(_async).lower(),
+                        'status': str(_async).lower(),
                         'lineage': str(lineage).lower()})
             # keeping backward compability of output parameter
             if isinstance(output, str):
