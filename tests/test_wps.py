@@ -1,7 +1,9 @@
 import pytest
 
+
 from tests.utils import resource_file
-from owslib.wps import WebProcessingService, WPSExecution
+from owslib.wps import WebProcessingService, WPSExecution, Process
+from owslib.etree import etree
 
 
 @pytest.fixture
@@ -29,3 +31,15 @@ def test_wps_checkStatus():
     execution.checkStatus(response=xml)
     assert execution.isSucceded()
     assert execution.creationTime == '2011-11-08T21:36:55Z'
+
+
+def test_wps_process_representation(wps):
+    p = wps.processes[0]
+    assert repr(p) == 'CDMSSubsetVariable'
+    assert str(p) == 'CDMSSubsetVariable'
+
+
+def test_wps_process_with_invalid_identifer():
+    p = Process(etree.Element('invalid'))
+    assert repr(p) == 'undefined'
+    assert str(p) == 'undefined'

@@ -1419,6 +1419,7 @@ class Process(object):
         self.processVersion = elem.get(nspath('processVersion', ns=wpsns))
         self.statusSupported = bool(elem.get("statusSupported"))
         self.storeSupported = bool(elem.get("storeSupported"))
+        self.identifier = None
         self.abstract = None
         self.metadata = []
 
@@ -1476,6 +1477,12 @@ class Process(object):
             self.processOutputs.append(Output(outputElement))
             if self.verbose is True:
                 dump(self.processOutputs[-1], prefix='\tOutput: ')
+
+    def __repr__(self):
+        return self.identifier or 'undefined'
+
+    def __str__(self):
+        return self.__repr__()
 
 
 class BoundingBoxDataInput(object):
