@@ -1,0 +1,52 @@
+<wps:ExecuteResponse xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd" service="WPS" version="1.0.0" xml:lang="en-US" serviceInstance="http://localhost:8092/wps?service=WPS&amp;request=GetCapabilities" statusLocation="http://localhost:8090/wpsoutputs/hummingbird/731f5bdc-52b7-11e8-a0a9-109836a7cf3a.xml">
+  <wps:Process wps:processVersion="0.3.0">
+    <ows:Identifier>spotchecker</ows:Identifier>
+    <ows:Title>Spot Checker</ows:Title>
+    <ows:Abstract>Checks a single uploaded or remote dataset against a variety of compliance standards. The dataset is either in the NetCDF format or a remote OpenDAP resource. Available compliance standards are the Climate and Forecast conventions (CF) and project specific rules for CMIP6 and CORDEX.</ows:Abstract>
+  </wps:Process>
+  <wps:Status creationTime="2018-05-08T14:00:54Z">
+    <wps:ProcessSucceeded>PyWPS Process Spot Checker finished</wps:ProcessSucceeded>
+  </wps:Status>
+  <wps:DataInputs>
+    <wps:Input>
+      <ows:Identifier>test</ows:Identifier>
+      <ows:Title>Select the test you want to run.</ows:Title>
+      <ows:Abstract>CF-1.6=Climate and Forecast Conventions (CF)</ows:Abstract>
+      <wps:Data>
+        <wps:LiteralData dataType="string">CF-1.6</wps:LiteralData>
+      </wps:Data>
+    </wps:Input>
+    <wps:Input>
+      <ows:Identifier>dataset</ows:Identifier>
+      <ows:Title>Upload your NetCDF file here</ows:Title>
+      <ows:Abstract>or enter a URL pointing to a NetCDF file.</ows:Abstract>
+      <wps:Reference xlink:href="https://www.esrl.noaa.gov/psd/thredds/fileServer/Datasets/ncep.reanalysis.dailyavgs/surface/air.sig995.1952.nc" mimeType="application/x-netcdf" method="GET"/>
+    </wps:Input>
+  </wps:DataInputs>
+  <wps:OutputDefinitions>
+    <wps:Output>
+      <ows:Identifier>output</ows:Identifier>
+      <ows:Title>Test Report</ows:Title>
+      <ows:Abstract>Compliance checker test report.</ows:Abstract>
+    </wps:Output>
+    <wps:Output>
+      <ows:Identifier>ncdump</ows:Identifier>
+      <ows:Title>ncdump of metadata</ows:Title>
+      <ows:Abstract>ncdump of header of checked dataset.</ows:Abstract>
+    </wps:Output>
+  </wps:OutputDefinitions>
+  <wps:ProcessOutputs>
+    <wps:Output>
+      <ows:Identifier>output</ows:Identifier>
+      <ows:Title>Test Report</ows:Title>
+      <ows:Abstract>Compliance checker test report.</ows:Abstract>
+      <wps:Reference xlink:href="http://localhost:8090/wpsoutputs/hummingbird/731f5bdc-52b7-11e8-a0a9-109836a7cf3a/report_oSlKto.html" mimeType="text/plain"/>
+    </wps:Output>
+    <wps:Output>
+      <ows:Identifier>ncdump</ows:Identifier>
+      <ows:Title>ncdump of metadata</ows:Title>
+      <ows:Abstract>ncdump of header of checked dataset.</ows:Abstract>
+      <wps:Reference xlink:href="http://localhost:8090/wpsoutputs/hummingbird/731f5bdc-52b7-11e8-a0a9-109836a7cf3a/nc_dump_xBwpmm.txt" mimeType="text/plain"/>
+    </wps:Output>
+  </wps:ProcessOutputs>
+</wps:ExecuteResponse>

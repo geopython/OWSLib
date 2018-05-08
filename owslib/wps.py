@@ -927,13 +927,19 @@ class WPSExecution():
         # <wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
         # xmlns:ows="http://www.opengis.net/ows/1.1"
         # xmlns:xlink="http://www.w3.org/1999/xlink">
+        if len(self.dataInputs) > 0:
+            log.debug('clean data inputs')
+            self.dataInputs[:] = []
         for inputElement in root.findall(nspath('DataInputs/Input', ns=wpsns)):
-            self.dataInputs.append(Input(inputElement))
+            self.dataInputs.append(Output(inputElement))
             if self.verbose is True:
                 dump(self.dataInputs[-1])
 
         # <ns:ProcessOutputs>
         # xmlns:ns="http://www.opengis.net/wps/1.0.0"
+        if len(self.processOutputs) > 0:
+            log.debug('clean process outputs')
+            self.processOutputs[:] = []
         for outputElement in root.findall(nspath('ProcessOutputs/Output', ns=wpsns)):
             self.processOutputs.append(Output(outputElement))
             if self.verbose is True:
