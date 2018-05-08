@@ -436,13 +436,16 @@ GetObservation
 
 SOS 2.0
 -------
-Examples of service metadata and GetObservation
 
-.. include:: ../../tests/doctests/sos_20_52n_geoviqua.txt
+Examples of service metadata and GetObservation
++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. include:: ../../tests/_broken/doctests_sphinx/sos_20_52N_demo.txt
 
 Using the GetObservation response decoder for O&M and WaterML2.0 results
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. include:: ../../tests/doctests/sos_20_timeseries_decoder_ioos.txt
+.. include:: ../../tests/_broken/doctests_sphinx/sos_20_timeseries_decoder_ioos.txt
 
 SensorML
 --------
@@ -485,7 +488,7 @@ Swiss GM03
 WMTS
 ----
 
-.. include:: ../../tests/doctests/wmts.txt
+.. include:: ../../tests/_broken/doctests_sphinx/wmts_demo.txt
 
 Result:
 
