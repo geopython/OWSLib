@@ -1,0 +1,1 @@
+<html><body>You are being <a href="https://raw.githubusercontent.com/geopython/OWSLib/0.16.0/tests/doctests/wmts.txt">redirected</a>.</body></html>
