@@ -221,14 +221,14 @@ class BoundingBox(object):
         self.maxx = None
         self.maxy = None
 
-        val = elem.attrib.get('crs')
+        val = elem.attrib.get('crs') or elem.attrib.get('{%s}crs' % namespace)
         try:
             self.crs = crs.Crs(val)
         except (AttributeError, ValueError):
             LOGGER.warning('Invalid CRS %r. Expected integer')
             self.crs = None
 
-        val = elem.attrib.get('dimensions')
+        val = elem.attrib.get('dimensions') or elem.attrib.get('{%s}dimensions' % namespace)
         if val is not None:
             self.dimensions = int(util.testXMLValue(val, True))
         else:  # assume 2
