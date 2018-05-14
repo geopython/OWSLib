@@ -1,5 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 
+import six
 import cgi
 from owslib.etree import etree
 from datetime import datetime
@@ -10,7 +11,7 @@ except ImportError:     # Python 2
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities
-from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
+from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time, encode_string
 from owslib.namespaces import Namespaces
 
 def get_namespaces():
@@ -221,6 +222,7 @@ class SensorObservationService_1_0_0(object):
                 return item
         raise KeyError("No Operation named %s" % name)
 
+
 class SosObservationOffering(object):
     def __init__(self, element):
         self._root = element
@@ -278,10 +280,11 @@ class SosObservationOffering(object):
             self.response_modes.append(testXMLValue(rm))
 
     def __str__(self):
-        return 'Offering id: %s, name: %s' % (self.id, self.name)
+        return 'Offering id: {}, name: {}'.format(encode_string(self.id), encode_string(self.name))
 
     def __repr__(self):
-        return "<SosObservationOffering '%s'>" % self.name
+        return "<SosObservationOffering '{}'>".format(encode_string(self.name))
+
 
 class SosCapabilitiesReader(object):
     def __init__(self, version="1.0.0", url=None, username=None, password=None):

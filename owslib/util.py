@@ -719,3 +719,19 @@ def datetime_from_ansi(ansi):
 
 def is_vector_grid(grid_elem):
     pass
+
+
+def encode_string(text):
+    """
+    On Python 3 this method does nothing and returns the ``text`` string itself.
+    On Python 2 this method returns the ``text`` string encoded with UTF-8.
+
+    See:
+    * https://pythonhosted.org/six/#six.python_2_unicode_compatible
+    * https://www.azavea.com/blog/2014/03/24/solving-unicode-problems-in-python-2-7/
+    """
+    if six.PY3:
+        return text
+    if isinstance(text, str):
+        return text.decode('utf-8').encode('utf-8', 'ignore')
+    return text.encode('utf-8', 'ignore')
