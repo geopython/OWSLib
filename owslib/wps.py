@@ -1449,6 +1449,7 @@ class Process(object):
         self.statusSupported = bool(elem.get("statusSupported"))
         self.storeSupported = bool(elem.get("storeSupported"))
         self.identifier = None
+        self.title = None
         self.abstract = None
         self.metadata = []
 
@@ -1507,11 +1508,11 @@ class Process(object):
             if self.verbose is True:
                 dump(self.processOutputs[-1], prefix='\tOutput: ')
 
-    def __repr__(self):
-        return self.identifier or 'undefined'
-
     def __str__(self):
-        return self.__repr__()
+        return "WPS Process: {}, title={}".format(self.identifier or '', self.title or '')
+
+    def __repr__(self):
+        return "<owslib.wps.Process {}>".format(self.identifier or '')
 
 
 class BoundingBoxDataInput(object):
