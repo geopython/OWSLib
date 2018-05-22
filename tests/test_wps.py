@@ -35,14 +35,14 @@ def test_wps_checkStatus():
 
 def test_wps_process_representation(wps):
     p = wps.processes[0]
-    assert repr(p) == 'CDMSSubsetVariable'
-    assert str(p) == 'CDMSSubsetVariable'
+    assert repr(p) == '<owslib.wps.Process CDMSSubsetVariable>'
+    assert str(p) == 'WPS Process: CDMSSubsetVariable, title=Writes a text file and returns an output.'
 
 
 def test_wps_process_with_invalid_identifer():
     p = Process(etree.Element('invalid'))
-    assert repr(p) == 'undefined'
-    assert str(p) == 'undefined'
+    assert repr(p) == '<owslib.wps.Process >'
+    assert str(p) == 'WPS Process: , title='
 
 
 def test_wps_response_with_lineage():
