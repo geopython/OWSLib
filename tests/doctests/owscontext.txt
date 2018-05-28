@@ -27,7 +27,7 @@ Test OWC Atom XML Read
 
 Test OWC GeoJSON Read
 
-	>>> f = open(resource_file(os.path.join('owc_geojson_examples','owc1.geojson')), 'r').read()
+	>>> f = open(resource_file(os.path.join('owc_geojson_examples','owc1.geojson')), 'rb').read().decode('utf-8')
 	>>> owc = OwcContext.from_json(f)
 	>>> owc.title
 	'WPS 52North example'
