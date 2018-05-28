@@ -128,20 +128,6 @@ def test_load_feeds_bulk():
                 assert (ops + con + sty) > 0
         assert a_owc.to_dict() == a_re_owc.to_dict()
 
-        b_atom_xml = a_owc.to_atomxml()
-        logger.debug("type xml: b_atom_xml " + str(type(b_atom_xml)))
-        b_re_owc = OwcContext.from_atomxml(b_atom_xml)
-        assert len(b_re_owc.resources) > 0
-        for b_re_res in b_re_owc.resources:
-            assert len(b_re_res.offerings) > 0
-            for b_re_off in b_re_res.offerings:
-                ops = len(b_re_off.operations)
-                con = len(b_re_off.contents)
-                sty = len(b_re_off.styles)
-                assert (ops + con + sty) > 0
-        # assert a_owc.to_dict() == b_re_owc.to_dict()
-        # assert a_re_owc.to_dict() == b_re_owc.to_dict()
-
 
 def test_single_atomxml_coding():
     atom1 = open(resource_file(os.path.join('owc_atom_examples', 'wms_meris.xml')), 'rb').read()

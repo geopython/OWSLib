@@ -1,6 +1,6 @@
 Imports
 
-	>>> from __future__ import (absolute_import, division, print_function)
+	>>> from __future__ import (absolute_import, division, print_function, unicode_literals)
 	>>> import os
 	>>> from owslib.owscontext.core import OwcContext
 	>>> from tests.utils import resource_file
