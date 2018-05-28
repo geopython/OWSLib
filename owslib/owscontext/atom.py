@@ -66,8 +66,7 @@ def parse_owc_content(content_node):
         child_elem = etree.tostring(
             list(content_node)[0],
             encoding='unicode',
-            method='xml',
-            pretty_print=True)
+            method='xml')
 
     content_dict = {
         "type": mimetype,
@@ -152,8 +151,7 @@ def parse_entry(entry_node):
             xmltxt = etree.tostring(
                 list(val)[0],
                 encoding='unicode',
-                method='xml',
-                pretty_print=True)
+                method='xml')
             # TODO here parse geometry??
             # log.debug("entry: geometry %s :: %s", xmltxt, val)
             resource_base_dict.update({"geometry": str(xmltxt)})
@@ -462,8 +460,7 @@ def decode_atomxml(xml_string):
             xmltxt = etree.tostring(
                 list(val)[0],
                 encoding='unicode',
-                method='xml',
-                pretty_print=True)
+                method='xml')
             # log.debug("geometry %s :: %s", xmltxt, val)
             context_base_dict['properties'].update({"bbox": str(xmltxt)})
 
@@ -589,8 +586,7 @@ def encode_atomxml(obj_d):
     return etree.tostring(
         tree,
         encoding='unicode',
-        method='xml',
-        pretty_print=True)
+        method='xml')
 
 
 def axml_context(d):

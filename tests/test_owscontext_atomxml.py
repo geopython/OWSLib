@@ -160,7 +160,8 @@ def test_single_atomxml_coding():
         #     logger.debug(lnk.to_dict())
 
     owctree = owc.to_atomxml()
-    # logger.debug(etree.tostring(owctree, encoding='utf8', method='xml', pretty_print=True))
+    # xml pretty_print=True is from lxml lib
+    # logger.debug(etree.tostring(owctree, encoding='utf8', method='xml'))
 
     jsdata = owc.to_json()
     assert jsdata is not None
