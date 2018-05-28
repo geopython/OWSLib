@@ -17,7 +17,7 @@ from __future__ import (absolute_import, division, print_function)
 from owslib.etree import etree, ParseError
 from owslib import util
 from owslib.namespaces import Namespaces
-from owslib.util import nspath_eval
+from owslib.util import nspath_eval, element_to_string
 
 from owslib.util import log
 
@@ -63,10 +63,8 @@ def parse_owc_content(content_node):
     title = util.testXMLAttribute(content_node, 'title')
     child_elem = None
     if len(list(content_node)) > 0:
-        child_elem = etree.tostring(
-            list(content_node)[0],
-            encoding='unicode',
-            method='xml')
+        child_elem = element_to_string(
+            list(content_node)[0],False)
 
     content_dict = {
         "type": mimetype,
@@ -148,13 +146,11 @@ def parse_entry(entry_node):
         if len(list(val)) > 0:
             # xmltxt = etree.tostring(
             #     list(val)[0], encoding='utf8', method='xml')
-            xmltxt = etree.tostring(
-                list(val)[0],
-                encoding='unicode',
-                method='xml')
+            xmltxt = element_to_string(
+                list(val)[0], False)
             # TODO here parse geometry??
-            # log.debug("entry: geometry %s :: %s", xmltxt, val)
-            resource_base_dict.update({"geometry": str(xmltxt)})
+            log.debug("entry: geometry %s :: %s", xmltxt, val)
+            resource_base_dict.update({"geometry": xmltxt.decode('utf-8')})
 
     # <content type = "text" > aka subtitle, aka abstract
     val = entry_node.find(util.nspath_eval('atom:content', ns))
@@ -457,12 +453,10 @@ def decode_atomxml(xml_string):
     val = feed_root.find(util.nspath_eval('georss:where', ns))
     if val is not None:
         if len(list(val)) > 0:
-            xmltxt = etree.tostring(
-                list(val)[0],
-                encoding='unicode',
-                method='xml')
-            # log.debug("geometry %s :: %s", xmltxt, val)
-            context_base_dict['properties'].update({"bbox": str(xmltxt)})
+            xmltxt = element_to_string(
+                list(val)[0], False)
+            log.debug("geometry %s :: %s", xmltxt, val)
+            context_base_dict['properties'].update({"bbox": xmltxt.decode('utf-8')})
 
     # <updated>2012-11-04T17:26:23Z</updated>
     val = feed_root.find(util.nspath_eval('atom:updated', ns))
@@ -583,10 +577,8 @@ def encode_atomxml(obj_d):
     #     raise pe
     xml_tree = axml_context(obj_d)
     tree = etree.ElementTree(xml_tree)
-    return etree.tostring(
-        tree,
-        encoding='unicode',
-        method='xml')
+    return element_to_string(
+        tree, True)
 
 
 def axml_context(d):
