@@ -159,10 +159,6 @@ def test_single_atomxml_coding():
         # for lnk in res.preview:
         #     logger.debug(lnk.to_dict())
 
-    owctree = owc.to_atomxml()
-    # xml pretty_print=True is from lxml lib
-    # logger.debug(util.element_to_string(owctree, True))
-
     jsdata = owc.to_json()
     assert jsdata is not None
     assert len(jsdata) > 10

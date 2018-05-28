@@ -149,7 +149,7 @@ def parse_entry(entry_node):
             xmltxt = element_to_string(
                 list(val)[0], False)
             # TODO here parse geometry??
-            log.debug("entry: geometry %s :: %s", xmltxt, val)
+            # log.debug("entry: geometry %s :: %s", xmltxt, val)
             resource_base_dict.update({"geometry": xmltxt.decode('utf-8')})
 
     # <content type = "text" > aka subtitle, aka abstract
@@ -455,7 +455,7 @@ def decode_atomxml(xml_string):
         if len(list(val)) > 0:
             xmltxt = element_to_string(
                 list(val)[0], False)
-            log.debug("geometry %s :: %s", xmltxt, val)
+            # log.debug("geometry %s :: %s", xmltxt, val)
             context_base_dict['properties'].update({"bbox": xmltxt.decode('utf-8')})
 
     # <updated>2012-11-04T17:26:23Z</updated>
@@ -577,8 +577,7 @@ def encode_atomxml(obj_d):
     #     raise pe
     xml_tree = axml_context(obj_d)
     tree = etree.ElementTree(xml_tree)
-    return element_to_string(
-        tree, True)
+    return element_to_string(tree, encoding='utf-8', xml_declaration=False)
 
 
 def axml_context(d):
