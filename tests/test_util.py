@@ -1,6 +1,22 @@
+# -*- coding: UTF-8 -*-
 import pytest
 
-from owslib.util import clean_ows_url, build_get_url
+import codecs
+from owslib.util import clean_ows_url, build_get_url, strip_bom, encode_string
+
+
+def test_encode_string():
+    assert encode_string('hello') == 'hello'
+    assert encode_string('Particulate Matter < 10 µm') == 'Particulate Matter < 10 µm'
+    assert encode_string(u'Particulate Matter < 10 µm') == 'Particulate Matter < 10 µm'
+
+
+def test_strip_bom():
+    assert strip_bom('<city>Hamburg</city>') == '<city>Hamburg</city>'
+    assert strip_bom(codecs.BOM_UTF8 + '<city>Dublin</city>'.encode('utf-8')) == \
+        '<city>Dublin</city>'.encode('utf-8')
+    assert strip_bom(codecs.BOM_UTF16 + '<city>Vancover</city>'.encode('utf-16')) == \
+        '<city>Vancover</city>'.encode('utf-16')
 
 
 def test_clean_ows_url():

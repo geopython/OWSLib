@@ -4,6 +4,7 @@
 
 from tests.utils import resource_file, compare_xml
 from owslib.wps import WebProcessingService, WPSExecution, ComplexDataInput
+from owslib.wps import SYNC
 from owslib.etree import etree
 
 
@@ -16,7 +17,7 @@ def test_wps_request7():
 
     # Build XML request for WPS process execution, sync request
     execution = WPSExecution()
-    requestElement = execution.buildRequest(processid, inputs, output=outputs, async=False, lineage=False)
+    requestElement = execution.buildRequest(processid, inputs, output=outputs, mode=SYNC, lineage=False)
     request = etree.tostring(requestElement)
 
     # Compare to cached XML request

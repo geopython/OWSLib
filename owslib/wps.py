@@ -1,22 +1,26 @@
+# -*- coding: ISO-8859-15 -*-
+# =============================================================================
+# Copyright (c) 2018 Luca Cinquini
 #
+# Authors : Luca Cinquini <luca.cinquini@jpl.nasa.gov>
+#           Carsten Ehbrecht <ehbrecht@dkrz.de>
 #
-# Author: Luca Cinquini
-#
-#
-
+# Contact email: ehbrecht@dkrz.de
+# =============================================================================
 """
-
 Abstract
 --------
+
 The wps module of the OWSlib package provides client-side functionality for executing invocations to a remote
 Web Processing Server.
 
 
 Disclaimer
 ----------
-PLEASE NOTE: the owslib wps module should be considered in beta state: it has been tested versus only a handful of
-WPS services (deployed by the USGS, BADC and PML).
-More extensive testing is needed and feedback is appreciated.
+
+.. warning:: The owslib wps module should be considered in beta state: it has been tested versus only a handful of
+    WPS services (deployed by the USGS, BADC and PML).
+    More extensive testing is needed and feedback is appreciated.
 
 
 Usage
@@ -24,42 +28,46 @@ Usage
 
 The module can be used to execute three types of requests versus a remote WPS endpoint:
 
-a) "GetCapabilities"
-    - use the method wps.getcapabilities(xml=None)
-    - the optional keyword argument "xml" may be used to avoid a real live request, and instead read the
+# "GetCapabilities"
+
+    * use the method wps.getcapabilities(xml=None)
+    * the optional keyword argument "xml" may be used to avoid a real live request, and instead read the
       WPS capabilities document from a cached XML file
 
-b) "DescribeProcess"
-    - use the method wps.describeprocess(identifier, xml=None)
-    - identifier is the process identifier, retrieved from the list obtained from a previous
+# "DescribeProcess"
+
+    * use the method wps.describeprocess(identifier, xml=None)
+    * identifier is the process identifier, retrieved from the list obtained from a previous
       "GetCapabilities" invocation
-    - the optional keyword argument "xml" may be used to avoid a real live request, and instead read the
+    * the optional keyword argument "xml" may be used to avoid a real live request, and instead read the
       WPS process description document from a cached XML file
 
-c) "Execute"
-    - use the method wps.execute(identifier, inputs, output=None, request=None, response=None),
+# "Execute"
+
+    * use the method wps.execute(identifier, inputs, output=None, request=None, response=None),
       which submits the job to the remote WPS server and returns a WPSExecution object that can be used to periodically
       check the job status until completion (or error)
-
-    - the optional keyword argument "request" may be used to avoid re-building the request XML from input arguments,
+    * the optional keyword argument "request" may be used to avoid re-building the request XML from input arguments,
       and instead submit a request from a pre-made XML file
-
-    - alternatively, an "Execute" request can be built from input arguments by supplying the "identifier", "inputs"
+    * alternatively, an "Execute" request can be built from input arguments by supplying the "identifier", "inputs"
       and "output" arguments to the execute() method.
-        - "identifier" is the mandatory process identifier
-        - "inputs" is a dictionary of (key,value) pairs where:
-            - key is a named input parameter
-            - value is either a string, or any python object that supports a getXml() method
-              In particular, a few classes are included in the package to support a FeatuteCollection input:
-                  - "WFSFeatureCollection" can be used in conjunction with "WFSQuery" to define a FEATURE_COLLECTION
-                    retrieved from a live WFS server.
-                  - "GMLMultiPolygonFeatureCollection" can be used to define one or more polygons
-                    of (latitude, longitude) points.
-          - "output" is an optional output identifier to be included in the ResponseForm section of the request.
 
-    - the optional keyword argument "response" mey be used to avoid submitting a real live request, and instead
+        * "identifier" is the mandatory process identifier
+        * "inputs" is a dictionary of (key,value) pairs where:
+
+            * key is a named input parameter
+            * value is either a string, or any python object that supports a getXml() method
+              In particular, a few classes are included in the package to support a FeatuteCollection input:
+
+                  * "WFSFeatureCollection" can be used in conjunction with "WFSQuery" to define a FEATURE_COLLECTION
+                    retrieved from a live WFS server.
+                  * "GMLMultiPolygonFeatureCollection" can be used to define one or more polygons
+                    of (latitude, longitude) points.
+          * "output" is an optional output identifier to be included in the ResponseForm section of the request.
+
+    * the optional keyword argument "response" mey be used to avoid submitting a real live request, and instead
       reading the WPS execution response document from a cached XML file (for debugging or testing purposes)
-    - the convenience module function monitorExecution() can be used to periodically check the status of a remote
+    * the convenience module function monitorExecution() can be used to periodically check the status of a remote
       running job, and eventually download the output either to a named file, or to a file specified by the server.
 
 
@@ -69,29 +77,33 @@ Examples
 The files examples/wps-usgs-script.py, examples/wps-pml-script-1.py and examples/wps-pml-script-2.py contain
 real-world usage examples that submits a "GetCapabilities", "DescribeProcess" and "Execute" requests to
 the live USGS and PML servers. To run:
-    cd examples
-    python wps-usgs-script.py
-    python wps-pml-script-1.py
-    python wps-pml-script-2.py
+
+* cd examples
+* python wps-usgs-script.py
+* python wps-pml-script-1.py
+* python wps-pml-script-2.py
 
 The file wps-client.py contains a command-line client that can be used to submit a "GetCapabilities",
 "DescribeProcess" or "Execute" request to an arbitratry WPS server. For example, you can run it as follows:
-    cd examples
-    To prints out usage and example invocations: wps-client -help
-    To execute a (fake) WPS invocation:
-        wps-client.py -v -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities -x ../tests/USGSCapabilities.xml  # noqa
+
+* cd examples
+* To prints out usage and example invocations: wps-client -help
+* To execute a (fake) WPS invocation::
+
+      $ wps-client.py -v -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities -x ../tests/USGSCapabilities.xml  # noqa
 
 The directory tests/ includes several doctest-style files wps_*.txt that show how to interactively submit a
 "GetCapabilities", "DescribeProcess" or "Execute" request, without making a live request but rather parsing the
 response of cached XML response documents. To run:
-    cd tests
-    python -m doctest wps_*.txt
-    (or python -m doctest -v wps_*.txt for verbose output)
+
+* cd tests
+* python -m doctest wps_*.txt
+    ``(or python -m doctest -v wps_*.txt for verbose output)``
 
 Also, the directory tests/ contains several examples of well-formed "Execute" requests:
-    - The files wps_USGSExecuteRequest*.xml contain requests that can be submitted to the live USGS WPS service.
-    - The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
 
+* The files wps_USGSExecuteRequest*.xml contain requests that can be submitted to the live USGS WPS service.
+* The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
 """
 
 from __future__ import (absolute_import, division, print_function)
@@ -125,6 +137,11 @@ DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/climate/derivative/xsd/draw.xsd'
 WFS_SCHEMA_LOCATION = 'http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'
 WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
 WPS_DEFAULT_VERSION = '1.0.0'
+
+# WPS execution modes
+AUTO = 'auto'
+SYNC = 'sync'
+ASYNC = 'async'
 
 
 def get_namespaces():
@@ -272,22 +289,22 @@ class WebProcessingService(object):
         # build metadata objects
         return self._parseProcessMetadata(rootElement)
 
-    def execute(self, identifier, inputs, output=None, async=True, lineage=False, request=None, response=None):
+    def execute(self, identifier, inputs, output=None, mode=ASYNC, lineage=False, request=None, response=None):
         """
         Submits a WPS process execution request.
         Returns a WPSExecution object, which can be used to monitor the status of the job, and ultimately
         retrieve the result.
 
-        identifier: the requested process identifier
-        inputs: list of process inputs as (key, value) tuples (where value is either a string for LiteralData, or
+        :param str identifier: the requested process identifier
+        :param inputs: list of process inputs as (key, value) tuples (where value is either a string for LiteralData, or
                 an object for ComplexData)
-        output: optional identifier for process output reference (if not provided, output will be
+        :param output: optional identifier for process output reference (if not provided, output will be
                 embedded in the response)
-        async: flag if process is run sync or async.
-        lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
+        :param mode: execution mode: SYNC, ASYNC or AUTO. Default: ASYNC
+        :param lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
                  OutputDefinitions elements.
-        request: optional pre-built XML request document, prevents building of request from other arguments
-        response: optional pre-built XML response document, prevents submission of request to live WPS server
+        :param request: optional pre-built XML request document, prevents building of request from other arguments
+        :param response: optional pre-built XML response document, prevents submission of request to live WPS server
         """
 
         # instantiate a WPSExecution object
@@ -298,7 +315,7 @@ class WebProcessingService(object):
 
         # build XML request from parameters
         if request is None:
-            requestElement = execution.buildRequest(identifier, inputs, output, async=async, lineage=lineage)
+            requestElement = execution.buildRequest(identifier, inputs, output, mode=mode, lineage=lineage)
             request = etree.tostring(requestElement)
             execution.request = request
         log.debug(request)
@@ -421,9 +438,10 @@ class WPSReader(object):
                      headers=None, verify=True, cert=None):
         """
         Method to get and parse a WPS document, returning an elementtree instance.
-        url: WPS service base url.
-        data: GET: dictionary of HTTP (key, value) parameter pairs, POST: XML document to post
-        username, password: optional user credentials
+        :param str url: WPS service base url.
+        :param str data: GET: dictionary of HTTP (key, value) parameter pairs, POST: XML document to post
+        :param str username: optional user credentials
+        :param str password: optional user credentials
         """
 
         if method == 'Get':
@@ -473,8 +491,10 @@ class WPSCapabilitiesReader(WPSReader):
                     headers=None, verify=True, cert=None):
         """
         Method to get and parse a WPS capabilities document, returning an elementtree instance.
-        url: WPS service base url, to which is appended the HTTP parameters: service, version, and request.
-        username, password: optional user credentials
+
+        :param str url: WPS service base url, to which is appended the HTTP parameters: service, version, and request.
+        :param str username: optional user credentials
+        :param str password: optional user credentials
         """
         return self._readFromUrl(url,
                                  {'service': 'WPS', 'request':
@@ -498,10 +518,10 @@ class WPSDescribeProcessReader(WPSReader):
                     headers=None, verify=True, cert=None):
         """
         Reads a WPS DescribeProcess document from a remote service and returns the XML etree object
-        url: WPS service base url, to which is appended the HTTP parameters: 'service', 'version', and 'request',
-             and 'identifier'.
-        """
 
+        :param str url: WPS service base url, to which is appended the HTTP parameters: 'service', 'version',
+            'request', and 'identifier'.
+        """
         return self._readFromUrl(url,
                                  {'service': 'WPS', 'request': 'DescribeProcess',
                                      'version': self.version, 'identifier': identifier},
@@ -523,7 +543,7 @@ class WPSExecuteReader(WPSReader):
                     headers=None, verify=True, cert=None):
         """
         Reads a WPS status document from a remote service and returns the XML etree object.
-        url: the URL to submit the GET/POST request to.
+        :param str url: the URL to submit the GET/POST request to.
         """
 
         return self._readFromUrl(url, data, method, username=username, password=password,
@@ -567,24 +587,31 @@ class WPSExecution():
         self.processOutputs = []
         self.creationTime = None
 
-    def buildRequest(self, identifier, inputs=[], output=None, async=True, lineage=False):
+    def buildRequest(self, identifier, inputs=[], output=None, mode=ASYNC, lineage=False):
         """
         Method to build a WPS process request.
-        identifier: the requested process identifier
-        inputs: array of input arguments for the process.
+        :param str identifier: the requested process identifier
+        :param inputs: array of input arguments for the process.
             - LiteralData inputs are expressed as simple (key,value) tuples where key is the input identifier,
               value is the value
             - ComplexData inputs are expressed as (key, object) tuples, where key is the input identifier,
               and the object must contain a 'getXml()' method that returns an XML infoset to be included in
               the WPS request
-        output: optional identifier if process output is to be returned as a hyperlink reference
-        output: array of outputs which should be returned:
+        :param output: array of outputs which should be returned:
                 expressed as tuples (key, as_ref) where key is the output identifier and as_ref is True
                 if output should be returned as reference.
-        async: flag if process is run sync or async.
-        lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
+        :param mode: execution mode: SYNC, ASYNC or AUTO.
+        :param lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
                  OutputDefinitions elements.
         """
+        # TODO: auto mode needs to implemented for WPS 2.0.0
+        if mode is SYNC:
+            _async = False
+        elif mode is AUTO:
+            log.warn("Auto mode not available in WPS 1.0.0. Using async mode.")
+            _async = True
+        else:
+            _async = True
 
         # <wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0"
         #             xmlns:ows="http://www.opengis.net/ows/1.1"
@@ -671,8 +698,8 @@ class WPSExecution():
             responseDocumentElement = etree.SubElement(
                 responseFormElement, nspath_eval(
                     'wps:ResponseDocument', namespaces),
-                attrib={'storeExecuteResponse': str(async).lower(),
-                        'status': str(async).lower(),
+                attrib={'storeExecuteResponse': str(_async).lower(),
+                        'status': str(_async).lower(),
                         'lineage': str(lineage).lower()})
             # keeping backward compability of output parameter
             if isinstance(output, str):
@@ -701,9 +728,9 @@ class WPSExecution():
         Method to check the status of a job execution.
         In the process, this method will upadte the object 'response' attribute.
 
-        url: optional 'statusLocation' URL retrieved from a previous WPS Execute response document.
+        :param str url: optional 'statusLocation' URL retrieved from a previous WPS Execute response document.
              If not provided, the current 'statusLocation' URL will be used.
-        sleepSecs: number of seconds to sleep before returning control to the caller.
+        :param int sleepSecs: number of seconds to sleep before returning control to the caller.
         """
 
         reader = WPSExecuteReader(verbose=self.verbose)
@@ -766,7 +793,7 @@ class WPSExecution():
         Method to write the outputs of a WPS process to a file:
         either retrieves the referenced files from the server, or writes out the content of response embedded output.
 
-        filepath: optional path to the output file, otherwise a file will be created in the local directory with
+        :param filepath: optional path to the output file, otherwise a file will be created in the local directory with
                   the name assigned by the server, or default name 'wps.out' for embedded output.
         """
 
@@ -807,7 +834,7 @@ class WPSExecution():
         Submits a WPS Execute document to a remote service, returns the XML response document from the server.
         This method will save the request document and the first returned response document.
 
-        request: the XML request document to be submitted as POST to the server.
+        :param request: the XML request document to be submitted as POST to the server.
         """
 
         self.request = request
@@ -914,13 +941,19 @@ class WPSExecution():
         # <wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
         # xmlns:ows="http://www.opengis.net/ows/1.1"
         # xmlns:xlink="http://www.w3.org/1999/xlink">
+        if len(self.dataInputs) > 0:
+            log.debug('clean data inputs')
+            self.dataInputs[:] = []
         for inputElement in root.findall(nspath('DataInputs/Input', ns=wpsns)):
-            self.dataInputs.append(Input(inputElement))
+            self.dataInputs.append(Output(inputElement))
             if self.verbose is True:
                 dump(self.dataInputs[-1])
 
         # <ns:ProcessOutputs>
         # xmlns:ns="http://www.opengis.net/wps/1.0.0"
+        if len(self.processOutputs) > 0:
+            log.debug('clean process outputs')
+            self.processOutputs[:] = []
         for outputElement in root.findall(nspath('ProcessOutputs/Output', ns=wpsns)):
             self.processOutputs.append(Output(outputElement))
             if self.verbose is True:
@@ -1304,9 +1337,9 @@ class Output(InputOutput):
         Method to retrieve data from server-side reference:
         returns "" if the reference is not known.
 
-        username, password: credentials to access the remote WPS server
+        :param username: credentials to access the remote WPS server
+        :param password: credentials to access the remote WPS server
         """
-
         url = self.reference
         if url is None:
             return ""
@@ -1336,11 +1369,11 @@ class Output(InputOutput):
         Method to write an output of a WPS process to disk:
         it either retrieves the referenced file from the server, or write out the content of response embedded output.
 
-        filepath: optional path to the output file, otherwise a file will be created in the local directory
+        :param filepath: optional path to the output file, otherwise a file will be created in the local directory
                   with the name assigned by the server,
-        username, password: credentials to access the remote WPS server
+        :param username: credentials to access the remote WPS server
+        :param password: credentials to access the remote WPS server
         """
-
         # Check if ExecuteResponse contains reference to server-side output
         content = self.retrieveData(username, password, headers=headers, verify=verify, cert=cert)
 
@@ -1362,11 +1395,9 @@ class Output(InputOutput):
 
 
 class WPSException:
-
     """
     Class representing an exception raised by a WPS.
     """
-
     def __init__(self, root):
         self.code = root.attrib.get("exceptionCode", None)
         self.locator = root.attrib.get("locator", None)
@@ -1397,11 +1428,9 @@ class Metadata(object):
 
 
 class Process(object):
-
     """
     Class that represents a WPS process.
     """
-
     def __init__(self, elem, verbose=False):
         """ Initialization method extracts all available metadata from an XML document (passed in as etree object) """
 
@@ -1419,6 +1448,8 @@ class Process(object):
         self.processVersion = elem.get(nspath('processVersion', ns=wpsns))
         self.statusSupported = bool(elem.get("statusSupported"))
         self.storeSupported = bool(elem.get("storeSupported"))
+        self.identifier = None
+        self.title = None
         self.abstract = None
         self.metadata = []
 
@@ -1477,6 +1508,12 @@ class Process(object):
             if self.verbose is True:
                 dump(self.processOutputs[-1], prefix='\tOutput: ')
 
+    def __str__(self):
+        return "WPS Process: {}, title={}".format(self.identifier or '', self.title or '')
+
+    def __repr__(self):
+        return "<owslib.wps.Process {}>".format(self.identifier or '')
+
 
 class BoundingBoxDataInput(object):
     """
@@ -1484,7 +1521,7 @@ class BoundingBoxDataInput(object):
 
     :param list data: Coordinates of lower and upper corner. Example [10, 50, 20, 60]
     with lower corner=[10, 50] and upper corner=[20, 60].
-    :param string crs: Name of coordinate reference system. Default: "epsg:4326".
+    :param str crs: Name of coordinate reference system. Default: "epsg:4326".
     """
     def __init__(self, data, crs=None, dimensions=2):
         if isinstance(data, list):
@@ -1678,11 +1715,9 @@ class WFSQuery(IComplexDataInput):
 
 
 class GMLMultiPolygonFeatureCollection(FeatureCollection):
-
     '''
     Class that represents a FeatureCollection defined as a GML multi-polygon.
     '''
-
     def __init__(self, polygons):
         '''
         Initializer accepts an array of polygons, where each polygon is an array of (lat,lon) tuples.
@@ -1761,10 +1796,10 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     Convenience method to monitor the status of a WPS execution till it completes (succesfully or not),
     and write the output to file after a succesfull job completion.
 
-    execution: WPSExecution instance
-    sleepSecs: number of seconds to sleep in between check status invocations
-    download: True to download the output when the process terminates, False otherwise
-    filepath: optional path to output file (if downloaded=True), otherwise filepath
+    :param execution: WPSExecution instance
+    :param int sleepSecs: number of seconds to sleep in between check status invocations
+    :param download: True to download the output when the process terminates, False otherwise
+    :param filepath: optional path to output file (if downloaded=True), otherwise filepath
               will be inferred from response document
 
     '''

@@ -579,22 +579,25 @@ def strip_bom(raw_text):
     """ return the raw (assumed) xml response without the BOM
     """
     boms = [
+        # utf-8
+        codecs.BOM_UTF8,
+        # utf-16
         codecs.BOM,
         codecs.BOM_BE,
         codecs.BOM_LE,
-        codecs.BOM_UTF8,
         codecs.BOM_UTF16,
         codecs.BOM_UTF16_LE,
         codecs.BOM_UTF16_BE,
+        # utf-32
         codecs.BOM_UTF32,
         codecs.BOM_UTF32_LE,
         codecs.BOM_UTF32_BE
     ]
 
-    if not isinstance(raw_text, str):
+    if isinstance(raw_text, six.binary_type):
         for bom in boms:
             if raw_text.startswith(bom):
-                return raw_text.replace(bom, '')
+                return raw_text[len(bom):]
     return raw_text
 
 
@@ -716,3 +719,19 @@ def datetime_from_ansi(ansi):
 
 def is_vector_grid(grid_elem):
     pass
+
+
+def encode_string(text):
+    """
+    On Python 3 this method does nothing and returns the ``text`` string itself.
+    On Python 2 this method returns the ``text`` string encoded with UTF-8.
+
+    See:
+    * https://pythonhosted.org/six/#six.python_2_unicode_compatible
+    * https://www.azavea.com/blog/2014/03/24/solving-unicode-problems-in-python-2-7/
+    """
+    if six.PY3:
+        return text
+    if isinstance(text, str):
+        return text.decode('utf-8').encode('utf-8', 'ignore')
+    return text.encode('utf-8', 'ignore')

@@ -6,7 +6,7 @@ OWSLib
    :alt: Travis Build
 
 .. image:: https://img.shields.io/github/license/geopython/OWSLib.svg
-    :target: https://github.com/geopython/OWSLib/blob/master/LICENSE.txt
+    :target: https://github.com/geopython/OWSLib/blob/master/LICENSE
     :alt: GitHub license
 
 .. image:: https://badges.gitter.im/geopython/OWSLib.svg
