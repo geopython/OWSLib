@@ -84,6 +84,14 @@ class ServiceIdentification(object):
         for p in self._root.findall(util.nspath('Profile', namespace)):
             self.profiles.append(util.testXMLValue(p))
 
+
+    def __str__(self):
+        return 'Service: {}, title={}'.format(self.service, self.title or '')
+
+    def __repr__(self):
+        return '<owslib.ows.ServiceIdentification {} at {}>'.format(self.service, hex(id(self)))
+
+
 class ServiceProvider(object):
     """Initialize an OWS Common ServiceProvider construct"""
     def __init__(self, infoset,namespace=DEFAULT_OWS_NAMESPACE):
@@ -211,6 +219,12 @@ class OperationsMetadata(object):
 
         for constraint in elem.findall(util.nspath('Constraint', namespace)):
             self.constraints.append(Constraint(constraint, namespace))
+
+    def __str__(self):
+        return "Operation: {}, format={}".format(self.name, self.formatOptions)
+
+    def __repr__(self):
+        return '<owslib.ows.OperationsMetadata {} at {}>'.format(self.name, hex(id(self)))
 
 
 class BoundingBox(object):
