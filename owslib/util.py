@@ -213,7 +213,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
             serviceException = se_tree.find(possible_error)
             if serviceException is not None:
                 # and we need to deal with some message nesting
-                raise ServiceException('\n'.join([str(t).strip() for t in serviceException.itertext() if str(t).strip()]))
+                raise ServiceException('\n'.join([encode_string(t).strip() for t in serviceException.itertext() if encode_string(t).strip()]))
 
     return ResponseWrapper(req)
 
