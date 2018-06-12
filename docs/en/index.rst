@@ -52,6 +52,8 @@ Standards Support
 +-------------------+---------------------+
 | `OGC OWS Common`_ | 1.0.0, 1.1.0, 2.0   |
 +-------------------+---------------------+
+| `OGC OWS Context`_ | 1.0.0 (alpha/under-review) |
++-------------------+---------------------+
 | `NASA DIF`_       | 9.7                 |
 +-------------------+---------------------+
 | `FGDC CSDGM`_     | 1998                |
@@ -502,6 +504,41 @@ WaterML
 
 .. include:: ../../tests/doctests/wml11_cuahsi.txt
 
+OGC OWS Context 1.0.0 Atom CML and GeoJSON Encoding (alpha/under-review)
+------------------------------------------------------------------------
+
+The OGC OWS Context implementation in OWSlib is currently in alpha and under review, and will still be improved.
+Please get in touch if you (want to) use it and provide feedback on how more comfortable it should be
+(especially handling geometries and dates in different encodings) and if it doesn't treat your "standards-compliant" OWS Context document right.
+Greatly appreciated :-)
+
+Basic reading/parsing of OGC Web Services Context Documents (OWS Context) in OWC Atom 1.0.0 Encoding and OWC GeoJSON 1.0.0 Encoding Standards:
+
+.. include:: ../../tests/doctests/owscontext.txt
+
+additionally, possibility to construct OWS Context documents from scratch, and then write/serialise into OWC Atom 1.0.0 Encoding or OWC GeoJSON 1.0.0 Encoding Standards:
+
+.. code-block:: python
+
+  >>> from owslib.owscontext.core import OwcResource, OwcContext
+  >>> myContext=OwcContext(id='http://my.url.com/context/id/1',
+        update_date='2017-11-02T15:24:24.446+12:00',
+        title='Awesome new Context doc')
+  >>> myContext.rights='Creative Commons 4.0 BY'
+  >>> myEntry=OwcResource(id='http://my.url.com/resource/demo-feature-1',
+        update_date='2017-11-02T15:24:24.446+12:00',
+        title='This is a feature')
+  >>> contributor={'name': 'Alex K',
+        'email': None,
+        'uri': 'https://allixender.blogspot.com'}
+  >>> myEntry.authors.append(contributor)
+
+  >>> # ... here also continue to build your OGC data offerings, e.g. WMS GetMap etc.
+
+  >>> myContext.resources.append(myEntry)
+  >>> myContext.to_json()
+  >>> myContext.to_atomxml()
+
 Development
 ===========
 
@@ -624,6 +661,7 @@ Credits
 .. _`OGC WMTS`: http://www.opengeospatial.org/standards/wmts
 .. _`OGC Filter`: http://www.opengeospatial.org/standards/filter
 .. _`OGC OWS Common`: http://www.opengeospatial.org/standards/common
+.. _`OGC OWS Context`: http://www.opengeospatial.org/standards/owc
 .. _`NASA DIF`: http://gcmd.nasa.gov/User/difguide/
 .. _`FGDC CSDGM`: http://www.fgdc.gov/metadata/csdgm
 .. _`ISO 19115`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=26020
