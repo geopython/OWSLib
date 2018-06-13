@@ -1,0 +1,137 @@
+{
+    "type": "FeatureCollection",
+    "id": "https://portal.smart-project.info/cswi-api/v1/query?query=xyz&uuid=970c4033-2191-4d1a-a6d5-78f279f3258e&contentType=OwcContext",
+    "bbox": [0, -47.93848, -1, 0],
+    "properties": {
+        "links": {
+            "profiles": [{
+                "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
+                "rel": "profile"
+            }],
+            "via": []
+        },
+        "lang": "en",
+        "title": "Search result CSW ingester",
+        "subtitle": "Subtitle",
+        "updated": "2017-06-30T10:29:42.678+03:00",
+        "authors": [],
+        "categories": []
+    },
+    "features": [{
+        "type": "Feature",
+        "id": "https://portal.smart-project.info/context/resource/5addcae9-bbbb-3333-85e2-8b1a01d43c64",
+        "properties": {
+            "title": "Geothermal and GroundWater database (GGW)",
+            "abstract": "The GGW database is operated and maintained by the Institute of Geological and Nuclear Sciences Limited (GNS Science). It contains geochemical (chemistry and sampling), hydrological, geological and/or geophysical information for Sites (Features) in New Zealand. Included in the database are the datasets for the National Groundwater Monitoring Programme (NGMP) and Wairaikei Analytical, Recording, Thermo Dynamic System (WARTS) projects maintained and operated by GNS Science. The database design was adapted for New Zealand from Australian Standards.",
+            "updated": "2015-03-25T00:00:00+02:00",
+            "authors": [{
+                "email": "records@gns.cri.nz",
+                "uuid": "3fce54f3-2a18-47cf-bd32-3acdc7e1d4b5"
+            }],
+            "rights": ", ",
+            "links": {
+                "alternates": [{
+                    "href": "http://ggw.gns.cri.nz/ggwdata/",
+                    "type": "text/html",
+                    "title": "Geothermal and GroundWater database (GGW)",
+                    "rel": "alternate",
+                    "uuid": "fc4bb73c-cda8-43d6-b08f-a3a13eb4e3de"
+                }],
+                "previews": [],
+                "data": [],
+                "via": []
+            },
+            "offerings": [{
+                "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+                "operations": [{
+                    "code": "GetCapabilities",
+                    "method": "GET",
+                    "type": "application/xml",
+                    "href": "http://data.gns.cri.nz/metadata/srv/eng/csw?request=GetCapabilities&service=CSW",
+                    "uuid": "0dc9c661-0aed-41c0-a56f-ff4aff1dbc17"
+                }, {
+                    "code": "GetRecordById",
+                    "method": "GET",
+                    "type": "application/xml",
+                    "href": "http://data.gns.cri.nz/metadata/srv/eng/csw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id=5addcae9-8a4f-49be-85e2-8b1a01d43c64",
+                    "uuid": "93d93ca4-35e2-4ab8-88e9-3e37c43d2dc8"
+                }],
+                "contents": [],
+                "styles": [],
+                "uuid": "808fa8e6-cba2-4c5d-9e59-3681f058000a"
+            }],
+            "categories": [],
+            "folder": "7.9232802"
+        },
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [166, -47.8333],
+                    [166, -34],
+                    [179, -34],
+                    [179, -47.8333],
+                    [166, -47.8333]
+                ]
+            ]
+        }
+    }, {
+        "type": "Feature",
+        "id": "https://portal.smart-project.info/context/resource/262b309d-b270-4321-abdc-ed8fa6db47f1",
+        "properties": {
+            "title": "Algorithm for the interpretation of groundwater field experiments",
+            "abstract": "Field experiments on the depth distributions of a solute in sandy soil under general conditions are discussed. Special consideration is given to the effects of multiple pulses and the proximity of the solute to the phreatic zone. The depth distribution of a tracer is analysed utilizing a general mathematical model proposed in a previous paper by the author, and applied to two illustrative examples.",
+            "updated": "2014-11-04T00:00:00+02:00",
+            "authors": [{
+                "name": "Grassia, A., Grassia, A.",
+                "email": "admin@hydrologynz.org.nz",
+                "uuid": "2d71d956-5f9e-473f-9af1-be12150436c0"
+            }],
+            "rights": ", ",
+            "links": {
+                "alternates": [{
+                    "href": "http://www.hydrologynz.co.nz/journal.php?article_id=237",
+                    "type": "text/html",
+                    "rel": "alternate",
+                    "uuid": "cf02e473-efba-490b-98f2-bc8308252c22"
+                }],
+                "previews": [],
+                "data": [],
+                "via": []
+            },
+            "offerings": [{
+                "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+                "operations": [{
+                    "code": "GetCapabilities",
+                    "method": "GET",
+                    "type": "application/xml",
+                    "href": "https://portal.smart-project.info/pycsw/csw?request=GetCapabilities&service=CSW",
+                    "uuid": "6774d97b-666f-4019-88b3-8df415a52dfb"
+                }, {
+                    "code": "GetRecordById",
+                    "method": "GET",
+                    "type": "application/xml",
+                    "href": "https://portal.smart-project.info/pycsw/csw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id=262b309d-b270-4028-abdd-ed8fa6db47f1",
+                    "uuid": "f48a290a-5bb0-4789-86e9-cfbcb3d24f29"
+                }],
+                "contents": [],
+                "styles": [],
+                "uuid": "4e0fea7e-c86b-4089-a1f9-3442972f20d4"
+            }],
+            "categories": [],
+            "folder": "7.435972"
+        },
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [165.3906, -47.93848],
+                    [165.3906, -34.02613],
+                    [178.73954, -34.02613],
+                    [178.73954, -47.93848],
+                    [165.3906, -47.93848]
+                ]
+            ]
+        }
+    }]
+}

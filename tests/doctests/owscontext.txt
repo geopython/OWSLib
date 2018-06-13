@@ -1,0 +1,47 @@
+Imports
+
+	>>> from __future__ import (absolute_import, division, print_function, unicode_literals)
+	>>> import os
+	>>> from owslib.owscontext.core import OwcContext
+	>>> from tests.utils import resource_file
+
+Test OWC Atom XML Read
+
+	>>> f = open(resource_file(os.path.join('owc_atom_examples', 'wms_meris.xml')), 'rb').read()
+	>>> owc = OwcContext.from_atomxml(f)
+	>>> owc.title
+	'Satellite Image and Countries borders Over France and England'
+	>>> res = owc.resources[0]
+	>>> res.id
+	'http://geoserver.sourceforge.net/html/index.php/'
+	>>> res.title
+	'MER_RR__2PRLRA20120406_102429_000026213113_00238_52838_0211.N1.tif'
+	>>> off = res.offerings[0]
+	>>> off.offering_code
+	'http://www.opengis.net/spec/owc-atom/1.0/req/wms'
+	>>> op = off.operations[0]
+	>>> op.operations_code
+	'GetCapabilities'
+	>>> op.request_url
+	'http://ows.genesi-dec.eu/geoserver/385d7d71-650a-414b-b8c7-739e2c0b5e76/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities'
+
+Test OWC GeoJSON Read
+
+	>>> f = open(resource_file(os.path.join('owc_geojson_examples','owc1.geojson')), 'rb').read().decode('utf-8')
+	>>> owc = OwcContext.from_json(f)
+	>>> # bcause json works on pure strings, the doctest unicode results for Python 2.7 would cause errors, I add print()
+	>>> print(owc.title)
+	WPS 52North example
+	>>> res = owc.resources[0]
+	>>> print(res.id)
+	http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService/process1/
+	>>> print(res.title)
+	WPS 52 north
+	>>> off = res.offerings[0]
+	>>> print(off.offering_code)
+	http://www.opengis.net/spec/owc-geojson/1.0/req/wps
+	>>> op = off.operations[0]
+	>>> print(op.operations_code)
+	GetCapabilities
+	>>> print(op.request_url)
+	http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService?SERVICE=WPS&VERSION=1.0.0&REQUEST=GetCapabilities

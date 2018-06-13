@@ -1,0 +1,176 @@
+{
+  "type": "FeatureCollection",
+  "id": "http://portal.smart-project.info/context/smart-sac/",
+  "bbox": [164, -50,  180, -31],
+  "properties": {
+    "lang": "en",
+    "title": "SMART Case Studies",
+    "subtitle": "SMART Case Studies Informative Layers, Sel. Geophysics, GW-SW Interaction, FODTS, Novel Tracers, DataVis and SOS",
+    "updated": "2012-02-21T11:58:23Z",
+    "date": "2011-11-04T00:01:23Z/2017-12-05T17:28:56Z",
+    "rights": "Copyright (c) 2012. Some rights reserved. This feed licensed under a Creative Commons Attribution 3.0 License.",
+    "authors": [
+      {
+        "name": "Alex Kmoch",
+        "email": "a.kmoch@gns.cri.nz",
+        "uri": "https://www.gns.cri.nz"
+      }
+    ],
+    "display": {
+      "pixelWidth": 800,
+      "pixelHeight": 600
+    },
+    "categories": [
+      {
+        "scheme": "http://gw-hub.info/vocab/view-groups",
+        "term": "sac_add",
+        "label": "Informative Layers"
+      },
+      {
+        "scheme": "http://gw-hub.info/vocab/view-groups",
+        "term": "sac_geophys",
+        "label": "Sel. Geophysics"
+      },
+      {
+        "scheme": "http://gw-hub.info/vocab/view-groups",
+        "term": "sac_dts",
+        "label": "GW-SW Interaction, FODTS"
+      },
+      {
+        "scheme": "http://gw-hub.info/vocab/view-groups",
+        "term": "sac_tracers",
+        "label": "Novel Tracers"
+      },
+      {
+        "scheme": "http://gw-hub.info/vocab/view-groups",
+        "term": "sac_datavis",
+        "label": "DataVis and SOS"
+      }
+    ],
+    "links": {
+      "profiles": [
+        {
+          "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core"
+        }
+      ],
+      "via" : [{
+        "rel": "via",
+        "type": "application/json",
+        "href": "http://portal.smart-project.info/context/smart-sac.owc.json",
+        "title": "SMARt Project Case Studies",
+        "lang" : "en"
+      }]
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "http://portal.smart-project.info/context/smart-sac_add-nz-dtm-100x100/",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -50
+            ],
+            [
+              164,
+              -31
+            ],
+            [
+              180,
+              -31
+            ],
+            [
+              180,
+              -50
+            ],
+            [
+              164,
+              -50
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "NZ DTM 100x100",
+        "abstract": "New Zealand Digital Terrain Model 100m by 100m resolution",
+        "updated": "2016-02-21T11:58:23Z",
+        "date": "2011-11-04T00:01:23Z/2017-12-05T17:28:56Z",
+        "publisher": "GNS Science and Salzburg Uni ZGIS Dept",
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_add",
+            "label": "Informative Layers"
+          }
+        ],
+        "links": {
+          "alternates" : [],
+          "previews" : [{
+            "rel": "icon",
+            "type": "image/png",
+            "href": "http://portal.smart-project.info/fs/images/nz_m.png",
+            "title": "NZ Flag",
+            "length": 46200
+          }],
+          "data" : [],
+          "via" : []
+        },
+        "active": true,
+        "folder": "/view-groups/sac_add",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "http://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "http://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-50,180,-31&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:nz-dtm-100x100&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": [{
+              "name": "Simple Line",
+              "title": "SLD Cook Book: Simple Line",
+              "abstract": "SLD Cook Book: Simple Line extracted from http://docs.geoserver.org/latest/en/user/_downloads/line_simpleline.sld",
+              "default": true,
+              "legendURL": "http://docs.geoserver.org/latest/en/user/_images/line_simpleline1.png"
+            }],
+            "uuid": "012c7aeb-a822-49d7-8a66-e77fa7137240"
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "http://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "http://portal.smart-project.info/pycsw/csw",
+                "request": {
+                  "type": "application/xml",
+                  "content": "<csw:GetRecordById xmlns:csw=\"http://www.opengis.net/cat/csw/2.0.2\" xmlns:gmd=\"http://www.isotc211.org/2005/gmd/\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:gco=\"http://www.isotc211.org/2005/gco\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" outputFormat=\"application/xml\" outputSchema=\"http://www.isotc211.org/2005/gmd\" service=\"CSW\" version=\"2.0.2\"><csw:Id>urn:uuid:1f542dbe-a35d-46d7-9dff-64004226d21c-nz_aquifers</csw:Id><csw:ElementSetName>full</csw:ElementSetName></csw:GetRecordById>"
+                }
+              }
+            ],
+            "contents": []
+          }
+        ]
+      }
+    }
+  ]
+}

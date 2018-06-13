@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:georss="http://www.georss.org/georss" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" 
+	xml:lang="en">
+	<link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+	<id>http://www.opengis.net/owc/1.0/examples/wmts</id>
+	<title>WMTS Example</title>
+	<subtitle type="html">
+              WMTS Example
+   </subtitle>
+	<author>
+		<name>Joan Masó</name>
+	</author>
+	<updated>2012-11-04T17:26:23Z</updated>
+	<entry>
+		<id>http://www.opengis.net/spec/owc-atom/1.0/req/wmts/1</id>
+		<title>WMTS Example</title>
+		<updated>2011-11-01T00:00:00Z</updated>
+		<dc:publisher>CREAF</dc:publisher>
+		<content type="text">WMTS example</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wmts">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://www.opengis.uab.es/cgi-bin/ICCTiled/MiraMon.cgi?REQUEST=GetCapabilities&amp;SERVICE=WMTS"/>
+            <owc:operation code="GetTile" method="GET" type="image/jpeg" href="http://www.opengis.uab.es/cgi-bin/ICCTiled/MiraMon.cgi?REQUEST=GetTile&amp;SERVICE=WMTS&amp;version=1.0.0&amp;format=image/jpeg&amp;layer=Topo250k_Vers5_ICC&amp;TileMatrixSet=Cat_topo250k_v5_EPSG23031&amp;TileMatrix=200m&amp;TileRow=1&amp;TileCol=0"/>
+		</owc:offering>
+	</entry>
+</feed>

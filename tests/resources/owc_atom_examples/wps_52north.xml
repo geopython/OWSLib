@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:georss="http://www.georss.org/georss" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" 
+	xml:lang="en">								  							  
+	<link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+	<id>http://www.opengis.net/owc/1.0/examples/wps_52north</id>
+	<title>WPS 52North example</title>	
+	<subtitle type="html">
+              WPS 52North example
+   </subtitle>
+   <author>
+	   <name>Joan Masó</name>
+   </author>
+	<updated>2012-11-04T17:26:23Z</updated>
+	<!-- creatorDisplay  -->
+	<owc:display>
+		<owc:pixelWidth>600</owc:pixelWidth>
+		<owc:pixelHeight>400</owc:pixelHeight>
+	</owc:display>
+	<entry>
+		<id>http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService</id>
+		<title>WPS 52 north</title>
+		<updated>2013-05-19T00:00:00Z</updated>
+		<dc:publisher>CREAF</dc:publisher>
+		<!-- preview  A URI identifying a preview of the resource. Assimilated to feed/entry/icon -->
+		<content type="text">WPS 52North</content>
+		<owc:offering code="http://www.opengis.net/spec/owc-atom/1.0/req/wps">
+			<owc:operation code="GetCapabilities" method="GET" type="application/xml" href="http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService?SERVICE=WPS&amp;VERSION=1.0.0&amp;REQUEST=GetCapabilities"/>
+			<owc:operation code="DescribeProcess" method="GET" type="application/xml" href="http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService?REQUEST=DescribeProcess&amp;SERVICE=WPS&amp;identifier=org.n52.wps.server.algorithm.SimpleBufferAlgorithm"/>
+			<owc:operation code="Execute" method="POST" href="http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService?">
+				<owc:request type="text/xml">
+					<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
+					  <ows:Identifier>org.n52.wps.server.algorithm.SimpleBufferAlgorithm</ows:Identifier>
+					  <wps:DataInputs>
+						<wps:Input>
+						  <ows:Identifier>data</ows:Identifier>
+						  <wps:Reference schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" xlink:href="http://geoprocessing.demo.52north.org:8080/geoserver/wfs?SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=GetFeature&amp;TYPENAME=topp:tasmania_roads&amp;SRS=EPSG:4326&amp;OUTPUTFORMAT=GML3" method="GET"/>
+						</wps:Input>
+						<wps:Input>
+						  <ows:Identifier>width</ows:Identifier>
+						  <wps:Data>
+							<wps:LiteralData dataType="xs:double">0.05</wps:LiteralData>
+						  </wps:Data>
+						</wps:Input>
+					  </wps:DataInputs>
+					  <wps:ResponseForm>
+						<wps:ResponseDocument storeExecuteResponse="false" lineage="false" status="false">
+						  <wps:Output asReference="false" schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+							<ows:Identifier>result</ows:Identifier>
+							<ows:Title>result</ows:Title>
+							<ows:Abstract>result</ows:Abstract>
+						  </wps:Output>
+						</wps:ResponseDocument>
+					  </wps:ResponseForm>
+					</wps:Execute>				
+				</owc:request>
+			</owc:operation>
+		</owc:offering>
+		<link rel="via" type="application/xml" href="http://www.opengis.uab.cat/wms/satcat/metadades/EPSG_23031/Cat_20110301.htm" title="HMTL metadata in Catalan (nothing to do with this WPS. Sorry!)"/>
+	</entry>
+</feed>

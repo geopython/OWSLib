@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:owc="http://www.opengis.net/owc/1.0" xmlns:ows="http://www.opengis.net/ows" xml:lang="en">
+  <link rel="profile"
+		href="http://www.opengis.net/spec/owc-atom/1.0/req/core"
+		title="This file is compliant with version 1.0 of OGC Context"/>
+  <title>Atlas of the Cryosphere: Southern Hemisphere</title>
+  <id>http://nsidc.org/cgi-bin/atlas_south?/</id>
+  <subtitle type="text">The National Snow and Ice Data Center (NSIDC) Atlas of the Cryosphere is a map server that provides data and information pertinent to the frozen regions of Earth, including monthly climatologies of sea ice extent and concentration, snow cover extent, and snow water equivalent, in addition to glacier outlines, ice sheet elevation and accumulation, and more. In order to support polar projections, the Atlas is divided into two separate map servers: one for the Northern Hemisphere and one for the Southern Hemisphere. In addition to providing map images and source data through Open Geospatial Consortium, Inc. (OGC) protocols (WMS, WFS, and WCS), a dynamic web interface for exploring these data is also available at http://nsidc.org/data/atlas. If you have questions, comments or suggestions, please contact NSIDC User Services at +1.303.492.6199 or nsidc@nsidc.org. The development of this map server application was supported by NASA's Earth Observing System (EOS) Program under contract NAS5-03099 and was developed using MapServer, an Open Source development environment for building spatially-enabled internet applications. To cite the Atlas of the Cryosphere: Maurer, J. 2007. Atlas of the Cryosphere. Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Available at http://nsidc.org/data/atlas/.</subtitle>
+  <updated>2012-10-12T19:10:48Z</updated>
+  <dc:publisher>National Snow and Ice Data Center</dc:publisher>
+  <generator uri="https://github.com/Terradue/trax/" version="1.0">
+        OGC Context CITE Testing XSLT (Extensible Stylesheet Language Transformations)   
+      </generator>
+  <rights>
+         Terradue Srl.
+         Copyright (c) 2012. Some rights reserved.  This feed is
+         licensed under a Creative Commons Attribution 3.0 License. 
+      </rights>
+  <!--
+     Add this the link with the self relation
+     Change the href to the location of the file
+     <link rel="self" type="application/atom+xml" href="http://some.server/path/file.atom"/>
+     -->
+  <!--
+     If known you can also add the resources date or dates ranges
+     for example :
+     <date>2010-05-03T09:04:59.000Z</dc:date>
+     -->
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Snow/Ice"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Bathymetry"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Seafloor Topography"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Terrain Elevation"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Topography"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Visible Imagery"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Ice Extent"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Sea Ice"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Sea Ice Concentration"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Ice Shelves"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Surface Morphology"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Snow Classification"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Snow Cover"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Snow Accumulation"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Snow Water Equivalent"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Bedrock Elevation"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Ice Sheet Elevation"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Coastlines"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Shorelines"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Fronts"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Ocean Circulation"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Ocean Currents"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Northern Hemisphere"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Projected Coordinate System"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="X/Y Grid"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Graticule"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Latitude Grid"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Longitude Grid"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Antarctic Circle"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Tropic of Capricorn"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Equator"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="International Date Line"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Boundaries"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Date Line"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Prime Meridian"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Glacial Landforms/Processes"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Megadunes"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="France"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Argentina"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Australia"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Chile"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="United Kingdom"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Norway"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="New Zealnd"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Political Divisions"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Administrative Divisions"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Cities"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Global"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Hydrosphere"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Oceans"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Southern Ocean"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Glaciers"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Ice Sheets"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Gazetteer"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Land Surface"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Southern Hemisphere"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Research Stations"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Ice Core Records"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Cryosphere"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Earth Science"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Antarctica"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Cold Pole"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Geographic South Pole"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Geomagnetic Indices"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Geomagnetism"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Geomagnetic South Pole"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Magnetic Field"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Magnetic South Pole"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="Polar"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="South Pole"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="South Pole of Cold"/>
+  <category scheme="http://nsidc.org/cgi-bin/atlas_south?" term="South Pole of Inaccessibility"/>
+  <entry>
+    <id>http://nsidc.org/cgi-bin/atlas_south?/</id>
+    <title>sea ice extent, January (1979-2007)</title>
+    <author>
+      <name>NSIDC User Services</name>
+      <email>nsidc@nsidc.org</email>
+      <uri>http://nsidc.org/cgi-bin/atlas_south?</uri>
+    </author>
+    <dc:creator>National Snow and Ice Data Center</dc:creator>
+    <dc:publisher>National Snow and Ice Data Center</dc:publisher>
+    <updated>2012-10-12T19:10:48Z</updated>
+    <dc:rights>Fee:none / Contraints:none</dc:rights>
+    <georss:where>
+      <gml:Polygon>
+        <gml:exterior>
+          <gml:LinearRing>
+            <gml:posList>-90 -178.854 -90 180 76.4039 180 76.4039 -178.854 -90 -178.854</gml:posList>
+          </gml:LinearRing>
+        </gml:exterior>
+      </gml:Polygon>
+    </georss:where>
+    <link rel="enclosure" type="image/png" title="WMS output for sea ice extent, January (1979-2007)" href="http://nsidc.org/cgi-bin/atlas_south?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;BBOX=-178.854,-90,180,76.4039SRS=EPSG:4326&amp;WIDTH=1078&amp;HEIGHT=500&amp;LAYERS=sea_ice_extent_01&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+    <link rel="icon" type="image/png" title="Preview for sea ice extent, January (1979-2007)" href="http://nsidc.org/cgi-bin/atlas_south?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-178.854,-90,180,76.4039&amp;WIDTH=215&amp;HEIGHT=100&amp;LAYERS=sea_ice_extent_01&amp;STYLES=default&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+    <link rel="via" type="application/vnd.ogc.wms_xml" title="Original GetCapabilities document" href="http://nsidc.org/cgi-bin/atlas_south?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities"/>
+    <link rel="related" href="http://nsidc.org/cgi-bin/get_metadata.pl?id=nsidc-0192&amp;format=fgdc" type="text/html"/>
+    <!--
+	This resource seems to have an invalid MIME-type: 
+	"flat binary (1-byte unsigned integers, 316 columns by 332 rows)"
+	The link element will use the generic application/octet-stream MIME-type to ensure valid ATOM feed
+	-->
+    <link rel="related" href="ftp://sidads.colorado.edu/pub/DATASETS/seaice/polar-stereo/trends-climatologies/monthly-means/mean.jan.1979-2007.s" type="application/octet-stream"/>
+    <content type="html">
+        &lt;br/&gt;
+	&lt;img border='1' align='right' height='100'src='http://nsidc.org/cgi-bin/atlas_south?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;SRS=EPSG:4326&amp;BBOX=-178.854,-90,180,76.4039&amp;WIDTH=215&amp;HEIGHT=100&amp;LAYERS=sea_ice_extent_01&amp;STYLES=default&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml'/&gt;
+	
+	&lt;b&gt;&lt;a href='http://nsidc.org'&gt;National Snow and Ice Data Center&lt;/a&gt;&lt;/b&gt;
+
+	&lt;img src='http://nsidc.org/images/logo_nsidc_115x90.gif' hspace='20' align='left' width='115' height='90'&gt;
+
+	&lt;br/&gt;
+	This resource is available from a OGC WMS Service (version 1.1.1) and it contains the following access points:
+	&lt;ul&gt;
+	&lt;li&gt;
+	&lt;a href='http://nsidc.org/cgi-bin/atlas_south?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;BBOX=-178.854,-90,180,76.4039SRS=EPSG:4326&amp;WIDTH=1078&amp;HEIGHT=500&amp;LAYERS=sea_ice_extent_01&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml'&gt;
+	GetMap &lt;/a&gt; request in image/png (atom:link[@rel="enclosure"])
+	&lt;/li&gt;
+	
+	&lt;li&gt;
+	&lt;a href='http://nsidc.org/cgi-bin/atlas_south?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities'&gt;
+	GetCapabilities &lt;/a&gt; request (atom:link[@rel="via"])
+	&lt;/li&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+	MetadataURL is available &lt;a href='http://nsidc.org/cgi-bin/get_metadata.pl?id=nsidc-0192&amp;format=fgdc'&gt;
+	FGDC - text/html
+	&lt;/a&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+	DataURL is available &lt;a href='ftp://sidads.colorado.edu/pub/DATASETS/seaice/polar-stereo/trends-climatologies/monthly-means/mean.jan.1979-2007.s'&gt;
+	flat binary (1-byte unsigned integers, 316 columns by 332 rows)
+	&lt;/a&gt;
+	&lt;/li&gt;
+	&lt;/ul&gt;
+	Stroeve, J. and W. Meier. 1999, updated 2008. Sea Ice Trends and Climatologies from SMMR and SSM/I. Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Available at http://nsidc.org/data/smmr_ssmi_ancillary/monthly_means.html. Accessed 27 June 2008. Compiled from: Cavalieri, D., C. Parkinson, P. Gloersen, and H. J. Zwally. 1996. Sea ice concentrations from Nimbus-7 SMMR and DMSP SSM/I passive microwave data. Boulder, Colorado USA: National Snow and Ice Data Center. Digital media. Available at http://nsidc.org/data/nsidc-0051.html. Background: Sea ice extent includes all areas where sea ice concentration is greater than or equal to 15%. Monthly climatologies of sea ice concentration represent mean ice concentration percentages for each month over the entire time period 1979-2007, which is generated from passive microwave brightness temperature data derived from Nimbus-7 Scanning Multichannel Microwave Radiometer (SMMR) and Defense Meteorological Satellite Program (DMSP) -F8, -F11 and -F13 Special Sensor Microwave/Imager (SSM/I) radiances at a grid cell size of 25 x 25 km using the NASA Team algorithm developed by the Oceans and Ice Branch, Laboratory for Hydrospheric Processes at NASA Goddard Space Flight Center (GSFC).
+	&lt;p style='font-size:small'&gt;OGC Context CITE Testing XSLT (Extensible Stylesheet Language Transformations) by Terradue Srl.&lt;/p&gt;
+	</content>
+    <owc:offering code="http://www.opengis.net/spec/owc/1.0/req/atom/wms">
+      <owc:operation method="GET" code="GetCapabilities" href="http://nsidc.org/cgi-bin/atlas_south?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilitiesVERSION=1.3.0&amp;REQUEST=GetCapabilities"/>
+      <owc:operation method="GET" code="GetMap" href="http://nsidc.org/cgi-bin/atlas_south?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;BBOX=-178.854,-90,180,76.4039SRS=EPSG:4326&amp;WIDTH=1078&amp;HEIGHT=500&amp;LAYERS=sea_ice_extent_01&amp;FORMAT=image/png&amp;BGCOLOR=0xffffff&amp;TRANSPARENT=TRUE&amp;EXCEPTIONS=application/vnd.ogc.se_xml"/>
+      <owc:styleSet>
+        <owc:name>default</owc:name>
+        <owc:title>default</owc:title>
+        <owc:abstract/>
+        <owc:legendURL href="http://nsidc.org/cgi-bin/atlas_south?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=sea_ice_extent_01&amp;format=image/png&amp;STYLE=default" type="image/png"/>
+      </owc:styleSet>
+    </owc:offering>
+  </entry>
+</feed>

@@ -1,0 +1,94 @@
+{
+  "type": "FeatureCollection",
+  "id": "http://www.opengis.net/owc/1.0/examples/wps_52north/",
+  "properties": {
+    "lang": "en",
+    "title": "WPS 52North example",
+    "subtitle": "WPS 52North example",
+    "updated": "2012-11-04T17:26:23Z",
+    "publisher": "OGC and 52North",
+    "authors": [
+      {
+        "name": "Joan Masó"
+      }
+    ],
+    "date": "2012-11-04T17:26:23Z",
+    "links": {
+      "profiles": [
+        {
+          "rel": "profile",
+          "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
+          "title": "This file is compliant with version 1.0 of OGC Context"
+        }
+      ]
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService/process1/",
+      "geometry": null,
+      "properties": {
+        "title": "WPS 52 north",
+        "updated": "2013-05-19T00:00:00Z",
+        "abstract": "abstract about data",
+        "authors": [],
+        "categories": [],
+        "date": "2013-11-02T15:24:24.446+12:00",
+        "links": {
+          "alternates" : [],
+          "previews" : [],
+          "data" : [{
+            "href" : "http://www.acme.com/products/algal20090123090856.hdf",
+            "type" : "application/x-hdf5",
+            "length" : 453123432,
+            "title" : "HDF file for the entry 2009-01-23 09:08:56"
+          }],
+          "via" : [{
+            "rel": "via",
+            "type": "application/xml",
+            "href": "http://www.opengis.uab.cat/wms/satcat/metadades/EPSG_23031/Cat_20110301.htm",
+            "title": "HMTL metadata in Catalan (nothing to do with this WPS. Sorry!)"
+          }]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wps",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService?SERVICE=WPS&VERSION=1.0.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "DescribeProcess",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService?REQUEST=DescribeProcess&SERVICE=WPS&identifier=org.n52.wps.server.algorithm.SimpleBufferAlgorithm"
+              },
+              {
+                "code": "Execute",
+                "method": "POST",
+                "type": "text/xml",
+                "href": "http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService?",
+                "request": {
+                  "type": "text/xml",
+                  "content": "<wps:Execute service=\"WPS\" version=\"1.0.0\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"><ows:Identifier xmlns:ows=\"http://www.opengis.net/ows/1.1\">org.n52.wps.server.algorithm.SimpleBufferAlgorithm</ows:Identifier><wps:DataInputs xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"><wps:Input xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"><ows:Identifier xmlns:ows=\"http://www.opengis.net/ows/1.1\">data</ows:Identifier><wps:Reference schema=\"http://schemas.opengis.net/gml/3.1.1/base/feature.xsd\" xlink:href=\"http://geoprocessing.demo.52north.org:8080/geoserver/wfs?SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=GetFeature&amp;TYPENAME=topp:tasmania_roads&amp;SRS=EPSG:4326&amp;OUTPUTFORMAT=GML3\" method=\"GET\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"/></wps:Input><wps:Input xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"><ows:Identifier xmlns:ows=\"http://www.opengis.net/ows/1.1\">width</ows:Identifier><wps:Data xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"><wps:LiteralData dataType=\"xs:double\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\">0.05</wps:LiteralData></wps:Data></wps:Input></wps:DataInputs><wps:ResponseForm xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"><wps:ResponseDocument storeExecuteResponse=\"false\" lineage=\"false\" status=\"false\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"><wps:Output asReference=\"false\" schema=\"http://schemas.opengis.net/gml/3.1.1/base/feature.xsd\" mimeType=\"text/xml\" encoding=\"UTF-8\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"><ows:Identifier xmlns:ows=\"http://www.opengis.net/ows/1.1\">result</ows:Identifier><ows:Title xmlns:ows=\"http://www.opengis.net/ows/1.1\">result</ows:Title><ows:Abstract xmlns:ows=\"http://www.opengis.net/ows/1.1\">result</ows:Abstract></wps:Output></wps:ResponseDocument></wps:ResponseForm></wps:Execute>"
+                }
+              }
+            ],
+            "contents": [
+              {
+                "type": "application/gml+xml",
+                "title": "ID_ROADS1:M30",
+                "content": "<my_srf:RoadCollection gml:id=\"ID_ROADS1\" xsi:schemaLocation=\"http://www.opengis.net/gml/3.2\n http://schemas.opengis.net/gml/3.2.1/gml.xsd http://www.opengis.net/owc/1.0/examples/gml/1 road.xsd\"\n xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:gml=\"http://www.opengis.net/gml/3.2\"\n xmlns:my_srf=\"http://www.opengis.net/owc/1.0/examples/example1\">\n <my_srf:road><my_srf:Road gml:id=\"ID_ROAD1\">\n <my_srf:position><gml:LineString gml:id=\"ID_LINEROAD1\">300 200</gml:pos><gml:pos>350 222</gml:pos>\n </gml:LineString></my_srf:position>\n <my_srf:width>4.1</my_srf:width><my_srf:name>M30</my_srf:name></my_srf:Road></my_srf:road>\n</my_srf:RoadCollection>",
+                "uuid": "b9ea2498-fb32-40ef-91ef-0ba00060fe64"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

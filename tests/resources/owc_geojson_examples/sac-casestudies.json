@@ -1,0 +1,1866 @@
+{
+  "type": "FeatureCollection",
+  "id": "https://portal.smart-project.info/context/document/02ea67bc-16bb-413c-83e2-62baccf172bc",
+  "bbox": [
+    164,
+    -48,
+    180,
+    -33
+  ],
+  "properties": {
+    "links": {
+      "profiles": [
+        {
+          "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
+          "rel": "profile"
+        }
+      ],
+      "via": [
+        {
+          "href": "https://portal.smart-project.info/context/document/02ea67bc-16bb-413c-83e2-62baccf172bc",
+          "rel": "via"
+        }
+      ]
+    },
+    "lang": "en",
+    "title": "SMART Case Studies",
+    "subtitle": "Informative Layers Sel. Geophysics GW-SW Interaction, FODTS Novel Tracers DataVis and SOS",
+    "updated": "2018-02-16T04:14:56.884Z",
+    "generator": {
+      "title": "Groundwater Hub"
+    },
+    "authors": [
+      {
+        "name": "Alex Kmoch",
+        "email": "allixender@gmail.com",
+        "uri": "https://portal.smart-project.info"
+      }
+    ],
+    "publisher": "GNS Science",
+    "rights": "CC BY SA 4.0 NZ",
+    "categories": [
+      {
+        "scheme": "view-groups",
+        "term": "sac",
+        "label": "SMART Case Studies"
+      }
+    ]
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/fe2f9546-09cf-43f3-bdf5-4f68acbfae70",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:ngmp-locations",
+        "abstract": "NGMP Sites",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:ngmp-locations",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "NGMP Sites:horowhenua_ws:ngmp-locations"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/fe2f9546-09cf-43f3-bdf5-4f68acbfae70",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:ngmp-locations&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_add",
+            "label": "Informative Layers"
+          }
+        ],
+        "active": false,
+        "folder": "sac_add"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/1ac11759-7e0e-4645-8c89-63a19ef96d46",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:nz_aquifers",
+        "abstract": "NZ Aquifers (White 2001)",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:nz_aquifers",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "NZ Aquifers (White 2001):horowhenua_ws:nz_aquifers"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/1ac11759-7e0e-4645-8c89-63a19ef96d46",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:nz_aquifers&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_add",
+            "label": "Informative Layers"
+          }
+        ],
+        "active": false,
+        "folder": "sac_add"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/fbee2f6b-5657-4407-bfba-09a2a698101e",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:nz_regions",
+        "abstract": "New Zealand regions",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:nz_regions",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "New Zealand regions:horowhenua_ws:nz_regions"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/fbee2f6b-5657-4407-bfba-09a2a698101e",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:nz_regions&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_add",
+            "label": "Informative Layers"
+          }
+        ],
+        "active": false,
+        "folder": "sac_add"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/9a358b9d-505e-4c16-beb7-0d34318a7dcc",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:nz-dtm-100x100",
+        "abstract": "NZ DTM 100x100",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:nz-dtm-100x100",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "NZ DTM 100x100:horowhenua_ws:nz-dtm-100x100"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/9a358b9d-505e-4c16-beb7-0d34318a7dcc",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:nz-dtm-100x100&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_add",
+            "label": "Informative Layers"
+          }
+        ],
+        "active": false,
+        "folder": "sac_add"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/1680380e-45e9-47f1-9926-4133c6e0e0c5",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:ewt_nzprj_new",
+        "abstract": "Equilibrium Water Table (NZ)",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:ewt_nzprj_new",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "Equilibrium Water Table (NZ):horowhenua_ws:ewt_nzprj_new"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/1680380e-45e9-47f1-9926-4133c6e0e0c5",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:ewt_nzprj_new&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_geophys",
+            "label": "Sel. Geophysics"
+          }
+        ],
+        "active": false,
+        "folder": "sac_geophys"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/fb6bc91e-37f5-4407-ab2f-c8bee0c143d6",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "PET",
+        "abstract": "Monthly Potential Evapotranspiration (NZ)",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://wci.earth2observe.eu/thredds/wms/deltares/aet-pet/MOD16_PET_corr_monthly_2000_2013.nc?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=PET",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://wci.earth2observe.eu/thredds/wms/deltares/aet-pet/MOD16_PET_corr_monthly_2000_2013.nc",
+              "type": "application/xml",
+              "title": "Monthly Potential Evapotranspiration (NZ):PET"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/fb6bc91e-37f5-4407-ab2f-c8bee0c143d6",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://wci.earth2observe.eu/thredds/wms/deltares/aet-pet/MOD16_PET_corr_monthly_2000_2013.nc?VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://wci.earth2observe.eu/thredds/wms/deltares/aet-pet/MOD16_PET_corr_monthly_2000_2013.nc?VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=PET&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_geophys",
+            "label": "Sel. Geophysics"
+          }
+        ],
+        "active": false,
+        "folder": "sac_geophys"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/d1519cce-bd68-4db6-be90-420f7932e4fe",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "Uncertainty",
+        "abstract": "PET Uncertainty (NZ)",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://wci.earth2observe.eu/thredds/wms/deltares/aet-pet/MOD16_PET_corr_monthly_2000_2013.nc?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Uncertainty",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://wci.earth2observe.eu/thredds/wms/deltares/aet-pet/MOD16_PET_corr_monthly_2000_2013.nc",
+              "type": "application/xml",
+              "title": "PET Uncertainty (NZ):Uncertainty"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/d1519cce-bd68-4db6-be90-420f7932e4fe",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://wci.earth2observe.eu/thredds/wms/deltares/aet-pet/MOD16_PET_corr_monthly_2000_2013.nc?VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://wci.earth2observe.eu/thredds/wms/deltares/aet-pet/MOD16_PET_corr_monthly_2000_2013.nc?VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=Uncertainty&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_geophys",
+            "label": "Sel. Geophysics"
+          }
+        ],
+        "active": false,
+        "folder": "sac_geophys"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/f59d010e-0b46-4088-9e21-83f8e09a3554",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:HawkesBay_geophys",
+        "abstract": "Hawkes Bay",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:HawkesBay_geophys",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "Hawkes Bay:horowhenua_ws:HawkesBay_geophys"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/f59d010e-0b46-4088-9e21-83f8e09a3554",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:HawkesBay_geophys&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_geophys",
+            "label": "Sel. Geophysics"
+          }
+        ],
+        "active": true,
+        "folder": "sac_geophys"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/fcc815d3-2b4c-4032-b6a7-55c564901fcd",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:canterbury_region",
+        "abstract": "Canterbury",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:canterbury_region",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "Canterbury:horowhenua_ws:canterbury_region"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/fcc815d3-2b4c-4032-b6a7-55c564901fcd",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:canterbury_region&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_geophys",
+            "label": "Sel. Geophysics"
+          }
+        ],
+        "active": true,
+        "folder": "sac_geophys"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/2fceee06-dd79-465a-a62e-9f94e408d6c2",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:Horizons_Tararua",
+        "abstract": "Horizons Tararua",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:Horizons_Tararua",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "Horizons Tararua:horowhenua_ws:Horizons_Tararua"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/2fceee06-dd79-465a-a62e-9f94e408d6c2",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:Horizons_Tararua&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_geophys",
+            "label": "Sel. Geophysics"
+          }
+        ],
+        "active": true,
+        "folder": "sac_geophys"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/3dca326b-de8f-44a8-b2af-c56b4aa9ce7d",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:OtagoEM",
+        "abstract": "Otago EM",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:OtagoEM",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "Otago EM:horowhenua_ws:OtagoEM"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/3dca326b-de8f-44a8-b2af-c56b4aa9ce7d",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:OtagoEM&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_geophys",
+            "label": "Sel. Geophysics"
+          }
+        ],
+        "active": true,
+        "folder": "sac_geophys"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/32fcfca7-9f55-45b0-8e6b-17aadad94076",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:waipa_catchment",
+        "abstract": "Waipa Catchment",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:waipa_catchment",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "Waipa Catchment:horowhenua_ws:waipa_catchment"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/32fcfca7-9f55-45b0-8e6b-17aadad94076",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:waipa_catchment&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_geophys",
+            "label": "Sel. Geophysics"
+          }
+        ],
+        "active": true,
+        "folder": "sac_geophys"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/eccc4cb0-f3e7-4d5b-a2d5-66b31d6178b1",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:FODTS-Testsites",
+        "abstract": "FODTS Testsites",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:FODTS-Testsites",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "FODTS Testsites:horowhenua_ws:FODTS-Testsites"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/eccc4cb0-f3e7-4d5b-a2d5-66b31d6178b1",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:FODTS-Testsites&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_dts",
+            "label": "GW-SW Interaction, FODTS"
+          }
+        ],
+        "active": true,
+        "folder": "sac_dts"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/133bb9bc-f735-4be4-93e8-b616b3e3bc8c",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:hutt_halon_sites",
+        "abstract": "Halon-1301 Sampling Sites",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:hutt_halon_sites",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "Halon-1301 Sampling Sites:horowhenua_ws:hutt_halon_sites"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/133bb9bc-f735-4be4-93e8-b616b3e3bc8c",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:hutt_halon_sites&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_tracers",
+            "label": "Novel Tracers"
+          }
+        ],
+        "active": true,
+        "folder": "sac_tracers"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "https://portal.smart-project.info/context/resource/73535274-2929-4a40-8a56-43bf456efc46",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              164,
+              -48
+            ],
+            [
+              180,
+              -48
+            ],
+            [
+              180,
+              -33
+            ],
+            [
+              164,
+              -33
+            ],
+            [
+              164,
+              -48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "horowhenua_ws:study_area",
+        "abstract": "Horowhenua Area (3D)",
+        "updated": "2018-02-16T04:14:56.884Z",
+        "authors": [
+          {
+            "name": "Alex Kmoch",
+            "email": "allixender@gmail.com",
+            "uri": "https://portal.smart-project.info"
+          }
+        ],
+        "publisher": "GNS Science",
+        "rights": "CC BY SA 4.0 NZ",
+        "links": {
+          "alternates": [],
+          "previews": [
+            {
+              "href": "https://portal.smart-project.info/fs/images/nz_m.png",
+              "type": "image/png",
+              "rel": "icon"
+            },
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=horowhenua_ws:study_area",
+              "type": "image/png",
+              "rel": "icon"
+            }
+          ],
+          "data": [
+            {
+              "href": "https://portal.smart-project.info/geoserver/wms",
+              "type": "application/xml",
+              "title": "Horowhenua Area (3D):horowhenua_ws:study_area"
+            }
+          ],
+          "via": [
+            {
+              "href": "https://portal.smart-project.info/context/resource/73535274-2929-4a40-8a56-43bf456efc46",
+              "rel": "via"
+            }
+          ]
+        },
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://portal.smart-project.info/geoserver/wms?SERVICE=WMS&VERSION=1.3&REQUEST=GetMap&SRS=EPSG:4326&BBOX=164,-48,180,-33&WIDTH=800&HEIGHT=600&LAYERS=horowhenua_ws:study_area&FORMAT=image/png&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_xml"
+              }
+            ],
+            "contents": [],
+            "styles": []
+          },
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/pycsw/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetRecordById",
+                "method": "POST",
+                "type": "application/xml",
+                "href": "https://portal.smart-project.info/journalcsw/journalcsw?request=GetRecordById&version=2.0.2&service=CSW&elementSetName=full&outputSchema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&Id="
+              }
+            ],
+            "contents": []
+          }
+        ],
+        "categories": [
+          {
+            "scheme": "view-groups",
+            "term": "sac_datavis",
+            "label": "DataVis and SOS"
+          }
+        ],
+        "active": true,
+        "folder": "sac_datavis"
+      }
+    }
+  ]
+}
