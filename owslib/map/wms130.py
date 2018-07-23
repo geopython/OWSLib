@@ -361,7 +361,7 @@ class WebMapService_1_3_0(object):
             transparent=transparent,
             bgcolor=bgcolor,
             exceptions=exceptions,
-            kwargs=kwargs)
+            **kwargs)
 
         # extend to GetFeatureInfo-Request
         request['request'] = 'GetFeatureInfo'
