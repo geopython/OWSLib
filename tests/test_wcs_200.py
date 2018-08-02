@@ -6,7 +6,7 @@ from owslib.wcs import WebCoverageService
 import pytest
 import datetime
 
-SERVICE_URL = 'http://earthserver.pml.ac.uk/rasdaman/ows'
+SERVICE_URL = 'http://ows.rasdaman.org/rasdaman/ows'
 
 
 @pytest.mark.online
@@ -23,18 +23,18 @@ def test_wcs_200():
     wcs = WebCoverageService(SERVICE_URL, version="2.0.1")
     assert wcs.version == '2.0.1'
     assert wcs.url == SERVICE_URL
-    assert wcs.identification.title == 'Marine Science Data Service'
+    assert wcs.identification.title == 'rasdaman'
     assert wcs.identification.service == 'OGC WCS'
-    assert wcs.provider.name == 'Plymouth Marine Laboratory'
-    assert 'OCCCI_V3_1_chlor_a_monthly' in wcs.contents.keys()
-    assert len(wcs.contents.keys()) >= 29
-    cvg = wcs.contents['OCCCI_V3_1_chlor_a_monthly']
-    assert cvg.boundingboxes[0]['bbox'] == (-89.9999973327159, -180.00000333371918,
-                                            89.9999973327159, 180.00000333371918)
-    assert cvg.timelimits == [datetime.datetime(1997, 9, 4, 0, 0), datetime.datetime(2016, 12, 1, 0, 0)]
-    assert cvg.timepositions[0:5] == [datetime.datetime(1997, 9, 4, 0, 0), datetime.datetime(1997, 10, 1, 0, 0),
-                                      datetime.datetime(1997, 11, 1, 0, 0), datetime.datetime(1997, 12, 1, 0, 0),
-                                      datetime.datetime(1998, 1, 1, 0, 0)]
+    assert wcs.provider.name == 'Jacobs University Bremen'
+    assert 'AvgLandTemp' in wcs.contents.keys()
+    assert len(wcs.contents.keys()) >= 20
+    cvg = wcs.contents['AvgLandTemp']
+    assert cvg.boundingboxes[0]['bbox'] == (-90, -180,
+                                            90, 180)
+    assert cvg.timelimits == [datetime.datetime(2000, 2, 1, 0, 0), datetime.datetime(2015, 6, 1, 0, 0)]
+    assert cvg.timepositions[0:5] == [datetime.datetime(2000, 2, 1, 0, 0), datetime.datetime(2000, 3, 1, 0, 0),
+                                      datetime.datetime(2000, 4, 1, 0, 0), datetime.datetime(2000, 5, 1, 0, 0),
+                                      datetime.datetime(2000, 6, 1, 0, 0)]
     assert cvg.supportedFormats == ['application/gml+xml', 'image/jpeg', 'image/png', 'image/tiff', 'image/bmp',
                                     'image/jp2', 'application/netcdf', 'text/csv', 'application/json',
                                     'application/dem', 'application/x-ogc-dted', 'application/x-ogc-ehdr',
@@ -51,9 +51,9 @@ def test_wcs_200():
     assert cvg.grid.axislabels == ['Lat', 'Long', 'ansi']
     assert cvg.grid.dimension == 3
     assert cvg.grid.lowlimits == ['0', '0', '0']
-    assert cvg.grid.highlimits == ['4319', '8639', '231']
-    covID = 'OCCCI_V3_1_chlor_a_monthly'
-    time_subset = ("ansi", "2004-06-01T00:00:00Z")
+    assert cvg.grid.highlimits == ['1799', '3599', '184']
+    covID = 'AvgLandTemp'
+    time_subset = ("ansi", "2000-02-01T00:00:00Z")
     lat_subset = ('Lat', 40, 50)
     long_subset = ('Long', -10, 0)
     formatType = 'application/netcdf'
