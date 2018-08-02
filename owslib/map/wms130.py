@@ -25,13 +25,12 @@ import six
 from owslib.etree import etree
 from owslib.util import (openURL, ServiceException, testXMLValue,
                          extract_xml_list, xmltag_split, OrderedDict, nspath,
-                         bind_url)
-from owslib.util import nspath
+                         nspath_eval, bind_url)
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
-from owslib.map.common import WMSCapabilitiesReader
+from owslib.map.common import WMSCapabilitiesReader, AbstractContentMetadata
 
 from owslib.util import log
 
@@ -423,7 +422,7 @@ class ServiceProvider(object):
             self.contact = None
 
 
-class ContentMetadata(object):
+class ContentMetadata(AbstractContentMetadata):
     def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False, timeout=30):
         if xmltag_split(elem.tag) != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
@@ -637,20 +636,10 @@ class ContentMetadata(object):
                 'format': testXMLValue(m.find(nspath('Format', WMS_NAMESPACE))),
                 'url': testXMLValue(m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
-
-            if metadataUrl['url'] is not None and parse_remote_metadata:  # download URL
-                try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
-                    doc = etree.parse(content)
-                    if metadataUrl['type'] is not None:
-                        if metadataUrl['type'] == 'FGDC':
-                            metadataUrl['metadata'] = Metadata(doc)
-                        if metadataUrl['type'] == 'TC211':
-                            metadataUrl['metadata'] = MD_Metadata(doc)
-                except Exception:
-                    metadataUrl['metadata'] = None
-
             self.metadataUrls.append(metadataUrl)
+
+        if parse_remote_metadata:
+            self.parse_remote_metadata(timeout)
 
         # DataURLs
         self.dataUrls = []
@@ -673,6 +662,28 @@ class ContentMetadata(object):
         self.layers = []
         for child in elem.findall(nspath('Layer', WMS_NAMESPACE)):
             self.layers.append(ContentMetadata(child, self))
+
+    def parse_remote_metadata(self, timeout=30):
+        """Parse remote metadata for MetadataURL and add it as metadataUrl['metadata']"""
+        for metadataUrl in self.metadataUrls:
+            if metadataUrl['url'] is not None \
+                    and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
+                try:
+                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    doc = etree.fromstring(content.read())
+
+                    mdelem = doc.find('.//metadata')
+                    if mdelem is not None:
+                        metadataUrl['metadata'] = Metadata(mdelem)
+                        continue
+
+                    mdelem = doc.find('.//' + nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
+                             or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                    if mdelem is not None:
+                        metadataUrl['metadata'] = MD_Metadata(mdelem)
+                        continue
+                except Exception:
+                    metadataUrl['metadata'] = None
 
     @property
     def children(self):

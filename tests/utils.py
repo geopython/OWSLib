@@ -3,6 +3,7 @@ from __future__ import (absolute_import, division, print_function)
 import logging
 import os
 import sys
+import requests
 from owslib.etree import etree, ElementType
 try:                    # Python 3
     from urllib.parse import urlparse
@@ -73,3 +74,15 @@ def cast_tuple_int_list_srs(tup):
 
 def sorted_url_query(url):
     return sorted(urlparse(url).query.split("&"))
+
+
+def service_ok(url, timeout=5):
+    try:
+        ok = requests.get(url, timeout=timeout).ok
+    except requests.exceptions.ReadTimeout:
+        ok = False
+    except requests.exceptions.ConnectTimeout:
+        ok = False
+    except Exception:
+        ok = False
+    return ok

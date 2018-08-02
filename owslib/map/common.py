@@ -82,3 +82,8 @@ class WMSCapabilitiesReader(object):
             raise ValueError("String must be of type string or bytes, not %s" % type(st))
         raw_text = strip_bom(st)
         return etree.fromstring(raw_text)
+
+
+class AbstractContentMetadata(object):
+    def get_metadata(self):
+        return [m['metadata'] for m in self.metadataUrls if m.get('metadata', None) is not None]

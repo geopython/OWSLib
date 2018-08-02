@@ -29,7 +29,7 @@ n = Namespaces()
 
 OWS_NAMESPACE_1_0_0 = n.get_namespace("ows")
 OWS_NAMESPACE_1_1_0 = n.get_namespace("ows110")
-OWS_NAMESPACE_2_0   = n.get_namespace("ows200")
+OWS_NAMESPACE_2_0_0 = n.get_namespace("ows200")
 XSI_NAMESPACE       = n.get_namespace("xsi")
 XLINK_NAMESPACE     = n.get_namespace("xlink")
 
@@ -41,8 +41,10 @@ class OwsCommon(object):
         self.version = version
         if version == '1.0.0':
             self.namespace = OWS_NAMESPACE_1_0_0
-        else:
+        elif version == '1.1.0':
             self.namespace = OWS_NAMESPACE_1_1_0
+        else:
+            self.namespace = OWS_NAMESPACE_2_0_0
     
 class ServiceIdentification(object):
     """Initialize an OWS Common ServiceIdentification construct"""
@@ -81,6 +83,14 @@ class ServiceIdentification(object):
         self.profiles = []
         for p in self._root.findall(util.nspath('Profile', namespace)):
             self.profiles.append(util.testXMLValue(p))
+
+
+    def __str__(self):
+        return 'Service: {}, title={}'.format(self.service, self.title or '')
+
+    def __repr__(self):
+        return '<owslib.ows.ServiceIdentification {} at {}>'.format(self.service, hex(id(self)))
+
 
 class ServiceProvider(object):
     """Initialize an OWS Common ServiceProvider construct"""
@@ -209,6 +219,12 @@ class OperationsMetadata(object):
 
         for constraint in elem.findall(util.nspath('Constraint', namespace)):
             self.constraints.append(Constraint(constraint, namespace))
+
+    def __str__(self):
+        return "Operation: {}, format={}".format(self.name, self.formatOptions)
+
+    def __repr__(self):
+        return '<owslib.ows.OperationsMetadata {} at {}>'.format(self.name, hex(id(self)))
 
 
 class BoundingBox(object):

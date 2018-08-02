@@ -14,9 +14,10 @@ install:
   - if [ "$LXML" == "true" ]; then pip install lxml; fi
 script:
   - python -m pytest
-  - pep8 owslib/wmts.py
+  - flake8 owslib/wmts.py
+  - flake8 owslib/wps.py
 after_success:
-  - coveralls  
+  - coveralls
 notifications:
   irc:
     - "irc.freenode.org#geopython"
