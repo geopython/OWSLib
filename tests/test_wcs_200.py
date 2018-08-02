@@ -10,6 +10,7 @@ SERVICE_URL = 'http://earthserver.pml.ac.uk/rasdaman/ows'
 
 
 @pytest.mark.online
+@pytest.mark.skip(reason="WCS service is broken (#494)")
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WCS service is unreachable")
 def test_wcs_200():
