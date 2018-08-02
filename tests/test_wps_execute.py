@@ -6,7 +6,9 @@ from owslib.wps import WebProcessingService
 
 
 def test_wps_execute():
-    wps = WebProcessingService('http://cida.usgs.gov/gdp/process/WebProcessingService')
+    wps = WebProcessingService(
+        'http://cida.usgs.gov/gdp/process/WebProcessingService',
+        skip_caps=True)
 
     # Execute fake invocation of Execute operation using cached HTTP request and response
     request = open(resource_file('wps_USGSExecuteRequest1.xml'), 'rb').read()

@@ -7,7 +7,9 @@ from owslib.wps import WebProcessingService
 
 def test_wps_execute_invalid_request():
     # Initialize WPS client
-    wps = WebProcessingService('http://cida.usgs.gov/gdp/process/WebProcessingService')
+    wps = WebProcessingService(
+        'http://cida.usgs.gov/gdp/process/WebProcessingService',
+        skip_caps=True)
 
     # Submit fake invocation of Execute operation using cached HTTP request and response
     request = open(resource_file('wps_USGSExecuteInvalidRequest.xml'), 'rb').read()
