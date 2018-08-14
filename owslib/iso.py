@@ -962,7 +962,7 @@ class MD_FeatureCatalogueDescription(object):
 
             self.featurecatalogues = []
             for i in fcd.findall(util.nspath_eval('gmd:featureCatalogueCitation', namespaces)):
-                val = i.attrib['uuidref']
+                val = i.attrib.get('uuidref')
                 val = util.testXMLValue(val, attrib=True)
                 if val is not None:
                     self.featurecatalogues.append(val)
