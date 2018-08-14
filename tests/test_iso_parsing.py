@@ -87,7 +87,7 @@ def test_md_parsing_dov():
     assert contact.address == 'Koning Albert II-laan 20 bus 16'
     assert contact.city == 'Brussel'
     assert contact.postcode == '1000'
-    assert contact.country == 'België'
+    assert contact.country == u'België'
     assert contact.email == 'info@vmm.be'
     assert contact.onlineresource.url == 'https://www.vmm.be'
     assert contact.role == 'pointOfContact'
@@ -177,7 +177,7 @@ def test_md_parsing_dov():
     assert iden.contact[0].address == 'Koning Albert II-laan 20 bus 16'
     assert iden.contact[0].city == 'Brussel'
     assert iden.contact[0].postcode == '1000'
-    assert iden.contact[0].country == 'België'
+    assert iden.contact[0].country == u'België'
     assert iden.contact[0].email == 'info@vmm.be'
     assert iden.contact[0].onlineresource.url == 'https://www.vmm.be'
     assert iden.contact[0].role == 'pointOfContact'
@@ -187,7 +187,7 @@ def test_md_parsing_dov():
     assert iden.contact[1].address == 'Technologiepark Gebouw 905'
     assert iden.contact[1].city == 'Zwijnaarde'
     assert iden.contact[1].postcode == '9052'
-    assert iden.contact[1].country == 'België'
+    assert iden.contact[1].country == u'België'
     assert iden.contact[1].email == 'dov@vlaanderen.be'
     assert iden.contact[1].onlineresource.url == \
            'https://www.dov.vlaanderen.be'
@@ -367,8 +367,8 @@ def test_md_parsing_geobretagne():
     assert_list(iden.uricodespace, 0)
 
     assert_list(iden.uselimitation, 2)
-    assert "le plan cadastral décrit les limites apparentes de la " \
-           "propriété." in iden.uselimitation
+    assert u"le plan cadastral décrit les limites apparentes de la " \
+           u"propriété." in iden.uselimitation
 
     assert_list(iden.uselimitation_url, 0)
 
@@ -379,8 +379,8 @@ def test_md_parsing_geobretagne():
 
     assert_list(iden.otherconstraints, 1)
     assert iden.otherconstraints[
-               0] == 'Usage libre sous réserve des mentions obligatoires sur ' \
-                     'tout document de diffusion : "Source : DGFIP"'
+               0] == u'Usage libre sous réserve des mentions obligatoires ' \
+                     u'sur tout document de diffusion : "Source : DGFIP"'
 
     assert_list(iden.securityconstraints, 0)
 
@@ -402,14 +402,14 @@ def test_md_parsing_geobretagne():
     assert iden.edition is None
 
     assert iden.abstract.startswith(
-        "Le plan du cadastre est un document administratif qui propose "
-        "l’unique plan parcellaire à grande échelle couvrant le territoire "
-        "national.")
+        u"Le plan du cadastre est un document administratif qui propose "
+        u"l’unique plan parcellaire à grande échelle couvrant le territoire "
+        u"national.")
 
     assert iden.purpose.startswith(
-        "Le but premier du plan cadastral est d'identifier, de localiser et "
-        "représenter la propriété foncière, ainsi que de servir à l'assise de "
-        "la fiscalité locale des propriétés non bâties.")
+        u"Le but premier du plan cadastral est d'identifier, de localiser et "
+        u"représenter la propriété foncière, ainsi que de servir à l'assise "
+        u"de la fiscalité locale des propriétés non bâties.")
 
     assert iden.status == 'completed'
 
@@ -452,9 +452,9 @@ def test_md_parsing_geobretagne():
     assert iden.keywords[2]['thesaurus']['datetype'] is None
     assert_list(iden.keywords[2]['keywords'], 7)
     assert iden.keywords[2]['keywords'] == [
-        'bâtiments', 'adresses', 'parcelles cadastrales', 'hydrographie',
-        'réseaux de transport', 'unités administratives',
-        'référentiels de coordonnées']
+        u'bâtiments', 'adresses', 'parcelles cadastrales', 'hydrographie',
+        u'réseaux de transport', u'unités administratives',
+        u'référentiels de coordonnées']
 
     assert type(iden.keywords[3]) is dict
     assert iden.keywords[3]['type'] == 'theme'
@@ -463,15 +463,15 @@ def test_md_parsing_geobretagne():
     assert iden.keywords[3]['thesaurus']['datetype'] is None
     assert_list(iden.keywords[3]['keywords'], 5)
     assert iden.keywords[3]['keywords'] == [
-        'bâtis', 'sections', 'parcelles', 'cadastre', 'cadastrale']
+        u'bâtis', 'sections', 'parcelles', 'cadastre', 'cadastrale']
 
     assert type(iden.keywords[4]) is dict
     assert iden.keywords[4]['type'] == 'theme'
-    assert iden.keywords[4]['thesaurus']['title'] == "GéoBretagne v 2.0"
+    assert iden.keywords[4]['thesaurus']['title'] == u"GéoBretagne v 2.0"
     assert iden.keywords[4]['thesaurus']['date'] == '2014-01-13'
     assert iden.keywords[4]['thesaurus']['datetype'] is None
     assert_list(iden.keywords[4]['keywords'], 1)
-    assert iden.keywords[4]['keywords'] == ['référentiels : cadastre']
+    assert iden.keywords[4]['keywords'] == [u'référentiels : cadastre']
 
     assert type(iden.keywords[5]) is dict
     assert iden.keywords[5]['type'] == 'theme'
@@ -487,7 +487,7 @@ def test_md_parsing_geobretagne():
     assert iden.keywords[6]['thesaurus']['date'] == '2012-07-20'
     assert iden.keywords[6]['thesaurus']['datetype'] is None
     assert_list(iden.keywords[6]['keywords'], 2)
-    assert iden.keywords[6]['keywords'] == ['cadastre', 'bâtiment']
+    assert iden.keywords[6]['keywords'] == ['cadastre', u'bâtiment']
 
     assert_list(iden.keywords2, 6)
 
@@ -500,22 +500,22 @@ def test_md_parsing_geobretagne():
     assert iden.keywords2[1].thesaurus is None
     assert_list(iden.keywords2[1].keywords, 7)
     assert iden.keywords2[1].keywords == [
-        'bâtiments', 'adresses', 'parcelles cadastrales', 'hydrographie',
-        'réseaux de transport', 'unités administratives',
-        'référentiels de coordonnées']
+        u'bâtiments', 'adresses', 'parcelles cadastrales', 'hydrographie',
+        u'réseaux de transport', u'unités administratives',
+        u'référentiels de coordonnées']
 
     assert iden.keywords2[2].type == 'theme'
     assert iden.keywords2[2].thesaurus is None
     assert_list(iden.keywords2[2].keywords, 5)
     assert iden.keywords2[2].keywords == [
-        'bâtis', 'sections', 'parcelles', 'cadastre', 'cadastrale']
+        u'bâtis', 'sections', 'parcelles', 'cadastre', 'cadastrale']
 
     assert iden.keywords2[3].type == 'theme'
-    assert iden.keywords2[3].thesaurus['title'] == "GéoBretagne v 2.0"
+    assert iden.keywords2[3].thesaurus['title'] == u"GéoBretagne v 2.0"
     assert iden.keywords2[3].thesaurus['date'] == '2014-01-13'
     assert iden.keywords2[3].thesaurus['datetype'] == 'publication'
     assert_list(iden.keywords2[3].keywords, 1)
-    assert iden.keywords2[3].keywords == ['référentiels : cadastre']
+    assert iden.keywords2[3].keywords == [u'référentiels : cadastre']
 
     assert iden.keywords2[4].type == 'theme'
     assert iden.keywords2[4].thesaurus['title'] == "INSPIRE themes"
@@ -529,13 +529,13 @@ def test_md_parsing_geobretagne():
     assert iden.keywords2[5].thesaurus['date'] == '2012-07-20'
     assert iden.keywords2[5].thesaurus['datetype'] == 'publication'
     assert_list(iden.keywords2[5].keywords, 2)
-    assert iden.keywords2[5].keywords == ['cadastre', 'bâtiment']
+    assert iden.keywords2[5].keywords == ['cadastre', u'bâtiment']
 
     assert_list(iden.topiccategory, 1)
     assert iden.topiccategory[0] == 'planningCadastre'
 
     assert iden.supplementalinformation == \
-           "La légende du plan cadastral est consultable sur: " \
+           u"La légende du plan cadastral est consultable sur: " \
            "http://www.cadastre.gouv.fr/scpc/pdf/legendes/FR_fr/Legende%20du" \
            "%20plan%20sur%20internet.pdf"
 
