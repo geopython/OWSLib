@@ -319,6 +319,7 @@ class MD_DataIdentification(object):
             self.distance = []
             self.uom = []
             self.resourcelanguage = []
+            self.resourcelanguagecode = []
             self.creator = []
             self.publisher = []
             self.contributor = []
@@ -349,7 +350,8 @@ class MD_DataIdentification(object):
             self.aggregationinfo = util.testXMLValue(val)
 
             self.uricode = []
-            for i in md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces)):
+            for i in md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces)) + \
+                     md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString', namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.uricode.append(val)
@@ -405,7 +407,7 @@ class MD_DataIdentification(object):
 
             self.securityconstraints = []
             for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_SecurityConstraints/gmd:classification/gmd:MD_ClassificationCode', namespaces)):
-                val = util.testXMLValue(i)
+                val = _testCodeListValue(i)
                 if val is not None:
                     self.securityconstraints.append(val)
 
@@ -429,9 +431,15 @@ class MD_DataIdentification(object):
                     self.distance.append(val)
                 self.uom.append(i.get("uom"))
 
-            self.resourcelanguage = []
+            self.resourcelanguagecode = []
             for i in md.findall(util.nspath_eval('gmd:language/gmd:LanguageCode', namespaces)):
                 val = _testCodeListValue(i)
+                if val is not None:
+                    self.resourcelanguagecode.append(val)
+
+            self.resourcelanguage = []
+            for i in md.findall(util.nspath_eval('gmd:language/gco:CharacterString', namespaces)):
+                val = util.testXMLValue(i)
                 if val is not None:
                     self.resourcelanguage.append(val)
 
@@ -458,6 +466,7 @@ class MD_DataIdentification(object):
 
             val = md.find(util.nspath_eval('gmd:abstract/gmx:Anchor', namespaces))
 
+            self.abstract_url = None
             if val is not None:
                 self.abstract = util.testXMLValue(val)
                 self.abstract_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
@@ -500,7 +509,7 @@ class MD_DataIdentification(object):
                 mdkw['thesaurus']['date'] = util.testXMLValue(val)
 
                 val = i.find(util.nspath_eval('gmd:MD_Keywords/gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces))
-                mdkw['thesaurus']['datetype'] = util.testXMLValue(val)
+                mdkw['thesaurus']['datetype'] = util.testXMLAttribute(val, 'codeListValue')
 
                 mdkw['keywords'] = []
 

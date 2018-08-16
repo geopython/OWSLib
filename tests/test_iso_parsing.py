@@ -140,7 +140,8 @@ def test_md_parsing_dov():
                      "beschikbaar op " \
                      "https://www.dov.vlaanderen.be/page/gebruiksvoorwaarden-dov-services"
 
-    assert_list(iden.securityconstraints, 0)
+    assert_list(iden.securityconstraints, 1)
+    assert iden.securityconstraints[0] == 'unclassified'
 
     assert_list(iden.useconstraints, 0)
 
@@ -150,8 +151,9 @@ def test_md_parsing_dov():
     assert_list(iden.distance, 0)
     assert_list(iden.uom, 0)
 
-    assert_list(iden.resourcelanguage, 1)
-    assert iden.resourcelanguage[0] == 'dut'
+    assert_list(iden.resourcelanguage, 0)
+    assert_list(iden.resourcelanguagecode, 1)
+    assert iden.resourcelanguagecode[0] == 'dut'
 
     assert_list(iden.creator, 0)
     assert_list(iden.publisher, 0)
@@ -202,7 +204,7 @@ def test_md_parsing_dov():
     assert iden.keywords[0]['type'] == ''
     assert iden.keywords[0]['thesaurus']['title'] == "GEMET - INSPIRE thema's, versie 1.0"
     assert iden.keywords[0]['thesaurus']['date'] == '2008-06-01'
-    assert iden.keywords[0]['thesaurus']['datetype'] is None
+    assert iden.keywords[0]['thesaurus']['datetype'] == 'publication'
     assert_list(iden.keywords[0]['keywords'], 1)
     assert iden.keywords[0]['keywords'] == ['Geologie']
 
@@ -211,7 +213,7 @@ def test_md_parsing_dov():
     assert iden.keywords[1]['thesaurus'][
                'title'] == "GEMET - Concepten, versie 2.4"
     assert iden.keywords[1]['thesaurus']['date'] == '2010-01-13'
-    assert iden.keywords[1]['thesaurus']['datetype'] is None
+    assert iden.keywords[1]['thesaurus']['datetype'] == 'publication'
     assert_list(iden.keywords[1]['keywords'], 2)
     assert iden.keywords[1]['keywords'] == ['grondwater', 'meetnet(werk)']
 
@@ -220,7 +222,7 @@ def test_md_parsing_dov():
     assert iden.keywords[2]['thesaurus'][
                'title'] == "Vlaamse regio's"
     assert iden.keywords[2]['thesaurus']['date'] == '2013-09-25'
-    assert iden.keywords[2]['thesaurus']['datetype'] is None
+    assert iden.keywords[2]['thesaurus']['datetype'] == 'publication'
     assert_list(iden.keywords[2]['keywords'], 1)
     assert iden.keywords[2]['keywords'] == ['Vlaams Gewest']
 
@@ -229,7 +231,7 @@ def test_md_parsing_dov():
     assert iden.keywords[3]['thesaurus'][
                'title'] == "GDI-Vlaanderen Trefwoorden"
     assert iden.keywords[3]['thesaurus']['date'] == '2014-02-26'
-    assert iden.keywords[3]['thesaurus']['datetype'] is None
+    assert iden.keywords[3]['thesaurus']['datetype'] == 'publication'
     assert_list(iden.keywords[3]['keywords'], 7)
     assert iden.keywords[3]['keywords'] == [
         'Toegevoegd GDI-Vl', 'Herbruikbaar', 'Vlaamse Open data',
@@ -240,7 +242,7 @@ def test_md_parsing_dov():
     assert iden.keywords[4]['type'] is None
     assert iden.keywords[4]['thesaurus']['title'] == "DOV"
     assert iden.keywords[4]['thesaurus']['date'] == '2010-12-01'
-    assert iden.keywords[4]['thesaurus']['datetype'] is None
+    assert iden.keywords[4]['thesaurus']['datetype'] == 'publication'
     assert_list(iden.keywords[4]['keywords'], 7)
     assert iden.keywords[4]['keywords'] == [
         'Ondergrond', 'DOV', 'Vlaanderen', 'monitoring', 'meetnetten',
@@ -363,7 +365,8 @@ def test_md_parsing_geobretagne():
     assert iden.date[0].date == '2018-09-01'
     assert iden.date[0].type == 'revision'
 
-    assert_list(iden.uricode, 0)
+    assert_list(iden.uricode, 1)
+    assert iden.uricode[0] == 'https://geobretagne.fr/geonetwork/apps/georchestra/?uuid=363e3a8e-d0ce-497d-87a9-2a2d58d82772'
     assert_list(iden.uricodespace, 0)
 
     assert_list(iden.uselimitation, 2)
@@ -393,7 +396,9 @@ def test_md_parsing_geobretagne():
     assert_list(iden.distance, 0)
     assert_list(iden.uom, 0)
 
-    assert_list(iden.resourcelanguage, 0)
+    assert_list(iden.resourcelanguage, 1)
+    assert iden.resourcelanguage[0] == 'fre'
+    assert_list(iden.resourcelanguagecode, 0)
 
     assert_list(iden.creator, 0)
     assert_list(iden.publisher, 0)
@@ -469,7 +474,7 @@ def test_md_parsing_geobretagne():
     assert iden.keywords[4]['type'] == 'theme'
     assert iden.keywords[4]['thesaurus']['title'] == u"GéoBretagne v 2.0"
     assert iden.keywords[4]['thesaurus']['date'] == '2014-01-13'
-    assert iden.keywords[4]['thesaurus']['datetype'] is None
+    assert iden.keywords[4]['thesaurus']['datetype'] == 'publication'
     assert_list(iden.keywords[4]['keywords'], 1)
     assert iden.keywords[4]['keywords'] == [u'référentiels : cadastre']
 
@@ -477,7 +482,7 @@ def test_md_parsing_geobretagne():
     assert iden.keywords[5]['type'] == 'theme'
     assert iden.keywords[5]['thesaurus']['title'] == "INSPIRE themes"
     assert iden.keywords[5]['thesaurus']['date'] == '2008-06-01'
-    assert iden.keywords[5]['thesaurus']['datetype'] is None
+    assert iden.keywords[5]['thesaurus']['datetype'] == 'publication'
     assert_list(iden.keywords[5]['keywords'], 1)
     assert iden.keywords[5]['keywords'] == ['Parcelles cadastrales']
 
@@ -485,7 +490,7 @@ def test_md_parsing_geobretagne():
     assert iden.keywords[6]['type'] == 'theme'
     assert iden.keywords[6]['thesaurus']['title'] == "GEMET"
     assert iden.keywords[6]['thesaurus']['date'] == '2012-07-20'
-    assert iden.keywords[6]['thesaurus']['datetype'] is None
+    assert iden.keywords[6]['thesaurus']['datetype'] == 'publication'
     assert_list(iden.keywords[6]['keywords'], 2)
     assert iden.keywords[6]['keywords'] == ['cadastre', u'bâtiment']
 
