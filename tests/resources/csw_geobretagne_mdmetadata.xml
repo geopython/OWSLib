@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:geonet="http://www.fao.org/geonetwork" xmlns:gfc="http://www.isotc211.org/2005/gfc" xmlns:gml="http://www.opengis.net/gml" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd http://www.isotc211.org/2005/gmx http://www.isotc211.org/2005/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd">
+  <gmd:fileIdentifier>
+    <gco:CharacterString>955c3e47-411e-4969-b61b-3556d1b9f879</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:language>
+    <gco:CharacterString>fre</gco:CharacterString>
+  </gmd:language>
+  <gmd:characterSet>
+    <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" />
+  </gmd:characterSet>
+  <gmd:parentIdentifier>
+    <gco:CharacterString />
+  </gmd:parentIdentifier>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" />
+  </gmd:hierarchyLevel>
+  <gmd:hierarchyLevelName>
+    <gco:CharacterString>Jeu de données</gco:CharacterString>
+  </gmd:hierarchyLevelName>
+  <gmd:contact>
+    <gmd:CI_ResponsibleParty>
+      <gmd:organisationName>
+        <gco:CharacterString>DIRECTION GENERALE DES FINANCES PUBLIQUES BUREAU GF-3A</gco:CharacterString>
+      </gmd:organisationName>
+      <gmd:contactInfo>
+        <gmd:CI_Contact>
+          <gmd:address>
+            <gmd:CI_Address>
+              <gmd:electronicMailAddress>
+                <gco:CharacterString>bureau.gf3a@dgfip.finances.gouv.fr</gco:CharacterString>
+              </gmd:electronicMailAddress>
+            </gmd:CI_Address>
+          </gmd:address>
+        </gmd:CI_Contact>
+      </gmd:contactInfo>
+      <gmd:role>
+        <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" />
+      </gmd:role>
+    </gmd:CI_ResponsibleParty>
+  </gmd:contact>
+  <gmd:dateStamp>
+    <gco:DateTime>2018-07-30T14:19:40</gco:DateTime>
+  </gmd:dateStamp>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>1.0</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:spatialRepresentationInfo>
+    <gmd:MD_VectorSpatialRepresentation>
+      <gmd:topologyLevel>
+        <gmd:MD_TopologyLevelCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_TopologyLevelCode" codeListValue="surfaceGraph" />
+      </gmd:topologyLevel>
+    </gmd:MD_VectorSpatialRepresentation>
+  </gmd:spatialRepresentationInfo>
+  <gmd:referenceSystemInfo>
+    <gmd:MD_ReferenceSystem>
+      <gmd:referenceSystemIdentifier>
+        <gmd:RS_Identifier>
+          <gmd:code>
+            <gco:CharacterString>RGF93 / CC48 (EPSG:3948)</gco:CharacterString>
+          </gmd:code>
+          <gmd:codeSpace>
+            <gco:CharacterString>EPSG</gco:CharacterString>
+          </gmd:codeSpace>
+          <gmd:version>
+            <gco:CharacterString>7.4</gco:CharacterString>
+          </gmd:version>
+        </gmd:RS_Identifier>
+      </gmd:referenceSystemIdentifier>
+    </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  <gmd:referenceSystemInfo>
+    <gmd:MD_ReferenceSystem>
+      <gmd:referenceSystemIdentifier>
+        <gmd:RS_Identifier>
+          <gmd:code>
+            <gco:CharacterString>RGF93 / CC50 (EPSG:3950)</gco:CharacterString>
+          </gmd:code>
+          <gmd:codeSpace>
+            <gco:CharacterString>EPSG</gco:CharacterString>
+          </gmd:codeSpace>
+          <gmd:version>
+            <gco:CharacterString>7.4</gco:CharacterString>
+          </gmd:version>
+        </gmd:RS_Identifier>
+      </gmd:referenceSystemIdentifier>
+    </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  <gmd:referenceSystemInfo>
+    <gmd:MD_ReferenceSystem>
+      <gmd:referenceSystemIdentifier>
+        <gmd:RS_Identifier>
+          <gmd:code>
+            <gco:CharacterString>RGF93 / Lambert-93 (EPSG:2154)</gco:CharacterString>
+          </gmd:code>
+          <gmd:codeSpace>
+            <gco:CharacterString>EPSG</gco:CharacterString>
+          </gmd:codeSpace>
+          <gmd:version>
+            <gco:CharacterString>7.4</gco:CharacterString>
+          </gmd:version>
+        </gmd:RS_Identifier>
+      </gmd:referenceSystemIdentifier>
+    </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title>
+            <gco:CharacterString>Cadastre 2018 en Bretagne</gco:CharacterString>
+          </gmd:title>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date>2018-09-01</gco:Date>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" />
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code>
+                <gco:CharacterString>https://geobretagne.fr/geonetwork/apps/georchestra/?uuid=363e3a8e-d0ce-497d-87a9-2a2d58d82772</gco:CharacterString>
+              </gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract>
+        <gco:CharacterString>Le plan du cadastre est un document administratif qui propose l’unique plan parcellaire à grande échelle couvrant le territoire national. 
+Le plan du cadastre d’une commune est découpé en sections, elles-mêmes pouvant être découpées en subdivisions de sections, communément appelées « feuilles de plan ».
+- La section cadastrale est une portion du territoire communal dont le périmètre est généralement constitué par des limites présentant un caractère relativement stable sur le terrain (route, chemins, cours d’eau…). 
+- La parcelle est l’unité cadastrale de base. C’est un terrain d’un seul tenant situé dans un même lieudit et appartenant à un même propriétaire.
+- Le plan du cadastre au format vecteur est issu majoritairement de numérisation du plan cadastral papier ou raster réalisée dans le cadre de conventions avec les collectivités territoriales. Dans une moindre mesure, il a été confectionné directement au format numérique dans le cadre de la production de plans cadastraux neufs (procédure du remaniement prévue par la loi n° 78-645 du 18 juillet 1974) ou d’aménagements fonciers agricoles et forestiers (communément désignés sous le terme « remembrements »). 
+Les plans cadastraux au format vecteur en France métropolitaine sont actuellement géoréférencés dans le système légal (RGF93) à l’aide des projections « coniques conformes 9 zones ». Le géoréférencement des plans vecteur a pu être obtenu :
+- lors de leur confection (cas des plans cadastraux très récents) ;
+- après transformation de leurs coordonnées exprimées dans la projection Lambert zones ;
+- lors de leur vectorisation (cas des plans non initialement géoréférencés)</gco:CharacterString>
+      </gmd:abstract>
+      <gmd:purpose>
+        <gco:CharacterString>Le but premier du plan cadastral est d'identifier, de localiser et représenter la propriété foncière, ainsi que de servir à l'assise de la fiscalité locale des propriétés non bâties. Par suite, l’article 110 de la loi n° 2009-526 du 12 mai 2009, abrogé et recodifié par l'Ordonnance n° 2010-1232 du 21 octobre 2010 à l'article L127-10 -I du Code de l'environnement dispose qu'en matière de découpage parcellaire et de représentation du bâti, le plan cadastral est la donnée de référence.</gco:CharacterString>
+      </gmd:purpose>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ProgressCode" codeListValue="completed" />
+      </gmd:status>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName>
+            <gco:CharacterString>DIRECTION GENERALE DES FINANCES PUBLIQUES</gco:CharacterString>
+          </gmd:individualName>
+          <gmd:organisationName>
+            <gco:CharacterString>DGFIP Bretagne</gco:CharacterString>
+          </gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString>bureau.gf3a@dgfip.finances.gouv.fr</gco:CharacterString>
+                  </gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+              <gmd:contactInstructions>
+                <gmx:FileName src="https://geobretagne.fr/geonetwork/images/harvesting/ddfip_drfip.gif">Logo</gmx:FileName>
+              </gmd:contactInstructions>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" />
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="annually" />
+          </gmd:maintenanceAndUpdateFrequency>
+          <gmd:contact>
+            <gmd:CI_ResponsibleParty>
+              <gmd:individualName>
+                <gco:CharacterString>DIRECTION GENERALE DES FINANCES PUBLIQUES / bureau GF-3A</gco:CharacterString>
+              </gmd:individualName>
+              <gmd:organisationName>
+                <gco:CharacterString>DGFIP Bretagne</gco:CharacterString>
+              </gmd:organisationName>
+              <gmd:contactInfo>
+                <gmd:CI_Contact />
+              </gmd:contactInfo>
+              <gmd:role>
+                <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" />
+              </gmd:role>
+            </gmd:CI_ResponsibleParty>
+          </gmd:contact>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>France</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="place" />
+          </gmd:type>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords />
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>bâtiments</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>adresses</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>parcelles cadastrales</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>hydrographie</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>réseaux de transport</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>unités administratives</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>référentiels de coordonnées</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme" />
+          </gmd:type>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>bâtis</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>sections</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>parcelles</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>cadastre</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>cadastrale</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme" />
+          </gmd:type>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>référentiels : cadastre</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_KeywordTypeCode" codeListValue="theme" />
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>GéoBretagne v 2.0</gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>2014-01-13</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code>
+                    <gmx:Anchor xlink:href="https://geobretagne.fr/geonetwork/srv/eng/thesaurus.download?ref=external.theme.geobretagne">geonetwork.thesaurus.external.theme.geobretagne</gmx:Anchor>
+                  </gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Parcelles cadastrales</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme" />
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>INSPIRE themes</gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>2008-06-01</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code>
+                    <gmx:Anchor xlink:href="https://geobretagne.fr/geonetwork/srv/fre/thesaurus.download?ref=external.theme.inspire-theme">geonetwork.thesaurus.external.theme.inspire-theme</gmx:Anchor>
+                  </gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>cadastre</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>bâtiment</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_KeywordTypeCode" codeListValue="theme" />
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>GEMET</gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>2012-07-20</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code>
+                    <gmx:Anchor xlink:href="https://geobretagne.fr/geonetwork/srv/eng/thesaurus.download?ref=external.theme.gemet">geonetwork.thesaurus.external.theme.gemet</gmx:Anchor>
+                  </gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:resourceConstraints>
+        <gmd:MD_LegalConstraints>
+          <gmd:useLimitation>
+            <gco:CharacterString>le plan cadastral décrit les limites apparentes de la propriété.</gco:CharacterString>
+          </gmd:useLimitation>
+          <gmd:useLimitation>
+            <gco:CharacterString>« En dépit des efforts et diligences mis en oeuvre pour en vérifier la fiabilité, le partenaire fournisseur n’est pas en mesure de garantir l’exactitude, la mise à jour, l’intégrité, l’exhaustivité des données et en particulier que les données sont exemptes d'erreurs, notamment de localisation, d’identification ou d’actualisation ou d’imprécisions. Les données ne sont pas fournies en vue d'une utilisation particulière et aucune garantie quant à leur aptitude à un usage particulier n'est apportée par le partenaire fournisseur. En conséquence, les utilisateurs utilisent les données sous leur responsabilité pleine et entière, à leurs risques et périls, sans recours possible contre le partenaire fournisseur dont la responsabilité ne saurait être engagée du fait d’un dommage résultant directement ou indirectement de l’utilisation de ces données. En particulier, il appartient aux utilisateurs d’apprécier, sous leur seule responsabilité : o l'opportunité d'utiliser les données ; o la compatibilité des fichiers avec leurs systèmes informatiques ; o l’adéquation des données à leurs besoins ; o qu’ils disposent de la compétence suffisante pour utiliser les données ; o l’opportunité d’utiliser la documentation ou les outils d’analyse fournis ou préconisés, en relation avec l’utilisation des données, le cas échéant. Le fournisseur partenaire n’est en aucune façon responsable des éléments extérieurs aux données et notamment des outils d’analyse, matériels, logiciels, réseaux..., utilisés pour consulter et/ou traiter les données, même s’il a préconisé ces éléments. L’utilisateur veille à vérifier que l’actualité des informations mises à disposition est compatible avec l’usage qu’il en fait. »</gco:CharacterString>
+          </gmd:useLimitation>
+          <gmd:accessConstraints>
+            <gmd:MD_RestrictionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions" />
+          </gmd:accessConstraints>
+          <gmd:useConstraints>
+            <gmd:MD_RestrictionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_RestrictionCode" codeListValue="copyright" />
+          </gmd:useConstraints>
+          <gmd:otherConstraints>
+            <gco:CharacterString>Usage libre sous réserve des mentions obligatoires sur tout document de diffusion : "Source : DGFIP"</gco:CharacterString>
+          </gmd:otherConstraints>
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
+      <gmd:spatialRepresentationType>
+        <gmd:MD_SpatialRepresentationTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_SpatialRepresentationTypeCode" codeListValue="vector" />
+      </gmd:spatialRepresentationType>
+      <gmd:spatialResolution>
+        <gmd:MD_Resolution>
+          <gmd:equivalentScale>
+            <gmd:MD_RepresentativeFraction>
+              <gmd:denominator>
+                <gco:Integer>500</gco:Integer>
+              </gmd:denominator>
+            </gmd:MD_RepresentativeFraction>
+          </gmd:equivalentScale>
+        </gmd:MD_Resolution>
+      </gmd:spatialResolution>
+      <gmd:language>
+        <gco:CharacterString>fre</gco:CharacterString>
+      </gmd:language>
+      <gmd:characterSet>
+        <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" />
+      </gmd:characterSet>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>planningCadastre</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:extent>
+        <gmd:EX_Extent>
+          <gmd:description>
+            <gco:CharacterString>Bretagne</gco:CharacterString>
+          </gmd:description>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude>
+                <gco:Decimal>-5.23515625</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>-1.1921875</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>46.755859375</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>49.30468750000001</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicDescription>
+              <gmd:geographicIdentifier>
+                <gmd:MD_Identifier>
+                  <gmd:authority>
+                    <gmd:CI_Citation>
+                      <gmd:title>
+                        <gco:CharacterString>ISO 3166 alpha 3</gco:CharacterString>
+                      </gmd:title>
+                      <gmd:date>
+                        <gmd:CI_Date>
+                          <gmd:date>
+                            <gco:Date>2019-02-19</gco:Date>
+                          </gmd:date>
+                          <gmd:dateType>
+                            <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+                          </gmd:dateType>
+                        </gmd:CI_Date>
+                      </gmd:date>
+                    </gmd:CI_Citation>
+                  </gmd:authority>
+                  <gmd:code>
+                    <gco:CharacterString>FXX</gco:CharacterString>
+                  </gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:geographicIdentifier>
+            </gmd:EX_GeographicDescription>
+          </gmd:geographicElement>
+        </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:supplementalInformation>
+        <gco:CharacterString>La légende du plan cadastral est consultable sur: http://www.cadastre.gouv.fr/scpc/pdf/legendes/FR_fr/Legende%20du%20plan%20sur%20internet.pdf</gco:CharacterString>
+      </gmd:supplementalInformation>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmd:contentInfo>
+    <gmd:MD_FeatureCatalogueDescription>
+      <gmd:includedWithDataset>
+        <gco:Boolean>false</gco:Boolean>
+      </gmd:includedWithDataset>
+      <gmd:featureCatalogueCitation />
+    </gmd:MD_FeatureCatalogueDescription>
+  </gmd:contentInfo>
+  <gmd:distributionInfo xmlns:date="http://exslt.org/dates-and-times">
+    <gmd:MD_Distribution>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name>
+            <gco:CharacterString>DXF</gco:CharacterString>
+          </gmd:name>
+          <gmd:version>
+            <gco:CharacterString>12.0</gco:CharacterString>
+          </gmd:version>
+          <gmd:specification>
+            <gco:CharacterString>DXF-PCI</gco:CharacterString>
+          </gmd:specification>
+          <gmd:formatDistributor>
+            <gmd:MD_Distributor>
+              <gmd:distributorContact>
+                <gmd:CI_ResponsibleParty>
+                  <gmd:organisationName>
+                    <gco:CharacterString>AUTODESK</gco:CharacterString>
+                  </gmd:organisationName>
+                  <gmd:role>
+                    <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="originator" />
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:distributorContact>
+            </gmd:MD_Distributor>
+          </gmd:formatDistributor>
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name>
+            <gco:CharacterString>EDIGEO</gco:CharacterString>
+          </gmd:name>
+          <gmd:version>
+            <gco:CharacterString>1.0</gco:CharacterString>
+          </gmd:version>
+          <gmd:specification>
+            <gco:CharacterString>NF Z 52-000</gco:CharacterString>
+          </gmd:specification>
+          <gmd:formatDistributor>
+            <gmd:MD_Distributor>
+              <gmd:distributorContact>
+                <gmd:CI_ResponsibleParty>
+                  <gmd:organisationName>
+                    <gco:CharacterString>AFNOR</gco:CharacterString>
+                  </gmd:organisationName>
+                  <gmd:role>
+                    <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="originator" />
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:distributorContact>
+            </gmd:MD_Distributor>
+          </gmd:formatDistributor>
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name>
+            <gco:CharacterString>Jpeg</gco:CharacterString>
+          </gmd:name>
+          <gmd:version>
+            <gco:CharacterString>(ISO/IEC 10918-4:1999)</gco:CharacterString>
+          </gmd:version>
+          <gmd:formatDistributor>
+            <gmd:MD_Distributor>
+              <gmd:distributorContact>
+                <gmd:CI_ResponsibleParty>
+                  <gmd:organisationName>
+                    <gco:CharacterString>ISO organisation internationale de normalisation</gco:CharacterString>
+                  </gmd:organisationName>
+                  <gmd:role>
+                    <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="publisher" />
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:distributorContact>
+            </gmd:MD_Distributor>
+          </gmd:formatDistributor>
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name>
+            <gco:CharacterString>gif</gco:CharacterString>
+          </gmd:name>
+          <gmd:version>
+            <gco:CharacterString>89a</gco:CharacterString>
+          </gmd:version>
+          <gmd:formatDistributor>
+            <gmd:MD_Distributor>
+              <gmd:distributorContact>
+                <gmd:CI_ResponsibleParty>
+                  <gmd:organisationName>
+                    <gco:CharacterString>CompuServe</gco:CharacterString>
+                  </gmd:organisationName>
+                  <gmd:role>
+                    <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="originator" />
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:distributorContact>
+            </gmd:MD_Distributor>
+          </gmd:formatDistributor>
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:distributor>
+        <gmd:MD_Distributor>
+          <gmd:distributorContact>
+            <gmd:CI_ResponsibleParty>
+              <gmd:organisationName>
+                <gco:CharacterString>DIRECTION GENERALE DES FINANCES PUBLIQUES</gco:CharacterString>
+              </gmd:organisationName>
+              <gmd:contactInfo>
+                <gmd:CI_Contact>
+                  <gmd:address>
+                    <gmd:CI_Address>
+                      <gmd:electronicMailAddress>
+                        <gco:CharacterString>bureau.gf3a@dgfip.finances.gouv.fr</gco:CharacterString>
+                      </gmd:electronicMailAddress>
+                    </gmd:CI_Address>
+                  </gmd:address>
+                </gmd:CI_Contact>
+              </gmd:contactInfo>
+              <gmd:role>
+                <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" />
+              </gmd:role>
+            </gmd:CI_ResponsibleParty>
+          </gmd:distributorContact>
+          <gmd:distributionOrderProcess>
+            <gmd:MD_StandardOrderProcess>
+              <gmd:fees>
+                <gco:CharacterString>cas courant 9.5€/feuille pour les commandes volumineuses voir prochainement conditions sur site</gco:CharacterString>
+              </gmd:fees>
+            </gmd:MD_StandardOrderProcess>
+          </gmd:distributionOrderProcess>
+        </gmd:MD_Distributor>
+      </gmd:distributor>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.cadastre.gouv.fr</gmd:URL>
+              </gmd:linkage>
+              <gmd:protocol>
+                <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
+              </gmd:protocol>
+              <gmd:name>
+                <gco:CharacterString>SCPC</gco:CharacterString>
+              </gmd:name>
+              <gmd:description>
+                <gco:CharacterString>Service de consultation du plan cadastral</gco:CharacterString>
+              </gmd:description>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.impots.gouv.fr/portal/dgi/public/popup;jsessionid=YEKIOSL2VA1SFQFIEIQCFFA?pageId=collectivites&amp;espId=3&amp;typePage=cpr02&amp;docOid=documentstandard_6522&amp;temNvlPopUp=true</gmd:URL>
+              </gmd:linkage>
+              <gmd:protocol>
+                <gco:CharacterString>WWW:LINK-1.0-http--related</gco:CharacterString>
+              </gmd:protocol>
+              <gmd:name>
+                <gco:CharacterString>SCPC</gco:CharacterString>
+              </gmd:name>
+              <gmd:description>
+                <gco:CharacterString>Lien officiel de description des données</gco:CharacterString>
+              </gmd:description>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+      <gmd:scope>
+        <gmd:DQ_Scope>
+          <gmd:level>
+            <gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode" codeListValue="series" />
+          </gmd:level>
+        </gmd:DQ_Scope>
+      </gmd:scope>
+      <gmd:report>
+        <gmd:DQ_DomainConsistency>
+          <gmd:result>
+            <gmd:DQ_ConformanceResult>
+              <gmd:specification>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>INSPIRE Data Specification on Cadastral Parcels - Guidelines v 3.0.1</gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date>2010-11-30</gco:Date>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                  <gmd:identifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gco:CharacterString>1.2</gco:CharacterString>
+                      </gmd:code>
+                      <gmd:codeSpace>
+                        <gco:CharacterString>INSPIRE</gco:CharacterString>
+                      </gmd:codeSpace>
+                    </gmd:RS_Identifier>
+                  </gmd:identifier>
+                </gmd:CI_Citation>
+              </gmd:specification>
+              <gmd:explanation>
+                <gco:CharacterString>Ressource concernée par INSPIRE
+Degré de conformité de la ressource par rapport aux spécifications visées d'Inspire Conforme</gco:CharacterString>
+              </gmd:explanation>
+              <gmd:pass>
+                <gco:Boolean>false</gco:Boolean>
+              </gmd:pass>
+            </gmd:DQ_ConformanceResult>
+          </gmd:result>
+        </gmd:DQ_DomainConsistency>
+      </gmd:report>
+      <gmd:lineage>
+        <gmd:LI_Lineage>
+          <gmd:statement>
+            <gco:CharacterString>Les plans cadastraux au format vecteur gérés et exportés par les services de la DGFiP ont été confectionnées à partir de levers terrain. Selon les feuilles de plan, les conditions de vectorisation et de géoréférencement sont diverses. Ces informations sont disponibles sur les fiches de chacune des communes. 
+
+Les plans cadastraux sont de plusieurs types : 
+
+- plans dits « mis à jour » : ce sont des plans cadastraux mis à jour à partir de la trame des plans cadastraux napoléoniens. Ce ne sont pas des plans réguliers. Ces feuilles de plan sont identifiables par leur section à lettre unique (par exemple « section A »). Les échelles des feuilles de plan peuvent être variables et sont principalement aux échelles suivantes : 1/1250, 1/2500 et 1/5000 ;
+
+- plans dits « réguliers » : ce sont des plans qui ont été confectionnés lors de la rénovation du cadastre sans reprendre la trame des plans napoléoniens. Parmi ces plans, l’on distingue deux catégories :
+
+- les plans dits « renouvelés » : ce sont des plans qui n’ont pas fait l’objet lors de leur confection d’une délimitation contradictoire des propriétés sur le terrain ;
+
+- les plans « refaits » qui ont quant à eux fait l’objet d’une délimitation contradictoire des propriétés ;
+
+Lorsque le plan cadastral n’est plus en mesure de répondre aux besoins (notamment en raison de son échelle ou de son imprécision éventuelle), il peut être refait selon la procédure du « remaniement » prévue par la loi n° 78-645 du 18 juillet 1974.
+
+Les plans cadastraux résultant d’opérations d’aménagements fonciers sont appelés « plans remembrés ».
+
+L’identifiant d’une feuille de plan est de la forme : « DDCCCPPPSSNN » où :
+
+- « DD » est le numéro du département ;
+
+- « CCC » le code INSEE de la commune ;
+
+- « PPP » le préfixe de section. Par défaut ce préfixe est égale à « 000 » sauf dans les cas suivants :
+
+- en cas d’absorption de commune, ce préfixe a pour valeur le code INSEE de la commune absorbée ;
+
+- en cas de communes à arrondissements, ce préfixe contient le code de l’arrondissement (pour Paris de 101 à 120, pour Lyon de 381 à 389, pour Marseille de 201 à 216, dans le cas de la ville de Toulouse il s’agit du code de quartier prenant les valeurs de 801 à 846)
+
+- « SS » est la désignation de la section « cadastrale » (en cas de lettre de section unique, la lettre de section est précédée du chiffre « 0 » par exemple « section 0A ») ;
+
+- « NN » est le numéro de la feuille (« 01 » par défaut)</gco:CharacterString>
+          </gmd:statement>
+        </gmd:LI_Lineage>
+      </gmd:lineage>
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+  <gmd:metadataMaintenance>
+    <gmd:MD_MaintenanceInformation>
+      <gmd:maintenanceAndUpdateFrequency>
+        <gmd:MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="continual" />
+      </gmd:maintenanceAndUpdateFrequency>
+      <gmd:contact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName>
+            <gco:CharacterString>DGFiP Bureau GF-3A</gco:CharacterString>
+          </gmd:organisationName>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" />
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:contact>
+    </gmd:MD_MaintenanceInformation>
+  </gmd:metadataMaintenance>
+</gmd:MD_Metadata>
+
