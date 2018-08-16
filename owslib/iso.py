@@ -500,7 +500,7 @@ class MD_DataIdentification(object):
                 mdkw['thesaurus']['date'] = util.testXMLValue(val)
 
                 val = i.find(util.nspath_eval('gmd:MD_Keywords/gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces))
-                mdkw['thesaurus']['datetype'] = util.testXMLValue(val)
+                mdkw['thesaurus']['datetype'] = util.testXMLAttribute(val, 'codeListValue')
 
                 mdkw['keywords'] = []
 
