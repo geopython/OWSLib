@@ -459,6 +459,7 @@ class MD_DataIdentification(object):
 
             val = md.find(util.nspath_eval('gmd:abstract/gmx:Anchor', namespaces))
 
+            self.abstract_url = None
             if val is not None:
                 self.abstract = util.testXMLValue(val)
                 self.abstract_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
