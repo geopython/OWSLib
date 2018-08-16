@@ -5,6 +5,10 @@ OWSLib
    :target: https://travis-ci.org/geopython/OWSLib
    :alt: Travis Build
 
+.. image:: https://api.codacy.com/project/badge/Grade/09f15588c99943e3976cdf20b7b32c8d
+   :target: https://www.codacy.com/project/cehbrecht/OWSLib/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=geopython/OWSLib&amp;utm_campaign=Badge_Grade_Dashboard
+   :alt: Codacy Check
+
 .. image:: https://img.shields.io/github/license/geopython/OWSLib.svg
     :target: https://github.com/geopython/OWSLib/blob/master/LICENSE
     :alt: GitHub license
