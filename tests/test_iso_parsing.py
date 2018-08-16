@@ -364,7 +364,8 @@ def test_md_parsing_geobretagne():
     assert iden.date[0].date == '2018-09-01'
     assert iden.date[0].type == 'revision'
 
-    assert_list(iden.uricode, 0)
+    assert_list(iden.uricode, 1)
+    assert iden.uricode[0] == 'https://geobretagne.fr/geonetwork/apps/georchestra/?uuid=363e3a8e-d0ce-497d-87a9-2a2d58d82772'
     assert_list(iden.uricodespace, 0)
 
     assert_list(iden.uselimitation, 2)

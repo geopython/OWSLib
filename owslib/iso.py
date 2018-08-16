@@ -349,7 +349,8 @@ class MD_DataIdentification(object):
             self.aggregationinfo = util.testXMLValue(val)
 
             self.uricode = []
-            for i in md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces)):
+            for i in md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces)) + \
+                     md.findall(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString', namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.uricode.append(val)
