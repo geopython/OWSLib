@@ -140,7 +140,8 @@ def test_md_parsing_dov():
                      "beschikbaar op " \
                      "https://www.dov.vlaanderen.be/page/gebruiksvoorwaarden-dov-services"
 
-    assert_list(iden.securityconstraints, 0)
+    assert_list(iden.securityconstraints, 1)
+    assert iden.securityconstraints[0] == 'unclassified'
 
     assert_list(iden.useconstraints, 0)
 
