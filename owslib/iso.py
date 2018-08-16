@@ -319,6 +319,7 @@ class MD_DataIdentification(object):
             self.distance = []
             self.uom = []
             self.resourcelanguage = []
+            self.resourcelanguagecode = []
             self.creator = []
             self.publisher = []
             self.contributor = []
@@ -430,9 +431,15 @@ class MD_DataIdentification(object):
                     self.distance.append(val)
                 self.uom.append(i.get("uom"))
 
-            self.resourcelanguage = []
+            self.resourcelanguagecode = []
             for i in md.findall(util.nspath_eval('gmd:language/gmd:LanguageCode', namespaces)):
                 val = _testCodeListValue(i)
+                if val is not None:
+                    self.resourcelanguagecode.append(val)
+
+            self.resourcelanguage = []
+            for i in md.findall(util.nspath_eval('gmd:language/gco:CharacterString', namespaces)):
+                val = util.testXMLValue(i)
                 if val is not None:
                     self.resourcelanguage.append(val)
 

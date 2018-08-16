@@ -151,8 +151,9 @@ def test_md_parsing_dov():
     assert_list(iden.distance, 0)
     assert_list(iden.uom, 0)
 
-    assert_list(iden.resourcelanguage, 1)
-    assert iden.resourcelanguage[0] == 'dut'
+    assert_list(iden.resourcelanguage, 0)
+    assert_list(iden.resourcelanguagecode, 1)
+    assert iden.resourcelanguagecode[0] == 'dut'
 
     assert_list(iden.creator, 0)
     assert_list(iden.publisher, 0)
@@ -395,7 +396,9 @@ def test_md_parsing_geobretagne():
     assert_list(iden.distance, 0)
     assert_list(iden.uom, 0)
 
-    assert_list(iden.resourcelanguage, 0)
+    assert_list(iden.resourcelanguage, 1)
+    assert iden.resourcelanguage[0] == 'fre'
+    assert_list(iden.resourcelanguagecode, 0)
 
     assert_list(iden.creator, 0)
     assert_list(iden.publisher, 0)
