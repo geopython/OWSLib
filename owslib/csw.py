@@ -676,6 +676,9 @@ class CatalogueServiceWeb(object):
 
             self.response = util.http_post(request_url, self.request, self.lang, self.timeout, self.username, self.password)
 
+        if self.response[0] == '{':  # response is JSON
+            return
+
         # parse result see if it's XML
         self._exml = etree.parse(BytesIO(self.response))
 
