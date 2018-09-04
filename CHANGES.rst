@@ -1,6 +1,14 @@
 Changes
 =======
 
+0.17.0 (2018-09-04)
+-------------------
+
+- Fixed test-suite and converted doctests to unit-tests (#339).
+- Support for OWS Context (#483 thanks @allixender)
+- Support for WCS 2.0.0 and 2.0.1 (#430, thanks @doclements)
+- numerous bug-fixes, especially for WPS.
+
 0.7 (2013-02-18)
 ---------------
 
