@@ -1,3 +1,4 @@
 include *.txt
+include LICENSE
 include *.rst
 recursive-include owslib
