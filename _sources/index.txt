@@ -52,6 +52,8 @@ Standards Support
 +-------------------+---------------------+
 | `OGC OWS Common`_ | 1.0.0, 1.1.0, 2.0   |
 +-------------------+---------------------+
+| `OGC OWS Context`_ | 1.0.0 (alpha/under-review) |
++-------------------+---------------------+
 | `NASA DIF`_       | 9.7                 |
 +-------------------+---------------------+
 | `FGDC CSDGM`_     | 1998                |
@@ -97,9 +99,9 @@ Anaconda:
 
 .. note::
 
-   The OWSLib conda packages are provided by the community, not OSGEO, and therefore there may be 
+   The OWSLib conda packages are provided by the community, not OSGEO, and therefore there may be
    multiple packages available.  To search all conda channels: http://anaconda.org/search?q=type%3Aconda+owslib
-   However usually conda-forge will be the most up-to-date. 
+   However usually conda-forge will be the most up-to-date.
 
 .. code-block:: bash
 
@@ -134,6 +136,7 @@ Fedora:
   As of Fedora 20, OWSLib is part of the Fedora core package collection
 
 .. code-block:: bash
+
   $ yum install OWSLib
 
 Usage
@@ -320,7 +323,7 @@ Search for bird data:
   {'matches': 101, 'nextrecord': 21, 'returned': 20}
   >>> for rec in csw.records:
   ...     print(csw.records[rec].title)
-  ... 
+  ...
   ALLSPECIES
   NatureServe Canada References
   Bird Studies Canada - BirdMap WMS
@@ -420,186 +423,7 @@ WMC
 WPS
 ---
 
-Inspect a remote WPS and retrieve the supported processes:
-
-.. code-block:: python
-
-	>>> from owslib.wps import WebProcessingService
-	>>> wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', verbose=False, skip_caps=True)
-	>>> wps.getcapabilities()
-	>>> wps.identification.type
-	'WPS'
-	>>> wps.identification.title
-	'Geo Data Portal WPS Processing'
-	>>> wps.identification.abstract
-	'Geo Data Portal WPS Processing'
-	>>> for operation in wps.operations:
-	...     operation.name
-	...
-	'GetCapabilities'
-	'DescribeProcess'
-	'Execute'
-	>>> for process in wps.processes:
-	...     process.identifier, process.title
-	...
-	('gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageIntersectionAlgorithm', 'Feature Coverage WCS Intersection')
-	('gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageOPeNDAPIntersectionAlgorithm', 'Feature Coverage OPeNDAP Intersection')
-	('gov.usgs.cida.gdp.wps.algorithm.FeatureCategoricalGridCoverageAlgorithm', 'Feature Categorical Grid Coverage')
-	('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm', 'Feature Weighted Grid Statistics')
-	('gov.usgs.cida.gdp.wps.algorithm.FeatureGridStatisticsAlgorithm', 'Feature Grid Statistics')
-	('gov.usgs.cida.gdp.wps.algorithm.PRMSParameterGeneratorAlgorithm', 'PRMS Parameter Generator')
-	>>>
-
-
-Determine how a specific process needs to be invoked - i.e. what are its input parameters, and output result:
-
-.. code-block:: python
-
-	>>> from owslib.wps import printInputOutput
-	>>> process = wps.describeprocess('gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm')
-	>>> process.identifier
-	'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
-	>>> process.title
-	'Feature Weighted Grid Statistics'
-	>>> process.abstract
-	'This algorithm generates area weighted statistics of a gridded dataset for a set of vector polygon features. Using the bounding-box that encloses ...
-	>>> for input in process.dataInputs:
-	...     printInputOutput(input)
-	...
-	 identifier=FEATURE_COLLECTION, title=Feature Collection, abstract=A feature collection encoded as a WFS request or one of the supported GML profiles.,...
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.1.1/feature.xsd
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.1.2/feature.xsd
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.1.2.1/feature.xsd
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.0.0/base/feature.xsd
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.0.1/base/feature.xsd
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.1.0/base/feature.xsd
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.1.1/base/feature.xsd
-	 Supported Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/3.2.1/base/feature.xsd
-	 Default Value: mimeType=text/xml, encoding=UTF-8, schema=http://schemas.opengis.net/gml/2.0.0/feature.xsd
-	 minOccurs=1, maxOccurs=1
-	 identifier=DATASET_URI, title=Dataset URI, abstract=The base data web service URI for the dataset of interest., data type=anyURI
-	 Allowed Value: AnyValue
-	 Default Value: None
-	 minOccurs=1, maxOccurs=1
-	 identifier=DATASET_ID, title=Dataset Identifier, abstract=The unique identifier for the data type or variable of interest., data type=string
-	 Allowed Value: AnyValue
-	 Default Value: None
-	 minOccurs=1, maxOccurs=2147483647
-	 identifier=REQUIRE_FULL_COVERAGE, title=Require Full Coverage, abstract=If turned on, the service will require that the dataset of interest ....
-	 Allowed Value: True
-	 Default Value: True
-	 minOccurs=1, maxOccurs=1
-	 identifier=TIME_START, title=Time Start, abstract=The date to begin analysis., data type=dateTime
-	 Allowed Value: AnyValue
-	 Default Value: None
-	 minOccurs=0, maxOccurs=1
-	 identifier=TIME_END, title=Time End, abstract=The date to end analysis., data type=dateTime
-	 Allowed Value: AnyValue
-	 Default Value: None
-	 minOccurs=0, maxOccurs=1
-	 identifier=FEATURE_ATTRIBUTE_NAME, title=Feature Attribute Name, abstract=The attribute that will be used to label column headers in processing output., ...
-	 Allowed Value: AnyValue
-	 Default Value: None
-	 minOccurs=1, maxOccurs=1
-	 identifier=DELIMITER, title=Delimiter, abstract=The delimiter that will be used to separate columns in the processing output., data type=string
-	 Allowed Value: COMMA
-	 Allowed Value: TAB
-	 Allowed Value: SPACE
-	 Default Value: COMMA
-	 minOccurs=1, maxOccurs=1
-	 identifier=STATISTICS, title=Statistics, abstract=Statistics that will be returned for each feature in the processing output., data type=string
-	 Allowed Value: MEAN
-	 Allowed Value: MINIMUM
-	 Allowed Value: MAXIMUM
-	 Allowed Value: VARIANCE
-	 Allowed Value: STD_DEV
-	 Allowed Value: SUM
-	 Allowed Value: COUNT
-	 Default Value: None
-	 minOccurs=1, maxOccurs=7
-	 identifier=GROUP_BY, title=Group By, abstract=If multiple features and statistics are selected, this will change whether the processing output ...
-	 Allowed Value: STATISTIC
-	 Allowed Value: FEATURE_ATTRIBUTE
-	 Default Value: None
-	 minOccurs=1, maxOccurs=1
-	 identifier=SUMMARIZE_TIMESTEP, title=Summarize Timestep, abstract=If selected, processing output will include columns with summarized statistics ...
-	 Allowed Value: True
-	 Default Value: True
-	 minOccurs=0, maxOccurs=1
-	 identifier=SUMMARIZE_FEATURE_ATTRIBUTE, title=Summarize Feature Attribute, abstract=If selected, processing output will include a final row of ...
-	 Allowed Value: True
-	 Default Value: True
-	 minOccurs=0, maxOccurs=1
-	>>> for output in process.processOutputs:
-	...     printInputOutput(output)
-	...
-	 identifier=OUTPUT, title=Output File, abstract=A delimited text file containing requested process output., data type=ComplexData
-	 Supported Value: mimeType=text/csv, encoding=UTF-8, schema=None
-	 Default Value: mimeType=text/csv, encoding=UTF-8, schema=None
-	 reference=None, mimeType=None
-	>>>
-
-Submit a processing request (extraction of a climate index variable over a specific GML polygon, for a given period of time), monitor the execution until complete:
-
-.. code-block:: python
-
-	>>> from owslib.wps import GMLMultiPolygonFeatureCollection
-	>>> polygon = [(-102.8184, 39.5273), (-102.8184, 37.418), (-101.2363, 37.418), (-101.2363, 39.5273), (-102.8184, 39.5273)]
-	>>> featureCollection = GMLMultiPolygonFeatureCollection( [polygon] )
-	>>> processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
-	>>> inputs = [ ("FEATURE_ATTRIBUTE_NAME","the_geom"),
-	...            ("DATASET_URI", "dods://cida.usgs.gov/qa/thredds/dodsC/derivatives/derivative-days_above_threshold.pr.ncml"),
-	...            ("DATASET_ID", "ensemble_b1_pr-days_above_threshold"),
-	...            ("TIME_START","2010-01-01T00:00:00.000Z"),
-	...            ("TIME_END","2011-01-01T00:00:00.000Z"),
-	...            ("REQUIRE_FULL_COVERAGE","false"),
-	...            ("DELIMITER","COMMA"),
-	...            ("STATISTICS","MEAN"),
-	...            ("GROUP_BY","STATISTIC"),
-	...            ("SUMMARIZE_TIMESTEP","false"),
-	...            ("SUMMARIZE_FEATURE_ATTRIBUTE","false"),
-	...            ("FEATURE_COLLECTION", featureCollection)
-	...           ]
-	>>> output = "OUTPUT"
-	>>> execution = wps.execute(processid, inputs, output = "OUTPUT")
-	Executing WPS request...
-	Execution status=ProcessStarted
-	>>> from owslib.wps import monitorExecution
-	>>> monitorExecution(execution)
-
-	Checking execution status... (location=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=6809217153012787208)
-	Execution status=ProcessSucceeded
-	Execution status: ProcessSucceeded
-	Output URL=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=6809217153012787208OUTPUT.3cbcd666-a912-456f-84a3-6ede450aca95
-	>>>
-
-Alternatively, define the feature through an embedded query to a WFS server:
-
-.. code-block:: python
-
-	>>> from owslib.wps import WFSQuery, WFSFeatureCollection
-	>>> wfsUrl = "http://cida.usgs.gov/climate/gdp/proxy/http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
-	>>> query = WFSQuery("sample:CONUS_States", propertyNames=['the_geom',"STATE"], filters=["CONUS_States.508","CONUS_States.469"])
-	>>> featureCollection = WFSFeatureCollection(wfsUrl, query)
-	>>> # same process submission as above
-	...
-
-You can also submit a pre-made request encoded as WPS XML:
-
-.. code-block:: python
-
-	>>> request = open('/Users/cinquini/Documents/workspace-cog/wps/tests/resources/wps_USGSExecuteRequest1.xml','rb').read()
-	>>> execution = wps.execute(None, [], request=request)
-	Executing WPS request...
-	Execution status=ProcessStarted
-	>>> monitorExecution(execution)
-
-	Checking execution status... (location=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=5103866488472745994)
-	Execution status=ProcessSucceeded
-	Execution status: ProcessSucceeded
-	Output URL=http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=5103866488472745994OUTPUT.f80e2a78-96a9-4343-9777-be60fac5b256
-
+.. include:: ../../tests/_broken/doctests_sphinx/wps_example_usgs.txt
 
 SOS 1.0
 -------
@@ -614,13 +438,16 @@ GetObservation
 
 SOS 2.0
 -------
-Examples of service metadata and GetObservation
 
-.. include:: ../../tests/doctests/sos_20_52n_geoviqua.txt
+Examples of service metadata and GetObservation
++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. include:: ../../tests/_broken/doctests_sphinx/sos_20_52N_demo.txt
 
 Using the GetObservation response decoder for O&M and WaterML2.0 results
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. include:: ../../tests/doctests/sos_20_timeseries_decoder_ioos.txt
+.. include:: ../../tests/_broken/doctests_sphinx/sos_20_timeseries_decoder_ioos.txt
 
 SensorML
 --------
@@ -663,7 +490,7 @@ Swiss GM03
 WMTS
 ----
 
-.. include:: ../../tests/doctests/wmts.txt
+.. include:: ../../tests/_broken/doctests_sphinx/wmts_demo.txt
 
 Result:
 
@@ -676,6 +503,41 @@ WaterML
 -------
 
 .. include:: ../../tests/doctests/wml11_cuahsi.txt
+
+OGC OWS Context 1.0.0 Atom CML and GeoJSON Encoding (alpha/under-review)
+------------------------------------------------------------------------
+
+The OGC OWS Context implementation in OWSlib is currently in alpha and under review, and will still be improved.
+Please get in touch if you (want to) use it and provide feedback on how more comfortable it should be
+(especially handling geometries and dates in different encodings) and if it doesn't treat your "standards-compliant" OWS Context document right.
+Greatly appreciated :-)
+
+Basic reading/parsing of OGC Web Services Context Documents (OWS Context) in OWC Atom 1.0.0 Encoding and OWC GeoJSON 1.0.0 Encoding Standards:
+
+.. include:: ../../tests/doctests/owscontext.txt
+
+additionally, possibility to construct OWS Context documents from scratch, and then write/serialise into OWC Atom 1.0.0 Encoding or OWC GeoJSON 1.0.0 Encoding Standards:
+
+.. code-block:: python
+
+  >>> from owslib.owscontext.core import OwcResource, OwcContext
+  >>> myContext=OwcContext(id='http://my.url.com/context/id/1',
+        update_date='2017-11-02T15:24:24.446+12:00',
+        title='Awesome new Context doc')
+  >>> myContext.rights='Creative Commons 4.0 BY'
+  >>> myEntry=OwcResource(id='http://my.url.com/resource/demo-feature-1',
+        update_date='2017-11-02T15:24:24.446+12:00',
+        title='This is a feature')
+  >>> contributor={'name': 'Alex K',
+        'email': None,
+        'uri': 'https://allixender.blogspot.com'}
+  >>> myEntry.authors.append(contributor)
+
+  >>> # ... here also continue to build your OGC data offerings, e.g. WMS GetMap etc.
+
+  >>> myContext.resources.append(myEntry)
+  >>> myContext.to_json()
+  >>> myContext.to_atomxml()
 
 Development
 ===========
@@ -783,7 +645,7 @@ POSSIBILITY OF SUCH DAMAGE.
 Credits
 =======
 
-.. include:: ../../CREDITS.txt
+.. include:: ../../AUTHORS.rst
 
 .. _`Open Geospatial Consortium`: http://www.opengeospatial.org/
 .. _`OGC WMS`: http://www.opengeospatial.org/standards/wms
@@ -799,6 +661,7 @@ Credits
 .. _`OGC WMTS`: http://www.opengeospatial.org/standards/wmts
 .. _`OGC Filter`: http://www.opengeospatial.org/standards/filter
 .. _`OGC OWS Common`: http://www.opengeospatial.org/standards/common
+.. _`OGC OWS Context`: http://www.opengeospatial.org/standards/owc
 .. _`NASA DIF`: http://gcmd.nasa.gov/User/difguide/
 .. _`FGDC CSDGM`: http://www.fgdc.gov/metadata/csdgm
 .. _`ISO 19115`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=26020
