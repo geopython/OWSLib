@@ -39,6 +39,12 @@ def test_wps_process_representation(wps):
     assert str(p) == 'WPS Process: CDMSSubsetVariable, title=Writes a text file and returns an output.'
 
 
+def test_wps_process_properties(wps):
+    p = wps.processes[0]
+    assert p.statusSupported is None
+    assert p.storeSupported is None
+
+
 def test_wps_process_with_invalid_identifer():
     p = Process(etree.Element('invalid'))
     assert repr(p) == '<owslib.wps.Process >'

@@ -12,6 +12,9 @@ def test_wps_describeprocess_ceda():
     assert process.identifier == 'DoubleIt'
     assert process.title == 'Doubles the input number and returns value'
     assert process.abstract == 'This is test process used to demonstrate how the WPS and the WPS User Interface work. The process accepts an integer or floating point number and returns some XML containing the input number double.'  # NOQA
+    # Check process properties
+    assert process.statusSupported is False
+    assert process.storeSupported is True
     # Check process inputs
     # Example Input:
     #   identifier=NumberToDouble, title=NumberToDouble, abstract=NumberToDouble, data type=LiteralData
