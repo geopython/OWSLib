@@ -923,11 +923,14 @@ class WPSExecution():
         element = root.find(nspath('Status', ns=wpsns))
         self.creationTime = testXMLAttribute(element, 'creationTime')
         # get progress info
-        try:
-            percentCompleted = int(statusEl.get('percentCompleted'))
-            self.percentCompleted = percentCompleted
-        except Exception:
-            pass
+        if self.status == 'ProcessSucceeded':
+            self.percentCompleted = 100
+        else:
+            try:
+                percentCompleted = int(statusEl.get('percentCompleted'))
+                self.percentCompleted = percentCompleted
+            except Exception:
+                pass
         # get status message
         self.statusMessage = statusEl.text
         # exceptions ?
