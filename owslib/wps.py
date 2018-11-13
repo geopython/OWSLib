@@ -704,11 +704,11 @@ class WPSExecution():
             # keeping backward compability of output parameter
             if isinstance(output, str):
                 self._add_output(
-                    responseDocumentElement, output, asReference=True)
+                    responseDocumentElement, output, asReference=_async)
             elif isinstance(output, list):
                 for (identifier, as_reference) in output:
                     self._add_output(
-                        responseDocumentElement, identifier, asReference=as_reference)
+                        responseDocumentElement, identifier, asReference=as_reference and _async)
             else:
                 raise Exception(
                     'output parameter is neither string nor list. output=%s' % output)
