@@ -13,7 +13,7 @@ def test_wps_request7():
     processid = "wordcount"
     textdoc = ComplexDataInput("http://emu.readthedocs.org/en/latest/index.html")
     inputs = [("text", textdoc), ]
-    outputs = [("output", True)]
+    outputs = [("output", False)]
 
     # Build XML request for WPS process execution, sync request
     execution = WPSExecution()
