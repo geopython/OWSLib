@@ -1444,10 +1444,20 @@ class Process(object):
 
         wpsns = getNamespace(elem)
 
+        def get_bool_attribute(elem, attribute):
+            property = elem.get(attribute, '').lower()
+            if property == 'true':
+                value = True
+            elif property == 'false':
+                value = False
+            else:
+                value = None
+            return value
+
         # <ProcessDescription statusSupported="true" storeSupported="true" ns0:processVersion="1.0.0">
         self.processVersion = elem.get(nspath('processVersion', ns=wpsns))
-        self.statusSupported = bool(elem.get("statusSupported"))
-        self.storeSupported = bool(elem.get("storeSupported"))
+        self.statusSupported = get_bool_attribute(elem, "statusSupported")
+        self.storeSupported = get_bool_attribute(elem, "storeSupported")
         self.identifier = None
         self.title = None
         self.abstract = None
