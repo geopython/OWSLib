@@ -569,6 +569,20 @@ Or ...
     # additional pep8 tests
     pep8 owslib/wmts.py
 
+Bump a new version
+------------------
+
+Make a new version of OWSLib in the following steps:
+
+* Make sure everything is commited to GitHub.
+* Update ``CHANGES.rst`` with the next version.
+* Dry Run: ``bumpversion --dry-run --verbose --new-version 0.17.1 patch``
+* Do it: ``bumpversion --new-version 0.17.1 patch``
+* ... or: ``bumpversion --new-version 0.18.0 minor``
+* Push it: ``git push --tags``
+
+See the bumpversion_ documentation for details.
+
 Support
 =======
 
@@ -672,3 +686,4 @@ Credits
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
 .. _`Swiss GM03`: http://www.geocat.ch/internet/geocat/en/home/documentation/gm03.html
+.. _bumpversion: https://pypi.org/project/bumpversion/
