@@ -1326,7 +1326,7 @@ class Output(InputOutput):
                 if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
                     self.data.append(literalDataElement.text.strip())
             bboxDataElement = dataElement.find(nspath('BoundingBox', ns=namespaces['ows']))
-            if not bboxDataElement:
+            if bboxDataElement is not None:
                 # TODO: just a workaround for data-inputs in lineage
                 bboxDataElement = dataElement.find(nspath('BoundingBoxData', ns=namespaces['wps']))
             if bboxDataElement is not None:
