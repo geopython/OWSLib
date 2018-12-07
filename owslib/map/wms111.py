@@ -377,7 +377,10 @@ class ServiceProvider(object):
             self.name=name.text
         else:
             self.name=None
-        self.url=self._root.find('OnlineResource').attrib.get('{http://www.w3.org/1999/xlink}href', '')
+        self.url = None
+        online_resource = self._root.find('OnlineResource')
+        if online_resource is not None:
+            self.url = online_resource.attrib.get('{http://www.w3.org/1999/xlink}href', '')
         #contact metadata
         contact = self._root.find('ContactInformation')
         ## sometimes there is a contact block that is empty, so make
