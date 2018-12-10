@@ -121,6 +121,26 @@ configure your application to use the log messages like so:
     >>> # Add formatting and handlers as needed
     >>> owslib_log.setLevel(logging.DEBUG)
 
+Releasing
+---------
+
+.. code-block:: bash
+
+  # update version
+  vi VERSION.txt
+  vi owslib/__init__.py
+  git commit -m 'update release version' VERSION.txt owslib/__init__.py
+  # push changes
+  git push origin master
+  git tag -a x.y.z -m 'tagging OWSLib release x.y.z'
+  # push tag
+  git push --tags
+  # update live docs
+  cd docs
+  make html
+  ./publish.sh
+  # update on PyPI (must be a maintainer)
+  python setup.py sdist upload
 
 Support
 -------
