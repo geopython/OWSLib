@@ -139,7 +139,8 @@ Releasing
   cd docs
   make html
   ./publish.sh
-
+  # update on PyPI (must be a maintainer)
+  python setup.py sdist upload
 
 Support
 -------
