@@ -33,7 +33,7 @@ def test_wps_request3():
     output = "OUTPUT"
     # build XML request for WPS process execution
     execution = WPSExecution()
-    requestElement = execution.buildRequest(processid, inputs, output=output)
+    requestElement = execution.buildRequest(processid, inputs, output=[(output, True)])
     request = etree.tostring(requestElement)
     # Compare to cached XML request
     _request = open(resource_file('wps_USGSExecuteRequest3.xml'), 'rb').read()

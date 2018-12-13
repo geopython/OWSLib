@@ -6,7 +6,7 @@ from owslib.wps import WPSExecution, WFSFeatureCollection, WFSQuery
 from owslib.etree import etree
 
 
-def test_wps_request3():
+def test_wps_request2():
     # Supply process input argument
     wfsUrl = "http://igsarm-cida-gdp2.er.usgs.gov:8082/geoserver/wfs"
     query = WFSQuery("sample:CONUS_States",
@@ -39,7 +39,7 @@ def test_wps_request3():
 
     # build XML request for WPS process execution
     execution = WPSExecution()
-    requestElement = execution.buildRequest(processid, inputs, output=output)
+    requestElement = execution.buildRequest(processid, inputs, output=[(output, True)])
     request = etree.tostring(requestElement)
 
     # Compare to cached XML request
