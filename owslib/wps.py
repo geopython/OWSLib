@@ -301,7 +301,7 @@ class WebProcessingService(object):
         :param output: optional list of process outputs as tuples (output_identifier, as_ref, mime_type).
                 `as_ref` can be True (as reference),
                 False (embedded in response) or None (use service default).
-                `mime_type` sould be text or None (use using service default)
+                `mime_type` should be text or None (use service default)
         :param mode: execution mode: SYNC, ASYNC or AUTO. Default: ASYNC
         :param lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
                  OutputDefinitions elements.
