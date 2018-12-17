@@ -298,9 +298,10 @@ class WebProcessingService(object):
         :param str identifier: the requested process identifier
         :param inputs: list of process inputs as (input_identifier, value) tuples (where value is either a string
                 for LiteralData, or an object for ComplexData).
-        :param output: optional list of process outputs as tuples (output_identifier, as_ref).
+        :param output: optional list of process outputs as tuples (output_identifier, as_ref, mime_type).
                 `as_ref` can be True (as reference),
                 False (embedded in response) or None (use service default).
+                `mime_type` sould be text or None (use using service default)
         :param mode: execution mode: SYNC, ASYNC or AUTO. Default: ASYNC
         :param lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
                  OutputDefinitions elements.
@@ -599,8 +600,9 @@ class WPSExecution():
               and the object must contain a 'getXml()' method that returns an XML infoset to be included in
               the WPS request
         :param output: array of outputs which should be returned:
-                expressed as tuples (key, as_ref) where key is the output identifier and as_ref is True
+                expressed as tuples (key, as_ref, mime_mype) where key is the output identifier and as_ref is True
                 if output should be returned as reference.
+                as_ref and mimeType may be null for using server's default value
         :param mode: execution mode: SYNC, ASYNC or AUTO.
         :param lineage: if lineage is "true", the Execute operation response shall include the DataInputs and
                  OutputDefinitions elements.
@@ -688,7 +690,7 @@ class WPSExecution():
 
         # <wps:ResponseForm>
         #   <wps:ResponseDocument storeExecuteResponse="true" status="true" lineage="false">
-        #     <wps:Output asReference="true">
+        #     <wps:Output asReference="true" mimeType="application/json">
         #       <ows:Identifier>OUTPUT</ows:Identifier>
         #     </wps:Output>
         #   </wps:ResponseDocument>
@@ -706,17 +708,25 @@ class WPSExecution():
             if isinstance(output, str):
                 self._add_output(responseDocumentElement, output)
             elif isinstance(output, list):
-                for (identifier, as_reference) in output:
+                for ouputTuple in output:
+                    # tuple (identifier, as_reference) for backward compatibility
+                    if(len(ouputTuple) == 2):
+                        (identifier, as_reference) = ouputTuple
+                        mime_type = None
+                    else:
+                        (identifier, as_reference, mime_type) = ouputTuple
                     self._add_output(
-                        responseDocumentElement, identifier, asReference=as_reference)
+                        responseDocumentElement, identifier, asReference=as_reference, mimeType=mime_type)
             else:
                 raise Exception(
                     'output parameter is neither string nor list. output=%s' % output)
         return root
 
-    def _add_output(self, element, identifier, asReference=None):
+    def _add_output(self, element, identifier, asReference=None, mimeType=None):
         output_element = etree.SubElement(
             element, nspath_eval('wps:Output', namespaces))
+        if isinstance(mimeType, str):
+            output_element.attrib['mimeType'] = mimeType
         if isinstance(asReference, bool):
             output_element.attrib['asReference'] = str(asReference).lower()
         # outputIdentifierElement
