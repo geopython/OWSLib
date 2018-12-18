@@ -2,7 +2,7 @@ import pytest
 
 
 from tests.utils import resource_file
-from owslib.wps import WebProcessingService, WPSExecution, Process
+from owslib.wps import WebProcessingService, WPSExecution, Process, is_reference
 from owslib.etree import etree
 
 
@@ -75,3 +75,10 @@ def test_wps_response_with_lineage():
     assert outp.title == 'Test Report'
     assert outp.abstract == 'Compliance checker test report.'
     assert outp.reference.startswith('http://localhost:8090/wpsoutputs')
+
+
+def test_is_reference():
+    assert is_reference('http://testing.org')
+    assert is_reference(b'http://testing.org')
+    assert not is_reference('mumbo jumbo')
+    assert not is_reference(b'mumbo jumbo')
