@@ -121,6 +121,7 @@ try:                    # Python 3
 except ImportError:     # Python 2
     from urlparse import urlparse
 
+import six
 # namespace definition
 n = Namespaces()
 
@@ -158,11 +159,14 @@ def is_reference(val):
     """
     Checks if the provided value is a reference (URL).
     """
-    try:
-        parsed = urlparse(val)
-        is_ref = parsed.scheme != ''
-    except Exception:
+    if isinstance(val, six.binary_type):
         is_ref = False
+    else:
+        try:
+            parsed = urlparse(val)
+            is_ref = parsed.scheme != ''
+        except Exception:
+            is_ref = False
     return is_ref
 
 
