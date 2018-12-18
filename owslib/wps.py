@@ -121,6 +121,7 @@ try:                    # Python 3
 except ImportError:     # Python 2
     from urlparse import urlparse
 
+import six
 # namespace definition
 n = Namespaces()
 
@@ -160,7 +161,7 @@ def is_reference(val):
     """
     try:
         parsed = urlparse(val)
-        is_ref = parsed.scheme != ''
+        is_ref = bool(parsed.scheme)
     except Exception:
         is_ref = False
     return is_ref
