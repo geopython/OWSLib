@@ -159,14 +159,11 @@ def is_reference(val):
     """
     Checks if the provided value is a reference (URL).
     """
-    if isinstance(val, six.binary_type):
+    try:
+        parsed = urlparse(val)
+        is_ref = bool(parsed.scheme)
+    except Exception:
         is_ref = False
-    else:
-        try:
-            parsed = urlparse(val)
-            is_ref = parsed.scheme != ''
-        except Exception:
-            is_ref = False
     return is_ref
 
 
