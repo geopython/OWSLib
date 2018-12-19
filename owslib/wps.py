@@ -553,7 +553,7 @@ class WPSExecuteReader(WPSReader):
                                  headers=headers, verify=verify, cert=cert)
 
 
-class WPSExecution():
+class WPSExecution(object):
 
     """
     Class that represents a single WPS process executed on a remote WPS service.
@@ -738,7 +738,7 @@ class WPSExecution():
     def checkStatus(self, url=None, response=None, sleepSecs=60):
         """
         Method to check the status of a job execution.
-        In the process, this method will upadte the object 'response' attribute.
+        In the process, this method will update the object 'response' attribute.
 
         :param str url: optional 'statusLocation' URL retrieved from a previous WPS Execute response document.
              If not provided, the current 'statusLocation' URL will be used.
