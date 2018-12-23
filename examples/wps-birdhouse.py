@@ -16,8 +16,8 @@ def multiple_outputs():
 
     processid = 'dummyprocess'
     inputs = [("input1", '1'), ("input2", '2')]
-    # list of tuple (output identifier, asReference attribute)
-    outputs = [("output1",True), ("output2",False)]
+    # list of tuple (output identifier, asReference attribute, desired mimeType)
+    outputs = [("output1",True, None), ("output2",False, None)]
 
     execution = wps.execute(processid, inputs, output=outputs)
     monitorExecution(execution)
@@ -47,8 +47,8 @@ def complex_input_with_reference():
     processid = 'wordcount'
     textdoc = ComplexDataInput("http://www.gutenberg.org/files/28885/28885-h/28885-h.htm")   # alice in wonderland
     inputs = [("text", textdoc)]
-    # list of tuple (output identifier, asReference attribute)
-    outputs = [("output",True)]
+    # list of tuple (output identifier, asReference attribute, desired mimeType)
+    outputs = [("output",True,'application/json')]
 
     execution = wps.execute(processid, inputs, output=outputs)
     monitorExecution(execution)
@@ -72,8 +72,8 @@ def complex_input_with_content():
     processid = 'wordcount'
     textdoc = ComplexDataInput("ALICE was beginning to get very tired ...")   # alice in wonderland
     inputs = [("text", textdoc)]
-    # list of tuple (output identifier, asReference attribute)
-    outputs = [("output",True)]
+    # list of tuple (output identifier, asReference attribute, desired mimeType)
+    outputs = [("output",True, None)]
 
     execution = wps.execute(processid, inputs, output=outputs)
     monitorExecution(execution)
