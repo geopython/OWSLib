@@ -348,20 +348,27 @@ class WebProcessingService(object):
         Method to parse a <ProcessDescriptions> XML element and returned the constructed Process object
         """
 
-        processDescriptionElement = rootElement.find('ProcessDescription')
-        process = Process(processDescriptionElement, verbose=self.verbose)
+        processDescriptionElements = rootElement.findall('ProcessDescription')
+        processes = []
+        for processDescriptionElement in processDescriptionElements:
+            process = Process(processDescriptionElement, verbose=self.verbose)
 
-        # override existing processes in object metadata, if existing already
-        found = False
-        for n, p in enumerate(self.processes):
-            if p.identifier == process.identifier:
-                self.processes[n] = process
-                found = True
-        # otherwise add it
-        if not found:
-            self.processes.append(process)
+            # override existing processes in object metadata, if existing already
+            found = False
+            for n, p in enumerate(self.processes):
+                if p.identifier == process.identifier:
+                    self.processes[n] = process
+                    found = True
+            # otherwise add it
+            if not found:
+                self.processes.append(process)
 
-        return process
+            processes.append(process)
+
+        if len(processes) == 1:
+            return process
+        else:
+            return processes
 
     def _parseCapabilitiesMetadata(self, root):
         ''' Sets up capabilities metadata objects '''
