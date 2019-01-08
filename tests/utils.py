@@ -10,6 +10,7 @@ try:                    # Python 3
 except ImportError:     # Python 2
     from urlparse import urlparse
 
+
 def setup_logging(loglevel='INFO'):
     """Helper function to setup logging for tests"""
     logger = logging.getLogger('owslib')
@@ -20,30 +21,36 @@ def setup_logging(loglevel='INFO'):
     logger.addHandler(sh)
     return logger
 
+
 def resource_file(filepath):
     return os.path.join(test_directory(), 'resources', filepath)
+
 
 def test_directory():
     """Helper function to return path to the tests directory"""
     return os.path.dirname(__file__)
 
+
 def scratch_directory():
     """Helper function to return path to the tests scratch directory"""
     return os.path.join(test_directory(), 'scratch')
+
 
 def scratch_file(filename):
     """Helper function to return file path in the tests scratch directory"""
     return os.path.join(scratch_directory(), filename)
 
-def compare_xml(a,b):
+
+def compare_xml(a, b):
     if not isinstance(a, ElementType):
         a = etree.fromstring(a)
     if not isinstance(b, ElementType):
         b = etree.fromstring(b)
 
-    return compare_elements(a,b)
+    return compare_elements(a, b)
 
-def compare_elements(a,b):
+
+def compare_elements(a, b):
     # Tag
     if a.tag != b.tag:
         return False
@@ -63,14 +70,17 @@ def compare_elements(a,b):
 
     return True
 
+
 def cast_tuple_int_list(tup):
     """Set tuple float values to int for more predictable test results"""
     return [int(a) for a in tup]
+
 
 def cast_tuple_int_list_srs(tup):
     tup2 = cast_tuple_int_list(tup[:4])
     tup2.append(tup[-1])
     return tup2
+
 
 def sorted_url_query(url):
     return sorted(urlparse(url).query.split("&"))
@@ -78,7 +88,11 @@ def sorted_url_query(url):
 
 def service_ok(url, timeout=5):
     try:
-        ok = requests.get(url, timeout=timeout).ok
+        resp = requests.get(url, timeout=timeout)
+        if 'html' in resp.headers['content-type']:
+            ok = False
+        else:
+            ok = resp.ok
     except requests.exceptions.ReadTimeout:
         ok = False
     except requests.exceptions.ConnectTimeout:
