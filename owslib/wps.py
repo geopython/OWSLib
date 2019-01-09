@@ -271,7 +271,9 @@ class WebProcessingService(object):
     def describeprocess(self, identifier, xml=None):
         """
         Requests a process document from a WPS service and populates the process metadata.
-        Returns the process object.
+        Returns the process object or a list of process objects.
+
+        :param str identifier: The process id. If `all`, return a list of all processes available.
         """
 
         # read capabilities document
@@ -288,7 +290,12 @@ class WebProcessingService(object):
         log.info(element_to_string(rootElement))
 
         # build metadata objects
-        return self._parseProcessMetadata(rootElement)
+        processes = self._parseProcessMetadata(rootElement)
+
+        if identifier == 'all':
+            return processes
+        else:
+            return processes[0]
 
     def execute(self, identifier, inputs, output=None, mode=ASYNC, lineage=False, request=None, response=None):
         """
@@ -344,9 +351,7 @@ class WebProcessingService(object):
         raise KeyError("No operation named %s" % name)
 
     def _parseProcessMetadata(self, rootElement):
-        """
-        Method to parse a <ProcessDescriptions> XML element and returned the constructed Process object
-        """
+        """Return a list of Process objects parsed from a <ProcessDescriptions> XML element."""
 
         processDescriptionElements = rootElement.findall('ProcessDescription')
         processes = []
@@ -365,13 +370,10 @@ class WebProcessingService(object):
 
             processes.append(process)
 
-        if len(processes) == 1:
-            return process
-        else:
-            return processes
+        return processes
 
     def _parseCapabilitiesMetadata(self, root):
-        ''' Sets up capabilities metadata objects '''
+        """Set up capabilities metadata objects."""
 
         # reset metdata
         self.operations = []
@@ -435,7 +437,6 @@ class WebProcessingService(object):
 
 
 class WPSReader(object):
-
     """
     Superclass for reading a WPS document into a lxml.etree infoset.
     """
