@@ -269,7 +269,7 @@ class WebMapService_1_1_1(object):
         u = openURL(base_url, data, method, username=self.username, password=self.password, timeout=timeout or self.timeout)
 
         # check for service exceptions, and return
-        if u.info()['Content-Type'].split(';')[0] in ['application/vnd.ogc.se_xml']:
+        if u.info().get('Content-Type', '').split(';')[0] in ['application/vnd.ogc.se_xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = six.text_type(se_tree.find('ServiceException').text).strip()
