@@ -1,0 +1,928 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PyWPS 4.3.dev0 -->
+<wps:ProcessDescriptions xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 ../wpsDescribeProcess_response.xsd" service="WPS" version="1.0.0" xml:lang="en-US">
+    <ProcessDescription wps:processVersion="2.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>ultimate_question</ows:Identifier>
+        <ows:Title>Answer to the ultimate question</ows:Title>
+        <ows:Abstract>This process gives the answer to the ultimate question of &#34;What is the meaning of life?&#34;</ows:Abstract>
+        <ows:Metadata xlink:title="Ultimate Question" xlink:type="simple"
+        />
+        <ows:Metadata xlink:title="What is the meaning of life" xlink:type="simple"
+        />
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>answer</ows:Identifier>
+                <ows:Title>Answer to Ultimate Question</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>sleep</ows:Identifier>
+        <ows:Title>Sleep Process</ows:Title>
+        <ows:Abstract>Testing a long running process, in the sleep. This process will sleep for a given delay or 10 seconds if not a valid value.</ows:Abstract>
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="https://emu.readthedocs.io/en/latest/processes.html"
+        />
+        <ows:Metadata xlink:title="PyWPS Demo" xlink:type="simple"
+            xlink:href="https://pywps-demo.readthedocs.io/en/latest/"
+        />
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>delay</ows:Identifier>
+                <ows:Title>Delay between every update</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#float">float</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>2.0</DefaultValue>
+                </LiteralData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>sleep_output</ows:Identifier>
+                <ows:Title>Sleep Output</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="false" statusSupported="false">
+        <ows:Identifier>nap</ows:Identifier>
+        <ows:Title>Afternoon Nap (supports sync calls only)</ows:Title>
+        <ows:Abstract>This process will have a short nap for a given delay or 1 second if not a valid value. This process only supports synchronous WPS requests... so, make sure the nap does not take to long.</ows:Abstract>
+        <ows:Metadata xlink:title="Birdhouse" xlink:type="simple"
+            xlink:href="http://bird-house.github.io/"
+        />
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="http://emu.readthedocs.io/en/latest/"
+        />
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>delay</ows:Identifier>
+                <ows:Title>Delay between every update</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#float">float</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>1.0</DefaultValue>
+                </LiteralData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>Nap Output</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="0.2" storeSupported="true" statusSupported="true">
+        <ows:Identifier>bbox</ows:Identifier>
+        <ows:Title>Bounding box in- and out</ows:Title>
+        <ows:Abstract>Give bounding box, return the same</ows:Abstract>
+        <ows:Metadata xlink:title="Birdhouse" xlink:type="simple"
+            xlink:href="http://bird-house.github.io/"
+        />
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="http://emu.readthedocs.io/en/latest/"
+        />
+        <DataInputs>
+            <Input minOccurs="0" maxOccurs="1">
+                <ows:Identifier>bbox</ows:Identifier>
+                <ows:Title>Bounding Box</ows:Title>
+                <ows:Abstract>Bounding Box Input.</ows:Abstract>
+                <BoundingBoxData>
+                    <Default>
+                        <CRS>epsg:4326</CRS>
+                    </Default>
+                    <Supported>
+                        <CRS>epsg:4326</CRS>
+                        <CRS>epsg:3035</CRS>
+                    </Supported>
+                </BoundingBoxData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>bbox</ows:Identifier>
+                <ows:Title>Bounding Box</ows:Title>
+                <ows:Abstract>Bounding Box Output.</ows:Abstract>
+                <BoundingBoxOutput>
+                    <Default>
+                        <CRS>epsg:4326</CRS>
+                    </Default>
+                    <Supported>
+                        <CRS>epsg:4326</CRS>
+                    </Supported>
+                </BoundingBoxOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.5" storeSupported="true" statusSupported="true">
+        <ows:Identifier>hello</ows:Identifier>
+        <ows:Title>Say Hello</ows:Title>
+        <ows:Abstract>Just says a friendly Hello. Returns a literal string output with Hello plus the inputed name.</ows:Abstract>
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="https://emu.readthedocs.io/en/latest/processes.html"
+        />
+        <ows:Metadata xlink:title="PyWPS Demo" xlink:type="simple"
+            xlink:href="https://pywps-demo.readthedocs.io/en/latest/"
+        />
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>name</ows:Identifier>
+                <ows:Title>Your name</ows:Title>
+                <ows:Abstract>Please enter your name.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                <ows:AnyValue />
+                </LiteralData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>Output response</ows:Title>
+                <ows:Abstract>A friendly Hello from us.</ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="2.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>dummyprocess</ows:Identifier>
+        <ows:Title>Dummy Process</ows:Title>
+        <ows:Abstract>DummyProcess to check the WPS structure</ows:Abstract>
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>input1</ows:Identifier>
+                <ows:Title>Input1 number</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>100</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>input2</ows:Identifier>
+                <ows:Title>Input2 number</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>200</DefaultValue>
+                </LiteralData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output1</ows:Identifier>
+                <ows:Title>Output1 add 1 result</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>output2</ows:Identifier>
+                <ows:Title>Output2 substract 1 result</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>wordcounter</ows:Identifier>
+        <ows:Title>Word Counter</ows:Title>
+        <ows:Abstract>Counts words in a given text.</ows:Abstract>
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="http://emu.readthedocs.io/en/latest/"
+        />
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>text</ows:Identifier>
+                <ows:Title>Text document</ows:Title>
+                <ows:Abstract>URL pointing to a text document, for example &#34;Alice in Wonderland&#34;: http://www.gutenberg.org/cache/epub/19033/pg19033.txt</ows:Abstract>
+                <ComplexData maximumMegabytes="200">
+                    <Default>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>Word counter result</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>application/json</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/json</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>chomsky</ows:Identifier>
+        <ows:Title>Chomsky text generator</ows:Title>
+        <ows:Abstract>Generates a random chomsky text</ows:Abstract>
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>times</ows:Identifier>
+                <ows:Title>Times</ows:Title>
+                <ows:Abstract>Generates a random chomsky text.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>5</DefaultValue>
+                </LiteralData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>Chomsky text</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>inout</ows:Identifier>
+        <ows:Title>In and Out</ows:Title>
+        <ows:Abstract>Testing all WPS input and output parameters.</ows:Abstract>
+        <ows:Metadata xlink:title="Birdhouse" xlink:type="simple"
+            xlink:href="http://bird-house.github.io/"
+        />
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="http://emu.readthedocs.io/en/latest/"
+            xlink:role="http://www.opengis.net/spec/wps/2.0/def/process/description/documentation"
+        />
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>string</ows:Identifier>
+                <ows:Title>String</ows:Title>
+                <ows:Abstract>Enter a simple string.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>This is just a string</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>int</ows:Identifier>
+                <ows:Title>Integer</ows:Title>
+                <ows:Abstract>Choose an integer number from allowed values.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</ows:DataType>
+                <ows:AllowedValues>
+                    <ows:Value>1</ows:Value>
+                    <ows:Value>2</ows:Value>
+                    <ows:Value>3</ows:Value>
+                    <ows:Value>5</ows:Value>
+                    <ows:Value>7</ows:Value>
+                    <ows:Value>11</ows:Value>
+                </ows:AllowedValues>
+                <DefaultValue>7</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>float</ows:Identifier>
+                <ows:Title>Float</ows:Title>
+                <ows:Abstract>Enter a float number.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#float">float</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>3.14</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>boolean</ows:Identifier>
+                <ows:Title>Boolean</ows:Title>
+                <ows:Abstract>Make your choice :)</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#boolean">boolean</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>True</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>angle</ows:Identifier>
+                <ows:Title>Angle</ows:Title>
+                <ows:Abstract>Enter an angle [0, 360] :)</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#angle">angle</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>90.0</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>time</ows:Identifier>
+                <ows:Title>Time</ows:Title>
+                <ows:Abstract>Enter a time like 12:00:00</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#time">time</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>12:00:00</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>date</ows:Identifier>
+                <ows:Title>Date</ows:Title>
+                <ows:Abstract>Enter a date like 2012-05-01</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#date">date</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>2012-05-01</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>datetime</ows:Identifier>
+                <ows:Title>Datetime</ows:Title>
+                <ows:Abstract>Enter a datetime like 2016-09-02T12:00:00Z</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>2016-09-02 12:00:00+00:00</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>string_choice</ows:Identifier>
+                <ows:Title>String Choice</ows:Title>
+                <ows:Abstract>Choose one item form list.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                <ows:AllowedValues>
+                    <ows:Value>rock</ows:Value>
+                    <ows:Value>paper</ows:Value>
+                    <ows:Value>scissor</ows:Value>
+                </ows:AllowedValues>
+                <DefaultValue>scissor</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="0" maxOccurs="2">
+                <ows:Identifier>string_multiple_choice</ows:Identifier>
+                <ows:Title>String Multiple Choice</ows:Title>
+                <ows:Abstract>Choose one or two items from list.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                <ows:AllowedValues>
+                    <ows:Value>sitting duck</ows:Value>
+                    <ows:Value>flying goose</ows:Value>
+                    <ows:Value>happy pinguin</ows:Value>
+                    <ows:Value>gentle albatros</ows:Value>
+                </ows:AllowedValues>
+                <DefaultValue>gentle albatros</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="0" maxOccurs="1">
+                <ows:Identifier>text</ows:Identifier>
+                <ows:Title>Text</ows:Title>
+                <ows:Abstract>Enter a URL pointing to a text document (optional)</ows:Abstract>
+                <ComplexData maximumMegabytes="200">
+                    <Default>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexData>
+            </Input>
+            <Input minOccurs="0" maxOccurs="1">
+                <ows:Identifier>dataset</ows:Identifier>
+                <ows:Title>Dataset</ows:Title>
+                <ows:Abstract>Enter a URL pointing to a NetCDF file (optional)</ows:Abstract>
+                <ComplexData maximumMegabytes="200">
+                    <Default>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                            <Encoding>base64</Encoding>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                            <Encoding>base64</Encoding>
+                        </Format>
+                    </Supported>
+                </ComplexData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>string</ows:Identifier>
+                <ows:Title>String</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>int</ows:Identifier>
+                <ows:Title>Integer</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>float</ows:Identifier>
+                <ows:Title>Float</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#float">float</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>boolean</ows:Identifier>
+                <ows:Title>Boolean</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#boolean">boolean</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>angle</ows:Identifier>
+                <ows:Title>Angle</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#angle">angle</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>time</ows:Identifier>
+                <ows:Title>Time</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#time">time</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>date</ows:Identifier>
+                <ows:Title>Date</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#date">date</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>datetime</ows:Identifier>
+                <ows:Title>DateTime</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>string_choice</ows:Identifier>
+                <ows:Title>String Choice</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>string_multiple_choice</ows:Identifier>
+                <ows:Title>String Multiple Choice</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>text</ows:Identifier>
+                <ows:Title>Text</ows:Title>
+                <ows:Abstract>Copy of input text file.</ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>dataset</ows:Identifier>
+                <ows:Title>Dataset</ows:Title>
+                <ows:Abstract>Copy of input netcdf file.</ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                            <Encoding>base64</Encoding>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                            <Encoding>base64</Encoding>
+                        </Format>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                            <Encoding></Encoding>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>bbox</ows:Identifier>
+                <ows:Title>Bounding Box</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <BoundingBoxOutput>
+                    <Default>
+                        <CRS>epsg:4326</CRS>
+                    </Default>
+                    <Supported>
+                        <CRS>epsg:4326</CRS>
+                    </Supported>
+                </BoundingBoxOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>binaryoperatorfornumbers</ows:Identifier>
+        <ows:Title>Binary Operator for Numbers</ows:Title>
+        <ows:Abstract>Performs operation on two numbers and returns the answer. This example process is taken from Climate4Impact.</ows:Abstract>
+        <ows:Metadata xlink:title="Birdhouse" xlink:type="simple"
+            xlink:href="http://bird-house.github.io/"
+        />
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="http://emu.readthedocs.io/en/latest/"
+        />
+        <ows:Metadata xlink:title="Climate4Impact" xlink:type="simple"
+            xlink:href="https://dev.climate4impact.eu"
+        />
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>inputa</ows:Identifier>
+                <ows:Title>Input 1</ows:Title>
+                <ows:Abstract>Enter Input 1</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#float">float</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>2.0</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>inputb</ows:Identifier>
+                <ows:Title>Input 2</ows:Title>
+                <ows:Abstract>Enter Input 2</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#float">float</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>3.0</DefaultValue>
+                </LiteralData>
+            </Input>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>operator</ows:Identifier>
+                <ows:Title>Operator</ows:Title>
+                <ows:Abstract>Choose a binary Operator</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                <ows:AllowedValues>
+                    <ows:Value>add</ows:Value>
+                    <ows:Value>substract</ows:Value>
+                    <ows:Value>divide</ows:Value>
+                    <ows:Value>multiply</ows:Value>
+                </ows:AllowedValues>
+                <DefaultValue>add</DefaultValue>
+                </LiteralData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>Binary operator result</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#float">float</ows:DataType>
+                </LiteralOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>show_error</ows:Identifier>
+        <ows:Title>Show a WPS Error</ows:Title>
+        <ows:Abstract>This process will fail intentionally with a WPS error message.</ows:Abstract>
+        <ows:Metadata xlink:title="Birdhouse" xlink:type="simple"
+            xlink:href="http://bird-house.github.io/"
+        />
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="http://emu.readthedocs.io/en/latest/"
+        />
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>message</ows:Identifier>
+                <ows:Title>Error Message</ows:Title>
+                <ows:Abstract>Enter an error message that will be returned.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                <ows:AnyValue />
+                <DefaultValue>This process failed intentionally :)</DefaultValue>
+                </LiteralData>
+            </Input>
+        </DataInputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.1" storeSupported="true" statusSupported="true">
+        <ows:Identifier>multiple_outputs</ows:Identifier>
+        <ows:Title>Multiple Outputs</ows:Title>
+        <ows:Abstract>Produces multiple files and returns a document with references to these files.</ows:Abstract>
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="https://emu.readthedocs.io/en/latest/processes.html"
+        />
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>count</ows:Identifier>
+                <ows:Title>Number of output files</ows:Title>
+                <ows:Abstract>The number of generated output files.</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</ows:DataType>
+                <ows:AllowedValues>
+                    <ows:Value>1</ows:Value>
+                    <ows:Value>2</ows:Value>
+                    <ows:Value>5</ows:Value>
+                    <ows:Value>10</ows:Value>
+                </ows:AllowedValues>
+                <DefaultValue>1</DefaultValue>
+                </LiteralData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>Output</ows:Title>
+                <ows:Abstract>Text document with dummy content.</ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>reference</ows:Identifier>
+                <ows:Title>Output References</ows:Title>
+                <ows:Abstract>Document with references to produced output files.</ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>application/json</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/json</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>esgf_demo</ows:Identifier>
+        <ows:Title>ESGF Demo</ows:Title>
+        <ows:Abstract>Shows how to use WPS metadata for processes using ESGF data.</ows:Abstract>
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="https://emu.readthedocs.io/en/latest/processes.html"
+        />
+        <ows:Metadata xlink:title="ESGF Constraints" xlink:type="simple"
+            xlink:href="http://esgf-data.dkrz.de/esg-search/search?project=CMIP5&amp;time_frequency=mon&amp;variable=tas,tasmax,tasmin&amp;experiment=historical"
+            xlink:role="https://www.earthsystemcog.org/spec/esgf_search/4.12.0/def/constraints"
+        />
+        <DataInputs>
+            <Input minOccurs="0" maxOccurs="100">
+                <ows:Identifier>dataset</ows:Identifier>
+                <ows:Title>Dataset</ows:Title>
+                <ows:Abstract>You may provide a URL or upload a NetCDF file.</ows:Abstract>
+                <ComplexData maximumMegabytes="200">
+                    <Default>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexData>
+            </Input>
+            <Input minOccurs="0" maxOccurs="100">
+                <ows:Identifier>dataset_opendap</ows:Identifier>
+                <ows:Title>Remote OpenDAP Data URL</ows:Title>
+                <ows:Abstract>Or provide a remote OpenDAP data URL, for example: http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc</ows:Abstract>
+                <LiteralData>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                <ows:AnyValue />
+                </LiteralData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>Output response</ows:Title>
+                <ows:Abstract>A summary report.</ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="2.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>output_formats</ows:Identifier>
+        <ows:Title>Return different output formats. </ows:Title>
+        <ows:Abstract>Dummy process returning various output file formats.</ows:Abstract>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>netcdf</ows:Identifier>
+                <ows:Title>netCDF dummy output file.</ows:Title>
+                <ows:Abstract>A very small test netCDF file. </ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                            <Encoding>base64</Encoding>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                            <Encoding>base64</Encoding>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+            <Output>
+                <ows:Identifier>json</ows:Identifier>
+                <ows:Title>json dummy output file.</ows:Title>
+                <ows:Abstract>A very small test json file. </ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>application/json</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/json</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="1.0" storeSupported="true" statusSupported="true">
+        <ows:Identifier>poly_centroid</ows:Identifier>
+        <ows:Title>Approximate centroid of a polygon.</ows:Title>
+        <ows:Abstract>Return the polygon&#39;s centroid coordinates. If the geometry contains multiple polygons, only the centroid of the first one will be computed. Do not use for serious computations, this is only a test process and uses a crude approximation. </ows:Abstract>
+        <DataInputs>
+            <Input minOccurs="1" maxOccurs="1">
+                <ows:Identifier>polygon</ows:Identifier>
+                <ows:Title>Region definition</ows:Title>
+                <ows:Abstract>A polygon defining a region.</ows:Abstract>
+                <ComplexData maximumMegabytes="200">
+                    <Default>
+                        <Format>
+                            <MimeType>application/gml+xml</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/gml+xml</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>The centroid of the polygon geometry.</ows:Title>
+                <ows:Abstract>The coordinates of the polygon&#39;s approximate centroid.</ows:Abstract>
+                <LiteralOutput>
+                <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+                </LiteralOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+    <ProcessDescription wps:processVersion="4" storeSupported="true" statusSupported="true">
+        <ows:Identifier>ncmeta</ows:Identifier>
+        <ows:Title>Return NetCDF Metadata</ows:Title>
+        <ows:Abstract>Return metadata from a netCDF dataset, either on file or an OpenDAP service.</ows:Abstract>
+        <ows:Metadata xlink:title="User Guide" xlink:type="simple"
+            xlink:href="http://emu.readthedocs.io/en/latest/"
+        />
+        <DataInputs>
+            <Input minOccurs="0" maxOccurs="1">
+                <ows:Identifier>dataset</ows:Identifier>
+                <ows:Title>NetCDF Dataset</ows:Title>
+                <ows:Abstract>http://test.opendap.org:80/opendap/netcdf/examples/sresa1b_ncar_ccsm3_0_run1_200001.nc.nc4</ows:Abstract>
+                <ComplexData maximumMegabytes="200">
+                    <Default>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                            <Encoding>base64</Encoding>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/x-netcdf</MimeType>
+                            <Encoding>base64</Encoding>
+                        </Format>
+                    </Supported>
+                </ComplexData>
+            </Input>
+            <Input minOccurs="0" maxOccurs="1">
+                <ows:Identifier>dataset_opendap</ows:Identifier>
+                <ows:Title>OpenDAP Dataset</ows:Title>
+                <ows:Abstract>http://test.opendap.org:80/opendap/netcdf/examples/sresa1b_ncar_ccsm3_0_run1_200001.nc</ows:Abstract>
+                <ComplexData maximumMegabytes="200">
+                    <Default>
+                        <Format>
+                            <MimeType>application/x-ogc-dods</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>application/x-ogc-dods</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexData>
+            </Input>
+        </DataInputs>
+        <ProcessOutputs>
+            <Output>
+                <ows:Identifier>output</ows:Identifier>
+                <ows:Title>Metadata</ows:Title>
+                <ows:Abstract></ows:Abstract>
+                <ComplexOutput>
+                    <Default>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Default>
+                    <Supported>
+                        <Format>
+                            <MimeType>text/plain</MimeType>
+                        </Format>
+                    </Supported>
+                </ComplexOutput>
+            </Output>
+        </ProcessOutputs>
+    </ProcessDescription>
+</wps:ProcessDescriptions>
