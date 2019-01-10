@@ -1,3 +1,4 @@
+import pytest
 from tests.utils import service_ok
 
 from owslib.wms import WebMapService
@@ -5,9 +6,8 @@ from owslib.util import ServiceException
 from owslib.util import ResponseWrapper
 
 
-import pytest
-
 SERVICE_URL = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi'
+NCWMS2_URL = "http://wms.stccmop.org:8080/ncWMS2/wms"
 
 
 @pytest.mark.online
@@ -36,7 +36,7 @@ def test_wms_getmap_111_service_exception():
     """GetMap 1.1.1 ServiceException for an invalid CRS"""
     wms = WebMapService(SERVICE_URL, version='1.1.1')
     try:
-        rsp = wms.getmap(
+        wms.getmap(
             layers=['nexrad_base_reflect'],
             styles=['default'],
             srs='EPSG:4328',
@@ -74,7 +74,7 @@ def test_wms_getmap_130_service_exception():
     """GetMap 1.3.0 ServiceException for an invalid CRS"""
     wms = WebMapService(SERVICE_URL, version='1.3.0')
     try:
-        rsp = wms.getmap(
+        wms.getmap(
             layers=['nexrad_base_reflect'],
             styles=['default'],
             srs='EPSG:4328',
@@ -118,5 +118,36 @@ def test_getmap_130_national_map():
     assert "box=-176.646%2C17.7016%2C-64.8017%2C71.2854" in wms.request
     assert "width=500" in wms.request
     assert "height=300" in wms.request
+    assert "format=image%2Fpng" in wms.request
+    assert "transparent=TRUE" in wms.request
+
+
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(NCWMS2_URL), reason="WMS service is unreachable")
+def test_ncwms2():
+    """Test with an ncWMS2 server.
+    """
+    # Note that this does not exercise the bug in https://github.com/geopython/OWSLib/issues/556
+    wms = WebMapService(NCWMS2_URL, version='1.3.0')
+    rsp = wms.getmap(
+        layers=['f33_thredds/min_temp'],
+        styles=['default'],
+        srs='CRS:84',
+        bbox=(-124.17, 46.02, -123.29, 46.38),
+        size=(256, 256),
+        format='image/png',
+        transparent=True,
+        mode='32bit',
+
+    )
+    assert type(rsp) is ResponseWrapper
+    assert "service=WMS" in wms.request
+    assert "version=1.3.0" in wms.request
+    assert "request=GetMap" in wms.request
+    assert "layers=f33_thredds/min_temp" in wms.request
+    assert "styles=default" in wms.request
+    assert "crs=CRS%3A84" in wms.request
+    assert "width=256" in wms.request
+    assert "height=256" in wms.request
     assert "format=image%2Fpng" in wms.request
     assert "transparent=TRUE" in wms.request

@@ -315,7 +315,7 @@ class WebMapService_1_3_0(object):
             headers[k.lower()] = v
 
         # handle the potential charset def
-        if headers['content-type'].split(';')[0] in ['application/vnd.ogc.se_xml', 'text/xml']:
+        if headers.get('content-type', '').split(';')[0] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
             err_message = six.text_type(se_tree.find(nspath('ServiceException', OGC_NAMESPACE)).text).strip()
