@@ -34,7 +34,7 @@ Standards Support
 +===================+=====================+
 | `OGC WMS`_        | 1.1.1               |
 +-------------------+---------------------+
-| `OGC WFS`_        | 1.0.0, 1.1.0, 2.0.0 |
+| `OGC WFS`_        | 1.0.0, 1.1.0, 2.0.0, 3.0 |
 +-------------------+---------------------+
 | `OGC WCS`_        | 1.0.0, 1.1.0        |
 +-------------------+---------------------+
@@ -285,6 +285,35 @@ services)
 
     >>> response = wfs20.getfeature(storedQueryID='urn:ogc:def:query:OGC-WFS::GetFeatureById', storedQueryParams={'ID':'gmd_ex.1'})
 
+WFS 3.0
+-------
+
+WFS 3.0 is a clean break from the traditional OGC service architecture
+(RESTful, JSON, OpenAPI) and as such OWSLib the code follows the same pattern.
+
+.. code-block:: python
+
+  >>> from owslib.wfs import WebFeatureService
+  >>> w = WebFeatureService('https://geo.kralidis.ca/pygeoapi, version='3.0')
+  >>> w.url
+  'http://geo.kralidis.ca/pygeoapi/'
+  >>> w.version
+  '3.0'
+  >>> conformance = w.conformance()
+  {u'conformsTo': [u'http://www.opengis.net/spec/wfs-1/3.0/req/core', u'http://www.opengis.net/spec/wfs-1/3.0/req/oas30', u'http://www.opengis.net/spec/wfs-1/3.0/req/html', u'http://www.opengis.net/spec/wfs-1/3.0/req/geojson']}
+  >>> collections = w.collections()
+  >>> len(collections)
+  3
+  >>> lakes = w.collection('lakes')
+  >>> lakes['name']
+  'lakes'
+  >>> lakes['title']
+  'Large Lakes'
+  >>> lakes['description']
+  'lakes of the world, public domain'
+  >>> lakes_query = w.collection_items('lakes')
+  >>> lakes_query['features'][0]['properties']
+  {u'scalerank': 0, u'name_alt': None, u'admin': None, u'featureclass': u'Lake', u'id': 0, u'name': u'Lake Baikal'}
 
 WCS
 ---
