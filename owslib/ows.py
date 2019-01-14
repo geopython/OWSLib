@@ -235,14 +235,14 @@ class BoundingBox(object):
         self.maxx = None
         self.maxy = None
 
-        val = elem.attrib.get('crs')
+        val = elem.attrib.get('crs') or elem.attrib.get('{{{}}}crs'.format(namespace))
         try:
             self.crs = crs.Crs(val)
         except (AttributeError, ValueError):
             LOGGER.warning('Invalid CRS %r. Expected integer')
             self.crs = None
 
-        val = elem.attrib.get('dimensions')
+        val = elem.attrib.get('dimensions') or elem.attrib.get('{{{}}}dimensions'.format(namespace))
         if val is not None:
             self.dimensions = int(util.testXMLValue(val, True))
         else:  # assume 2
@@ -267,6 +267,7 @@ class BoundingBox(object):
                     self.maxx, self.maxy = xy[1], xy[0]
                 else:
                     self.maxx, self.maxy = xy[0], xy[1]
+
 
 class WGS84BoundingBox(BoundingBox):
     """WGS84 bbox, axis order xy"""
