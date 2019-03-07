@@ -826,7 +826,7 @@ class WPSExecution(object):
                     headers=self.headers, verify=self.verify, cert=self.cert)
 
                 # ExecuteResponse contains reference to server-side output
-                if output_content is not b'':
+                if output_content != b'':
                     content = content + output_content
                     if filepath is None:
                         filepath = output.fileName
@@ -839,7 +839,7 @@ class WPSExecution(object):
                         content = content + data
 
             # write out content
-            if content is not '':
+            if content != '':
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
@@ -1335,7 +1335,7 @@ class Output(InputOutput):
             if complexDataElement is not None:
                 self.dataType = "ComplexData"
                 self.mimeType = complexDataElement.get('mimeType')
-                if complexDataElement.text is not None and complexDataElement.text.strip() is not '':
+                if complexDataElement.text is not None and complexDataElement.text.strip() != '':
                     self.data.append(complexDataElement.text.strip())
                 for child in complexDataElement:
                     self.data.append(etree.tostring(child))
@@ -1343,7 +1343,7 @@ class Output(InputOutput):
                 nspath('LiteralData', ns=wpsns))
             if literalDataElement is not None:
                 self.dataType = literalDataElement.get('dataType')
-                if literalDataElement.text is not None and literalDataElement.text.strip() is not '':
+                if literalDataElement.text is not None and literalDataElement.text.strip() != '':
                     self.data.append(literalDataElement.text.strip())
             bboxDataElement = dataElement.find(nspath('BoundingBox', ns=namespaces['ows']))
             if bboxDataElement is not None:
@@ -1401,13 +1401,13 @@ class Output(InputOutput):
         content = self.retrieveData(username, password, headers=headers, verify=verify, cert=cert)
 
         # ExecuteResponse contain embedded output
-        if content is "" and len(self.data) > 0:
+        if content == "" and len(self.data) > 0:
             self.fileName = self.identifier
             for data in self.data:
                 content = content + data
 
         # write out content
-        if content is not "":
+        if content != "":
             if self.fileName == "":
                 self.fileName = self.identifier
             self.filePath = path + self.fileName

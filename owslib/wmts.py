@@ -323,9 +323,9 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             msg = 'tilematrix (zoom level) is mandatory (cannot be None)'
             raise ValueError(msg)
         if row is None:
-                raise ValueError("row is mandatory (cannot be None)")
+            raise ValueError("row is mandatory (cannot be None)")
         if column is None:
-                raise ValueError("column is mandatory (cannot be None)")
+            raise ValueError("column is mandatory (cannot be None)")
 
         request = list()
         request.append(('SERVICE', 'WMTS'))
