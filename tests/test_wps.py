@@ -2,7 +2,7 @@ import pytest
 
 
 from tests.utils import resource_file
-from owslib.wps import WebProcessingService, WPSExecution, Process, is_reference
+from owslib.wps import WebProcessingService, WPSExecution, Process, is_reference, Input
 from owslib.etree import etree
 
 
@@ -45,10 +45,19 @@ def test_wps_process_properties(wps):
     assert p.storeSupported is None
 
 
-def test_wps_process_with_invalid_identifer():
+def test_wps_process_with_invalid_identifier():
     p = Process(etree.Element('invalid'))
     assert repr(p) == '<owslib.wps.Process >'
     assert str(p) == 'WPS Process: , title='
+
+
+def test_wps_literal_data_input_parsing_references():
+    xml = open(resource_file('wps_inout_parsing.xml'), 'r').read()
+    inputs = etree.fromstring(xml)
+    for i, i_elem in enumerate(inputs):
+        wps_in = Input(i_elem)
+        assert wps_in.identifier == 'input{}'.format(i + 1)
+        assert wps_in.dataType == 'string'
 
 
 def test_wps_response_with_lineage():
