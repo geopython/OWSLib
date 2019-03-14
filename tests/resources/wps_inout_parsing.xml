@@ -16,7 +16,7 @@
         <ows:Identifier>input2</ows:Identifier>
         <ows:Title>Input 2</ows:Title>
         <LiteralData>
-            <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+            <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string" />
             <ows:AllowedValues>
                 <ows:Value>YS</ows:Value>
                 <ows:Value>MS</ows:Value>
@@ -30,7 +30,7 @@
         <ows:Identifier>input3</ows:Identifier>
         <ows:Title>Input 3</ows:Title>
         <LiteralData>
-            <ows:DataType ows:reference="urn:ogc:def:dataType:OGC:1.1:string">string</ows:DataType>
+            <ows:DataType ows:reference="urn:ogc:def:dataType:OGC:1.1:string" />
             <ows:AnyValue />
         </LiteralData>
     </Input>
@@ -42,4 +42,26 @@
             <ows:AnyValue />
         </LiteralData>
      </Input>
+        <Input minOccurs="1" maxOccurs="1">
+        <ows:Identifier>input5</ows:Identifier>
+        <ows:Title>Input 5</ows:Title>
+        <LiteralData>
+            <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+            <ows:AllowedValues>
+                <ows:Value>YS</ows:Value>
+                <ows:Value>MS</ows:Value>
+                <ows:Value>QS-DEC</ows:Value>
+                <ows:Value>AS-JUL</ows:Value>
+            </ows:AllowedValues>
+            <DefaultValue>YS</DefaultValue>
+        </LiteralData>
+    </Input>
+    <Input minOccurs="1" maxOccurs="1">
+        <ows:Identifier>input6</ows:Identifier>
+        <ows:Title>Input 6</ows:Title>
+        <LiteralData>
+            <ows:DataType ows:reference="urn:ogc:def:dataType:OGC:1.1:string">string</ows:DataType>
+            <ows:AnyValue />
+        </LiteralData>
+    </Input>
 </DataInputs>
