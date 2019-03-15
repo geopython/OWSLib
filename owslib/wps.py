@@ -1080,9 +1080,11 @@ class InputOutput(object):
                     self.dataType = sub_element.text
                     if not self.dataType:
                         reference = sub_element.get(nspath("reference", ns=subns))
+                        # backward search of first non-alpha character (:, #, /, etc.)
                         pos = len(reference) - 1
                         while pos >= 0 and reference[pos].isalpha():
                             pos -= 1
+                        # obtain substring after found non-alpha character position
                         self.dataType = reference[pos + 1:]
 
             for sub_element in literal_data_element:
