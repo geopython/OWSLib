@@ -1,0 +1,67 @@
+<DataInputs xmlns:ows="http://www.opengis.net/ows/1.1">
+    <Input minOccurs="1" maxOccurs="1000">
+        <ows:Identifier>input1</ows:Identifier>
+        <ows:Title>Input 1</ows:Title>
+        <LiteralData>
+            <ows:DataType ows:reference="xs:string" xmlns:ows="http://www.opengis.net/ows/1.1" />
+            <ows:AllowedValues xmlns:ows="http://www.opengis.net/ows/1.1">
+                <ows:Value>COMMA</ows:Value>
+                <ows:Value>TAB</ows:Value>
+                <ows:Value>SPACE</ows:Value>
+            </ows:AllowedValues>
+            <DefaultValue>COMMA</DefaultValue>
+        </LiteralData>
+    </Input>
+    <Input minOccurs="1" maxOccurs="1">
+        <ows:Identifier>input2</ows:Identifier>
+        <ows:Title>Input 2</ows:Title>
+        <LiteralData>
+            <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string" />
+            <ows:AllowedValues>
+                <ows:Value>YS</ows:Value>
+                <ows:Value>MS</ows:Value>
+                <ows:Value>QS-DEC</ows:Value>
+                <ows:Value>AS-JUL</ows:Value>
+            </ows:AllowedValues>
+            <DefaultValue>YS</DefaultValue>
+        </LiteralData>
+    </Input>
+    <Input minOccurs="1" maxOccurs="1">
+        <ows:Identifier>input3</ows:Identifier>
+        <ows:Title>Input 3</ows:Title>
+        <LiteralData>
+            <ows:DataType ows:reference="urn:ogc:def:dataType:OGC:1.1:string" />
+            <ows:AnyValue />
+        </LiteralData>
+    </Input>
+    <Input minOccurs="1" maxOccurs="1">
+        <ows:Identifier>input4</ows:Identifier>
+        <ows:Title>Input 4</ows:Title>
+        <LiteralData>
+            <ows:DataType>string</ows:DataType>
+            <ows:AnyValue />
+        </LiteralData>
+     </Input>
+        <Input minOccurs="1" maxOccurs="1">
+        <ows:Identifier>input5</ows:Identifier>
+        <ows:Title>Input 5</ows:Title>
+        <LiteralData>
+            <ows:DataType ows:reference="http://www.w3.org/TR/xmlschema-2/#string">string</ows:DataType>
+            <ows:AllowedValues>
+                <ows:Value>YS</ows:Value>
+                <ows:Value>MS</ows:Value>
+                <ows:Value>QS-DEC</ows:Value>
+                <ows:Value>AS-JUL</ows:Value>
+            </ows:AllowedValues>
+            <DefaultValue>YS</DefaultValue>
+        </LiteralData>
+    </Input>
+    <Input minOccurs="1" maxOccurs="1">
+        <ows:Identifier>input6</ows:Identifier>
+        <ows:Title>Input 6</ows:Title>
+        <LiteralData>
+            <ows:DataType ows:reference="urn:ogc:def:dataType:OGC:1.1:string">string</ows:DataType>
+            <ows:AnyValue />
+        </LiteralData>
+    </Input>
+</DataInputs>
