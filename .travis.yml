@@ -9,6 +9,11 @@ matrix:
     - python: 3.7
       dist: xenial
       sudo: true
+      env: LMXL=true
+    - python: 3.7
+      dist: xenial
+      sudo: true
+      env: LMXL=false
 sudo: false
 env:
   - LXML=true
