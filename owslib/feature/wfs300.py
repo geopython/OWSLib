@@ -55,7 +55,7 @@ class WebFeatureService_3_0_0(object):
         if json_ is not None:  # static JSON string
             self.links = json.loads(json_)['links']
         else:
-            response = requests.get(url, headers=REQUEST_HEADERS).json()
+            response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password)).json()
             self.links = response['links']
 
     def conformance(self):
@@ -67,7 +67,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url('conformance')
         LOGGER.debug('Request: {}'.format(url))
-        response = requests.get(url, headers=REQUEST_HEADERS).json()
+        response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password)).json()
         return response
 
     def collections(self):
@@ -79,7 +79,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url('collections')
         LOGGER.debug('Request: {}'.format(url))
-        response = requests.get(url, headers=REQUEST_HEADERS).json()
+        response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password)).json()
         return response['collections']
 
     def collection(self, collection_name):
@@ -95,7 +95,7 @@ class WebFeatureService_3_0_0(object):
         path = 'collections/{}'.format(collection_name)
         url = self._build_url(path)
         LOGGER.debug('Request: {}'.format(url))
-        response = requests.get(url, headers=REQUEST_HEADERS).json()
+        response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password)).json()
         return response
 
     def collection_items(self, collection_name, **kwargs):
@@ -122,7 +122,7 @@ class WebFeatureService_3_0_0(object):
         path = 'collections/{}/items'.format(collection_name)
         url = self._build_url(path)
         LOGGER.debug('Request: {}'.format(url))
-        response = requests.get(url, headers=REQUEST_HEADERS,
+        response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password),
                                 params=kwargs).json()
         return response
 
@@ -141,7 +141,7 @@ class WebFeatureService_3_0_0(object):
         path = 'collections/{}/items/{}'.format(collection_name, identifier)
         url = self._build_url(path)
         LOGGER.debug('Request: {}'.format(url))
-        response = requests.get(url, headers=REQUEST_HEADERS).json()
+        response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password)).json()
         return response
 
     def _build_url(self, path=None):
