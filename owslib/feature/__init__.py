@@ -11,8 +11,10 @@ from owslib.crs import Crs
 
 try:
     from urllib import urlencode
+    import urlparse
 except ImportError:
     from urllib.parse import urlencode
+    import urllib.parse as urlparse
 import logging
 from owslib.util import log
 from owslib.feature.schema import get_schema
@@ -121,7 +123,6 @@ class WebFeatureService_(object):
         storedQueryParams = storedQueryParams or {}
 
         base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
-        base_url = base_url if base_url.endswith("?") else base_url+"?"
             
         request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
         
@@ -158,9 +159,12 @@ class WebFeatureService_(object):
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
 
-        data = urlencode(request, doseq=True)
-
-        return base_url+data
+        url_parts = list(urlparse.urlparse(base_url))
+        query = dict(urlparse.parse_qsl(url_parts[4]))
+        query.update(request)
+        url_parts[4] = urlencode(query, doseq=True)
+        
+        return urlparse.urlunparse(url_parts)
 
 
     def get_schema(self, typename):
@@ -170,4 +174,3 @@ class WebFeatureService_(object):
 
         return get_schema(self.url, typename, self.version)
     
-
