@@ -472,7 +472,7 @@ class WPSReader(object):
         elif method == 'Post':
             u = openURL(url, data, method='Post',
                         username=username, password=password,
-                        headers=headers, verify=verify, cert=cert,timeout=timeout)
+                        headers=headers, verify=verify, cert=cert, timeout=timeout)
             return etree.fromstring(u.read())
 
         else:
