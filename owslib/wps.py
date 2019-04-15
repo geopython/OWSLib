@@ -219,7 +219,7 @@ class WebProcessingService(object):
     """
 
     def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False,
-                 headers=None, verify=True, cert=None):
+                 headers=None, verify=True, cert=None, timeout=None):
         """
         Initialization method resets the object status.
         By default it will execute a GetCapabilities invocation to the remote service,
@@ -235,6 +235,7 @@ class WebProcessingService(object):
         self.headers = headers
         self.verify = verify
         self.cert = cert
+        self.timeout = timeout
 
         # fields populated by method invocations
         self._capabilities = None
@@ -321,7 +322,7 @@ class WebProcessingService(object):
         log.info('Executing WPS request...')
         execution = WPSExecution(version=self.version, url=self.url,
                                  username=self.username, password=self.password, verbose=self.verbose,
-                                 headers=self.headers, verify=self.verify, cert=self.cert)
+                                 headers=self.headers, verify=self.verify, cert=self.cert, timeout=self.timeout)
 
         # build XML request from parameters
         if request is None:
@@ -441,11 +442,12 @@ class WPSReader(object):
     Superclass for reading a WPS document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=30):
         self.version = version
         self.verbose = verbose
+        self.timeout = timeout
 
-    def _readFromUrl(self, url, data, method='Get', username=None, password=None,
+    def _readFromUrl(self, url, data, timeout, method='Get', username=None, password=None,
                      headers=None, verify=True, cert=None):
         """
         Method to get and parse a WPS document, returning an elementtree instance.
@@ -464,13 +466,13 @@ class WPSReader(object):
             spliturl = request_url.split('?')
             u = openURL(spliturl[0], spliturl[
                         1], method='Get', username=username, password=password,
-                        headers=headers, verify=verify, cert=cert)
+                        headers=headers, verify=verify, cert=cert, timeout=self.timeout)
             return etree.fromstring(u.read())
 
         elif method == 'Post':
             u = openURL(url, data, method='Post',
                         username=username, password=password,
-                        headers=headers, verify=verify, cert=cert)
+                        headers=headers, verify=verify, cert=cert, timeout=timeout)
             return etree.fromstring(u.read())
 
         else:
@@ -493,10 +495,10 @@ class WPSCapabilitiesReader(WPSReader):
     Utility class that reads and parses a WPS GetCapabilities document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None):
         # superclass initializer
         super(WPSCapabilitiesReader, self).__init__(
-            version=version, verbose=verbose)
+            version=version, verbose=verbose, timeout=timeout)
 
     def readFromUrl(self, url, username=None, password=None,
                     headers=None, verify=True, cert=None):
@@ -510,6 +512,7 @@ class WPSCapabilitiesReader(WPSReader):
         return self._readFromUrl(url,
                                  {'service': 'WPS', 'request':
                                      'GetCapabilities', 'version': self.version},
+                                 self.timeout,
                                  username=username, password=password,
                                  headers=headers, verify=verify, cert=cert)
 
@@ -520,10 +523,10 @@ class WPSDescribeProcessReader(WPSReader):
     Class that reads and parses a WPS DescribeProcess document into a etree infoset
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None):
         # superclass initializer
         super(WPSDescribeProcessReader, self).__init__(
-            version=version, verbose=verbose)
+            version=version, verbose=verbose, timeout=timeout)
 
     def readFromUrl(self, url, identifier, username=None, password=None,
                     headers=None, verify=True, cert=None):
@@ -536,6 +539,7 @@ class WPSDescribeProcessReader(WPSReader):
         return self._readFromUrl(url,
                                  {'service': 'WPS', 'request': 'DescribeProcess',
                                      'version': self.version, 'identifier': identifier},
+                                 self.timeout,
                                  username=username, password=password,
                                  headers=headers, verify=verify, cert=cert)
 
@@ -546,9 +550,9 @@ class WPSExecuteReader(WPSReader):
     Class that reads and parses a WPS Execute response document into a etree infoset
     """
 
-    def __init__(self, verbose=False):
+    def __init__(self, verbose=False, timeout=None):
         # superclass initializer
-        super(WPSExecuteReader, self).__init__(verbose=verbose)
+        super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout)
 
     def readFromUrl(self, url, data={}, method='Get', username=None, password=None,
                     headers=None, verify=True, cert=None):
@@ -557,7 +561,7 @@ class WPSExecuteReader(WPSReader):
         :param str url: the URL to submit the GET/POST request to.
         """
 
-        return self._readFromUrl(url, data, method, username=username, password=password,
+        return self._readFromUrl(url, data, self.timeout, method, username=username, password=password,
                                  headers=headers, verify=verify, cert=cert)
 
 
@@ -568,7 +572,7 @@ class WPSExecution(object):
     """
 
     def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False,
-                 headers=None, verify=True, cert=None):
+                 headers=None, verify=True, cert=None, timeout=None):
 
         # initialize fields
         self.url = url
@@ -579,6 +583,7 @@ class WPSExecution(object):
         self.headers = headers
         self.verify = verify
         self.cert = cert
+        self.timeout = timeout
 
         # request document
         self.request = None
@@ -858,7 +863,7 @@ class WPSExecution(object):
         """
 
         self.request = request
-        reader = WPSExecuteReader(verbose=self.verbose)
+        reader = WPSExecuteReader(verbose=self.verbose, timeout=self.timeout)
         response = reader.readFromUrl(
             self.url, request, method='Post', username=self.username, password=self.password,
             headers=self.headers, verify=self.verify, cert=self.cert)
