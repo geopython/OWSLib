@@ -294,7 +294,7 @@ WFS 3.0 is a clean break from the traditional OGC service architecture
 .. code-block:: python
 
   >>> from owslib.wfs import WebFeatureService
-  >>> w = WebFeatureService('https://geo.kralidis.ca/pygeoapi, version='3.0')
+  >>> w = WebFeatureService('https://geo.kralidis.ca/pygeoapi', version='3.0')
   >>> w.url
   'http://geo.kralidis.ca/pygeoapi/'
   >>> w.version
