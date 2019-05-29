@@ -4,7 +4,7 @@ import pytest
 
 from owslib.wfs import WebFeatureService
 
-SERVICE_URL = 'http://geo.kralidis.ca/pygeoapi'
+SERVICE_URL = 'https://demo.pygeoapi.io/master'
 
 
 @pytest.mark.online
@@ -13,7 +13,7 @@ SERVICE_URL = 'http://geo.kralidis.ca/pygeoapi'
 def test_wfs3_pygeoapi():
     w = WebFeatureService(SERVICE_URL, version='3.0')
 
-    assert w.url == 'http://geo.kralidis.ca/pygeoapi/'
+    assert w.url == 'https://demo.pygeoapi.io/master/'
     assert w.version == '3.0'
     assert w.url_query_string is None
 
@@ -21,7 +21,7 @@ def test_wfs3_pygeoapi():
     assert len(conformance['conformsTo']) == 4
 
     collections = w.collections()
-    assert len(collections) == 3
+    assert len(collections) == 10
 
     lakes = w.collection('lakes')
     assert lakes['name'] == 'lakes'
