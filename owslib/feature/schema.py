@@ -27,7 +27,7 @@ GML_NAMESPACES = (MYNS.get_namespace('gml'),
 
 
 def get_schema(url, typename, version='1.0.0', timeout=30,
-               username=None, password=None, cert=None, verify=None):
+               username=None, password=None, cert=None, verify=True):
     """Parses DescribeFeatureType response and creates schema compatible
     with :class:`fiona`
 

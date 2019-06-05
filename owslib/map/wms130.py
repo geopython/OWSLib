@@ -52,7 +52,7 @@ class WebMapService_1_3_0(object):
 
     def __init__(self, url, version='1.3.0', xml=None, username=None,
                  password=None, parse_remote_metadata=False, timeout=30,
-                 headers=None, cert=None, verify=None):
+                 headers=None, cert=None, verify=True):
         """initialize"""
         self.url = url
         self.username = username
@@ -443,7 +443,7 @@ class ServiceProvider(object):
 
 class ContentMetadata(AbstractContentMetadata):
     def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False,
-                 timeout=30, username=None, password=None, cert=None, verify=None):
+                 timeout=30, username=None, password=None, cert=None, verify=True):
         self.username = username
         self.password = password
         self.cert = cert

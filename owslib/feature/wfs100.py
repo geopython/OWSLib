@@ -62,7 +62,7 @@ class WebFeatureService_1_0_0(object):
     Implements IWebFeatureService.
     """
     def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
-                username=None, password=None, cert=None, verify=None):
+                username=None, password=None, cert=None, verify=True):
         """ overridden __new__ method
 
         @type url: string
@@ -92,7 +92,7 @@ class WebFeatureService_1_0_0(object):
 
 
     def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30,
-                 username=None, password=None, cert=None, verify=None):
+                 username=None, password=None, cert=None, verify=True):
         """Initialize."""
         self.url = url
         self.version = version
@@ -348,7 +348,7 @@ class ContentMetadata(AbstractContentMetadata):
     """
 
     def __init__(self, elem, parent, parse_remote_metadata=False,
-                 timeout=30, username=None, password=None, cert=None, verify=None):
+                 timeout=30, username=None, password=None, cert=None, verify=True):
         """."""
         super(ContentMetadata, self).__init__(username, password, cert, verify)
         self.id = testXMLValue(elem.find(nspath('Name')))

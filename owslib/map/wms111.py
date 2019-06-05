@@ -58,7 +58,7 @@ class WebMapService_1_1_1(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.1.1', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, headers=None, timeout=30, cert=None, verify=None):
+                 parse_remote_metadata=False, headers=None, timeout=30, cert=None, verify=True):
         """Initialize."""
         self.url = url
         self.username = username
@@ -430,7 +430,7 @@ class ContentMetadata(AbstractContentMetadata):
     """
 
     def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False,
-                 timeout=30, username=None, password=None, cert=None, verify=None):
+                 timeout=30, username=None, password=None, cert=None, verify=True):
         self.username = username
         self.password = password
         self.cert = cert

@@ -13,7 +13,7 @@ class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0', username=None, password=None, cert=None, verify=None):
+    def __init__(self, version='1.0', username=None, password=None, cert=None, verify=True):
         """Initialize"""
         self.version = version
         self.username = username
@@ -76,7 +76,7 @@ class WFSCapabilitiesReader(object):
 
 class AbstractContentMetadata(object):
     
-    def __init__(self, username=None, password=None, cert=None, verify=None):
+    def __init__(self, username=None, password=None, cert=None, verify=True):
         self.username = username
         self.password = password
         self.cert = cert

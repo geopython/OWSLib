@@ -21,7 +21,7 @@ from owslib.util import clean_ows_url, openURL
 
 
 def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30,
-                       username=None, password=None, cert=None, verify=None):
+                       username=None, password=None, cert=None, verify=True):
     ''' wcs factory function, returns a version specific WebCoverageService object '''
 
     if version is None:

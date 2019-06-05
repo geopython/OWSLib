@@ -15,7 +15,7 @@ class WMSCapabilitiesReader(object):
     """
 
     def __init__(self, version='1.1.1', url=None, un=None,
-                 pw=None, headers=None, cert=None, verify=None):
+                 pw=None, headers=None, cert=None, verify=True):
         """Initialize"""
         self.version = version
         self._infoset = None

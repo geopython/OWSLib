@@ -39,7 +39,7 @@ class ServiceException(Exception):
 
 class WCSBase(object):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
-    def __new__(self,url, xml, cookies, username=None, password=None, cert=None, verify=None):
+    def __new__(self,url, xml, cookies, username=None, password=None, cert=None, verify=True):
         """ overridden __new__ method 
         
         @type url: string
@@ -58,7 +58,7 @@ class WCSBase(object):
         self._describeCoverage = {} #cache for DescribeCoverage responses
         return obj
     
-    def __init__(self, username=None, password=None, cert=None, verify=None):
+    def __init__(self, username=None, password=None, cert=None, verify=True):
         self.username = username
         self.password = password
         self.cert = cert
@@ -85,7 +85,7 @@ class WCSCapabilitiesReader(object):
     """
 
     def __init__(self, version=None, cookies=None, username=None,
-                 password=None, cert=None, verify=None):
+                 password=None, cert=None, verify=True):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -155,7 +155,7 @@ class DescribeCoverageReader(object):
     """
 
     def __init__(self, version, identifier, cookies, username=None,
-                 password=None, cert=None, verify=None):
+                 password=None, cert=None, verify=True):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'

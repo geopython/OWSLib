@@ -48,7 +48,7 @@ class WebCoverageService_2_0_1(WCSBase):
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self,url,xml, cookies, username=None, password=None, cert=None, verify=None):
+    def __init__(self,url,xml, cookies, username=None, password=None, cert=None, verify=True):
         super(WebCoverageService_2_0_1, self).__init__(username, password, cert, verify)
         self.version='2.0.1'
         self.url = url

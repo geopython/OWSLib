@@ -25,7 +25,7 @@ REQUEST_HEADERS = {
 class WebFeatureService_3_0_0(object):
     """Abstraction for OGC Web Feature Service (WFS) version 3.0"""
     def __init__(self, url, version, json_, timeout=30, username=None,
-                 password=None, cert=None, verify=None):
+                 password=None, cert=None, verify=True):
         """
         initializer; implements Requirement 1 (/req/core/root-op)
 

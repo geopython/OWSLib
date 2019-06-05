@@ -41,7 +41,7 @@ class TileMapService(object):
     """
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, timeout=30, cert=None, verify=None):
+                 parse_remote_metadata=False, timeout=30, cert=None, verify=True):
         """Initialize."""
         self.url = url
         self.username = username
@@ -196,7 +196,7 @@ class ContentMetadata(object):
     def __str__(self):
         return 'Layer Title: %s, URL: %s' % (self.title, self.id)
 
-    def __init__(self, elem, un=None, pw=None, cert=None, verify=None):
+    def __init__(self, elem, un=None, pw=None, cert=None, verify=True):
         if elem.tag != 'TileMap':
             raise ValueError('%s should be a TileMap' % (elem,))
         self.id = elem.attrib['href']
@@ -273,7 +273,7 @@ class TileMap(object):
     tilesets = None
     profile = None
 
-    def __init__(self, url=None, xml=None, un=None, pw=None, cert=None, verify=None):
+    def __init__(self, url=None, xml=None, un=None, pw=None, cert=None, verify=True):
         self.url = url
         self.username = un
         self.password = pw
@@ -344,7 +344,7 @@ class TMSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None, cert=None, verify=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, cert=None, verify=True):
         """Initialize"""
         self.version = version
         self._infoset = None

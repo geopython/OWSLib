@@ -135,7 +135,7 @@ class WebMapTileService(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, vendor_kwargs=None, cert=None, verify=None):
+                 parse_remote_metadata=False, vendor_kwargs=None, cert=None, verify=True):
         """Initialize.
 
         Parameters
@@ -813,7 +813,7 @@ class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None, cert=None, verify=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, cert=None, verify=True):
         """Initialize"""
         self.version = version
         self._infoset = None

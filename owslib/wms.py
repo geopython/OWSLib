@@ -21,7 +21,7 @@ from .util import clean_ows_url
 
 
 def WebMapService(url, version='1.1.1', xml=None, username=None, password=None,
-                  parse_remote_metadata=False, timeout=30, headers=None, cert=None, verify=None):
+                  parse_remote_metadata=False, timeout=30, headers=None, cert=None, verify=True):
 
     '''wms factory function, returns a version specific WebMapService object
 

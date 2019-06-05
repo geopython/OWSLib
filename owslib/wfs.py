@@ -21,7 +21,7 @@ from .util import clean_ows_url
 
 def WebFeatureService(url, version='1.0.0', xml=None, json_=None,
                       parse_remote_metadata=False, timeout=30, username=None,
-                      password=None, cert=None, verify=None):
+                      password=None, cert=None, verify=True):
     ''' wfs factory function, returns a version specific WebFeatureService object
 
     @type url: string

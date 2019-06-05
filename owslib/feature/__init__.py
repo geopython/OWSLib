@@ -20,7 +20,7 @@ from owslib.feature.schema import get_schema
 class WebFeatureService_(object):
     """Base class for WebFeatureService implementations"""
 
-    def __init__(self, username=None, password=None, cert=None, verify=None):
+    def __init__(self, username=None, password=None, cert=None, verify=True):
         self.username = username
         self.password = password
         self.cert = cert
