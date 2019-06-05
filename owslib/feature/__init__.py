@@ -20,6 +20,12 @@ from owslib.feature.schema import get_schema
 class WebFeatureService_(object):
     """Base class for WebFeatureService implementations"""
 
+    def __init__(self, username=None, password=None, cert=None, verify=None):
+        self.username = username
+        self.password = password
+        self.cert = cert
+        self.verify = verify
+
     def getBBOXKVP (self,bbox,typename):
         """Formate bounding box for KVP request type (HTTP GET)
 
@@ -168,6 +174,7 @@ class WebFeatureService_(object):
         Get layer schema compatible with :class:`fiona` schema object
         """
 
-        return get_schema(self.url, typename, self.version)
+        return get_schema(self.url, typename, self.version, username=self.username,
+                          password=self.password, cert=self.cert, verify=self.verify)
     
 

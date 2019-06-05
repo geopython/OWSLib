@@ -26,7 +26,8 @@ GML_NAMESPACES = (MYNS.get_namespace('gml'),
                   MYNS.get_namespace('gml32'))
 
 
-def get_schema(url, typename, version='1.0.0', timeout=30, username=None, password=None):
+def get_schema(url, typename, version='1.0.0', timeout=30,
+               username=None, password=None, cert=None, verify=None):
     """Parses DescribeFeatureType response and creates schema compatible
     with :class:`fiona`
 
@@ -37,7 +38,14 @@ def get_schema(url, typename, version='1.0.0', timeout=30, username=None, passwo
     """
 
     url = _get_describefeaturetype_url(url, version, typename)
-    res = openURL(url, timeout=timeout, username=username, password=password)
+    res = openURL(
+        url,
+        timeout=timeout,
+        username=username,
+        password=password,
+        cert=cert,
+        verify=verify
+    )
     root = etree.fromstring(res.read())
 
     if ':' in typename:

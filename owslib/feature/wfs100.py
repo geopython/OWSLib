@@ -62,7 +62,7 @@ class WebFeatureService_1_0_0(object):
     Implements IWebFeatureService.
     """
     def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
-                username=None, password=None):
+                username=None, password=None, cert=None, verify=None):
         """ overridden __new__ method
 
         @type url: string
@@ -74,11 +74,13 @@ class WebFeatureService_1_0_0(object):
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
+        @param cert: authentication certificate for requests
+        @param verify: trusted CA certificates (defaults to system certificates)
         @return: initialized WebFeatureService_1_0_0 object
         """
         obj=object.__new__(self)
         obj.__init__(url, version, xml, parse_remote_metadata, timeout,
-                     username=username, password=password)
+                     username=username, password=password, cert=cert, verify=verify)
         return obj
 
     def __getitem__(self,name):
@@ -90,15 +92,23 @@ class WebFeatureService_1_0_0(object):
 
 
     def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30,
-                 username=None, password=None):
+                 username=None, password=None, cert=None, verify=None):
         """Initialize."""
         self.url = url
         self.version = version
         self.timeout = timeout
         self.username = username
         self.password = password
+        self.cert = cert
+        self.verify = verify
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, self.username, self.password)
+        reader = WFSCapabilitiesReader(
+            self.version,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -130,7 +140,15 @@ class WebFeatureService_1_0_0(object):
         featuretypelist=self._capabilities.find(nspath('FeatureTypeList'))
         features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType'))
         for feature in features:
-            cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
+            cm = ContentMetadata(
+                feature,
+                featuretypelist,
+                parse_remote_metadata,
+                username=self.username,
+                password=self.password,
+                cert=self.cert,
+                verify=self.verify
+            )
             self.contents[cm.id]=cm
 
         #exceptions
@@ -142,8 +160,14 @@ class WebFeatureService_1_0_0(object):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version)
-        return openURL(reader.capabilities_url(self.url), timeout=self.timeout,
-                       username=self.username, password=self.password)
+        return openURL(
+            reader.capabilities_url(self.url),
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
 
     def items(self):
         '''supports dict-like items() access'''
@@ -235,8 +259,16 @@ class WebFeatureService_1_0_0(object):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(
+            base_url,
+            data,
+            method,
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
 
 
         # check for service exceptions, rewrap, and return
@@ -283,7 +315,8 @@ class WebFeatureService_1_0_0(object):
         Get layer schema compatible with :class:`fiona` schema object
         """
 
-        return get_schema(self.url, typename, self.version)
+        return get_schema(self.url, typename, self.version, username=self.username,
+                          password=self.password, cert=self.cert, verify=self.verify)
 
 
 
@@ -314,8 +347,10 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parent, parse_remote_metadata=False, timeout=30):
+    def __init__(self, elem, parent, parse_remote_metadata=False,
+                 timeout=30, username=None, password=None, cert=None, verify=None):
         """."""
+        super(ContentMetadata, self).__init__(username, password, cert, verify)
         self.id = testXMLValue(elem.find(nspath('Name')))
         self.title = testXMLValue(elem.find(nspath('Title')))
         self.abstract = testXMLValue(elem.find(nspath('Abstract')))
@@ -378,7 +413,14 @@ class ContentMetadata(AbstractContentMetadata):
             if metadataUrl['url'] is not None \
                     and metadataUrl['format'].lower() == 'xml':
                 try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    content = openURL(
+                        metadataUrl['url'],
+                        timeout=timeout,
+                        username=self.username,
+                        password=self.password,
+                        cert=self.cert,
+                        verify=self.verify
+                    )
                     doc = etree.fromstring(content.read())
                     if metadataUrl['type'] == 'FGDC':
                         mdelem = doc.find('.//metadata')

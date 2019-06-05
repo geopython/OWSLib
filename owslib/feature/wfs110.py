@@ -68,16 +68,21 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
 
     def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30,
-                 username=None, password=None):
+                 username=None, password=None, cert=None, verify=None):
         """Initialize."""
+        super(WebFeatureService_1_1_0, self).__init__(username, password, cert, verify)
         self.url = url
         self.version = version
         self.timeout = timeout
-        self.username = username
-        self.password = password
         self._capabilities = None
         self.owscommon = OwsCommon('1.0.0')
-        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
+        reader = WFSCapabilitiesReader(
+            self.version,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -118,7 +123,14 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.contents={}
         features = self._capabilities.findall(nspath_eval('wfs:FeatureTypeList/wfs:FeatureType', namespaces))
         for feature in features:
-            cm=ContentMetadata(feature, parse_remote_metadata)
+            cm=ContentMetadata(
+                feature,
+                parse_remote_metadata,
+                username=self.username,
+                password=self.password,
+                cert=self.cert,
+                verify=self.verify
+            )
             self.contents[cm.id]=cm
 
         #exceptions
@@ -129,9 +141,21 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
-        reader = WFSCapabilitiesReader(self.version)
-        return openURL(reader.capabilities_url(self.url), timeout=self.timeout,
-                       username=self.username, password=self.password)
+        reader = WFSCapabilitiesReader(
+            self.version,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
+        return openURL(
+            reader.capabilities_url(self.url),
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
 
     def items(self):
         '''supports dict-like items() access'''
@@ -246,8 +270,16 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(
+            base_url,
+            data,
+            method,
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -295,8 +327,10 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parse_remote_metadata=False, timeout=30):
+    def __init__(self, elem, parse_remote_metadata=False, timeout=30,
+                 username=None, password=None, cert=None, verify=None):
         """."""
+        super(ContentMetadata, self).__init__(username, password, cert, verify)
         self.id = testXMLValue(elem.find(nspath_eval('wfs:Name', namespaces)))
         self.title = testXMLValue(elem.find(nspath_eval('wfs:Title', namespaces)))
         self.abstract = testXMLValue(elem.find(nspath_eval('wfs:Abstract', namespaces)))
@@ -349,7 +383,14 @@ class ContentMetadata(AbstractContentMetadata):
             if metadataUrl['url'] is not None \
                     and metadataUrl['format'].lower() == 'text/xml':
                 try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    content = openURL(
+                        metadataUrl['url'],
+                        timeout=timeout,
+                        username=self.username,
+                        password=self.password,
+                        cert=self.cert,
+                        verify=self.verify
+                    )
                     doc = etree.fromstring(content.read())
 
                     if metadataUrl['type'] == 'FGDC':

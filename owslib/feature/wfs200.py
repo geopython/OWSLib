@@ -78,17 +78,22 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
     def __init__(self, url,  version, xml=None, parse_remote_metadata=False, timeout=30,
-                 username=None, password=None):
+                 username=None, password=None, cert=None, verify=None):
         """Initialize."""
+        super(WebFeatureService_2_0_0, self).__init__(username, password, cert, verify)
         if log.isEnabledFor(logging.DEBUG):
             log.debug('building WFS %s'%url)
         self.url = url
         self.version = version
         self.timeout = timeout
-        self.username = username
-        self.password = password
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
+        reader = WFSCapabilitiesReader(
+            self.version,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -140,7 +145,15 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns=WFS_NAMESPACE))
         features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType', ns=WFS_NAMESPACE))
         for feature in features:
-            cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
+            cm = ContentMetadata(
+                feature,
+                featuretypelist,
+                parse_remote_metadata,
+                username=self.username,
+                password=self.password,
+                cert=self.cert,
+                verify=self.verify
+            )
             self.contents[cm.id]=cm
 
         #exceptions
@@ -151,9 +164,21 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
-        reader = WFSCapabilitiesReader(self.version)
-        return openURL(reader.capabilities_url(self.url), timeout=self.timeout,
-                       username=self.username, password=self.password)
+        reader = WFSCapabilitiesReader(
+            self.version,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
+        return openURL(
+            reader.capabilities_url(self.url),
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
 
     def items(self):
         '''supports dict-like items() access'''
@@ -228,8 +253,16 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
         # If method is 'Post', data will be None here
-        u = openURL(url, data, method, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(
+            url,
+            data,
+            method,
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -282,8 +315,14 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             for kw in kwargs.keys():
                 request[kw]=str(kwargs[kw])
         encoded_request=urlencode(request)
-        u = openURL(base_url + encoded_request, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(
+            base_url + encoded_request,
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         return u.read()
 
 
@@ -302,8 +341,15 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         encoded_request = urlencode(request)
-        u = openURL(base_url, data=encoded_request, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(
+            base_url,
+            data=encoded_request,
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         tree=etree.fromstring(u.read())
         tempdict={}
         for sqelem in tree[:]:
@@ -323,8 +369,15 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         encoded_request = urlencode(request)
-        u = openURL(base_url, data=encoded_request, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(
+            base_url,
+            data=encoded_request,
+            timeout=self.timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         tree=etree.fromstring(u.read())
         tempdict2={}
         for sqelem in tree[:]:
@@ -373,8 +426,10 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parent, parse_remote_metadata=False, timeout=30):
+    def __init__(self, elem, parent, parse_remote_metadata=False,
+                 timeout=30, username=None, password=None, cert=None, verify=None):
         """."""
+        super(ContentMetadata, self).__init__(username, password, cert, verify)
         self.id = elem.find(nspath('Name',ns=WFS_NAMESPACE)).text
         self.title = elem.find(nspath('Title',ns=WFS_NAMESPACE)).text
         abstract = elem.find(nspath('Abstract',ns=WFS_NAMESPACE))
@@ -439,7 +494,14 @@ class ContentMetadata(AbstractContentMetadata):
         for metadataUrl in self.metadataUrls:
             if metadataUrl['url'] is not None:
                 try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    content = openURL(
+                        metadataUrl['url'],
+                        timeout=timeout,
+                        username=self.username,
+                        password=self.password,
+                        cert=self.cert,
+                        verify=self.verify
+                    )
                     doc = etree.fromstring(content.read())
 
                     mdelem = doc.find('.//metadata')
