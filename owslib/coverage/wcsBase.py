@@ -54,13 +54,24 @@ class WCSBase(object):
         self._describeCoverage = {} #cache for DescribeCoverage responses
         return obj
     
-    def __init__(self):
-        pass    
+    def __init__(self, username=None, password=None, cert=None, verify=None):
+        self.username = username
+        self.password = password
+        self.cert = cert
+        self.verify = verify
 
     def getDescribeCoverage(self, identifier):
         ''' returns a describe coverage document - checks the internal cache to see if it has been fetched before '''
         if identifier not in self._describeCoverage.keys():
-            reader = DescribeCoverageReader(self.version, identifier, self.cookies)
+            reader = DescribeCoverageReader(
+                self.version,
+                identifier,
+                self.cookies,
+                username=self.username,
+                password=self.password,
+                cert=self.cert,
+                verify=self.verify
+            )
             self._describeCoverage[identifier] = reader.read(self.url)
         return self._describeCoverage[identifier]
         
@@ -69,7 +80,8 @@ class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version=None, cookies = None):
+    def __init__(self, version=None, cookies=None, username=None,
+                 password=None, cert=None, verify=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -77,6 +89,10 @@ class WCSCapabilitiesReader(object):
         self.version = version
         self._infoset = None
         self.cookies = cookies
+        self.username = username
+        self.password = password
+        self.cert = cert
+        self.verify = verify
 
     def capabilities_url(self, service_url):
         """Return a capabilities url
@@ -112,7 +128,15 @@ class WCSCapabilitiesReader(object):
         @return: An elementtree tree representation of the capabilities document
         """
         request = self.capabilities_url(service_url)
-        u = openURL(request, timeout=timeout, cookies=self.cookies)
+        u = openURL(
+            request,
+            timeout=timeout,
+            cookies=self.cookies,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         return etree.fromstring(u.read())
 
     def readString(self, st):
@@ -126,7 +150,8 @@ class DescribeCoverageReader(object):
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
 
-    def __init__(self, version, identifier, cookies):
+    def __init__(self, version, identifier, cookies, username=None,
+                 password=None, cert=None, verify=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -135,6 +160,10 @@ class DescribeCoverageReader(object):
         self._infoset = None
         self.identifier=identifier
         self.cookies = cookies
+        self.username = username
+        self.password = password
+        self.cert = cert
+        self.verify = verify
 
     def descCov_url(self, service_url):
         """Return a describe coverage url
@@ -187,6 +216,14 @@ class DescribeCoverageReader(object):
         """
         
         request = self.descCov_url(service_url)
-        u = openURL(request, cookies=self.cookies, timeout=timeout)
+        u = openURL(
+            request,
+            cookies=self.cookies,
+            timeout=timeout,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         return etree.fromstring(u.read())
 
