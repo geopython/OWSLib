@@ -136,7 +136,7 @@ class WebMapTileService(object):
 
     def __init__(self, url, version='1.0.0', xml=None, username=None,
                  password=None, parse_remote_metadata=False,
-                 vendor_kwargs=None):
+                 vendor_kwargs=None, cert=None, verify=None):
         """Initialize.
 
         Parameters
@@ -165,10 +165,13 @@ class WebMapTileService(object):
         self.version = version
         self.vendor_kwargs = vendor_kwargs
         self._capabilities = None
+        self.cert = cert
+        self.verify = verify
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(self.version, url=self.url,
-                                        un=self.username, pw=self.password)
+                                        un=self.username, pw=self.password,
+                                        cert=self.cert, verify=self.verify)
 
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
@@ -190,7 +193,8 @@ class WebMapTileService(object):
         # TODO: deprecated function. See ticket #453.
         if not self._capabilities:
             reader = WMTSCapabilitiesReader(
-                self.version, url=self.url, un=self.username, pw=self.password
+                self.version, url=self.url, un=self.username, pw=self.password,
+                cert=self.cert, verify=self.verify
             )
             # xml = reader.read(self.url, self.vendor_kwargs)
             # self._capabilities = ServiceMetadata(xml)
@@ -453,7 +457,13 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             resurl = self.buildTileResource(
                 layer, style, format, tilematrixset, tilematrix,
                 row, column, **vendor_kwargs)
-            u = openURL(resurl, username=self.username, password=self.password)
+            u = openURL(
+                resurl,
+                username=self.username,
+                password=self.password,
+                cert=self.cert,
+                verify=self.verify
+            )
             return u
 
         # KVP implemetation
@@ -479,8 +489,14 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
                     base_url = get_verbs[0].get('url')
             except StopIteration:
                 pass
-        u = openURL(base_url, data, username=self.username,
-                    password=self.password)
+        u = openURL(
+            base_url,
+            data,
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -794,13 +810,15 @@ class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, cert=None, verify=None):
         """Initialize"""
         self.version = version
         self._infoset = None
         self.url = url
         self.username = un
         self.password = pw
+        self.cert = cert
+        self.verify = verify
 
     def capabilities_url(self, service_url, vendor_kwargs=None):
         """Return a capabilities url
@@ -835,8 +853,15 @@ class WMTSCapabilitiesReader:
 
         # now split it up again to use the generic openURL function...
         spliturl = getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get',
-                    username=self.username, password=self.password)
+        u = openURL(
+            spliturl[0],
+            spliturl[1],
+            method='Get',
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         return etree.fromstring(u.read())
 
     def readString(self, st):
