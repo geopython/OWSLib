@@ -21,7 +21,9 @@ def test_wfs3_pygeoapi():
     assert len(conformance['conformsTo']) == 4
 
     collections = w.collections()
-    assert len(collections) == 10
+    # UDPATED : 2019-06-05
+    # This now includes "Dutch addresses (subset Otterlo). OGR GeoPackage Driver"
+    assert len(collections) == 11
 
     lakes = w.collection('lakes')
     assert lakes['name'] == 'lakes'
