@@ -19,7 +19,7 @@ def test_wfs3_pygeoapi():
 
     api = w.api()
     assert api['components']['parameters'] is not None
-    paths = api['components']['paths']
+    paths = api['paths']
     assert paths is not None
     assert paths['/collections/lakes'] is not None
 

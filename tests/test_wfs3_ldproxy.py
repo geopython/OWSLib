@@ -22,4 +22,4 @@ def test_wfs3_ldproxy():
 
     api = w.api()
     assert api['components']['parameters'] is not None
-    assert api['components']['paths'] is not None
+    assert api['paths'] is not None
