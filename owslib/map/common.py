@@ -14,7 +14,8 @@ class WMSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.1.1', url=None, un=None, pw=None, headers=None):
+    def __init__(self, version='1.1.1', url=None, un=None,
+                 pw=None, headers=None, cert=None, verify=None):
         """Initialize"""
         self.version = version
         self._infoset = None
@@ -23,6 +24,8 @@ class WMSCapabilitiesReader(object):
         self.password = pw
         self.headers = headers
         self.request = None
+        self.cert = cert
+        self.verify = verify
 
         #if self.username and self.password:
             ## Provide login information in order to use the WMS server
@@ -67,6 +70,8 @@ class WMSCapabilitiesReader(object):
         u = openURL(spliturl[0], spliturl[1], method='Get',
                     username=self.username,
                     password=self.password,
+                    cert=self.cert,
+                    verify=self.verify,
                     timeout=timeout,
                     headers=self.headers)
 
