@@ -35,6 +35,10 @@ def get_schema(url, typename, version='1.0.0', timeout=30,
     :param str version: version of the service
     :param str typename: name of the layer
     :param int timeout: request timeout
+    :param str username: service authentication username
+    :param str password: service authentication password
+    :param cert: authentication certificate for requests
+    :param str verify: trusted CA certificates (defaults to system certificates)
     """
 
     url = _get_describefeaturetype_url(url, version, typename)

@@ -20,16 +20,8 @@ from .map import wms111, wms130
 from .util import clean_ows_url
 
 
-def WebMapService(url,
-                  version='1.1.1',
-                  xml=None,
-                  username=None,
-                  password=None,
-                  parse_remote_metadata=False,
-                  timeout=30,
-                  headers=None,
-                  cert=None,
-                  verify=None):
+def WebMapService(url, version='1.1.1', xml=None, username=None, password=None,
+                  parse_remote_metadata=False, timeout=30, headers=None, cert=None, verify=None):
 
     '''wms factory function, returns a version specific WebMapService object
 
@@ -40,22 +32,22 @@ def WebMapService(url,
     @type parse_remote_metadata: boolean
     @param parse_remote_metadata: whether to fully process MetadataURL elements
     @param timeout: time (in seconds) after which requests should timeout
+    @param username: service authentication username
+    @param password: service authentication password
+    @param cert: path authentication certificate and/or key for requests
+    @param verify: path to trusted CA certificates (defaults to system certificates)
     @return: initialized WebFeatureService_2_0_0 object
     '''
 
     clean_url = clean_ows_url(url)
 
     if version in ['1.1.1']:
-        return wms111.WebMapService_1_1_1(clean_url, version=version, xml=xml,
-                                          parse_remote_metadata=parse_remote_metadata,
-                                          username=username, password=password,
-                                          timeout=timeout, headers=headers,
-                                          cert=cert, verify=verify)
+        return wms111.WebMapService_1_1_1(
+            clean_url, version=version, xml=xml, parse_remote_metadata=parse_remote_metadata,
+            username=username, password=password, timeout=timeout, headers=headers, cert=cert, verify=verify)
     elif version in ['1.3.0']:
-        return wms130.WebMapService_1_3_0(clean_url, version=version, xml=xml,
-                                          parse_remote_metadata=parse_remote_metadata,
-                                          username=username, password=password,
-                                          timeout=timeout, headers=headers,
-                                          cert=cert, verify=verify)
+        return wms130.WebMapService_1_3_0(
+            clean_url, version=version, xml=xml, parse_remote_metadata=parse_remote_metadata,
+            username=username, password=password, timeout=timeout, headers=headers, cert=cert, verify=verify)
     raise NotImplementedError('The WMS version (%s) you requested is not implemented. Please use 1.1.1 or 1.3.0.' % version)
 

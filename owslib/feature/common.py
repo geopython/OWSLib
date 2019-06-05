@@ -13,8 +13,7 @@ class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0', username=None,
-                 password=None, cert=None, verify=None):
+    def __init__(self, version='1.0', username=None, password=None, cert=None, verify=None):
         """Initialize"""
         self.version = version
         self.username = username

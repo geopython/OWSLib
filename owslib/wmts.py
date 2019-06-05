@@ -134,9 +134,8 @@ class WebMapTileService(object):
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self, url, version='1.0.0', xml=None, username=None,
-                 password=None, parse_remote_metadata=False,
-                 vendor_kwargs=None, cert=None, verify=None):
+    def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
+                 parse_remote_metadata=False, vendor_kwargs=None, cert=None, verify=None):
         """Initialize.
 
         Parameters
@@ -157,6 +156,10 @@ class WebMapTileService(object):
         vendor_kwargs : dict
             Optional vendor-specific parameters to be included in all
             requests.
+        cert : str or tuple(str, str)
+            Path authentication certificate and/or key for requests
+        verify : str
+            Path to trusted CA certificates (defaults to system certificates)
 
         """
         self.url = clean_ows_url(url)

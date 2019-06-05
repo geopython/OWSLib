@@ -40,11 +40,14 @@ class TileMapService(object):
     Implements IWebMapService.
     """
 
-    def __init__(self, url, version='1.0.0', xml=None, username=None, password=None, parse_remote_metadata=False, timeout=30):
+    def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
+                 parse_remote_metadata=False, timeout=30, cert=None, verify=None):
         """Initialize."""
         self.url = url
         self.username = username
         self.password = password
+        self.cert = cert
+        self.verify = verify
         self.version = version
         self.timeout = timeout
         self.services = None
@@ -85,7 +88,13 @@ class TileMapService(object):
         tilemaps = self._capabilities.find('TileMaps')
         if tilemaps is not None:
             for tilemap in tilemaps.findall('TileMap'):
-                cm = ContentMetadata(tilemap, un=self.username, pw=self.password)
+                cm = ContentMetadata(
+                    tilemap,
+                    un=self.username,
+                    pw=self.password,
+                    cert=self.cert,
+                    verify=self.verify
+                )
                 if cm.id:
                     if cm.id in self.contents:
                         raise KeyError('Content metadata for layer "%s" already exists' % cm.id)
@@ -122,8 +131,15 @@ class TileMapService(object):
         for tileset in tilesets:
             if tileset['order'] == z:
                 url = tileset['href'] + '/' + str(x) +'/' + str(y) + '.' + ext
-                u = openURL(url, '', username = self.username,
-                            password = self.password, timeout=timeout or self.timeout)
+                u = openURL(
+                    url,
+                    '',
+                    username=self.username,
+                    password=self.password,
+                    timeout=timeout or self.timeout,
+                    cert=self.cert,
+                    verify=self.verify
+                )
                 return u
         else:
             raise ValueError('cannot find zoomlevel %i for TileMap' % z)
@@ -180,7 +196,7 @@ class ContentMetadata(object):
     def __str__(self):
         return 'Layer Title: %s, URL: %s' % (self.title, self.id)
 
-    def __init__(self, elem, un=None, pw=None):
+    def __init__(self, elem, un=None, pw=None, cert=None, verify=None):
         if elem.tag != 'TileMap':
             raise ValueError('%s should be a TileMap' % (elem,))
         self.id = elem.attrib['href']
@@ -189,12 +205,20 @@ class ContentMetadata(object):
         self.profile = elem.attrib['profile']
         self.password = pw
         self.username = pw
+        self.cert = cert
+        self.verify = verify
         self._tile_map = None
         self.type = elem.attrib.get('type')
 
     def _get_tilemap(self):
         if self._tile_map is None:
-            self._tile_map = TileMap(self.id, un=self.username, pw=self.password)
+            self._tile_map = TileMap(
+                self.id,
+                un=self.username,
+                pw=self.password,
+                cert=self.cert,
+                verify=self.verify
+            )
             assert(self._tile_map.srs == self.srs)
         return self._tile_map
 
@@ -249,10 +273,12 @@ class TileMap(object):
     tilesets = None
     profile = None
 
-    def __init__(self, url=None, xml=None, un=None, pw=None):
+    def __init__(self, url=None, xml=None, un=None, pw=None, cert=None, verify=None):
         self.url = url
         self.username = un
         self.password = pw
+        self.cert = cert
+        self.verify = verify
         self.tilesets = []
         if xml and not url:
             self.readString(xml)
@@ -296,7 +322,15 @@ class TileMap(object):
                     'order': order})
 
     def read(self, url):
-        u = openURL(url, '', method='Get', username = self.username, password = self.password)
+        u = openURL(
+            url,
+            '',
+            method='Get',
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify
+        )
         self._parse(etree.fromstring(u.read()))
 
     def readString(self, st):
@@ -310,20 +344,31 @@ class TMSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, cert=None, verify=None):
         """Initialize"""
         self.version = version
         self._infoset = None
         self.url = url
         self.username = un
         self.password = pw
+        self.cert = cert
+        self.verify = verify
 
 
     def read(self, service_url, timeout=30):
         """Get and parse a TMS capabilities document, returning an
         elementtree instance
         """
-        u = openURL(service_url, '', method='Get', username=self.username, password=self.password, timeout=timeout)
+        u = openURL(
+            service_url,
+            '',
+            method='Get',
+            username=self.username,
+            password=self.password,
+            timeout=timeout,
+            cert=self.cert,
+            verify=self.verify
+        )
         return etree.fromstring(u.read())
 
     def readString(self, st):

@@ -39,17 +39,21 @@ class ServiceException(Exception):
 
 class WCSBase(object):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
-    def __new__(self,url, xml, cookies):
+    def __new__(self,url, xml, cookies, username=None, password=None, cert=None, verify=None):
         """ overridden __new__ method 
         
         @type url: string
         @param url: url of WCS capabilities document
         @type xml: string
         @param xml: elementtree object
+        @param username: service authentication username
+        @param password: service authentication password
+        @param cert: path authentication certificate and/or key for requests
+        @param verify: path to trusted CA certificates (defaults to system certificates)
         @return: inititalised WCSBase object
         """
         obj=object.__new__(self)
-        obj.__init__(url, xml, cookies)
+        obj.__init__(url, xml, cookies, username=username, password=password, cert=cert, verify=verify)
         self.cookies=cookies
         self._describeCoverage = {} #cache for DescribeCoverage responses
         return obj

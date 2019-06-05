@@ -67,13 +67,17 @@ class WMSCapabilitiesReader(object):
 
         # now split it up again to use the generic openURL function...
         spliturl = self.request.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get',
-                    username=self.username,
-                    password=self.password,
-                    cert=self.cert,
-                    verify=self.verify,
-                    timeout=timeout,
-                    headers=self.headers)
+        u = openURL(
+            spliturl[0],
+            spliturl[1],
+            method='Get',
+            username=self.username,
+            password=self.password,
+            cert=self.cert,
+            verify=self.verify,
+            timeout=timeout,
+            headers=self.headers
+        )
 
         raw_text = strip_bom(u.read())
         return etree.fromstring(raw_text)

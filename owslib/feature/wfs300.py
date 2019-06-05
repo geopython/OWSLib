@@ -36,8 +36,8 @@ class WebFeatureService_3_0_0(object):
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
-        @param cert: authentication certificate for requests
-        @param verify: trusted CA certificates (defaults to system certificates)
+        @param cert: path authentication certificate and/or key for requests
+        @param verify: path to trusted CA certificates (defaults to system certificates)
 
         @return: initialized WebFeatureService_3_0_0 object
         """

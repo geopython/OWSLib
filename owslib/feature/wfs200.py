@@ -50,7 +50,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     Implements IWebFeatureService.
     """
     def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
-                username=None, password=None):
+                username=None, password=None, cert=None, verify=None):
         """ overridden __new__ method
 
         @type url: string
@@ -62,11 +62,13 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
+        @param cert: path authentication certificate and/or key for requests
+        @param verify: path to trusted CA certificates (defaults to system certificates)
         @return: initialized WebFeatureService_2_0_0 object
         """
         obj=object.__new__(self)
         obj.__init__(url, version, xml, parse_remote_metadata, timeout,
-                     username=username, password=password)
+                     username=username, password=password, cert=cert, verify=verify)
         return obj
 
     def __getitem__(self,name):
