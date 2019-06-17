@@ -32,6 +32,7 @@ class WebCoverageService_1_0_0(WCSBase):
     """Abstraction for OGC Web Coverage Service (WCS), version 1.0.0
     Implements IWebCoverageService.
     """
+
     def __getitem__(self,name):
         ''' check contents dictionary to allow dict like access to service layers'''
         if name in self.__getattribute__('contents').keys():
@@ -39,20 +40,13 @@ class WebCoverageService_1_0_0(WCSBase):
         else:
             raise KeyError("No content named %s" % name)
     
-    def __init__(self,url,xml, cookies, username=None, password=None, cert=None, verify=True):
-        super(WebCoverageService_1_0_0, self).__init__(username, password, cert, verify)
+    def __init__(self,url,xml, cookies, auth=None):
+        super(WebCoverageService_1_0_0, self).__init__(auth)
         self.version='1.0.0'
         self.url = url   
         self.cookies=cookies
         # initialize from saved capability document or access the server
-        reader = WCSCapabilitiesReader(
-            self.version,
-            self.cookies,
-            username=self.username,
-            password=self.password,
-            cert=self.cert,
-            verify=self.verify
-        )
+        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -95,8 +89,7 @@ class WebCoverageService_1_0_0(WCSBase):
         #exceptions
         self.exceptions = [f.text for f \
                 in self._capabilities.findall('Capability/Exception/Format')]
-    
-    
+
     def items(self):
         '''supports dict-like items() access'''
         items=[]
@@ -169,20 +162,8 @@ class WebCoverageService_1_0_0(WCSBase):
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
         
-        u = openURL(
-            base_url,
-            data,
-            method,
-            self.cookies,
-            username=self.username,
-            password=self.password,
-            cert=self.cert,
-            verify=self.verify
-        )
-
+        u = self.auth.openURL(base_url, data, method, self.cookies)
         return u
-    
-
                
     def getOperationByName(self, name):
         """Return a named operation item."""

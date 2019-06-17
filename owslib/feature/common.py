@@ -1,6 +1,6 @@
 import cgi
 from owslib.etree import etree
-from owslib.util import openURL
+from owslib.util import Authentication
 
 try:
     from urllib import urlencode
@@ -13,13 +13,15 @@ class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0', username=None, password=None, cert=None, verify=True):
+    def __init__(self, version='1.0', username=None, password=None, auth=None):
         """Initialize"""
+        if auth:
+            if username:
+                auth.username = username
+            if password:
+                auth.password = password
+        self.auth = auth or Authentication(username, password)
         self.version = version
-        self.username = username
-        self.password = password
-        self.cert = cert
-        self.verify = verify
         self._infoset = None
 
     def capabilities_url(self, service_url):
@@ -53,14 +55,7 @@ class WFSCapabilitiesReader(object):
             A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = openURL(
-            request,
-            timeout=timeout,
-            username=self.username,
-            password=self.password,
-            cert=self.cert,
-            verify=self.verify
-        )
+        u = self.auth.openURL(request, timeout=timeout)
         return etree.fromstring(u.read())
 
     def readString(self, st):
@@ -76,11 +71,8 @@ class WFSCapabilitiesReader(object):
 
 class AbstractContentMetadata(object):
     
-    def __init__(self, username=None, password=None, cert=None, verify=True):
-        self.username = username
-        self.password = password
-        self.cert = cert
-        self.verify = verify
+    def __init__(self, auth=None):
+        self.auth = auth or Authentication()
         
     def get_metadata(self):
         return [m['metadata'] for m in self.metadataUrls if m.get('metadata', None) is not None]

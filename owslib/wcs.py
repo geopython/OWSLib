@@ -17,27 +17,20 @@ from __future__ import (absolute_import, division, print_function)
 
 from . import etree
 from .coverage import wcs100, wcs110, wcs111, wcsBase, wcs200, wcs201
-from owslib.util import clean_ows_url, openURL
+from owslib.util import clean_ows_url, Authentication
 
 
-def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30,
-                       username=None, password=None, cert=None, verify=True):
+def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, auth=None):
     ''' wcs factory function, returns a version specific WebCoverageService object '''
+
+    if not auth:
+        auth = Authentication()
 
     if version is None:
         if xml is None:
-            reader = wcsBase.WCSCapabilitiesReader(
-                username=username, password=password, cert=cert, verify=verify)
+            reader = wcsBase.WCSCapabilitiesReader(auth=auth)
             request = reader.capabilities_url(url)
-            xml = openURL(
-                request,
-                cookies=cookies,
-                timeout=timeout,
-                username=username,
-                password=password,
-                cert=cert,
-                verify=verify
-            ).read()
+            xml = auth.openURL(request, cookies=cookies, timeout=timeout).read()
 
         capabilities = etree.etree.fromstring(xml)
         version = capabilities.get('version')
@@ -47,21 +40,16 @@ def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30,
 
     if version == '1.0.0':
         return wcs100.WebCoverageService_1_0_0.__new__(
-            wcs100.WebCoverageService_1_0_0, clean_url, xml, cookies,
-            username=username, password=password, cert=cert, verify=verify)
+            wcs100.WebCoverageService_1_0_0, clean_url, xml, cookies, auth=auth)
     elif version == '1.1.0':
         return wcs110.WebCoverageService_1_1_0.__new__(
-            wcs110.WebCoverageService_1_1_0, url, xml, cookies,
-            username=username, password=password, cert=cert, verify=verify)
+            wcs110.WebCoverageService_1_1_0, url, xml, cookies, auth=auth)
     elif version == '1.1.1':
         return wcs111.WebCoverageService_1_1_1.__new__(
-            wcs111.WebCoverageService_1_1_1, url, xml, cookies,
-            username=username, password=password, cert=cert, verify=verify)
+            wcs111.WebCoverageService_1_1_1, url, xml, cookies, auth=auth)
     elif version == '2.0.0':
         return wcs200.WebCoverageService_2_0_0.__new__(
-            wcs200.WebCoverageService_2_0_0, url, xml, cookies,
-            username=username, password=password, cert=cert, verify=verify)
+            wcs200.WebCoverageService_2_0_0, url, xml, cookies, auth=auth)
     elif version == '2.0.1':
         return wcs201.WebCoverageService_2_0_1.__new__(
-            wcs201.WebCoverageService_2_0_1, url, xml, cookies,
-            username=username, password=password, cert=cert, verify=verify)
+            wcs201.WebCoverageService_2_0_1, url, xml, cookies, auth=auth)

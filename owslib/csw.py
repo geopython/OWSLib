@@ -24,8 +24,6 @@ try:                    # Python 3
 except ImportError:     # Python 2
     from urllib import urlencode
 
-from owslib.util import OrderedDict
-
 from owslib.etree import etree
 from owslib import fes
 from owslib import util
@@ -35,7 +33,7 @@ from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.gm03 import GM03
 from owslib.namespaces import Namespaces
-from owslib.util import cleanup_namespaces, bind_url, add_namespaces, openURL
+from owslib.util import cleanup_namespaces, bind_url, add_namespaces, OrderedDict, Authentication
 
 # default variables
 outputformat = 'application/xml'
@@ -50,7 +48,7 @@ schema_location = '%s %s' % (namespaces['csw'], schema)
 class CatalogueServiceWeb(object):
     """ csw request class """
     def __init__(self, url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False,
-                 username=None, password=None):
+                 username=None, password=None, auth=None):
         """
 
         Construct and process a GetCapabilities request
@@ -65,15 +63,19 @@ class CatalogueServiceWeb(object):
         - skip_caps: whether to skip GetCapabilities processing on init (default is False)
         - username: username for HTTP basic authentication
         - password: password for HTTP basic authentication
+        - auth: instance of owslib.util.Authentication
 
         """
-
+        if auth:
+            if username:
+                auth.username = username
+            if password:
+                auth.password = password
         self.url = util.clean_ows_url(url)
         self.lang = lang
         self.version = version
         self.timeout = timeout
-        self.username = username
-        self.password = password
+        self.auth = auth or Authentication(username, password)
         self.service = 'CSW'
         self.exceptionreport = None
         self.owscommon = ows.OwsCommon('1.0.0')
@@ -93,15 +95,15 @@ class CatalogueServiceWeb(object):
                 # ServiceIdentification
                 val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
                 if val is not None:
-                  self.identification = ows.ServiceIdentification(val,self.owscommon.namespace)
+                    self.identification = ows.ServiceIdentification(val,self.owscommon.namespace)
                 else:
-                  self.identification = None
+                    self.identification = None
                 # ServiceProvider
                 val = self._exml.find(util.nspath_eval('ows:ServiceProvider', namespaces))
                 if val is not None:
                     self.provider = ows.ServiceProvider(val,self.owscommon.namespace)
                 else:
-                  self.provider = None
+                    self.provider = None
                 # ServiceOperations metadata 
                 self.operations = []
                 for elem in self._exml.findall(util.nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
@@ -385,7 +387,7 @@ class CatalogueServiceWeb(object):
             self.results['returned'] = int(util.testXMLValue(val, True))
             val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('nextRecord')
             if val is not None:
-                 self.results['nextrecord'] = int(util.testXMLValue(val, True))
+                self.results['nextrecord'] = int(util.testXMLValue(val, True))
             else:
                 warnings.warn("""CSW Server did not supply a nextRecord value (it is optional), so the client
                 should page through the results in another way.""")
@@ -658,7 +660,7 @@ class CatalogueServiceWeb(object):
 
         if isinstance(self.request, six.string_types):  # GET KVP
             self.request = '%s%s' % (bind_url(request_url), self.request)
-            self.response = openURL(self.request, None, 'Get', username=self.username, password=self.password, timeout=self.timeout).read()
+            self.response = self.auth.openURL(self.request, None, 'Get', timeout=self.timeout).read()
         else:
             self.request = cleanup_namespaces(self.request)
             # Add any namespaces used in the "typeNames" attribute of the
@@ -674,7 +676,7 @@ class CatalogueServiceWeb(object):
 
             self.request = util.element_to_string(self.request, encoding='utf-8')
 
-            self.response = util.http_post(request_url, self.request, self.lang, self.timeout, self.username, self.password)
+            self.response = self.auth.post(request_url, self.request, self.lang, self.timeout)
 
         # parse result see if it's XML
         self._exml = etree.parse(BytesIO(self.response))

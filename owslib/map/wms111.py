@@ -30,7 +30,7 @@ import six
 from owslib.etree import etree
 from owslib.util import (openURL, testXMLValue, extract_xml_list,
                          xmltag_split, OrderedDict, ServiceException,
-                         bind_url, nspath_eval)
+                         bind_url, nspath_eval, Authentication)
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.map.common import WMSCapabilitiesReader, AbstractContentMetadata
@@ -58,23 +58,23 @@ class WebMapService_1_1_1(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.1.1', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, headers=None, timeout=30, cert=None, verify=True):
+                 parse_remote_metadata=False, headers=None, timeout=30, auth=None):
         """Initialize."""
+        if auth:
+            if username:
+                auth.username = username
+            if password:
+                auth.password = password
         self.url = url
-        self.username = username
-        self.password = password
         self.version = version
         self.timeout = timeout
         self.headers = headers
         self._capabilities = None
-        self.cert = cert
-        self.verify = verify
+        self.auth = auth or Authentication(username, password)
 
         # Authentication handled by Reader
-        reader = WMSCapabilitiesReader(self.version, url=self.url,
-                                       un=self.username, pw=self.password,
-                                       headers=headers, cert=self.cert,
-                                       verify=self.verify)
+        reader = WMSCapabilitiesReader(
+            self.version, url=self.url, headers=headers, auth=self.auth)
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -148,9 +148,7 @@ class WebMapService_1_1_1(object):
         NOTE: this is effectively redundant now"""
 
         reader = WMSCapabilitiesReader(
-            self.version, url=self.url, un=self.username, pw=self.password,
-            cert=self.cert, verify=self.verify
-        )
+            self.version, url=self.url, auth=self.auth)
         u = self._open(reader.capabilities_url(self.url))
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -266,16 +264,8 @@ class WebMapService_1_1_1(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(
-            base_url,
-            data,
-            method,
-            username=self.username,
-            password=self.password,
-            cert=self.cert,
-            verify=self.verify,
-            timeout=timeout or self.timeout
-        )
+        u = self.auth.openURL(
+            base_url, data, method, timeout=timeout or self.timeout)
 
         # check for service exceptions, and return
         if u.info().get('Content-Type', '').split(';')[0] in ['application/vnd.ogc.se_xml']:
@@ -341,16 +331,8 @@ class WebMapService_1_1_1(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(
-            base_url,
-            data,
-            method,
-            username=self.username,
-            password=self.password,
-            cert=self.cert,
-            verify=self.verify,
-            timeout=timeout or self.timeout
-        )
+        u = self.auth.openURL(
+            base_url, data, method, timeout=timeout or self.timeout)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -429,13 +411,9 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IContentMetadata.
     """
 
-    def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False,
-                 timeout=30, username=None, password=None, cert=None, verify=True):
-        self.username = username
-        self.password = password
-        self.cert = cert
-        self.verify = verify
-        
+    def __init__(self, elem, parent=None, children=None, index=0,
+                 parse_remote_metadata=False, timeout=30, auth=None):
+        super(ContentMetadata, self).__init__(auth)
         if elem.tag != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
 
@@ -618,14 +596,8 @@ class ContentMetadata(AbstractContentMetadata):
             if metadataUrl['url'] is not None \
                     and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
                 try:
-                    content = openURL(
-                        metadataUrl['url'],
-                        username=self.username,
-                        password=self.password,
-                        cert=self.cert,
-                        verify=self.verify,
-                        timeout=timeout
-                    )
+                    content = self.auth.openURL(
+                        metadataUrl['url'], timeout=timeout)
                     doc = etree.fromstring(content.read())
 
                     if metadataUrl['type'] == 'FGDC':
