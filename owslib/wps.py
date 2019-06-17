@@ -910,9 +910,8 @@ class WPSExecution(object):
         """
         Method to parse a WPS ExceptionReport document and populate this object's metadata.
         """
-        # set exception status, unless set already
-        if self.status is None:
-            self.status = "Exception"
+        # set exception status
+        self.status = "Exception"
 
         for exceptionEl in root.findall(nspath('Exception', ns=namespaces['ows'])):
             self.errors.append(WPSException(exceptionEl))
