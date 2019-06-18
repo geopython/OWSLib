@@ -12,7 +12,7 @@ import logging
 from six.moves.urllib.parse import urljoin
 
 from owslib import __version__
-from owslib.util import Authentication
+from owslib.util import Authentication, http_get
 
 LOGGER = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ class WebFeatureService_3_0_0(object):
         if json_ is not None:  # static JSON string
             self.links = json.loads(json_)['links']
         else:
-            response = self.auth.get(url, headers=REQUEST_HEADERS,).json()
+            response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
             self.links = response['links']
 
     def api(self):
@@ -72,7 +72,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url('api')
         LOGGER.debug('Request: {}'.format(url))
-        response = self.auth.get(url, headers=REQUEST_HEADERS).json()
+        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
     def conformance(self):
@@ -84,7 +84,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url('conformance')
         LOGGER.debug('Request: {}'.format(url))
-        response = self.auth.get(url, headers=REQUEST_HEADERS).json()
+        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
     def collections(self):
@@ -96,7 +96,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url('collections')
         LOGGER.debug('Request: {}'.format(url))
-        response = self.auth.get(url, headers=REQUEST_HEADERS).json()
+        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response['collections']
 
     def collection(self, collection_name):
@@ -112,7 +112,7 @@ class WebFeatureService_3_0_0(object):
         path = 'collections/{}'.format(collection_name)
         url = self._build_url(path)
         LOGGER.debug('Request: {}'.format(url))
-        response = self.auth.get(url, headers=REQUEST_HEADERS).json()
+        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
     def collection_items(self, collection_name, **kwargs):
@@ -139,7 +139,7 @@ class WebFeatureService_3_0_0(object):
         path = 'collections/{}/items'.format(collection_name)
         url = self._build_url(path)
         LOGGER.debug('Request: {}'.format(url))
-        response = self.auth.get(url, headers=REQUEST_HEADERS, params=kwargs).json()
+        response = http_get(url, headers=REQUEST_HEADERS, params=kwargs, auth=self.auth).json()
         return response
 
     def collection_item(self, collection_name, identifier):
@@ -157,7 +157,7 @@ class WebFeatureService_3_0_0(object):
         path = 'collections/{}/items/{}'.format(collection_name, identifier)
         url = self._build_url(path)
         LOGGER.debug('Request: {}'.format(url))
-        response = self.auth.get(url, headers=REQUEST_HEADERS).json()
+        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
     def _build_url(self, path=None):

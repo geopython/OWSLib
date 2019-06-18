@@ -201,7 +201,7 @@ class WebCoverageService_1_1_0(WCSBase):
         #encode and request
         data = urlencode(request)
         
-        u = self.auth.openURL(base_url, data, method, self.cookies)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth)
         return u
         
         

@@ -16,7 +16,7 @@ except ImportError:
     from urllib.parse import urlencode
 from owslib.etree import etree
 from owslib.namespaces import Namespaces
-from owslib.util import which_etree, findall,Authentication
+from owslib.util import which_etree, findall, Authentication, openURL
 
 MYNS = Namespaces()
 XS_NAMESPACE = MYNS.get_namespace('xs')
@@ -46,7 +46,7 @@ def get_schema(url, typename, version='1.0.0', timeout=30,
     else:
         auth = Authentication(username, password)
     url = _get_describefeaturetype_url(url, version, typename)
-    res = auth.openURL(url, timeout=timeout)
+    res = openURL(url, timeout=timeout, auth=auth)
     root = etree.fromstring(res.read())
 
     if ':' in typename:

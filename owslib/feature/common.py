@@ -1,6 +1,6 @@
 import cgi
 from owslib.etree import etree
-from owslib.util import Authentication
+from owslib.util import Authentication, openURL
 
 try:
     from urllib import urlencode
@@ -55,7 +55,7 @@ class WFSCapabilitiesReader(object):
             A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = self.auth.openURL(request, timeout=timeout)
+        u = openURL(request, timeout=timeout, auth=self.auth)
         return etree.fromstring(u.read())
 
     def readString(self, st):

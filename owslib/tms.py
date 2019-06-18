@@ -18,7 +18,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 from .etree import etree
-from .util import testXMLValue, ServiceException, Authentication
+from .util import testXMLValue, ServiceException, Authentication, openURL
 
 
 FORCE900913 = False
@@ -127,7 +127,7 @@ class TileMapService(object):
         for tileset in tilesets:
             if tileset['order'] == z:
                 url = tileset['href'] + '/' + str(x) +'/' + str(y) + '.' + ext
-                u = self.auth.openURL(url, '', timeout=timeout or self.timeout)
+                u = openURL(url, '', timeout=timeout or self.timeout, auth=self.auth)
                 return u
         else:
             raise ValueError('cannot find zoomlevel %i for TileMap' % z)
@@ -306,7 +306,7 @@ class TileMap(object):
                     'order': order})
 
     def read(self, url):
-        u = self.auth.openURL(url, '', method='Get')
+        u = openURL(url, '', method='Get', auth=self.auth)
         self._parse(etree.fromstring(u.read()))
 
     def readString(self, st):
@@ -336,7 +336,7 @@ class TMSCapabilitiesReader(object):
         """Get and parse a TMS capabilities document, returning an
         elementtree instance
         """
-        u = self.auth.openURL(service_url, '', method='Get', timeout=timeout)
+        u = openURL(service_url, '', method='Get', timeout=timeout, auth=self.auth)
         return etree.fromstring(u.read())
 
     def readString(self, st):

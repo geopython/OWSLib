@@ -7,7 +7,8 @@ except ImportError:     # Python 2
     from urllib import urlencode
 
 from owslib.etree import etree
-from owslib.util import strip_bom, Authentication
+from owslib.util import strip_bom, Authentication, openURL
+
 
 
 class WMSCapabilitiesReader(object):
@@ -68,8 +69,8 @@ class WMSCapabilitiesReader(object):
 
         # now split it up again to use the generic openURL function...
         spliturl = self.request.split('?')
-        u = self.auth.openURL(
-            spliturl[0], spliturl[1], method='Get', timeout=timeout, headers=self.headers)
+        u = openURL(spliturl[0], spliturl[1], method='Get',
+                    timeout=timeout, headers=self.headers, auth=self.auth)
 
         raw_text = strip_bom(u.read())
         return etree.fromstring(raw_text)

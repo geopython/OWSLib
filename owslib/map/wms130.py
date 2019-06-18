@@ -305,8 +305,7 @@ class WebMapService_1_3_0(object):
 
         self.request = bind_url(base_url) + data
 
-        u = self.auth.openURL(
-            base_url, data, method, timeout=timeout or self.timeout)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
 
         # need to handle casing in the header keys
         headers = {}
@@ -380,8 +379,7 @@ class WebMapService_1_3_0(object):
  
         self.request = bind_url(base_url) + data
 
-        u = self.auth.openURL(
-            base_url, data, method, timeout=timeout or self.timeout)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'XML':
@@ -676,8 +674,8 @@ class ContentMetadata(AbstractContentMetadata):
             if metadataUrl['url'] is not None \
                     and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
                 try:
-                    content = self.auth.openURL(
-                        metadataUrl['url'], timeout=timeout)
+                    content = openURL(
+                        metadataUrl['url'], timeout=timeout, auth=self.auth)
                     doc = etree.fromstring(content.read())
 
                     mdelem = doc.find('.//metadata')

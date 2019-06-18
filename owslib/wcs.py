@@ -17,7 +17,7 @@ from __future__ import (absolute_import, division, print_function)
 
 from . import etree
 from .coverage import wcs100, wcs110, wcs111, wcsBase, wcs200, wcs201
-from owslib.util import clean_ows_url, Authentication
+from owslib.util import clean_ows_url, Authentication, openURL
 
 
 def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, auth=None):
@@ -30,7 +30,8 @@ def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, au
         if xml is None:
             reader = wcsBase.WCSCapabilitiesReader(auth=auth)
             request = reader.capabilities_url(url)
-            xml = auth.openURL(request, cookies=cookies, timeout=timeout).read()
+            xml = openURL(
+                request, cookies=cookies, timeout=timeout, auth=auth).read()
 
         capabilities = etree.etree.fromstring(xml)
         version = capabilities.get('version')

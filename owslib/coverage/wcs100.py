@@ -162,7 +162,7 @@ class WebCoverageService_1_0_0(WCSBase):
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s'%data)
         
-        u = self.auth.openURL(base_url, data, method, self.cookies)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth)
         return u
                
     def getOperationByName(self, name):

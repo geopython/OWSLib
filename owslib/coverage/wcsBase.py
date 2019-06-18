@@ -19,7 +19,7 @@ from owslib.etree import etree
 import cgi
 from six.moves import cStringIO as StringIO
 import six
-from owslib.util import Authentication
+from owslib.util import Authentication, openURL
 
 
 class ServiceException(Exception):
@@ -115,7 +115,7 @@ class WCSCapabilitiesReader(object):
         @return: An elementtree tree representation of the capabilities document
         """
         request = self.capabilities_url(service_url)
-        u = self.auth.openURL(request, timeout=timeout, cookies=self.cookies)
+        u = openURL(request, timeout=timeout, cookies=self.cookies, auth=self.auth)
         return etree.fromstring(u.read())
 
     def readString(self, st):
@@ -191,6 +191,6 @@ class DescribeCoverageReader(object):
         """
         
         request = self.descCov_url(service_url)
-        u = self.auth.openURL(request, cookies=self.cookies, timeout=timeout)
+        u = openURL(request, cookies=self.cookies, timeout=timeout, auth=self.auth)
         return etree.fromstring(u.read())
 

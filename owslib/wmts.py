@@ -42,7 +42,7 @@ except ImportError:      # Python 2
     from urllib import urlencode
     from urlparse import urlparse, urlunparse, parse_qs, ParseResult
 from .etree import etree
-from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication
+from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication, openURL
 from .fgdc import Metadata
 from .iso import MD_Metadata
 from .ows import ServiceProvider, ServiceIdentification, OperationsMetadata
@@ -456,7 +456,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             resurl = self.buildTileResource(
                 layer, style, format, tilematrixset, tilematrix,
                 row, column, **vendor_kwargs)
-            u = self.auth.openURL(resurl)
+            u = openURL(resurl, auth=self.auth)
             return u
 
         # KVP implemetation
@@ -482,7 +482,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
                     base_url = get_verbs[0].get('url')
             except StopIteration:
                 pass
-        u = self.auth.openURL(base_url, data)
+        u = openURL(base_url, data, auth=self.auth)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -840,7 +840,7 @@ class WMTSCapabilitiesReader:
 
         # now split it up again to use the generic openURL function...
         spliturl = getcaprequest.split('?')
-        u = self.auth.openURL(spliturl[0], spliturl[1], method='Get')
+        u = openURL(spliturl[0], spliturl[1], method='Get', auth=self.auth)
         return etree.fromstring(u.read())
 
     def readString(self, st):

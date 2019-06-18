@@ -159,8 +159,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version, auth=self.auth)
-        return self.auth.openURL(
-            reader.capabilities_url(self.url), timeout=self.timeout)
+        return openURL(reader.capabilities_url(self.url),
+                       timeout=self.timeout, auth=self.auth)
 
     def items(self):
         '''supports dict-like items() access'''
@@ -235,7 +235,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
         # If method is 'Post', data will be None here
-        u = self.auth.openURL(url, data, method, timeout=self.timeout)
+        u = openURL(url, data, method, timeout=self.timeout, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -287,7 +287,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             for kw in kwargs.keys():
                 request[kw]=str(kwargs[kw])
         encoded_request=urlencode(request)
-        u = self.auth.openURL(base_url + encoded_request, timeout=self.timeout)
+        u = openURL(base_url + encoded_request, timeout=self.timeout, auth=self.auth)
         return u.read()
 
     def _getStoredQueries(self):
@@ -305,8 +305,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         encoded_request = urlencode(request)
-        u = self.auth.openURL(
-            base_url, data=encoded_request, timeout=self.timeout)
+        u = openURL(base_url, data=encoded_request, timeout=self.timeout, auth=self.auth)
         tree=etree.fromstring(u.read())
         tempdict={}
         for sqelem in tree[:]:
@@ -326,8 +325,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         encoded_request = urlencode(request)
-        u = self.auth.openURL(
-            base_url, data=encoded_request, timeout=self.timeout)
+        u = openURL(base_url, data=encoded_request, timeout=self.timeout, auth=self.auth)
         tree=etree.fromstring(u.read())
         tempdict2={}
         for sqelem in tree[:]:

@@ -33,7 +33,7 @@ from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.gm03 import GM03
 from owslib.namespaces import Namespaces
-from owslib.util import cleanup_namespaces, bind_url, add_namespaces, OrderedDict, Authentication
+from owslib.util import cleanup_namespaces, bind_url, add_namespaces, OrderedDict, Authentication, openURL, http_post
 
 # default variables
 outputformat = 'application/xml'
@@ -660,7 +660,9 @@ class CatalogueServiceWeb(object):
 
         if isinstance(self.request, six.string_types):  # GET KVP
             self.request = '%s%s' % (bind_url(request_url), self.request)
-            self.response = self.auth.openURL(self.request, None, 'Get', timeout=self.timeout).read()
+            self.response = openURL(
+                self.request, None, 'Get', timeout=self.timeout, auth=self.auth
+            ).read()
         else:
             self.request = cleanup_namespaces(self.request)
             # Add any namespaces used in the "typeNames" attribute of the
@@ -676,7 +678,7 @@ class CatalogueServiceWeb(object):
 
             self.request = util.element_to_string(self.request, encoding='utf-8')
 
-            self.response = self.auth.post(request_url, self.request, self.lang, self.timeout)
+            self.response = http_post(request_url, self.request, self.lang, self.timeout, auth=self.auth)
 
         # parse result see if it's XML
         self._exml = etree.parse(BytesIO(self.response))

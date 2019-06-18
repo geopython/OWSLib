@@ -137,8 +137,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version, auth=self.auth)
-        return self.auth.openURL(
-            reader.capabilities_url(self.url), timeout=self.timeout)
+        return openURL(reader.capabilities_url(self.url),
+                       timeout=self.timeout, auth=self.auth)
 
     def items(self):
         '''supports dict-like items() access'''
@@ -253,7 +253,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = self.auth.openURL(base_url, data, method, timeout=self.timeout)
+        u = openURL(base_url, data, method, timeout=self.timeout, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k

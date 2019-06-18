@@ -17,13 +17,12 @@ try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
-from owslib.util import testXMLValue, extract_xml_list, ServiceException, xmltag_split, Authentication
+from owslib.util import testXMLValue, extract_xml_list, ServiceException, xmltag_split, Authentication, openURL, log
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
-from owslib.util import log
 from owslib.feature.schema import get_schema
 from owslib.feature.common import WFSCapabilitiesReader, \
     AbstractContentMetadata
@@ -147,8 +146,8 @@ class WebFeatureService_1_0_0(object):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version, auth=self.auth)
-        return self.auth.openURL(
-            reader.capabilities_url(self.url), timeout=self.timeout)
+        return openURL(reader.capabilities_url(self.url),
+                       timeout=self.timeout, auth=self.auth)
 
     def items(self):
         '''supports dict-like items() access'''
@@ -240,7 +239,7 @@ class WebFeatureService_1_0_0(object):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = self.auth.openURL(base_url, data, method, timeout=self.timeout)
+        u = openURL(base_url, data, method, timeout=self.timeout, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -381,8 +380,8 @@ class ContentMetadata(AbstractContentMetadata):
             if metadataUrl['url'] is not None \
                     and metadataUrl['format'].lower() == 'xml':
                 try:
-                    content = self.auth.openURL(
-                        metadataUrl['url'], timeout=timeout)
+                    content = openURL(
+                        metadataUrl['url'], timeout=timeout, auth=self.auth)
                     doc = etree.fromstring(content.read())
                     if metadataUrl['type'] == 'FGDC':
                         mdelem = doc.find('.//metadata')

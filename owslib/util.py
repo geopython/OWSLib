@@ -18,6 +18,7 @@ import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
 from six.moves.urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
+import copy
 
 try:
     from StringIO import StringIO  # Python 2
@@ -410,6 +411,37 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
 
     up = requests.post(url, request, headers=headers, **rkwargs)
     return up.content
+
+def http_get(*args, **kwargs):
+    # Copy input kwargs so the dict can be modified
+    rkwargs = copy.deepcopy(kwargs)
+
+    # Use Authentication instance if provided, else create one
+    auth = rkwargs.pop('auth', None)
+    if auth is not None:
+        if isinstance(auth, (tuple, list)):
+            auth = Authentication(*auth)
+    else:
+        auth = Authentication()
+
+    # Populate values with other arguments supplied
+    if 'username' in rkwargs:
+        auth.username = rkwargs.pop('username')
+    if 'password' in rkwargs:
+        auth.password = rkwargs.pop('password')
+    if 'cert' in rkwargs:
+        auth.cert = rkwargs.pop('cert')
+    if 'verify' in rkwargs:
+        auth.verify = rkwargs.pop('verify')
+
+    # Build keyword args for call to requests.get()
+    if auth.username and auth.password:
+        rkwargs.setdefault('auth', (auth.username, auth.password))
+    else:
+        rkwargs.setdefault('auth', None)
+    rkwargs.setdefault('cert', rkwargs.get('cert'))
+    rkwargs.setdefault('verify', rkwargs.get('verify', True))
+    return requests.get(*args, **rkwargs)
 
 def element_to_string(element, encoding=None, xml_declaration=False):
     """
@@ -883,34 +915,3 @@ class Authentication(object):
     def __repr__(self, *args, **kwargs):
         return '<{} shared={} username={} password={} cert={} verify={}>'.format(
             self.__class__.__name__, self.shared, self.username, self.password, self.cert, self.verify)
-
-    def openURL(self, url_base, data=None, method='Get', cookies=None, timeout=30, headers=None):
-        kwargs = dict(
-            url_base=url_base,
-            data=data,
-            method=method,
-            cookies=cookies,
-            timeout=timeout,
-            headers=headers,
-            auth=self
-        )
-        return openURL(**kwargs)
-
-    def get(self, *args, **kwargs):
-        if self.username and self.password:
-            kwargs.setdefault('auth', (self.username, self.password))
-        else:
-            kwargs.setdefault('auth', None)
-        kwargs.setdefault('cert', self.cert)
-        kwargs.setdefault('verify', self.verify)
-        return requests.get(*args, **kwargs)
-
-    def post(self, url=None, request=None, lang='en-US', timeout=10):
-        kwargs = dict(
-            url=url,
-            request=request,
-            lang=lang,
-            timeout=timeout,
-            auth=self
-        )
-        return http_post(**kwargs)
