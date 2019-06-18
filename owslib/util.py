@@ -18,7 +18,6 @@ import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
 from six.moves.urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
-import traceback
 
 try:
     from StringIO import StringIO  # Python 2
