@@ -58,6 +58,18 @@ class WebFeatureService_3_0_0(object):
             response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password)).json()
             self.links = response['links']
 
+    def api(self):
+        """
+        implements Requirement 3 (/req/core/api-definition-op)
+
+        @returns: OpenAPI definition object
+        """
+
+        url = self._build_url('api')
+        LOGGER.debug('Request: {}'.format(url))
+        response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password)).json()
+        return response
+
     def conformance(self):
         """
         implements Requirement 5 (/req/core/conformance-op)

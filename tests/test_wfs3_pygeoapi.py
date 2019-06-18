@@ -17,11 +17,17 @@ def test_wfs3_pygeoapi():
     assert w.version == '3.0'
     assert w.url_query_string is None
 
+    api = w.api()
+    assert api['components']['parameters'] is not None
+    paths = api['paths']
+    assert paths is not None
+    assert paths['/collections/lakes'] is not None
+
     conformance = w.conformance()
     assert len(conformance['conformsTo']) == 4
 
     collections = w.collections()
-    assert len(collections) == 10
+    assert len(collections) > 0
 
     lakes = w.collection('lakes')
     assert lakes['name'] == 'lakes'
