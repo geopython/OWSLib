@@ -164,10 +164,10 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
             auth.password = password
         if cert:
             auth.cert = cert
-        if verify:
+        if verify and not auth.verify:
             auth.verify = verify
     else:
-        auth = Authentication(username, password)
+        auth = Authentication(username, password, cert, verify)
     if auth.username and auth.password:
         rkwargs['auth'] = (auth.username, auth.password)
     rkwargs['cert'] = auth.cert
@@ -893,10 +893,7 @@ class Authentication(object):
             cookies=cookies,
             timeout=timeout,
             headers=headers,
-            username=self.username,
-            password=self.password,
-            verify=self.verify,
-            cert=self.cert
+            auth=self
         )
         return openURL(**kwargs)
 
