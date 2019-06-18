@@ -21,7 +21,7 @@ def test_wfs3_pygeoapi():
     assert len(conformance['conformsTo']) == 4
 
     collections = w.collections()
-    assert len(collections) == 10
+    assert len(collections) == 11
 
     lakes = w.collection('lakes')
     assert lakes['name'] == 'lakes'
