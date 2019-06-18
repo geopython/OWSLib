@@ -19,3 +19,7 @@ def test_wfs3_ldproxy():
 
     conformance = w.conformance()
     assert len(conformance['conformsTo']) == 5
+
+    api = w.api()
+    assert api['components']['parameters'] is not None
+    assert api['paths'] is not None
