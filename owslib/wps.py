@@ -910,9 +910,8 @@ class WPSExecution(object):
         """
         Method to parse a WPS ExceptionReport document and populate this object's metadata.
         """
-        # set exception status, unless set already
-        if self.status is None:
-            self.status = "Exception"
+        # set exception status
+        self.status = "Exception"
 
         for exceptionEl in root.findall(nspath('Exception', ns=namespaces['ows'])):
             self.errors.append(WPSException(exceptionEl))
@@ -1845,7 +1844,6 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     '''
     Convenience method to monitor the status of a WPS execution till it completes (succesfully or not),
     and write the output to file after a succesfull job completion.
-
     :param execution: WPSExecution instance
     :param int sleepSecs: number of seconds to sleep in between check status invocations
     :param download: True to download the output when the process terminates, False otherwise
