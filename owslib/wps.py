@@ -1844,6 +1844,7 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     '''
     Convenience method to monitor the status of a WPS execution till it completes (succesfully or not),
     and write the output to file after a succesfull job completion.
+
     :param execution: WPSExecution instance
     :param int sleepSecs: number of seconds to sleep in between check status invocations
     :param download: True to download the output when the process terminates, False otherwise
