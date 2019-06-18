@@ -72,7 +72,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url('api')
         LOGGER.debug('Request: {}'.format(url))
-        response = requests.get(url, headers=REQUEST_HEADERS, auth=(self.username, self.password)).json()
+        response = self.auth.get(url, headers=REQUEST_HEADERS).json()
         return response
 
     def conformance(self):
