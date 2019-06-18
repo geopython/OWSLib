@@ -176,7 +176,7 @@ class WebCoverageService_2_0_0(WCSBase):
         if log.isEnabledFor(logging.DEBUG):
             log.debug('WCS 2.0.0 DEBUG: Second part of URL: %s'%data)
 
-        u = self.auth.openURL(base_url, data, method, self.cookie)
+        u = self.auth.openURL(base_url, data, method, self.cookies)
         return u
 
     def is_number(self,s):
