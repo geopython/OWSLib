@@ -9,6 +9,7 @@
 
 from __future__ import (absolute_import, division, print_function)
 
+import os
 import sys
 from collections import OrderedDict
 from dateutil import parser
@@ -17,6 +18,7 @@ import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
 from six.moves.urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
+import copy
 
 try:
     from StringIO import StringIO  # Python 2
@@ -135,7 +137,7 @@ class ResponseWrapper(object):
     # @TODO: __getattribute__ for poking at response
 
 def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None,
-            verify=True, cert=None):
+            verify=True, cert=None, auth=None):
     """
     Function to open URLs.
 
@@ -147,6 +149,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
                    Defaults to ``True``.
     :param cert: (optional) A file with a client side certificate for SSL authentication
                  to send with the :class:`Request`.
+    :param auth: Instance of owslib.util.Authentication
     """
 
     headers = headers if headers is not None else {}
@@ -154,11 +157,21 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     rkwargs['timeout'] = timeout
 
-    auth = None
-    if username and password:
-        auth = (username, password)
-
-    rkwargs['auth'] = auth
+    if auth:
+        if username:
+            auth.username = username
+        if password:
+            auth.password = password
+        if cert:
+            auth.cert = cert
+        if verify and not auth.verify:
+            auth.verify = verify
+    else:
+        auth = Authentication(username, password, cert, verify)
+    if auth.username and auth.password:
+        rkwargs['auth'] = (auth.username, auth.password)
+    rkwargs['cert'] = auth.cert
+    rkwargs['verify'] = auth.verify
 
     # FIXUP for WFS in particular, remove xml style namespace
     # @TODO does this belong here?
@@ -166,7 +179,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     if method.lower() == 'post':
         try:
-            xml = etree.fromstring(data)
+            etree.fromstring(data)
             headers['Content-Type'] = 'text/xml'
         except (ParseError, UnicodeEncodeError):
             pass
@@ -182,12 +195,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     if cookies is not None:
         rkwargs['cookies'] = cookies
 
-    req = requests.request(method.upper(),
-                           url_base,
-                           headers=headers,
-                           verify=verify,
-                           cert=cert,
-                           **rkwargs)
+    req = requests.request(method.upper(), url_base, headers=headers, **rkwargs)
 
     if req.status_code in [400, 401]:
         raise ServiceException(req.text)
@@ -358,7 +366,7 @@ def testXMLAttribute(element, attribute):
 
     return None
 
-def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, password=None):
+def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, password=None, auth=None):
     """
 
     Invoke an HTTP POST request
@@ -389,11 +397,51 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
 
     rkwargs = {}
 
-    if username is not None and password is not None:
-        rkwargs['auth'] = (username, password)
+    if auth:
+        if username:
+            auth.username = username
+        if password:
+            auth.password = password
+    else:
+        auth = Authentication(username, password)
+    if auth.username is not None and auth.password is not None:
+        rkwargs['auth'] = (auth.username, auth.password)
+    rkwargs['verify'] = auth.verify
+    rkwargs['cert'] = auth.cert
 
     up = requests.post(url, request, headers=headers, **rkwargs)
     return up.content
+
+def http_get(*args, **kwargs):
+    # Copy input kwargs so the dict can be modified
+    rkwargs = copy.deepcopy(kwargs)
+
+    # Use Authentication instance if provided, else create one
+    auth = rkwargs.pop('auth', None)
+    if auth is not None:
+        if isinstance(auth, (tuple, list)):
+            auth = Authentication(*auth)
+    else:
+        auth = Authentication()
+
+    # Populate values with other arguments supplied
+    if 'username' in rkwargs:
+        auth.username = rkwargs.pop('username')
+    if 'password' in rkwargs:
+        auth.password = rkwargs.pop('password')
+    if 'cert' in rkwargs:
+        auth.cert = rkwargs.pop('cert')
+    if 'verify' in rkwargs:
+        auth.verify = rkwargs.pop('verify')
+
+    # Build keyword args for call to requests.get()
+    if auth.username and auth.password:
+        rkwargs.setdefault('auth', (auth.username, auth.password))
+    else:
+        rkwargs.setdefault('auth', None)
+    rkwargs.setdefault('cert', rkwargs.get('cert'))
+    rkwargs.setdefault('verify', rkwargs.get('verify', True))
+    return requests.get(*args, **rkwargs)
 
 def element_to_string(element, encoding=None, xml_declaration=False):
     """
@@ -735,3 +783,135 @@ def encode_string(text):
     if isinstance(text, str):
         return text.decode('utf-8').encode('utf-8', 'ignore')
     return text.encode('utf-8', 'ignore')
+
+
+class Authentication(object):
+
+    _USERNAME = None
+    _PASSWORD = None
+    _CERT = None
+    _VERIFY = None
+
+    def __init__(self, username=None, password=None,
+                 cert=None, verify=True, shared=False):
+        '''
+        :param str username=None: Username for basic authentication, None for
+            unauthenticated access (or if using cert/verify)
+        :param str password=None: Password for basic authentication, None for
+            unauthenticated access (or if using cert/verify)
+        :param cert=None: Either a str (path to a combined certificate/key) or
+            tuple/list of paths (certificate, key). If supplied, the target
+            files must exist.
+        :param verify=True: Either a bool (verify SSL certificates, use system
+            CA bundle) or str (path to a specific CA bundle). If a str, the
+            target file must exist.
+        :param bool shared=False: Set to True to make the values be class-level
+            attributes (shared among instances where shared=True) instead of
+            instance-level (shared=False, default)
+        '''
+        self.shared = shared
+        self.username = username
+        self.password = password
+        self.cert = cert
+        self.verify = verify
+
+    @property
+    def username(self):
+        if self.shared:
+            return self._USERNAME
+        return self._username
+
+    @username.setter
+    def username(self, value):
+        if value is None:
+            pass
+        elif not isinstance(value, str):
+            raise TypeError('Value for "username" must be a str')
+        if self.shared:
+            self.__class__._USERNAME = value
+        else:
+            self._username = value
+
+    @property
+    def password(self):
+        if self.shared:
+            return self._PASSWORD
+        return self._username
+
+    @password.setter
+    def password(self, value):
+        if value is None:
+            pass
+        elif not isinstance(value, str):
+            raise TypeError('Value for "password" must be a str')
+        if self.shared:
+            self.__class__._PASSWORD = value
+        else:
+            self._password = value
+
+    @property
+    def cert(self):
+        if self.shared:
+            return self._CERT
+        return self._cert
+
+    @cert.setter
+    def cert(self, certificate, key=None):
+        error = 'Value for "cert" must be a str path to a file or list/tuple of str paths'
+        value = None
+        if certificate is None:
+            value = certificate
+        elif isinstance(certificate, (list, tuple)):
+            for _ in certificate:
+                if not isinstance(_, str):
+                    raise TypeError(error)
+                os.stat(_)  # Raises OSError/FileNotFoundError if missing
+            # Both paths supplied as same argument
+            value = tuple(certificate)
+        elif isinstance(certificate, str):
+            os.stat(certificate)  # Raises OSError/FileNotFoundError if missing
+            if isinstance(key, str):
+                # Separate files for certificate and key
+                value = (certificate, key)
+            else:
+                # Assume combined file of both certificate and key
+                value = certificate
+        else:
+            raise TypeError(error)
+        if self.shared:
+            self.__class__._CERT = value
+        else:
+            self._cert = value
+
+    @property
+    def verify(self):
+        if self.shared:
+            return self._VERIFY
+        return self._verify
+
+    @verify.setter
+    def verify(self, value):
+        if value is None:
+            pass  # Passthrough when clearing the value
+        elif not isinstance(value, (bool, str)):
+            raise TypeError(
+                'Value for "verify" must a bool or str path to a file')
+        elif isinstance(value, str):
+            os.stat(value)  # Raises OSError/FileNotFoundError if missing
+        if self.shared:
+            self.__class__._VERIFY = value
+        else:
+            self._verify = value
+
+    @property
+    def urlopen_kwargs(self):
+        return {
+            'username': self.username,
+            'password': self.password,
+            'cert': self.cert,
+            'verify': self.verify
+        }
+
+    def __repr__(self, *args, **kwargs):
+        return '<{} shared={} username={} password={} cert={} verify={}>'.format(
+            self.__class__.__name__, self.shared, self.username, self.password, self.cert, self.verify)

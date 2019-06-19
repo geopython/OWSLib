@@ -22,3 +22,8 @@ tester.py
 tags
 .idea/
 tile.jpg
+/env/
+/.project
+/.pydevproject
+/.settings/
+/env27/

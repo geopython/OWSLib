@@ -10,14 +10,13 @@ generating layer schema description compatible with `fiona`
 """
 
 import cgi, sys
-from owslib.util import openURL
 try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
 from owslib.etree import etree
 from owslib.namespaces import Namespaces
-from owslib.util import which_etree, findall
+from owslib.util import which_etree, findall, Authentication, openURL
 
 MYNS = Namespaces()
 XS_NAMESPACE = MYNS.get_namespace('xs')
@@ -26,7 +25,8 @@ GML_NAMESPACES = (MYNS.get_namespace('gml'),
                   MYNS.get_namespace('gml32'))
 
 
-def get_schema(url, typename, version='1.0.0', timeout=30, username=None, password=None):
+def get_schema(url, typename, version='1.0.0', timeout=30,
+               username=None, password=None, auth=None):
     """Parses DescribeFeatureType response and creates schema compatible
     with :class:`fiona`
 
@@ -34,10 +34,19 @@ def get_schema(url, typename, version='1.0.0', timeout=30, username=None, passwo
     :param str version: version of the service
     :param str typename: name of the layer
     :param int timeout: request timeout
+    :param str username: service authentication username
+    :param str password: service authentication password
+    :param Authentication auth: instance of owslib.util.Authentication
     """
-
+    if auth:
+        if username:
+            auth.username = username
+        if password:
+            auth.password = password
+    else:
+        auth = Authentication(username, password)
     url = _get_describefeaturetype_url(url, version, typename)
-    res = openURL(url, timeout=timeout, username=username, password=password)
+    res = openURL(url, timeout=timeout, auth=auth)
     root = etree.fromstring(res.read())
 
     if ':' in typename:

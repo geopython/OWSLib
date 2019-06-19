@@ -136,10 +136,7 @@ class SensorObservationService_1_0_0(object):
 
         data = urlencode(request)
 
-
         response = openURL(base_url, data, method, username=self.username, password=self.password, **url_kwargs).read()
-
-
 
         tr = etree.fromstring(response)
 

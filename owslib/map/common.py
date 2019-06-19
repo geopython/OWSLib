@@ -7,22 +7,27 @@ except ImportError:     # Python 2
     from urllib import urlencode
 
 from owslib.etree import etree
-from owslib.util import openURL, strip_bom
+from owslib.util import strip_bom, Authentication, openURL
+
 
 
 class WMSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.1.1', url=None, un=None, pw=None, headers=None):
+    def __init__(self, version='1.1.1', url=None, un=None, pw=None, headers=None, auth=None):
         """Initialize"""
         self.version = version
         self._infoset = None
         self.url = url
-        self.username = un
-        self.password = pw
+        if auth:
+            if un:
+                auth.username = un
+            if pw:
+                auth.password = pw
         self.headers = headers
         self.request = None
+        self.auth = auth or Authentication(un, pw)
 
         #if self.username and self.password:
             ## Provide login information in order to use the WMS server
@@ -65,10 +70,7 @@ class WMSCapabilitiesReader(object):
         # now split it up again to use the generic openURL function...
         spliturl = self.request.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get',
-                    username=self.username,
-                    password=self.password,
-                    timeout=timeout,
-                    headers=self.headers)
+                    timeout=timeout, headers=self.headers, auth=self.auth)
 
         raw_text = strip_bom(u.read())
         return etree.fromstring(raw_text)
@@ -85,5 +87,9 @@ class WMSCapabilitiesReader(object):
 
 
 class AbstractContentMetadata(object):
+    
+    def __init__(self, auth=None):
+        self.auth = auth or Authentication()
+    
     def get_metadata(self):
         return [m['metadata'] for m in self.metadataUrls if m.get('metadata', None) is not None]

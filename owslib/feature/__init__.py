@@ -14,11 +14,14 @@ try:
 except ImportError:
     from urllib.parse import urlencode
 import logging
-from owslib.util import log
+from owslib.util import log, Authentication
 from owslib.feature.schema import get_schema
 
 class WebFeatureService_(object):
     """Base class for WebFeatureService implementations"""
+
+    def __init__(self, auth=None):
+        self.auth = auth or Authentication()
 
     def getBBOXKVP (self,bbox,typename):
         """Formate bounding box for KVP request type (HTTP GET)
@@ -162,12 +165,8 @@ class WebFeatureService_(object):
 
         return base_url+data
 
-
     def get_schema(self, typename):
         """
         Get layer schema compatible with :class:`fiona` schema object
         """
-
-        return get_schema(self.url, typename, self.version)
-    
-
+        return get_schema(self.url, typename, self.version, auth=self.auth)

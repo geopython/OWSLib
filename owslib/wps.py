@@ -113,7 +113,7 @@ from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
 from owslib.util import (testXMLValue, testXMLAttribute, build_get_url, clean_ows_url, dump, getTypedValue,
-                         getNamespace, element_to_string, nspath, openURL, nspath_eval, log)
+                         getNamespace, element_to_string, nspath, openURL, nspath_eval, log, Authentication)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 try:                    # Python 3
@@ -219,22 +219,29 @@ class WebProcessingService(object):
     """
 
     def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False,
-                 headers=None, verify=True, cert=None, timeout=None):
+                 headers=None, verify=True, cert=None, timeout=None, auth=None):
         """
         Initialization method resets the object status.
         By default it will execute a GetCapabilities invocation to the remote service,
         which can be skipped by using skip_caps=True.
         """
 
+        if auth:
+            if username:
+                auth.username = username
+            if password:
+                auth.password = password
+            if cert:
+                auth.cert = cert
+            if verify:
+                auth.verify = verify
+        self.auth = auth or Authentication(username, password, cert, verify)
+
         # fields passed in from object initializer
         self.url = clean_ows_url(url)
-        self.username = username
-        self.password = password
         self.version = version
         self.verbose = verbose
         self.headers = headers
-        self.verify = verify
-        self.cert = cert
         self.timeout = timeout
 
         # fields populated by method invocations
@@ -255,14 +262,13 @@ class WebProcessingService(object):
 
         # read capabilities document
         reader = WPSCapabilitiesReader(
-            version=self.version, verbose=self.verbose)
+            version=self.version, verbose=self.verbose, auth=self.auth)
         if xml:
             # read from stored XML file
             self._capabilities = reader.readFromString(xml)
         else:
             self._capabilities = reader.readFromUrl(
-                self.url, username=self.username, password=self.password,
-                headers=self.headers, verify=self.verify, cert=self.cert)
+                self.url, headers=self.headers)
 
         log.debug(element_to_string(self._capabilities))
 
@@ -279,14 +285,14 @@ class WebProcessingService(object):
 
         # read capabilities document
         reader = WPSDescribeProcessReader(
-            version=self.version, verbose=self.verbose)
+            version=self.version, verbose=self.verbose, auth=self.auth)
         if xml:
             # read from stored XML file
             rootElement = reader.readFromString(xml)
         else:
             # read from server
-            rootElement = reader.readFromUrl(self.url, identifier,
-                                             headers=self.headers, verify=self.verify, cert=self.cert)
+            rootElement = reader.readFromUrl(
+                self.url, identifier, headers=self.headers)
 
         log.info(element_to_string(rootElement))
 
@@ -320,9 +326,14 @@ class WebProcessingService(object):
 
         # instantiate a WPSExecution object
         log.info('Executing WPS request...')
-        execution = WPSExecution(version=self.version, url=self.url,
-                                 username=self.username, password=self.password, verbose=self.verbose,
-                                 headers=self.headers, verify=self.verify, cert=self.cert, timeout=self.timeout)
+        execution = WPSExecution(
+            version=self.version,
+            url=self.url,
+            verbose=self.verbose,
+            headers=self.headers,
+            timeout=self.timeout,
+            auth=self.auth
+        )
 
         # build XML request from parameters
         if request is None:
@@ -442,10 +453,11 @@ class WPSReader(object):
     Superclass for reading a WPS document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=30):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=30, auth=None):
         self.version = version
         self.verbose = verbose
         self.timeout = timeout
+        self.auth = auth or Authentication()
 
     def _readFromUrl(self, url, data, timeout, method='Get', username=None, password=None,
                      headers=None, verify=True, cert=None):
@@ -456,6 +468,10 @@ class WPSReader(object):
         :param str username: optional user credentials
         :param str password: optional user credentials
         """
+        username = username or self.auth.username
+        password = password or self.auth.password
+        cert = cert or self.auth.cert
+        verify = verify or self.auth.verify
 
         if method == 'Get':
             # full HTTP request url
@@ -495,10 +511,10 @@ class WPSCapabilitiesReader(WPSReader):
     Utility class that reads and parses a WPS GetCapabilities document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None):
         # superclass initializer
         super(WPSCapabilitiesReader, self).__init__(
-            version=version, verbose=verbose, timeout=timeout)
+            version=version, verbose=verbose, timeout=timeout, auth=auth)
 
     def readFromUrl(self, url, username=None, password=None,
                     headers=None, verify=True, cert=None):
@@ -523,10 +539,10 @@ class WPSDescribeProcessReader(WPSReader):
     Class that reads and parses a WPS DescribeProcess document into a etree infoset
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None):
         # superclass initializer
         super(WPSDescribeProcessReader, self).__init__(
-            version=version, verbose=verbose, timeout=timeout)
+            version=version, verbose=verbose, timeout=timeout, auth=auth)
 
     def readFromUrl(self, url, identifier, username=None, password=None,
                     headers=None, verify=True, cert=None):
@@ -550,9 +566,9 @@ class WPSExecuteReader(WPSReader):
     Class that reads and parses a WPS Execute response document into a etree infoset
     """
 
-    def __init__(self, verbose=False, timeout=None):
+    def __init__(self, verbose=False, timeout=None, auth=None):
         # superclass initializer
-        super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout)
+        super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout, auth=auth)
 
     def readFromUrl(self, url, data={}, method='Get', username=None, password=None,
                     headers=None, verify=True, cert=None):
@@ -572,17 +588,24 @@ class WPSExecution(object):
     """
 
     def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False,
-                 headers=None, verify=True, cert=None, timeout=None):
+                 headers=None, verify=True, cert=None, timeout=None, auth=None):
+
+        if auth:
+            if username:
+                auth.username = username
+            if password:
+                auth.password = password
+            if cert:
+                auth.cert = cert
+            if verify:
+                auth.verify = verify
 
         # initialize fields
         self.url = url
         self.version = version
-        self.username = username
-        self.password = password
         self.verbose = verbose
         self.headers = headers
-        self.verify = verify
-        self.cert = cert
+        self.auth = auth or Authentication(username, password, cert, verify)
         self.timeout = timeout
 
         # request document
@@ -758,7 +781,7 @@ class WPSExecution(object):
         :param int sleepSecs: number of seconds to sleep before returning control to the caller.
         """
 
-        reader = WPSExecuteReader(verbose=self.verbose)
+        reader = WPSExecuteReader(verbose=self.verbose, auth=self.auth)
         if response is None:
             # override status location
             if url is not None:
@@ -767,8 +790,7 @@ class WPSExecution(object):
                      self.statusLocation)
             try:
                 response = reader.readFromUrl(
-                    self.statusLocation, username=self.username, password=self.password,
-                    headers=self.headers, verify=self.verify, cert=self.cert)
+                    self.statusLocation, headers=self.headers)
             except Exception:
                 log.error("Could not read status document.")
         else:
@@ -827,8 +849,8 @@ class WPSExecution(object):
             for output in self.processOutputs:
 
                 output_content = output.retrieveData(
-                    self.username, self.password,
-                    headers=self.headers, verify=self.verify, cert=self.cert)
+                    self.auth.username, self.auth.password,
+                    headers=self.headers, verify=self.auth.verify, cert=self.auth.cert)
 
                 # ExecuteResponse contains reference to server-side output
                 if output_content != b'':
@@ -863,10 +885,9 @@ class WPSExecution(object):
         """
 
         self.request = request
-        reader = WPSExecuteReader(verbose=self.verbose, timeout=self.timeout)
+        reader = WPSExecuteReader(verbose=self.verbose, timeout=self.timeout, auth=self.auth)
         response = reader.readFromUrl(
-            self.url, request, method='Post', username=self.username, password=self.password,
-            headers=self.headers, verify=self.verify, cert=self.cert)
+            self.url, request, method='Post', headers=self.headers)
         self.response = response
         return response
 
