@@ -14,7 +14,7 @@ from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata
 from owslib.etree import etree
-from owslib.util import nspath, testXMLValue, openURL
+from owslib.util import nspath, testXMLValue, openURL, Authentication
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.feature.common import WFSCapabilitiesReader, \
@@ -50,7 +50,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
     Implements IWebFeatureService.
     """
     def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
-                username=None, password=None):
+                username=None, password=None, auth=None):
         """ overridden __new__ method
 
         @type url: string
@@ -62,11 +62,12 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
+        @param auth: instance of owslib.util.Authentication
         @return: initialized WebFeatureService_2_0_0 object
         """
         obj=object.__new__(self)
         obj.__init__(url, version, xml, parse_remote_metadata, timeout,
-                     username=username, password=password)
+                     username=username, password=password, auth=auth)
         return obj
 
     def __getitem__(self,name):
@@ -76,19 +77,24 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         else:
             raise KeyError("No content named %s" % name)
 
-
     def __init__(self, url,  version, xml=None, parse_remote_metadata=False, timeout=30,
-                 username=None, password=None):
+                 username=None, password=None, auth=None):
         """Initialize."""
+        if auth:
+            if username:
+                auth.username = username
+            if password:
+                auth.password = password
+        else:
+            auth = Authentication()
+        super(WebFeatureService_2_0_0, self).__init__(auth)
         if log.isEnabledFor(logging.DEBUG):
             log.debug('building WFS %s'%url)
         self.url = url
         self.version = version
         self.timeout = timeout
-        self.username = username
-        self.password = password
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
+        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -140,7 +146,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         featuretypelist=self._capabilities.find(nspath('FeatureTypeList',ns=WFS_NAMESPACE))
         features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType', ns=WFS_NAMESPACE))
         for feature in features:
-            cm=ContentMetadata(feature, featuretypelist, parse_remote_metadata)
+            cm = ContentMetadata(
+                feature, featuretypelist, parse_remote_metadata, auth=self.auth)
             self.contents[cm.id]=cm
 
         #exceptions
@@ -151,9 +158,9 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
-        reader = WFSCapabilitiesReader(self.version)
-        return openURL(reader.capabilities_url(self.url), timeout=self.timeout,
-                       username=self.username, password=self.password)
+        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
+        return openURL(reader.capabilities_url(self.url),
+                       timeout=self.timeout, auth=self.auth)
 
     def items(self):
         '''supports dict-like items() access'''
@@ -228,8 +235,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
         # If method is 'Post', data will be None here
-        u = openURL(url, data, method, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(url, data, method, timeout=self.timeout, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -262,7 +268,6 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                 return self._makeStringIO(data)
             return u
 
-
     def getpropertyvalue(self, query=None, storedquery_id=None, valuereference=None, typename=None, method=nspath('Get'),**kwargs):
         ''' the WFS GetPropertyValue method'''
         try:
@@ -282,10 +287,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             for kw in kwargs.keys():
                 request[kw]=str(kwargs[kw])
         encoded_request=urlencode(request)
-        u = openURL(base_url + encoded_request, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(base_url + encoded_request, timeout=self.timeout, auth=self.auth)
         return u.read()
-
 
     def _getStoredQueries(self):
         ''' gets descriptions of the stored queries available on the server '''
@@ -302,8 +305,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
         request = {'service': 'WFS', 'version': self.version, 'request': 'ListStoredQueries'}
         encoded_request = urlencode(request)
-        u = openURL(base_url, data=encoded_request, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(base_url, data=encoded_request, timeout=self.timeout, auth=self.auth)
         tree=etree.fromstring(u.read())
         tempdict={}
         for sqelem in tree[:]:
@@ -323,8 +325,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             base_url = self.url
         request = {'service': 'WFS', 'version': self.version, 'request': 'DescribeStoredQueries'}
         encoded_request = urlencode(request)
-        u = openURL(base_url, data=encoded_request, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(base_url, data=encoded_request, timeout=self.timeout, auth=self.auth)
         tree=etree.fromstring(u.read())
         tempdict2={}
         for sqelem in tree[:]:
@@ -373,8 +374,9 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parent, parse_remote_metadata=False, timeout=30):
+    def __init__(self, elem, parent, parse_remote_metadata=False, timeout=30, auth=None):
         """."""
+        super(ContentMetadata, self).__init__(auth)
         self.id = elem.find(nspath('Name',ns=WFS_NAMESPACE)).text
         self.title = elem.find(nspath('Title',ns=WFS_NAMESPACE)).text
         abstract = elem.find(nspath('Abstract',ns=WFS_NAMESPACE))
@@ -439,7 +441,8 @@ class ContentMetadata(AbstractContentMetadata):
         for metadataUrl in self.metadataUrls:
             if metadataUrl['url'] is not None:
                 try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    content = openURL(
+                        metadataUrl['url'], timeout=timeout)
                     doc = etree.fromstring(content.read())
 
                     mdelem = doc.find('.//metadata')

@@ -42,7 +42,7 @@ except ImportError:      # Python 2
     from urllib import urlencode
     from urlparse import urlparse, urlunparse, parse_qs, ParseResult
 from .etree import etree
-from .util import clean_ows_url, openURL, testXMLValue, getXMLInteger
+from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication, openURL
 from .fgdc import Metadata
 from .iso import MD_Metadata
 from .ows import ServiceProvider, ServiceIdentification, OperationsMetadata
@@ -134,9 +134,8 @@ class WebMapTileService(object):
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self, url, version='1.0.0', xml=None, username=None,
-                 password=None, parse_remote_metadata=False,
-                 vendor_kwargs=None):
+    def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
+                 parse_remote_metadata=False, vendor_kwargs=None, auth=None):
         """Initialize.
 
         Parameters
@@ -157,19 +156,24 @@ class WebMapTileService(object):
         vendor_kwargs : dict
             Optional vendor-specific parameters to be included in all
             requests.
+        auth : owslib.util.Authentication
+            Instance of Authentication class to hold username/password/cert/verify
 
         """
         self.url = clean_ows_url(url)
-        self.username = username
-        self.password = password
+        if auth:
+            if username:
+                auth.username = username
+            if password:
+                auth.password = password
         self.version = version
         self.vendor_kwargs = vendor_kwargs
         self._capabilities = None
+        self.auth = auth or Authentication(username, password)
 
         # Authentication handled by Reader
-        reader = WMTSCapabilitiesReader(self.version, url=self.url,
-                                        un=self.username, pw=self.password)
-
+        reader = WMTSCapabilitiesReader(
+            self.version, url=self.url, auth=self.auth)
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -190,8 +194,7 @@ class WebMapTileService(object):
         # TODO: deprecated function. See ticket #453.
         if not self._capabilities:
             reader = WMTSCapabilitiesReader(
-                self.version, url=self.url, un=self.username, pw=self.password
-            )
+                self.version, url=self.url, auth=self.auth)
             # xml = reader.read(self.url, self.vendor_kwargs)
             # self._capabilities = ServiceMetadata(xml)
             self._capabilities = reader.read(self.url, self.vendor_kwargs)
@@ -453,7 +456,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             resurl = self.buildTileResource(
                 layer, style, format, tilematrixset, tilematrix,
                 row, column, **vendor_kwargs)
-            u = openURL(resurl, username=self.username, password=self.password)
+            u = openURL(resurl, auth=self.auth)
             return u
 
         # KVP implemetation
@@ -479,8 +482,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
                     base_url = get_verbs[0].get('url')
             except StopIteration:
                 pass
-        u = openURL(base_url, data, username=self.username,
-                    password=self.password)
+        u = openURL(base_url, data, auth=self.auth)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -678,8 +680,7 @@ class ContentMetadata:
 
     Implements IContentMetadata.
     """
-    def __init__(self, elem, parent=None, index=0,
-                 parse_remote_metadata=False):
+    def __init__(self, elem, parent=None, index=0, parse_remote_metadata=False):
         if elem.tag != _LAYER_TAG:
             raise ValueError('%s should be a Layer' % (elem,))
 
@@ -794,13 +795,17 @@ class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, auth=None):
         """Initialize"""
         self.version = version
         self._infoset = None
         self.url = url
-        self.username = un
-        self.password = pw
+        if auth:
+            if un:
+                auth.username = un
+            if pw:
+                auth.password = pw
+        self.auth = auth or Authentication(un, pw)
 
     def capabilities_url(self, service_url, vendor_kwargs=None):
         """Return a capabilities url
@@ -835,8 +840,7 @@ class WMTSCapabilitiesReader:
 
         # now split it up again to use the generic openURL function...
         spliturl = getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get',
-                    username=self.username, password=self.password)
+        u = openURL(spliturl[0], spliturl[1], method='Get', auth=self.auth)
         return etree.fromstring(u.read())
 
     def readString(self, st):

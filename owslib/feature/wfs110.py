@@ -15,7 +15,8 @@ try:
     from urllib import urlencode
 except ImportError:
     from urllib.parse import urlencode
-from owslib.util import openURL, testXMLValue, nspath_eval, ServiceException
+from owslib.util import testXMLValue, nspath_eval, ServiceException, Authentication,\
+    openURL
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -26,7 +27,7 @@ from owslib.feature import WebFeatureService_
 from owslib.feature.common import WFSCapabilitiesReader, \
     AbstractContentMetadata
 from owslib.namespaces import Namespaces
-from owslib.util import log
+from owslib.util import log, openURL
 
 
 def get_namespaces():
@@ -40,7 +41,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
     Implements IWebFeatureService.
     """
     def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
-                username=None, password=None):
+                username=None, password=None, auth=None):
         """ overridden __new__ method
 
         @type url: string
@@ -52,11 +53,12 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
+        @param auth: instance of owslib.util.Authentication
         @return: initialized WebFeatureService_1_1_0 object
         """
         obj=object.__new__(self)
         obj.__init__(url, version, xml, parse_remote_metadata, timeout,
-                     username=username, password=password)
+                     username=username, password=password, auth=auth)
         return obj
 
     def __getitem__(self,name):
@@ -66,18 +68,23 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         else:
             raise KeyError("No content named %s" % name)
 
-
     def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30,
-                 username=None, password=None):
+                 username=None, password=None, auth=None):
         """Initialize."""
+        if auth:
+            if username:
+                auth.username = username
+            if password:
+                auth.password = password
+        else:
+            auth = Authentication(username, password)
+        super(WebFeatureService_1_1_0, self).__init__(auth)
         self.url = url
         self.version = version
         self.timeout = timeout
-        self.username = username
-        self.password = password
         self._capabilities = None
         self.owscommon = OwsCommon('1.0.0')
-        reader = WFSCapabilitiesReader(self.version, username=username, password=password)
+        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -118,7 +125,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.contents={}
         features = self._capabilities.findall(nspath_eval('wfs:FeatureTypeList/wfs:FeatureType', namespaces))
         for feature in features:
-            cm=ContentMetadata(feature, parse_remote_metadata)
+            cm=ContentMetadata(feature, parse_remote_metadata, auth=self.auth)
             self.contents[cm.id]=cm
 
         #exceptions
@@ -129,9 +136,9 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
-        reader = WFSCapabilitiesReader(self.version)
-        return openURL(reader.capabilities_url(self.url), timeout=self.timeout,
-                       username=self.username, password=self.password)
+        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
+        return openURL(reader.capabilities_url(self.url),
+                       timeout=self.timeout, auth=self.auth)
 
     def items(self):
         '''supports dict-like items() access'''
@@ -246,8 +253,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=self.timeout,
-                    username=self.username, password=self.password)
+        u = openURL(base_url, data, method, timeout=self.timeout, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -295,8 +301,9 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parse_remote_metadata=False, timeout=30):
+    def __init__(self, elem, parse_remote_metadata=False, timeout=30, auth=None):
         """."""
+        super(ContentMetadata, self).__init__(auth)
         self.id = testXMLValue(elem.find(nspath_eval('wfs:Name', namespaces)))
         self.title = testXMLValue(elem.find(nspath_eval('wfs:Title', namespaces)))
         self.abstract = testXMLValue(elem.find(nspath_eval('wfs:Abstract', namespaces)))
@@ -349,7 +356,8 @@ class ContentMetadata(AbstractContentMetadata):
             if metadataUrl['url'] is not None \
                     and metadataUrl['format'].lower() == 'text/xml':
                 try:
-                    content = openURL(metadataUrl['url'], timeout=timeout)
+                    content = openURL(
+                        metadataUrl['url'], timeout=timeout)
                     doc = etree.fromstring(content.read())
 
                     if metadataUrl['type'] == 'FGDC':
