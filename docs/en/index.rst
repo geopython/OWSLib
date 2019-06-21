@@ -576,7 +576,7 @@ The OWSLib wiki is located at https://github.com/geopython/OWSLib/wiki
 
 The OWSLib source code is available at https://github.com/geopython/OWSLib
 
-You can find out about software metrics at the OWSLib ohloh page at http://www.ohloh.net/p/OWSLib.
+You can find out about software metrics at the OWSLib OpenHub page at https://www.openhub.net/p/OWSLib.
 
 Testing
 -------
@@ -605,7 +605,7 @@ Support
 Mailing Lists
 -------------
 
-OWSLib provides users and developers mailing lists.  Subscription options and archives are available at http://lists.osgeo.org/mailman/listinfo/owslib-users and http://lists.osgeo.org/mailman/listinfo/owslib-devel.
+OWSLib provides users and developers mailing lists.  Subscription options and archives are available at https://lists.osgeo.org/mailman/listinfo/owslib-users and https://lists.osgeo.org/mailman/listinfo/owslib-devel.
 
 Submitting Questions to Community
 ---------------------------------
@@ -615,12 +615,12 @@ To submit questions to a mailing list, first join the list by following the subs
 Searching the Archives
 ----------------------
 
-All Community archives are located in http://lists.osgeo.org/pipermail/owslib-users/ http://lists.osgeo.org/pipermail/owslib-devel/
+All Community archives are located in https://lists.osgeo.org/pipermail/owslib-users/ https://lists.osgeo.org/pipermail/owslib-devel/
 
 Metrics
 -------
 
-You can find out about software metrics at the OWSLib `ohloh`_ page.
+You can find out about software metrics at the OWSLib `OpenHub`_ page.
 
 IRC
 ---
@@ -677,28 +677,28 @@ Credits
 
 .. include:: ../../AUTHORS.rst
 
-.. _`Open Geospatial Consortium`: http://www.opengeospatial.org/
-.. _`OGC WMS`: http://www.opengeospatial.org/standards/wms
-.. _`OGC WFS`: http://www.opengeospatial.org/standards/wfs
-.. _`OGC WCS`: http://www.opengeospatial.org/standards/wcs
-.. _`OGC WMC`: http://www.opengeospatial.org/standards/wmc
-.. _`OGC WPS`: http://www.opengeospatial.org/standards/wps
-.. _`OGC SOS`: http://www.opengeospatial.org/standards/sos
-.. _`OGC O&M`: http://www.opengeospatial.org/standards/om
-.. _`OGC WaterML2.0`: http://www.opengeospatial.org/standards/waterml
-.. _`OGC SensorML`: http://www.opengeospatial.org/standards/sensorml
-.. _`OGC CSW`: http://www.opengeospatial.org/standards/cat
-.. _`OGC WMTS`: http://www.opengeospatial.org/standards/wmts
-.. _`OGC Filter`: http://www.opengeospatial.org/standards/filter
-.. _`OGC OWS Common`: http://www.opengeospatial.org/standards/common
-.. _`OGC OWS Context`: http://www.opengeospatial.org/standards/owc
-.. _`NASA DIF`: http://gcmd.nasa.gov/User/difguide/
-.. _`FGDC CSDGM`: http://www.fgdc.gov/metadata/csdgm
-.. _`ISO 19115`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=26020
-.. _`ISO 19139`: http://www.iso.org/iso/catalogue_detail.htm?csnumber=32557
-.. _`Dublin Core`: http://www.dublincore.org/
-.. _`freenode`: http://freenode.net/
-.. _`ohloh`: http://www.ohloh.net/p/OWSLib
+.. _`Open Geospatial Consortium`: https://www.opengeospatial.org/
+.. _`OGC WMS`: https://www.opengeospatial.org/standards/wms
+.. _`OGC WFS`: https://www.opengeospatial.org/standards/wfs
+.. _`OGC WCS`: https://www.opengeospatial.org/standards/wcs
+.. _`OGC WMC`: https://www.opengeospatial.org/standards/wmc
+.. _`OGC WPS`: https://www.opengeospatial.org/standards/wps
+.. _`OGC SOS`: https://www.opengeospatial.org/standards/sos
+.. _`OGC O&M`: https://www.opengeospatial.org/standards/om
+.. _`OGC WaterML2.0`: https://www.opengeospatial.org/standards/waterml
+.. _`OGC SensorML`: https://www.opengeospatial.org/standards/sensorml
+.. _`OGC CSW`: https://www.opengeospatial.org/standards/cat
+.. _`OGC WMTS`: https://www.opengeospatial.org/standards/wmts
+.. _`OGC Filter`: https://www.opengeospatial.org/standards/filter
+.. _`OGC OWS Common`: https://www.opengeospatial.org/standards/common
+.. _`OGC OWS Context`: https://www.opengeospatial.org/standards/owc
+.. _`NASA DIF`: https://earthdata.nasa.gov/esdis/eso/standards-and-references/directory-interchange-format-dif-standard
+.. _`FGDC CSDGM`: https://www.fgdc.gov/metadata/csdgm-standard
+.. _`ISO 19115`: https://www.iso.org/standard/26020.html
+.. _`ISO 19139`: https://www.iso.org/standard/32557.html
+.. _`Dublin Core`: https://www.dublincore.org/
+.. _`freenode`: https://freenode.net/
+.. _`OpenHub`: https://www.openhub.net/p/OWSLib
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
-.. _`Swiss GM03`: http://www.geocat.ch/internet/geocat/en/home/documentation/gm03.html
+.. _`Swiss GM03`: https://www.geocat.admin.ch/en/dokumentation/gm03.html
