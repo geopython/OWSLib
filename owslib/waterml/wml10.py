@@ -1,5 +1,3 @@
-from __future__ import (absolute_import, division, print_function)
-
 from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse, namespaces
 from owslib.etree import etree, ElementType
 

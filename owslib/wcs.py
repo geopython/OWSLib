@@ -13,8 +13,6 @@
 Web Coverage Server (WCS) methods and metadata. Factory function.
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from . import etree
 from .coverage import wcs100, wcs110, wcs111, wcsBase, wcs200, wcs201
 from owslib.util import clean_ows_url, Authentication, openURL

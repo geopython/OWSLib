@@ -9,8 +9,6 @@
 
 """GM03 Core metadata parser http://www.geocat.ch/internet/geocat/en/home/documentation/gm03.html"""
 
-from __future__ import (absolute_import, division, print_function)
-
 from owslib import util
 from owslib.etree import etree
 from owslib.namespaces import Namespaces

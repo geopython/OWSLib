@@ -6,8 +6,6 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
 #owslib imports:
 from owslib import util
 from owslib.fgdc import Metadata

@@ -15,7 +15,6 @@ API for Web Map Service (WMS) methods and metadata.
 Currently supports only version 1.1.1 of the WMS protocol.
 """
 
-from __future__ import (absolute_import, division, print_function)
 from .map import wms111, wms130
 from .util import clean_ows_url, Authentication
 

@@ -15,8 +15,6 @@
 # TMS as defined in:
 # http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification
 
-from __future__ import (absolute_import, division, print_function)
-
 from .etree import etree
 from .util import testXMLValue, ServiceException, Authentication, openURL
 

@@ -16,8 +16,6 @@ https://portal.opengeospatial.org/files/?artifact_id=8618
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from .etree import etree
 
 

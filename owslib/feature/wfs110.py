@@ -7,14 +7,9 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
 from six import PY2
 from six.moves import cStringIO as StringIO
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+from urllib.parse import urlencode
 from owslib.util import testXMLValue, nspath_eval, ServiceException, Authentication,\
     openURL
 from owslib.etree import etree

@@ -1,11 +1,6 @@
-from __future__ import (absolute_import, division, print_function)
-
 import cgi
 from owslib.etree import etree
-try:
-    from urllib.parse import urlencode  # Python 3
-except ImportError:
-    from urllib import urlencode  # Python 2
+from urllib.parse import urlencode
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities200

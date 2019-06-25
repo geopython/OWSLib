@@ -29,18 +29,12 @@ would be appreciated.
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from random import randint
 import warnings
 import six
 from six.moves import filter
-try:                    # Python 3
-    from urllib.parse import (urlencode, urlparse, urlunparse, parse_qs,
-                              ParseResult)
-except ImportError:      # Python 2
-    from urllib import urlencode
-    from urlparse import urlparse, urlunparse, parse_qs, ParseResult
+from urllib.parse import (urlencode, urlparse, urlunparse, parse_qs,
+                          ParseResult)
 from .etree import etree
 from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication, openURL
 from .fgdc import Metadata

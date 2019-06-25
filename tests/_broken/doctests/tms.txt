@@ -1,6 +1,5 @@
 Imports
 
-    >>> from __future__ import (absolute_import, division, print_function, unicode_literals)
     >>> from owslib import tms
 
 You can find a list of servers at

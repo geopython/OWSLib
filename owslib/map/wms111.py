@@ -15,13 +15,8 @@ API for Web Map Service (WMS) methods and metadata.
 Currently supports only version 1.1.1 of the WMS protocol.
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import cgi
-try:                    # Python 3
-    from urllib.parse import urlencode
-except ImportError:     # Python 2
-    from urllib import urlencode
+from urllib.parse import urlencode
 
 import warnings
 

@@ -9,8 +9,6 @@
 
 """ FGDC metadata parser """
 
-from __future__ import (absolute_import, division, print_function)
-
 from owslib.etree import etree
 from owslib import util
 

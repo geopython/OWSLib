@@ -1,5 +1,3 @@
-from __future__ import (absolute_import, division, print_function)
-
 from owslib.util import nspath_eval
 from owslib.namespaces import Namespaces
 from owslib.util import testXMLAttribute, testXMLValue, InfiniteDateTime, NegativeInfiniteDateTime

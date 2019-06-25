@@ -1,6 +1,5 @@
 Imports and initialize
 
-    >>> from __future__ import (absolute_import, division, print_function)
     >>> from owslib.wfs import WebFeatureService
     >>> try:
     ...     from urlparse import urlparse

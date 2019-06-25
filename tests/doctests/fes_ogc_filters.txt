@@ -1,5 +1,4 @@
 Imports
-    >>> from __future__ import (absolute_import, division, print_function)
     >>> from owslib import fes
     >>> from owslib.etree import etree
     >>> from tests.utils import compare_xml

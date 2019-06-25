@@ -5,14 +5,9 @@
 #
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
 from owslib.crs import Crs
 
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+from urllib.parse import urlencode
 import logging
 from owslib.util import log, Authentication
 from owslib.feature.schema import get_schema

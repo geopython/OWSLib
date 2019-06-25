@@ -9,20 +9,12 @@
 
 """ CSW request and response processor """
 
-from __future__ import (absolute_import, division, print_function)
-
 import inspect
 import warnings
 import six
-try:
-    from StringIO import StringIO as BytesIO  # Python 2
-except ImportError:
-    from io import BytesIO  # Python 3
+from io import BytesIO
 import random
-try:                    # Python 3
-    from urllib.parse import urlencode
-except ImportError:     # Python 2
-    from urllib import urlencode
+from urllib.parse import urlencode
 
 from owslib.etree import etree
 from owslib import fes

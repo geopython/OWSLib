@@ -106,8 +106,6 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 * The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
@@ -116,10 +114,7 @@ from owslib.util import (testXMLValue, testXMLAttribute, build_get_url, clean_ow
                          getNamespace, element_to_string, nspath, openURL, nspath_eval, log, Authentication)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
-try:                    # Python 3
-    from urllib.parse import urlparse
-except ImportError:     # Python 2
-    from urlparse import urlparse
+from urllib.parse import urlparse
 
 import six
 # namespace definition

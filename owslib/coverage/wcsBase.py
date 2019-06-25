@@ -9,12 +9,7 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+from urllib.parse import urlencode
 from owslib.etree import etree
 import cgi
 from six.moves import cStringIO as StringIO

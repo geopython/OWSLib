@@ -6,17 +6,12 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
 from six import PY2
 from six.moves import cStringIO as StringIO
 
 from owslib import util
 
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+from urllib.parse import urlencode
 from owslib.util import testXMLValue, extract_xml_list, ServiceException, xmltag_split, Authentication, openURL, log
 from owslib.etree import etree
 from owslib.fgdc import Metadata

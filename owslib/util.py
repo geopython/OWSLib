@@ -7,8 +7,6 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
 import os
 import sys
 from collections import OrderedDict
@@ -20,11 +18,7 @@ from owslib.namespaces import Namespaces
 from six.moves.urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
 import copy
 
-try:
-    from StringIO import StringIO  # Python 2
-    BytesIO = StringIO
-except ImportError:
-    from io import StringIO, BytesIO  # Python 3
+from io import StringIO, BytesIO
 
 import cgi
 import re
@@ -703,14 +697,8 @@ def bind_url(url):
 
 import logging
 # Null logging handler
-try:
-    # Python 2.7
-    NullHandler = logging.NullHandler
-except AttributeError:
-    # Python < 2.7
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
+NullHandler = logging.NullHandler
+
 log = logging.getLogger('owslib')
 log.addHandler(NullHandler())
 

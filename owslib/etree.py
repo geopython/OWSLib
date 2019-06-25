@@ -4,7 +4,6 @@
 # Contact email: sgillies@frii.com
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
 import six
 from owslib.namespaces import Namespaces
 

@@ -12,8 +12,6 @@ Conceptual model base classes: http://www.opengeospatial.org/standards/owc
 OGC OWS Context Conceptual Model 1.0 (12-080r2)
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from owslib.owscontext.atom import decode_atomxml, encode_atomxml
 from owslib.owscontext.common import GENERIC_OWCSPEC_URL
 # from owslib.util import log
