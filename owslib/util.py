@@ -214,7 +214,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
             serviceException = se_tree.find(possible_error)
             if serviceException is not None:
                 # and we need to deal with some message nesting
-                raise ServiceException('\n'.join([encode_string(t).strip() for t in serviceException.itertext() if encode_string(t).strip()]))
+                raise ServiceException('\n'.join([t.strip() for t in serviceException.itertext() if t.strip()]))
 
     return ResponseWrapper(req)
 
@@ -754,15 +754,6 @@ def datetime_from_ansi(ansi):
 
 def is_vector_grid(grid_elem):
     pass
-
-
-def encode_string(text):
-    """
-    On Python 3 this method does nothing and returns the ``text`` string itself.
-
-    TODO: skipped python 2 support. This method is obsolete now.
-    """
-    return text
 
 
 class Authentication(object):

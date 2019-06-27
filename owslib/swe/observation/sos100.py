@@ -5,7 +5,7 @@ from urllib.parse import urlencode
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities
-from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time, encode_string
+from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
 from owslib.namespaces import Namespaces
 
 def get_namespaces():
@@ -271,10 +271,10 @@ class SosObservationOffering(object):
             self.response_modes.append(testXMLValue(rm))
 
     def __str__(self):
-        return 'Offering id: {}, name: {}'.format(encode_string(self.id), encode_string(self.name))
+        return 'Offering id: {}, name: {}'.format(self.id, self.name)
 
     def __repr__(self):
-        return "<SosObservationOffering '{}'>".format(encode_string(self.name))
+        return "<SosObservationOffering '{}'>".format(self.name)
 
 
 class SosCapabilitiesReader(object):
