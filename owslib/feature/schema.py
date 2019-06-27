@@ -9,11 +9,9 @@ Set of functions, which are suitable for DescribeFeatureType parsing and
 generating layer schema description compatible with `fiona`
 """
 
-import cgi, sys
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+import cgi
+import sys
+from urllib.parse import urlencode
 from owslib.etree import etree
 from owslib.namespaces import Namespaces
 from owslib.util import which_etree, findall, Authentication, openURL
