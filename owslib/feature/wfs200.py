@@ -6,7 +6,7 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
-#owslib imports:
+# owslib imports:
 from owslib import util
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
@@ -19,11 +19,8 @@ from owslib.feature.common import WFSCapabilitiesReader, \
     AbstractContentMetadata, makeStringIO
 from owslib.namespaces import Namespaces
 
-#other imports
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+# other imports
+from urllib.parse import urlencode
 
 import logging
 from owslib.util import log

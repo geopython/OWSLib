@@ -3,10 +3,7 @@ from io import StringIO
 from owslib.etree import etree
 from owslib.util import Authentication, openURL
 
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+from urllib.parse import urlencode
 
 
 def makeStringIO(strval):
