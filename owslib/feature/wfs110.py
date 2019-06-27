@@ -7,7 +7,6 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-from io import StringIO
 from urllib.parse import urlencode
 from owslib.util import testXMLValue, nspath_eval, ServiceException, Authentication,\
     openURL
@@ -19,7 +18,7 @@ from owslib.fes import *
 from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.feature.common import WFSCapabilitiesReader, \
-    AbstractContentMetadata
+    AbstractContentMetadata, makeStringIO
 from owslib.namespaces import Namespaces
 from owslib.util import log, openURL
 
@@ -141,14 +140,6 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             items.append((item,self.contents[item]))
         return items
 
-    def _makeStringIO(self, strval):
-        """
-        Helper method to make sure the StringIO being returned will work.
-
-        TODO: duplicate of wfs100._makeStringIO.
-        """
-        return StringIO(strval.decode())
-
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname='*', maxfeatures=None,
                    srsname=None, outputFormat=None, method='Get',
@@ -265,16 +256,16 @@ class WebFeatureService_1_1_0(WebFeatureService_):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return self._makeStringIO(data)
+                return makeStringIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % namespaces["ogc"]:
                     se = tree.find(nspath_eval('ServiceException', namespaces["ogc"]))
                     raise ServiceException(str(se.text).strip())
                 else:
-                    return self._makeStringIO(data)
+                    return makeStringIO(data)
         else:
             if have_read:
-                return self._makeStringIO(data)
+                return makeStringIO(data)
             return u
 
     def getOperationByName(self, name):

@@ -6,8 +6,6 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
-from io import StringIO
-
 from owslib import util
 
 from urllib.parse import urlencode
@@ -19,7 +17,7 @@ from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.feature.schema import get_schema
 from owslib.feature.common import WFSCapabilitiesReader, \
-    AbstractContentMetadata
+    AbstractContentMetadata, makeStringIO
 
 import pyproj
 
@@ -150,16 +148,6 @@ class WebFeatureService_1_0_0(object):
             items.append((item,self.contents[item]))
         return items
 
-    def _makeStringIO(self, strval):
-        """
-        Helper method to make sure the StringIO being returned will work.
-
-        Differences between Python 2.7/3.x mean we have a lot of cases to handle.
-
-        TODO: skipped Python 2.x support. Is this still necessary?
-        """
-        return StringIO(strval.decode())
-
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
                    featureversion=None, propertyname='*', maxfeatures=None,
                    srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get',
@@ -254,16 +242,16 @@ class WebFeatureService_1_0_0(object):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return self._makeStringIO(data)
+                return makeStringIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
                     raise ServiceException(str(se.text).strip())
                 else:
-                    return self._makeStringIO(data)
+                    return makeStringIO(data)
         else:
             if have_read:
-                return self._makeStringIO(data)
+                return makeStringIO(data)
             return u
 
     def getOperationByName(self, name):
