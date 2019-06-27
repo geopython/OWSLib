@@ -836,7 +836,7 @@ class Authentication(object):
     def password(self):
         if self.shared:
             return self._PASSWORD
-        return self._username
+        return self._password
 
     @password.setter
     def password(self, value):
