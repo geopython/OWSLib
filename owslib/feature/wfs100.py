@@ -6,8 +6,7 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
-from six import PY2
-from six.moves import cStringIO as StringIO
+from io import StringIO
 
 from owslib import util
 
@@ -156,10 +155,9 @@ class WebFeatureService_1_0_0(object):
         Helper method to make sure the StringIO being returned will work.
 
         Differences between Python 2.7/3.x mean we have a lot of cases to handle.
-        """
-        if PY2:
-            return StringIO(strval)
 
+        TODO: skipped Python 2.x support. Is this still necessary?
+        """
         return StringIO(strval.decode())
 
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,

@@ -1,4 +1,3 @@
-import six
 import cgi
 from owslib.etree import etree
 from datetime import datetime

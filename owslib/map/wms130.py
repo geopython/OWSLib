@@ -16,7 +16,6 @@ API For Web Map Service version 1.3.0.
 from urllib.parse import urlencode
 
 import warnings
-import six
 from owslib.etree import etree
 from owslib.util import (openURL, ServiceException, testXMLValue,
                          extract_xml_list, xmltag_split, OrderedDict, nspath,
@@ -191,7 +190,7 @@ class WebMapService_1_3_0(object):
             request['elevation'] = str(elevation)
 
         # any other specified dimension, prefixed with "dim_"
-        for k, v in six.iteritems(dimensions):
+        for k, v in dimensions.items():
             request['dim_' + k] = str(v)
 
         if kwargs:
@@ -304,14 +303,14 @@ class WebMapService_1_3_0(object):
 
         # need to handle casing in the header keys
         headers = {}
-        for k, v in six.iteritems(u.info()):
+        for k, v in u.info().items():
             headers[k.lower()] = v
 
         # handle the potential charset def
         if headers.get('content-type', '').split(';')[0] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find(nspath('ServiceException', OGC_NAMESPACE)).text).strip()
+            err_message = str(se_tree.find(nspath('ServiceException', OGC_NAMESPACE)).text).strip()
             raise ServiceException(err_message)
         return u
 
@@ -371,7 +370,7 @@ class WebMapService_1_3_0(object):
         request['feature_count'] = str(feature_count)
 
         data = urlencode(request)
- 
+
         self.request = bind_url(base_url) + data
 
         u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
@@ -380,7 +379,7 @@ class WebMapService_1_3_0(object):
         if u.info()['Content-Type'] == 'XML':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find('ServiceException').text).strip()
+            err_message = str(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message)
         return u
 
@@ -423,7 +422,7 @@ class ContentMetadata(AbstractContentMetadata):
     def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False,
                  timeout=30, auth=None):
         super(ContentMetadata, self).__init__(auth)
-        
+
         if xmltag_split(elem.tag) != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
 
@@ -621,7 +620,7 @@ class ContentMetadata(AbstractContentMetadata):
         for dim in elem.findall(nspath('Dimension', WMS_NAMESPACE)):
             dim_name = dim.attrib.get('name')
             dim_data = {}
-            for k, v in six.iteritems(dim.attrib):
+            for k, v in dim.attrib.items():
                 if k != 'name':
                     dim_data[k] = v
             # single values and ranges are not differentiated here

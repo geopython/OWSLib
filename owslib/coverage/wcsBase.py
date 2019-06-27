@@ -3,7 +3,7 @@
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2007 STFC <http://www.stfc.ac.uk>
 #
-# Authors : 
+# Authors :
 #          Dominic Lowe <d.lowe@rl.ac.uk>
 #
 # Contact email: d.lowe@rl.ac.uk
@@ -12,8 +12,6 @@
 from urllib.parse import urlencode
 from owslib.etree import etree
 import cgi
-from six.moves import cStringIO as StringIO
-import six
 from owslib.util import Authentication, openURL
 
 
@@ -35,8 +33,8 @@ class ServiceException(Exception):
 class WCSBase(object):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
     def __new__(self,url, xml, cookies, auth=None):
-        """ overridden __new__ method 
-        
+        """ overridden __new__ method
+
         @type url: string
         @param url: url of WCS capabilities document
         @type xml: string
@@ -49,7 +47,7 @@ class WCSBase(object):
         self.cookies=cookies
         self._describeCoverage = {} #cache for DescribeCoverage responses
         return obj
-    
+
     def __init__(self, auth=None):
         self.auth = auth or Authentication()
 
@@ -60,8 +58,8 @@ class WCSBase(object):
                 self.version, identifier, self.cookies, self.auth)
             self._describeCoverage[identifier] = reader.read(self.url)
         return self._describeCoverage[identifier]
-        
-        
+
+
 class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
@@ -165,7 +163,7 @@ class DescribeCoverageReader(object):
                 qs.append(('CoverageID', self.identifier))
         elif self.version == '1.1.0' or self.version == '1.1.1':
             #NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
-            #or identifiers (see tables 9, 10 of specification)  
+            #or identifiers (see tables 9, 10 of specification)
             if 'identifiers' not in params:
                 qs.append(('identifiers', self.identifier))
             if 'identifier' not in params:
@@ -184,8 +182,7 @@ class DescribeCoverageReader(object):
         @rtype: elementtree tree
         @return: An elementtree tree representation of the capabilities document
         """
-        
+
         request = self.descCov_url(service_url)
         u = openURL(request, cookies=self.cookies, timeout=timeout, auth=self.auth)
         return etree.fromstring(u.read())
-

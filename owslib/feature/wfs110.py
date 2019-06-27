@@ -7,8 +7,7 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-from six import PY2
-from six.moves import cStringIO as StringIO
+from io import StringIO
 from urllib.parse import urlencode
 from owslib.util import testXMLValue, nspath_eval, ServiceException, Authentication,\
     openURL
@@ -146,11 +145,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         """
         Helper method to make sure the StringIO being returned will work.
 
-        Differences between Python 2.7/3.x mean we have a lot of cases to handle.
+        TODO: duplicate of wfs100._makeStringIO.
         """
-        if PY2:
-            return StringIO(strval)
-
         return StringIO(strval.decode())
 
     def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,

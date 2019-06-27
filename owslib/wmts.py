@@ -31,8 +31,6 @@ would be appreciated.
 
 from random import randint
 import warnings
-import six
-from six.moves import filter
 from urllib.parse import (urlencode, urlparse, urlunparse, parse_qs,
                           ParseResult)
 from .etree import etree
@@ -336,7 +334,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         request.append(('TILECOL', str(column)))
         request.append(('FORMAT', format))
 
-        for key, value in six.iteritems(kwargs):
+        for key, value in kwargs.items():
             request.append((key, value))
 
         data = urlencode(request, True)
@@ -482,7 +480,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find('ServiceException').text)
+            err_message = str(se_tree.find('ServiceException').text)
             raise ServiceException(err_message.strip(), se_xml)
         return u
 

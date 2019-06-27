@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
-from six.moves.urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
+from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
 import copy
 
 from io import StringIO, BytesIO
@@ -24,7 +24,6 @@ import cgi
 import re
 from copy import deepcopy
 import warnings
-import six
 import requests
 import codecs
 
@@ -263,7 +262,7 @@ def cleanup_namespaces(element):
 
 
 def add_namespaces(root, ns_keys):
-    if isinstance(ns_keys, six.string_types):
+    if isinstance(ns_keys, str):
         ns_keys = [ns_keys]
 
     namespaces = Namespaces()
@@ -535,7 +534,7 @@ def build_get_url(base_url, params, overwrite=False):
         qs_base = cgi.parse_qsl(base_url.split('?')[1])
 
     qs_params = []
-    for key, value in six.iteritems(params):
+    for key, value in params.items():
         qs_params.append((key, value))
 
     qs = qs_add = []
@@ -636,7 +635,7 @@ def strip_bom(raw_text):
         codecs.BOM_UTF32_BE
     ]
 
-    if isinstance(raw_text, six.binary_type):
+    if isinstance(raw_text, bytes):
         for bom in boms:
             if raw_text.startswith(bom):
                 return raw_text[len(bom):]
@@ -760,17 +759,10 @@ def is_vector_grid(grid_elem):
 def encode_string(text):
     """
     On Python 3 this method does nothing and returns the ``text`` string itself.
-    On Python 2 this method returns the ``text`` string encoded with UTF-8.
 
-    See:
-    * https://pythonhosted.org/six/#six.python_2_unicode_compatible
-    * https://www.azavea.com/blog/2014/03/24/solving-unicode-problems-in-python-2-7/
+    TODO: skipped python 2 support. This method is obsolete now.
     """
-    if six.PY3:
-        return text
-    if isinstance(text, str):
-        return text.decode('utf-8').encode('utf-8', 'ignore')
-    return text.encode('utf-8', 'ignore')
+    return text
 
 
 class Authentication(object):

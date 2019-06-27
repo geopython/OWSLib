@@ -9,7 +9,7 @@ place for some constants to avoid circular imports
 """
 
 # seen in wms.py
-from six.moves.urllib.parse import urlparse
+from urllib.parse import urlparse
 
 from datetime import datetime
 from dateutil import parser

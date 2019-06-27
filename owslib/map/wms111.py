@@ -20,8 +20,6 @@ from urllib.parse import urlencode
 
 import warnings
 
-import six
-
 from owslib.etree import etree
 from owslib.util import (openURL, testXMLValue, extract_xml_list,
                          xmltag_split, OrderedDict, ServiceException,
@@ -265,7 +263,7 @@ class WebMapService_1_1_1(object):
         if u.info().get('Content-Type', '').split(';')[0] in ['application/vnd.ogc.se_xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find('ServiceException').text).strip()
+            err_message = str(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message)
         return u
 
@@ -331,7 +329,7 @@ class WebMapService_1_1_1(object):
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find('ServiceException').text).strip()
+            err_message = str(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message)
         return u
 
@@ -341,7 +339,7 @@ class WebMapService_1_1_1(object):
             xml = etree.tostring(self._capabilities)
         return xml
 
-    def getOperationByName(self, name): 
+    def getOperationByName(self, name):
         """Return a named content item."""
         for item in self.operations:
             if item.name == name:
@@ -460,7 +458,7 @@ class ContentMetadata(AbstractContentMetadata):
         self.scaleHint = None
         if sh is not None:
             if 'min' in sh.attrib and 'max' in sh.attrib:
-                self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']} 
+                self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']}
 
         attribution = elem.find('Attribution')
         if attribution is not None:
@@ -468,11 +466,11 @@ class ContentMetadata(AbstractContentMetadata):
             title = attribution.find('Title')
             url = attribution.find('OnlineResource')
             logo = attribution.find('LogoURL')
-            if title is not None: 
+            if title is not None:
                 self.attribution['title'] = title.text
             if url is not None:
                 self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
-            if logo is not None: 
+            if logo is not None:
                 self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
                 self.attribution['logo_url'] = logo.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
 

@@ -4,7 +4,6 @@
 # Contact email: sgillies@frii.com
 # =============================================================================
 
-import six
 from owslib.namespaces import Namespaces
 
 
@@ -21,7 +20,7 @@ def patch_well_known_namespaces(etree_module):
         def register_namespace(prefix, uri):
             etree_module._namespace_map[uri] = prefix
 
-    for k, v in six.iteritems(ns.get_namespaces()):
+    for k, v in ns.get_namespaces().items():
         register_namespace(k, v)
 
 

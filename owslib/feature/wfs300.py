@@ -9,7 +9,7 @@
 import json
 import logging
 
-from six.moves.urllib.parse import urljoin
+from urllib.parse import urljoin
 
 from owslib import __version__
 from owslib.util import Authentication, http_get

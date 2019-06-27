@@ -116,7 +116,6 @@ from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 from urllib.parse import urlparse
 
-import six
 # namespace definition
 n = Namespaces()
 
