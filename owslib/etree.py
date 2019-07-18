@@ -20,7 +20,7 @@ def patch_well_known_namespaces(etree_module):
         def register_namespace(prefix, uri):
             etree_module._namespace_map[uri] = prefix
 
-    for k, v in ns.get_namespaces().items():
+    for k, v in list(ns.get_namespaces().items()):
         register_namespace(k, v)
 
 

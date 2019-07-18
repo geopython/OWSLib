@@ -143,7 +143,7 @@ class Namespaces(object):
         return retval
 
     def get_namespace_from_url(self, url):
-        for k, v in self.namespace_dict.items():
+        for k, v in list(self.namespace_dict.items()):
             if v == url:
                 return k
         return None

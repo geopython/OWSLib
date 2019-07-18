@@ -123,7 +123,7 @@ def skip_nulls(dict_obj):
     :param o: needs to be dict
     :return:
     """
-    reduced = {k: v for k, v in dict_obj.items() if v is not None}
+    reduced = {k: v for k, v in list(dict_obj.items()) if v is not None}
     return reduced
 
 
@@ -138,7 +138,7 @@ def skip_nulls_rec(dict_obj):
         return dict_obj
     else:
         result = {}
-        for k, v in dict_obj.items():
+        for k, v in list(dict_obj.items()):
             if v is None:
                 pass
             else:
@@ -203,11 +203,11 @@ def is_empty(dict_obj):
     :return: True, if it is empty, False if not empty
     """
     if isinstance(dict_obj, dict):
-        if len(dict_obj.items()) <= 0:
+        if len(list(dict_obj.items())) <= 0:
             return True
         else:
             switch = True
-            for k, v in dict_obj.items():
+            for k, v in list(dict_obj.items()):
                 if v is None:
                     pass
                 else:

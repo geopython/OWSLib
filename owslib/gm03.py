@@ -340,7 +340,7 @@ class Core(object):
     def get_element_by_tid(self, tid):
         """helper function to find values by reference"""
 
-        for key, value in self.elements.items():
+        for key, value in list(self.elements.items()):
             if hasattr(value, 'tid') and value.tid == tid:
                 return self.elements[key]
         return None

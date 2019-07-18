@@ -1895,24 +1895,24 @@ def printInputOutput(value, indent=''):
     '''
 
     # InputOutput fields
-    print('{} identifier={}, title={}, abstract={}, data type={}'.format(
-          indent, value.identifier, value.title, value.abstract, value.dataType))
+    print(('{} identifier={}, title={}, abstract={}, data type={}'.format(
+          indent, value.identifier, value.title, value.abstract, value.dataType)))
     for val in value.allowedValues:
-        print('{} Allowed Value: {}'.format(indent, printValue(val)))
+        print(('{} Allowed Value: {}'.format(indent, printValue(val))))
     if value.anyValue:
         print(' Any value allowed')
     for val in value.supportedValues:
-        print('{} Supported Value: {}'.format(indent, printValue(val)))
-    print('{} Default Value: {} '.format(indent, printValue(value.defaultValue)))
+        print(('{} Supported Value: {}'.format(indent, printValue(val))))
+    print(('{} Default Value: {} '.format(indent, printValue(value.defaultValue))))
 
     # Input fields
     if isinstance(value, Input):
-        print('{} minOccurs={}, maxOccurs={}'.format(
-              indent, value.minOccurs, value.maxOccurs))
+        print(('{} minOccurs={}, maxOccurs={}'.format(
+              indent, value.minOccurs, value.maxOccurs)))
 
     # Output fields
     if isinstance(value, Output):
-        print('{} reference={}, mimeType={}'.format(
-              indent, value.reference, value.mimeType))
+        print(('{} reference={}, mimeType={}'.format(
+              indent, value.reference, value.mimeType)))
         for datum in value.data:
-            print('{} Data Value: {}'.format(indent, printValue(datum)))
+            print(('{} Data Value: {}'.format(indent, printValue(datum))))
