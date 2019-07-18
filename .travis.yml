@@ -27,9 +27,10 @@ script:
   - flake8 owslib/dif.py
   - flake8 owslib/etree.py
   - flake8 owslib/fgdc.py
+  - flake8 owslib/gm03.py
+  - flake8 owslib/interfaces.py
   - flake8 owslib/iso_che.py
   - flake8 owslib/iso.py
-  - flake8 owslib/interfaces.py
   - flake8 owslib/ows.py
   - flake8 owslib/sos.py
   - flake8 owslib/tms.py

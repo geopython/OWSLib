@@ -21,6 +21,7 @@ def get_namespaces():
     ns[None] = n.get_namespace("gm03")
     return ns
 
+
 namespaces = get_namespaces()
 
 
@@ -68,7 +69,8 @@ class PT_FreeText(object):
         """constructor"""
 
         pt_groups = []
-        for pt_group in md.findall(util.nspath_eval('gm03:GM03_2_1Core.Core.PT_FreeText/gm03:textGroup/gm03:GM03_2_1Core.Core.PT_Group', namespaces)):
+        for pt_group in md.findall(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.PT_FreeText/gm03:textGroup/gm03:GM03_2_1Core.Core.PT_Group', namespaces)):
             pt_groups.append(PT_Group(pt_group))
 
         self.pt_group = pt_groups
@@ -80,7 +82,8 @@ class PT_FreeURL(object):
         """constructor"""
 
         pt_groups = []
-        for pt_group in md.findall(util.nspath_eval('gm03:GM03_2_1Core.Core.PT_FreeURL/gm03:URLGroup/gm03:GM03_2_1Core.Core.PT_URLGroup', namespaces)):
+        for pt_group in md.findall(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.PT_FreeURL/gm03:URLGroup/gm03:GM03_2_1Core.Core.PT_URLGroup', namespaces)):
             pt_groups.append(PT_Group(pt_group))
 
         self.pt_group = pt_groups
@@ -286,7 +289,8 @@ class Core(object):
 
         val = md.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_DataIdentification', namespaces))
         if val is None:
-            val = md.find(util.nspath_eval('gm03:GM03_2_1Comprehensive.Comprehensive.MD_DataIdentification', namespaces))
+            val = md.find(util.nspath_eval(
+                'gm03:GM03_2_1Comprehensive.Comprehensive.MD_DataIdentification', namespaces))
             if val is not None:
                 self.data_identification = MD_DataIdentification(val)
         else:
@@ -490,7 +494,7 @@ class MD_Format(_GenericObject):
         _GenericObject.__init__(self, md)
 
         self.name = util.testXMLValue(md.find(util.nspath_eval('gm03:name', namespaces)))
-        self.version = util.testXMLValue(md.find(util.nspath_eval('gm03:version', versionspaces)))
+        self.version = util.testXMLValue(md.find(util.nspath_eval('gm03:version', namespaces)))
 
 
 class MD_Metadata(_GenericObject):
@@ -504,8 +508,10 @@ class MD_Metadata(_GenericObject):
         self.language = util.testXMLValue(md.find(util.nspath_eval('gm03:language', namespaces)))
         self.character_set = util.testXMLValue(md.find(util.nspath_eval('gm03:characterSet', namespaces)))
         self.date_stamp = util.testXMLValue(md.find(util.nspath_eval('gm03:dateStamp', namespaces)))
-        self.metadata_standard_name = util.testXMLValue(md.find(util.nspath_eval('gm03:metadataStandardName', namespaces)))
-        self.metadata_standard_version = util.testXMLValue(md.find(util.nspath_eval('gm03:metadataStandardVersion', namespaces)))
+        self.metadata_standard_name = util.testXMLValue(md.find(util.nspath_eval(
+            'gm03:metadataStandardName', namespaces)))
+        self.metadata_standard_version = util.testXMLValue(md.find(util.nspath_eval(
+            'gm03:metadataStandardVersion', namespaces)))
         self.dataset_uri = util.testXMLValue(md.find(util.nspath_eval('gm03:dataSetURI', namespaces)))
 
         val = md.find(util.nspath_eval('gm03:hierarchyLevel', namespaces))
@@ -518,7 +524,8 @@ class MD_Metadata(_GenericObject):
         val = md.find(util.nspath_eval('gm03:hierarchyLevelName', namespaces))
         if val is not None:
             values = []
-            for value in val.findall(util.nspath_eval('gm03:GM03_2_1Core.Core.CharacterString_/gm03:value', namespaces)):
+            for value in val.findall(util.nspath_eval(
+                    'gm03:GM03_2_1Core.Core.CharacterString_/gm03:value', namespaces)):
                 values.append(util.testXMLValue(value))
             self.hierarchy_level_name = values
 
@@ -644,8 +651,10 @@ class EX_TemporalExtent(_GenericObject):
 
         _GenericObject.__init__(self, md)
 
-        begin = util.testXMLValue(md.find(util.nspath_eval('gm03:extent/gm03:GM03_2_1Core.Core.TM_Primitive/begin', namespaces)))
-        end = util.testXMLValue(md.find(util.nspath_eval('gm03:extent/gm03:GM03_2_1Core.Core.TM_Primitive/end', namespaces)))
+        begin = util.testXMLValue(md.find(util.nspath_eval(
+            'gm03:extent/gm03:GM03_2_1Core.Core.TM_Primitive/begin', namespaces)))
+        end = util.testXMLValue(md.find(util.nspath_eval(
+            'gm03:extent/gm03:GM03_2_1Core.Core.TM_Primitive/end', namespaces)))
 
         self.extent = {'begin': begin, 'end': end}
 
@@ -737,12 +746,15 @@ class CI_ResponsibleParty(_GenericObject):
 
         _GenericObject.__init__(self, md)
 
-        self.individual_first_name = util.testXMLValue(md.find(util.nspath_eval('gm03:individualFirstName', namespaces)))
-        self.individual_last_name = util.testXMLValue(md.find(util.nspath_eval('gm03:individualLastName', namespaces)))
+        self.individual_first_name = util.testXMLValue(md.find(util.nspath_eval(
+            'gm03:individualFirstName', namespaces)))
+        self.individual_last_name = util.testXMLValue(md.find(util.nspath_eval(
+            'gm03:individualLastName', namespaces)))
 
         val = md.find(util.nspath_eval('gm03:electronicalMailAddress', namespaces))
         if val is not None:
-            self.electronical_mail_address = util.testXMLValue(val.find(util.nspath_eval('gm03:GM03_2_1Core.Core.URL_/gm03:value', namespaces)))
+            self.electronical_mail_address = util.testXMLValue(val.find(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.URL_/gm03:value', namespaces)))
 
         val = md.find(util.nspath_eval('gm03:organisationName', namespaces))
         if val is not None:
@@ -846,7 +858,8 @@ class MD_DataIdentification(_GenericObject):
 
         val = md.find(util.nspath_eval('gm03:status', namespaces))
         if val is not None:
-            self.status = util.testXMLValue(val.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_ProgressCode_/gm03:value', namespaces)))
+            self.status = util.testXMLValue(val.find(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.MD_ProgressCode_/gm03:value', namespaces)))
 
         val = md.find(util.nspath_eval('gm03:abstract', namespaces))
         if val is not None:
@@ -864,19 +877,23 @@ class MD_DataIdentification(_GenericObject):
 
         val = md.find(util.nspath_eval('gm03:spatialRepresentationType', namespaces))
         if val is not None:
-            self.spatial_representation_type = util.testXMLValue(val.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_SpatialRepresentationTypeCode_/gm03:value', namespaces)))
+            self.spatial_representation_type = util.testXMLValue(val.find(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.MD_SpatialRepresentationTypeCode_/gm03:value', namespaces)))
 
         val = md.find(util.nspath_eval('gm03:language', namespaces))
         if val is not None:
-            self.language = util.testXMLValue(val.find(util.nspath_eval('gm03:CodeISO.LanguageCodeISO_/gm03:value', namespaces)))
+            self.language = util.testXMLValue(val.find(util.nspath_eval(
+                'gm03:CodeISO.LanguageCodeISO_/gm03:value', namespaces)))
 
         val = md.find(util.nspath_eval('gm03:characterSet', namespaces))
         if val is not None:
-            self.character_set = util.testXMLValue(val.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_CharacterSetCode_/gm03:value', namespaces)))
+            self.character_set = util.testXMLValue(val.find(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.MD_CharacterSetCode_/gm03:value', namespaces)))
 
         val = md.find(util.nspath_eval('gm03:topicCategory', namespaces))
         if val is not None:
-            self.topic_category = util.testXMLValue(val.find(util.nspath_eval('gm03:GM03_2_1Core.Core.MD_TopicCategoryCode_/gm03:value', namespaces)))
+            self.topic_category = util.testXMLValue(val.find(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.MD_TopicCategoryCode_/gm03:value', namespaces)))
 
 
 class RS_Identifier(_GenericObject):
@@ -922,8 +939,8 @@ class descriptiveKeywordsMD_Identification(_GenericObject):
         self.identification = _GenericObjectProperty(val)
 
 
-class EX_ExtentgeographicElement(_GenericObject):
-    """EX_ExtentgeographicElement parser"""
+class EX_ExtenttemporalElement(_GenericObject):
+    """EX_ExtenttemporalElement parser"""
     def __init__(self, md):
         """constructor"""
 
@@ -979,7 +996,8 @@ class MD_IdentificationpointOfContact(_GenericObject):
 
         val = md.find(util.nspath_eval('gm03:role', namespaces))
         if val is not None:
-            self.role = util.testXMLValue(val.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_RoleCode_/gm03:value', namespaces)))
+            self.role = util.testXMLValue(val.find(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.CI_RoleCode_/gm03:value', namespaces)))
 
 
 class MD_Metadatacontact(_GenericObject):
@@ -997,7 +1015,8 @@ class MD_Metadatacontact(_GenericObject):
 
         val = md.find(util.nspath_eval('gm03:role', namespaces))
         if val is not None:
-            self.role = util.testXMLValue(val.find(util.nspath_eval('gm03:GM03_2_1Core.Core.CI_RoleCode_/gm03:value', namespaces)))
+            self.role = util.testXMLValue(val.find(util.nspath_eval(
+                'gm03:GM03_2_1Core.Core.CI_RoleCode_/gm03:value', namespaces)))
 
 
 class spatialExtentEX_SpatialTemporalExtent(_GenericObject):
