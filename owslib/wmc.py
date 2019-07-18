@@ -45,7 +45,7 @@ class MapContext:
             'id' : self._map.id,
             'version' : '1.0.0',
             }
-        for k, v in attrs.items():
+        for k, v in list(attrs.items()):
             root.attrib[k] = v
         return root
 
@@ -72,7 +72,7 @@ class MapContext:
 
     def _getLayerListElement(self):
         layerlist = WMCElement('LayerList')
-        layering = zip(self._map.layernames, self._map.layertitles)
+        layering = list(zip(self._map.layernames, self._map.layertitles))
         layer_infos = self._map.getLayerInfos()
 
         # mapbuilder draws layers in bottom-top order
