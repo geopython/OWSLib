@@ -13,13 +13,17 @@ from owslib.etree import etree
 from owslib import util
 from owslib.namespaces import Namespaces
 
+
 # default variables
 def get_namespaces():
     n = Namespaces()
     ns = n.get_namespaces("dif")
     ns[None] = n.get_namespace("dif")
     return ns
+
+
 namespaces = get_namespaces()
+
 
 class DIF(object):
     """ Process DIF """
@@ -42,11 +46,11 @@ class DIF(object):
         for el in md.findall(util.nspath_eval('dif:Discipline', namespaces)):
             self.discipline.append(util.testXMLValue(el))
 
-        self.parameters= []
+        self.parameters = []
         for el in md.findall(util.nspath_eval('dif:Parameters', namespaces)):
             self.parameters.append(util.testXMLValue(el))
 
-        self.iso_topic_category  = []
+        self.iso_topic_category = []
         for el in md.findall(util.nspath_eval('dif:ISO_Topic_Category', namespaces)):
             self.iso_topic_category.append(util.testXMLValue(el))
 
@@ -108,15 +112,15 @@ class DIF(object):
             self.originating_center.append(util.testXMLValue(el))
 
         self.data_center = []
-        for el in md.findall(util.nspath_eval('dif:Data_Center', namespaces)):         
+        for el in md.findall(util.nspath_eval('dif:Data_Center', namespaces)):
             self.data_center.append(Data_Center(el))
 
         self.distribution = []
-        for el in md.findall(util.nspath_eval('dif:Distribution', namespaces)):     
+        for el in md.findall(util.nspath_eval('dif:Distribution', namespaces)):
             self.distribution.append(Distribution(el))
 
         self.multimedia_sample = []
-        for el in md.findall(util.nspath_eval('dif:Multimedia_Sample', namespaces)):     
+        for el in md.findall(util.nspath_eval('dif:Multimedia_Sample', namespaces)):
             self.multimedia_sample.append(Multimedia_Sample(el))
 
         val = md.find(util.nspath_eval('dif:Reference', namespaces))
@@ -158,6 +162,7 @@ class DIF(object):
         val = md.find(util.nspath_eval('dif:Private', namespaces))
         self.private = util.testXMLValue(val)
 
+
 class Citation(object):
     """ Parse Data_Set_Citation """
     def __init__(self, el):
@@ -194,6 +199,7 @@ class Citation(object):
         val = el.find(util.nspath_eval('dif:Online_Resource', namespaces))
         self.onlineresource = util.testXMLValue(val)
 
+
 class Personnel(object):
     """ Process Personnel """
     def __init__(self, md):
@@ -225,6 +231,7 @@ class Personnel(object):
         val = md.find(util.nspath_eval('dif:Contact_Address', namespaces))
         self.contact_address = Contact_Address(val)
 
+
 class Contact_Address(object):
     """ Process Contact_Address """
     def __init__(self, md):
@@ -244,6 +251,7 @@ class Contact_Address(object):
         val = md.find(util.nspath_eval('dif:Country', namespaces))
         self.country = util.testXMLValue(val)
 
+
 class Discipline(object):
     """ Process Discipline """
     def __init__(self, md):
@@ -255,6 +263,7 @@ class Discipline(object):
 
         val = md.find(util.nspath_eval('dif:Detailed_Subdiscipline', namespaces))
         self.detailed_subdiscipline = util.testXMLValue(val)
+
 
 class Parameters(object):
     """ Process Parameters """
@@ -273,12 +282,13 @@ class Parameters(object):
 
         val = md.find(util.nspath_eval('dif:Variable_Level_2', namespaces))
         self.variable_l2 = util.testXMLValue(val)
-    
+
         val = md.find(util.nspath_eval('dif:Variable_Level_3', namespaces))
         self.variable_l3 = util.testXMLValue(val)
- 
+
         val = md.find(util.nspath_eval('dif:Detailed_Variable', namespaces))
         self.detailed_variable = util.testXMLValue(val)
+
 
 class Name(object):
     """ Process Sensor_Name, Source_Name, Project, IDN_Node """
@@ -289,14 +299,16 @@ class Name(object):
         val = md.find(util.nspath_eval('dif:Long_Name', namespaces))
         self.long_name = util.testXMLValue(val)
 
+
 class Temporal_Coverage(object):
     """ Process Temporal_Coverage """
     def __init__(self, md):
         val = md.find(util.nspath_eval('dif:Start_Date', namespaces))
         self.start_date = util.testXMLValue(val)
-        
+
         val = md.find(util.nspath_eval('dif:End_Date', namespaces))
         self.end_date = util.testXMLValue(val)
+
 
 class Paleo_Temporal_Coverage(object):
     """ Process Paleo_Temporal_Coverage """
@@ -310,6 +322,7 @@ class Paleo_Temporal_Coverage(object):
         self.chronostratigraphic_unit = []
         for el in md.findall(util.nspath_eval('dif:Chronostratigraphic_Unit', namespaces)):
             self.chronostratigraphic_unit.append(Chronostratigraphic_Unit(el))
+
 
 class Chronostratigraphic_Unit(object):
     """ Process Chronostratigraphic_Unit """
@@ -331,6 +344,7 @@ class Chronostratigraphic_Unit(object):
 
         val = md.find(util.nspath_eval('dif:Detailed_Classification', namespaces))
         self.detailed_classification = util.testXMLValue(val)
+
 
 class Spatial_Coverage(object):
     """ Process Spatial_Coverage """
@@ -359,6 +373,7 @@ class Spatial_Coverage(object):
         val = md.find(util.nspath_eval('dif:Maximum_Depth', namespaces))
         self.maxdepth = util.testXMLValue(val)
 
+
 class Location(object):
     """ Process Location """
     def __init__(self, md):
@@ -379,6 +394,7 @@ class Location(object):
 
         val = md.find(util.nspath_eval('dif:Detailed_Location', namespaces))
         self.detailed_location = util.testXMLValue(val)
+
 
 class Data_Resolution(object):
     """ Process Data_Resolution"""
@@ -404,6 +420,7 @@ class Data_Resolution(object):
         val = md.find(util.nspath_eval('dif:Temporal_Resolution_Range', namespaces))
         self.temporal_res_range = util.testXMLValue(val)
 
+
 class Data_Center(object):
     """ Process Data_Center """
     def __init__(self, md):
@@ -419,6 +436,7 @@ class Data_Center(object):
         val = md.find(util.nspath_eval('dif:Personnel', namespaces))
         self.personnel = util.testXMLValue(val)
 
+
 class Distribution(object):
     """ Process Distribution """
     def __init__(self, md):
@@ -433,6 +451,7 @@ class Distribution(object):
 
         val = md.find(util.nspath_eval('dif:Fees', namespaces))
         self.fees = util.testXMLValue(val)
+
 
 class Multimedia_Sample(object):
     """ Process Multimedia_Sample """
@@ -467,6 +486,7 @@ class Multimedia_Sample(object):
         val = md.find(util.nspath_eval('dif:Visualization_File_Size', namespaces))
         self.file_size = util.testXMLValue(val)
 
+
 class Related_URL(object):
     """ Process Related_URL """
     def __init__(self, md):
@@ -480,6 +500,7 @@ class Related_URL(object):
         val = md.find(util.nspath_eval('dif:Description', namespaces))
         self.description = util.testXMLValue(val)
 
+
 class URL_Content_Type(object):
     """ Process URL_Content_Type """
     def __init__(self, md):
@@ -488,14 +509,3 @@ class URL_Content_Type(object):
 
         val = md.find(util.nspath_eval('dif:SubType', namespaces))
         self.subtype = util.testXMLValue(val)
-
-
-
-
-
-
-
-
-
-
-
