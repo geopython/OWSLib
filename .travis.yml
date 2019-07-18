@@ -26,6 +26,9 @@ script:
   - flake8 owslib/util.py
   - flake8 owslib/interfaces.py owslib/crs.py owslib/etree.py
   - flake8 owslib/ows.py
+  - flake8 owslib/tms.py
+  - flake8 owslib/wcs.py
+  - flake8 owslib/wfs.py
   - flake8 owslib/wmc.py
   - flake8 owslib/wms.py
   - flake8 owslib/wmts.py
