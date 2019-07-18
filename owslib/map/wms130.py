@@ -190,7 +190,7 @@ class WebMapService_1_3_0(object):
             request['elevation'] = str(elevation)
 
         # any other specified dimension, prefixed with "dim_"
-        for k, v in dimensions.items():
+        for k, v in list(dimensions.items()):
             request['dim_' + k] = str(v)
 
         if kwargs:
@@ -303,7 +303,7 @@ class WebMapService_1_3_0(object):
 
         # need to handle casing in the header keys
         headers = {}
-        for k, v in u.info().items():
+        for k, v in list(u.info().items()):
             headers[k.lower()] = v
 
         # handle the potential charset def
@@ -536,7 +536,7 @@ class ContentMetadata(AbstractContentMetadata):
             # some servers found in the wild use a single SRS
             # tag containing a whitespace separated list of SRIDs
             # instead of several SRS tags. hence the inner loop
-            for srslist in map(lambda x: x.text, elem.findall(nspath('CRS', WMS_NAMESPACE))):
+            for srslist in [x.text for x in elem.findall(nspath('CRS', WMS_NAMESPACE))]:
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
@@ -575,9 +575,9 @@ class ContentMetadata(AbstractContentMetadata):
 
             lgd = s.find(nspath('LegendURL', WMS_NAMESPACE))
             if lgd is not None:
-                if 'width' in lgd.attrib.keys():
+                if 'width' in list(lgd.attrib.keys()):
                     style['legend_width'] = lgd.attrib.get('width')
-                if 'height' in lgd.attrib.keys():
+                if 'height' in list(lgd.attrib.keys()):
                     style['legend_height'] = lgd.attrib.get('height')
 
                 lgd_format = lgd.find(nspath('Format', WMS_NAMESPACE))
@@ -620,7 +620,7 @@ class ContentMetadata(AbstractContentMetadata):
         for dim in elem.findall(nspath('Dimension', WMS_NAMESPACE)):
             dim_name = dim.attrib.get('name')
             dim_data = {}
-            for k, v in dim.attrib.items():
+            for k, v in list(dim.attrib.items()):
                 if k != 'name':
                     dim_data[k] = v
             # single values and ranges are not differentiated here
