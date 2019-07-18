@@ -75,7 +75,7 @@ class WebFeatureService_1_0_0(object):
 
     def __getitem__(self,name):
         ''' check contents dictionary to allow dict like access to service layers'''
-        if name in self.__getattribute__('contents').keys():
+        if name in list(self.__getattribute__('contents').keys()):
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError("No content named %s" % name)

@@ -65,7 +65,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
     def __getitem__(self,name):
         ''' check contents dictionary to allow dict like access to service layers'''
-        if name in self.__getattribute__('contents').keys():
+        if name in list(self.__getattribute__('contents').keys()):
             return self.__getattribute__('contents')[name]
         else:
             raise KeyError("No content named %s" % name)
@@ -266,7 +266,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         if typename:
             request['typename']=str(typename)
         if kwargs:
-            for kw in kwargs.keys():
+            for kw in list(kwargs.keys()):
                 request[kw]=str(kwargs[kw])
         encoded_request=urlencode(request)
         u = openURL(base_url + encoded_request, timeout=self.timeout, auth=self.auth)
@@ -323,7 +323,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             tempdict2[id]=(abstract, params) #store in another temporary dictionary
 
         #now group the results into StoredQuery objects:
-        for key in tempdict.keys():
+        for key in list(tempdict.keys()):
             sqs.append(StoredQuery(key, tempdict[key][0], tempdict[key][1], tempdict2[key][0], tempdict2[key][1]))
         return sqs
     storedqueries = property(_getStoredQueries, None)

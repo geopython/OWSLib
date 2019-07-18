@@ -73,8 +73,7 @@ class WebFeatureService_(object):
             # GetCaps document (the 'id' attribute in the Crs object).
             return self.contents[typename].crsOptions[index]
         except ValueError:
-            options = ", ".join(map(lambda crs: crs.id,
-                                self.contents[typename].crsOptions))
+            options = ", ".join([crs.id for crs in self.contents[typename].crsOptions])
             log.warning("Requested srsName %r is not declared as being "
                         "allowed for requested typename %r. "
                         "Options are: %r.", srs.getcode(), typename, options)
