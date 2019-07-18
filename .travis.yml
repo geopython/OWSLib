@@ -23,25 +23,7 @@ install:
   - if [ "$LXML" == "true" ]; then pip install lxml; fi
 script:
   - python -m pytest
-  - flake8 owslib/crs.py
-  - flake8 owslib/dif.py
-  - flake8 owslib/etree.py
-  - flake8 owslib/fes.py
-  - flake8 owslib/fgdc.py
-  - flake8 owslib/gm03.py
-  - flake8 owslib/interfaces.py
-  - flake8 owslib/iso_che.py
-  - flake8 owslib/iso.py
-  - flake8 owslib/ows.py
-  - flake8 owslib/sos.py
-  - flake8 owslib/tms.py
-  - flake8 owslib/util.py
-  - flake8 owslib/wcs.py
-  - flake8 owslib/wfs.py
-  - flake8 owslib/wmc.py
-  - flake8 owslib/wms.py
-  - flake8 owslib/wmts.py
-  - flake8 owslib/wps.py
+  - flake8 owslib --exclude=owslib/coverage,owslib/feature,owslib/map,owslib/swe,owslib/owscontext,owslib/waterml,owslib/namespaces.py
 after_success:
   - coveralls
 notifications:

@@ -29,12 +29,16 @@ from owslib.util import cleanup_namespaces, bind_url, add_namespaces, OrderedDic
 # default variables
 outputformat = 'application/xml'
 
+
 def get_namespaces():
     n = Namespaces()
     return n.get_namespaces()
+
+
 namespaces = get_namespaces()
 schema = 'http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd'
 schema_location = '%s %s' % (namespaces['csw'], schema)
+
 
 class CatalogueServiceWeb(object):
     """ csw request class """
@@ -86,13 +90,13 @@ class CatalogueServiceWeb(object):
                 # ServiceIdentification
                 val = self._exml.find(util.nspath_eval('ows:ServiceIdentification', namespaces))
                 if val is not None:
-                    self.identification = ows.ServiceIdentification(val,self.owscommon.namespace)
+                    self.identification = ows.ServiceIdentification(val, self.owscommon.namespace)
                 else:
                     self.identification = None
                 # ServiceProvider
                 val = self._exml.find(util.nspath_eval('ows:ServiceProvider', namespaces))
                 if val is not None:
-                    self.provider = ows.ServiceProvider(val,self.owscommon.namespace)
+                    self.provider = ows.ServiceProvider(val, self.owscommon.namespace)
                 else:
                     self.provider = None
                 # ServiceOperations metadata
@@ -181,7 +185,9 @@ class CatalogueServiceWeb(object):
             for f in self._exml.findall(util.nspath_eval('csw:DomainValues/csw:ListOfValues/csw:Value', namespaces)):
                 self.results['values'].append(util.testXMLValue(f))
 
-    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None, esn='summary', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None, resulttype='results'):
+    def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None,
+                   esn='summary', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0,
+                   maxrecords=10, cql=None, xml=None, resulttype='results'):
         """
 
         Construct and process a  GetRecords request
@@ -251,9 +257,11 @@ class CatalogueServiceWeb(object):
             self.results = {}
 
             # process search results attributes
-            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsMatched')
+            val = self._exml.find(
+                util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsMatched')
             self.results['matches'] = int(util.testXMLValue(val, True))
-            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsReturned')
+            val = self._exml.find(
+                util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsReturned')
             self.results['returned'] = int(util.testXMLValue(val, True))
             val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('nextRecord')
             self.results['nextrecord'] = int(util.testXMLValue(val, True))
@@ -298,7 +306,9 @@ class CatalogueServiceWeb(object):
             self.records = OrderedDict()
             self._parserecords(outputschema, esn)
 
-    def getrecords2(self, constraints=[], sortby=None, typenames='csw:Record', esn='summary', outputschema=namespaces['csw'], format=outputformat, startposition=0, maxrecords=10, cql=None, xml=None, resulttype='results'):
+    def getrecords2(self, constraints=[], sortby=None, typenames='csw:Record', esn='summary',
+                    outputschema=namespaces['csw'], format=outputformat, startposition=0,
+                    maxrecords=10, cql=None, xml=None, resulttype='results'):
         """
 
         Construct and process a  GetRecords request
@@ -372,9 +382,11 @@ class CatalogueServiceWeb(object):
             self.results = {}
 
             # process search results attributes
-            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsMatched')
+            val = self._exml.find(
+                util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsMatched')
             self.results['matches'] = int(util.testXMLValue(val, True))
-            val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsReturned')
+            val = self._exml.find(
+                util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('numberOfRecordsReturned')
             self.results['returned'] = int(util.testXMLValue(val, True))
             val = self._exml.find(util.nspath_eval('csw:SearchResults', namespaces)).attrib.get('nextRecord')
             if val is not None:
@@ -391,7 +403,8 @@ class CatalogueServiceWeb(object):
 
             self._parserecords(outputschema, esn)
 
-    def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None, bbox=None, keywords=[], cql=None, identifier=None):
+    def transaction(self, ttype=None, typename='csw:Record', record=None, propertyname=None, propertyvalue=None,
+                    bbox=None, keywords=[], cql=None, identifier=None):
         """
 
         Construct and process a Transaction request
@@ -519,10 +532,10 @@ class CatalogueServiceWeb(object):
 
         """
 
-        urls=[]
-        for key,rec in list(self.records.items()):
-            #create a generator object, and iterate through it until the match is found
-            #if not found, gets the default value (here "none")
+        urls = []
+        for key, rec in list(self.records.items()):
+            # create a generator object, and iterate through it until the match is found
+            # if not found, gets the default value (here "none")
             url = next((d['url'] for d in rec.references if d['scheme'] == service_string), None)
             if url is not None:
                 urls.append(url)
@@ -530,36 +543,37 @@ class CatalogueServiceWeb(object):
 
     def _parseinsertresult(self):
         self.results['insertresults'] = []
-        for i in self._exml.findall('.//'+util.nspath_eval('csw:InsertResult', namespaces)):
+        for i in self._exml.findall('.//' + util.nspath_eval('csw:InsertResult', namespaces)):
             for j in i.findall(util.nspath_eval('csw:BriefRecord/dc:identifier', namespaces)):
                 self.results['insertresults'].append(util.testXMLValue(j))
 
     def _parserecords(self, outputschema, esn):
-        if outputschema == namespaces['gmd']: # iso 19139
-            for i in self._exml.findall('.//'+util.nspath_eval('gmd:MD_Metadata', namespaces)) or self._exml.findall('.//'+util.nspath_eval('gmi:MI_Metadata', namespaces)):
+        if outputschema == namespaces['gmd']:  # iso 19139
+            for i in self._exml.findall('.//' + util.nspath_eval('gmd:MD_Metadata', namespaces)) or \
+                    self._exml.findall('.//' + util.nspath_eval('gmi:MI_Metadata', namespaces)):
                 val = i.find(util.nspath_eval('gmd:fileIdentifier/gco:CharacterString', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = MD_Metadata(i)
-            for i in self._exml.findall('.//'+util.nspath_eval('gfc:FC_FeatureCatalogue', namespaces)):
+            for i in self._exml.findall('.//' + util.nspath_eval('gfc:FC_FeatureCatalogue', namespaces)):
                 identifier = self._setidentifierkey(util.testXMLValue(i.attrib['uuid'], attrib=True))
                 self.records[identifier] = FC_FeatureCatalogue(i)
-        elif outputschema == namespaces['fgdc']: # fgdc csdgm
+        elif outputschema == namespaces['fgdc']:  # fgdc csdgm
             for i in self._exml.findall('.//metadata'):
                 val = i.find('idinfo/datasetid')
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = Metadata(i)
-        elif outputschema == namespaces['dif']: # nasa dif
-            for i in self._exml.findall('.//'+util.nspath_eval('dif:DIF', namespaces)):
+        elif outputschema == namespaces['dif']:  # nasa dif
+            for i in self._exml.findall('.//' + util.nspath_eval('dif:DIF', namespaces)):
                 val = i.find(util.nspath_eval('dif:Entry_ID', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = DIF(i)
-        elif outputschema == namespaces['gm03']: # GM03
-            for i in self._exml.findall('.//'+util.nspath_eval('gm03:TRANSFER', namespaces)):
+        elif outputschema == namespaces['gm03']:  # GM03
+            for i in self._exml.findall('.//' + util.nspath_eval('gm03:TRANSFER', namespaces)):
                 val = i.find(util.nspath_eval('gm03:fileIdentifier', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = GM03(i)
-        else: # process default
-            for i in self._exml.findall('.//'+util.nspath_eval('csw:%s' % self._setesnel(esn), namespaces)):
+        else:  # process default
+            for i in self._exml.findall('.//' + util.nspath_eval('csw:%s' % self._setesnel(esn), namespaces)):
                 val = i.find(util.nspath_eval('dc:identifier', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = CswRecord(i)
@@ -587,7 +601,7 @@ class CatalogueServiceWeb(object):
 
     def _setidentifierkey(self, el):
         if el is None:
-            return 'owslib_random_%i' % random.randint(1,65536)
+            return 'owslib_random_%i' % random.randint(1, 65536)
         else:
             return el
 
@@ -597,7 +611,8 @@ class CatalogueServiceWeb(object):
         else:
             return etree.Element(util.nspath_eval(el, namespaces))
 
-    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None, identifier=None):
+    def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None,
+                       identifier=None):
         if keywords or bbox is not None or qtype is not None or cql is not None or identifier is not None:
             node0 = etree.SubElement(parent, util.nspath_eval('csw:Constraint', namespaces))
             node0.set('version', '1.1.0')
@@ -611,7 +626,7 @@ class CatalogueServiceWeb(object):
                 node1.text = cql
             else:  # construct a Filter request
                 flt = fes.FilterRequest()
-                node0.append(flt.set(qtype=qtype, keywords=keywords, propertyname=propertyname,bbox=bbox))
+                node0.append(flt.set(qtype=qtype, keywords=keywords, propertyname=propertyname, bbox=bbox))
 
     def _invoke(self):
         # do HTTP request
@@ -624,7 +639,8 @@ class CatalogueServiceWeb(object):
         # default URL.
         if hasattr(self, 'operations'):
             caller = inspect.stack()[1][3]
-            if caller == 'getrecords2': caller = 'getrecords'
+            if caller == 'getrecords2':
+                caller = 'getrecords'
             try:
                 op = self.get_operation_by_name(caller)
                 if isinstance(self.request, str):  # GET KVP
@@ -646,7 +662,7 @@ class CatalogueServiceWeb(object):
                             request_url = post_verbs[0].get('url')
                     elif len(post_verbs) == 1:
                         request_url = post_verbs[0].get('url')
-            except:  # no such luck, just go with request_url
+            except Exception:  # no such luck, just go with request_url
                 pass
 
         if isinstance(self.request, str):  # GET KVP
@@ -695,6 +711,7 @@ class CatalogueServiceWeb(object):
             raise ows.ExceptionReport(self._exml, self.owscommon.namespace)
         else:
             self.exceptionreport = None
+
 
 class CswRecord(object):
     """ Process csw:Record, csw:BriefRecord, csw:SummaryRecord """
