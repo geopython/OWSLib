@@ -334,7 +334,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         request.append(('TILECOL', str(column)))
         request.append(('FORMAT', format))
 
-        for key, value in kwargs.items():
+        for key, value in list(kwargs.items()):
             request.append((key, value))
 
         data = urlencode(request, True)
@@ -745,11 +745,11 @@ class ContentMetadata:
             legendURL = s.find(_STYLE_LEGEND_URL)
             if legendURL is not None:
                 style['legend'] = legendURL.attrib[_HREF_TAG]
-                if 'width' in legendURL.attrib.keys():
+                if 'width' in list(legendURL.attrib.keys()):
                     style['width'] = legendURL.attrib.get('width')
-                if 'height' in legendURL.attrib.keys():
+                if 'height' in list(legendURL.attrib.keys()):
                     style['height'] = legendURL.attrib.get('height')
-                if 'format' in legendURL.attrib.keys():
+                if 'format' in list(legendURL.attrib.keys()):
                     style['format'] = legendURL.attrib.get('format')
 
             keywords = [f.text for f in s.findall(
