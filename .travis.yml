@@ -24,8 +24,10 @@ install:
 script:
   - python -m pytest
   - flake8 owslib/util.py
-  - flake8 owslib/interfaces.py owslib/crs.py
+  - flake8 owslib/interfaces.py owslib/crs.py owslib/etree.py
   - flake8 owslib/ows.py
+  - flake8 owslib/wmc.py
+  - flake8 owslib/wms.py
   - flake8 owslib/wmts.py
   - flake8 owslib/wps.py
 after_success:
