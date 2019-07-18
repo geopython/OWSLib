@@ -23,9 +23,11 @@ install:
   - if [ "$LXML" == "true" ]; then pip install lxml; fi
 script:
   - python -m pytest
+  - flake8 owslib/iso.py
   - flake8 owslib/util.py
   - flake8 owslib/interfaces.py owslib/crs.py owslib/etree.py
   - flake8 owslib/ows.py
+  - flake8 owslib/sos.py
   - flake8 owslib/tms.py
   - flake8 owslib/wcs.py
   - flake8 owslib/wfs.py
