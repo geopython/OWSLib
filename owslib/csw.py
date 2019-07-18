@@ -520,7 +520,7 @@ class CatalogueServiceWeb(object):
         """
 
         urls=[]
-        for key,rec in self.records.items():
+        for key,rec in list(self.records.items()):
             #create a generator object, and iterate through it until the match is found
             #if not found, gets the default value (here "none")
             url = next((d['url'] for d in rec.references if d['scheme'] == service_string), None)
