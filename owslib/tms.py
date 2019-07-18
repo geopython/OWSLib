@@ -138,7 +138,7 @@ class TileMapService(object):
                 x, y, z, self.contents[id].tilemap.extension, timeout=timeout)
 
         elif title and srs:
-            for tm in self.contents.values():
+            for tm in list(self.contents.values()):
                 if tm.title == title and tm.srs == srs:
                     if mimetype:
                         if tm.tilemap.mimetype == mimetype:
