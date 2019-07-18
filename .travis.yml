@@ -26,6 +26,7 @@ script:
   - flake8 owslib/crs.py
   - flake8 owslib/dif.py
   - flake8 owslib/etree.py
+  - flake8 owslib/fes.py
   - flake8 owslib/fgdc.py
   - flake8 owslib/gm03.py
   - flake8 owslib/interfaces.py
