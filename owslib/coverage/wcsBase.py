@@ -30,9 +30,11 @@ class ServiceException(Exception):
     def __str__(self):
         return repr(self.message)
 
+
 class WCSBase(object):
-    """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
-    def __new__(self,url, xml, cookies, auth=None):
+    """Base class to be subclassed by version dependent WCS classes. Provides 'high-level'
+    version independent methods"""
+    def __new__(self, url, xml, cookies, auth=None):
         """ overridden __new__ method
 
         @type url: string
@@ -42,10 +44,10 @@ class WCSBase(object):
         @param auth: instance of owslib.util.Authentication
         @return: inititalised WCSBase object
         """
-        obj=object.__new__(self)
+        obj = object.__new__(self)
         obj.__init__(url, xml, cookies, auth=auth)
-        self.cookies=cookies
-        self._describeCoverage = {} #cache for DescribeCoverage responses
+        self.cookies = cookies
+        self._describeCoverage = {}  # cache for DescribeCoverage responses
         return obj
 
     def __init__(self, auth=None):
@@ -118,6 +120,7 @@ class WCSCapabilitiesReader(object):
         """
         return etree.fromstring(st)
 
+
 class DescribeCoverageReader(object):
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
@@ -129,7 +132,7 @@ class DescribeCoverageReader(object):
         """
         self.version = version
         self._infoset = None
-        self.identifier=identifier
+        self.identifier = identifier
         self.cookies = cookies
         self.auth = auth or Authentication()
 
@@ -162,8 +165,8 @@ class DescribeCoverageReader(object):
             if 'CoverageID' not in params:
                 qs.append(('CoverageID', self.identifier))
         elif self.version == '1.1.0' or self.version == '1.1.1':
-            #NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
-            #or identifiers (see tables 9, 10 of specification)
+            # NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
+            # or identifiers (see tables 9, 10 of specification)
             if 'identifiers' not in params:
                 qs.append(('identifiers', self.identifier))
             if 'identifier' not in params:
