@@ -1,8 +1,10 @@
 from owslib.waterml.wml import SitesResponse, TimeSeriesResponse, VariablesResponse, namespaces
 from owslib.etree import etree, ElementType
 
+
 def ns(namespace):
     return namespaces.get(namespace)
+
 
 class WaterML_1_0(object):
     def __init__(self, element):
@@ -26,7 +28,7 @@ class WaterML_1_0(object):
                 return TimeSeriesResponse(self._root, self._ns)
             elif self._root.tag == str(ns(self._ns) + 'sitesResponse'):
                 return SitesResponse(self._root, self._ns)
-        except:
+        except Exception:
             raise
 
         raise ValueError('Unable to determine response type from xml')
