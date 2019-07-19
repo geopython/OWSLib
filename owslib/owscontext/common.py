@@ -113,7 +113,7 @@ class TimeIntervalFormat(object):
             else:
                 single_dt = parser.parse(date_str)
                 return TimeIntervalFormat(single_dt)
-        except:
+        except Exception:
             raise ValueError("Error parsing datetime string: %s" % date_str)
 
 

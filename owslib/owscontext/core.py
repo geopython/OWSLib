@@ -141,8 +141,7 @@ class OwcContext(object):
                         [obj.to_dict() for obj in self.spec_reference],
                     "via":
                         [] if len(self.context_metadata) <= 0 else
-                        [obj.to_dict() for obj in self.context_metadata]
-                    },
+                        [obj.to_dict() for obj in self.context_metadata]},
             },
             "features":
                 [] if len(self.resources) <= 0 else
@@ -339,8 +338,7 @@ class OwcResource(object):
                     "via":
                         [] if len(self.resource_metadata) <= 0 else
                         [obj.to_dict() for obj in
-                         self.resource_metadata]
-                    },
+                         self.resource_metadata]},
                 "offerings":
                     [] if len(self.offerings) <= 0 else
                     [obj.to_dict() for obj in self.offerings],
@@ -376,8 +374,7 @@ class OwcResource(object):
             resource_metadata=[OwcLink.from_dict(do) for do in
                                extract_p('properties.links.via', d, [])],
             content_description=[OwcLink.from_dict(do)
-                                 for do in extract_p(
-                    'properties.links.alternates', d, [])],
+                                 for do in extract_p('properties.links.alternates', d, [])],
             preview=[OwcLink.from_dict(do) for do in
                      extract_p('properties.links.previews', d, [])],
             content_by_ref=[OwcLink.from_dict(do) for do in
