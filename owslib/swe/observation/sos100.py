@@ -8,12 +8,16 @@ from owslib.fes import FilterCapabilities
 from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
 from owslib.namespaces import Namespaces
 
+
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["ogc","sa","sml","gml","sos","swe","xlink"])
+    ns = n.get_namespaces(["ogc", "sa", "sml", "gml", "sos", "swe", "xlink"])
     ns["ows"] = n.get_namespace("ows110")
     return ns
+
+
 namespaces = get_namespaces()
+
 
 class SensorObservationService_1_0_0(object):
     """
@@ -24,11 +28,11 @@ class SensorObservationService_1_0_0(object):
 
     def __new__(self, url, version, xml=None, username=None, password=None):
         """overridden __new__ method"""
-        obj=object.__new__(self)
+        obj = object.__new__(self)
         obj.__init__(url, version, xml, username, password)
         return obj
 
-    def __getitem__(self,id):
+    def __getitem__(self, id):
         ''' check contents dictionary to allow dict like access to service observational offerings'''
         if id in list(self.__getattribute__('contents').keys()):
             return self.__getattribute__('contents')[id]
@@ -45,8 +49,8 @@ class SensorObservationService_1_0_0(object):
 
         # Authentication handled by Reader
         reader = SosCapabilitiesReader(
-                version=self.version, url=self.url, username=self.username, password=self.password
-                )
+            version=self.version, url=self.url, username=self.username, password=self.password
+        )
         if xml:  # read from stored xml
             self._capabilities = reader.read_string(xml)
         else:  # read from server
@@ -82,7 +86,7 @@ class SensorObservationService_1_0_0(object):
         self.provider = ows.ServiceProvider(service_provider_element)
 
         # ows:OperationsMetadata metadata
-        self.operations=[]
+        self.operations = []
         for elem in self._capabilities.findall(nspath_eval('ows:OperationsMetadata/ows:Operation', namespaces)):
             self.operations.append(ows.OperationsMetadata(elem))
 
@@ -96,18 +100,16 @@ class SensorObservationService_1_0_0(object):
         # sos:Contents metadata
         self.contents = {}
         self.offerings = []
-        for offering in self._capabilities.findall(nspath_eval('sos:Contents/sos:ObservationOfferingList/sos:ObservationOffering', namespaces)):
+        for offering in self._capabilities.findall(
+                nspath_eval('sos:Contents/sos:ObservationOfferingList/sos:ObservationOffering', namespaces)):
             off = SosObservationOffering(offering)
             self.contents[off.id] = off
             self.offerings.append(off)
 
-    def describe_sensor(self,   outputFormat=None,
-                                procedure=None,
-                                method='Get',
-                                **kwargs):
-
+    def describe_sensor(self, outputFormat=None, procedure=None, method='Get', **kwargs):
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('DescribeSensor').methods if m.get('type').lower() == method.lower()))
+            base_url = next((m.get('url') for m in self.getOperationByName('DescribeSensor').methods
+                            if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
         request = {'service': 'SOS', 'version': self.version, 'request': 'DescribeSensor'}
@@ -121,12 +123,12 @@ class SensorObservationService_1_0_0(object):
 
         url_kwargs = {}
         if 'timeout' in kwargs:
-            url_kwargs['timeout'] = kwargs.pop('timeout') # Client specified timeout value
+            url_kwargs['timeout'] = kwargs.pop('timeout')  # Client specified timeout value
 
         # Optional Fields
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
 
         data = urlencode(request)
 
@@ -139,13 +141,8 @@ class SensorObservationService_1_0_0(object):
 
         return response
 
-    def get_observation(self,   responseFormat=None,
-                                offerings=None,
-                                observedProperties=None,
-                                eventTime=None,
-                                procedure=None,
-                                method='Get',
-                                **kwargs):
+    def get_observation(self, responseFormat=None, offerings=None, observedProperties=None,
+                        eventTime=None, procedure=None, method='Get', **kwargs):
         """
         Parameters
         ----------
@@ -157,7 +154,8 @@ class SensorObservationService_1_0_0(object):
             anything else e.g. vendor specific parameters
         """
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetObservation').methods if m.get('type').lower() == method.lower()))
+            base_url = next((m.get('url') for m in self.getOperationByName('GetObservation').methods
+                            if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
 
@@ -173,21 +171,20 @@ class SensorObservationService_1_0_0(object):
         assert isinstance(responseFormat, str)
         request['responseFormat'] = responseFormat
 
-
         # Optional Fields
         if eventTime is not None:
             request['eventTime'] = eventTime
 
         url_kwargs = {}
         if 'timeout' in kwargs:
-            url_kwargs['timeout'] = kwargs.pop('timeout') # Client specified timeout value
+            url_kwargs['timeout'] = kwargs.pop('timeout')  # Client specified timeout value
 
         if procedure is not None:
             request['procedure'] = procedure
 
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
 
         data = urlencode(request)
 
@@ -232,7 +229,10 @@ class SosObservationOffering(object):
             lower_left_corner = testXMLValue(envelope.find(nspath_eval('gml:lowerCorner', namespaces))).split()
             upper_right_corner = testXMLValue(envelope.find(nspath_eval('gml:upperCorner', namespaces))).split()
             # (left, bottom, right, top) in self.bbox_srs units
-            self.bbox = (float(lower_left_corner[1]), float(lower_left_corner[0]), float(upper_right_corner[1]), float(upper_right_corner[0]))
+            self.bbox = (float(lower_left_corner[1]),
+                         float(lower_left_corner[0]),
+                         float(upper_right_corner[1]),
+                         float(upper_right_corner[0]))
             self.bbox_srs = Crs(testXMLValue(envelope.attrib.get('srsName'), True))
         except Exception:
             self.bbox = None
@@ -313,7 +313,7 @@ class SosCapabilitiesReader(object):
             acceptVersions, and request parameters
         """
         getcaprequest = self.capabilities_url(service_url)
-        spliturl=getcaprequest.split('?')
+        spliturl = getcaprequest.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password)
         return etree.fromstring(u.read())
 

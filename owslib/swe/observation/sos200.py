@@ -16,6 +16,8 @@ def get_namespaces():
     ns["ows"] = n.get_namespace("ows110")
     ns["sos"] = n.get_namespace("sos20")
     return ns
+
+
 namespaces = get_namespaces()
 
 
@@ -49,8 +51,8 @@ class SensorObservationService_2_0_0(object):
 
         # Authentication handled by Reader
         reader = SosCapabilitiesReader(
-                version=self.version, url=self.url, username=self.username, password=self.password
-                )
+            version=self.version, url=self.url, username=self.username, password=self.password
+        )
         if xml:  # read from stored xml
             self._capabilities = reader.read_string(xml)
         else:  # read from server
@@ -101,13 +103,15 @@ class SensorObservationService_2_0_0(object):
         # sos:Contents metadata
         self.contents = {}
         self.offerings = []
-        for offering in self._capabilities.findall(nspath_eval('sos:contents/sos:Contents/swes:offering/sos:ObservationOffering', namespaces)):
+        for offering in self._capabilities.findall(
+                nspath_eval('sos:contents/sos:Contents/swes:offering/sos:ObservationOffering', namespaces)):
             off = SosObservationOffering(offering)
             self.contents[off.id] = off
             self.offerings.append(off)
 
         self.observed_properties = []
-        for op in self._capabilities.findall(nspath_eval('sos:contents/sos:Contents/swes:observableProperty', namespaces)):
+        for op in self._capabilities.findall(
+                nspath_eval('sos:contents/sos:Contents/swes:observableProperty', namespaces)):
             observed_prop = testXMLValue(op)
             self.observed_properties.append(observed_prop)
 
@@ -116,7 +120,8 @@ class SensorObservationService_2_0_0(object):
         method = method or 'Get'
 
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('DescribeSensor').methods if m.get('type').lower() == method.lower()))
+            base_url = next((m.get('url') for m in self.getOperationByName('DescribeSensor').methods
+                            if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
         request = {'service': 'SOS', 'version': self.version, 'request': 'DescribeSensor'}
@@ -137,7 +142,8 @@ class SensorObservationService_2_0_0(object):
             for kw in kwargs:
                 request[kw] = kwargs[kw]
 
-        response = openURL(base_url, request, method, username=self.username, password=self.password, **url_kwargs).read()
+        response = openURL(base_url, request, method,
+                           username=self.username, password=self.password, **url_kwargs).read()
         tr = etree.fromstring(response)
 
         if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
@@ -168,7 +174,7 @@ class SensorObservationService_2_0_0(object):
         # Pluck out the get observation URL for HTTP method - methods is an
         # array of dicts
         methods = self.get_operation_by_name('GetObservation').methods
-        base_url = [ m['url'] for m in methods if m['type'] == method][0]
+        base_url = [m['url'] for m in methods if m['type'] == method][0]
 
         request = {'service': 'SOS', 'version': self.version, 'request': 'GetObservation'}
 
@@ -197,7 +203,8 @@ class SensorObservationService_2_0_0(object):
             for kw in kwargs:
                 request[kw] = kwargs[kw]
 
-        response = openURL(base_url, request, method, username=self.username, password=self.password, **url_kwargs).read()
+        response = openURL(base_url, request, method,
+                           username=self.username, password=self.password, **url_kwargs).read()
         try:
             tr = etree.fromstring(response)
             if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
@@ -235,7 +242,10 @@ class SosObservationOffering(object):
             lower_left_corner = testXMLValue(envelope.find(nspath_eval('gml32:lowerCorner', namespaces))).split()
             upper_right_corner = testXMLValue(envelope.find(nspath_eval('gml32:upperCorner', namespaces))).split()
             # (left, bottom, right, top) in self.bbox_srs units
-            self.bbox = (float(lower_left_corner[1]), float(lower_left_corner[0]), float(upper_right_corner[1]), float(upper_right_corner[0]))
+            self.bbox = (float(lower_left_corner[1]),
+                         float(lower_left_corner[0]),
+                         float(upper_right_corner[1]),
+                         float(upper_right_corner[0]))
             self.bbox_srs = Crs(testXMLValue(envelope.attrib.get('srsName'), True))
         except Exception:
             self.bbox = None
@@ -244,9 +254,11 @@ class SosObservationOffering(object):
         # LOOK: Support all gml:TimeGeometricPrimitivePropertyType
         # Right now we are just supporting gml:TimePeriod
         # sos:Time
-        begin_position_element = self._root.find(nspath_eval('sos:phenomenonTime/gml32:TimePeriod/gml32:beginPosition', namespaces))
+        begin_position_element = self._root.find(
+            nspath_eval('sos:phenomenonTime/gml32:TimePeriod/gml32:beginPosition', namespaces))
         self.begin_position = extract_time(begin_position_element)
-        end_position_element = self._root.find(nspath_eval('sos:phenomenonTime/gml32:TimePeriod/gml32:endPosition', namespaces))
+        end_position_element = self._root.find(
+            nspath_eval('sos:phenomenonTime/gml32:TimePeriod/gml32:endPosition', namespaces))
         self.end_position = extract_time(end_position_element)
 
         self.procedures = []
@@ -375,8 +387,7 @@ class ObservationDecoder(object):
 
         if result_type.find('MeasureType') != -1:
             return MeasurementObservation(element)
-        elif (result_type ==
-                '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries'):
+        elif (result_type == '{http://www.opengis.net/waterml/2.0}MeasurementTimeseries'):
             return MeasurementTimeseriesObservation(element)
         else:
             raise NotImplementedError('Result type {} not supported'.format(result_type))
