@@ -6,26 +6,29 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
-from six import PY2
-from six.moves import cStringIO as StringIO
-
 from owslib import util
 
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
-from owslib.util import testXMLValue, extract_xml_list, ServiceException, xmltag_split, Authentication, openURL, log
+from urllib.parse import urlencode
+from owslib.util import (
+    testXMLValue,
+    extract_xml_list,
+    ServiceException,
+    xmltag_split,
+    Authentication,
+    openURL,
+    log,
+)
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.feature.schema import get_schema
-from owslib.feature.common import WFSCapabilitiesReader, \
-    AbstractContentMetadata
+from owslib.feature.common import (
+    WFSCapabilitiesReader,
+    AbstractContentMetadata,
+    makeStringIO,
+)
 
 import pyproj
 
@@ -34,7 +37,7 @@ WFS_NAMESPACE = n.get_namespace("wfs")
 OGC_NAMESPACE = n.get_namespace("ogc")
 
 
-#TODO: use nspath in util.py
+# TODO: use nspath in util.py
 def nspath(path, ns=WFS_NAMESPACE):
     """
     Prefix the given path with the given namespace identifier.
@@ -49,7 +52,7 @@ def nspath(path, ns=WFS_NAMESPACE):
     """
     components = []
     for component in path.split("/"):
-        if component != '*':
+        if component != "*":
             component = "{%s}%s" % (ns, component)
         components.append(component)
     return "/".join(components)
@@ -60,8 +63,18 @@ class WebFeatureService_1_0_0(object):
 
     Implements IWebFeatureService.
     """
-    def __new__(self,url, version, xml, parse_remote_metadata=False, timeout=30,
-                username=None, password=None, auth=None):
+
+    def __new__(
+        self,
+        url,
+        version,
+        xml,
+        parse_remote_metadata=False,
+        timeout=30,
+        username=None,
+        password=None,
+        auth=None,
+    ):
         """ overridden __new__ method
 
         @type url: string
@@ -76,20 +89,37 @@ class WebFeatureService_1_0_0(object):
         @param auth: instance of owslib.util.Authentication
         @return: initialized WebFeatureService_1_0_0 object
         """
-        obj=object.__new__(self)
-        obj.__init__(url, version, xml, parse_remote_metadata, timeout,
-                     username=username, password=password, auth=auth)
+        obj = object.__new__(self)
+        obj.__init__(
+            url,
+            version,
+            xml,
+            parse_remote_metadata,
+            timeout,
+            username=username,
+            password=password,
+            auth=auth,
+        )
         return obj
 
-    def __getitem__(self,name):
-        ''' check contents dictionary to allow dict like access to service layers'''
-        if name in self.__getattribute__('contents').keys():
-            return self.__getattribute__('contents')[name]
+    def __getitem__(self, name):
+        """ check contents dictionary to allow dict like access to service layers"""
+        if name in list(self.__getattribute__("contents").keys()):
+            return self.__getattribute__("contents")[name]
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self, url, version, xml=None, parse_remote_metadata=False, timeout=30,
-                 username=None, password=None, auth=None):
+    def __init__(
+        self,
+        url,
+        version,
+        xml=None,
+        parse_remote_metadata=False,
+        timeout=30,
+        username=None,
+        password=None,
+        auth=None,
+    ):
         """Initialize."""
         if auth:
             if username:
@@ -108,69 +138,70 @@ class WebFeatureService_1_0_0(object):
             self._capabilities = reader.read(self.url)
         self._buildMetadata(parse_remote_metadata)
 
-
     def _buildMetadata(self, parse_remote_metadata=False):
-        '''set up capabilities metadata objects: '''
+        """set up capabilities metadata objects: """
 
-        self.updateSequence = self._capabilities.attrib.get('updateSequence')
+        self.updateSequence = self._capabilities.attrib.get("updateSequence")
 
-        #serviceIdentification metadata
-        serviceelem=self._capabilities.find(nspath('Service'))
-        self.identification=ServiceIdentification(serviceelem, self.version)
+        # serviceIdentification metadata
+        serviceelem = self._capabilities.find(nspath("Service"))
+        self.identification = ServiceIdentification(serviceelem, self.version)
 
-        #serviceProvider metadata
-        self.provider=ServiceProvider(serviceelem)
+        # serviceProvider metadata
+        self.provider = ServiceProvider(serviceelem)
 
-        #serviceOperations metadata
-        self.operations=[]
-        for elem in self._capabilities.find(nspath('Capability/Request'))[:]:
+        # serviceOperations metadata
+        self.operations = []
+        for elem in self._capabilities.find(nspath("Capability/Request"))[:]:
             self.operations.append(OperationMetadata(elem))
 
-        #serviceContents metadata: our assumption is that services use a top-level
-        #layer as a metadata organizer, nothing more.
+        # serviceContents metadata: our assumption is that services use a top-level
+        # layer as a metadata organizer, nothing more.
 
-        self.contents={}
-        featuretypelist=self._capabilities.find(nspath('FeatureTypeList'))
-        features = self._capabilities.findall(nspath('FeatureTypeList/FeatureType'))
+        self.contents = {}
+        featuretypelist = self._capabilities.find(nspath("FeatureTypeList"))
+        features = self._capabilities.findall(nspath("FeatureTypeList/FeatureType"))
         for feature in features:
             cm = ContentMetadata(
-                feature, featuretypelist, parse_remote_metadata, auth=self.auth)
-            self.contents[cm.id]=cm
+                feature, featuretypelist, parse_remote_metadata, auth=self.auth
+            )
+            self.contents[cm.id] = cm
 
-        #exceptions
-        self.exceptions = [f.text for f \
-                in self._capabilities.findall('Capability/Exception/Format')]
+        # exceptions
+        self.exceptions = [
+            f.text for f in self._capabilities.findall("Capability/Exception/Format")
+        ]
 
     def getcapabilities(self):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version, auth=self.auth)
-        return openURL(reader.capabilities_url(self.url),
-                       timeout=self.timeout, auth=self.auth)
+        return openURL(
+            reader.capabilities_url(self.url), timeout=self.timeout, auth=self.auth
+        )
 
     def items(self):
-        '''supports dict-like items() access'''
-        items=[]
+        """supports dict-like items() access"""
+        items = []
         for item in self.contents:
-            items.append((item,self.contents[item]))
+            items.append((item, self.contents[item]))
         return items
 
-    def _makeStringIO(self, strval):
-        """
-        Helper method to make sure the StringIO being returned will work.
-
-        Differences between Python 2.7/3.x mean we have a lot of cases to handle.
-        """
-        if PY2:
-            return StringIO(strval)
-
-        return StringIO(strval.decode())
-
-    def getfeature(self, typename=None, filter=None, bbox=None, featureid=None,
-                   featureversion=None, propertyname='*', maxfeatures=None,
-                   srsname=None, outputFormat=None, method='{http://www.opengis.net/wfs}Get',
-                   startindex=None):
+    def getfeature(
+        self,
+        typename=None,
+        filter=None,
+        bbox=None,
+        featureid=None,
+        featureversion=None,
+        propertyname="*",
+        maxfeatures=None,
+        srsname=None,
+        outputFormat=None,
+        method="{http://www.opengis.net/wfs}Get",
+        startindex=None,
+    ):
         """Request and return feature data as a file-like object.
 
         Parameters
@@ -206,33 +237,42 @@ class WebFeatureService_1_0_0(object):
         3) featureid (direct access to known features)
         """
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
+            base_url = next(
+                (
+                    m.get("url")
+                    for m in self.getOperationByName("GetFeature").methods
+                    if m.get("type").lower() == method.lower()
+                )
+            )
         except StopIteration:
             base_url = self.url
-        request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
+        request = {"service": "WFS", "version": self.version, "request": "GetFeature"}
 
         # check featureid
         if featureid:
-            request['featureid'] = ','.join(featureid)
+            request["featureid"] = ",".join(featureid)
         elif bbox and typename:
-            request['bbox'] = ','.join([repr(x) for x in bbox])
+            request["bbox"] = ",".join([repr(x) for x in bbox])
         elif filter and typename:
-            request['filter'] = str(filter)
+            request["filter"] = str(filter)
 
         if srsname:
-            request['srsname'] = str(srsname)
+            request["srsname"] = str(srsname)
 
         assert len(typename) > 0
-        request['typename'] = ','.join(typename)
+        request["typename"] = ",".join(typename)
 
         if propertyname is not None:
             if not isinstance(propertyname, list):
                 propertyname = [propertyname]
-            request['propertyname'] = ','.join(propertyname)
+            request["propertyname"] = ",".join(propertyname)
 
-        if featureversion: request['featureversion'] = str(featureversion)
-        if maxfeatures: request['maxfeatures'] = str(maxfeatures)
-        if startindex: request['startindex'] = str(startindex)
+        if featureversion:
+            request["featureversion"] = str(featureversion)
+        if maxfeatures:
+            request["maxfeatures"] = str(maxfeatures)
+        if startindex:
+            request["startindex"] = str(startindex)
 
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
@@ -245,8 +285,8 @@ class WebFeatureService_1_0_0(object):
         # We're going to assume that anything with a content-length > 32k
         # is data. We'll check anything smaller.
 
-        if 'Content-Length' in u.info():
-            length = int(u.info()['Content-Length'])
+        if "Content-Length" in u.info():
+            length = int(u.info()["Content-Length"])
             have_read = False
         else:
             data = u.read()
@@ -261,16 +301,16 @@ class WebFeatureService_1_0_0(object):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return self._makeStringIO(data)
+                return makeStringIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
-                    se = tree.find(nspath('ServiceException', OGC_NAMESPACE))
+                    se = tree.find(nspath("ServiceException", OGC_NAMESPACE))
                     raise ServiceException(str(se.text).strip())
                 else:
-                    return self._makeStringIO(data)
+                    return makeStringIO(data)
         else:
             if have_read:
-                return self._makeStringIO(data)
+                return makeStringIO(data)
             return u
 
     def getOperationByName(self, name):
@@ -289,25 +329,30 @@ class WebFeatureService_1_0_0(object):
 
 
 class ServiceIdentification(object):
-    ''' Implements IServiceIdentificationMetadata '''
+    """ Implements IServiceIdentificationMetadata """
 
     def __init__(self, infoset, version):
-        self._root=infoset
-        self.type = testXMLValue(self._root.find(nspath('Name')))
+        self._root = infoset
+        self.type = testXMLValue(self._root.find(nspath("Name")))
         self.version = version
-        self.title = testXMLValue(self._root.find(nspath('Title')))
-        self.abstract = testXMLValue(self._root.find(nspath('Abstract')))
-        self.keywords = [f.text for f in self._root.findall(nspath('Keywords'))]
-        self.fees = testXMLValue(self._root.find(nspath('Fees')))
-        self.accessconstraints = testXMLValue(self._root.find(nspath('AccessConstraints')))
+        self.title = testXMLValue(self._root.find(nspath("Title")))
+        self.abstract = testXMLValue(self._root.find(nspath("Abstract")))
+        self.keywords = [f.text for f in self._root.findall(nspath("Keywords"))]
+        self.fees = testXMLValue(self._root.find(nspath("Fees")))
+        self.accessconstraints = testXMLValue(
+            self._root.find(nspath("AccessConstraints"))
+        )
+
 
 class ServiceProvider(object):
-    ''' Implements IServiceProviderMetatdata '''
+    """ Implements IServiceProviderMetatdata """
+
     def __init__(self, infoset):
         self._root = infoset
-        self.name = testXMLValue(self._root.find(nspath('Name')))
-        self.url = testXMLValue(self._root.find(nspath('OnlineResource')))
-        self.keywords = extract_xml_list(self._root.find(nspath('Keywords')))
+        self.name = testXMLValue(self._root.find(nspath("Name")))
+        self.url = testXMLValue(self._root.find(nspath("OnlineResource")))
+        self.keywords = extract_xml_list(self._root.find(nspath("Keywords")))
+
 
 class ContentMetadata(AbstractContentMetadata):
     """Abstraction for WFS metadata.
@@ -315,22 +360,29 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parent, parse_remote_metadata=False, timeout=30, auth=None):
+    def __init__(
+        self, elem, parent, parse_remote_metadata=False, timeout=30, auth=None
+    ):
         """."""
         super(ContentMetadata, self).__init__(auth)
-        self.id = testXMLValue(elem.find(nspath('Name')))
-        self.title = testXMLValue(elem.find(nspath('Title')))
-        self.abstract = testXMLValue(elem.find(nspath('Abstract')))
-        self.keywords = [f.text for f in elem.findall(nspath('Keywords'))]
+        self.id = testXMLValue(elem.find(nspath("Name")))
+        self.title = testXMLValue(elem.find(nspath("Title")))
+        self.abstract = testXMLValue(elem.find(nspath("Abstract")))
+        self.keywords = [f.text for f in elem.findall(nspath("Keywords"))]
 
         # bboxes
         self.boundingBox = None
-        b = elem.find(nspath('LatLongBoundingBox'))
-        srs = elem.find(nspath('SRS'))
+        b = elem.find(nspath("LatLongBoundingBox"))
+        srs = elem.find(nspath("SRS"))
 
         if b is not None:
-            self.boundingBox = (float(b.attrib['minx']),float(b.attrib['miny']),
-                    float(b.attrib['maxx']), float(b.attrib['maxy']), Crs(srs.text))
+            self.boundingBox = (
+                float(b.attrib["minx"]),
+                float(b.attrib["miny"]),
+                float(b.attrib["maxx"]),
+                float(b.attrib["maxy"]),
+                Crs(srs.text),
+            )
 
         # transform wgs84 bbox from given default bboxt
         self.boundingBoxWGS84 = None
@@ -339,65 +391,77 @@ class ContentMetadata(AbstractContentMetadata):
             wgs84 = pyproj.Proj(init="epsg:4326")
             try:
                 src_srs = pyproj.Proj(init=srs.text)
-                mincorner = pyproj.transform(src_srs, wgs84, b.attrib['minx'],
-                        b.attrib['miny'])
-                maxcorner = pyproj.transform(src_srs, wgs84, b.attrib['maxx'],
-                        b.attrib['maxy'])
+                mincorner = pyproj.transform(
+                    src_srs, wgs84, b.attrib["minx"], b.attrib["miny"]
+                )
+                maxcorner = pyproj.transform(
+                    src_srs, wgs84, b.attrib["maxx"], b.attrib["maxy"]
+                )
 
-                self.boundingBoxWGS84 = (mincorner[0], mincorner[1],
-                        maxcorner[0], maxcorner[1])
-            except RuntimeError as e:
+                self.boundingBoxWGS84 = (
+                    mincorner[0],
+                    mincorner[1],
+                    maxcorner[0],
+                    maxcorner[1],
+                )
+            except RuntimeError:
                 pass
 
         # crs options
-        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath('SRS'))]
+        self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath("SRS"))]
 
         # verbs
-        self.verbOptions = [op.tag for op \
-            in parent.findall(nspath('Operations/*'))]
-        self.verbOptions + [op.tag for op \
-            in elem.findall(nspath('Operations/*')) \
-            if op.tag not in self.verbOptions]
+        self.verbOptions = [op.tag for op in parent.findall(nspath("Operations/*"))]
+        self.verbOptions + [
+            op.tag
+            for op in elem.findall(nspath("Operations/*"))
+            if op.tag not in self.verbOptions
+        ]
 
-        #others not used but needed for iContentMetadata harmonisation
-        self.styles=None
-        self.timepositions=None
-        self.defaulttimeposition=None
+        # others not used but needed for iContentMetadata harmonisation
+        self.styles = None
+        self.timepositions = None
+        self.defaulttimeposition = None
 
         # MetadataURLs
         self.metadataUrls = []
-        for m in elem.findall(nspath('MetadataURL')):
+        for m in elem.findall(nspath("MetadataURL")):
             metadataUrl = {
-                'type': testXMLValue(m.attrib['type'], attrib=True),
-                'format': testXMLValue(m.attrib['format'], attrib=True),
-                'url': testXMLValue(m)
+                "type": testXMLValue(m.attrib["type"], attrib=True),
+                "format": testXMLValue(m.attrib["format"], attrib=True),
+                "url": testXMLValue(m),
             }
             self.metadataUrls.append(metadataUrl)
 
     def parse_remote_metadata(self, timeout=30):
         """Parse remote metadata for MetadataURL of format 'XML' and add it as metadataUrl['metadata']"""
         for metadataUrl in self.metadataUrls:
-            if metadataUrl['url'] is not None \
-                    and metadataUrl['format'].lower() == 'xml':
+            if (
+                metadataUrl["url"] is not None and metadataUrl["format"].lower() == "xml"
+            ):
                 try:
                     content = openURL(
-                        metadataUrl['url'], timeout=timeout, auth=self.auth)
+                        metadataUrl["url"], timeout=timeout, auth=self.auth
+                    )
                     doc = etree.fromstring(content.read())
-                    if metadataUrl['type'] == 'FGDC':
-                        mdelem = doc.find('.//metadata')
+                    if metadataUrl["type"] == "FGDC":
+                        mdelem = doc.find(".//metadata")
                         if mdelem is not None:
-                            metadataUrl['metadata'] = Metadata(mdelem)
+                            metadataUrl["metadata"] = Metadata(mdelem)
                         else:
-                            metadataUrl['metadata'] = None
-                    elif metadataUrl['type'] == 'TC211':
-                        mdelem = doc.find('.//' + util.nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
-                                 or doc.find('.//' + util.nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                            metadataUrl["metadata"] = None
+                    elif metadataUrl["type"] == "TC211":
+                        mdelem = doc.find(
+                            ".//" + util.nspath_eval("gmd:MD_Metadata", n.get_namespaces(["gmd"]))
+                        ) or doc.find(
+                            ".//" + util.nspath_eval("gmi:MI_Metadata", n.get_namespaces(["gmi"]))
+                        )
                         if mdelem is not None:
-                            metadataUrl['metadata'] = MD_Metadata(mdelem)
+                            metadataUrl["metadata"] = MD_Metadata(mdelem)
                         else:
-                            metadataUrl['metadata'] = None
+                            metadataUrl["metadata"] = None
                 except Exception:
-                    metadataUrl['metadata'] = None
+                    metadataUrl["metadata"] = None
 
 
 class OperationMetadata:
@@ -405,12 +469,13 @@ class OperationMetadata:
 
     Implements IMetadata.
     """
+
     def __init__(self, elem):
         """."""
         self.name = xmltag_split(elem.tag)
         # formatOptions
-        self.formatOptions = [f.tag for f in elem.findall(nspath('ResultFormat/*'))]
+        self.formatOptions = [f.tag for f in elem.findall(nspath("ResultFormat/*"))]
         self.methods = []
-        for verb in elem.findall(nspath('DCPType/HTTP/*')):
-            url = verb.attrib['onlineResource']
-            self.methods.append({'type' : xmltag_split(verb.tag), 'url': url})
+        for verb in elem.findall(nspath("DCPType/HTTP/*")):
+            url = verb.attrib["onlineResource"]
+            self.methods.append({"type": xmltag_split(verb.tag), "url": url})

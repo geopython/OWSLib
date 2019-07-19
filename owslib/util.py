@@ -7,8 +7,6 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
 import os
 import sys
 from collections import OrderedDict
@@ -17,20 +15,15 @@ from datetime import datetime, timedelta
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
-from six.moves.urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
+from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
 import copy
 
-try:
-    from StringIO import StringIO  # Python 2
-    BytesIO = StringIO
-except ImportError:
-    from io import StringIO, BytesIO  # Python 3
+from io import StringIO, BytesIO
 
 import cgi
 import re
 from copy import deepcopy
 import warnings
-import six
 import requests
 import codecs
 
@@ -38,35 +31,45 @@ import codecs
 Utility functions and classes
 """
 
+
 class ServiceException(Exception):
-    #TODO: this should go in ows common module when refactored.
+    # TODO: this should go in ows common module when refactored.
     pass
 
+
 # http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
-dict_union = lambda d1,d2: dict((x,(dict_union(d1.get(x,{}),d2[x]) if
-  isinstance(d2.get(x),dict) else d2.get(x,d1.get(x)))) for x in
-  set(list(d1.keys())+list(d2.keys())))
+def dict_union(d1, d2):
+    return dict((x, (dict_union(d1.get(x, {}), d2[x]) if isinstance(d2.get(x), dict) else d2.get(x, d1.get(x))))
+                for x in set(list(d1.keys()) + list(d2.keys())))
 
 
 # Infinite DateTimes for Python.  Used in SWE 2.0 and other OGC specs as "INF" and "-INF"
 class InfiniteDateTime(object):
     def __lt__(self, other):
         return False
+
     def __gt__(self, other):
         return True
+
     def timetuple(self):
         return tuple()
+
+
 class NegativeInfiniteDateTime(object):
     def __lt__(self, other):
         return True
+
     def __gt__(self, other):
         return False
+
     def timetuple(self):
         return tuple()
 
 
 first_cap_re = re.compile('(.)([A-Z][a-z]+)')
 all_cap_re = re.compile('([a-z0-9])([A-Z])')
+
+
 def format_string(prop_string):
     """
         Formats a property string to remove spaces and go from CamelCase to pep8
@@ -75,13 +78,15 @@ def format_string(prop_string):
     if prop_string is None:
         return ''
     st_r = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', prop_string)
-    st_r = st_r.replace(' ','')
+    st_r = st_r.replace(' ', '')
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', st_r).lower()
+
 
 def xml_to_dict(root, prefix=None, depth=1, diction=None):
     """
-        Recursively iterates through an xml element to convert each element in the tree to a (key,val). Where key is the element
-        tag and val is the inner-text of the element. Note that this recursively go through the tree until the depth specified.
+        Recursively iterates through an xml element to convert each element in the tree to a (key,val).
+        Where key is the element tag and val is the inner-text of the element.
+        Note that this recursively go through the tree until the depth specified.
 
         Parameters
         ===========
@@ -102,7 +107,7 @@ def xml_to_dict(root, prefix=None, depth=1, diction=None):
         # skip values that are empty or None
         if val is None or val == '':
             if depth > 1:
-                ret = xml_to_dict(child,prefix=prefix,depth=(depth-1),diction=ret)
+                ret = xml_to_dict(child, prefix=prefix, depth=(depth - 1), diction=ret)
             continue
 
         key = format_string(child.tag.split('}')[-1])
@@ -112,9 +117,10 @@ def xml_to_dict(root, prefix=None, depth=1, diction=None):
 
         ret[key] = val
         if depth > 1:
-            ret = xml_to_dict(child,prefix=prefix,depth=(depth-1),diction=ret)
+            ret = xml_to_dict(child, prefix=prefix, depth=(depth - 1), diction=ret)
 
     return ret
+
 
 class ResponseWrapper(object):
     """
@@ -135,6 +141,7 @@ class ResponseWrapper(object):
         return self._response.url.replace('&&', '&')
 
     # @TODO: __getattribute__ for poking at response
+
 
 def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None,
             verify=True, cert=None, auth=None):
@@ -204,8 +211,9 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
         req.raise_for_status()
 
     # check for service exceptions without the http header set
-    if 'Content-Type' in req.headers and req.headers['Content-Type'] in ['text/xml', 'application/xml', 'application/vnd.ogc.se_xml']:
-        #just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
+    if 'Content-Type' in req.headers and \
+            req.headers['Content-Type'] in ['text/xml', 'application/xml', 'application/vnd.ogc.se_xml']:
+        # just in case 400 headers were not set, going to have to read the xml to see if it's an exception report.
         se_tree = etree.fromstring(req.content)
 
         # to handle the variety of namespaces and terms across services
@@ -221,12 +229,15 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
             serviceException = se_tree.find(possible_error)
             if serviceException is not None:
                 # and we need to deal with some message nesting
-                raise ServiceException('\n'.join([encode_string(t).strip() for t in serviceException.itertext() if encode_string(t).strip()]))
+                raise ServiceException('\n'.join([t.strip() for t in serviceException.itertext() if t.strip()]))
 
     return ResponseWrapper(req)
 
-#default namespace for nspath is OWS common
+
+# default namespace for nspath is OWS common
 OWS_NAMESPACE = 'http://www.opengis.net/ows/1.1'
+
+
 def nspath(path, ns=OWS_NAMESPACE):
 
     """
@@ -251,6 +262,7 @@ def nspath(path, ns=OWS_NAMESPACE):
         components.append(component)
     return '/'.join(components)
 
+
 def nspath_eval(xpath, namespaces):
     ''' Return an etree friendly xpath '''
     out = []
@@ -258,6 +270,7 @@ def nspath_eval(xpath, namespaces):
         namespace, element = chunks.split(':')
         out.append('{%s}%s' % (namespaces[namespace], element))
     return '/'.join(out)
+
 
 def cleanup_namespaces(element):
     """ Remove unused namespaces from an element """
@@ -269,7 +282,7 @@ def cleanup_namespaces(element):
 
 
 def add_namespaces(root, ns_keys):
-    if isinstance(ns_keys, six.string_types):
+    if isinstance(ns_keys, str):
         ns_keys = [ns_keys]
 
     namespaces = Namespaces()
@@ -349,6 +362,7 @@ def testXMLValue(val, attrib=False):
     else:
         return None
 
+
 def testXMLAttribute(element, attribute):
     """
 
@@ -365,6 +379,7 @@ def testXMLAttribute(element, attribute):
         return element.get(attribute)
 
     return None
+
 
 def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, password=None, auth=None):
     """
@@ -387,12 +402,12 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     u = urlsplit(url)
 
     headers = {
-        'User-Agent'      : 'OWSLib (https://geopython.github.io/OWSLib)',
-        'Content-type'    : 'text/xml',
-        'Accept'          : 'text/xml',
-        'Accept-Language' : lang,
-        'Accept-Encoding' : 'gzip,deflate',
-        'Host'            : u.netloc,
+        'User-Agent': 'OWSLib (https://geopython.github.io/OWSLib)',
+        'Content-type': 'text/xml',
+        'Accept': 'text/xml',
+        'Accept-Language': lang,
+        'Accept-Encoding': 'gzip,deflate',
+        'Host': u.netloc,
     }
 
     rkwargs = {}
@@ -411,6 +426,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
 
     up = requests.post(url, request, headers=headers, **rkwargs)
     return up.content
+
 
 def http_get(*args, **kwargs):
     # Copy input kwargs so the dict can be modified
@@ -443,6 +459,7 @@ def http_get(*args, **kwargs):
     rkwargs.setdefault('verify', rkwargs.get('verify', True))
     return requests.get(*args, **rkwargs)
 
+
 def element_to_string(element, encoding=None, xml_declaration=False):
     """
     Returns a string from a XML object
@@ -463,16 +480,16 @@ def element_to_string(element, encoding=None, xml_declaration=False):
     if etree.__name__ == 'lxml.etree':
         if xml_declaration:
             if encoding in ['unicode', 'utf-8']:
-                output = '<?xml version="1.0" encoding="utf-8" standalone="no"?>\n%s' % \
-                       etree.tostring(element, encoding='unicode')
+                output = '<?xml version="1.0" encoding="utf-8" standalone="no"?>\n{}'.format(
+                    etree.tostring(element, encoding='unicode'))
             else:
                 output = etree.tostring(element, encoding=encoding, xml_declaration=True)
         else:
-                output = etree.tostring(element)
+            output = etree.tostring(element)
     else:
         if xml_declaration:
-            output = '<?xml version="1.0" encoding="%s" standalone="no"?>\n%s' % (encoding,
-                   etree.tostring(element, encoding=encoding))
+            output = '<?xml version="1.0" encoding="{}" standalone="no"?>\n{}'.format(
+                encoding, etree.tostring(element, encoding=encoding))
         else:
             output = etree.tostring(element)
 
@@ -494,6 +511,7 @@ def xml2string(xml):
                    The 'xml2string' method will be removed in a future version of OWSLib.")
     return '<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>\n' + xml
 
+
 def xmlvalid(xml, xsd):
     """
 
@@ -513,16 +531,18 @@ def xmlvalid(xml, xsd):
     doc = etree.parse(StringIO(xml))
     return xsd2.validate(doc)
 
+
 def xmltag_split(tag):
     ''' Return XML element bare tag name (without prefix) '''
     try:
         return tag.split('}')[1]
-    except:
+    except Exception:
         return tag
+
 
 def getNamespace(element):
     ''' Utility method to extract the namespace from an XML element tag encoded as {namespace}localname. '''
-    if element.tag[0]=='{':
+    if element.tag[0] == '{':
         return element.tag[1:].split("}")[0]
     else:
         return ""
@@ -541,7 +561,7 @@ def build_get_url(base_url, params, overwrite=False):
         qs_base = cgi.parse_qsl(base_url.split('?')[1])
 
     qs_params = []
-    for key, value in six.iteritems(params):
+    for key, value in list(params.items()):
         qs_params.append((key, value))
 
     qs = qs_add = []
@@ -567,7 +587,8 @@ def build_get_url(base_url, params, overwrite=False):
 def dump(obj, prefix=''):
     '''Utility function to print to standard output a generic object with all its attributes.'''
 
-    print("%s %s.%s : %s" % (prefix, obj.__module__, obj.__class__.__name__, obj.__dict__))
+    print(("{} {}.{} : {}".format(prefix, obj.__module__, obj.__class__.__name__, obj.__dict__)))
+
 
 def getTypedValue(data_type, value):
     '''Utility function to cast a string value to the appropriate XSD type. '''
@@ -581,7 +602,7 @@ def getTypedValue(data_type, value):
     elif data_type == 'string':
         return str(value)
     else:
-        return value # no type casting
+        return value  # no type casting
 
 
 def extract_time(element):
@@ -617,7 +638,7 @@ def extract_xml_list(elements):
 Some people don't have seperate tags for their keywords and seperate them with
 a newline. This will extract out all of the keywords correctly.
 """
-    keywords = (re.split(r'[\n\r]+',f.text) for f in elements if f.text)
+    keywords = (re.split(r'[\n\r]+', f.text) for f in elements if f.text)
     flattened = (item.strip() for sublist in keywords for item in sublist)
     remove_blank = [_f for _f in flattened if _f]
     return remove_blank
@@ -642,7 +663,7 @@ def strip_bom(raw_text):
         codecs.BOM_UTF32_BE
     ]
 
-    if isinstance(raw_text, six.binary_type):
+    if isinstance(raw_text, bytes):
         for bom in boms:
             if raw_text.startswith(bom):
                 return raw_text[len(bom):]
@@ -665,7 +686,7 @@ def clean_ows_url(url):
     parsed = urlparse(url)
     qd = parse_qs(parsed.query, keep_blank_values=True)
 
-    for key, value in qd.items():
+    for key, value in list(qd.items()):
         if key.lower() not in basic_service_elements:
             filtered_kvp[key] = value
 
@@ -683,36 +704,32 @@ def clean_ows_url(url):
 
 def bind_url(url):
     """binds an HTTP GET query string endpiont"""
-    if url.find('?') == -1: # like http://host/wms
+    if url.find('?') == -1:  # like http://host/wms
         binder = '?'
 
     # if like http://host/wms?foo=bar& or http://host/wms?foo=bar
     if url.find('=') != -1:
-        if url.find('&', -1) != -1: # like http://host/wms?foo=bar&
+        if url.find('&', -1) != -1:  # like http://host/wms?foo=bar&
             binder = ''
-        else: # like http://host/wms?foo=bar
+        else:  # like http://host/wms?foo=bar
             binder = '&'
 
     # if like http://host/wms?foo
     if url.find('?') != -1:
-        if url.find('?', -1) != -1: # like http://host/wms?
+        if url.find('?', -1) != -1:  # like http://host/wms?
             binder = ''
-        elif url.find('&', -1) == -1: # like http://host/wms?foo=bar
+        elif url.find('&', -1) == -1:  # like http://host/wms?foo=bar
             binder = '&'
     return '%s%s' % (url, binder)
 
+
 import logging
 # Null logging handler
-try:
-    # Python 2.7
-    NullHandler = logging.NullHandler
-except AttributeError:
-    # Python < 2.7
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
+NullHandler = logging.NullHandler
+
 log = logging.getLogger('owslib')
 log.addHandler(NullHandler())
+
 
 def which_etree():
     """decipher which etree library is being used by OWSLib"""
@@ -727,6 +744,7 @@ def which_etree():
         which_etree = 'elementtree.ElementTree'
 
     return which_etree
+
 
 def findall(root, xpath, attribute_name=None, attribute_value=None):
     """Find elements recursively from given root element based on
@@ -754,35 +772,23 @@ def datetime_from_iso(iso):
     """returns a datetime object from dates in the format 2001-07-01T00:00:00Z or 2001-07-01T00:00:00.000Z """
     try:
         iso_datetime = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ")
-    except:
+    except Exception:
         iso_datetime = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%S.%fZ")
     return iso_datetime
 
-def datetime_from_ansi(ansi):
-    """Converts an ansiDate (expressed as a number = the nuber of days since the datum origin of ansi) to a python datetime object."""
 
-    datumOrigin = datetime(1600,12,31,0,0,0)
+def datetime_from_ansi(ansi):
+    """Converts an ansiDate (expressed as a number = the nuber of days since the datum origin of ansi)
+    to a python datetime object.
+    """
+
+    datumOrigin = datetime(1600, 12, 31, 0, 0, 0)
 
     return datumOrigin + timedelta(ansi)
 
+
 def is_vector_grid(grid_elem):
     pass
-
-
-def encode_string(text):
-    """
-    On Python 3 this method does nothing and returns the ``text`` string itself.
-    On Python 2 this method returns the ``text`` string encoded with UTF-8.
-
-    See:
-    * https://pythonhosted.org/six/#six.python_2_unicode_compatible
-    * https://www.azavea.com/blog/2014/03/24/solving-unicode-problems-in-python-2-7/
-    """
-    if six.PY3:
-        return text
-    if isinstance(text, str):
-        return text.decode('utf-8').encode('utf-8', 'ignore')
-    return text.encode('utf-8', 'ignore')
 
 
 class Authentication(object):

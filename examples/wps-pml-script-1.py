@@ -1,7 +1,5 @@
 # Example script that performs a set of (small) live requests versus the live PML WPS service
 
-from __future__ import absolute_import
-from __future__ import print_function
 from owslib.wps import WebProcessingService, monitorExecution
 
 # instantiate WPS client

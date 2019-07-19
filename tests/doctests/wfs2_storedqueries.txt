@@ -1,4 +1,3 @@
->>> from __future__ import (absolute_import, division, print_function)
 >>> from owslib.wfs import WebFeatureService
 
 >>> wfs = WebFeatureService(url='http://geoserv.weichand.de/cgi-bin/test-mapserver7.cgi', version='2.0.0', timeout=30)

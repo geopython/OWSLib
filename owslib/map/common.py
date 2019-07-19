@@ -1,14 +1,8 @@
-from __future__ import (absolute_import, division, print_function)
-
 import cgi
-try:                    # Python 3
-    from urllib.parse import urlencode
-except ImportError:     # Python 2
-    from urllib import urlencode
+from urllib.parse import urlencode
 
 from owslib.etree import etree
 from owslib.util import strip_bom, Authentication, openURL
-
 
 
 class WMSCapabilitiesReader(object):
@@ -29,15 +23,15 @@ class WMSCapabilitiesReader(object):
         self.request = None
         self.auth = auth or Authentication(un, pw)
 
-        #if self.username and self.password:
-            ## Provide login information in order to use the WMS server
-            ## Create an OpenerDirector with support for Basic HTTP 
-            ## Authentication...
-            #passman = HTTPPasswordMgrWithDefaultRealm()
-            #passman.add_password(None, self.url, self.username, self.password)
-            #auth_handler = HTTPBasicAuthHandler(passman)
-            #opener = build_opener(auth_handler)
-            #self._open = opener.open
+        # if self.username and self.password:
+        #     # Provide login information in order to use the WMS server
+        #     # Create an OpenerDirector with support for Basic HTTP
+        #     # Authentication...
+        #     passman = HTTPPasswordMgrWithDefaultRealm()
+        #     passman.add_password(None, self.url, self.username, self.password)
+        #     auth_handler = HTTPBasicAuthHandler(passman)
+        #     opener = build_opener(auth_handler)
+        #     self._open = opener.open
 
     def capabilities_url(self, service_url):
         """Return a capabilities url
@@ -87,9 +81,9 @@ class WMSCapabilitiesReader(object):
 
 
 class AbstractContentMetadata(object):
-    
+
     def __init__(self, auth=None):
         self.auth = auth or Authentication()
-    
+
     def get_metadata(self):
         return [m['metadata'] for m in self.metadataUrls if m.get('metadata', None) is not None]

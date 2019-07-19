@@ -13,15 +13,9 @@
 API For Web Map Service version 1.3.0.
 """
 
-from __future__ import (absolute_import, division, print_function)
-
-try:                    # Python 3
-    from urllib.parse import urlencode
-except ImportError:     # Python 2
-    from urllib import urlencode
+from urllib.parse import urlencode
 
 import warnings
-import six
 from owslib.etree import etree
 from owslib.util import (openURL, ServiceException, testXMLValue,
                          extract_xml_list, xmltag_split, OrderedDict, nspath,
@@ -115,7 +109,7 @@ class WebMapService_1_3_0(object):
         def gather_layers(parent_elem, parent_metadata):
             layers = []
             for index, elem in enumerate(parent_elem.findall(nspath('Layer', WMS_NAMESPACE))):
-                cm = ContentMetadata(elem, parent=parent_metadata, index=index+1,
+                cm = ContentMetadata(elem, parent=parent_metadata, index=index + 1,
                                      parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
@@ -152,9 +146,9 @@ class WebMapService_1_3_0(object):
         raise KeyError("No operation named %s" % name)
 
     def __build_getmap_request(self, layers=None, styles=None, srs=None, bbox=None,
-               format=None, size=None, time=None, dimensions={},
-               elevation=None, transparent=False,
-               bgcolor=None, exceptions=None, **kwargs):
+                               format=None, size=None, time=None, dimensions={},
+                               elevation=None, transparent=False,
+                               bgcolor=None, exceptions=None, **kwargs):
 
         request = {'service': 'WMS', 'version': self.version, 'request': 'GetMap'}
 
@@ -196,12 +190,12 @@ class WebMapService_1_3_0(object):
             request['elevation'] = str(elevation)
 
         # any other specified dimension, prefixed with "dim_"
-        for k, v in six.iteritems(dimensions):
+        for k, v in list(dimensions.items()):
             request['dim_' + k] = str(v)
 
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
         return request
 
     def getmap(self, layers=None,
@@ -309,14 +303,14 @@ class WebMapService_1_3_0(object):
 
         # need to handle casing in the header keys
         headers = {}
-        for k, v in six.iteritems(u.info()):
+        for k, v in list(u.info().items()):
             headers[k.lower()] = v
 
         # handle the potential charset def
         if headers.get('content-type', '').split(';')[0] in ['application/vnd.ogc.se_xml', 'text/xml']:
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find(nspath('ServiceException', OGC_NAMESPACE)).text).strip()
+            err_message = str(se_tree.find(nspath('ServiceException', OGC_NAMESPACE)).text).strip()
             raise ServiceException(err_message)
         return u
 
@@ -341,7 +335,8 @@ class WebMapService_1_3_0(object):
                        **kwargs
                        ):
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods if m.get('type').lower() == method.lower()))
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods
+                            if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
 
@@ -376,7 +371,7 @@ class WebMapService_1_3_0(object):
         request['feature_count'] = str(feature_count)
 
         data = urlencode(request)
- 
+
         self.request = bind_url(base_url) + data
 
         u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
@@ -385,9 +380,10 @@ class WebMapService_1_3_0(object):
         if u.info()['Content-Type'] == 'XML':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find('ServiceException').text).strip()
+            err_message = str(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message)
         return u
+
 
 class ServiceIdentification(object):
     def __init__(self, infoset, version):
@@ -428,7 +424,7 @@ class ContentMetadata(AbstractContentMetadata):
     def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False,
                  timeout=30, auth=None):
         super(ContentMetadata, self).__init__(auth)
-        
+
         if xmltag_split(elem.tag) != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
 
@@ -459,8 +455,10 @@ class ContentMetadata(AbstractContentMetadata):
         self.abstract = testXMLValue(elem.find(nspath('Abstract', WMS_NAMESPACE)))
 
         # TODO: what is the preferred response to esri's handling of custom projections
-        #       in the spatial ref definitions? see http://resources.arcgis.com/en/help/main/10.1/index.html#//00sq000000m1000000
-        #       and an example (20150812) http://maps.ngdc.noaa.gov/arcgis/services/firedetects/MapServer/WMSServer?request=GetCapabilities&service=WMS
+        # in the spatial ref definitions? see
+        # http://resources.arcgis.com/en/help/main/10.1/index.html#//00sq000000m1000000
+        # and an example (20150812)
+        # http://maps.ngdc.noaa.gov/arcgis/services/firedetects/MapServer/WMSServer?request=GetCapabilities&service=WMS
 
         # bboxes
         b = elem.find(nspath('EX_GeographicBoundingBox', WMS_NAMESPACE))
@@ -527,7 +525,8 @@ class ContentMetadata(AbstractContentMetadata):
                 self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
             if logo is not None:
                 self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
-                self.attribution['logo_url'] = logo.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
+                self.attribution['logo_url'] = logo.find(
+                    nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
 
         # TODO: get this from the bbox attributes instead (deal with parents)
         # SRS options
@@ -542,7 +541,7 @@ class ContentMetadata(AbstractContentMetadata):
             # some servers found in the wild use a single SRS
             # tag containing a whitespace separated list of SRIDs
             # instead of several SRS tags. hence the inner loop
-            for srslist in map(lambda x: x.text, elem.findall(nspath('CRS', WMS_NAMESPACE))):
+            for srslist in [x.text for x in elem.findall(nspath('CRS', WMS_NAMESPACE))]:
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
@@ -554,7 +553,8 @@ class ContentMetadata(AbstractContentMetadata):
         if len(self.crsOptions) == 0:
             # raise ValueError('%s no SRS available!?' % (elem,))
             # Comment by D Lowe.
-            # Do not raise ValueError as it is possible that a layer is purely a parent layer and does not have SRS specified. Instead set crsOptions to None
+            # Do not raise ValueError as it is possible that a layer is purely a parent layer and
+            # does not have SRS specified. Instead set crsOptions to None
             # Comment by Jachym:
             # Do not set it to None, but to [], which will make the code
             # work further. Fixed by anthonybaxter
@@ -581,9 +581,9 @@ class ContentMetadata(AbstractContentMetadata):
 
             lgd = s.find(nspath('LegendURL', WMS_NAMESPACE))
             if lgd is not None:
-                if 'width' in lgd.attrib.keys():
+                if 'width' in list(lgd.attrib.keys()):
                     style['legend_width'] = lgd.attrib.get('width')
-                if 'height' in lgd.attrib.keys():
+                if 'height' in list(lgd.attrib.keys()):
                     style['legend_height'] = lgd.attrib.get('height')
 
                 lgd_format = lgd.find(nspath('Format', WMS_NAMESPACE))
@@ -626,7 +626,7 @@ class ContentMetadata(AbstractContentMetadata):
         for dim in elem.findall(nspath('Dimension', WMS_NAMESPACE)):
             dim_name = dim.attrib.get('name')
             dim_data = {}
-            for k, v in six.iteritems(dim.attrib):
+            for k, v in list(dim.attrib.items()):
                 if k != 'name':
                     dim_data[k] = v
             # single values and ranges are not differentiated here
@@ -639,7 +639,8 @@ class ContentMetadata(AbstractContentMetadata):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
                 'format': testXMLValue(m.find(nspath('Format', WMS_NAMESPACE))),
-                'url': testXMLValue(m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
+                'url': testXMLValue(m.find(
+                    nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
             self.metadataUrls.append(metadataUrl)
 
@@ -684,7 +685,7 @@ class ContentMetadata(AbstractContentMetadata):
                         continue
 
                     mdelem = doc.find('.//' + nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
-                             or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                        or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
                     if mdelem is not None:
                         metadataUrl['metadata'] = MD_Metadata(mdelem)
                         continue
@@ -704,6 +705,7 @@ class ContentMetadata(AbstractContentMetadata):
 
     def __str__(self):
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
+
 
 class OperationMetadata(object):
     def __init__(self, elem):

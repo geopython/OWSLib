@@ -29,18 +29,10 @@ would be appreciated.
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from random import randint
 import warnings
-import six
-from six.moves import filter
-try:                    # Python 3
-    from urllib.parse import (urlencode, urlparse, urlunparse, parse_qs,
-                              ParseResult)
-except ImportError:      # Python 2
-    from urllib import urlencode
-    from urlparse import urlparse, urlunparse, parse_qs, ParseResult
+from urllib.parse import (urlencode, urlparse, urlunparse, parse_qs,
+                          ParseResult)
 from .etree import etree
 from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication, openURL
 from .fgdc import Metadata
@@ -342,7 +334,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         request.append(('TILECOL', str(column)))
         request.append(('FORMAT', format))
 
-        for key, value in six.iteritems(kwargs):
+        for key, value in list(kwargs.items()):
             request.append((key, value))
 
         data = urlencode(request, True)
@@ -488,7 +480,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
             se_xml = u.read()
             se_tree = etree.fromstring(se_xml)
-            err_message = six.text_type(se_tree.find('ServiceException').text)
+            err_message = str(se_tree.find('ServiceException').text)
             raise ServiceException(err_message.strip(), se_xml)
         return u
 
@@ -753,11 +745,11 @@ class ContentMetadata:
             legendURL = s.find(_STYLE_LEGEND_URL)
             if legendURL is not None:
                 style['legend'] = legendURL.attrib[_HREF_TAG]
-                if 'width' in legendURL.attrib.keys():
+                if 'width' in list(legendURL.attrib.keys()):
                     style['width'] = legendURL.attrib.get('width')
-                if 'height' in legendURL.attrib.keys():
+                if 'height' in list(legendURL.attrib.keys()):
                     style['height'] = legendURL.attrib.get('height')
-                if 'format' in legendURL.attrib.keys():
+                if 'format' in list(legendURL.attrib.keys()):
                     style['format'] = legendURL.attrib.get('format')
 
             keywords = [f.text for f in s.findall(

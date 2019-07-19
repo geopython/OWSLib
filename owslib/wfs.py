@@ -13,8 +13,6 @@
 Web Feature Server (WFS) methods and metadata. Factory function.
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from .feature import wfs100, wfs110, wfs200, wfs300
 from .util import clean_ows_url, Authentication
 

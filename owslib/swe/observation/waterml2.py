@@ -18,6 +18,8 @@ def get_namespaces():
     ns = Namespaces()
     return ns.get_namespaces(["swe20", "xlink", "sos20", "om20", "gml32",
                               "xsi", "wml2"])
+
+
 namespaces = get_namespaces()
 
 
@@ -36,8 +38,7 @@ class MeasurementTimeseriesObservation(OM_Observation):
     def _parse_result(self):
         ''' Parse the result element of the observation type '''
         if self.result is not None:
-            result = self.result.find(nspv(
-                     "wml2:MeasurementTimeseries"))
+            result = self.result.find(nspv("wml2:MeasurementTimeseries"))
             self.result = MeasurementTimeseries(result)
 
     def get_result(self):
@@ -87,14 +88,14 @@ class TimeValuePair(object):
             element.find(nspv("wml2:MeasurementTVP/wml2:time")))
         try:
             self.datetime = parser.parse(date_str)
-        except:
+        except Exception:
             raise ValueError("Error parsing datetime string: %s" % date_str)
 
         value_str = testXMLValue(element.find(nspv(
             "wml2:MeasurementTVP/wml2:value")))
         try:
             self.value = float(value_str)
-        except:
+        except Exception:
             self.value = float('nan')
 
     def __str__(self):

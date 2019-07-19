@@ -1,7 +1,5 @@
 # Example script that performs a set of (small) live requests versus the live CEDA WPS service
 
-from __future__ import absolute_import
-from __future__ import print_function
 from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution, ComplexData, printInputOutput
 from owslib.util import dump
 

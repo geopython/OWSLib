@@ -76,8 +76,9 @@ def test_wms_capabilities():
                  'visual_bright': {'title': 'Real-color image (Uses the visual bands, 321 mapping), gamma 1.5'}}
 
     # Expecting a KeyError for invalid names
-    with pytest.raises(KeyError, message="Expecting a KeyError for invalid names"):
+    with pytest.raises(KeyError):
         wms['utterly bogus'].title
+        pytest.fail("Expecting a KeyError for invalid names")
 
     # Test operations
     assert sorted([op.name for op in wms.operations]) == ['GetCapabilities', 'GetMap', 'GetTileService']

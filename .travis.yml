@@ -1,6 +1,5 @@
 language: python
 python:
-  - "2.7"
   - "3.5"
   - "3.6"
 # Enable 3.7 without globally enabling sudo and dist: xenial for other build jobs
@@ -24,8 +23,7 @@ install:
   - if [ "$LXML" == "true" ]; then pip install lxml; fi
 script:
   - python -m pytest
-  - flake8 owslib/wmts.py
-  - flake8 owslib/wps.py
+  - flake8 owslib
 after_success:
   - coveralls
 notifications:

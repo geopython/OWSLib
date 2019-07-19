@@ -106,8 +106,6 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 * The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
@@ -116,12 +114,8 @@ from owslib.util import (testXMLValue, testXMLAttribute, build_get_url, clean_ow
                          getNamespace, element_to_string, nspath, openURL, nspath_eval, log, Authentication)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
-try:                    # Python 3
-    from urllib.parse import urlparse
-except ImportError:     # Python 2
-    from urlparse import urlparse
+from urllib.parse import urlparse
 
-import six
 # namespace definition
 n = Namespaces()
 
@@ -171,15 +165,7 @@ def is_literaldata(val):
     """
     Checks if the provided value is a string (includes unicode).
     """
-    is_str = isinstance(val, str)
-    if not is_str:
-        # on python 2.x we need to check unicode
-        try:
-            is_str = isinstance(val, unicode)  # noqa: F821
-        except Exception:
-            # unicode is not available on python 3.x
-            is_str = False
-    return is_str
+    return isinstance(val, str)
 
 
 def is_boundingboxdata(val):
@@ -1301,7 +1287,7 @@ class Output(InputOutput):
             xlinkns = get_namespaces()['xlink']
             xlink_href = '{{{}}}href'.format(xlinkns)
 
-            if xlink_href in referenceElement.keys():
+            if xlink_href in list(referenceElement.keys()):
                 self.reference = referenceElement.get(xlink_href)
             else:
                 self.reference = referenceElement.get('href')
@@ -1909,24 +1895,24 @@ def printInputOutput(value, indent=''):
     '''
 
     # InputOutput fields
-    print('%s identifier=%s, title=%s, abstract=%s, data type=%s' %
-          (indent, value.identifier, value.title, value.abstract, value.dataType))
+    print(('{} identifier={}, title={}, abstract={}, data type={}'.format(
+          indent, value.identifier, value.title, value.abstract, value.dataType)))
     for val in value.allowedValues:
-        print('%s Allowed Value: %s' % (indent, printValue(val)))
+        print(('{} Allowed Value: {}'.format(indent, printValue(val))))
     if value.anyValue:
         print(' Any value allowed')
     for val in value.supportedValues:
-        print('%s Supported Value: %s' % (indent, printValue(val)))
-    print('%s Default Value: %s ' % (indent, printValue(value.defaultValue)))
+        print(('{} Supported Value: {}'.format(indent, printValue(val))))
+    print(('{} Default Value: {} '.format(indent, printValue(value.defaultValue))))
 
     # Input fields
     if isinstance(value, Input):
-        print('%s minOccurs=%d, maxOccurs=%d' %
-              (indent, value.minOccurs, value.maxOccurs))
+        print(('{} minOccurs={}, maxOccurs={}'.format(
+              indent, value.minOccurs, value.maxOccurs)))
 
     # Output fields
     if isinstance(value, Output):
-        print('%s reference=%s, mimeType=%s' %
-              (indent, value.reference, value.mimeType))
+        print(('{} reference={}, mimeType={}'.format(
+              indent, value.reference, value.mimeType)))
         for datum in value.data:
-            print('%s Data Value: %s' % (indent, printValue(datum)))
+            print(('{} Data Value: {}'.format(indent, printValue(datum))))

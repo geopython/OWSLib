@@ -1,6 +1,5 @@
 Imports
 
-    >>> from __future__ import (absolute_import, division, print_function)
     >>> from tests.utils import resource_file
     >>> from owslib.swe.sensor.sml import SensorML
     >>> from dateutil import parser

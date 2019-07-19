@@ -10,8 +10,6 @@
 
 # simple process to harvest CSW catalogues via Harvest operations
 
-from __future__ import absolute_import
-from __future__ import print_function
 import sys
 from owslib.csw import CatalogueServiceWeb
 

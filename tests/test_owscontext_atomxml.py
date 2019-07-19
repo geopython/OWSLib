@@ -8,8 +8,6 @@
 initial test setup for Ows Context
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import os
 
 from owslib.owscontext.atom import decode_atomxml

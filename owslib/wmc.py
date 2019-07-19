@@ -16,18 +16,18 @@ https://portal.opengeospatial.org/files/?artifact_id=8618
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from .etree import etree
 
 
 context_ns_uri = 'http://www.opengis.net/context'
 context_schemas_uri = 'http://schemas.opengis.net/context/1.0.0/context.xsd'
 
+
 def WMCElement(tag):
     """WMC based element
     """
-    return etree.Element("{%s}"%context_ns_uri + tag)
+    return etree.Element("{%s}" % context_ns_uri + tag)
+
 
 class MapContext:
     """ Map Context abstraction
@@ -44,10 +44,10 @@ class MapContext:
         attrs = {
             '{http://www.w3.org/2001/XMLSchema-instance}schemaLocation':
             context_ns_uri + ' ' + context_schemas_uri,
-            'id' : self._map.id,
-            'version' : '1.0.0',
-            }
-        for k, v in attrs.items():
+            'id': self._map.id,
+            'version': '1.0.0',
+        }
+        for k, v in list(attrs.items()):
             root.attrib[k] = v
         return root
 
@@ -74,7 +74,7 @@ class MapContext:
 
     def _getLayerListElement(self):
         layerlist = WMCElement('LayerList')
-        layering = zip(self._map.layernames, self._map.layertitles)
+        layering = list(zip(self._map.layernames, self._map.layertitles))
         layer_infos = self._map.getLayerInfos()
 
         # mapbuilder draws layers in bottom-top order
@@ -94,8 +94,8 @@ class MapContext:
                     e_style.attrib['current'] = '1'
                     # Change namespace to wmc
                     for node in e_style.getiterator():
-                        tag_name = node.tag[node.tag.rfind('}')+1:]
-                        node.tag = "{%s}"%context_ns_uri + tag_name
+                        tag_name = node.tag[node.tag.rfind('}') + 1:]
+                        node.tag = "{%s}" % context_ns_uri + tag_name
                     stylelist.append(e_style)
                 layer.append(stylelist)
 
@@ -154,8 +154,8 @@ class AggregateMapContext(MapContext):
 
     def _getLayerListElement(self):
         layerlist = WMCElement('LayerList')
-        #layering = zip(self._map.layernames, self._map.layertitles)
-        layer_infos = self._map.getLayerInfos()
+        # layering = zip(self._map.layernames, self._map.layertitles)
+        # layer_infos = self._map.getLayerInfos()
 
         # Layer
         layer = WMCElement('Layer')
@@ -193,7 +193,7 @@ class AggregateMapContext(MapContext):
         formatlist.append(format)
         layer.append(formatlist)
         layerlist.append(layer)
-        
+
         return layerlist
 
 
@@ -207,4 +207,3 @@ def mapToWebMapContext(map, aggregate_layers=False):
         return AggregateMapContext(map)()
     else:
         return MapContext(map)()
-
