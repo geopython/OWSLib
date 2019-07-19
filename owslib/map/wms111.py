@@ -31,6 +31,7 @@ from owslib.namespaces import Namespaces
 
 n = Namespaces()
 
+
 class CapabilitiesError(Exception):
     pass
 
@@ -152,8 +153,8 @@ class WebMapService_1_1_1(object):
         return u
 
     def __build_getmap_request(self, layers=None, styles=None, srs=None, bbox=None,
-               format=None, size=None, time=None, transparent=False,
-               bgcolor=None, exceptions=None, **kwargs):
+                               format=None, size=None, time=None, transparent=False,
+                               bgcolor=None, exceptions=None, **kwargs):
 
         request = {'service': 'WMS', 'version': self.version, 'request': 'GetMap'}
 
@@ -182,7 +183,7 @@ class WebMapService_1_1_1(object):
 
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
         return request
 
     def getmap(self, layers=None, styles=None, srs=None, bbox=None,
@@ -235,7 +236,8 @@ class WebMapService_1_1_1(object):
 
         """
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods if m.get('type').lower() == method.lower()))
+            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods
+                            if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
         request = {'version': self.version, 'request': 'GetMap'}
@@ -287,7 +289,8 @@ class WebMapService_1_1_1(object):
                        **kwargs
                        ):
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods if m.get('type').lower() == method.lower()))
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods
+                            if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
 
@@ -346,11 +349,12 @@ class WebMapService_1_1_1(object):
                 return item
         raise KeyError("No operation named %s" % name)
 
+
 class ServiceIdentification(object):
     ''' Implements IServiceIdentificationMetadata '''
 
     def __init__(self, infoset, version):
-        self._root=infoset
+        self._root = infoset
         self.type = testXMLValue(self._root.find('Name'))
         self.version = version
         self.title = testXMLValue(self._root.find('Title'))
@@ -359,23 +363,24 @@ class ServiceIdentification(object):
         self.accessconstraints = testXMLValue(self._root.find('AccessConstraints'))
         self.fees = testXMLValue(self._root.find('Fees'))
 
+
 class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
     def __init__(self, infoset):
-        self._root=infoset
-        name=self._root.find('ContactInformation/ContactPersonPrimary/ContactOrganization')
+        self._root = infoset
+        name = self._root.find('ContactInformation/ContactPersonPrimary/ContactOrganization')
         if name is not None:
-            self.name=name.text
+            self.name = name.text
         else:
-            self.name=None
+            self.name = None
         self.url = None
         online_resource = self._root.find('OnlineResource')
         if online_resource is not None:
             self.url = online_resource.attrib.get('{http://www.w3.org/1999/xlink}href', '')
-        #contact metadata
+        # contact metadata
         contact = self._root.find('ContactInformation')
-        ## sometimes there is a contact block that is empty, so make
-        ## sure there are children to parse
+        # sometimes there is a contact block that is empty, so make
+        # sure there are children to parse
         if contact is not None and contact[:] != []:
             self.contact = ContactMetadata(contact)
         else:
@@ -394,6 +399,7 @@ class ServiceProvider(object):
             if item.name == name:
                 return item
         raise KeyError("No operation named %s" % name)
+
 
 class ContentMetadata(AbstractContentMetadata):
     """
@@ -496,41 +502,42 @@ class ContentMetadata(AbstractContentMetadata):
 
         # Look for SRS option attached to this layer
         if elem.find('SRS') is not None:
-            ## some servers found in the wild use a single SRS
-            ## tag containing a whitespace separated list of SRIDs
-            ## instead of several SRS tags. hence the inner loop
+            # some servers found in the wild use a single SRS
+            # tag containing a whitespace separated list of SRIDs
+            # instead of several SRS tags. hence the inner loop
             for srslist in [x.text for x in elem.findall('SRS')]:
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
 
-        #Get rid of duplicate entries
+        # Get rid of duplicate entries
         self.crsOptions = list(set(self.crsOptions))
 
-        #Set self.crsOptions to None if the layer (and parents) had no SRS options
+        # Set self.crsOptions to None if the layer (and parents) had no SRS options
         if len(self.crsOptions) == 0:
-            #raise ValueError('%s no SRS available!?' % (elem,))
-            #Comment by D Lowe.
-            #Do not raise ValueError as it is possible that a layer is purely a parent layer and does not have SRS specified. Instead set crsOptions to None
+            # raise ValueError('%s no SRS available!?' % (elem,))
+            # Comment by D Lowe.
+            # Do not raise ValueError as it is possible that a layer is purely a parent layer and does
+            # not have SRS specified. Instead set crsOptions to None
             # Comment by Jachym:
             # Do not set it to None, but to [], which will make the code
             # work further. Fixed by anthonybaxter
             self.crsOptions = []
 
-        #Styles
+        # Styles
         self.styles = {}
 
-        #Copy any parent styles (they are inheritable properties)
+        # Copy any parent styles (they are inheritable properties)
         if self.parent:
             self.styles = self.parent.styles.copy()
 
-        #Get the styles for this layer (items with the same name are replaced)
+        # Get the styles for this layer (items with the same name are replaced)
         for s in elem.findall('Style'):
             name = s.find('Name')
             title = s.find('Title')
             if name is None or title is None:
                 raise ValueError('%s missing name or title' % (s,))
-            style = { 'title' : title.text }
+            style = {'title': title.text}
             # legend url
             legend = s.find('LegendURL/OnlineResource')
             if legend is not None:
@@ -541,17 +548,17 @@ class ContentMetadata(AbstractContentMetadata):
         self.keywords = [f.text for f in elem.findall('KeywordList/Keyword')]
 
         # timepositions - times for which data is available.
-        self.timepositions=None
+        self.timepositions = None
         self.defaulttimeposition = None
         for extent in elem.findall('Extent'):
-            if extent.attrib.get("name").lower() =='time':
+            if extent.attrib.get("name").lower() == 'time':
                 if extent.text:
-                    self.timepositions=extent.text.split(',')
+                    self.timepositions = extent.text.split(',')
                     self.defaulttimeposition = extent.attrib.get("default")
                     break
 
         # Elevations - available vertical levels
-        self.elevations=None
+        self.elevations = None
         for extent in elem.findall('Extent'):
             if extent.attrib.get("name").lower() == 'elevation':
                 if extent.text:
@@ -599,7 +606,7 @@ class ContentMetadata(AbstractContentMetadata):
 
                     if metadataUrl['type'] == 'TC211':
                         mdelem = doc.find('.//' + nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
-                                 or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                            or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
                         if mdelem is not None:
                             metadataUrl['metadata'] = MD_Metadata(mdelem)
                             continue
@@ -634,7 +641,7 @@ class OperationMetadata:
         self.methods = []
         for verb in elem.findall('DCPType/HTTP/*'):
             url = verb.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
-            self.methods.append({'type' : xmltag_split(verb.tag), 'url': url})
+            self.methods.append({'type': xmltag_split(verb.tag), 'url': url})
 
 
 class ContactMetadata:
@@ -657,24 +664,33 @@ class ContactMetadata:
         address = elem.find('ContactAddress')
         if address is not None:
             street = address.find('Address')
-            if street is not None: self.address = street.text
+            if street is not None:
+                self.address = street.text
 
             city = address.find('City')
-            if city is not None: self.city = city.text
+            if city is not None:
+                self.city = city.text
 
             region = address.find('StateOrProvince')
-            if region is not None: self.region = region.text
+            if region is not None:
+                self.region = region.text
 
             postcode = address.find('PostCode')
-            if postcode is not None: self.postcode = postcode.text
+            if postcode is not None:
+                self.postcode = postcode.text
 
             country = address.find('Country')
-            if country is not None: self.country = country.text
+            if country is not None:
+                self.country = country.text
 
         organization = elem.find('ContactPersonPrimary/ContactOrganization')
-        if organization is not None: self.organization = organization.text
-        else:self.organization = None
+        if organization is not None:
+            self.organization = organization.text
+        else:
+            self.organization = None
 
         position = elem.find('ContactPosition')
-        if position is not None: self.position = position.text
-        else: self.position = None
+        if position is not None:
+            self.position = position.text
+        else:
+            self.position = None

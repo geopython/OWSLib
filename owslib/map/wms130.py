@@ -109,7 +109,7 @@ class WebMapService_1_3_0(object):
         def gather_layers(parent_elem, parent_metadata):
             layers = []
             for index, elem in enumerate(parent_elem.findall(nspath('Layer', WMS_NAMESPACE))):
-                cm = ContentMetadata(elem, parent=parent_metadata, index=index+1,
+                cm = ContentMetadata(elem, parent=parent_metadata, index=index + 1,
                                      parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
@@ -146,9 +146,9 @@ class WebMapService_1_3_0(object):
         raise KeyError("No operation named %s" % name)
 
     def __build_getmap_request(self, layers=None, styles=None, srs=None, bbox=None,
-               format=None, size=None, time=None, dimensions={},
-               elevation=None, transparent=False,
-               bgcolor=None, exceptions=None, **kwargs):
+                               format=None, size=None, time=None, dimensions={},
+                               elevation=None, transparent=False,
+                               bgcolor=None, exceptions=None, **kwargs):
 
         request = {'service': 'WMS', 'version': self.version, 'request': 'GetMap'}
 
@@ -195,7 +195,7 @@ class WebMapService_1_3_0(object):
 
         if kwargs:
             for kw in kwargs:
-                request[kw]=kwargs[kw]
+                request[kw] = kwargs[kw]
         return request
 
     def getmap(self, layers=None,
@@ -335,7 +335,8 @@ class WebMapService_1_3_0(object):
                        **kwargs
                        ):
         try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods if m.get('type').lower() == method.lower()))
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods
+                            if m.get('type').lower() == method.lower()))
         except StopIteration:
             base_url = self.url
 
@@ -382,6 +383,7 @@ class WebMapService_1_3_0(object):
             err_message = str(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message)
         return u
+
 
 class ServiceIdentification(object):
     def __init__(self, infoset, version):
@@ -453,8 +455,10 @@ class ContentMetadata(AbstractContentMetadata):
         self.abstract = testXMLValue(elem.find(nspath('Abstract', WMS_NAMESPACE)))
 
         # TODO: what is the preferred response to esri's handling of custom projections
-        #       in the spatial ref definitions? see http://resources.arcgis.com/en/help/main/10.1/index.html#//00sq000000m1000000
-        #       and an example (20150812) http://maps.ngdc.noaa.gov/arcgis/services/firedetects/MapServer/WMSServer?request=GetCapabilities&service=WMS
+        # in the spatial ref definitions? see
+        # http://resources.arcgis.com/en/help/main/10.1/index.html#//00sq000000m1000000
+        # and an example (20150812)
+        # http://maps.ngdc.noaa.gov/arcgis/services/firedetects/MapServer/WMSServer?request=GetCapabilities&service=WMS
 
         # bboxes
         b = elem.find(nspath('EX_GeographicBoundingBox', WMS_NAMESPACE))
@@ -521,7 +525,8 @@ class ContentMetadata(AbstractContentMetadata):
                 self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
             if logo is not None:
                 self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
-                self.attribution['logo_url'] = logo.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
+                self.attribution['logo_url'] = logo.find(
+                    nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
 
         # TODO: get this from the bbox attributes instead (deal with parents)
         # SRS options
@@ -548,7 +553,8 @@ class ContentMetadata(AbstractContentMetadata):
         if len(self.crsOptions) == 0:
             # raise ValueError('%s no SRS available!?' % (elem,))
             # Comment by D Lowe.
-            # Do not raise ValueError as it is possible that a layer is purely a parent layer and does not have SRS specified. Instead set crsOptions to None
+            # Do not raise ValueError as it is possible that a layer is purely a parent layer and
+            # does not have SRS specified. Instead set crsOptions to None
             # Comment by Jachym:
             # Do not set it to None, but to [], which will make the code
             # work further. Fixed by anthonybaxter
@@ -633,7 +639,8 @@ class ContentMetadata(AbstractContentMetadata):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
                 'format': testXMLValue(m.find(nspath('Format', WMS_NAMESPACE))),
-                'url': testXMLValue(m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
+                'url': testXMLValue(m.find(
+                    nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
             self.metadataUrls.append(metadataUrl)
 
@@ -678,7 +685,7 @@ class ContentMetadata(AbstractContentMetadata):
                         continue
 
                     mdelem = doc.find('.//' + nspath_eval('gmd:MD_Metadata', n.get_namespaces(['gmd']))) \
-                             or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
+                        or doc.find('.//' + nspath_eval('gmi:MI_Metadata', n.get_namespaces(['gmi'])))
                     if mdelem is not None:
                         metadataUrl['metadata'] = MD_Metadata(mdelem)
                         continue
@@ -698,6 +705,7 @@ class ContentMetadata(AbstractContentMetadata):
 
     def __str__(self):
         return 'Layer Name: %s Title: %s' % (self.name, self.title)
+
 
 class OperationMetadata(object):
     def __init__(self, elem):
