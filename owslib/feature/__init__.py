@@ -12,18 +12,19 @@ import logging
 from owslib.util import log, Authentication
 from owslib.feature.schema import get_schema
 
+
 class WebFeatureService_(object):
     """Base class for WebFeatureService implementations"""
 
     def __init__(self, auth=None):
         self.auth = auth or Authentication()
 
-    def getBBOXKVP (self,bbox,typename):
+    def getBBOXKVP(self, bbox, typename):
         """Formate bounding box for KVP request type (HTTP GET)
 
         @param bbox: (minx,miny,maxx,maxy[,srs])
         @type bbox: List
-        @param typename:  feature name 
+        @param typename:  feature name
         @type typename: String
         @returns: String properly formated according to version and
             coordinate reference system
@@ -38,28 +39,48 @@ class WebFeatureService_(object):
             srs = self.contents[typename[0]].crsOptions[0]
 
         # 1.1.0 and 2.0.0 have same encoding
-        if self.version in ["1.1.0","2.0.0"]:
+        if self.version in ["1.1.0", "2.0.0"]:
 
             # format bbox parameter
-            if srs.encoding == "urn" :
-                    if srs.axisorder == "yx":
-                        return "%s,%s,%s,%s,%s" % \
-                            (bbox[1],bbox[0],bbox[3],bbox[2],srs.getcodeurn())
-                    else:
-                        return "%s,%s,%s,%s,%s" % \
-                        (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcodeurn())
+            if srs.encoding == "urn":
+                if srs.axisorder == "yx":
+                    return "%s,%s,%s,%s,%s" % (
+                        bbox[1],
+                        bbox[0],
+                        bbox[3],
+                        bbox[2],
+                        srs.getcodeurn(),
+                    )
+                else:
+                    return "%s,%s,%s,%s,%s" % (
+                        bbox[0],
+                        bbox[1],
+                        bbox[2],
+                        bbox[3],
+                        srs.getcodeurn(),
+                    )
             else:
-                return "%s,%s,%s,%s,%s" % \
-                        (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcode())
+                return "%s,%s,%s,%s,%s" % (
+                    bbox[0],
+                    bbox[1],
+                    bbox[2],
+                    bbox[3],
+                    srs.getcode(),
+                )
         # 1.0.0
         else:
-            return "%s,%s,%s,%s,%s" % \
-                    (bbox[0],bbox[1],bbox[2],bbox[3],srs.getcode())
+            return "%s,%s,%s,%s,%s" % (
+                bbox[0],
+                bbox[1],
+                bbox[2],
+                bbox[3],
+                srs.getcode(),
+            )
 
     def getSRS(self, srsname, typename):
         """Returns None or Crs object for given name
 
-        @param typename:  feature name 
+        @param typename:  feature name
         @type typename: String
         """
         if not isinstance(srsname, Crs):
@@ -74,19 +95,37 @@ class WebFeatureService_(object):
             return self.contents[typename].crsOptions[index]
         except ValueError:
             options = ", ".join([crs.id for crs in self.contents[typename].crsOptions])
-            log.warning("Requested srsName %r is not declared as being "
-                        "allowed for requested typename %r. "
-                        "Options are: %r.", srs.getcode(), typename, options)
+            log.warning(
+                "Requested srsName %r is not declared as being "
+                "allowed for requested typename %r. "
+                "Options are: %r.",
+                srs.getcode(),
+                typename,
+                options,
+            )
             return None
 
-    def getGETGetFeatureRequest(self, typename=None, filter=None, bbox=None, featureid=None,
-                   featureversion=None, propertyname=None, maxfeatures=None,storedQueryID=None, storedQueryParams=None,
-                   outputFormat=None, method='Get', startindex=None, sortby=None):
+    def getGETGetFeatureRequest(
+        self,
+        typename=None,
+        filter=None,
+        bbox=None,
+        featureid=None,
+        featureversion=None,
+        propertyname=None,
+        maxfeatures=None,
+        storedQueryID=None,
+        storedQueryParams=None,
+        outputFormat=None,
+        method="Get",
+        startindex=None,
+        sortby=None,
+    ):
         """Formulate proper GetFeature request using KVP encoding
         ----------
         typename : list
             List of typenames (string)
-        filter : string 
+        filter : string
             XML-encoded OGC filter expression.
         bbox : tuple
             (left, bottom, right, top) in the feature type's coordinates == (minx, miny, maxx, maxy)
@@ -117,47 +156,55 @@ class WebFeatureService_(object):
         """
         storedQueryParams = storedQueryParams or {}
 
-        base_url = next((m.get('url') for m in self.getOperationByName('GetFeature').methods if m.get('type').lower() == method.lower()))
-        base_url = base_url if base_url.endswith("?") else base_url+"?"
-            
-        request = {'service': 'WFS', 'version': self.version, 'request': 'GetFeature'}
-        
+        base_url = next(
+            (
+                m.get("url")
+                for m in self.getOperationByName("GetFeature").methods
+                if m.get("type").lower() == method.lower()
+            )
+        )
+        base_url = base_url if base_url.endswith("?") else base_url + "?"
+
+        request = {"service": "WFS", "version": self.version, "request": "GetFeature"}
+
         # check featureid
         if featureid:
-            request['featureid'] = ','.join(featureid)
+            request["featureid"] = ",".join(featureid)
         elif bbox:
-            request['bbox'] = self.getBBOXKVP(bbox,typename)
+            request["bbox"] = self.getBBOXKVP(bbox, typename)
         elif filter:
-            request['query'] = str(filter)
+            request["query"] = str(filter)
         if typename:
-            typename = [typename] if type(typename) == type("") else typename
-            if int(self.version.split('.')[0]) >= 2:
-                request['typenames'] = ','.join(typename)
+            typename = (
+                [typename] if type(typename) == type("") else typename
+            )  # noqa: E721
+            if int(self.version.split(".")[0]) >= 2:
+                request["typenames"] = ",".join(typename)
             else:
-                request['typename'] = ','.join(typename)
-        if propertyname: 
-            request['propertyname'] = ','.join(propertyname)
+                request["typename"] = ",".join(typename)
+        if propertyname:
+            request["propertyname"] = ",".join(propertyname)
         if sortby:
-            request['sortby'] = ','.join(sortby)
-        if featureversion: 
-            request['featureversion'] = str(featureversion)
-        if maxfeatures: 
-            if int(self.version.split('.')[0]) >= 2:
-                request['count'] = str(maxfeatures)
+            request["sortby"] = ",".join(sortby)
+        if featureversion:
+            request["featureversion"] = str(featureversion)
+        if maxfeatures:
+            if int(self.version.split(".")[0]) >= 2:
+                request["count"] = str(maxfeatures)
             else:
-                request['maxfeatures'] = str(maxfeatures)
+                request["maxfeatures"] = str(maxfeatures)
         if startindex:
-            request['startindex'] = str(startindex)
-        if storedQueryID: 
-            request['storedQuery_id']=str(storedQueryID)
+            request["startindex"] = str(startindex)
+        if storedQueryID:
+            request["storedQuery_id"] = str(storedQueryID)
             for param in storedQueryParams:
-                request[param]=storedQueryParams[param]
+                request[param] = storedQueryParams[param]
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
 
         data = urlencode(request, doseq=True)
 
-        return base_url+data
+        return base_url + data
 
     def get_schema(self, typename):
         """

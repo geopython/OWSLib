@@ -17,15 +17,16 @@ from owslib.util import Authentication, http_get
 LOGGER = logging.getLogger(__name__)
 
 REQUEST_HEADERS = {
-    'User-Agent': 'OWSLib {} (https://geopython.github.io/OWSLib)'.format(
-        __version__)
+    "User-Agent": "OWSLib {} (https://geopython.github.io/OWSLib)".format(__version__)
 }
 
 
 class WebFeatureService_3_0_0(object):
     """Abstraction for OGC Web Feature Service (WFS) version 3.0"""
-    def __init__(self, url, version, json_, timeout=30, username=None,
-                 password=None, auth=None):
+
+    def __init__(
+        self, url, version, json_, timeout=30, username=None, password=None, auth=None
+    ):
         """
         initializer; implements Requirement 1 (/req/core/root-op)
 
@@ -41,10 +42,10 @@ class WebFeatureService_3_0_0(object):
         @return: initialized WebFeatureService_3_0_0 object
         """
 
-        if '?' in url:
-            self.url, self.url_query_string = url.split('?')
+        if "?" in url:
+            self.url, self.url_query_string = url.split("?")
         else:
-            self.url = url.rstrip('/') + '/'
+            self.url = url.rstrip("/") + "/"
             self.url_query_string = None
 
         self.version = version
@@ -58,10 +59,10 @@ class WebFeatureService_3_0_0(object):
         self.auth = auth or Authentication(username, password)
 
         if json_ is not None:  # static JSON string
-            self.links = json.loads(json_)['links']
+            self.links = json.loads(json_)["links"]
         else:
             response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
-            self.links = response['links']
+            self.links = response["links"]
 
     def api(self):
         """
@@ -70,8 +71,8 @@ class WebFeatureService_3_0_0(object):
         @returns: OpenAPI definition object
         """
 
-        url = self._build_url('api')
-        LOGGER.debug('Request: {}'.format(url))
+        url = self._build_url("api")
+        LOGGER.debug("Request: {}".format(url))
         response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
@@ -82,8 +83,8 @@ class WebFeatureService_3_0_0(object):
         @returns: conformance object
         """
 
-        url = self._build_url('conformance')
-        LOGGER.debug('Request: {}'.format(url))
+        url = self._build_url("conformance")
+        LOGGER.debug("Request: {}".format(url))
         response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
@@ -94,10 +95,10 @@ class WebFeatureService_3_0_0(object):
         @returns: collections object
         """
 
-        url = self._build_url('collections')
-        LOGGER.debug('Request: {}'.format(url))
+        url = self._build_url("collections")
+        LOGGER.debug("Request: {}".format(url))
         response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
-        return response['collections']
+        return response["collections"]
 
     def collection(self, collection_name):
         """
@@ -109,9 +110,9 @@ class WebFeatureService_3_0_0(object):
         @returns: feature collection metadata
         """
 
-        path = 'collections/{}'.format(collection_name)
+        path = "collections/{}".format(collection_name)
         url = self._build_url(path)
-        LOGGER.debug('Request: {}'.format(url))
+        LOGGER.debug("Request: {}".format(url))
         response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
@@ -133,13 +134,15 @@ class WebFeatureService_3_0_0(object):
         @returns: feature results
         """
 
-        if 'bbox' in kwargs:
-            kwargs['bbox'] = ','.join(kwargs['bbox'])
+        if "bbox" in kwargs:
+            kwargs["bbox"] = ",".join(kwargs["bbox"])
 
-        path = 'collections/{}/items'.format(collection_name)
+        path = "collections/{}/items".format(collection_name)
         url = self._build_url(path)
-        LOGGER.debug('Request: {}'.format(url))
-        response = http_get(url, headers=REQUEST_HEADERS, params=kwargs, auth=self.auth).json()
+        LOGGER.debug("Request: {}".format(url))
+        response = http_get(
+            url, headers=REQUEST_HEADERS, params=kwargs, auth=self.auth
+        ).json()
         return response
 
     def collection_item(self, collection_name, identifier):
@@ -154,9 +157,9 @@ class WebFeatureService_3_0_0(object):
         @returns: single feature result
         """
 
-        path = 'collections/{}/items/{}'.format(collection_name, identifier)
+        path = "collections/{}/items/{}".format(collection_name, identifier)
         url = self._build_url(path)
-        LOGGER.debug('Request: {}'.format(url))
+        LOGGER.debug("Request: {}".format(url))
         response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
@@ -172,11 +175,11 @@ class WebFeatureService_3_0_0(object):
 
         url = self.url
         if self.url_query_string is not None:
-            LOGGER.debug('base URL has a query string')
+            LOGGER.debug("base URL has a query string")
             url = urljoin(url, path)
-            url = '?'.join([url, self.url_query_string])
+            url = "?".join([url, self.url_query_string])
         else:
             url = urljoin(url, path)
 
-        LOGGER.debug('URL: {}'.format(url))
+        LOGGER.debug("URL: {}".format(url))
         return url
