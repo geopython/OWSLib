@@ -23,7 +23,7 @@ install:
   - if [ "$LXML" == "true" ]; then pip install lxml; fi
 script:
   - python -m pytest
-  - flake8 owslib --exclude=owslib/coverage,owslib/feature,owslib/map,owslib/swe,owslib/waterml
+  - flake8 owslib --exclude=owslib/coverage,owslib/feature,owslib/map,owslib/swe
 after_success:
   - coveralls
 notifications:
