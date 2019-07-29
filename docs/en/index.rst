@@ -244,6 +244,14 @@ Download GML using ``typename``, ``bbox`` and ``srsname``.
     >>> # OWSLib will switch the axis order from EN to NE automatically if designated by EPSG-Registry
     >>> response = wfs11.getfeature(typename='bvv:gmd_ex', bbox=(4500000,5500000,4500500,5500500), srsname='urn:x-ogc:def:crs:EPSG:31468')
 
+Return a FeatureType's schema via ``DescribeFeatureType``. The dictionary returned is 
+compatible with a `Fiona schema object <https://fiona.readthedocs.io/en/latest/fiona.html#fiona.collection.Collection.schema>`_.
+
+::
+
+    >>> wfs11.get_schema('bvv:vg_ex')
+    >>> {'properties': {'land': 'string', 'modellart': 'string', 'objart': 'string', 'objart_txt': 'string', 'objid': 'string', 'hdu_x': 'short', 'beginn': 'string', 'ende': 'string', 'adm': 'string', 'avg': 'string', 'bez_gem': 'string', 'bez_krs': 'string', 'bez_lan': 'string', 'bez_rbz': 'string', 'sch': 'string'}, 'geometry': '3D MultiPolygon', 'geometry_column': 'geom'}
+
 Download GML using ``typename`` and ``filter``. OWSLib currently only
 support filter building for WFS 1.1 (FE.1.1).
 
