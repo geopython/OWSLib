@@ -849,7 +849,7 @@ class WPSExecution(object):
                     if filepath is None:
                         filepath = 'wps.out'
                     for data in output.data:
-                        content = content + data
+                        content = content + data.encode()
 
             # write out content
             if content != '':
@@ -1382,7 +1382,7 @@ class Output(InputOutput):
         """
         url = self.reference
         if url is None:
-            return ""
+            return b''
 
         # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'  # noqa
         # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
