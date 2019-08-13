@@ -118,7 +118,12 @@ configure your application to use the log messages like so:
 
     >>> import logging
     >>> owslib_log = logging.getLogger('owslib')
-    >>> # Add formatting and handlers as needed
+    >>> # Add formatting and handlers as needed, for example to log to the console
+    >>> ch = logging.StreamHandler()
+    >>> ch.setLevel(logging.DEBUG)
+    >>> ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    >>> # add the handler to the logger
+    >>> owslib_log.addHandler(ch)
     >>> owslib_log.setLevel(logging.DEBUG)
 
 Releasing
