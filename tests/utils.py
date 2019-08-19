@@ -1,14 +1,9 @@
-from __future__ import (absolute_import, division, print_function)
-
 import logging
 import os
 import sys
 import requests
 from owslib.etree import etree, ElementType
-try:                    # Python 3
-    from urllib.parse import urlparse
-except ImportError:     # Python 2
-    from urlparse import urlparse
+from urllib.parse import urlparse
 
 
 def setup_logging(loglevel='INFO'):

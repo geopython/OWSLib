@@ -3,7 +3,7 @@
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2007 STFC <http://www.stfc.ac.uk>
 #
-# Authors : 
+# Authors :
 #          Dominic Lowe <d.lowe@rl.ac.uk>
 #
 # Contact email: d.lowe@rl.ac.uk
@@ -12,8 +12,6 @@
 """
 Web Coverage Server (WCS) methods and metadata. Factory function.
 """
-
-from __future__ import (absolute_import, division, print_function)
 
 from . import etree
 from .coverage import wcs100, wcs110, wcs111, wcsBase, wcs200, wcs201

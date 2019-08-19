@@ -8,8 +8,6 @@
 initial test setup for Ows Context
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 # TODO make dates from (currently) string to datetime instances
 from datetime import datetime
 

@@ -1,6 +1,5 @@
 Imports
 
-    >>> from __future__ import (absolute_import, division, print_function)
     >>> from owslib.etree import etree
     >>> from owslib.iso import MD_Metadata, MD_DataIdentification, CI_ResponsibleParty, MD_ReferenceSystem
 

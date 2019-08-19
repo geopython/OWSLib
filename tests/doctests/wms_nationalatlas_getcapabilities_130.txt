@@ -1,6 +1,5 @@
 Imports
 
-    >>> from __future__ import (absolute_import, division, print_function)
     >>> from owslib.wms import WebMapService
     >>> from tests.utils import resource_file, cast_tuple_int_list, cast_tuple_int_list_srs
     >>> from operator import itemgetter

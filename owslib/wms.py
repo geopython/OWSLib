@@ -15,7 +15,6 @@ API for Web Map Service (WMS) methods and metadata.
 Currently supports only version 1.1.1 of the WMS protocol.
 """
 
-from __future__ import (absolute_import, division, print_function)
 from .map import wms111, wms130
 from .util import clean_ows_url, Authentication
 
@@ -54,4 +53,5 @@ def WebMapService(url, version='1.1.1', xml=None, username=None, password=None,
         return wms130.WebMapService_1_3_0(
             clean_url, version=version, xml=xml, parse_remote_metadata=parse_remote_metadata,
             timeout=timeout, headers=headers, auth=auth)
-    raise NotImplementedError('The WMS version (%s) you requested is not implemented. Please use 1.1.1 or 1.3.0.' % version)
+    raise NotImplementedError(
+        'The WMS version ({}) you requested is not implemented. Please use 1.1.1 or 1.3.0.'.format(version))

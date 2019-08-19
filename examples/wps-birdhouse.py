@@ -2,8 +2,6 @@
 This example calls processes on a Emu WPS: https://github.com/bird-house/emu
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
 from owslib.wps import WebProcessingService, ComplexDataInput, monitorExecution
 
 verbose = False

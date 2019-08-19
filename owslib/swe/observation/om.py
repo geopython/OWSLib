@@ -11,23 +11,28 @@ from owslib.util import nspath_eval, extract_time
 from owslib.namespaces import Namespaces
 from owslib.util import testXMLAttribute, testXMLValue
 
+
 def get_namespaces():
     ns = Namespaces()
-    return ns.get_namespaces(["swe20", "xlink", "sos20", "om20", "gml32",
-        "xsi"])
+    return ns.get_namespaces(["swe20", "xlink", "sos20", "om20", "gml32", "xsi"])
+
+
 namespaces = get_namespaces()
+
 
 def nspv(path):
     return nspath_eval(path, namespaces)
+
 
 class TimePeriod(object):
     ''' Basic class for gml TimePeriod '''
     def __init__(self, start, end):
         self.start = start
         self.end = end
+
     def __str__(self):
-        return ("start: " + str(self.start) + " " +
-                "end: " + str(self.end))
+        return ("start: " + str(self.start) + " " + "end: " + str(self.end))
+
 
 class OM_Observation(object):
     ''' The base OM_Observation type, of which there may be many
@@ -71,6 +76,7 @@ class OM_Observation(object):
         observation types '''
         return self.result
 
+
 class MeasurementObservation(OM_Observation):
     ''' Specialised observation type that has a measurement (value + uom)
     as result type
@@ -87,23 +93,26 @@ class MeasurementObservation(OM_Observation):
             value_str = testXMLValue(self.result)
             try:
                 value = float(value_str)
-            except:
+            except Exception:
                 raise ValueError("Error parsing measurement value")
             self.result = Measurement(value, uom)
 
     def get_result(self):
         return self.result
 
-class Result(object): 
+
+class Result(object):
     ''' Base class for different OM_Observation result types '''
     def __init__(self, element):
         pass
 
-class Measurement(Result): 
+
+class Measurement(Result):
     ''' A single measurement (value + uom) '''
     def __init__(self, value, uom):
         super(Measurement, self).__init__(None)
         self.value = value
         self.uom = uom
+
     def __str__(self):
         return str(self.value) + "(" + self.uom + ")"

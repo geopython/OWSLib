@@ -3,22 +3,15 @@
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2007 STFC <http://www.stfc.ac.uk>
 #
-# Authors : 
+# Authors :
 #          Dominic Lowe <d.lowe@rl.ac.uk>
 #
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from __future__ import (absolute_import, division, print_function)
-
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+from urllib.parse import urlencode
 from owslib.etree import etree
 import cgi
-from six.moves import cStringIO as StringIO
-import six
 from owslib.util import Authentication, openURL
 
 
@@ -37,11 +30,13 @@ class ServiceException(Exception):
     def __str__(self):
         return repr(self.message)
 
+
 class WCSBase(object):
-    """Base class to be subclassed by version dependent WCS classes. Provides 'high-level' version independent methods"""
-    def __new__(self,url, xml, cookies, auth=None):
-        """ overridden __new__ method 
-        
+    """Base class to be subclassed by version dependent WCS classes. Provides 'high-level'
+    version independent methods"""
+    def __new__(self, url, xml, cookies, auth=None):
+        """ overridden __new__ method
+
         @type url: string
         @param url: url of WCS capabilities document
         @type xml: string
@@ -49,24 +44,24 @@ class WCSBase(object):
         @param auth: instance of owslib.util.Authentication
         @return: inititalised WCSBase object
         """
-        obj=object.__new__(self)
+        obj = object.__new__(self)
         obj.__init__(url, xml, cookies, auth=auth)
-        self.cookies=cookies
-        self._describeCoverage = {} #cache for DescribeCoverage responses
+        self.cookies = cookies
+        self._describeCoverage = {}  # cache for DescribeCoverage responses
         return obj
-    
+
     def __init__(self, auth=None):
         self.auth = auth or Authentication()
 
     def getDescribeCoverage(self, identifier):
         ''' returns a describe coverage document - checks the internal cache to see if it has been fetched before '''
-        if identifier not in self._describeCoverage.keys():
+        if identifier not in list(self._describeCoverage.keys()):
             reader = DescribeCoverageReader(
                 self.version, identifier, self.cookies, self.auth)
             self._describeCoverage[identifier] = reader.read(self.url)
         return self._describeCoverage[identifier]
-        
-        
+
+
 class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
@@ -125,6 +120,7 @@ class WCSCapabilitiesReader(object):
         """
         return etree.fromstring(st)
 
+
 class DescribeCoverageReader(object):
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
@@ -136,7 +132,7 @@ class DescribeCoverageReader(object):
         """
         self.version = version
         self._infoset = None
-        self.identifier=identifier
+        self.identifier = identifier
         self.cookies = cookies
         self.auth = auth or Authentication()
 
@@ -169,8 +165,8 @@ class DescribeCoverageReader(object):
             if 'CoverageID' not in params:
                 qs.append(('CoverageID', self.identifier))
         elif self.version == '1.1.0' or self.version == '1.1.1':
-            #NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
-            #or identifiers (see tables 9, 10 of specification)  
+            # NOTE: WCS 1.1.0 is ambigous about whether it should be identifier
+            # or identifiers (see tables 9, 10 of specification)
             if 'identifiers' not in params:
                 qs.append(('identifiers', self.identifier))
             if 'identifier' not in params:
@@ -189,8 +185,7 @@ class DescribeCoverageReader(object):
         @rtype: elementtree tree
         @return: An elementtree tree representation of the capabilities document
         """
-        
+
         request = self.descCov_url(service_url)
         u = openURL(request, cookies=self.cookies, timeout=timeout, auth=self.auth)
         return etree.fromstring(u.read())
-

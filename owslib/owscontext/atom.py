@@ -12,8 +12,6 @@ ATOM XML Encoding: http://www.opengeospatial.org/standards/owc
 OGC OWS Context Atom Encoding Standard 1.0 (12-084r2)
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from owslib.etree import etree, ParseError
 from owslib import util
 from owslib.namespaces import Namespaces
@@ -64,7 +62,7 @@ def parse_owc_content(content_node):
     child_elem = None
     if len(list(content_node)) > 0:
         child_elem = element_to_string(
-            list(content_node)[0],False)
+            list(content_node)[0], False)
 
     content_dict = {
         "type": mimetype,
@@ -257,7 +255,7 @@ def parse_entry(entry_node):
             req_content_val = val.find(util.nspath_eval('owc:request', ns))
             req_content = None
             if req_content_val is not None:
-                request_content = parse_owc_content(req_content_val)
+                req_content = parse_owc_content(req_content_val)
 
             # TODO no example for result/response
             op_dict = {
@@ -608,36 +606,44 @@ def axml_context(d):
     [xml.append(el) for el in context_metadata if el is not None]
 
     language = extract_p('properties.lang', d, None)
-    if language is not None: xml.set(ns_elem("xml", "lang"), language)
+    if language is not None:
+        xml.set(ns_elem("xml", "lang"), language)
 
     title = extract_p('properties.title', d, None)
-    if title is not None: etree.SubElement(xml, "title").text = title
+    if title is not None:
+        etree.SubElement(xml, "title").text = title
 
     # <subtitle type = "html"
     subtitle = extract_p('properties.abstract', d, None)
-    if subtitle is not None: etree.SubElement(xml, "subtitle").text = subtitle
+    if subtitle is not None:
+        etree.SubElement(xml, "subtitle").text = subtitle
 
     update_date = extract_p('properties.updated', d, None)
-    if update_date is not None: etree.SubElement(xml, "updated").text = update_date
+    if update_date is not None:
+        etree.SubElement(xml, "updated").text = update_date
 
     authors = [axml_author(do) for do in extract_p('properties.authors', d, [])]
     [xml.append(el) for el in authors if el is not None]
 
     publisher = extract_p('properties.publisher', d, None)
-    if publisher is not None: etree.SubElement(xml, ns_elem("dc", "publisher")).text = publisher
+    if publisher is not None:
+        etree.SubElement(xml, ns_elem("dc", "publisher")).text = publisher
 
     creator_application = axml_creator_app(extract_p('properties.generator', d, None))
-    if creator_application is not None and not is_empty(creator_application): xml.append(creator_application)
+    if creator_application is not None and not is_empty(creator_application):
+        xml.append(creator_application)
 
     creator_display = axml_display(extract_p('properties.display', d, None))
-    if creator_display is not None: xml.append(creator_display)
+    if creator_display is not None:
+        xml.append(creator_display)
 
     rights = extract_p('properties.rights', d, None)
-    if rights is not None: etree.SubElement(xml, "rights").text = rights
+    if rights is not None:
+        etree.SubElement(xml, "rights").text = rights
 
     time_interval_of_interest = extract_p('properties.date', d, None)
-    if time_interval_of_interest is not None: etree.SubElement(xml,
-                                                               ns_elem("dc", "date")).text = time_interval_of_interest
+    if time_interval_of_interest is not None:
+        etree.SubElement(xml, ns_elem("dc", "date")).text = time_interval_of_interest
 
     keywords = [axml_category(do) for do in
                 extract_p('properties.categories', d, [])]
@@ -672,27 +678,33 @@ def axml_resource(d):
             pass
 
     title = d['properties']['title']
-    if title is not None: etree.SubElement(entry, "title").text = title
+    if title is not None:
+        etree.SubElement(entry, "title").text = title
 
     subtitle = extract_p('properties.abstract', d, None)
     # <content type = "text" >
-    if subtitle is not None: etree.SubElement(entry, "content").text = subtitle
+    if subtitle is not None:
+        etree.SubElement(entry, "content").text = subtitle
 
     update_date = extract_p('properties.updated', d, None)
-    if update_date is not None: etree.SubElement(entry, "updated").text = update_date
+    if update_date is not None:
+        etree.SubElement(entry, "updated").text = update_date
 
     authors = [axml_author(do) for do in
                extract_p('properties.authors', d, [])]
     [entry.append(el) for el in authors if el is not None]
 
     publisher = extract_p('properties.publisher', d, None)
-    if update_date is not None: etree.SubElement(entry, ns_elem("dc", "publisher")).text = publisher
+    if update_date is not None:
+        etree.SubElement(entry, ns_elem("dc", "publisher")).text = publisher
 
     rights = extract_p('properties.rights', d, None)
-    if update_date is not None: etree.SubElement(entry, ns_elem("dc", "rights")).text = rights
+    if update_date is not None:
+        etree.SubElement(entry, ns_elem("dc", "rights")).text = rights
 
     temporal_extent = extract_p('properties.date', d, None)
-    if temporal_extent is not None: etree.SubElement(entry, "date").text = temporal_extent
+    if temporal_extent is not None:
+        etree.SubElement(entry, "date").text = temporal_extent
 
     keywords = [axml_category(do) for do in
                 extract_p('properties.categories', d, [])]
@@ -703,8 +715,7 @@ def axml_resource(d):
     [entry.append(el) for el in resource_metadata if el is not None]
 
     content_description = [axml_content(do)
-                           for do in extract_p(
-            'properties.links.alternates', d, [])]
+                           for do in extract_p('properties.links.alternates', d, [])]
     [entry.append(el) for el in content_description if el is not None]
 
     preview = [axml_link(do) for do in
@@ -721,23 +732,27 @@ def axml_resource(d):
 
     # TODO no examples for active attribute
     active = extract_p('properties.active', d, None)
-    if active is not None: etree.SubElement(entry, "active").text = active
+    if active is not None:
+        etree.SubElement(entry, "active").text = active
 
     min_scale_denominator = try_float(extract_p(
         'properties.minscaledenominator', d, None))
     # <owc:minScaleDenominator>2500</owc:minScaleDenominator>
-    if min_scale_denominator is not None: etree.SubElement(entry, ns_elem("owc",
-                                                                          "minScaleDenominator")).text = str(min_scale_denominator)
+    if min_scale_denominator is not None:
+        etree.SubElement(entry, ns_elem(
+            "owc", "minScaleDenominator")).text = str(min_scale_denominator)
 
     max_scale_denominator = try_float(extract_p(
         'properties.maxscaledenominator', d, None))
     # <owc:maxScaleDenominator>25000</owc:maxScaleDenominator>
-    if max_scale_denominator is not None: etree.SubElement(entry, ns_elem("owc",
-                                                                          "maxScaleDenominator")).text = str(max_scale_denominator)
+    if max_scale_denominator is not None:
+        etree.SubElement(entry, ns_elem(
+            "owc", "maxScaleDenominator")).text = str(max_scale_denominator)
 
     # TODO no examples for folder attribute
     folder = extract_p('properties.folder', d, None)
-    if folder is not None: etree.SubElement(entry, "folder").text = folder
+    if folder is not None:
+        etree.SubElement(entry, "folder").text = folder
 
     # xml.append(entry)
     return entry
@@ -751,11 +766,14 @@ def axml_creator_app(d):
         try:
             creator_app = etree.Element("generator", nsmap=ns)
             title = extract_p('title', d, None)
-            if title is not None: creator_app.text = title
+            if title is not None:
+                creator_app.text = title
             uri = extract_p('uri', d, None)
-            if uri is not None: creator_app.set("uri", uri)
+            if uri is not None:
+                creator_app.set("uri", uri)
             version = extract_p('version', d, None)
-            if version is not None: creator_app.set("version", version)
+            if version is not None:
+                creator_app.set("version", version)
             return creator_app
         except Exception as ex:
             log.warn('could encode creator_app', ex)
@@ -771,14 +789,17 @@ def axml_display(d):
         try:
             creator_display = etree.Element(ns_elem("owc", "display"), nsmap=ns)
             pixel_width = try_int(extract_p('pixelWidth', d, None))
-            if pixel_width is not None: etree.SubElement(creator_display,
-                                                         ns_elem("owc", "pixelWidth")).text = str(pixel_width)
+            if pixel_width is not None:
+                etree.SubElement(creator_display, ns_elem(
+                    "owc", "pixelWidth")).text = str(pixel_width)
             pixel_height = try_int(extract_p('pixelHeight', d, None))
-            if pixel_height is not None: etree.SubElement(creator_display,
-                                                          ns_elem("owc", "pixelHeight")).text = str(pixel_height)
+            if pixel_height is not None:
+                etree.SubElement(creator_display, ns_elem(
+                    "owc", "pixelHeight")).text = str(pixel_height)
             mm_per_pixel = try_float(extract_p('mmPerPixel', d, None))
-            if mm_per_pixel is not None: etree.SubElement(creator_display,
-                                                          ns_elem("owc", "mmPerPixel")).text = str(mm_per_pixel)
+            if mm_per_pixel is not None:
+                etree.SubElement(creator_display, ns_elem(
+                    "owc", "mmPerPixel")).text = str(mm_per_pixel)
             return creator_display
         except Exception as ex:
             log.warn('could encode creator_display', ex)
@@ -793,17 +814,23 @@ def axml_link(d):
         try:
             link = etree.Element("link", nsmap=ns)
             href = extract_p('href', d, None)
-            if href is not None: link.set("href", href)
+            if href is not None:
+                link.set("href", href)
             rel = extract_p('rel', d, None)
-            if rel is not None: link.set("rel", rel)
+            if rel is not None:
+                link.set("rel", rel)
             mimetype = extract_p('type', d, None)
-            if mimetype is not None: link.set("type", mimetype)
+            if mimetype is not None:
+                link.set("type", mimetype)
             lang = extract_p('lang', d, None)
-            if lang is not None: link.set("lang", lang)
+            if lang is not None:
+                link.set("lang", lang)
             title = extract_p('title', d, None)
-            if title is not None: link.set("title", title)
+            if title is not None:
+                link.set("title", title)
             length = try_int(extract_p('length', d, None))
-            if length is not None: link.set("length", str(length))
+            if length is not None:
+                link.set("length", str(length))
             return link
         except Exception as ex:
             log.warn('could not encode link', ex)
@@ -818,11 +845,14 @@ def axml_category(d):
         try:
             category = etree.Element("category", nsmap=ns)
             term = extract_p('term', d, None)
-            if term is not None: category.set("term", term)
+            if term is not None:
+                category.set("term", term)
             scheme = extract_p('scheme', d, None)
-            if scheme is not None: category.set("scheme", scheme)
+            if scheme is not None:
+                category.set("scheme", scheme)
             label = extract_p('label', d, None)
-            if label is not None: category.set("label", label)
+            if label is not None:
+                category.set("label", label)
             return category
         except Exception as ex:
             log.warn('could encode category', ex)
@@ -839,11 +869,14 @@ def axml_author(d):
         try:
             author = etree.Element("author", nsmap=ns)
             name = extract_p('name', d, None)
-            if name is not None: etree.SubElement(author, "name").text = name
+            if name is not None:
+                etree.SubElement(author, "name").text = name
             email = extract_p('email', d, None)
-            if email is not None: etree.SubElement(author, "email").text = email
+            if email is not None:
+                etree.SubElement(author, "email").text = email
             uri = extract_p('uri', d, None)
-            if uri is not None: etree.SubElement(author, "uri").text = uri
+            if uri is not None:
+                etree.SubElement(author, "uri").text = uri
             return author
         except Exception as ex:
             log.warn('could encode author', ex)
@@ -891,22 +924,28 @@ def axml_operation(d):
             operation = etree.Element(ns_elem("owc", "operation"), nsmap=ns)
 
             operations_code = extract_p('code', d, None)
-            if operations_code is not None: operation.set("code", operations_code)
+            if operations_code is not None:
+                operation.set("code", operations_code)
             http_method = extract_p('method', d, None)
-            if http_method is not None: operation.set("method", http_method)
+            if http_method is not None:
+                operation.set("method", http_method)
             mimetype = extract_p('type', d, None)
-            if mimetype is not None: operation.set("type", mimetype)
+            if mimetype is not None:
+                operation.set("type", mimetype)
             request_url = extract_p('href', d, None)
-            if request_url is not None: operation.set("href", request_url)
+            if request_url is not None:
+                operation.set("href", request_url)
 
             # use axml_content here
             request = extract_p('request', d, None)
             request_enc = None if request is None else axml_content(request)
-            if request_enc is not None: operation.append(request_enc)
+            if request_enc is not None:
+                operation.append(request_enc)
             # use axml_content here
             result = extract_p('result', d, None)
             result_enc = None if result is None else axml_content(result)
-            if result_enc is not None: operation.append(result_enc)
+            if result_enc is not None:
+                operation.append(result_enc)
             return operation
         except Exception as ex:
             log.warn('could encode operation', ex)
@@ -927,20 +966,26 @@ def axml_styleset(d):
             styleset = etree.Element(ns_elem("owc", "styleSet"), nsmap=ns)
 
             name = extract_p('name', d, None)
-            if name is not None: etree.SubElement(styleset, ns_elem("owc", "name")).text = name
+            if name is not None:
+                etree.SubElement(styleset, ns_elem("owc", "name")).text = name
             title = extract_p('title', d, None)
-            if title is not None: etree.SubElement(styleset, ns_elem("owc", "title")).text = title
+            if title is not None:
+                etree.SubElement(styleset, ns_elem("owc", "title")).text = title
             subtitle = extract_p('abstract', d, None)
-            if subtitle is not None: etree.SubElement(styleset, ns_elem("owc", "abstract")).text = subtitle
+            if subtitle is not None:
+                etree.SubElement(styleset, ns_elem("owc", "abstract")).text = subtitle
             is_default = extract_p('default', d, None)
             # TODO no example for default setting on style set
-            if is_default is not None: etree.SubElement(styleset, ns_elem("owc", "default")).text = is_default
+            if is_default is not None:
+                etree.SubElement(styleset, ns_elem("owc", "default")).text = is_default
             legend_url = extract_p('legendURL', d, None)
-            if legend_url is not None: etree.SubElement(styleset, ns_elem("owc", "legendURL")).text = legend_url
+            if legend_url is not None:
+                etree.SubElement(styleset, ns_elem("owc", "legendURL")).text = legend_url
             # TODO no example for content on style set
             content = extract_p('content', d, None)
             content_enc = None if content is None else axml_content(content)
-            if content_enc is not None: styleset.append(content_enc)
+            if content_enc is not None:
+                styleset.append(content_enc)
             return styleset
         except Exception as ex:
             log.warn('could encode styleset', ex)
@@ -961,14 +1006,18 @@ def axml_content(d):
             content_elem = etree.Element(ns_elem("owc", "content"), nsmap=ns)
 
             mimetype = extract_p('type', d, None)
-            if mimetype is not None: content_elem.set("type", mimetype)
+            if mimetype is not None:
+                content_elem.set("type", mimetype)
             url = extract_p('url', d, None)
-            if url is not None: content_elem.set("href", url)
+            if url is not None:
+                content_elem.set("href", url)
             title = extract_p('title', d, None)
-            if title is not None: content_elem.set("title", title)
+            if title is not None:
+                content_elem.set("title", title)
 
             content = extract_p('content', d, None)
-            if content is None: content_elem.text = content
+            if content is None:
+                content_elem.text = content
             return content_elem
         except Exception as ex:
             log.warn('could encode content', ex)

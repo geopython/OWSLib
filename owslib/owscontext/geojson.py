@@ -12,8 +12,6 @@ GeoJson Encoding: http://www.opengeospatial.org/standards/owc
 OGC OWS Context GeoJSON Encoding Standard 1.0 (14-055r2)
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import json
 from datetime import datetime
 from owslib.owscontext.common import skip_nulls, skip_nulls_rec

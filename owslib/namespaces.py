@@ -1,7 +1,3 @@
-from __future__ import (absolute_import, division, print_function)
-import six
-
-
 class Namespaces(object):
     """
         Class for holding and maniputlating a dictionary containing the various namespaces for
@@ -9,59 +5,59 @@ class Namespaces(object):
     """
 
     namespace_dict = {
-        'atom'  :   'http://www.w3.org/2005/Atom',
-        'csw'   :   'http://www.opengis.net/cat/csw/2.0.2',
-        'dc'    :   'http://purl.org/dc/elements/1.1/',
-        'dct'   :   'http://purl.org/dc/terms/',
-        'dif'   :   'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
-        'draw'  :   'gov.usgs.cida.gdp.draw',
-        'fes'   :   'http://www.opengis.net/fes/2.0',
-        'fgdc'  :   'http://www.opengis.net/cat/csw/csdgm',
-        'gco'   :   'http://www.isotc211.org/2005/gco',
-        'gfc'   :   'http://www.isotc211.org/2005/gfc',
-        'gm03'  :   'http://www.interlis.ch/INTERLIS2.3',
-        'gmd'   :   'http://www.isotc211.org/2005/gmd',
-        'gmi'   :   'http://www.isotc211.org/2005/gmi',
-        'gml'   :   'http://www.opengis.net/gml',
-        'gml311':   'http://www.opengis.net/gml',
-        'gml32' :   'http://www.opengis.net/gml/3.2',
-        'gmx'   :   'http://www.isotc211.org/2005/gmx',
-        'gts'   :   'http://www.isotc211.org/2005/gts',
-        'ogc'   :   'http://www.opengis.net/ogc',
-        'om'    :   'http://www.opengis.net/om/1.0',
-        'om10'  :   'http://www.opengis.net/om/1.0',
-        'om100' :   'http://www.opengis.net/om/1.0',
-        'om20'  :   'http://www.opengis.net/om/2.0',
-        'ows'   :   'http://www.opengis.net/ows',
-        'ows100':   'http://www.opengis.net/ows',
-        'ows110':   'http://www.opengis.net/ows/1.1',
-        'ows200':   'http://www.opengis.net/ows/2.0',
-        'rim'   :   'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0',
-        'rdf'   :   'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-        'sa'    :   'http://www.opengis.net/sampling/1.0',
-        'sml'   :   'http://www.opengis.net/sensorML/1.0.1',
-        'sml101':   'http://www.opengis.net/sensorML/1.0.1',
-        'sos'   :   'http://www.opengis.net/sos/1.0',
-        'sos20' :   'http://www.opengis.net/sos/2.0',
-        'srv'   :   'http://www.isotc211.org/2005/srv',
-        'swe'   :   'http://www.opengis.net/swe/1.0.1',
-        'swe10' :   'http://www.opengis.net/swe/1.0',
-        'swe101':   'http://www.opengis.net/swe/1.0.1',
-        'swe20' :   'http://www.opengis.net/swe/2.0',
-        'swes'  :   'http://www.opengis.net/swes/2.0',
-        'tml'   :   'ttp://www.opengis.net/tml',
-        'wfs'   :   'http://www.opengis.net/wfs',
-        'wfs20' :   'http://www.opengis.net/wfs/2.0',
-        'wcs'   :   'http://www.opengis.net/wcs',
-        'wms'   :   'http://www.opengis.net/wms',
-        'wps'   :   'http://www.opengis.net/wps/1.0.0',
-        'wps100':   'http://www.opengis.net/wps/1.0.0',
-        'xlink' :   'http://www.w3.org/1999/xlink',
-        'xs'    :   'http://www.w3.org/2001/XMLSchema',
-        'xs2'   :   'http://www.w3.org/XML/Schema',
-        'xsi'   :   'http://www.w3.org/2001/XMLSchema-instance',
-        'wml2'  :   'http://www.opengis.net/waterml/2.0'
-    }    
+        'atom': 'http://www.w3.org/2005/Atom',
+        'csw': 'http://www.opengis.net/cat/csw/2.0.2',
+        'dc': 'http://purl.org/dc/elements/1.1/',
+        'dct': 'http://purl.org/dc/terms/',
+        'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
+        'draw': 'gov.usgs.cida.gdp.draw',
+        'fes': 'http://www.opengis.net/fes/2.0',
+        'fgdc': 'http://www.opengis.net/cat/csw/csdgm',
+        'gco': 'http://www.isotc211.org/2005/gco',
+        'gfc': 'http://www.isotc211.org/2005/gfc',
+        'gm03': 'http://www.interlis.ch/INTERLIS2.3',
+        'gmd': 'http://www.isotc211.org/2005/gmd',
+        'gmi': 'http://www.isotc211.org/2005/gmi',
+        'gml': 'http://www.opengis.net/gml',
+        'gml311': 'http://www.opengis.net/gml',
+        'gml32': 'http://www.opengis.net/gml/3.2',
+        'gmx': 'http://www.isotc211.org/2005/gmx',
+        'gts': 'http://www.isotc211.org/2005/gts',
+        'ogc': 'http://www.opengis.net/ogc',
+        'om': 'http://www.opengis.net/om/1.0',
+        'om10': 'http://www.opengis.net/om/1.0',
+        'om100': 'http://www.opengis.net/om/1.0',
+        'om20': 'http://www.opengis.net/om/2.0',
+        'ows': 'http://www.opengis.net/ows',
+        'ows100': 'http://www.opengis.net/ows',
+        'ows110': 'http://www.opengis.net/ows/1.1',
+        'ows200': 'http://www.opengis.net/ows/2.0',
+        'rim': 'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0',
+        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'sa': 'http://www.opengis.net/sampling/1.0',
+        'sml': 'http://www.opengis.net/sensorML/1.0.1',
+        'sml101': 'http://www.opengis.net/sensorML/1.0.1',
+        'sos': 'http://www.opengis.net/sos/1.0',
+        'sos20': 'http://www.opengis.net/sos/2.0',
+        'srv': 'http://www.isotc211.org/2005/srv',
+        'swe': 'http://www.opengis.net/swe/1.0.1',
+        'swe10': 'http://www.opengis.net/swe/1.0',
+        'swe101': 'http://www.opengis.net/swe/1.0.1',
+        'swe20': 'http://www.opengis.net/swe/2.0',
+        'swes': 'http://www.opengis.net/swes/2.0',
+        'tml': 'ttp://www.opengis.net/tml',
+        'wfs': 'http://www.opengis.net/wfs',
+        'wfs20': 'http://www.opengis.net/wfs/2.0',
+        'wcs': 'http://www.opengis.net/wcs',
+        'wms': 'http://www.opengis.net/wms',
+        'wps': 'http://www.opengis.net/wps/1.0.0',
+        'wps100': 'http://www.opengis.net/wps/1.0.0',
+        'xlink': 'http://www.w3.org/1999/xlink',
+        'xs': 'http://www.w3.org/2001/XMLSchema',
+        'xs2': 'http://www.w3.org/XML/Schema',
+        'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+        'wml2': 'http://www.opengis.net/waterml/2.0'
+    }
 
     def get_namespace(self, key):
         """
@@ -81,7 +77,7 @@ class Namespaces(object):
         if key in self.namespace_dict:
             retval = self.namespace_dict[key]
         return retval
-    
+
     def get_versioned_namespace(self, key, ver=None):
         """
             Retrieves a namespace from the dictionary with a specific version number
@@ -96,7 +92,7 @@ class Namespaces(object):
             >>> ns.get_versioned_namespace('ows','1.1.0')
             'http://www.opengis.net/ows/1.1'
         """
-        
+
         if ver is None:
             return self.get_namespace(key)
 
@@ -104,15 +100,15 @@ class Namespaces(object):
         # Strip the decimals out of the passed in version
         for s in ver.split('.'):
             version += s
-        
+
         key += version
 
         retval = None
         if key in self.namespace_dict:
             retval = self.namespace_dict[key]
-            
+
         return retval
-    
+
     def get_namespaces(self, keys=None):
         """
             Retrieves a dict of namespaces from the namespace mapping
@@ -137,8 +133,8 @@ class Namespaces(object):
         if keys is None or len(keys) == 0:
             return self.namespace_dict
 
-        if isinstance(keys, six.string_types):
-            return { keys: self.get_namespace(keys) }
+        if isinstance(keys, str):
+            return {keys: self.get_namespace(keys)}
 
         retval = {}
         for key in keys:
@@ -147,7 +143,7 @@ class Namespaces(object):
         return retval
 
     def get_namespace_from_url(self, url):
-        for k, v in self.namespace_dict.items():
+        for k, v in list(self.namespace_dict.items()):
             if v == url:
                 return k
         return None

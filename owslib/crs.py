@@ -9,8 +9,6 @@
 
 """ API for OGC CRS constructs. """
 
-from __future__ import (absolute_import, division, print_function)
-
 # list of URN codes for EPSG in which axis order
 # of coordinates are y,x (e.g. lat, long)
 axisorder_yx = frozenset([
@@ -1719,6 +1717,7 @@ axisorder_yx = frozenset([
     31700
 ])
 
+
 class Crs(object):
     """Initialize a CRS construct
 
@@ -1747,7 +1746,7 @@ class Crs(object):
 
         values = self.id.split(':')
 
-        if self.id.find('/def/crs/') != -1: # URI Style 1
+        if self.id.find('/def/crs/') != -1:  # URI Style 1
             self.encoding = "uri"
             vals = self.id.split('/')
             self.authority = vals[5].upper()
@@ -1777,7 +1776,7 @@ class Crs(object):
             # code is always the last value
             try:
                 self.code = int(values[-1])
-            except:
+            except Exception:
                 self.code = values[-1]
 
         elif len(values) == 2:  # it's an authority:code code
@@ -1786,7 +1785,7 @@ class Crs(object):
 
             try:
                 self.code = int(values[1])
-            except:
+            except Exception:
                 self.code = values[1]
 
         # if the user has not forced the axisorder,
@@ -1795,7 +1794,6 @@ class Crs(object):
         if axisorder is None:
             if self.code in axisorder_yx:
                 self.axisorder = 'yx'
-
 
     def getcode(self):
         """Create for example "EPSG:4326" string and return back
@@ -1813,11 +1811,11 @@ class Crs(object):
         :returns: String code formated in "urn:ogc:def:authority:code"
         """
 
-        return 'urn:%s:def:crs:%s:%s:%s' % (
-                    (self.naming_authority and self.naming_authority or "ogc"),
-                                    (self.authority or ""),
-                                    (self.version or ""),
-                                    (self.code or ""))
+        return 'urn:{}:def:crs:{}:{}:{}'.format(
+            (self.naming_authority and self.naming_authority or "ogc"),
+            (self.authority or ""),
+            (self.version or ""),
+            (self.code or ""))
 
     def getcodeuri1(self):
         """Create for example "http://www.opengis.net/def/crs/EPSG/0/4326"
