@@ -99,8 +99,11 @@ class ServiceProvider(object):
         self.contact = ServiceContact(infoset, namespace)
         val = self._root.find(util.nspath('ProviderSite', namespace))
         if val is not None:
-            urlattrib = val.attrib[util.nspath('href', XLINK_NAMESPACE)]
-            self.url = util.testXMLValue(urlattrib, True)
+            try:
+                urlattrib = val.attrib[util.nspath('href', XLINK_NAMESPACE)]
+                self.url = util.testXMLValue(urlattrib, True)
+            except KeyError:
+                self.url = None
         else:
             self.url = None
 
