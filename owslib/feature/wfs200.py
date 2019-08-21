@@ -150,7 +150,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
         # TODO: update serviceProvider metadata, miss it out for now
         serviceproviderelem = self._capabilities.find(nspath("ServiceProvider"))
-        if serviceproviderelem:
+        if serviceproviderelem is not None:
             self.provider = ServiceProvider(serviceproviderelem)
 
         # serviceOperations metadata
