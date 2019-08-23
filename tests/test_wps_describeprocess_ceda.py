@@ -7,7 +7,7 @@ def test_wps_describeprocess_ceda():
     wps = WebProcessingService('http://ceda-wps2.badc.rl.ac.uk/wps', skip_caps=True)
     # Execute fake invocation of DescribeProcess operation by parsing cached response from CEDA service
     xml = open(resource_file('wps_CEDADescribeProcess.xml'), 'rb').read()
-    process = wps.describeprocess('Doubleit', xml=xml)
+    process = wps.describeprocess('DoubleIt', xml=xml)
     # Check process description
     assert process.identifier == 'DoubleIt'
     assert process.title == 'Doubles the input number and returns value'

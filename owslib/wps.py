@@ -287,8 +287,11 @@ class WebProcessingService(object):
 
         if identifier == 'all':
             return processes
-        else:
-            return processes[0]
+        # return process with given identifier
+        for process in processes:
+            if process.identifier == identifier:
+                return process
+        raise ValueError('process with identifier {} not found'.format(identifier))
 
     def execute(self, identifier, inputs, output=None, mode=ASYNC, lineage=False, request=None, response=None):
         """

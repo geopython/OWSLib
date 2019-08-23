@@ -24,7 +24,7 @@ def test_wmts():
     assert wmts.provider.url == 'https://earthdata.nasa.gov/'
     # Available Layers:
     assert len(wmts.contents.keys()) > 0
-    assert sorted(list(wmts.contents))[0] == 'AIRS_All_Sky_Outgoing_Longwave_Radiation_Daily_Day'
+    assert sorted(list(wmts.contents))[0] == 'AIRS_CO_Total_Column_Day'
     # Fetch a tile (using some defaults):
     tile = wmts.gettile(layer='MODIS_Terra_CorrectedReflectance_TrueColor',
                         tilematrixset='EPSG4326_250m', tilematrix='0',
