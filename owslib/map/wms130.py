@@ -16,6 +16,7 @@ API For Web Map Service version 1.3.0.
 from urllib.parse import urlencode
 
 import warnings
+from math import sqrt
 from owslib.etree import etree
 from owslib.util import (openURL, ServiceException, testXMLValue,
                          extract_xml_list, xmltag_split, OrderedDict, nspath,
@@ -31,6 +32,11 @@ from owslib.util import log
 n = Namespaces()
 WMS_NAMESPACE = n.get_namespace("wms")
 OGC_NAMESPACE = n.get_namespace('ogc')
+INCH_TO_M = 0.0254  # Standard inch to meter conversion
+OGC_PIXEL_SIZE = 0.00028  # The OGC standard pixel size is 0.28 mm, here it's in meter
+OGC_DPI = INCH_TO_M / OGC_PIXEL_SIZE
+# The sqrt(2) is because the scale is on the diagonal and the resolution on the side
+SCALEDENOM_TO_RESOLUTION = 1 / OGC_DPI * INCH_TO_M * sqrt(2)
 
 
 class WebMapService_1_3_0(object):
@@ -507,11 +513,15 @@ class ContentMetadata(AbstractContentMetadata):
         self.boundingBox = crs_list[0] if crs_list else self.boundingBoxWGS84
 
         # ScaleHint
-        sh = elem.find(nspath('ScaleHint', WMS_NAMESPACE))
         self.scaleHint = None
-        if sh is not None:
-            if 'min' in sh.attrib and 'max' in sh.attrib:
-                self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']}
+        self.min_scale_denominator = elem.find(nspath('MinScaleDenominator', WMS_NAMESPACE))
+        min_scale_hint = 0 if self.min_scale_denominator is None else \
+            float(self.min_scale_denominator.text) * SCALEDENOM_TO_RESOLUTION
+        self.max_scale_denominator = elem.find(nspath('MaxScaleDenominator', WMS_NAMESPACE))
+        max_scale_hint = 0 if self.max_scale_denominator is None else \
+            float(self.max_scale_denominator.text) * SCALEDENOM_TO_RESOLUTION
+        if self.min_scale_denominator is not None or self.max_scale_denominator is not None:
+            self.scaleHint = {'min': min_scale_hint, 'max': max_scale_hint}
 
         attribution = elem.find(nspath('Attribution', WMS_NAMESPACE))
         if attribution is not None:
