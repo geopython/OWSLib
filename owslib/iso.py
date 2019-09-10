@@ -952,6 +952,9 @@ class MD_ReferenceSystem(object):
         else:
             val = md.find(util.nspath_eval(
                 'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
+            if val is None:
+                val = md.find(util.nspath_eval(
+                    'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code/gmx:Anchor', namespaces))
             if val is not None:
                 self.code = util.testXMLValue(val)
             else:
