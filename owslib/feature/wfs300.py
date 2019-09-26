@@ -100,28 +100,28 @@ class WebFeatureService_3_0_0(object):
         response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response["collections"]
 
-    def collection(self, collection_name):
+    def collection(self, collection_id):
         """
         implements Requirement 15 (/req/core/sfc-md-op)
 
-        @type collection_name: string
-        @param collection_name: name of collection
+        @type collection_id: string
+        @param collection_id: id of collection
 
         @returns: feature collection metadata
         """
 
-        path = "collections/{}".format(collection_name)
+        path = "collections/{}".format(collection_id)
         url = self._build_url(path)
         LOGGER.debug("Request: {}".format(url))
         response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
         return response
 
-    def collection_items(self, collection_name, **kwargs):
+    def collection_items(self, collection_id, **kwargs):
         """
         implements Requirement 17 (/req/core/fc-op)
 
-        @type collection_name: string
-        @param collection_name: name of collection
+        @type collection_id: string
+        @param collection_id: id of collection
         @type bbox: list
         @param bbox: list of minx,miny,maxx,maxy
         @type time: string
@@ -137,7 +137,7 @@ class WebFeatureService_3_0_0(object):
         if "bbox" in kwargs:
             kwargs["bbox"] = ",".join(kwargs["bbox"])
 
-        path = "collections/{}/items".format(collection_name)
+        path = "collections/{}/items".format(collection_id)
         url = self._build_url(path)
         LOGGER.debug("Request: {}".format(url))
         response = http_get(
@@ -145,19 +145,19 @@ class WebFeatureService_3_0_0(object):
         ).json()
         return response
 
-    def collection_item(self, collection_name, identifier):
+    def collection_item(self, collection_id, identifier):
         """
         implements Requirement 30 (/req/core/f-op)
 
-        @type collection_name: string
-        @param collection_name: name of collection
+        @type collection_id: string
+        @param collection_id: id of collection
         @type identifier: string
         @param identifier: feature identifier
 
         @returns: single feature result
         """
 
-        path = "collections/{}/items/{}".format(collection_name, identifier)
+        path = "collections/{}/items/{}".format(collection_id, identifier)
         url = self._build_url(path)
         LOGGER.debug("Request: {}".format(url))
         response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
