@@ -205,22 +205,14 @@ class WebProcessingService(object):
     """
 
     def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False,
-                 headers=None, verify=True, cert=None, timeout=None, auth=None):
+                 headers=None, verify=None, cert=None, timeout=None, auth=None):
         """
         Initialization method resets the object status.
         By default it will execute a GetCapabilities invocation to the remote service,
         which can be skipped by using skip_caps=True.
-        """
 
-        if auth:
-            if username:
-                auth.username = username
-            if password:
-                auth.password = password
-            if cert:
-                auth.cert = cert
-            if verify:
-                auth.verify = verify
+        Parameters username, password, verify and cert are deprecated. Please use auth parameter.
+        """
         self.auth = auth or Authentication(username, password, cert, verify)
 
         # fields passed in from object initializer
@@ -448,20 +440,12 @@ class WPSReader(object):
         self.timeout = timeout
         self.auth = auth or Authentication()
 
-    def _readFromUrl(self, url, data, timeout, method='Get', username=None, password=None,
-                     headers=None, verify=True, cert=None):
+    def _readFromUrl(self, url, data, timeout, method='Get', headers=None):
         """
         Method to get and parse a WPS document, returning an elementtree instance.
         :param str url: WPS service base url.
         :param str data: GET: dictionary of HTTP (key, value) parameter pairs, POST: XML document to post
-        :param str username: optional user credentials
-        :param str password: optional user credentials
         """
-        username = username or self.auth.username
-        password = password or self.auth.password
-        cert = cert or self.auth.cert
-        verify = verify or self.auth.verify
-
         if method == 'Get':
             # full HTTP request url
             request_url = build_get_url(url, data, overwrite=True)
@@ -470,14 +454,14 @@ class WPSReader(object):
             # split URL into base url and query string to use utility function
             spliturl = request_url.split('?')
             u = openURL(spliturl[0], spliturl[
-                        1], method='Get', username=username, password=password,
-                        headers=headers, verify=verify, cert=cert, timeout=self.timeout)
+                        1], method='Get', username=self.auth.username, password=self.auth.password,
+                        headers=headers, verify=self.auth.verify, cert=self.auth.cert, timeout=self.timeout)
             return etree.fromstring(u.read())
 
         elif method == 'Post':
             u = openURL(url, data, method='Post',
-                        username=username, password=password,
-                        headers=headers, verify=verify, cert=cert, timeout=timeout)
+                        username=self.auth.username, password=self.auth.password,
+                        headers=headers, verify=self.auth.verify, cert=self.auth.cert, timeout=timeout)
             return etree.fromstring(u.read())
 
         else:
@@ -505,21 +489,17 @@ class WPSCapabilitiesReader(WPSReader):
         super(WPSCapabilitiesReader, self).__init__(
             version=version, verbose=verbose, timeout=timeout, auth=auth)
 
-    def readFromUrl(self, url, username=None, password=None,
-                    headers=None, verify=True, cert=None):
+    def readFromUrl(self, url, headers=None):
         """
         Method to get and parse a WPS capabilities document, returning an elementtree instance.
 
         :param str url: WPS service base url, to which is appended the HTTP parameters: service, version, and request.
-        :param str username: optional user credentials
-        :param str password: optional user credentials
         """
         return self._readFromUrl(url,
                                  {'service': 'WPS', 'request':
                                      'GetCapabilities', 'version': self.version},
                                  self.timeout,
-                                 username=username, password=password,
-                                 headers=headers, verify=verify, cert=cert)
+                                 headers=headers)
 
 
 class WPSDescribeProcessReader(WPSReader):
@@ -533,8 +513,7 @@ class WPSDescribeProcessReader(WPSReader):
         super(WPSDescribeProcessReader, self).__init__(
             version=version, verbose=verbose, timeout=timeout, auth=auth)
 
-    def readFromUrl(self, url, identifier, username=None, password=None,
-                    headers=None, verify=True, cert=None):
+    def readFromUrl(self, url, identifier, headers=None):
         """
         Reads a WPS DescribeProcess document from a remote service and returns the XML etree object
 
@@ -545,8 +524,7 @@ class WPSDescribeProcessReader(WPSReader):
                                  {'service': 'WPS', 'request': 'DescribeProcess',
                                      'version': self.version, 'identifier': identifier},
                                  self.timeout,
-                                 username=username, password=password,
-                                 headers=headers, verify=verify, cert=cert)
+                                 headers=headers)
 
 
 class WPSExecuteReader(WPSReader):
@@ -559,15 +537,13 @@ class WPSExecuteReader(WPSReader):
         # superclass initializer
         super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout, auth=auth)
 
-    def readFromUrl(self, url, data={}, method='Get', username=None, password=None,
-                    headers=None, verify=True, cert=None):
+    def readFromUrl(self, url, data={}, method='Get', headers=None):
         """
         Reads a WPS status document from a remote service and returns the XML etree object.
         :param str url: the URL to submit the GET/POST request to.
         """
 
-        return self._readFromUrl(url, data, self.timeout, method, username=username, password=password,
-                                 headers=headers, verify=verify, cert=cert)
+        return self._readFromUrl(url, data, self.timeout, method, headers=headers)
 
 
 class WPSExecution(object):
@@ -576,25 +552,15 @@ class WPSExecution(object):
     Class that represents a single WPS process executed on a remote WPS service.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False,
-                 headers=None, verify=True, cert=None, timeout=None, auth=None):
-
-        if auth:
-            if username:
-                auth.username = username
-            if password:
-                auth.password = password
-            if cert:
-                auth.cert = cert
-            if verify:
-                auth.verify = verify
+    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, verbose=False,
+                 headers=None, timeout=None, auth=None):
 
         # initialize fields
         self.url = url
         self.version = version
         self.verbose = verbose
         self.headers = headers
-        self.auth = auth or Authentication(username, password, cert, verify)
+        self.auth = auth or Authentication()
         self.timeout = timeout
 
         # request document
