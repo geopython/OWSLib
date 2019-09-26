@@ -127,7 +127,8 @@ class WebMapTileService(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, vendor_kwargs=None, auth=None):
+                 parse_remote_metadata=False, vendor_kwargs=None, auth=None,
+                 timeout=30):
         """Initialize.
 
         Parameters
@@ -150,6 +151,8 @@ class WebMapTileService(object):
             requests.
         auth : owslib.util.Authentication
             Instance of Authentication class to hold username/password/cert/verify
+        timeout : int
+            number of seconds for GetTile request
 
         """
         self.url = clean_ows_url(url)
@@ -162,6 +165,7 @@ class WebMapTileService(object):
         self.vendor_kwargs = vendor_kwargs
         self._capabilities = None
         self.auth = auth or Authentication(username, password)
+        self.timeout = timeout or 30
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(
@@ -448,7 +452,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             resurl = self.buildTileResource(
                 layer, style, format, tilematrixset, tilematrix,
                 row, column, **vendor_kwargs)
-            u = openURL(resurl, auth=self.auth)
+            u = openURL(resurl, auth=self.auth, timeout=self.timeout)
             return u
 
         # KVP implemetation
@@ -474,7 +478,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
                     base_url = get_verbs[0].get('url')
             except StopIteration:
                 pass
-        u = openURL(base_url, data, auth=self.auth)
+        u = openURL(base_url, data, auth=self.auth, timeout=self.timeout)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
