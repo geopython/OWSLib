@@ -30,7 +30,7 @@ def test_wfs3_pygeoapi():
     assert len(collections) > 0
 
     lakes = w.collection('lakes')
-    assert lakes['name'] == 'lakes'
+    assert lakes['id'] == 'lakes'
     assert lakes['title'] == 'Large Lakes'
     assert lakes['description'] == 'lakes of the world, public domain'
 
