@@ -115,6 +115,7 @@ from owslib.util import (testXMLValue, testXMLAttribute, build_get_url, clean_ow
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 from urllib.parse import urlparse
+import warnings
 
 # namespace definition
 n = Namespaces()
@@ -182,6 +183,24 @@ def is_complexdata(val):
     return isinstance(val, IComplexDataInput)
 
 
+def _fix_auth(auth, username=None, password=None, verify=None, cert=None):
+    """Updates auth from deprecated parameters username, password, verify and cert."""
+    if any(p is not None for p in (username, password, verify, cert)):
+        message = 'The use of "username", "password", "verify", and "cert" is deprecated. ' + \
+                  'Please use the "auth" keyword during class instantiation. ' + \
+                  'These keywords will be removed in a future release.'
+        warnings.warn(message, DeprecationWarning)
+    if username is not None:
+        auth.username = username
+    if password is not None:
+        auth.password = password
+    if verify is not None:
+        auth.verify = verify
+    if cert is not None:
+        auth.cert = cert
+    return auth
+
+
 class IComplexDataInput(object):
 
     """
@@ -213,7 +232,8 @@ class WebProcessingService(object):
 
         Parameters username, password, verify and cert are deprecated. Please use auth parameter.
         """
-        self.auth = auth or Authentication(username, password, cert, verify)
+        self.auth = auth or Authentication()
+        _fix_auth(self.auth, username, password, verify, cert)
 
         # fields passed in from object initializer
         self.url = clean_ows_url(url)
@@ -440,12 +460,14 @@ class WPSReader(object):
         self.timeout = timeout
         self.auth = auth or Authentication()
 
-    def _readFromUrl(self, url, data, timeout, method='Get', headers=None):
+    def _readFromUrl(self, url, data, timeout, method='Get', username=None, password=None,
+                     headers=None, verify=True, cert=None):
         """
         Method to get and parse a WPS document, returning an elementtree instance.
         :param str url: WPS service base url.
         :param str data: GET: dictionary of HTTP (key, value) parameter pairs, POST: XML document to post
         """
+        _fix_auth(self.auth, username, password, verify, cert)
         if method == 'Get':
             # full HTTP request url
             request_url = build_get_url(url, data, overwrite=True)
@@ -489,7 +511,8 @@ class WPSCapabilitiesReader(WPSReader):
         super(WPSCapabilitiesReader, self).__init__(
             version=version, verbose=verbose, timeout=timeout, auth=auth)
 
-    def readFromUrl(self, url, headers=None):
+    def readFromUrl(self, url, username=None, password=None,
+                    headers=None, verify=None, cert=None):
         """
         Method to get and parse a WPS capabilities document, returning an elementtree instance.
 
@@ -499,7 +522,8 @@ class WPSCapabilitiesReader(WPSReader):
                                  {'service': 'WPS', 'request':
                                      'GetCapabilities', 'version': self.version},
                                  self.timeout,
-                                 headers=headers)
+                                 username=username, password=password,
+                                 headers=headers, verify=verify, cert=cert)
 
 
 class WPSDescribeProcessReader(WPSReader):
@@ -513,7 +537,8 @@ class WPSDescribeProcessReader(WPSReader):
         super(WPSDescribeProcessReader, self).__init__(
             version=version, verbose=verbose, timeout=timeout, auth=auth)
 
-    def readFromUrl(self, url, identifier, headers=None):
+    def readFromUrl(self, url, identifier, username=None, password=None,
+                    headers=None, verify=None, cert=None):
         """
         Reads a WPS DescribeProcess document from a remote service and returns the XML etree object
 
@@ -524,7 +549,8 @@ class WPSDescribeProcessReader(WPSReader):
                                  {'service': 'WPS', 'request': 'DescribeProcess',
                                      'version': self.version, 'identifier': identifier},
                                  self.timeout,
-                                 headers=headers)
+                                 username=username, password=password,
+                                 headers=headers, verify=verify, cert=cert)
 
 
 class WPSExecuteReader(WPSReader):
@@ -537,13 +563,15 @@ class WPSExecuteReader(WPSReader):
         # superclass initializer
         super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout, auth=auth)
 
-    def readFromUrl(self, url, data={}, method='Get', headers=None):
+    def readFromUrl(self, url, data={}, method='Get', username=None, password=None,
+                    headers=None, verify=None, cert=None):
         """
         Reads a WPS status document from a remote service and returns the XML etree object.
         :param str url: the URL to submit the GET/POST request to.
         """
 
-        return self._readFromUrl(url, data, self.timeout, method, headers=headers)
+        return self._readFromUrl(url, data, self.timeout, method, username=username, password=password,
+                                 headers=headers, verify=verify, cert=cert)
 
 
 class WPSExecution(object):
@@ -552,8 +580,8 @@ class WPSExecution(object):
     Class that represents a single WPS process executed on a remote WPS service.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, verbose=False,
-                 headers=None, timeout=None, auth=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False,
+                 headers=None, verify=None, cert=None, timeout=None, auth=None):
 
         # initialize fields
         self.url = url
@@ -561,6 +589,7 @@ class WPSExecution(object):
         self.verbose = verbose
         self.headers = headers
         self.auth = auth or Authentication()
+        _fix_auth(self.auth, username, password, verify, cert)
         self.timeout = timeout
 
         # request document
