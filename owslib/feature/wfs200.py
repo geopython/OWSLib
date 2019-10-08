@@ -29,6 +29,8 @@ try:
 except ImportError:
     from urllib.parse import urlencode
 
+from urllib import unquote_plus
+    
 import logging
 from owslib.util import log
 
@@ -228,7 +230,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
 
         # If method is 'Post', data will be None here
-        u = openURL(url, data, method, timeout=self.timeout,
+        u = openURL(unquote_plus(url), data, method, timeout=self.timeout,
                     username=self.username, password=self.password)
 
         # check for service exceptions, rewrap, and return
