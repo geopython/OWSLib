@@ -39,7 +39,7 @@ class TileMapService(object):
     """
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, timeout=30, auth=None):
+                 parse_remote_metadata=False, timeout=30, headers=None, auth=None):
         """Initialize."""
         if auth:
             if username:
@@ -47,6 +47,7 @@ class TileMapService(object):
             if password:
                 auth.password = password
         self.url = url
+        self.headers = headers
         self.auth = auth or Authentication(username, password)
         self.version = version
         self.timeout = timeout
@@ -56,7 +57,7 @@ class TileMapService(object):
 
         # Authentication handled by Reader
         reader = TMSCapabilitiesReader(
-            self.version, url=self.url, un=self.username, pw=self.password
+            self.version, url=self.url, un=username, pw=password, headers=self.headers, auth=self.auth
         )
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
@@ -86,7 +87,7 @@ class TileMapService(object):
         tilemaps = self._capabilities.find('TileMaps')
         if tilemaps is not None:
             for tilemap in tilemaps.findall('TileMap'):
-                cm = ContentMetadata(tilemap, auth=self.auth)
+                cm = ContentMetadata(tilemap, headers=self.headers, auth=self.auth)
                 if cm.id:
                     if cm.id in self.contents:
                         raise KeyError('Content metadata for layer "%s" already exists' % cm.id)
@@ -122,7 +123,7 @@ class TileMapService(object):
         for tileset in tilesets:
             if tileset['order'] == z:
                 url = tileset['href'] + '/' + str(x) + '/' + str(y) + '.' + ext
-                u = openURL(url, '', timeout=timeout or self.timeout, auth=self.auth)
+                u = openURL(url, '', timeout=timeout or self.timeout, headers=self.headers, auth=self.auth)
                 return u
         else:
             raise ValueError('cannot find zoomlevel %i for TileMap' % z)
@@ -177,7 +178,7 @@ class ContentMetadata(object):
     def __str__(self):
         return 'Layer Title: %s, URL: %s' % (self.title, self.id)
 
-    def __init__(self, elem, un=None, pw=None, auth=None):
+    def __init__(self, elem, un=None, pw=None, headers=None, auth=None):
         if elem.tag != 'TileMap':
             raise ValueError('%s should be a TileMap' % (elem,))
         self.id = elem.attrib['href']
@@ -190,12 +191,13 @@ class ContentMetadata(object):
             if pw:
                 auth.password = pw
         self.auth = auth or Authentication(un, pw)
+        self.headers = headers
         self._tile_map = None
         self.type = elem.attrib.get('type')
 
     def _get_tilemap(self):
         if self._tile_map is None:
-            self._tile_map = TileMap(self.id, auth=self.auth)
+            self._tile_map = TileMap(self.id, headers=self.headers, auth=self.auth)
             assert(self._tile_map.srs == self.srs)
         return self._tile_map
 
@@ -249,7 +251,7 @@ class TileMap(object):
     tilesets = None
     profile = None
 
-    def __init__(self, url=None, xml=None, un=None, pw=None, auth=None):
+    def __init__(self, url=None, xml=None, un=None, pw=None, headers=None, auth=None):
         self.url = url
         if auth:
             if un:
@@ -257,6 +259,7 @@ class TileMap(object):
             if pw:
                 auth.password = pw
         self.auth = auth or Authentication(un, pw)
+        self.headers = headers
         self.tilesets = []
         if xml and not url:
             self.readString(xml)
@@ -299,7 +302,7 @@ class TileMap(object):
                     'order': order})
 
     def read(self, url):
-        u = openURL(url, '', method='Get', auth=self.auth)
+        u = openURL(url, '', method='Get', headers=self.headers, auth=self.auth)
         self._parse(etree.fromstring(u.read()))
 
     def readString(self, st):
@@ -312,7 +315,7 @@ class TMSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None, auth=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, auth=None):
         """Initialize"""
         if auth:
             if un:
@@ -322,13 +325,14 @@ class TMSCapabilitiesReader(object):
         self.version = version
         self._infoset = None
         self.url = url
+        self.headers = headers
         self.auth = auth or Authentication(un, pw)
 
     def read(self, service_url, timeout=30):
         """Get and parse a TMS capabilities document, returning an
         elementtree instance
         """
-        u = openURL(service_url, '', method='Get', timeout=timeout, auth=self.auth)
+        u = openURL(service_url, '', method='Get', timeout=timeout, headers=self.headers, auth=self.auth)
         return etree.fromstring(u.read())
 
     def readString(self, st):

@@ -60,6 +60,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         xml,
         parse_remote_metadata=False,
         timeout=30,
+        headers=None,
         username=None,
         password=None,
         auth=None,
@@ -72,6 +73,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         @param xml: elementtree object
         @type parse_remote_metadata: boolean
         @param parse_remote_metadata: whether to fully process MetadataURL elements
+        @param headers: HTTP headers to send with requests
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
@@ -85,6 +87,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             xml,
             parse_remote_metadata,
             timeout,
+            headers=headers,
             username=username,
             password=password,
             auth=auth,
@@ -105,6 +108,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         xml=None,
         parse_remote_metadata=False,
         timeout=30,
+        headers=None,
         username=None,
         password=None,
         auth=None,
@@ -120,10 +124,11 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         super(WebFeatureService_1_1_0, self).__init__(auth)
         self.url = url
         self.version = version
+        self.headers = headers
         self.timeout = timeout
         self._capabilities = None
         self.owscommon = OwsCommon("1.0.0")
-        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -182,7 +187,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             nspath_eval("wfs:FeatureTypeList/wfs:FeatureType", namespaces)
         )
         for feature in features:
-            cm = ContentMetadata(feature, parse_remote_metadata, auth=self.auth)
+            cm = ContentMetadata(feature, parse_remote_metadata, headers=self.headers, auth=self.auth)
             self.contents[cm.id] = cm
 
         # exceptions
@@ -196,7 +201,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version, auth=self.auth)
         return openURL(
-            reader.capabilities_url(self.url), timeout=self.timeout, auth=self.auth
+            reader.capabilities_url(self.url), timeout=self.timeout,
+            headers=self.headers, auth=self.auth
         )
 
     def items(self):
@@ -318,7 +324,8 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=self.timeout, auth=self.auth)
+        u = openURL(base_url, data, method, timeout=self.timeout,
+                    headers=self.headers, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -365,9 +372,9 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parse_remote_metadata=False, timeout=30, auth=None):
+    def __init__(self, elem, parse_remote_metadata=False, timeout=30, headers=None, auth=None):
         """."""
-        super(ContentMetadata, self).__init__(auth)
+        super(ContentMetadata, self).__init__(headers=headers, auth=auth)
         self.id = testXMLValue(elem.find(nspath_eval("wfs:Name", namespaces)))
         self.title = testXMLValue(elem.find(nspath_eval("wfs:Title", namespaces)))
         self.abstract = testXMLValue(elem.find(nspath_eval("wfs:Abstract", namespaces)))
@@ -442,7 +449,7 @@ class ContentMetadata(AbstractContentMetadata):
                 metadataUrl["url"] is not None and metadataUrl["format"].lower() == "text/xml"
             ):
                 try:
-                    content = openURL(metadataUrl["url"], timeout=timeout)
+                    content = openURL(metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth)
                     doc = etree.fromstring(content.read())
 
                     if metadataUrl["type"] == "FGDC":

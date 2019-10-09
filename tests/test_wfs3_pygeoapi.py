@@ -34,7 +34,11 @@ def test_wfs3_pygeoapi():
     assert lakes['title'] == 'Large Lakes'
     assert lakes['description'] == 'lakes of the world, public domain'
 
+    # Minimum of limit param is 1
     lakes_query = w.collection_items('lakes', limit=0)
+    assert lakes_query['code'] == 'InvalidParameterValue'
+
+    lakes_query = w.collection_items('lakes', limit=1)
     assert lakes_query['numberMatched'] == 25
-    assert lakes_query['numberReturned'] == 0
-    assert len(lakes_query['features']) == 0
+    assert lakes_query['numberReturned'] == 1
+    assert len(lakes_query['features']) == 1

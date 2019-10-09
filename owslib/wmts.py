@@ -127,7 +127,7 @@ class WebMapTileService(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, vendor_kwargs=None, auth=None,
+                 parse_remote_metadata=False, vendor_kwargs=None, headers=None, auth=None,
                  timeout=30):
         """Initialize.
 
@@ -164,12 +164,13 @@ class WebMapTileService(object):
         self.version = version
         self.vendor_kwargs = vendor_kwargs
         self._capabilities = None
+        self.headers = headers
         self.auth = auth or Authentication(username, password)
         self.timeout = timeout or 30
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(
-            self.version, url=self.url, auth=self.auth)
+            self.version, url=self.url, headers=self.headers, auth=self.auth)
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -190,7 +191,7 @@ class WebMapTileService(object):
         # TODO: deprecated function. See ticket #453.
         if not self._capabilities:
             reader = WMTSCapabilitiesReader(
-                self.version, url=self.url, auth=self.auth)
+                self.version, url=self.url, headers=self.headers, auth=self.auth)
             # xml = reader.read(self.url, self.vendor_kwargs)
             # self._capabilities = ServiceMetadata(xml)
             self._capabilities = reader.read(self.url, self.vendor_kwargs)
@@ -452,7 +453,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             resurl = self.buildTileResource(
                 layer, style, format, tilematrixset, tilematrix,
                 row, column, **vendor_kwargs)
-            u = openURL(resurl, auth=self.auth, timeout=self.timeout)
+            u = openURL(resurl, headers=self.headers, auth=self.auth, timeout=self.timeout)
             return u
 
         # KVP implemetation
@@ -478,7 +479,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
                     base_url = get_verbs[0].get('url')
             except StopIteration:
                 pass
-        u = openURL(base_url, data, auth=self.auth, timeout=self.timeout)
+        u = openURL(base_url, data, headers=self.headers, auth=self.auth, timeout=self.timeout)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -791,7 +792,7 @@ class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None, auth=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, auth=None):
         """Initialize"""
         self.version = version
         self._infoset = None
@@ -802,6 +803,7 @@ class WMTSCapabilitiesReader:
             if pw:
                 auth.password = pw
         self.auth = auth or Authentication(un, pw)
+        self.headers = headers
 
     def capabilities_url(self, service_url, vendor_kwargs=None):
         """Return a capabilities url
@@ -836,7 +838,7 @@ class WMTSCapabilitiesReader:
 
         # now split it up again to use the generic openURL function...
         spliturl = getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get', auth=self.auth)
+        u = openURL(spliturl[0], spliturl[1], method='Get', headers=self.headers, auth=self.auth)
         return etree.fromstring(u.read())
 
     def readString(self, st):

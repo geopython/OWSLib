@@ -26,7 +26,7 @@ GML_NAMESPACES = (
 
 
 def get_schema(
-    url, typename, version="1.0.0", timeout=30, username=None, password=None, auth=None
+    url, typename, version="1.0.0", timeout=30, headers=None, username=None, password=None, auth=None
 ):
     """Parses DescribeFeatureType response and creates schema compatible
     with :class:`fiona`
@@ -47,7 +47,7 @@ def get_schema(
     else:
         auth = Authentication(username, password)
     url = _get_describefeaturetype_url(url, version, typename)
-    res = openURL(url, timeout=timeout, auth=auth)
+    res = openURL(url, timeout=timeout, headers=headers, auth=auth)
     root = etree.fromstring(res.read())
 
     if ":" in typename:
