@@ -204,7 +204,8 @@ class WebMapTileService(object):
 
         # serviceIdentification metadata
         serviceident = self._capabilities.find(_SERVICE_IDENTIFICATION_TAG)
-        self.identification = ServiceIdentification(serviceident)
+        if serviceident is not None:
+            self.identification = ServiceIdentification(serviceident)
 
         # serviceProvider metadata
         serviceprov = self._capabilities.find(_SERVICE_PROVIDER_TAG)
