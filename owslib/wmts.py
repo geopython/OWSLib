@@ -297,19 +297,6 @@ class WebMapTileService(object):
             Column index of tile to request.
         **kwargs : extra arguments
             anything else e.g. vendor specific parameters
-
-        Example
-        -------
-            >>> url = 'http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi'
-            >>> wmts = WebMapTileService(url)
-            >>> wmts.buildTileRequest(layer='VIIRS_CityLights_2012',
-            ...                       tilematrixset='EPSG4326_500m',
-            ...                       tilematrix='6',
-            ...                       row=4, column=4)
-            'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&\
-LAYER=VIIRS_CityLights_2012&STYLE=default&TILEMATRIXSET=EPSG4326_500m&\
-TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
-
         """
 
         if (layer is None):
@@ -432,19 +419,6 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
             Column index of tile to request.
         **kwargs : extra arguments
             anything else e.g. vendor specific parameters
-
-        Example
-        -------
-            >>> url = 'http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi'
-            >>> wmts = WebMapTileService(url)
-            >>> img = wmts.gettile(layer='VIIRS_CityLights_2012',\
-                                   tilematrixset='EPSG4326_500m',\
-                                   tilematrix='6',\
-                                   row=4, column=4)
-            >>> out = open('tile.jpg', 'wb')
-            >>> bytes_written = out.write(img.read())
-            >>> out.close()
-
         """
         vendor_kwargs = self.vendor_kwargs or {}
         vendor_kwargs.update(kwargs)
