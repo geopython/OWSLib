@@ -47,6 +47,8 @@ class TileMapService(object):
             if password:
                 auth.password = password
         self.url = url
+        self.username = username
+        self.password = password
         self.auth = auth or Authentication(username, password)
         self.version = version
         self.timeout = timeout
