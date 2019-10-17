@@ -19,7 +19,7 @@ from .util import clean_ows_url, Authentication
 
 def WebFeatureService(url, version='1.0.0', xml=None, json_=None,
                       parse_remote_metadata=False, timeout=30, username=None,
-                      password=None, auth=None):
+                      password=None, headers=None, auth=None):
     ''' wfs factory function, returns a version specific WebFeatureService object
 
     @type url: string
@@ -28,6 +28,7 @@ def WebFeatureService(url, version='1.0.0', xml=None, json_=None,
     @param xml: elementtree object
     @type parse_remote_metadata: boolean
     @param parse_remote_metadata: whether to fully process MetadataURL elements
+    @param headers: HTTP headers to send with requests
     @param timeout: time (in seconds) after which requests should timeout
     @param username: service authentication username
     @param password: service authentication password
@@ -45,13 +46,17 @@ def WebFeatureService(url, version='1.0.0', xml=None, json_=None,
 
     if version in ['1.0', '1.0.0']:
         return wfs100.WebFeatureService_1_0_0(
-            clean_url, version, xml, parse_remote_metadata, timeout=timeout, auth=auth)
+            clean_url, version, xml, parse_remote_metadata,
+            timeout=timeout, headers=headers, auth=auth)
     elif version in ['1.1', '1.1.0']:
         return wfs110.WebFeatureService_1_1_0(
-            clean_url, version, xml, parse_remote_metadata, timeout=timeout, auth=auth)
+            clean_url, version, xml, parse_remote_metadata,
+            timeout=timeout, headers=headers, auth=auth)
     elif version in ['2.0', '2.0.0']:
         return wfs200.WebFeatureService_2_0_0(
-            clean_url, version, xml, parse_remote_metadata, timeout=timeout, auth=auth)
+            clean_url, version, xml, parse_remote_metadata,
+            timeout=timeout, headers=headers, auth=auth)
     elif version in ['3.0', '3.0.0']:
         return wfs300.WebFeatureService_3_0_0(
-            clean_url, version, json_, timeout=timeout, auth=auth)
+            clean_url, version, json_, timeout=timeout,
+            headers=headers, auth=auth)
