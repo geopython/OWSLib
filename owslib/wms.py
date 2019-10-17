@@ -30,6 +30,7 @@ def WebMapService(url, version='1.1.1', xml=None, username=None, password=None,
     @param xml: elementtree object
     @type parse_remote_metadata: boolean
     @param parse_remote_metadata: whether to fully process MetadataURL elements
+    @param headers: HTTP headers to send with requests
     @param timeout: time (in seconds) after which requests should timeout
     @param username: service authentication username
     @param password: service authentication password
@@ -48,7 +49,7 @@ def WebMapService(url, version='1.1.1', xml=None, username=None, password=None,
     if version in ['1.1.1']:
         return wms111.WebMapService_1_1_1(
             clean_url, version=version, xml=xml, parse_remote_metadata=parse_remote_metadata,
-            timeout=timeout, auth=auth)
+            timeout=timeout, headers=headers, auth=auth)
     elif version in ['1.3.0']:
         return wms130.WebMapService_1_3_0(
             clean_url, version=version, xml=xml, parse_remote_metadata=parse_remote_metadata,

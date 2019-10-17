@@ -12,7 +12,7 @@ import logging
 from urllib.parse import urljoin
 
 from owslib import __version__
-from owslib.util import Authentication, http_get
+from owslib.util import http_get
 
 LOGGER = logging.getLogger(__name__)
 
@@ -24,9 +24,7 @@ REQUEST_HEADERS = {
 class WebFeatureService_3_0_0(object):
     """Abstraction for OGC Web Feature Service (WFS) version 3.0"""
 
-    def __init__(
-        self, url, version, json_, timeout=30, username=None, password=None, auth=None
-    ):
+    def __init__(self, url, version, json_, timeout=30, headers=None, auth=None):
         """
         initializer; implements Requirement 1 (/req/core/root-op)
 
@@ -34,6 +32,7 @@ class WebFeatureService_3_0_0(object):
         @param url: url of WFS root document
         @type json_: string
         @param json_: json object
+        @param headers: HTTP headers to send with requests
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
@@ -51,17 +50,15 @@ class WebFeatureService_3_0_0(object):
         self.version = version
         self.json_ = json_
         self.timeout = timeout
-        if auth:
-            if username:
-                auth.username = username
-            if password:
-                auth.password = password
-        self.auth = auth or Authentication(username, password)
+        self.headers = REQUEST_HEADERS
+        if headers:
+            self.headers = self.headers.update(headers)
+        self.auth = auth
 
         if json_ is not None:  # static JSON string
             self.links = json.loads(json_)["links"]
         else:
-            response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
+            response = http_get(url, headers=self.headers, auth=self.auth).json()
             self.links = response["links"]
 
     def api(self):
@@ -73,7 +70,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url("api")
         LOGGER.debug("Request: {}".format(url))
-        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
+        response = http_get(url, headers=self.headers, auth=self.auth).json()
         return response
 
     def conformance(self):
@@ -85,7 +82,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url("conformance")
         LOGGER.debug("Request: {}".format(url))
-        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
+        response = http_get(url, headers=self.headers, auth=self.auth).json()
         return response
 
     def collections(self):
@@ -97,7 +94,7 @@ class WebFeatureService_3_0_0(object):
 
         url = self._build_url("collections")
         LOGGER.debug("Request: {}".format(url))
-        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
+        response = http_get(url, headers=self.headers, auth=self.auth).json()
         return response["collections"]
 
     def collection(self, collection_id):
@@ -113,7 +110,7 @@ class WebFeatureService_3_0_0(object):
         path = "collections/{}".format(collection_id)
         url = self._build_url(path)
         LOGGER.debug("Request: {}".format(url))
-        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
+        response = http_get(url, headers=self.headers, auth=self.auth).json()
         return response
 
     def collection_items(self, collection_id, **kwargs):
@@ -141,7 +138,7 @@ class WebFeatureService_3_0_0(object):
         url = self._build_url(path)
         LOGGER.debug("Request: {}".format(url))
         response = http_get(
-            url, headers=REQUEST_HEADERS, params=kwargs, auth=self.auth
+            url, headers=self.headers, params=kwargs, auth=self.auth
         ).json()
         return response
 
@@ -160,7 +157,7 @@ class WebFeatureService_3_0_0(object):
         path = "collections/{}/items/{}".format(collection_id, identifier)
         url = self._build_url(path)
         LOGGER.debug("Request: {}".format(url))
-        response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
+        response = http_get(url, headers=self.headers, auth=self.auth).json()
         return response
 
     def _build_url(self, path=None):

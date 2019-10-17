@@ -53,6 +53,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         xml,
         parse_remote_metadata=False,
         timeout=30,
+        headers=None,
         username=None,
         password=None,
         auth=None,
@@ -65,6 +66,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         @param xml: elementtree object
         @type parse_remote_metadata: boolean
         @param parse_remote_metadata: whether to fully process MetadataURL elements
+        @param headers: HTTP headers to send with requests
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
@@ -78,6 +80,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             xml,
             parse_remote_metadata,
             timeout,
+            headers=headers,
             username=username,
             password=password,
             auth=auth,
@@ -98,6 +101,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         xml=None,
         parse_remote_metadata=False,
         timeout=30,
+        headers=None,
         username=None,
         password=None,
         auth=None,
@@ -116,8 +120,9 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         self.url = url
         self.version = version
         self.timeout = timeout
+        self.headers = headers
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -201,7 +206,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version, auth=self.auth)
         return openURL(
-            reader.capabilities_url(self.url), timeout=self.timeout, auth=self.auth
+            reader.capabilities_url(self.url), timeout=self.timeout,
+            headers=self.headers, auth=self.auth
         )
 
     def items(self):
@@ -288,7 +294,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (url, data) = self.getPOSTGetFeatureRequest()
 
         # If method is 'Post', data will be None here
-        u = openURL(url, data, method, timeout=self.timeout, auth=self.auth)
+        u = openURL(url, data, method, timeout=self.timeout, headers=self.headers, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -358,7 +364,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             for kw in list(kwargs.keys()):
                 request[kw] = str(kwargs[kw])
         encoded_request = urlencode(request)
-        u = openURL(base_url + encoded_request, timeout=self.timeout, auth=self.auth)
+        u = openURL(base_url + encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth)
         return u.read()
 
     def _getStoredQueries(self):
@@ -388,7 +394,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         }
         encoded_request = urlencode(request)
         u = openURL(
-            base_url, data=encoded_request, timeout=self.timeout, auth=self.auth
+            base_url, data=encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth
         )
         tree = etree.fromstring(u.read())
         tempdict = {}
@@ -420,7 +426,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         }
         encoded_request = urlencode(request)
         u = openURL(
-            base_url, data=encoded_request, timeout=self.timeout, auth=self.auth
+            base_url, data=encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth
         )
         tree = etree.fromstring(u.read())
         tempdict2 = {}
@@ -483,10 +489,10 @@ class ContentMetadata(AbstractContentMetadata):
     """
 
     def __init__(
-        self, elem, parent, parse_remote_metadata=False, timeout=30, auth=None
+        self, elem, parent, parse_remote_metadata=False, timeout=30, headers=None, auth=None
     ):
         """."""
-        super(ContentMetadata, self).__init__(auth)
+        super(ContentMetadata, self).__init__(headers=headers, auth=auth)
         self.id = elem.find(nspath("Name", ns=WFS_NAMESPACE)).text
         self.title = elem.find(nspath("Title", ns=WFS_NAMESPACE)).text
         abstract = elem.find(nspath("Abstract", ns=WFS_NAMESPACE))
@@ -561,7 +567,7 @@ class ContentMetadata(AbstractContentMetadata):
         for metadataUrl in self.metadataUrls:
             if metadataUrl["url"] is not None:
                 try:
-                    content = openURL(metadataUrl["url"], timeout=timeout)
+                    content = openURL(metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth)
                     doc = etree.fromstring(content.read())
 
                     mdelem = doc.find(".//metadata")

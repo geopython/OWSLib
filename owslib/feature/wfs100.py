@@ -71,6 +71,7 @@ class WebFeatureService_1_0_0(object):
         xml,
         parse_remote_metadata=False,
         timeout=30,
+        headers=None,
         username=None,
         password=None,
         auth=None,
@@ -83,6 +84,7 @@ class WebFeatureService_1_0_0(object):
         @param xml: elementtree object
         @type parse_remote_metadata: boolean
         @param parse_remote_metadata: whether to fully process MetadataURL elements
+        @param headers: HTTP headers to send with requests
         @param timeout: time (in seconds) after which requests should timeout
         @param username: service authentication username
         @param password: service authentication password
@@ -96,6 +98,7 @@ class WebFeatureService_1_0_0(object):
             xml,
             parse_remote_metadata,
             timeout,
+            headers=headers,
             username=username,
             password=password,
             auth=auth,
@@ -116,6 +119,7 @@ class WebFeatureService_1_0_0(object):
         xml=None,
         parse_remote_metadata=False,
         timeout=30,
+        headers=None,
         username=None,
         password=None,
         auth=None,
@@ -129,9 +133,10 @@ class WebFeatureService_1_0_0(object):
         self.url = url
         self.version = version
         self.timeout = timeout
+        self.headers = headers
         self.auth = auth or Authentication(username, password)
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -178,7 +183,8 @@ class WebFeatureService_1_0_0(object):
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version, auth=self.auth)
         return openURL(
-            reader.capabilities_url(self.url), timeout=self.timeout, auth=self.auth
+            reader.capabilities_url(self.url), timeout=self.timeout,
+            headers=self.headers, auth=self.auth
         )
 
     def items(self):
@@ -279,7 +285,8 @@ class WebFeatureService_1_0_0(object):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=self.timeout, auth=self.auth)
+        u = openURL(base_url, data, method, timeout=self.timeout,
+                    headers=self.headers, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -441,7 +448,7 @@ class ContentMetadata(AbstractContentMetadata):
             ):
                 try:
                     content = openURL(
-                        metadataUrl["url"], timeout=timeout, auth=self.auth
+                        metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth
                     )
                     doc = etree.fromstring(content.read())
                     if metadataUrl["type"] == "FGDC":
