@@ -337,6 +337,21 @@ class WebMapTileService(object):
                           tilematrixset=None, tilematrix=None, row=None,
                           column=None, **kwargs):
 
+        # check the validity of the parameters and set reasonable defaults
+        if layer is None:
+            raise ValueError("layer is mandatory (cannot be None)")
+        if style is None:
+            style = list(self[layer].styles.keys())[0]
+        if tilematrixset is None:
+            tilematrixset = sorted(self[layer].tilematrixsetlinks.keys())[0]
+        if tilematrix is None:
+            msg = 'tilematrix (zoom level) is mandatory (cannot be None)'
+            raise ValueError(msg)
+        if row is None:
+            raise ValueError("row is mandatory (cannot be None)")
+        if column is None:
+            raise ValueError("column is mandatory (cannot be None)")
+
         tileresourceurls = []
         for resourceURL in self[layer].resourceURLs:
             if resourceURL['resourceType'] == 'tile':
@@ -346,13 +361,11 @@ class WebMapTileService(object):
             # choose random ResourceURL if more than one available
             resindex = randint(0, numres - 1)
             resurl = tileresourceurls[resindex]['template']
-            if tilematrixset:
-                resurl = resurl.replace('{TileMatrixSet}', tilematrixset)
+            resurl = resurl.replace('{TileMatrixSet}', tilematrixset)
             resurl = resurl.replace('{TileMatrix}', tilematrix)
-            resurl = resurl.replace('{TileRow}', row)
-            resurl = resurl.replace('{TileCol}', column)
-            if style:
-                resurl = resurl.replace('{Style}', style)
+            resurl = resurl.replace('{TileRow}', str(row))
+            resurl = resurl.replace('{TileCol}', str(column))
+            resurl = resurl.replace('{Style}', style)
             return resurl
 
         return None

@@ -83,12 +83,32 @@ def test_wmts_example_get_title():
 EXAMPLE_SERVICE_URL = "http://tile.informatievlaanderen.be/ws/raadpleegdiensten/wmts"
 
 
-@pytest.mark.online
-@pytest.mark.skipif(not service_ok(EXAMPLE_SERVICE_URL),
-                    reason="WMTS service is unreachable")
 def test_wmts_example_informatievlaanderen():
     wmts = WebMapTileService(EXAMPLE_SERVICE_URL)
     assert wmts.identification.type == 'OGC WMTS'
     assert wmts.identification.version == '1.0.0'
     assert wmts.identification.title == 'agentschap Informatie Vlaanderen WMTS service'
-    assert sorted(list(wmts.contents))[:5] == ['abw', 'ferraris', 'frickx', 'grb_bsk', 'grb_bsk_grijs']
+    # assert sorted(list(wmts.contents))[:5] == ['abw', 'ferraris', 'frickx', 'grb_bsk', 'grb_bsk_grijs']
+
+
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(EXAMPLE_SERVICE_URL),
+                    reason="WMTS service is unreachable")
+def test_wmts_without_serviceprovider_tag():
+    # Test a WMTS without a ServiceProvider tag in Capababilities XML
+    from owslib.wmts import WebMapTileService
+    wmts = WebMapTileService(SERVICE_URL_ARCGIS)
+
+
+SERVICE_URL_REST = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml'
+
+
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL_REST),
+                    reason="WMTS service is unreachable")
+def test_wmts_rest_only():
+    # Test a WMTS with REST only
+    from owslib.wmts import WebMapTileService
+    wmts = WebMapTileService(SERVICE_URL_REST)
+    tile = wmts.gettile(layer="bmaporthofoto30cm", tilematrix="10", row=357, column=547)
+    assert(tile.info()['Content-Type'] == 'image/jpeg')
