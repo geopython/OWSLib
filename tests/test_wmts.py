@@ -11,6 +11,7 @@ SERVICE_URL = 'http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi'
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WMTS service is unreachable")
+@pytest.mark.skip(reason="WMTS service not responding correctly")
 def test_wmts():
     # Find out what a WMTS has to offer. Service metadata:
     wmts = WebMapTileService(SERVICE_URL)
@@ -44,6 +45,7 @@ def test_wmts():
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WMTS service is unreachable")
+@pytest.mark.skip(reason="WMTS service not responding correctly")
 def test_wmts_example_build_tile_request():
     """
     Example for wmts.buildTileRequest
@@ -62,6 +64,7 @@ TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WMTS service is unreachable")
+@pytest.mark.skip(reason="WMTS service not responding correctly")
 def test_wmts_example_get_title():
     """
     Example for wmts.getTitle
@@ -77,12 +80,15 @@ def test_wmts_example_get_title():
     out.close()
 
 
-SERVICE_URL_ARCGIS = 'http://data.geus.dk/arcgis/rest/services/OneGeologyGlobal/S071_G2500_OneGeology/MapServer/WMTS/1.0.0/WMTSCapabilities.xml'  # noqa
+EXAMPLE_SERVICE_URL = "http://tile.informatievlaanderen.be/ws/raadpleegdiensten/wmts"
 
 
 @pytest.mark.online
-@pytest.mark.skipif(not service_ok(SERVICE_URL_ARCGIS),
-                    reason="WMTS ArcGIS service is unreachable")
-def test_wmts_without_serviceprovider_tag():
-    # Test a WMTS without a ServiceProvider tag in Capababilities XML
-    wmts = WebMapTileService(SERVICE_URL_ARCGIS)
+@pytest.mark.skipif(not service_ok(EXAMPLE_SERVICE_URL),
+                    reason="WMTS service is unreachable")
+def test_wmts_example_informatievlaanderen():
+    wmts = WebMapTileService(EXAMPLE_SERVICE_URL)
+    assert wmts.identification.type == 'OGC WMTS'
+    assert wmts.identification.version == '1.0.0'
+    assert wmts.identification.title == 'agentschap Informatie Vlaanderen WMTS service'
+    assert sorted(list(wmts.contents))[:5] == ['abw', 'ferraris', 'frickx', 'grb_bsk', 'grb_bsk_grijs']
