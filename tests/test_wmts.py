@@ -48,4 +48,19 @@ SERVICE_URL_ARCGIS = 'http://data.geus.dk/arcgis/rest/services/OneGeologyGlobal/
                     reason="WMTS service is unreachable")
 def test_wmts_without_serviceprovider_tag():
     # Test a WMTS without a ServiceProvider tag in Capababilities XML
+    from owslib.wmts import WebMapTileService
     wmts = WebMapTileService(SERVICE_URL_ARCGIS)
+
+
+SERVICE_URL_REST = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml'
+
+
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL_REST),
+                    reason="WMTS service is unreachable")
+def test_wmts_rest_only():
+    # Test a WMTS with REST only
+    from owslib.wmts import WebMapTileService
+    wmts = WebMapTileService(SERVICE_URL_REST)
+    tile = wmts.gettile(layer="bmaporthofoto30cm", tilematrix="10", row=357, column=547)
+    assert(tile.info()['Content-Type'] == 'image/jpeg')
