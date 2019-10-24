@@ -68,10 +68,20 @@ class WebFeatureService_3_0_0(object):
         @returns: OpenAPI definition object
         """
 
-        url = self._build_url("api")
-        LOGGER.debug("Request: {}".format(url))
-        response = http_get(url, headers=self.headers, auth=self.auth).json()
-        return response
+        url = None
+
+        for l in self.links:
+            if l['rel'] == 'service-desc':
+                url = l['href']
+
+        if url is not None:
+            LOGGER.debug('Request: {}'.format(url))
+            response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
+            return response
+        else:
+            msg = 'Did not find service-desc link'
+            LOGGER.error(msg)
+            raise RuntimeError(msg)
 
     def conformance(self):
         """
