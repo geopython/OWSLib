@@ -91,7 +91,7 @@ def _construct_schema(elements, nsmap):
     :return dict: schema
     """
 
-    schema = {"properties": {}, "geometry": None}
+    schema = {"properties": {}, "required": [], "geometry": None}
 
     schema_key = None
     gml_key = None
@@ -124,12 +124,16 @@ def _construct_schema(elements, nsmap):
     for element in elements:
         data_type = element.attrib["type"].replace(gml_key + ":", "")
         name = element.attrib["name"]
+        non_nillable = element.attrib["nillable"] == "false"
 
         if data_type in mappings:
             schema["geometry"] = mappings[data_type]
             schema["geometry_column"] = name
         else:
             schema["properties"][name] = data_type.replace(schema_key + ":", "")
+
+        if non_nillable:
+            schema["required"].append(name)
 
     if schema["properties"] or schema["geometry"]:
         return schema
