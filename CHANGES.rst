@@ -20,10 +20,19 @@ https://github.com/geopython/OWSLib/commits/0.18.0
 - NEW: WFS 3 initial implementation
 - NEW: add Authentication framework (eric-spitler)
 - WPS:
-    * add process properties, percentCompleted (cebrecht)
+    * add process properties, percentCompleted (cehbrecht)
     * add reference attributes (enolfc)
     * add support for multi process processes (huard)
 - OWS: add support for crs and dimension (saimeCS)
+
+0.17.1 (2019-01-12)
+-------------------
+
+Bugfix release for issues in WPS and WMS.
+
+A full list of commits for 0.17.1 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.17.1
 
 0.17.0 (2018-09-04)
 -------------------
