@@ -8,6 +8,7 @@ SERVICE_URL = 'https://www.ldproxy.nrw.de/rest/services/kataster/?f=json'
 
 
 @pytest.mark.online
+@pytest.mark.skip(reason='api() call fails. See issue #625')
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
 def test_wfs3_ldproxy():
