@@ -4,7 +4,7 @@
 THIS_DIR=`pwd`
 
 make clean && make html
-git clone git@github.com:geopython/OWSLib.git /tmp/OWSLib-$$
+git clone https://github.com/geopython/OWSLib.git /tmp/OWSLib-$$
 cd /tmp/OWSLib-$$
 git checkout gh-pages
 /bin/cp -rp $THIS_DIR/build/html/en/* .
