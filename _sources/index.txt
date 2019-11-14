@@ -21,7 +21,7 @@ Introduction
 
 OWSLib is a Python package for client programming with `Open Geospatial Consortium`_ (OGC) web service (hence OWS) interface standards, and their related content models.
 
-OWSLib was buried down inside PCL, but has been brought out as a separate project in `r481 <http://trac.gispython.org/lab/changeset/481>`_.
+OWSLib was buried down inside PCL (Python Cartography Library), but has been brought out as a separate project.
 
 Features
 ========
@@ -29,45 +29,45 @@ Features
 Standards Support
 -----------------
 
-+-------------------+---------------------+
-| Standard          | Version(s)          |
-+===================+=====================+
-| `OGC WMS`_        | 1.1.1               |
-+-------------------+---------------------+
-| `OGC WFS`_        | 1.0.0, 1.1.0, 2.0.0, 3.0 |
-+-------------------+---------------------+
-| `OGC WCS`_        | 1.0.0, 1.1.0        |
-+-------------------+---------------------+
-| `OGC WMC`_        | 1.1.0               |
-+-------------------+---------------------+
-| `OGC SOS`_        | 1.0.0, 2.0.0        |
-+-------------------+---------------------+
-| `OGC SensorML`_   | 1.0.1               |
-+-------------------+---------------------+
-| `OGC CSW`_        | 2.0.2               |
-+-------------------+---------------------+
-| `OGC WPS`_        | 1.0.0               |
-+-------------------+---------------------+
-| `OGC Filter`_     | 1.1.0               |
-+-------------------+---------------------+
-| `OGC OWS Common`_ | 1.0.0, 1.1.0, 2.0   |
-+-------------------+---------------------+
-| `OGC OWS Context`_ | 1.0.0 (alpha/under-review) |
-+-------------------+---------------------+
-| `NASA DIF`_       | 9.7                 |
-+-------------------+---------------------+
-| `FGDC CSDGM`_     | 1998                |
-+-------------------+---------------------+
-| `ISO 19139`_      | 2007                |
-+-------------------+---------------------+
-| `Dublin Core`_    | 1.1                 |
-+-------------------+---------------------+
-| `Swiss GM03`_     | 2.3                 |
-+-------------------+---------------------+
-| `WMTS`_           | 1.0.0               |
-+-------------------+---------------------+
-| `WaterML`_        | 1.0, 1.1, 2.0       |
-+-------------------+---------------------+
++-----------------------+-----------------------------+
+| Standard              | Version(s)                  |
++=======================+=============================+
+| `OGC WMS`_            | 1.1.1                       |
++-----------------------+-----------------------------+
+| `OGC WFS`_            | 1.0.0, 1.1.0, 2.0.0, 3.0    |
++-----------------------+-----------------------------+
+| `OGC WCS`_            | 1.0.0, 1.1.0                |
++-----------------------+-----------------------------+
+| `OGC WMC`_            | 1.1.0                       |
++-----------------------+-----------------------------+
+| `OGC SOS`_            | 1.0.0, 2.0.0                |
++-----------------------+-----------------------------+
+| `OGC SensorML`_       | 1.0.1                       |
++-----------------------+-----------------------------+
+| `OGC CSW`_            | 2.0.2                       |
++-----------------------+-----------------------------+
+| `OGC WPS`_            | 1.0.0                       |
++-----------------------+-----------------------------+
+| `OGC Filter`_         | 1.1.0                       |
++-----------------------+-----------------------------+
+| `OGC OWS Common`_     | 1.0.0, 1.1.0, 2.0           |
++-----------------------+-----------------------------+
+| `OGC OWS Context`_    | 1.0.0 (alpha/under-review)  |
++-----------------------+-----------------------------+
+| `NASA DIF`_           | 9.7                         |
++-----------------------+-----------------------------+
+| `FGDC CSDGM`_         | 1998                        |
++-----------------------+-----------------------------+
+| `ISO 19139`_          | 2007                        |
++-----------------------+-----------------------------+
+| `Dublin Core`_        | 1.1                         |
++-----------------------+-----------------------------+
+| `Swiss GM03`_         | 2.3                         |
++-----------------------+-----------------------------+
+| `WMTS`_               | 1.0.0                       |
++-----------------------+-----------------------------+
+| `WaterML`_            | 1.0, 1.1, 2.0               |
++-----------------------+-----------------------------+
 
 Installation
 ============
@@ -243,6 +243,14 @@ Download GML using ``typename``, ``bbox`` and ``srsname``.
 
     >>> # OWSLib will switch the axis order from EN to NE automatically if designated by EPSG-Registry
     >>> response = wfs11.getfeature(typename='bvv:gmd_ex', bbox=(4500000,5500000,4500500,5500500), srsname='urn:x-ogc:def:crs:EPSG:31468')
+
+Return a FeatureType's schema via ``DescribeFeatureType``. The dictionary returned is
+compatible with a `Fiona schema object <https://fiona.readthedocs.io/en/latest/fiona.html#fiona.collection.Collection.schema>`_.
+
+::
+
+    >>> wfs11.get_schema('bvv:vg_ex')
+    >>> {'properties': {'land': 'string', 'modellart': 'string', 'objart': 'string', 'objart_txt': 'string', 'objid': 'string', 'hdu_x': 'short', 'beginn': 'string', 'ende': 'string', 'adm': 'string', 'avg': 'string', 'bez_gem': 'string', 'bez_krs': 'string', 'bez_lan': 'string', 'bez_rbz': 'string', 'sch': 'string'}, 'geometry': '3D MultiPolygon', 'geometry_column': 'geom'}
 
 Download GML using ``typename`` and ``filter``. OWSLib currently only
 support filter building for WFS 1.1 (FE.1.1).
@@ -702,3 +710,6 @@ Credits
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
 .. _`Swiss GM03`: https://www.geocat.admin.ch/en/dokumentation/gm03.html
+
+
+.. include:: ../../CHANGES.rst

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OWSLib 0.18.0 documentation &#8212; OWSLib 0.18.0 documentation</title>
+    <title>OWSLib 0.19.0 documentation &#8212; OWSLib 0.19.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.18.0',
+        VERSION:     '0.19.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="OWSLib 0.18.0 documentation" href="#" />
+    <link rel="top" title="OWSLib 0.19.0 documentation" href="#" />
  
 
 <script type="text/javascript">
@@ -53,7 +53,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">OWSLib 0.18.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">OWSLib 0.19.0 documentation</a> &#187;</li> 
       </ul>
     </div>
   
@@ -64,7 +64,7 @@
           <div class="body" role="main">
             
   <div class="section" id="owslib-release-documentation">
-<h1>OWSLib 0.18.0 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>OWSLib 0.19.0 documentation<a class="headerlink" href="#owslib-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <a class="reference external image-reference" href="https://www.openhub.net/p/owslib?ref=WidgetProjectPartnerBadge"><img alt="OWSLib" src="https://www.openhub.net/p/owslib/widgets/project_partner_badge.gif" style="width: 193px; height: 33px;" /></a>
@@ -76,21 +76,88 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tomkralidis at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.18.0</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.19.0</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2019-06-25</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2019-11-14</td>
 </tr>
 </tbody>
 </table>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>OWSLib is a Python package for client programming with <a class="reference external" href="https://www.opengeospatial.org/">Open Geospatial Consortium</a> (OGC) web service (hence OWS) interface standards, and their related content models.</p>
-<p>OWSLib was buried down inside PCL, but has been brought out as a separate project in <a class="reference external" href="http://trac.gispython.org/lab/changeset/481">r481</a>.</p>
+<p>OWSLib was buried down inside PCL (Python Cartography Library), but has been brought out as a separate project.</p>
 </div>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="standards-support">
 <h3>Standards Support<a class="headerlink" href="#standards-support" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Standard</th>
+<th class="head">Version(s)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="https://www.opengeospatial.org/standards/wms">OGC WMS</a></td>
+<td>1.1.1</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.opengeospatial.org/standards/wfs">OGC WFS</a></td>
+<td>1.0.0, 1.1.0, 2.0.0, 3.0</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.opengeospatial.org/standards/wcs">OGC WCS</a></td>
+<td>1.0.0, 1.1.0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.opengeospatial.org/standards/wmc">OGC WMC</a></td>
+<td>1.1.0</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.opengeospatial.org/standards/sos">OGC SOS</a></td>
+<td>1.0.0, 2.0.0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.opengeospatial.org/standards/sensorml">OGC SensorML</a></td>
+<td>1.0.1</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.opengeospatial.org/standards/cat">OGC CSW</a></td>
+<td>2.0.2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.opengeospatial.org/standards/wps">OGC WPS</a></td>
+<td>1.0.0</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.opengeospatial.org/standards/filter">OGC Filter</a></td>
+<td>1.1.0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.opengeospatial.org/standards/common">OGC OWS Common</a></td>
+<td>1.0.0, 1.1.0, 2.0</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.opengeospatial.org/standards/owc">OGC OWS Context</a></td>
+<td>1.0.0 (alpha/under-review)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://earthdata.nasa.gov/esdis/eso/standards-and-references/directory-interchange-format-dif-standard">NASA DIF</a></td>
+<td>9.7</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.fgdc.gov/metadata/csdgm-standard">FGDC CSDGM</a></td>
+<td>1998</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.iso.org/standard/32557.html">ISO 19139</a></td>
+<td>2007</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.dublincore.org/">Dublin Core</a></td>
+<td>1.1</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.geocat.admin.ch/en/dokumentation/gm03.html">Swiss GM03</a></td>
+<td>2.3</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#wmts">WMTS</a></td>
+<td>1.0.0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://his.cuahsi.org/wofws.html#waterml">WaterML</a></td>
+<td>1.0, 1.1, 2.0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section" id="installation">
@@ -227,6 +294,12 @@ $ yum install owslib
 <p>Download GML using <code class="docutils literal"><span class="pre">typename</span></code>, <code class="docutils literal"><span class="pre">bbox</span></code> and <code class="docutils literal"><span class="pre">srsname</span></code>.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># OWSLib will switch the axis order from EN to NE automatically if designated by EPSG-Registry</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">wfs11</span><span class="o">.</span><span class="n">getfeature</span><span class="p">(</span><span class="n">typename</span><span class="o">=</span><span class="s1">&#39;bvv:gmd_ex&#39;</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="p">(</span><span class="mi">4500000</span><span class="p">,</span><span class="mi">5500000</span><span class="p">,</span><span class="mi">4500500</span><span class="p">,</span><span class="mi">5500500</span><span class="p">),</span> <span class="n">srsname</span><span class="o">=</span><span class="s1">&#39;urn:x-ogc:def:crs:EPSG:31468&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Return a FeatureType&#8217;s schema via <code class="docutils literal"><span class="pre">DescribeFeatureType</span></code>. The dictionary returned is
+compatible with a <a class="reference external" href="https://fiona.readthedocs.io/en/latest/fiona.html#fiona.collection.Collection.schema">Fiona schema object</a>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">wfs11</span><span class="o">.</span><span class="n">get_schema</span><span class="p">(</span><span class="s1">&#39;bvv:vg_ex&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="s1">&#39;properties&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;land&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;modellart&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;objart&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;objart_txt&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;objid&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;hdu_x&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="s1">&#39;beginn&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;ende&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;adm&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;bez_gem&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;bez_krs&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;bez_lan&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;bez_rbz&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;sch&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">},</span> <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="s1">&#39;3D MultiPolygon&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry_column&#39;</span><span class="p">:</span> <span class="s1">&#39;geom&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Download GML using <code class="docutils literal"><span class="pre">typename</span></code> and <code class="docutils literal"><span class="pre">filter</span></code>. OWSLib currently only
@@ -577,8 +650,7 @@ services)</p>
 <h3>SOS 1.0<a class="headerlink" href="#sos-1-0" title="Permalink to this headline">¶</a></h3>
 <p>GetCapabilities</p>
 <p>Imports</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">cast_tuple_int_list</span><span class="p">,</span> <span class="n">resource_file</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">cast_tuple_int_list</span><span class="p">,</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.sos</span> <span class="k">import</span> <span class="n">SensorObservationService</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.fes</span> <span class="k">import</span> <span class="n">FilterCapabilities</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ows</span> <span class="k">import</span> <span class="n">OperationsMetadata</span>
@@ -1104,8 +1176,7 @@ services)</p>
 <div class="section" id="sensorml">
 <h3>SensorML<a class="headerlink" href="#sensorml" title="Permalink to this headline">¶</a></h3>
 <p>Imports</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.swe.sensor.sml</span> <span class="k">import</span> <span class="n">SensorML</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dateutil</span> <span class="k">import</span> <span class="n">parser</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pytz</span>
@@ -1233,8 +1304,7 @@ services)</p>
 </div>
 <p>ISO Codelists:</p>
 <p>Imports</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.etree</span> <span class="k">import</span> <span class="n">etree</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.iso</span> <span class="k">import</span> <span class="n">CodelistCatalogue</span>
 </pre></div>
@@ -1253,8 +1323,7 @@ services)</p>
 </div>
 <div class="section" id="crs-handling">
 <h3>CRS Handling<a class="headerlink" href="#crs-handling" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib</span> <span class="k">import</span> <span class="n">crs</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib</span> <span class="k">import</span> <span class="n">crs</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Crs</span><span class="p">(</span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">code</span>
 <span class="go">4326</span>
@@ -1308,8 +1377,7 @@ services)</p>
 <div class="section" id="swiss-gm03">
 <h3>Swiss GM03<a class="headerlink" href="#swiss-gm03" title="Permalink to this headline">¶</a></h3>
 <p>Imports</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.etree</span> <span class="k">import</span> <span class="n">etree</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.gm03</span> <span class="k">import</span> <span class="n">GM03</span>
 </pre></div>
@@ -1372,8 +1440,7 @@ services)</p>
 <div class="section" id="wmts">
 <h3>WMTS<a class="headerlink" href="#wmts" title="Permalink to this headline">¶</a></h3>
 <p>Imports</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">scratch_file</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">scratch_file</span>
 </pre></div>
 </div>
 <p>Find out what a WMTS has to offer. Service metadata:</p>
@@ -1435,8 +1502,7 @@ services)</p>
 <h3>WaterML<a class="headerlink" href="#waterml" title="Permalink to this headline">¶</a></h3>
 <p>Using WaterML 1.1 for examples</p>
 <p>Imports</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.waterml.wml11</span> <span class="k">import</span> <span class="n">WaterML_1_1</span> <span class="k">as</span> <span class="n">wml</span>
 </pre></div>
 </div>
@@ -1642,8 +1708,7 @@ Please get in touch if you (want to) use it and provide feedback on how more com
 Greatly appreciated :-)</p>
 <p>Basic reading/parsing of OGC Web Services Context Documents (OWS Context) in OWC Atom 1.0.0 Encoding and OWC GeoJSON 1.0.0 Encoding Standards:</p>
 <p>Imports</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.owscontext.core</span> <span class="k">import</span> <span class="n">OwcContext</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tests.utils</span> <span class="k">import</span> <span class="n">resource_file</span>
 </pre></div>
@@ -1820,6 +1885,573 @@ POSSIBILITY OF SUCH DAMAGE.</p>
 </ul>
 </div></blockquote>
 </div>
+<div class="section" id="changes">
+<h2>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>0.18.0 (2019-06-24)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>This release includes initial support for the evolving OGC API - Features
+standard (aka WFS 3), which represents a clean break from the traditional
+design patterns of OGC interface specifications.  This release also includes
+a refactoring of authentication support into a common approach for all parts of the codebase to use.
+Thanks to Eric Spitler for this enhanced functionality!</p>
+<p>Users are strongly encouraged to use OWSLib via Python 3 as Python 2 support
+(Travis, python-six) will be removed in the future.</p>
+<p>A full list of commits for 0.18.0 can be found at:</p>
+<p><a class="reference external" href="https://github.com/geopython/OWSLib/commits/0.18.0">https://github.com/geopython/OWSLib/commits/0.18.0</a></p>
+<ul class="simple">
+<li>NEW: WFS 3 initial implementation</li>
+<li>NEW: add Authentication framework (eric-spitler)</li>
+<li><dl class="first docutils">
+<dt>WPS:</dt>
+<dd><ul class="first last">
+<li>add process properties, percentCompleted (cehbrecht)</li>
+<li>add reference attributes (enolfc)</li>
+<li>add support for multi process processes (huard)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>OWS: add support for crs and dimension (saimeCS)</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h3>0.17.1 (2019-01-12)<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>Bugfix release for issues in WPS and WMS.</p>
+<p>A full list of commits for 0.17.1 can be found at:</p>
+<p><a class="reference external" href="https://github.com/geopython/OWSLib/commits/0.17.1">https://github.com/geopython/OWSLib/commits/0.17.1</a></p>
+</div>
+<div class="section" id="id7">
+<h3>0.17.0 (2018-09-04)<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>This release provides numerous fixes, enhancements and re-engineering
+of OWSLib&#8217;s test framework.</p>
+<p>A full list of commits for 0.17.0 can be found at:</p>
+<p><a class="reference external" href="https://github.com/geopython/OWSLib/commits/0.17.0">https://github.com/geopython/OWSLib/commits/0.17.0</a></p>
+<ul class="simple">
+<li>NEW: OWS Context implementation (#483 allixender)</li>
+<li><dl class="first docutils">
+<dt>ISO:</dt>
+<dd><ul class="first last">
+<li>Added MD_LegalConstraints to uselimitation xpath (m431m)</li>
+<li>Fix ISO metadata parsing for empty gmd:featureCatalogueCitation. (Roel)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>OWS:</dt>
+<dd><ul class="first last">
+<li>Improve remote metadata parsing (Roel)</li>
+<li>Allow the lack of optional ows:ServiceProvider (mhugo)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>WPS:</dt>
+<dd><ul class="first last">
+<li>add headers, cert options (cehbrecht)</li>
+<li>add lineage to execute (cehbrecht)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>WMTS/TMS: replaced ServiceMetadata (cehbrecht)</li>
+<li>SOS: fix encoding error (cehbrecht)</li>
+<li>tests: move away from doctests (#339 cehbrecht)</li>
+<li>overall codebase: move from pep8 to flake8</li>
+<li>Support for WCS 2.0.0 and 2.0.1 (#430, thanks &#64;doclements)</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h3>0.16.0 (2017-12-21)<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>drop Python 2.6 support</li>
+<li>WFS: get schema auth params (karakostis)</li>
+<li>WFS: add sortby to GetFeature requests (drnextgis)</li>
+<li>CSW: add ows namespace to bounding box queries</li>
+<li>CSW: add feature catalogue support parsing</li>
+<li>CRS: support proj.4 CRS definitions (orhygine)</li>
+<li>fix namespaces (jsanchezfr)</li>
+<li>ISO GM03: fix bounding box handling</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h3>0.15.0 (2017-09-13)<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>WFS:</dt>
+<dd><ul class="first last">
+<li>add doseq to WFS request qyery urlencode</li>
+<li>handle non-existing bounding boxes in feature types</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>SOS:</dt>
+<dd><ul class="first last">
+<li>add support for authentication</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>WMTS:</dt>
+<dd><ul class="first last">
+<li>add support for styles</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ISO:</dt>
+<dd><ul class="first last">
+<li>add support for gmd:locale</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>GM03:</dt>
+<dd><ul class="first last">
+<li>add support for GM03 ISO metadata profile</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>CRS:</dt>
+<dd><ul class="first last">
+<li>catch invalid CRS codes</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>WMS:</dt>
+<dd><ul class="first last">
+<li>fix time dimension handling in Capabilities</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>SWE:</dt>
+<dd><ul class="first last">
+<li>various bug fixes</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>WPS:</dt>
+<dd><ul class="first last">
+<li>fix WPS DescribeProcess issue on DataType</li>
+<li>fixed bbox lower/upper_corner conversion</li>
+<li>added a test for wps BoundingBoxDataInput</li>
+<li>added BoundingBoxDataInput and fix boundingbox parsing</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Misc:</dt>
+<dd><ul class="first last">
+<li>fix double <code class="docutils literal"><span class="pre">&amp;&amp;</span></code> in URL requests</li>
+<li>add util.clean_ows_url function to remove basic service parameters from OWS base URLs</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h3>0.14.0 (2017-01-12)<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>WFS: add authentication (&#64;pmauduit)</li>
+<li>WFS: fix parameter names for WFS2</li>
+<li>OWS: implement updateSequence support</li>
+<li>CSW: fix ref bug in CSW-T workflows</li>
+<li>WCS: fix 1.0.0 Capabilities OWS namespace handling</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h3>0.13.0 (2016-09-24)<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>general: Handle servers that give 500 errors better (&#64;davidread)</li>
+<li>WMS: 1.3.0 support &#64;roomthily / &#64;b-cube</li>
+<li>WMS: add WMS request property to cache request URL, add service parameter</li>
+<li>OWS: add ows.ServiceIdentification.versions, fix ref in ows.ServiceIdentification.profiles</li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h3>0.12.0 (2016-09-12)<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>OWS: Support OWS Constraints and Parameters</li>
+<li>SOS/WaterML: handle WaterML 2.0 updates and SOS decoder</li>
+<li>Add username and password arguments to WFS class constructors</li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h3>0.11.0 (2016-04-01)<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>CSW: fix outputschema setting when raw XML is specified</li>
+<li><dl class="first docutils">
+<dt>ISO:</dt>
+<dd><ul class="first last">
+<li>parsing anchor for abstract and lineage fields added (madi)</li>
+<li>added support for spatialRepresentationType (pmdias)</li>
+<li>add MD_Keywords class (pmdias)</li>
+<li>fix md.languagecode to come from the codeListValue attribute (pmdias)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>WFS: add get_schema method for DescribeFeatureType parsing (jachym)</li>
+<li>WMS: do not assume parent layers should be queryable if 1..n of their children is</li>
+<li>WMTS: fix parsing when ServiceProvider does not exist</li>
+<li><dl class="first docutils">
+<dt>WPS:</dt>
+<dd><ul class="first last">
+<li>fix bbox type, parsing bbox output (cehbrecht)</li>
+<li>add support for bbox data and more robust literal data parsing (jachym)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="id14">
+<h3>0.10.0 (2015-11-11)<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>GM03: add support for GM03 metadata</li>
+<li>WPS: add fix for optional Abstract</li>
+</ul>
+</div>
+<div class="section" id="id15">
+<h3>0.9.2 (2015-09-23)<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>etree: add convenience function to report which etree is used</li>
+<li>WMS: add GetFeatureInfo support (JuergenWeichand)</li>
+<li>WMS: add a children attribute to ContentMetadata to handle WMS nested layers (Jenselme)</li>
+<li>WMTS: add support for restful only WMTS (JuergenWeichand)</li>
+<li>pass headers to requests (ayan-usgs)</li>
+</ul>
+</div>
+<div class="section" id="id16">
+<h3>0.9.1 (2015-09-03)<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>etree: Fix incorrect lxml ParseError import (daf)</li>
+<li>CRS: make crs hashable (QuLogic)</li>
+<li><dl class="first docutils">
+<dt>WPS:</dt>
+<dd><ul class="first last">
+<li>statuslocation bugfix (dblodgett-usgs)</li>
+<li>various bugfixes, tests and examples (cehbrecht)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>WFS:</dt>
+<dd><ul class="first last">
+<li>fix WFS 2.0 stored queries bugfix (JuergenWeichand)</li>
+<li>add docs for WFS 1.1/2.0 (JuergenWeichand)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>ISO: ignored empty gmd:identificationInfo elements (menegon)</li>
+</ul>
+</div>
+<div class="section" id="id17">
+<h3>0.9.0 (2015-06-12)<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Python 3 compatibility (numerous contributors!)</li>
+<li><dl class="first docutils">
+<dt>CSW:</dt>
+<dd><ul class="first last">
+<li>fix Capabilities parsing when ows:ServiceProvider is empty</li>
+<li>fix GetRecordById URL</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>WCS: add support for 1.1.1 (ldesousa)</li>
+<li><dl class="first docutils">
+<dt>ISO:</dt>
+<dd><ul class="first last">
+<li>add support for gmd:MD_ReferenceSystem (kalxas)</li>
+<li>safeguard vars (dblodgett-usgs)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>SOS: add sa namespace, add procedure as optional parameter (ict4eo)</li>
+</ul>
+</div>
+<div class="section" id="id18">
+<h3>0.8.13 (2015-02-12)<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>SOS: fix var reference blocker (ocefpaf)</li>
+<li>various Python 3 enhancements</li>
+</ul>
+</div>
+<div class="section" id="id19">
+<h3>0.8.11 (2014-12-17)<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>WMTS: add/fix vendor kwarg handling (rhattersley)</li>
+<li>WMS: add ScaleHint support (SiggyF)</li>
+<li>FES: add srsName support for gml:Envelope, add filter to string support</li>
+<li>WFS: add timeout support (selimnairb), add support for startindex</li>
+<li>fix/cleanup tests</li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h3>0.8.10 (2014-10-13)<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>CSW: fix bad URL being sent to GetRecords</li>
+<li>SOS: add timeout support (lukecampbell)</li>
+<li>WPS: add logging (dblodgett-usgs)</li>
+<li>WFS: ignore comments when parsing (Samuli Vuorinen)</li>
+<li>tests: add support for logging</li>
+<li>LICENSE: update reference (johanvdw )</li>
+</ul>
+</div>
+<div class="section" id="id21">
+<h3>0.8.9 (2014-09-24)<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>CSW: support <code class="docutils literal"><span class="pre">gmi:MI_Metadata</span></code> as <code class="docutils literal"><span class="pre">gmd:MD_Metadata</span></code> when parsing reuslts (&#64;FuhuXia)</li>
+<li>CSW: add support for basic authentication</li>
+<li>ISO: add support for instantiation of MD_Metadata objects (&#64;kalxas)</li>
+<li>ISO: add support for CI_ResponsibleParty as a responsible role attribute (&#64;milokmet)</li>
+<li>ISO: add title support for SV_ServiceIdentification (&#64;dblodgett-usgs)</li>
+<li>SOS: add &#8216;om&#8217; back to namespace list (&#64;ict4eo)</li>
+<li>util: add support for race conditions for WPS (&#64;TobiasKipp)</li>
+</ul>
+</div>
+<div class="section" id="id22">
+<h3>0.8.8 (2014-07-05)<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>CSW: use URLS as defined in GetCaps for CSW operations (&#64;kwilcox)</li>
+<li>CSW: fix GetRecordById (&#64;kwilcox)</li>
+<li>CSW: use default CSW URL when initialized with skip_caps=True</li>
+<li>WMTS: Allow vendor-specific args in WMTS tile requests (&#64;rhattersley)</li>
+<li>ISO: allow for MD_Metadata to be intialized as empty, supporting export to XML functionality (&#64;kalxas)</li>
+<li>ISO: add support for gmd:RS_Identifier needed by INSPIRE (&#64;kalxas)</li>
+<li>numerous unit test / build fixes and cleanups</li>
+</ul>
+</div>
+<div class="section" id="id23">
+<h3>0.8.7 (2014-05-02)<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>WPS: add method to write output to disk (&#64;ldesousa)</li>
+<li>CSW: add method to get operations by name</li>
+<li>CSW: responses now maintain order using OrderedDict</li>
+<li>CSW: ensure namespace is declared for GetRecords typeName values in request (&#64;kwilcox)</li>
+<li>SOS: fix error detections (&#64;daf)</li>
+<li>ISO: fix xpath for selecting gmd:thesaurusName (&#64;menegon)</li>
+<li>add timeouts to HTTP functions (&#64;iguest)</li>
+<li>FES: add matchCase to ogc:PropertyIsLike</li>
+<li>logging: add Null handler to not write files randomly (&#64;kwilcox)</li>
+<li>WFS: add GetFeature outputformat support (&#64;kwilcox, &#64;rsignell-usgs)</li>
+<li>ISO: support GML 3.2 extent handling</li>
+<li>numerous unit test / build fixes and cleanups</li>
+</ul>
+</div>
+<div class="section" id="id24">
+<h3>0.8.3 (2014-01-10)<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>allow CSW URLs to be requested as unicode or string (&#64;rclark)</li>
+<li>support multiple gmd:extent elements (&#64;severo)</li>
+<li>support WMS default time position (&#64;vicb)</li>
+<li>fix SOS GetCapabilities support (&#64;kwilcox)</li>
+<li>support missing CSW nextRecord (&#64;davidread)</li>
+<li>use child layers for WMS duplicates</li>
+<li>numerous unit test fixes and cleanups</li>
+</ul>
+</div>
+<div class="section" id="id25">
+<h3>0.8.0 (2013-09-11)<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Support for WaterML 1.0 and 1.1 (thanks &#64;kwilcox and &#64;CowanSM)</li>
+<li>drastically improved CSW getrecords support (owslib.csw.CatalogueServiceWeb.getrecords2, which will eventually replace owslib.csw.CatalogueServiceWeb.getrecords, which is now deprecated) (thanks &#64;kwilcox and &#64;rsignell-usgs input)</li>
+<li>fix owslib.csw.CatalogueServiceWeb to use HTTP GET for GetCapabilities and GetRecordById (thanks &#64;rsignell-usgs for input)</li>
+<li>numerous test fixes</li>
+<li>support owslib.iso.MD_Metadata scanning of multiple extents (thanks &#64;severo)</li>
+<li>add WMS elevation support in Capabilities (thanks &#64;mhermida)</li>
+<li>travis-ci setup (thanks &#64;brianmckenna)</li>
+<li>Support for TMS (thanks &#64;cleder)</li>
+<li>updated build packages (thanks &#64;kalxas)</li>
+<li>numerous bug fixes</li>
+</ul>
+</div>
+<div class="section" id="id26">
+<h3>0.7 (2013-02-18)<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Support for SOS 1.0.0, SOS 2.0.0, SensorML (thanks &#64;kwilcox)</li>
+<li>Support for TMS (thanks &#64;cleder)</li>
+<li>numerous bug fixes</li>
+</ul>
+</div>
+<div class="section" id="id27">
+<h3>0.6 (2012-12-22)<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Support for WMTS (thanks &#64;bradh)</li>
+<li><dl class="first docutils">
+<dt>packaging support (thanks &#64;kalxas) for:</dt>
+<dd><ul class="first last">
+<li>openSUSE</li>
+<li>Debian</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>addition of owslib.__version__</li>
+<li><dl class="first docutils">
+<dt>ISO support:</dt>
+<dd><ul class="first last">
+<li>multiple gmd:identificationInfo elements</li>
+<li>gmd:distributorInfo elements</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>WMS</dt>
+<dd><ul class="first last">
+<li>read additional Layer attributes (thanks &#64;elemoine)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>numerous bug fixes</li>
+</ul>
+</div>
+<div class="section" id="id28">
+<h3>0.5 (2012-06-15)<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Support for the following parsers:</dt>
+<dd><ul class="first last">
+<li>WPS 1.0.0</li>
+<li>WFS 1.1.0</li>
+<li>CRS handling: URNs, URIs, EPSG:xxxx style</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>etree.py looks for lxml.etree first now</li>
+<li>catch WMS service exceptions on GetCapabilities</li>
+<li>CSW exceptions are now Pythonic</li>
+</ul>
+</div>
+<div class="section" id="id29">
+<h3>0.4 (2011-10-02)<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Support for the following parsers:</dt>
+<dd><ul class="first last">
+<li>CSW 2.0.2</li>
+<li>OWS Common 1.0.0, 1.1.0, 2.0.0</li>
+<li>Filter Encoding 1.1.0</li>
+<li>ISO 19115:2003</li>
+<li>FGDC CSDGM</li>
+<li>NASA DIF</li>
+<li>Dublin Core</li>
+<li>WFS 2.0</li>
+<li>WCS 1.1</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>New SCM/bug/mailing list infrastructure</li>
+<li>Sphinx documentation</li>
+</ul>
+</div>
+<div class="section" id="id30">
+<h3>0.3 (2008-05-08)<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>WCS support.</li>
+<li>Support for basic authorization in WMS requests (#107).</li>
+</ul>
+</div>
+<div class="section" id="id31">
+<h3>0.2.1 (2007-08-06)<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Added support for Python 2.5.</li>
+<li>Fixed ticket #105: Don&#8217;t depend on Content-length in the http headers for
+getfeature.</li>
+</ul>
+</div>
+<div class="section" id="id32">
+<h3>0.2.0 (2007-02-01)<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Change license to BSD.</li>
+<li>Added service contact metadata.</li>
+</ul>
+</div>
+<div class="section" id="id33">
+<h3>0.1.0 (2006-10-19)<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>New and improved metadata API.</li>
+<li>Wrappers for GetCapabilities, WMS GetMap, and WFS GetFeature requests.</li>
+<li>Doctests.</li>
+</ul>
+</div>
+<div class="section" id="id34">
+<h3>0.0.1 (2006-07-30)<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Brought OWSLib up out of the PCL trunk into its own space.</li>
+<li>Updated the testing frameworm.</li>
+<li>Initial test coverage:</li>
+</ul>
+<table border="1" class="colwidths-given docutils" id="id35">
+<caption><span class="caption-text">Test Coverage</span><a class="headerlink" href="#id35" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Stmts</th>
+<th class="head">Exec</th>
+<th class="head">Cover</th>
+<th class="head">Missing</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>wms</td>
+<td>105</td>
+<td>68</td>
+<td>64%</td>
+<td>36, 41-48, 61-63, 114-118, 125-155, 172, 203-205</td>
+</tr>
+<tr class="row-odd"><td>wfs</td>
+<td>74</td>
+<td>69</td>
+<td>93%</td>
+<td>146, 166, 199-201</td>
+</tr>
+<tr class="row-even"><td>wmc</td>
+<td>111</td>
+<td>0</td>
+<td>0%</td>
+<td>33-220</td>
+</tr>
+<tr class="row-odd"><td>TOTAL</td>
+<td>290</td>
+<td>137</td>
+<td>47%</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 
 
@@ -1830,7 +2462,7 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OWSLib 0.18.0 documentation</a><ul>
+<li><a class="reference internal" href="#">OWSLib 0.19.0 documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a><ul>
 <li><a class="reference internal" href="#standards-support">Standards Support</a></li>
@@ -1882,6 +2514,39 @@ POSSIBILITY OF SUCH DAMAGE.</p>
 <li><a class="reference internal" href="#logging">Logging</a></li>
 <li><a class="reference internal" href="#license">License</a></li>
 <li><a class="reference internal" href="#credits">Credits</a></li>
+<li><a class="reference internal" href="#changes">Changes</a><ul>
+<li><a class="reference internal" href="#id5">0.18.0 (2019-06-24)</a></li>
+<li><a class="reference internal" href="#id6">0.17.1 (2019-01-12)</a></li>
+<li><a class="reference internal" href="#id7">0.17.0 (2018-09-04)</a></li>
+<li><a class="reference internal" href="#id8">0.16.0 (2017-12-21)</a></li>
+<li><a class="reference internal" href="#id9">0.15.0 (2017-09-13)</a></li>
+<li><a class="reference internal" href="#id10">0.14.0 (2017-01-12)</a></li>
+<li><a class="reference internal" href="#id11">0.13.0 (2016-09-24)</a></li>
+<li><a class="reference internal" href="#id12">0.12.0 (2016-09-12)</a></li>
+<li><a class="reference internal" href="#id13">0.11.0 (2016-04-01)</a></li>
+<li><a class="reference internal" href="#id14">0.10.0 (2015-11-11)</a></li>
+<li><a class="reference internal" href="#id15">0.9.2 (2015-09-23)</a></li>
+<li><a class="reference internal" href="#id16">0.9.1 (2015-09-03)</a></li>
+<li><a class="reference internal" href="#id17">0.9.0 (2015-06-12)</a></li>
+<li><a class="reference internal" href="#id18">0.8.13 (2015-02-12)</a></li>
+<li><a class="reference internal" href="#id19">0.8.11 (2014-12-17)</a></li>
+<li><a class="reference internal" href="#id20">0.8.10 (2014-10-13)</a></li>
+<li><a class="reference internal" href="#id21">0.8.9 (2014-09-24)</a></li>
+<li><a class="reference internal" href="#id22">0.8.8 (2014-07-05)</a></li>
+<li><a class="reference internal" href="#id23">0.8.7 (2014-05-02)</a></li>
+<li><a class="reference internal" href="#id24">0.8.3 (2014-01-10)</a></li>
+<li><a class="reference internal" href="#id25">0.8.0 (2013-09-11)</a></li>
+<li><a class="reference internal" href="#id26">0.7 (2013-02-18)</a></li>
+<li><a class="reference internal" href="#id27">0.6 (2012-12-22)</a></li>
+<li><a class="reference internal" href="#id28">0.5 (2012-06-15)</a></li>
+<li><a class="reference internal" href="#id29">0.4 (2011-10-02)</a></li>
+<li><a class="reference internal" href="#id30">0.3 (2008-05-08)</a></li>
+<li><a class="reference internal" href="#id31">0.2.1 (2007-08-06)</a></li>
+<li><a class="reference internal" href="#id32">0.2.0 (2007-02-01)</a></li>
+<li><a class="reference internal" href="#id33">0.1.0 (2006-10-19)</a></li>
+<li><a class="reference internal" href="#id34">0.0.1 (2006-07-30)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1913,12 +2578,12 @@ POSSIBILITY OF SUCH DAMAGE.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">OWSLib 0.18.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">OWSLib 0.19.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2010, Tom Kralidis.
-      Last updated on 2019-06-25T00:01:47Z.
+      Last updated on 2019-11-14T20:15:06Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
