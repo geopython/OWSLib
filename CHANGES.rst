@@ -1,6 +1,28 @@
 Changes
 =======
 
+0.19.0 (2019-11-14)
+-------------------
+
+Python 2 support has been removed.  Users are strongly encouraged to
+upgrade to the latest version of OWSLib and Python 3.
+
+A full list of commits for 0.19.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.19.0
+
+- ALL: 2 support removed (cehbrecht et. al.)
+- OWS
+- safeguard ProviderSite/@href (jannefleischer)
+- safeguard bbox parsing (walkermatt)
+- WMS: support ScaleDenominator
+- WMTS: add timeout (jachym)
+- OGC API
+- Features updates following specification
+- TMS: fix broken constructor (justb4)
+- ALL: pass HTTP headers for WMS/WFS/WMTS/TMS (justb4)
+- ALL: test fixes/updates
+
 0.18.0 (2019-06-24)
 -------------------
 
