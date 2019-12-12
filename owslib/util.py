@@ -787,6 +787,25 @@ def datetime_from_ansi(ansi):
     return datumOrigin + timedelta(ansi)
 
 
+def param_list_to_url_string(self, param_list, param_name):
+    """Converts list of tuples for certain WCS GetCoverage keyword arguments (subsets, resolutions, sizes) to a url-enconded
+    string
+    """
+    string = ''
+    for param in param_list:
+        if len(param) > 2:
+            if not self.is_number(param[1]):
+                string += "&" + urlencode({param_name: param[0] + '("' + self.__makeString(param[1]) + '","' + self.__makeString(param[2]) + '")'})  # noqa
+            else:
+                string += "&" + urlencode({param_name: param[0] + "(" + self.__makeString(param[1]) + "," + self.__makeString(param[2]) + ")"})  # noqa
+        else:
+            if not self.is_number(param[1]):
+                string += "&" + urlencode({param_name: param[0] + '("' + self.__makeString(param[1]) + '")'})
+            else:
+                string += "&" + urlencode({param_name: param[0] + "(" + self.__makeString(param[1]) + ")"})
+    return string
+
+
 def is_vector_grid(grid_elem):
     pass
 

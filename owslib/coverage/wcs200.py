@@ -29,7 +29,7 @@ import errno
 import dateutil.parser as parser
 from datetime import timedelta
 import logging
-from owslib.util import log, datetime_from_ansi, datetime_from_iso
+from owslib.util import log, datetime_from_ansi, datetime_from_iso, param_list_to_url_string
 
 
 #  function to save writing out WCS namespace in full each time
@@ -128,6 +128,8 @@ class WebCoverageService_2_0_0(WCSBase):
         time=None,
         format=None,
         subsets=None,
+        resolutions=None,
+        sizes=None,
         crs=None,
         width=None,
         height=None,
@@ -211,26 +213,13 @@ class WebCoverageService_2_0_0(WCSBase):
         # encode and request
         data = urlencode(request)
         if subsets:
-            for subset in subsets:
-                if len(subset) > 2:
-                    if not self.is_number(subset[1]):
-                        data = (
-                            data + "&" + urlencode({"subset": subset[0] + '("' + self.__makeString(subset[1]) + '","' + self.__makeString(subset[2]) + '")'})  # noqa
-                        )
-                    else:
-                        data = (
-                            data + "&" + urlencode({"subset": subset[0] + "(" + self.__makeString(subset[1]) + "," + self.__makeString(subset[2]) + ")"})  # noqa
-                        )
-                else:
-                    if not self.is_number(subset[1]):
-                        data = (
-                            data + "&" + urlencode({"subset": subset[0] + '("' + self.__makeString(subset[1]) + '")'})
-                        )
-                    else:
-                        data = (
-                            data + "&" + urlencode({"subset": subset[0] + "(" + self.__makeString(subset[1]) + ")"})
-                        )
-
+            data += param_list_to_url_string(subsets, 'subset')
+        if resolutions:
+            log.debug('Adding vendor-specific RESOLUTION parameter.')
+            data += param_list_to_url_string(resolutions, 'resolution')
+        if sizes:
+            log.debug('Adding vendor-specific SIZE parameter.')
+            data += param_list_to_url_string(sizes, 'size')
         if log.isEnabledFor(logging.DEBUG):
             log.debug("WCS 2.0.0 DEBUG: Second part of URL: %s" % data)
 
