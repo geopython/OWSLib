@@ -1,9 +1,8 @@
-import cgi
 from io import StringIO
 from owslib.etree import etree
 from owslib.util import Authentication, openURL
 
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qsl
 
 
 def makeStringIO(strval):
@@ -38,7 +37,7 @@ class WFSCapabilitiesReader(object):
         """
         qs = []
         if service_url.find("?") != -1:
-            qs = cgi.parse_qsl(service_url.split("?")[1])
+            qs = parse_qsl(service_url.split("?")[1])
 
         params = [x[0] for x in qs]
 

@@ -9,9 +9,8 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qsl
 from owslib.etree import etree
-import cgi
 from owslib.util import Authentication, openURL
 
 
@@ -85,7 +84,7 @@ class WCSCapabilitiesReader(object):
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
+            qs = parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 
@@ -145,7 +144,7 @@ class DescribeCoverageReader(object):
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
+            qs = parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 

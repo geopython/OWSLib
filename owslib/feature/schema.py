@@ -9,9 +9,8 @@ Set of functions, which are suitable for DescribeFeatureType parsing and
 generating layer schema description compatible with `fiona`
 """
 
-import cgi
 import sys
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qsl
 from owslib.etree import etree
 from owslib.namespaces import Namespaces
 from owslib.util import which_etree, findall, Authentication, openURL
@@ -145,7 +144,7 @@ def _get_describefeaturetype_url(url, version, typename):
 
     query_string = []
     if url.find("?") != -1:
-        query_string = cgi.parse_qsl(url.split("?")[1])
+        query_string = parse_qsl(url.split("?")[1])
 
     params = [x[0] for x in query_string]
 
