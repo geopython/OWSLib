@@ -106,7 +106,7 @@ class WebMapService_1_1_1(object):
 
             # serviceOperations metadata
             self.operations = []
-            for elem in self._capabilities.find(str(result.group())+'Capability/'+result.group()+'Request')[:]:
+            for elem in self._capabilities.find(str(result.group()) + 'Capability/' + result.group() + 'Request')[:]:
                 self.operations.append(OperationMetadata(elem, result.group()))
 
             # serviceContents metadata: our assumption is that services use a
@@ -403,8 +403,9 @@ class ServiceProvider(object):
         self._root = infoset
         # check if exist url in tag
         if urlInTag is not None:
-            name = self._root.find(str(urlInTag)+'ContactInformation/'+str(urlInTag)+'ContactPersonPrimary/'+
-                                   str(urlInTag)+'ContactOrganization')
+            u = urlInTag
+            name = self._root.find(
+                str(u) + 'ContactInformation/' + str(u) + 'ContactPersonPrimary/' + str(u) + 'ContactOrganization')
             online_resource = self._root.find('{}OnlineResource'.format(urlInTag))
             # contact metadata
             contact = self._root.find('{}ContactInformation'.format(urlInTag))
@@ -522,8 +523,8 @@ class ContentMetadata(AbstractContentMetadata):
                 self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
             if logo is not None:
                 self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
-                self.attribution['logo_url'] = logo.find(str(urlInTag)+
-                                                         'OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+                self.attribution['logo_url'] = logo.find(
+                    str(urlInTag) + 'OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
 
         b = elem.find('{}LatLonBoundingBox'.format(urlInTag))
         if b is not None:
@@ -588,13 +589,13 @@ class ContentMetadata(AbstractContentMetadata):
             else:
                 style = {'title': title.text}
             # legend url
-            legend = s.find(str(urlInTag)+'LegendURL/'+str(urlInTag)+'OnlineResource')
+            legend = s.find(str(urlInTag) + 'LegendURL/' + str(urlInTag) + 'OnlineResource')
             if legend is not None:
                 style['legend'] = legend.attrib['{http://www.w3.org/1999/xlink}href']
             self.styles[name.text] = style
 
         # keywords
-        self.keywords = [f.text for f in elem.findall(str(urlInTag)+'KeywordList/'+str(urlInTag)+'Keyword')]
+        self.keywords = [f.text for f in elem.findall(str(urlInTag) + 'KeywordList/' + str(urlInTag) + 'Keyword')]
 
         # timepositions - times for which data is available.
         self.timepositions = None
@@ -689,7 +690,7 @@ class OperationMetadata:
         # formatOptions
         self.formatOptions = [f.text for f in elem.findall('{}Format'.format(urlInTag))]
         self.methods = []
-        for verb in elem.findall(str(urlInTag)+'DCPType/'+str(urlInTag)+'HTTP/*'):
+        for verb in elem.findall(str(urlInTag) + 'DCPType/' + str(urlInTag) + 'HTTP/*'):
             url = verb.find('{}OnlineResource'.format(urlInTag)).attrib['{http://www.w3.org/1999/xlink}href']
             self.methods.append({'type': xmltag_split(verb.tag), 'url': url})
 
@@ -700,9 +701,9 @@ class ContactMetadata:
     def __init__(self, elem, urlInTag=None):
         # check if exist url in tag
         if urlInTag is not None:
-            name = elem.find(str(urlInTag)+'ContactPersonPrimary/'+str(urlInTag)+'ContactPerson')
+            name = elem.find(str(urlInTag) + 'ContactPersonPrimary/' + str(urlInTag) + 'ContactPerson')
             email = elem.find('{}ContactElectronicMailAddress'.format(urlInTag))
-            organization = elem.find(str(urlInTag)+'ContactPersonPrimary/'+str(urlInTag)+'ContactOrganization')
+            organization = elem.find(str(urlInTag) + 'ContactPersonPrimary/' + str(urlInTag) + 'ContactOrganization')
             position = elem.find('{}ContactPosition'.format(urlInTag))
         else:
             name = elem.find('ContactPersonPrimary/ContactPerson')
@@ -730,23 +731,23 @@ class ContactMetadata:
             address = elem.find('ContactAddress')
 
         if address is not None:
-            street = address.find('{}Address'.format(urlInTag))
+            street = address.find('{}Address'.format(urlBeforeTag))
             if street is not None:
                 self.address = street.text
 
-            city = address.find('{}City'.format(urlInTag))
+            city = address.find('{}City'.format(urlBeforeTag))
             if city is not None:
                 self.city = city.text
 
-            region = address.find('{}StateOrProvince'.format(urlInTag))
+            region = address.find('{}StateOrProvince'.format(urlBeforeTag))
             if region is not None:
                 self.region = region.text
 
-            postcode = address.find('{}PostCode'.format(urlInTag))
+            postcode = address.find('{}PostCode'.format(urlBeforeTag))
             if postcode is not None:
                 self.postcode = postcode.text
 
-            country = address.find('{}Country'.format(urlInTag))
+            country = address.find('{}Country'.format(urlBeforeTag))
             if country is not None:
                 self.country = country.text
 
