@@ -34,6 +34,7 @@ from owslib.namespaces import Namespaces
 
 n = Namespaces()
 
+
 class CapabilitiesError(Exception):
     pass
 
@@ -94,7 +95,7 @@ class WebMapService_1_1_1(object):
         self.updateSequence = self._capabilities.attrib.get('updateSequence')
 
         # check if exist url in tag
-        result = re.match('{(\w*:\/\/)?(\w{3}|\.\w*\.\w*|\.\w*)*(\/?\w)*}', self._capabilities.tag)
+        result = re.match(r"{(\w*:\/\/)?(\w{3}|\.\w*\.\w*|\.\w*)*(\/?\w)*}", self._capabilities.tag)
         if result is not None:
             # serviceIdentification metadata
             serviceelem = self._capabilities.find('{}Service'.format(result.group()))
@@ -402,7 +403,8 @@ class ServiceProvider(object):
         self._root = infoset
         # check if exist url in tag
         if urlInTag is not None:
-            name = self._root.find(str(urlInTag)+'ContactInformation/'+str(urlInTag)+'ContactPersonPrimary/'+str(urlInTag)+'ContactOrganization')
+            name = self._root.find(str(urlInTag)+'ContactInformation/'+str(urlInTag)+'ContactPersonPrimary/'+
+                                   str(urlInTag)+'ContactOrganization')
             online_resource = self._root.find('{}OnlineResource'.format(urlInTag))
             # contact metadata
             contact = self._root.find('{}ContactInformation'.format(urlInTag))
@@ -520,7 +522,8 @@ class ContentMetadata(AbstractContentMetadata):
                 self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
             if logo is not None:
                 self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
-                self.attribution['logo_url'] = logo.find(str(urlInTag)+'OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+                self.attribution['logo_url'] = logo.find(str(urlInTag)+
+                                                         'OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
 
         b = elem.find('{}LatLonBoundingBox'.format(urlInTag))
         if b is not None:
@@ -617,7 +620,8 @@ class ContentMetadata(AbstractContentMetadata):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
                 'format': testXMLValue(m.find('{}Format'.format(urlInTag))),
-                'url': testXMLValue(m.find('{}OnlineResource'.format(urlInTag)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
+                'url': testXMLValue(m.find(
+                    '{}OnlineResource'.format(urlInTag)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
             self.metadataUrls.append(metadataUrl)
 
