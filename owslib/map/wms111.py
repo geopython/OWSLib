@@ -134,6 +134,9 @@ class WebMapService_1_1_1(object):
         # recursively gather content metadata for all layer elements.
         # To the WebMapService.contents store only metadata of named layers.
         def gather_layers(parent_elem, parent_metadata, urlInTag=''):
+            result = re.match(r"{(\w*:\/\/)?(\w{3}|\.\w*\.\w*|\.\w*)*(\/?\w)*}", parent_elem.tag)
+            if result is not None:
+                urlInTag = result.group()
             layers = []
             for index, elem in enumerate(parent_elem.findall('{}Layer'.format(urlInTag))):
                 cm = ContentMetadata(elem, parent=parent_metadata,
@@ -146,7 +149,7 @@ class WebMapService_1_1_1(object):
                     self.contents[cm.id] = cm
                 cm.children = gather_layers(elem, cm)
             return layers
-        gather_layers(caps, None, result.group())
+        gather_layers(caps, None)
 
         # exceptions
         self.exceptions = [f.text for f
