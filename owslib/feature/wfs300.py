@@ -131,8 +131,8 @@ class WebFeatureService_3_0_0(object):
         @param collection_id: id of collection
         @type bbox: list
         @param bbox: list of minx,miny,maxx,maxy
-        @type time: string
-        @param time: time extent or time instant
+        @type datetime: string
+        @param datetime: time extent or time instant
         @type limit: int
         @param limit: limit number of features
         @type startindex: int
