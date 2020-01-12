@@ -26,15 +26,15 @@ def patch_well_known_namespaces(etree_module):
 
 # try to find lxml or elementtree
 try:
-    from lxml import etree
-    from lxml.etree import ParseError
-    ElementType = etree._Element
-except ImportError:
     import xml.etree.ElementTree as etree
     ElementType = etree.Element
     try:
         from xml.etree.ElementTree import ParseError
     except ImportError:
         from xml.parsers.expat import ExpatError as ParseError
+except ImportError:
+    from lxml import etree
+    from lxml.etree import ParseError
+    ElementType = etree._Element
 
 patch_well_known_namespaces(etree)
