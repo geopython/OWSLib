@@ -38,7 +38,7 @@ class API(object):
         @param password: service authentication password
         @param auth: instance of owslib.util.Authentication
 
-        @returns: `owslib.ogc_api.API`
+        @returns: `owslib.ogcapi.API`
         """
 
         if '?' in url:

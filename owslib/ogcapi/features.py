@@ -11,7 +11,7 @@ import logging
 
 from urllib.parse import urljoin
 
-from owslib.ogc_api import API, REQUEST_HEADERS
+from owslib.ogcapi import API, REQUEST_HEADERS
 from owslib.util import http_get
 
 LOGGER = logging.getLogger(__name__)

@@ -2,7 +2,7 @@ from tests.utils import service_ok
 
 import pytest
 
-from owslib.ogc_api.features import Features
+from owslib.ogcapi.features import Features
 
 SERVICE_URL = 'https://demo.pygeoapi.io/master'
 
@@ -10,7 +10,7 @@ SERVICE_URL = 'https://demo.pygeoapi.io/master'
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
-def test_ogc_api_features_pygeoapi():
+def test_ogcapi_features_pygeoapi():
     w = Features(SERVICE_URL)
 
     assert w.url == 'https://demo.pygeoapi.io/master/'
