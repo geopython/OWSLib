@@ -293,26 +293,24 @@ services)
 
     >>> response = wfs20.getfeature(storedQueryID='urn:ogc:def:query:OGC-WFS::GetFeatureById', storedQueryParams={'ID':'gmd_ex.1'})
 
-WFS 3.0
--------
+OGC API - Features 1.0
+----------------------
 
-WFS 3.0 is a clean break from the traditional OGC service architecture
+The OGC API - Features standar is a clean break from the traditional OGC service architecture
 (RESTful, JSON, OpenAPI) and as such OWSLib the code follows the same pattern.
 
 .. code-block:: python
 
-  >>> from owslib.wfs import WebFeatureService
-  >>> w = WebFeatureService('https://geo.kralidis.ca/pygeoapi', version='3.0')
+  >>> from owslib.ogcapi import Features
+  >>> w = Features('https://demo.pygeoapi.io/cite')
   >>> w.url
-  'http://geo.kralidis.ca/pygeoapi/'
-  >>> w.version
-  '3.0'
+  'https://demo.pygeoapi.io/cite'
   >>> conformance = w.conformance()
-  {u'conformsTo': [u'http://www.opengis.net/spec/wfs-1/3.0/req/core', u'http://www.opengis.net/spec/wfs-1/3.0/req/oas30', u'http://www.opengis.net/spec/wfs-1/3.0/req/html', u'http://www.opengis.net/spec/wfs-1/3.0/req/geojson']}
-  >>> api = w.api() # OpenAPI definition
+  {u'conformsTo': [u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson']}
+  >>> api = w.api()  # OpenAPI definition
   >>> collections = w.collections()
   >>> len(collections)
-  3
+  13
   >>> lakes = w.collection('lakes')
   >>> lakes['name']
   'lakes'
