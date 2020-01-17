@@ -2,7 +2,7 @@ from tests.utils import service_ok
 
 import pytest
 
-from owslib.wfs import WebFeatureService
+from owslib.ogcapi.features import Features
 
 SERVICE_URL = 'https://demo.pygeoapi.io/master'
 
@@ -10,11 +10,10 @@ SERVICE_URL = 'https://demo.pygeoapi.io/master'
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
-def test_wfs3_pygeoapi():
-    w = WebFeatureService(SERVICE_URL, version='3.0')
+def test_ogcapi_features_pygeoapi():
+    w = Features(SERVICE_URL)
 
     assert w.url == 'https://demo.pygeoapi.io/master/'
-    assert w.version == '3.0'
     assert w.url_query_string is None
 
     api = w.api()

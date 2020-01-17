@@ -13,11 +13,11 @@
 Web Feature Server (WFS) methods and metadata. Factory function.
 """
 
-from .feature import wfs100, wfs110, wfs200, wfs300
+from .feature import wfs100, wfs110, wfs200
 from .util import clean_ows_url, Authentication
 
 
-def WebFeatureService(url, version='1.0.0', xml=None, json_=None,
+def WebFeatureService(url, version='1.0.0', xml=None,
                       parse_remote_metadata=False, timeout=30, username=None,
                       password=None, headers=None, auth=None):
     ''' wfs factory function, returns a version specific WebFeatureService object
@@ -56,7 +56,3 @@ def WebFeatureService(url, version='1.0.0', xml=None, json_=None,
         return wfs200.WebFeatureService_2_0_0(
             clean_url, version, xml, parse_remote_metadata,
             timeout=timeout, headers=headers, auth=auth)
-    elif version in ['3.0', '3.0.0']:
-        return wfs300.WebFeatureService_3_0_0(
-            clean_url, version, json_, timeout=timeout,
-            headers=headers, auth=auth)
