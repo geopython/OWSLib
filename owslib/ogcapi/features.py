@@ -26,7 +26,7 @@ class Features(API):
 
     def collection_items(self, collection_id, **kwargs):
         """
-        implements Requirement 17 (/req/core/fc-op)
+        implements /collection/{collectionId}/items
 
         @type collection_id: string
         @param collection_id: id of collection
@@ -55,7 +55,7 @@ class Features(API):
 
     def collection_item(self, collection_id, identifier):
         """
-        implements Requirement 30 (/req/core/f-op)
+        implements /collections/{collectionId}/items/{featureId}
 
         @type collection_id: string
         @param collection_id: id of collection

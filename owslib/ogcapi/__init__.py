@@ -26,7 +26,7 @@ class API(object):
 
     def __init__(self, url, json_=None, timeout=30, headers=None, auth=None):
         """
-        initializer; implements Requirement 1 (/req/core/root-op)
+        Initializer; implements /
 
         @type url: string
         @param url: url of WFS root document
@@ -62,7 +62,7 @@ class API(object):
 
     def api(self):
         """
-        implements Requirement 3 (/req/core/api-definition-op)
+        implements /api
 
         @returns: `dict` of OpenAPI definition object
         """
@@ -84,7 +84,7 @@ class API(object):
 
     def conformance(self):
         """
-        implements Requirement 5 (/req/core/conformance-op)
+        implements /conformance
 
         @returns: `dict` of conformance object
         """
@@ -97,7 +97,7 @@ class API(object):
 
     def collections(self):
         """
-        implements Requirement 9 (/req/core/collections-op)
+        implements /collections
 
         @returns: `dict` of collections object
         """
@@ -110,7 +110,7 @@ class API(object):
 
     def collection(self, collection_id):
         """
-        implements Requirement 15 (/req/core/sfc-md-op)
+        implements /collections/{collectionId}
 
         @type collection_id: string
         @param collection_id: id of collection
@@ -127,7 +127,7 @@ class API(object):
 
     def _build_url(self, path=None):
         """
-        helper function to build a WFS 3.0 URL
+        helper function to build an OGC API URL
 
         @type path: string
         @param path: path of WFS URL
