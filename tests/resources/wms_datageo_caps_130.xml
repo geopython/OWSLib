@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WMS_Capabilities
+  xmlns="http://www.opengis.net/wms"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  updateSequence="1291"
+  version="1.3.0"
+  xsi:schemaLocation="http://www.opengis.net/wms http://geo.ipt.br:8080/geoserver/schemas/wms/1.3.0/capabilities_1_3_0.xsd">
+  <Service>
+    <Name>WMS</Name>
+    <Title>GeoServer Web Map Service</Title>
+    <Abstract>A compliant implementation of WMS plus most of the SLD extension (dynamic styling). Can also generate PDF, SVG, KML, GeoRSS</Abstract>
+    <KeywordList>
+      <Keyword>WFS</Keyword>
+      <Keyword>WMS</Keyword>
+      <Keyword>GEOSERVER</Keyword>
+    </KeywordList>
+    <OnlineResource xlink:href="http://geoserver.sourceforge.net/html/index.php" xlink:type="simple"/>
+    <ContactInformation>
+      <ContactPersonPrimary>
+        <ContactPerson>Labgeo</ContactPerson>
+        <ContactOrganization>IPT - Instituto de Pesquisas Tecnológicas do Estado de São Paulo</ContactOrganization>
+      </ContactPersonPrimary>
+      <ContactPosition/>
+      <ContactAddress>
+        <AddressType/>
+        <Address>Av. Professor Almeida Prado, 532</Address>
+        <City>São Paulo</City>
+        <StateOrProvince>SP</StateOrProvince>
+        <PostCode>05508-901</PostCode>
+        <Country>Brazil</Country>
+      </ContactAddress>
+      <ContactVoiceTelephone/>
+      <ContactFacsimileTelephone/>
+      <ContactElectronicMailAddress>labgeo@ipt.br</ContactElectronicMailAddress>
+    </ContactInformation>
+    <Fees>NONE</Fees>
+    <AccessConstraints>NONE</AccessConstraints>
+  </Service>
+  <Capability>
+    <Request>
+      <GetCapabilities>
+        <Format>text/xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xlink:href="http://geo.ipt.br:8080/geoserver/iptwms/ows?SERVICE=WMS&amp;" xlink:type="simple"/>
+            </Get>
+            <Post>
+              <OnlineResource xlink:href="http://geo.ipt.br:8080/geoserver/iptwms/ows?SERVICE=WMS&amp;" xlink:type="simple"/>
+            </Post>
+          </HTTP>
+        </DCPType>
+      </GetCapabilities>
+      <GetMap>
+        <Format>image/png</Format>
+        <Format>application/atom+xml</Format>
+        <Format>application/pdf</Format>
+        <Format>application/rss+xml</Format>
+        <Format>application/vnd.google-earth.kml+xml</Format>
+        <Format>application/vnd.google-earth.kml+xml;mode=networklink</Format>
+        <Format>application/vnd.google-earth.kmz</Format>
+        <Format>image/geotiff</Format>
+        <Format>image/geotiff8</Format>
+        <Format>image/gif</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/png; mode=8bit</Format>
+        <Format>image/svg+xml</Format>
+        <Format>image/tiff</Format>
+        <Format>image/tiff8</Format>
+        <Format>text/html; subtype=openlayers</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xlink:href="http://geo.ipt.br:8080/geoserver/iptwms/ows?SERVICE=WMS&amp;" xlink:type="simple"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetMap>
+      <GetFeatureInfo>
+        <Format>text/plain</Format>
+        <Format>application/vnd.ogc.gml</Format>
+        <Format>text/xml</Format>
+        <Format>application/vnd.ogc.gml/3.1.1</Format>
+        <Format>text/xml; subtype=gml/3.1.1</Format>
+        <Format>text/html</Format>
+        <Format>application/json</Format>
+        <DCPType>
+          <HTTP>
+            <Get>
+              <OnlineResource xlink:href="http://geo.ipt.br:8080/geoserver/iptwms/ows?SERVICE=WMS&amp;" xlink:type="simple"/>
+            </Get>
+          </HTTP>
+        </DCPType>
+      </GetFeatureInfo>
+    </Request>
+    <Exception>
+      <Format>XML</Format>
+      <Format>INIMAGE</Format>
+      <Format>BLANK</Format>
+    </Exception>
+    <Layer opaque="0" queryable="1">
+      <Name>Risco_Louveira</Name>
+      <Title>IPT - Mapa de áreas de alto e muito alto risco a deslizamentos e inundações do Município de Louveira, SP</Title>
+      <Abstract/>
+      <KeywordList>
+        <Keyword>features</Keyword>
+        <Keyword>Louveira</Keyword>
+      </KeywordList>
+      <CRS>EPSG:4674</CRS>
+      <CRS>CRS:84</CRS>
+      <EX_GeographicBoundingBox>
+        <westBoundLongitude>-46.9813729807882</westBoundLongitude>
+        <eastBoundLongitude>-46.94205848792482</eastBoundLongitude>
+        <southBoundLatitude>-23.10269890561529</southBoundLatitude>
+        <northBoundLatitude>-23.076645607363375</northBoundLatitude>
+      </EX_GeographicBoundingBox>
+      <BoundingBox CRS="CRS:84" maxx="-46.94205848792482" maxy="-23.076645607363375" minx="-46.9813729807882" miny="-23.10269890561529"/>
+      <BoundingBox CRS="EPSG:4674" maxx="-23.07664560804442" maxy="-46.94205848792482" minx="-23.10269890629693" miny="-46.9813729807882"/>
+      <Style>
+        <Name>iptwms:Risco</Name>
+        <Title>Test</Title>
+        <LegendURL height="40" width="453">
+          <Format>image/png</Format>
+          <OnlineResource
+            xlink:href="http://geo.ipt.br:8080/geoserver/iptwms/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=Risco_Louveira"
+            xlink:type="simple"
+            xmlns:xlink="http://www.w3.org/1999/xlink"/>
+        </LegendURL>
+      </Style>
+    </Layer>
+  </Capability>
+</WMS_Capabilities>
