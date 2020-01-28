@@ -47,7 +47,7 @@ def get_schema(
         auth = Authentication(username, password)
     url = _get_describefeaturetype_url(url, version, typename)
     root = _get_remote_describefeaturetype(url, timeout=timeout,
-                                          headers=headers, auth=auth)
+                                           headers=headers, auth=auth)
 
     if ":" in typename:
         typename = typename.split(":")[1]
