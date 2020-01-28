@@ -115,8 +115,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         else:
             auth = Authentication()
         super(WebFeatureService_2_0_0, self).__init__(auth)
-        if log.isEnabledFor(logging.DEBUG):
-            log.debug("building WFS %s" % url)
+        log.debug("building WFS %s" % url)
         self.url = url
         self.version = version
         self.timeout = timeout
@@ -288,8 +287,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                 startindex,
                 sortby,
             )
-            if log.isEnabledFor(logging.DEBUG):
-                log.debug("GetFeature WFS GET url %s" % url)
+            log.debug("GetFeature WFS GET url %s" % url)
         else:
             (url, data) = self.getPOSTGetFeatureRequest()
 
