@@ -190,8 +190,7 @@ class WebCoverageService_2_0_0(WCSBase):
         except StopIteration:
             base_url = self.url
 
-        if log.isEnabledFor(logging.DEBUG):
-            log.debug("WCS 2.0.0 DEBUG: base url of server: %s" % base_url)
+        log.debug("WCS 2.0.0 DEBUG: base url of server: %s" % base_url)
 
         request = {"version": self.version, "request": "GetCoverage", "service": "WCS"}
         assert len(identifier) > 0
@@ -220,8 +219,7 @@ class WebCoverageService_2_0_0(WCSBase):
         if sizes:
             log.debug('Adding vendor-specific SIZE parameter.')
             data += param_list_to_url_string(sizes, 'size')
-        if log.isEnabledFor(logging.DEBUG):
-            log.debug("WCS 2.0.0 DEBUG: Second part of URL: %s" % data)
+        log.debug("WCS 2.0.0 DEBUG: Second part of URL: %s" % data)
 
         u = openURL(base_url, data, method, self.cookies, auth=self.auth)
         return u
