@@ -51,12 +51,7 @@ def get_schema(
 
     if ":" in typename:
         typename = typename.split(":")[1]
-    type_element = findall(
-        root,
-        "{%s}element" % XS_NAMESPACE,
-        attribute_name="name",
-        attribute_value=typename,
-    )[0]
+    type_element = root.find("./{%s}element" % XS_NAMESPACE)
     complex_type = type_element.attrib["type"].split(":")[1]
     elements = _get_elements(complex_type, root)
     nsmap = None
