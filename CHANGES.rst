@@ -1,6 +1,22 @@
 Changes
 =======
 
+0.19.1 (2020-01-29)
+-------------------
+
+This release is an update with a fix for Python 3.8 installation.
+
+A full list of commits for 0.19.1 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.19.1
+
+- Fixed Python 3.8 installation (#635, ocefpaf)
+- Refactored OGC API (#641, tomkralidis)
+- Add `python_requires` to prevent pip installing this on Python 2.x (#634, craigds)
+- WCS: Removed redundant check on logging level (#646, johanvdw)
+- WFS3: renamed time parameter to datetime (#639, mattfung)
+- WCS: added resolution and size params to WCS GetCoverage requests (#633, dukestep)
+
 0.19.0 (2019-11-14)
 -------------------
 
