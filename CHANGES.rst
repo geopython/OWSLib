@@ -17,6 +17,7 @@ https://github.com/geopython/OWSLib/commits/0.19.1
 - WFS: Fix WFS get_schema when typename doubles as attributename (#647, roel)
 - WCS: Removed redundant check on logging level (#646, johanvdw)
 - WFS3: renamed time parameter to datetime (#639, mattfung)
+- WFS: Added required fields to wfs schema (#628, Alexandre27)
 - WCS: added resolution and size params to WCS GetCoverage requests (#633, dukestep)
 - DOCS: updated WMS docs (#649, pathmapper)
 
