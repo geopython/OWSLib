@@ -124,7 +124,7 @@ def _construct_schema(elements, nsmap):
     for element in elements:
         data_type = element.attrib["type"].replace(gml_key + ":", "")
         name = element.attrib["name"]
-        non_nillable = element.attrib["nillable"] == "false"
+        non_nillable = element.attrib.get("nillable", "false") == "false"
 
         if data_type in mappings:
             schema["geometry"] = mappings[data_type]
