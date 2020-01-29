@@ -46,17 +46,12 @@ def get_schema(
     else:
         auth = Authentication(username, password)
     url = _get_describefeaturetype_url(url, version, typename)
-    res = openURL(url, timeout=timeout, headers=headers, auth=auth)
-    root = etree.fromstring(res.read())
+    root = _get_remote_describefeaturetype(url, timeout=timeout,
+                                           headers=headers, auth=auth)
 
     if ":" in typename:
         typename = typename.split(":")[1]
-    type_element = findall(
-        root,
-        "{%s}element" % XS_NAMESPACE,
-        attribute_name="name",
-        attribute_value=typename,
-    )[0]
+    type_element = root.find("./{%s}element" % XS_NAMESPACE)
     complex_type = type_element.attrib["type"].split(":")[1]
     elements = _get_elements(complex_type, root)
     nsmap = None
@@ -159,3 +154,16 @@ def _get_describefeaturetype_url(url, version, typename):
 
     urlqs = urlencode(tuple(query_string))
     return url.split("?")[0] + "?" + urlqs
+
+
+def _get_remote_describefeaturetype(url, timeout, headers, auth):
+    """Gets the DescribeFeatureType response from the remote server.
+
+    :param str url: url of the service
+    :param int timeout: request timeout
+    :param Authentication auth: instance of owslib.util.Authentication
+
+    :return etree.Element with the root of the DescribeFeatureType response
+    """
+    res = openURL(url, timeout=timeout, headers=headers, auth=auth)
+    return etree.fromstring(res.read())
