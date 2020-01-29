@@ -32,7 +32,7 @@ Standards Support
 +-----------------------+-----------------------------+
 | Standard              | Version(s)                  |
 +=======================+=============================+
-| `OGC WMS`_            | 1.1.1                       |
+| `OGC WMS`_            | 1.1.1, 1.3.0                |
 +-----------------------+-----------------------------+
 | `OGC WFS`_            | 1.0.0, 1.1.0, 2.0.0, 3.0    |
 +-----------------------+-----------------------------+
@@ -153,8 +153,12 @@ Find out what a WMS has to offer. Service metadata:
   >>> wms = WebMapService('http://wms.jpl.nasa.gov/wms.cgi', version='1.1.1')
   >>> wms.identification.type
   'OGC:WMS'
+  >>> wms.identification.version
+  '1.1.1'
   >>> wms.identification.title
   'JPL Global Imagery Service'
+  >>> wms.identification.abstract
+  'WMS Server maintained by JPL, worldwide satellite imagery.'
 
 Available layers:
 
