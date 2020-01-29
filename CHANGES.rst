@@ -18,6 +18,7 @@ https://github.com/geopython/OWSLib/commits/0.19.1
 - WCS: Removed redundant check on logging level (#646, johanvdw)
 - WFS3: renamed time parameter to datetime (#639, mattfung)
 - WCS: added resolution and size params to WCS GetCoverage requests (#633, dukestep)
+- DOCS: updated WMS docs (#649, pathmapper)
 
 0.19.0 (2019-11-14)
 -------------------
