@@ -1,6 +1,48 @@
 Changes
 =======
 
+0.19.1 (2020-01-29)
+-------------------
+
+This release is an update with a fix for Python 3.8 installation.
+
+A full list of commits for 0.19.1 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.19.1
+
+- Fixed Python 3.8 installation (#635, ocefpaf)
+- Refactored OGC API (#641, tomkralidis)
+- Add `python_requires` to prevent pip installing this on Python 2.x (#634, craigds)
+- Tests: replaced service URLs with working versions (#648, roel)
+- WFS: Fix WFS get_schema when typename doubles as attributename (#647, roel)
+- WCS: Removed redundant check on logging level (#646, johanvdw)
+- WFS3: renamed time parameter to datetime (#639, mattfung)
+- WFS: Added required fields to wfs schema (#628, Alexandre27)
+- WCS: added resolution and size params to WCS GetCoverage requests (#633, dukestep)
+- DOCS: updated WMS docs (#649, pathmapper)
+
+0.19.0 (2019-11-14)
+-------------------
+
+Python 2 support has been removed.  Users are strongly encouraged to
+upgrade to the latest version of OWSLib and Python 3.
+
+A full list of commits for 0.19.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.19.0
+
+- ALL: 2 support removed (cehbrecht et. al.)
+- OWS
+- safeguard ProviderSite/@href (jannefleischer)
+- safeguard bbox parsing (walkermatt)
+- WMS: support ScaleDenominator
+- WMTS: add timeout (jachym)
+- OGC API
+- Features updates following specification
+- TMS: fix broken constructor (justb4)
+- ALL: pass HTTP headers for WMS/WFS/WMTS/TMS (justb4)
+- ALL: test fixes/updates
+
 0.18.0 (2019-06-24)
 -------------------
 
@@ -20,10 +62,19 @@ https://github.com/geopython/OWSLib/commits/0.18.0
 - NEW: WFS 3 initial implementation
 - NEW: add Authentication framework (eric-spitler)
 - WPS:
-    * add process properties, percentCompleted (cebrecht)
+    * add process properties, percentCompleted (cehbrecht)
     * add reference attributes (enolfc)
     * add support for multi process processes (huard)
 - OWS: add support for crs and dimension (saimeCS)
+
+0.17.1 (2019-01-12)
+-------------------
+
+Bugfix release for issues in WPS and WMS.
+
+A full list of commits for 0.17.1 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.17.1
 
 0.17.0 (2018-09-04)
 -------------------

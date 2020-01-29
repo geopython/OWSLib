@@ -9,9 +9,8 @@ Set of functions, which are suitable for DescribeFeatureType parsing and
 generating layer schema description compatible with `fiona`
 """
 
-import cgi
 import sys
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qsl
 from owslib.etree import etree
 from owslib.namespaces import Namespaces
 from owslib.util import which_etree, findall, Authentication, openURL
@@ -47,17 +46,12 @@ def get_schema(
     else:
         auth = Authentication(username, password)
     url = _get_describefeaturetype_url(url, version, typename)
-    res = openURL(url, timeout=timeout, headers=headers, auth=auth)
-    root = etree.fromstring(res.read())
+    root = _get_remote_describefeaturetype(url, timeout=timeout,
+                                           headers=headers, auth=auth)
 
     if ":" in typename:
         typename = typename.split(":")[1]
-    type_element = findall(
-        root,
-        "{%s}element" % XS_NAMESPACE,
-        attribute_name="name",
-        attribute_value=typename,
-    )[0]
+    type_element = root.find("./{%s}element" % XS_NAMESPACE)
     complex_type = type_element.attrib["type"].split(":")[1]
     elements = _get_elements(complex_type, root)
     nsmap = None
@@ -149,7 +143,7 @@ def _get_describefeaturetype_url(url, version, typename):
 
     query_string = []
     if url.find("?") != -1:
-        query_string = cgi.parse_qsl(url.split("?")[1])
+        query_string = parse_qsl(url.split("?")[1])
 
     params = [x[0] for x in query_string]
 
@@ -164,3 +158,16 @@ def _get_describefeaturetype_url(url, version, typename):
 
     urlqs = urlencode(tuple(query_string))
     return url.split("?")[0] + "?" + urlqs
+
+
+def _get_remote_describefeaturetype(url, timeout, headers, auth):
+    """Gets the DescribeFeatureType response from the remote server.
+
+    :param str url: url of the service
+    :param int timeout: request timeout
+    :param Authentication auth: instance of owslib.util.Authentication
+
+    :return etree.Element with the root of the DescribeFeatureType response
+    """
+    res = openURL(url, timeout=timeout, headers=headers, auth=auth)
+    return etree.fromstring(res.read())

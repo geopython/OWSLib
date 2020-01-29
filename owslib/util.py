@@ -15,12 +15,11 @@ from datetime import datetime, timedelta
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
-from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse
+from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
 import copy
 
 from io import StringIO, BytesIO
 
-import cgi
 import re
 from copy import deepcopy
 import warnings
@@ -558,7 +557,7 @@ def build_get_url(base_url, params, overwrite=False):
 
     qs_base = []
     if base_url.find('?') != -1:
-        qs_base = cgi.parse_qsl(base_url.split('?')[1])
+        qs_base = parse_qsl(base_url.split('?')[1])
 
     qs_params = []
     for key, value in list(params.items()):
@@ -785,6 +784,25 @@ def datetime_from_ansi(ansi):
     datumOrigin = datetime(1600, 12, 31, 0, 0, 0)
 
     return datumOrigin + timedelta(ansi)
+
+
+def param_list_to_url_string(self, param_list, param_name):
+    """Converts list of tuples for certain WCS GetCoverage keyword arguments (subsets, resolutions, sizes) to a url-enconded
+    string
+    """
+    string = ''
+    for param in param_list:
+        if len(param) > 2:
+            if not self.is_number(param[1]):
+                string += "&" + urlencode({param_name: param[0] + '("' + self.__makeString(param[1]) + '","' + self.__makeString(param[2]) + '")'})  # noqa
+            else:
+                string += "&" + urlencode({param_name: param[0] + "(" + self.__makeString(param[1]) + "," + self.__makeString(param[2]) + ")"})  # noqa
+        else:
+            if not self.is_number(param[1]):
+                string += "&" + urlencode({param_name: param[0] + '("' + self.__makeString(param[1]) + '")'})
+            else:
+                string += "&" + urlencode({param_name: param[0] + "(" + self.__makeString(param[1]) + ")"})
+    return string
 
 
 def is_vector_grid(grid_elem):

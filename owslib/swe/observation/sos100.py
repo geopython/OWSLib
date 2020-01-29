@@ -1,7 +1,6 @@
-import cgi
 from owslib.etree import etree
 from datetime import datetime
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qsl
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities
@@ -290,7 +289,7 @@ class SosCapabilitiesReader(object):
         """
         qs = []
         if service_url.find('?') != -1:
-            qs = cgi.parse_qsl(service_url.split('?')[1])
+            qs = parse_qsl(service_url.split('?')[1])
 
         params = [x[0] for x in qs]
 

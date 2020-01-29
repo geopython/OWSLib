@@ -7,8 +7,11 @@ from owslib.wms import WebMapService
 from tests.utils import service_ok
 
 
-WMS_SERVICE_URL = 'https://www.dov.vlaanderen.be/geoserver/gw_meetnetten/wms'
-WFS_SERVICE_URL = 'https://www.dov.vlaanderen.be/geoserver/gw_meetnetten/wfs'
+WMS_SERVICE_URL = 'https://www.dov.vlaanderen.be/geoserver/gw_meetnetten/' \
+                  'wms?request=GetCapabilities'
+
+WFS_SERVICE_URL = 'https://www.dov.vlaanderen.be/geoserver/gw_meetnetten/' \
+                  'wfs?request=GetCapabilities'
 
 
 @pytest.fixture
