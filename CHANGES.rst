@@ -13,6 +13,7 @@ https://github.com/geopython/OWSLib/commits/0.19.1
 - Fixed Python 3.8 installation (#635, ocefpaf)
 - Refactored OGC API (#641, tomkralidis)
 - Add `python_requires` to prevent pip installing this on Python 2.x (#634, craigds)
+- Tests: use HEAD instead of GET in service_ok (#651, roel)
 - Tests: replaced service URLs with working versions (#648, roel)
 - WFS: Fix WFS get_schema when typename doubles as attributename (#647, roel)
 - WCS: Removed redundant check on logging level (#646, johanvdw)
