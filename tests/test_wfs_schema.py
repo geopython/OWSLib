@@ -111,6 +111,9 @@ class TestOnline(object):
         if 'properties' in schema:
             assert isinstance(schema['properties'], dict)
 
+        assert 'required' in schema
+        assert isinstance(schema['required'], list)
+
 
 class TestOffline(object):
     """Class grouping offline tests for the WFS get_schema method."""
@@ -148,6 +151,9 @@ class TestOffline(object):
 
         if 'properties' in schema:
             assert isinstance(schema['properties'], dict)
+
+        assert 'required' in schema
+        assert isinstance(schema['required'], list)
 
     def test_get_schema_typename_eq_attribute(
             self, mp_wfs_110,
