@@ -83,7 +83,7 @@ def sorted_url_query(url):
 
 def service_ok(url, timeout=5):
     try:
-        resp = requests.get(url, timeout=timeout)
+        resp = requests.head(url, allow_redirects=True, timeout=timeout)
         if 'html' in resp.headers['content-type']:
             ok = False
         else:
