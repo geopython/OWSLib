@@ -8,8 +8,9 @@
 
 import json
 import logging
-
 from urllib.parse import urljoin
+
+import yaml
 
 from owslib import __version__
 from owslib.util import http_get
@@ -68,15 +69,33 @@ class API(object):
         """
 
         url = None
+        openapi_format = None
 
+        openapi_json_mimetype = 'application/vnd.oai.openapi+json;version=3.0'
+        openapi_yaml_mimetype = 'application/vnd.oai.openapi;version=3.0'
+
+        LOGGER.debug('Searching for OpenAPI JSON Document')
         for l in self.links:
-            if l['rel'] == 'service-desc':
+            if l['rel'] == 'service-desc' and l['type'] == openapi_json_mimetype:
+                openapi_format = openapi_json_mimetype
                 url = l['href']
+                break
+
+            LOGGER.debug('Searching for OpenAPI YAML Document')
+            if url is None:
+                if l['rel'] == 'service-desc' and l['type'] == openapi_yaml_mimetype:
+                    openapi_format = openapi_yaml_mimetype
+                    url = l['href']
+                    break
 
         if url is not None:
             LOGGER.debug('Request: {}'.format(url))
-            response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth).json()
-            return response
+            response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth)
+            if openapi_format == openapi_json_mimetype:
+                content = response.json()
+            elif openapi_format == openapi_yaml_mimetype:
+                content = yaml.load(response.text)
+            return content
         else:
             msg = 'Did not find service-desc link'
             LOGGER.error(msg)
