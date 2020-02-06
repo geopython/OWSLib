@@ -224,7 +224,7 @@ class WebProcessingService(object):
     """
 
     def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False,
-                 headers=None, verify=None, cert=None, timeout=None, auth=None):
+                 headers=None, verify=None, cert=None, timeout=None, auth=None, language=None):
         """
         Initialization method resets the object status.
         By default it will execute a GetCapabilities invocation to the remote service,
@@ -241,6 +241,7 @@ class WebProcessingService(object):
         self.verbose = verbose
         self.headers = headers
         self.timeout = timeout
+        self.language = language
 
         # fields populated by method invocations
         self._capabilities = None
@@ -260,7 +261,11 @@ class WebProcessingService(object):
 
         # read capabilities document
         reader = WPSCapabilitiesReader(
-            version=self.version, verbose=self.verbose, auth=self.auth)
+            version=self.version,
+            verbose=self.verbose,
+            auth=self.auth,
+            language=self.language,
+        )
         if xml:
             # read from stored XML file
             self._capabilities = reader.readFromString(xml)
@@ -283,7 +288,11 @@ class WebProcessingService(object):
 
         # read capabilities document
         reader = WPSDescribeProcessReader(
-            version=self.version, verbose=self.verbose, auth=self.auth)
+            version=self.version,
+            verbose=self.verbose,
+            auth=self.auth,
+            language=self.language,
+        )
         if xml:
             # read from stored XML file
             rootElement = reader.readFromString(xml)
@@ -333,7 +342,8 @@ class WebProcessingService(object):
             verbose=self.verbose,
             headers=self.headers,
             timeout=self.timeout,
-            auth=self.auth
+            auth=self.auth,
+            language=self.language,
         )
 
         # build XML request from parameters
@@ -454,11 +464,12 @@ class WPSReader(object):
     Superclass for reading a WPS document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=30, auth=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=30, auth=None, language=None):
         self.version = version
         self.verbose = verbose
         self.timeout = timeout
         self.auth = auth or Authentication()
+        self.language = language
 
     def _readFromUrl(self, url, data, timeout, method='Get', username=None, password=None,
                      headers=None, verify=True, cert=None):
@@ -470,6 +481,8 @@ class WPSReader(object):
         _fix_auth(self.auth, username, password, verify, cert)
         if method == 'Get':
             # full HTTP request url
+            if self.language:
+                data["language"] = self.language
             request_url = build_get_url(url, data, overwrite=True)
             log.debug(request_url)
 
@@ -506,10 +519,10 @@ class WPSCapabilitiesReader(WPSReader):
     Utility class that reads and parses a WPS GetCapabilities document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None, language=None):
         # superclass initializer
         super(WPSCapabilitiesReader, self).__init__(
-            version=version, verbose=verbose, timeout=timeout, auth=auth)
+            version=version, verbose=verbose, timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -532,10 +545,10 @@ class WPSDescribeProcessReader(WPSReader):
     Class that reads and parses a WPS DescribeProcess document into a etree infoset
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None, language=None):
         # superclass initializer
         super(WPSDescribeProcessReader, self).__init__(
-            version=version, verbose=verbose, timeout=timeout, auth=auth)
+            version=version, verbose=verbose, timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, identifier, username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -559,9 +572,9 @@ class WPSExecuteReader(WPSReader):
     Class that reads and parses a WPS Execute response document into a etree infoset
     """
 
-    def __init__(self, verbose=False, timeout=None, auth=None):
+    def __init__(self, verbose=False, timeout=None, auth=None, language=None):
         # superclass initializer
-        super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout, auth=auth)
+        super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, data={}, method='Get', username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -581,7 +594,7 @@ class WPSExecution(object):
     """
 
     def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False,
-                 headers=None, verify=None, cert=None, timeout=None, auth=None):
+                 headers=None, verify=None, cert=None, timeout=None, auth=None, language=None):
 
         # initialize fields
         self.url = url
@@ -591,6 +604,7 @@ class WPSExecution(object):
         self.auth = auth or Authentication()
         _fix_auth(self.auth, username, password, verify, cert)
         self.timeout = timeout
+        self.language = language
 
         # request document
         self.request = None
@@ -648,6 +662,8 @@ class WPSExecution(object):
         root = etree.Element(nspath_eval('wps:Execute', namespaces))
         root.set('service', 'WPS')
         root.set('version', WPS_DEFAULT_VERSION)
+        if self.language:
+            root.set('language', self.language)
         root.set(nspath_eval('xsi:schemaLocation', namespaces), '%s %s' %
                  (namespaces['wps'], WPS_DEFAULT_SCHEMA_LOCATION))
 
@@ -765,7 +781,7 @@ class WPSExecution(object):
         :param int sleepSecs: number of seconds to sleep before returning control to the caller.
         """
 
-        reader = WPSExecuteReader(verbose=self.verbose, auth=self.auth)
+        reader = WPSExecuteReader(verbose=self.verbose, auth=self.auth, language=self.language)
         if response is None:
             # override status location
             if url is not None:
