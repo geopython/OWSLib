@@ -249,6 +249,7 @@ class WebProcessingService(object):
         self.provider = None
         self.operations = []
         self.processes = []
+        self.languages = None
 
         if not skip_caps:
             self.getcapabilities()
@@ -411,7 +412,7 @@ class WebProcessingService(object):
         # loop over children WITHOUT requiring a specific namespace
         for element in root:
 
-            # thie element's namespace
+            # this element's namespace
             ns = getNamespace(element)
 
             # <ows:ServiceIdentification> metadata
@@ -457,6 +458,21 @@ class WebProcessingService(object):
                     self.processes.append(p)
                     if self.verbose is True:
                         dump(self.processes[-1])
+
+            # <wps:Languages>
+            #   <wps:Default>
+            #     <ows:Language>en-US</ows:Language>
+            #   </wps:Default>
+            #   <wps:Supported>
+            #     <ows:Language>en-US</ows:Language>
+            #     <ows:Language>fr-CA</ows:Language>
+            #     ......
+            #   </wps:Supported>
+            # </wps:Languages>
+            elif element.tag.endswith('Languages'):
+                self.languages = Languages(element)
+                if self.verbose:
+                    dump(self.languages)
 
 
 class WPSReader(object):
@@ -1930,3 +1946,21 @@ def printInputOutput(value, indent=''):
               indent, value.reference, value.mimeType)))
         for datum in value.data:
             print(('{} Data Value: {}'.format(indent, printValue(datum))))
+
+
+class Languages(object):
+    """Initialize a WPS Languages construct"""
+    def __init__(self, infoset):
+        self._root = infoset
+        self.default = None
+        self.supported = []
+
+        for element in self._root:
+            if element.tag.endswith('Default'):
+                self.default = testXMLValue(element[0])
+            elif element.tag.endswith('Supported'):
+                for child in element:
+                    self.supported.append(testXMLValue(child))
+
+    def __repr__(self):
+        return "<owslib.wps.Languages default='{}' supported={}>".format(self.default, self.supported)
