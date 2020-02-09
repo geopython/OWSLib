@@ -8,7 +8,6 @@ SERVICE_URL = 'https://www.ldproxy.nrw.de/rest/services/kataster/?f=json'
 
 
 @pytest.mark.online
-@pytest.mark.skip(reason='api() call fails. See issue #625')
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
 def test_ogcapi_features_ldproxy():
@@ -20,6 +19,8 @@ def test_ogcapi_features_ldproxy():
     conformance = w.conformance()
     assert len(conformance['conformsTo']) == 5
 
-    api = w.api()
-    assert api['components']['parameters'] is not None
-    assert api['paths'] is not None
+    # TODO: remove pytest.raises once ldproxy is fixed/updated
+    with pytest.raises(RuntimeError):
+        api = w.api()
+        assert api['components']['parameters'] is not None
+        assert api['paths'] is not None
