@@ -639,7 +639,7 @@ class TileMatrixSetLink(object):
                         if tml.tilematrix in tilematrixlimits:
                             msg = ('TileMatrixLimits with tileMatrix "%s" '
                                    'already exists' % tml.tilematrix)
-                            raise KeyError(msg)
+                            warnings.warn(msg, RuntimeWarning)
                         tilematrixlimits[tml.tilematrix] = tml
 
                 links.append(TileMatrixSetLink(uri, tilematrixlimits))
