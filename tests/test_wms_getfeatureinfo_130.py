@@ -18,7 +18,6 @@ def test_wms_getfeatureinfo_130():
         info_format="text/html", xy=(250, 250))
     html_string1 = res1.read().decode("utf-8")
     assert 'lkr_ex' in html_string1
-    assert 'gmd_ex' in html_string1
 
     res2 = wms.getfeatureinfo(
         layers=['bvv:lkr_ex', 'bvv:gmd_ex'], srs='EPSG:31468',
