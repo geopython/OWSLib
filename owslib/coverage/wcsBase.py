@@ -9,14 +9,7 @@
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-try:
-    # python 3
-    from urllib.parse import urlencode, urlparse, parse_qsl
-except ImportError:
-    # python 2
-    from urlparse import urlparse, parse_qsl
-    from urllib import urlencode
-
+from urllib.parse import urlencode, parse_qsl
 from owslib.etree import etree
 from owslib.util import Authentication, openURL
 

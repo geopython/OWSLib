@@ -15,15 +15,7 @@ from datetime import datetime, timedelta
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
-
-try:
-    # python 3
-    from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
-except ImportError:
-    # python 2
-    from urlparse import urlsplit, urlparse, parse_qs, urlunparse, parse_qsl
-    from urllib import urlencode
-
+from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
 import copy
 
 from io import StringIO, BytesIO
