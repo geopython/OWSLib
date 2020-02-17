@@ -20,7 +20,12 @@ from owslib.ows import (
     OperationsMetadata,
 )
 
-from urllib.parse import urlencode
+try:
+    # python 3
+    from urllib.parse import urlencode
+except ImportError:
+    # python 2
+    from urllib import urlencode
 from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
 from owslib.crs import Crs

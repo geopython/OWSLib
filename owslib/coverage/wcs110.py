@@ -13,7 +13,12 @@
 
 from .wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
 from owslib.util import openURL, testXMLValue
-from urllib.parse import urlencode
+try:
+    # python 3
+    from urllib.parse import urlencode
+except ImportError:
+    # python 2
+    from urllib import urlencode
 from owslib.etree import etree
 import os
 import errno
