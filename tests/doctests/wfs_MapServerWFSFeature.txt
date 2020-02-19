@@ -7,7 +7,7 @@ Test the getfeature method
 
     >>> wfs = WebFeatureService('http://nsidc.org/cgi-bin/atlas_south?', version='1.0.0')
     >>> response = wfs.getfeature(typename=['glaciers'], maxfeatures=5)
-    >>> response.read().find('<wfs:FeatureCollection') > 0
+    >>> response.read().find(b'<wfs:FeatureCollection') > 0
     True
 
 Handle service exception
