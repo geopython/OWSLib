@@ -395,14 +395,16 @@ class ContentMetadata(AbstractContentMetadata):
         self.boundingBoxWGS84 = None
 
         if b is not None and srs is not None:
-            wgs84 = pyproj.Proj(init="epsg:4326")
+            wgs84 = pyproj.Proj("epsg:4326")
             try:
-                src_srs = pyproj.Proj(init=srs.text)
+                src_srs = pyproj.Proj(srs.text)
                 mincorner = pyproj.transform(
-                    src_srs, wgs84, b.attrib["minx"], b.attrib["miny"]
+                    src_srs, wgs84, b.attrib["minx"], b.attrib["miny"],
+                    always_xy=True,
                 )
                 maxcorner = pyproj.transform(
-                    src_srs, wgs84, b.attrib["maxx"], b.attrib["maxy"]
+                    src_srs, wgs84, b.attrib["maxx"], b.attrib["maxy"],
+                    always_xy=True,
                 )
 
                 self.boundingBoxWGS84 = (
