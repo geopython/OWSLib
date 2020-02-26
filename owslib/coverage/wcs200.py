@@ -113,14 +113,6 @@ class WebCoverageService_2_0_0(WCSBase):
             items.append((item, self.contents[item]))
         return items
 
-    def __makeString(self, value):
-        # using repr unconditionally breaks things in some circumstances if a value is already a string
-        if type(value) is not str:
-            sval = repr(value)
-        else:
-            sval = value
-        return sval
-
     def getCoverage(
         self,
         identifier=None,
@@ -223,16 +215,6 @@ class WebCoverageService_2_0_0(WCSBase):
 
         u = openURL(base_url, data, method, self.cookies, auth=self.auth)
         return u
-
-    def is_number(self, s):
-        """simple helper to test if value is number as requests with numbers dont
-        need quote marks
-        """
-        try:
-            float(s)
-            return True
-        except ValueError:
-            return False
 
     def getOperationByName(self, name):
         """Return a named operation item."""

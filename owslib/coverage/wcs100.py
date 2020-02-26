@@ -18,7 +18,7 @@ import os
 import errno
 
 import logging
-from owslib.util import log
+from owslib.util import log, makeString
 
 
 #  function to save writing out WCS namespace in full each time
@@ -94,14 +94,6 @@ class WebCoverageService_1_0_0(WCSBase):
             items.append((item, self.contents[item]))
         return items
 
-    def __makeString(self, value):
-        # using repr unconditionally breaks things in some circumstances if a value is already a string
-        if type(value) is not str:
-            sval = repr(value)
-        else:
-            sval = value
-        return sval
-
     def getCoverage(self, identifier=None, bbox=None, time=None, format=None, crs=None, width=None, height=None,
                     resx=None, resy=None, resz=None, parameter=None, method='Get', **kwargs):
         """Request and return a coverage from the WCS as a file-like object
@@ -134,7 +126,7 @@ class WebCoverageService_1_0_0(WCSBase):
         request['Coverage'] = identifier
         # request['identifier'] = ','.join(identifier)
         if bbox:
-            request['BBox'] = ','.join([self.__makeString(x) for x in bbox])
+            request['BBox'] = ','.join([makeString(x) for x in bbox])
         else:
             request['BBox'] = None
         if time:
