@@ -8,6 +8,7 @@
 
 from owslib import util
 
+from io import BytesIO
 from urllib.parse import urlencode
 from owslib.util import (
     testXMLValue,
@@ -27,7 +28,6 @@ from owslib.feature.schema import get_schema
 from owslib.feature.common import (
     WFSCapabilitiesReader,
     AbstractContentMetadata,
-    makeStringIO,
 )
 
 import pyproj
@@ -308,16 +308,16 @@ class WebFeatureService_1_0_0(object):
                 tree = etree.fromstring(data)
             except BaseException:
                 # Not XML
-                return makeStringIO(data)
+                return BytesIO(data)
             else:
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath("ServiceException", OGC_NAMESPACE))
                     raise ServiceException(str(se.text).strip())
                 else:
-                    return makeStringIO(data)
+                    return BytesIO(data)
         else:
             if have_read:
-                return makeStringIO(data)
+                return BytesIO(data)
             return u
 
     def getOperationByName(self, name):
