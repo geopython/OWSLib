@@ -300,7 +300,7 @@ services)
 OGC API - Features 1.0
 ----------------------
 
-The OGC API - Features standar is a clean break from the traditional OGC service architecture
+The OGC API - Features standard is a clean break from the traditional OGC service architecture
 (RESTful, JSON, OpenAPI) and as such OWSLib the code follows the same pattern.
 
 .. code-block:: python
