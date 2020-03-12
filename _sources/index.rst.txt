@@ -36,7 +36,7 @@ Standards Support
 +-----------------------+-----------------------------+
 | `OGC WFS`_            | 1.0.0, 1.1.0, 2.0.0, 3.0    |
 +-----------------------+-----------------------------+
-| `OGC WCS`_            | 1.0.0, 1.1.0                |
+| `OGC WCS`_            | 1.0.0, 1.1.0, 2.0, 2.0.1    |
 +-----------------------+-----------------------------+
 | `OGC WMC`_            | 1.1.0                       |
 +-----------------------+-----------------------------+
@@ -300,7 +300,7 @@ services)
 OGC API - Features 1.0
 ----------------------
 
-The OGC API - Features standar is a clean break from the traditional OGC service architecture
+The OGC API - Features standard is a clean break from the traditional OGC service architecture
 (RESTful, JSON, OpenAPI) and as such OWSLib the code follows the same pattern.
 
 .. code-block:: python
@@ -328,6 +328,48 @@ The OGC API - Features standar is a clean break from the traditional OGC service
 
 WCS
 ---
+
+.. code-block:: python
+
+  >>> # Import OWSLib in Python once installed
+  ... from owslib.wcs import WebCoverageService
+
+  >>> # Create coverage object
+  ... my_wcs = WebCoverageService('http://ows.rasdaman.org/rasdaman/ows',
+  ...                             version='2.0.1')
+
+  >>> # Get list of coverages
+  ... print my_wcs.contents.keys()
+  ['RadianceColor', 'test_irr_cube_2', 'test_mean_summer_airtemp', 'test_double_1d', 'INSPIRE_EL', 'AverageChlorophyllScaled', 'INSPIRE_OI_RGB', 'Temperature4D', 'INSPIRE_OI_IR', 'visible_human', 'INSPIRE_WS_LC', 'meris_lai', 'climate_earth', 'mean_summer_airtemp', 'multiband', 'ls8_coastal_aerosol', 'NN3_3', 'NN3_2', 'NN3_1', 'NN3_4', 'AvgTemperatureColorScaled', 'AverageChloroColorScaled', 'lena', 'Germany_DTM', 'climate_cloud', 'FiLCCoverageBit', 'AverageChloroColor', 'LandsatMultiBand', 'RadianceColorScaled', 'AvgLandTemp', 'NIR', 'BlueMarbleCov']
+
+  >>> # Get geo-bounding boxes and native CRS
+  ... my_wcs.contents['AverageChlorophyllScaled'].boundingboxes
+  [{'nativeSrs': 'http://ows.rasdaman.org/def/crs-compound?1=http://ows.rasdaman.org/def/crs/EPSG/0/4326&2=http://ows.rasdaman.org/def/crs/OGC/0/UnixTime', 'bbox': (-90.0, -180.0, 90.0, 180.0)}]
+
+  >>> # Get axis labels
+  ... my_wcs.contents['AverageChlorophyllScaled'].grid.axislabels
+  ['Lat', 'Long', 'unix']
+
+  >>> # Get dimension
+  ... my_wcs.contents['AverageChlorophyllScaled'].grid.dimension
+  3
+
+  >>> # Get grid lower and upper bounds
+  ... my_wcs.contents['AverageChlorophyllScaled'].grid.lowlimits
+  ['0', '0', '0']
+
+  >>> my_wcs.contents['AverageChlorophyllScaled'].grid.highlimits
+  ['119', '239', '5']
+
+  >>> # Get offset vectors for geo axes
+  ... my_wcs.contents['AverageChlorophyllScaled'].grid.offsetvectors
+  [['-1.5', '0', '0'], ['0', '1.5', '0'], ['0', '0', '1']]
+  
+  >>> # For coverage with time axis get the date time values
+  ... my_wcs.contents['AverageChlorophyllScaled'].timepositions
+  [datetime.datetime(2015, 1, 1, 0, 0), datetime.datetime(2015, 2, 1, 0, 0), datetime.datetime(2015, 3, 1, 0, 0), datetime.datetime(2015, 4, 1, 0, 0), datetime.datetime(2015, 5, 1, 0, 0), datetime.datetime(2015, 7, 1, 0, 0)]
+
+
 
 CSW
 ---
