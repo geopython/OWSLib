@@ -1,6 +1,25 @@
 Changes
 =======
 
+0.19.2 (2020-03-13)
+-------------------
+
+This release is an update.
+It drops Python 3.5 support and adds language support to the WPS module.
+
+A full list of commits for 0.19.2 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.19.2
+
+- Dropped Python 3.5 support (#659).
+- Fix pyproj deprecation (only use pyproj>=2) (#661).
+- WPS: Added support for multiple languages (#654, #655).
+- OGC API: fix api media type handling (#653).
+- WMTS: fix cartopy examples (#656).
+- Tests: fix wms tests (#657).
+- WCS: added WCS code example do documentation (#658).
+- WCS: fix params list (#663).
+
 0.19.1 (2020-01-29)
 -------------------
 
