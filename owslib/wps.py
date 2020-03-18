@@ -851,7 +851,7 @@ class WPSExecution(object):
     def isNotComplete(self):
         return not self.isComplete()
 
-    def getOutput(self, filepath=None):
+    def getOutput(self, filepath=None, identifier=None):
         """
         Method to write the outputs of a WPS process to a file:
         either retrieves the referenced files from the server, or writes out the content of response embedded output.
@@ -863,16 +863,17 @@ class WPSExecution(object):
         if self.isSucceded():
             content = b''
             for output in self.processOutputs:
-
-                output_content = output.retrieveData(
-                    self.auth.username, self.auth.password,
-                    headers=self.headers, verify=self.auth.verify, cert=self.auth.cert)
+                if identifier and output.identifier != identifier:
+                    continue
 
                 # ExecuteResponse contains reference to server-side output
-                if output_content != b'':
-                    content = content + output_content
+                if output.reference:
+                    content = output.retrieveData(
+                        self.auth.username, self.auth.password,
+                        headers=self.headers, verify=self.auth.verify, cert=self.auth.cert)
                     if filepath is None:
                         filepath = output.fileName
+                    break
 
                 # ExecuteResponse contain embedded output
                 if len(output.data) > 0:
@@ -880,17 +881,18 @@ class WPSExecution(object):
                         filepath = 'wps.out'
                     for data in output.data:
                         content = content + data.encode()
+                    break
 
             # write out content
-            if content != '':
+            if content != b'':
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
-                log.info('Output written to file: %s' % filepath)
+                log.info(f'Output written to file: {filepath}')
 
         else:
             raise Exception(
-                "Execution not successfully completed: status=%s" % self.status)
+                f"Execution not successfully completed: status={self.status}")
 
     def submitRequest(self, request):
         """
