@@ -858,14 +858,23 @@ class WPSExecution(object):
 
         :param filepath: optional path to the output file, otherwise a file will be created in the local directory with
                   the name assigned by the server, or default name 'wps.out' for embedded output.
+        :oaram: identifier: optional identifier of the output that should be written.
+                  For backward compability if will default to first output.
         """
 
         if self.isSucceded():
             content = b''
-            for output in self.processOutputs:
-                if identifier and output.identifier != identifier:
-                    continue
-
+            output = None
+            if self.processOutputs:
+                if identifier:
+                    # filter outputs by identifier
+                    outputs = [o for o in self.processOutputs if o.identifier == identifier]
+                    if outputs:
+                        output = outputs[0]
+                else:
+                    # take the first found output
+                    output = self.processOutputs[0]
+            if output:
                 # ExecuteResponse contains reference to server-side output
                 if output.reference:
                     content = output.retrieveData(
@@ -873,23 +882,18 @@ class WPSExecution(object):
                         headers=self.headers, verify=self.auth.verify, cert=self.auth.cert)
                     if filepath is None:
                         filepath = output.fileName
-                    break
-
                 # ExecuteResponse contain embedded output
-                if len(output.data) > 0:
+                elif len(output.data) > 0:
                     if filepath is None:
                         filepath = 'wps.out'
                     for data in output.data:
                         content = content + data.encode()
-                    break
-
             # write out content
             if content != b'':
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
                 log.info(f'Output written to file: {filepath}')
-
         else:
             raise Exception(
                 f"Execution not successfully completed: status={self.status}")
