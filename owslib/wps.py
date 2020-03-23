@@ -851,46 +851,52 @@ class WPSExecution(object):
     def isNotComplete(self):
         return not self.isComplete()
 
-    def getOutput(self, filepath=None):
+    def getOutput(self, filepath=None, identifier=None):
         """
         Method to write the outputs of a WPS process to a file:
         either retrieves the referenced files from the server, or writes out the content of response embedded output.
 
         :param filepath: optional path to the output file, otherwise a file will be created in the local directory with
                   the name assigned by the server, or default name 'wps.out' for embedded output.
+        :param: identifier: optional identifier of the output that should be written.
+                  For backward compatibility it will default to the first output.
         """
 
         if self.isSucceded():
             content = b''
-            for output in self.processOutputs:
-
-                output_content = output.retrieveData(
-                    self.auth.username, self.auth.password,
-                    headers=self.headers, verify=self.auth.verify, cert=self.auth.cert)
-
+            output = None
+            if self.processOutputs:
+                if identifier:
+                    # filter outputs by identifier
+                    outputs = [o for o in self.processOutputs if o.identifier == identifier]
+                    if outputs:
+                        output = outputs[0]
+                else:
+                    # take the first found output
+                    output = self.processOutputs[0]
+            if output:
                 # ExecuteResponse contains reference to server-side output
-                if output_content != b'':
-                    content = content + output_content
+                if output.reference:
+                    content = output.retrieveData(
+                        self.auth.username, self.auth.password,
+                        headers=self.headers, verify=self.auth.verify, cert=self.auth.cert)
                     if filepath is None:
                         filepath = output.fileName
-
                 # ExecuteResponse contain embedded output
-                if len(output.data) > 0:
+                elif len(output.data) > 0:
                     if filepath is None:
                         filepath = 'wps.out'
                     for data in output.data:
                         content = content + data.encode()
-
             # write out content
-            if content != '':
+            if content != b'':
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
-                log.info('Output written to file: %s' % filepath)
-
+                log.info(f'Output written to file: {filepath}')
         else:
             raise Exception(
-                "Execution not successfully completed: status=%s" % self.status)
+                f"Execution not successfully completed: status={self.status}")
 
     def submitRequest(self, request):
         """
