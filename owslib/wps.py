@@ -858,8 +858,8 @@ class WPSExecution(object):
 
         :param filepath: optional path to the output file, otherwise a file will be created in the local directory with
                   the name assigned by the server, or default name 'wps.out' for embedded output.
-        :oaram: identifier: optional identifier of the output that should be written.
-                  For backward compability if will default to first output.
+        :param: identifier: optional identifier of the output that should be written.
+                  For backward compatibility it will default to the first output.
         """
 
         if self.isSucceded():
