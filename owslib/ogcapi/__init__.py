@@ -52,7 +52,7 @@ class API(object):
         self.timeout = timeout
         self.headers = REQUEST_HEADERS
         if headers:
-            self.headers = self.headers.update(headers)
+            self.headers.update(headers)
         self.auth = auth
 
         if json_ is not None:  # static JSON string
