@@ -141,16 +141,17 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         featuretypelistelem = self._capabilities.find(
             nspath("FeatureTypeList", ns=WFS_NAMESPACE)
         )
-        featuretypeelems = featuretypelistelem.findall(
-            nspath("FeatureType", ns=WFS_NAMESPACE)
-        )
-        if serviceidentelem is not None:
-            for f in featuretypeelems:
-                kwds = f.findall(nspath("Keywords/Keyword", ns=OWS_NAMESPACE))
-                if kwds is not None:
-                    for kwd in kwds[:]:
-                        if kwd.text not in self.identification.keywords:
-                            self.identification.keywords.append(kwd.text)
+        if featuretypelistelem is not None:
+            featuretypeelems = featuretypelistelem.findall(
+                nspath("FeatureType", ns=WFS_NAMESPACE)
+            )
+            if serviceidentelem is not None:
+                for f in featuretypeelems:
+                    kwds = f.findall(nspath("Keywords/Keyword", ns=OWS_NAMESPACE))
+                    if kwds is not None:
+                        for kwd in kwds[:]:
+                            if kwd.text not in self.identification.keywords:
+                                self.identification.keywords.append(kwd.text)
 
         # TODO: update serviceProvider metadata, miss it out for now
         serviceproviderelem = self._capabilities.find(nspath("ServiceProvider"))
