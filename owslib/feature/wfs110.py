@@ -186,9 +186,10 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         features = self._capabilities.findall(
             nspath_eval("wfs:FeatureTypeList/wfs:FeatureType", namespaces)
         )
-        for feature in features:
-            cm = ContentMetadata(feature, parse_remote_metadata, headers=self.headers, auth=self.auth)
-            self.contents[cm.id] = cm
+        if features is not None:
+            for feature in features:
+                cm = ContentMetadata(feature, parse_remote_metadata, headers=self.headers, auth=self.auth)
+                self.contents[cm.id] = cm
 
         # exceptions
         self.exceptions = [
