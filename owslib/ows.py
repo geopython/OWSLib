@@ -239,7 +239,10 @@ class BoundingBox(object):
         self.miny = None
         self.maxx = None
         self.maxy = None
-
+        self.crs = None
+        self.dimensions = 2
+        if elem is None:
+            return
         val = elem.attrib.get('crs') or elem.attrib.get('{{{}}}crs'.format(namespace))
         if val:
             try:
