@@ -84,7 +84,8 @@ def _construct_schema(elements, nsmap):
 
     :return dict: schema
     """
-
+    if elements is None:
+        return None
     schema = {"properties": {}, "required": [], "geometry": None}
 
     schema_key = None

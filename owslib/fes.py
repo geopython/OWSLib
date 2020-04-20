@@ -184,6 +184,15 @@ class FilterCapabilities(object):
     """ Abstraction for Filter_Capabilities """
     def __init__(self, elem):
         # Spatial_Capabilities
+
+        if elem is None:
+            self.spatial_operands = []
+            self.spatial_operators = []
+            self.temporal_operators = []
+            self.temporal_operands = []
+            self.scalar_comparison_operators = []
+            return
+
         self.spatial_operands = [f.text for f in elem.findall(util.nspath_eval(
             'ogc:Spatial_Capabilities/ogc:GeometryOperands/ogc:GeometryOperand', namespaces))]
         self.spatial_operators = []
@@ -207,6 +216,16 @@ class FilterCapabilities(object):
 class FilterCapabilities200(object):
     """Abstraction for Filter_Capabilities 2.0"""
     def __init__(self, elem):
+
+        if elem is None:
+            self.spatial_operands = []
+            self.spatial_operators = []
+            self.temporal_operators = []
+            self.temporal_operands = []
+            self.scalar_comparison_operators = []
+            self.conformance = []
+            return
+
         # Spatial_Capabilities
         self.spatial_operands = [f.attrib.get('name') for f in elem.findall(util.nspath_eval(
             'fes:Spatial_Capabilities/fes:GeometryOperands/fes:GeometryOperand', namespaces))]
