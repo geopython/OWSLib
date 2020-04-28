@@ -297,15 +297,19 @@ services)
 
     >>> response = wfs20.getfeature(storedQueryID='urn:ogc:def:query:OGC-WFS::GetFeatureById', storedQueryParams={'ID':'gmd_ex.1'})
 
-OGC API - Features 1.0
-----------------------
+OGC API
+-------
 
-The OGC API - Features standard is a clean break from the traditional OGC service architecture
-(RESTful, JSON, OpenAPI) and as such OWSLib the code follows the same pattern.
+The `OGC API`_ standards are a clean break from the traditional OGC service architecture
+using current design patterns (RESTful, JSON, OpenAPI).  As such, OWSLib the code follows
+the same pattern.
+
+OGC API - Features 1.0
+^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-  >>> from owslib.ogcapi import Features
+  >>> from owslib.ogcapi.features import Features
   >>> w = Features('https://demo.pygeoapi.io/cite')
   >>> w.url
   'https://demo.pygeoapi.io/cite'
@@ -316,15 +320,53 @@ The OGC API - Features standard is a clean break from the traditional OGC servic
   >>> len(collections)
   13
   >>> lakes = w.collection('lakes')
-  >>> lakes['name']
+  >>> lakes['id']
   'lakes'
   >>> lakes['title']
   'Large Lakes'
   >>> lakes['description']
   'lakes of the world, public domain'
+  >>> lakes_queryables = w.collection_queryables('lakes')
+  >>> len(lakes_queryables['queryables'])
+  6
   >>> lakes_query = w.collection_items('lakes')
   >>> lakes_query['features'][0]['properties']
   {u'scalerank': 0, u'name_alt': None, u'admin': None, u'featureclass': u'Lake', u'id': 0, u'name': u'Lake Baikal'}
+
+OGC API - Records 1.0
+^^^^^^^^^^^^^^^^^^^^^
+
+  >>> from owslib.ogcapi.records import Records
+  >>> w = Records('https://example.org/records-api')
+  >>> w.url
+  'https://example.org/records-api'
+  >>> conformance = w.conformance()
+  {'conformsTo': [u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/core', u'http://www.opengis.net/spec/ogcapi-records/1.0/req/oas30', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/json', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/html']}
+  >>> api = w.api()  # OpenAPI definition
+  >>> collections = w.collections()
+  >>> len(collections)
+  1
+  >>> my_catalogue = w.collection('my-catalogue')
+  >>> my_catalogue['id']
+  'my-catalogue'
+  >>> my_catalogue['title']
+  'My catalogue'
+  >>> my_catalogue['description']
+  'My catalogue'
+  >>> my_catalogue_queryables = w.collection_queryables('my-catalogue')
+  >>> len(my_catalogue_queryables['queryables'])
+  8
+  >>> my_catalogue_query = w.collection_items('my-catalogue')
+  >>> my_catalogue_query['features'][0]['properties'].keys()
+  [u'title', u'abstract', u'keywords']
+  >>> my_catalogue_query['features'][0]['properties']['title']
+  u'Roadrunner ambush locations'
+  >>> my_catalogue_query2 = w.collection_items('my-catalogue', q='birds')
+  >>> msc_wis_dcpc_query2['numberMatched']
+  2
+  >>> msc_wis_dcpc_query2['numberReturned']
+  2
+
 
 WCS
 ---
@@ -754,6 +796,7 @@ Credits
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
 .. _`Swiss GM03`: https://www.geocat.admin.ch/en/dokumentation/gm03.html
+.. _`OGC API`: http://www.ogcapi.org
 
 
 .. include:: ../../CHANGES.rst
