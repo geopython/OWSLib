@@ -1430,6 +1430,9 @@ class Output(InputOutput):
                         headers=headers, verify=verify, cert=cert)
             # extract output filepath from URL query string
             self.fileName = spliturl[1].split('=')[1]
+        elif url.startswith("file://"):
+            u = open(url[7:])
+            self.fileName = url.split('/')[-1]
         else:
             u = openURL(
                 url, '', method='Get', username=username, password=password,
