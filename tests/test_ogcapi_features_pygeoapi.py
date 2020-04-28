@@ -33,9 +33,12 @@ def test_ogcapi_features_pygeoapi():
     assert lakes['title'] == 'Large Lakes'
     assert lakes['description'] == 'lakes of the world, public domain'
 
+    lakes_queryables = w.collection_queryables('lakes')
+    assert len(lakes_queryables['queryables']) == 6
+
     # Minimum of limit param is 1
-    lakes_query = w.collection_items('lakes', limit=0)
-    assert lakes_query['code'] == 'InvalidParameterValue'
+    with pytest.raises(RuntimeError):
+        lakes_query = w.collection_items('lakes', limit=0)
 
     lakes_query = w.collection_items('lakes', limit=1)
     assert lakes_query['numberMatched'] == 25

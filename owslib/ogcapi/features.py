@@ -6,13 +6,9 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-import json
 import logging
 
-from urllib.parse import urljoin
-
-from owslib.ogcapi import API, REQUEST_HEADERS
-from owslib.util import http_get
+from owslib.ogcapi import API
 
 LOGGER = logging.getLogger(__name__)
 
@@ -38,6 +34,8 @@ class Features(API):
         @param limit: limit number of features
         @type startindex: int
         @param startindex: start position of results
+        @type q: string
+        @param q: full text search
 
         @returns: feature results
         """
@@ -46,12 +44,7 @@ class Features(API):
             kwargs['bbox'] = ','.join(kwargs['bbox'])
 
         path = 'collections/{}/items'.format(collection_id)
-        url = self._build_url(path)
-        LOGGER.debug('Request: {}'.format(url))
-        response = http_get(
-            url, headers=self.headers, params=kwargs, auth=self.auth
-        ).json()
-        return response
+        return self._request(path, kwargs)
 
     def collection_item(self, collection_id, identifier):
         """
@@ -66,7 +59,4 @@ class Features(API):
         """
 
         path = 'collections/{}/items/{}'.format(collection_id, identifier)
-        url = self._build_url(path)
-        LOGGER.debug('Request: {}'.format(url))
-        response = http_get(url, headers=self.headers, auth=self.auth).json()
-        return response
+        return self._request(path)

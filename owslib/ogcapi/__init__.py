@@ -10,6 +10,7 @@ import json
 import logging
 from urllib.parse import urljoin
 
+import requests
 import yaml
 
 from owslib import __version__
@@ -30,7 +31,7 @@ class API(object):
         Initializer; implements /
 
         @type url: string
-        @param url: url of WFS root document
+        @param url: url of OGC API landing page document
         @type json_: string
         @param json_: json object
         @param headers: HTTP headers to send with requests
@@ -108,11 +109,8 @@ class API(object):
         @returns: `dict` of conformance object
         """
 
-        url = self._build_url('conformance')
-        LOGGER.debug('Request: {}'.format(url))
-        response = http_get(url, headers=self.headers, auth=self.auth).json()
-
-        return response
+        path = 'conformance'
+        return self._request(path)
 
     def collections(self):
         """
@@ -121,11 +119,8 @@ class API(object):
         @returns: `dict` of collections object
         """
 
-        url = self._build_url('collections')
-        LOGGER.debug('Request: {}'.format(url))
-        response = http_get(url, headers=self.headers, auth=self.auth).json()
-
-        return response['collections']
+        path = 'collections'
+        return self._request(path)
 
     def collection(self, collection_id):
         """
@@ -138,18 +133,27 @@ class API(object):
         """
 
         path = 'collections/{}'.format(collection_id)
-        url = self._build_url(path)
-        LOGGER.debug('Request: {}'.format(url))
-        response = http_get(url, headers=self.headers, auth=self.auth).json()
+        return self._request(path)
 
-        return response
+    def collection_queryables(self, collection_id):
+        """
+        implements /collections/{collectionId}/queryables
+
+        @type collection_id: string
+        @param collection_id: id of collection
+
+        @returns: `dict` of feature collection queryables
+        """
+
+        path = 'collections/{}/queryables'.format(collection_id)
+        return self._request(path)
 
     def _build_url(self, path=None):
         """
         helper function to build an OGC API URL
 
         @type path: string
-        @param path: path of WFS URL
+        @param path: path of OGC API URL
 
         @returns: fully constructed URL path
         """
@@ -165,3 +169,26 @@ class API(object):
         LOGGER.debug('URL: {}'.format(url))
 
         return url
+
+    def _request(self, path=None, kwargs={}):
+        """
+        helper function for request/response patterns against OGC API endpoints
+
+        @type path: string
+        @param path: path of request
+        @type kwargs: string
+        @param kwargs: ``dict`` of keyword value pair request parameters
+
+        @returns: response as JSON ``dict``
+        """
+
+        url = self._build_url(path)
+
+        LOGGER.debug('Request: {}'.format(url))
+
+        response = http_get(url, headers=self.headers, auth=self.auth,
+                            params=kwargs)
+        if response.status_code != requests.codes.ok:
+            raise RuntimeError(response.text)
+
+        return response.json()
