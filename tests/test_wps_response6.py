@@ -30,3 +30,22 @@ def test_wps_response6():
     response = output.data[0]
     should_return = '''<ns3:FeatureCollection xmlns:ns3="http://ogr.maptools.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns0="http://www.opengis.net/wps/1.0.0" xsi:schemaLocation="http://ogr.maptools.org/ output_0n7ij9D.xsd">\n\t\t\t\t\t  <gml:boundedBy xmlns:gml="http://www.opengis.net/gml">\n\t\t\t\t\t    <gml:Box>\n\t\t\t\t\t      <gml:coord><gml:X>-960123.1421801626</gml:X><gml:Y>4665723.56559387</gml:Y></gml:coord>\n\t\t\t\t\t      <gml:coord><gml:X>-101288.6510608822</gml:X><gml:Y>5108200.011823481</gml:Y></gml:coord>\n\t\t\t\t\t    </gml:Box>\n\t\t\t\t\t  </gml:boundedBy>                         \n\t\t\t\t\t  <gml:featureMember xmlns:gml="http://www.opengis.net/gml">\n\t\t\t\t\t    <ns3:output fid="F0">\n\t\t\t\t\t      <ns3:geometryProperty><gml:LineString><gml:coordinates>-960123.142180162365548,4665723.565593870356679,0 -960123.142180162365548,4665723.565593870356679,0 -960123.142180162598379,4665723.565593870356679,0 -960123.142180162598379,4665723.565593870356679,0 -711230.141176006174646,4710278.48552671354264,0 -711230.141176006174646,4710278.48552671354264,0 -623656.677859728806652,4848552.374973464757204,0 -623656.677859728806652,4848552.374973464757204,0 -410100.337491964863148,4923834.82589447684586,0 -410100.337491964863148,4923834.82589447684586,0 -101288.651060882242746,5108200.011823480948806,0 -101288.651060882242746,5108200.011823480948806,0 -101288.651060882257298,5108200.011823480948806,0 -101288.651060882257298,5108200.011823480948806,0</gml:coordinates></gml:LineString></ns3:geometryProperty>\n\t\t\t\t\t      <ns3:cat>1</ns3:cat>\n\t\t\t\t\t      <ns3:id>1</ns3:id>\n\t\t\t\t\t      <ns3:fcat>0</ns3:fcat>\n\t\t\t\t\t      <ns3:tcat>0</ns3:tcat>\n\t\t\t\t\t      <ns3:sp>0</ns3:sp>\n\t\t\t\t\t      <ns3:cost>1002619.181</ns3:cost>\n\t\t\t\t\t      <ns3:fdist>0</ns3:fdist>\n\t\t\t\t\t      <ns3:tdist>0</ns3:tdist>\n\t\t\t\t\t    </ns3:output>\n\t\t\t\t\t  </gml:featureMember>\n\t\t\t\t\t</ns3:FeatureCollection>'''  # noqa
     assert compare_xml(should_return, response) is True
+
+
+def test_wps_response_local_file(tmpdir):
+    # Build WPS object; service has been down for some time so skip caps here
+    wps = WebProcessingService('http://localhost', skip_caps=True)
+
+    # Write dummy output file
+    out_fn = tmpdir / "output.txt"
+    content = 'hi there'
+    out_fn.write_text(content, encoding="utf8")
+
+    # Execute fake WPS invocation
+    response = open(resource_file('wps_DummyExecuteResponseLocalFile.xml'), 'r').read()
+    execution = wps.execute(None, [], response=response.format(tmpdir=str(tmpdir)))
+
+    # Retrieve data from local file system
+    out = execution.processOutputs[0]
+    txt = out.retrieveData()
+    assert txt == content
