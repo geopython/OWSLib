@@ -84,7 +84,7 @@ the live USGS and PML servers. To run:
 * python wps-pml-script-2.py
 
 The file wps-client.py contains a command-line client that can be used to submit a "GetCapabilities",
-"DescribeProcess" or "Execute" request to an arbitratry WPS server. For example, you can run it as follows:
+"DescribeProcess" or "Execute" request to an arbitrary WPS server. For example, you can run it as follows:
 
 * cd examples
 * To prints out usage and example invocations: wps-client -help
@@ -492,7 +492,7 @@ class WPSReader(object):
         """
         Method to get and parse a WPS document, returning an elementtree instance.
         :param str url: WPS service base url.
-        :param str data: GET: dictionary of HTTP (key, value) parameter pairs, POST: XML document to post
+        :param {} data: GET: dictionary of HTTP (key, value) parameter pairs, POST: XML document to post
         """
         _fix_auth(self.auth, username, password, verify, cert)
         if method == 'Get':
@@ -1423,19 +1423,28 @@ class Output(InputOutput):
         # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'  # noqa
         # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
         log.info('Output URL=%s' % url)
+
+        # Extract output filepath from base URL
+        self.fileName = url.split('/')[-1]
+
+        # The link is a local file.
+        # Useful when running local tests during development.
+        if url.startswith("file://"):
+            with open(url[7:]) as f:
+                return f.read()
+
         if '?' in url:
             spliturl = url.split('?')
+            # Extract output filepath from URL query string
+            self.fileName = spliturl[1].split('=')[1]
+
             u = openURL(spliturl[0], spliturl[
                         1], method='Get', username=username, password=password,
                         headers=headers, verify=verify, cert=cert)
-            # extract output filepath from URL query string
-            self.fileName = spliturl[1].split('=')[1]
         else:
             u = openURL(
                 url, '', method='Get', username=username, password=password,
                 headers=headers, verify=verify, cert=cert)
-            # extract output filepath from base URL
-            self.fileName = url.split('/')[-1]
 
         return u.read()
 
@@ -1445,7 +1454,7 @@ class Output(InputOutput):
         Method to write an output of a WPS process to disk:
         it either retrieves the referenced file from the server, or write out the content of response embedded output.
 
-        :param filepath: optional path to the output file, otherwise a file will be created in the local directory
+        :param path: optional path to the output file, otherwise a file will be created in the local directory
                   with the name assigned by the server,
         :param username: credentials to access the remote WPS server
         :param password: credentials to access the remote WPS server
