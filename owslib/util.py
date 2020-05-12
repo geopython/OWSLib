@@ -170,8 +170,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
             auth.password = password
         if cert:
             auth.cert = cert
-        if not verify or not auth.verify:
-            verify = False
+        verify = verify and auth.verify
     else:
         auth = Authentication(username, password, cert, verify)
     if auth.username and auth.password:
