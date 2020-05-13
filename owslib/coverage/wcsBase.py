@@ -33,7 +33,7 @@ class ServiceException(Exception):
 class WCSBase(object):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level'
     version independent methods"""
-    def __new__(self, url, xml, cookies, auth=None):
+    def __new__(self, url, xml, cookies, auth=None, headers=None):
         """ overridden __new__ method
 
         @type url: string
@@ -44,12 +44,13 @@ class WCSBase(object):
         @return: inititalised WCSBase object
         """
         obj = object.__new__(self)
-        obj.__init__(url, xml, cookies, auth=auth)
+        obj.__init__(url, xml, cookies, auth=auth, headers=headers)
         self.cookies = cookies
         self._describeCoverage = {}  # cache for DescribeCoverage responses
         return obj
 
-    def __init__(self, auth=None):
+    def __init__(self, auth=None, headers=None):
+        self.headers = headers
         self.auth = auth or Authentication()
 
     def getDescribeCoverage(self, identifier):
@@ -65,7 +66,7 @@ class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version=None, cookies=None, auth=None):
+    def __init__(self, version=None, cookies=None, auth=None, headers=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -73,6 +74,7 @@ class WCSCapabilitiesReader(object):
         self.version = version
         self._infoset = None
         self.cookies = cookies
+        self.headers = headers
         self.auth = auth or Authentication()
 
     def capabilities_url(self, service_url):
@@ -109,7 +111,7 @@ class WCSCapabilitiesReader(object):
         @return: An elementtree tree representation of the capabilities document
         """
         request = self.capabilities_url(service_url)
-        u = openURL(request, timeout=timeout, cookies=self.cookies, auth=self.auth)
+        u = openURL(request, timeout=timeout, cookies=self.cookies, auth=self.auth, headers=self.headers)
         return etree.fromstring(u.read())
 
     def readString(self, st):
@@ -124,7 +126,7 @@ class DescribeCoverageReader(object):
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
 
-    def __init__(self, version, identifier, cookies, auth=None):
+    def __init__(self, version, identifier, cookies, auth=None, headers=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -133,6 +135,7 @@ class DescribeCoverageReader(object):
         self._infoset = None
         self.identifier = identifier
         self.cookies = cookies
+        self.headers = headers
         self.auth = auth or Authentication()
 
     def descCov_url(self, service_url):
@@ -186,5 +189,5 @@ class DescribeCoverageReader(object):
         """
 
         request = self.descCov_url(service_url)
-        u = openURL(request, cookies=self.cookies, timeout=timeout, auth=self.auth)
+        u = openURL(request, cookies=self.cookies, timeout=timeout, auth=self.auth, headers=self.headers)
         return etree.fromstring(u.read())

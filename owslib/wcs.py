@@ -18,7 +18,7 @@ from .coverage import wcs100, wcs110, wcs111, wcsBase, wcs200, wcs201
 from owslib.util import clean_ows_url, Authentication, openURL
 
 
-def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, auth=None):
+def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, auth=None, headers=None):
     ''' wcs factory function, returns a version specific WebCoverageService object '''
 
     if not auth:
@@ -51,4 +51,4 @@ def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, au
             wcs200.WebCoverageService_2_0_0, url, xml, cookies, auth=auth)
     elif version == '2.0.1':
         return wcs201.WebCoverageService_2_0_1.__new__(
-            wcs201.WebCoverageService_2_0_1, url, xml, cookies, auth=auth)
+            wcs201.WebCoverageService_2_0_1, url, xml, cookies, auth=auth, headers=headers)
