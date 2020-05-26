@@ -176,7 +176,7 @@ class WebFeatureService_(object):
             request["query"] = str(filter)
         if typename:
             typename = (
-                [typename] if type(typename) == type("") else typename
+                [typename] if isinstance(typename, str) else typename
             )  # noqa: E721
             if int(self.version.split(".")[0]) >= 2:
                 request["typenames"] = ",".join(typename)

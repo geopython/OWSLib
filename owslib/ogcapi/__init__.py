@@ -76,17 +76,17 @@ class API(object):
         openapi_yaml_mimetype = 'application/vnd.oai.openapi;version=3.0'
 
         LOGGER.debug('Searching for OpenAPI JSON Document')
-        for l in self.links:
-            if l['rel'] == 'service-desc' and l['type'] == openapi_json_mimetype:
+        for link in self.links:
+            if link['rel'] == 'service-desc' and link['type'] == openapi_json_mimetype:
                 openapi_format = openapi_json_mimetype
-                url = l['href']
+                url = link['href']
                 break
 
             LOGGER.debug('Searching for OpenAPI YAML Document')
             if url is None:
-                if l['rel'] == 'service-desc' and l['type'] == openapi_yaml_mimetype:
+                if link['rel'] == 'service-desc' and link['type'] == openapi_yaml_mimetype:
                     openapi_format = openapi_yaml_mimetype
-                    url = l['href']
+                    url = link['href']
                     break
 
         if url is not None:
