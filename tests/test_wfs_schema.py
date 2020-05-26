@@ -87,7 +87,7 @@ class TestOnline(object):
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
-    @pytest.mark.parametrize("wfs_version", ["1.0.0", "1.1.0", "2.0.0"])
+    @pytest.mark.parametrize("wfs_version", ["1.1.0", "2.0.0"])
     def test_get_schema(self, wfs_version):
         """Test the get_schema method for a standard schema."""
         wfs = WebFeatureService(WFS_SERVICE_URL, version=wfs_version)
@@ -96,7 +96,7 @@ class TestOnline(object):
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
-    @pytest.mark.parametrize("wfs_version", ["1.0.0", "1.1.0", "2.0.0"])
+    @pytest.mark.parametrize("wfs_version", ["1.1.0", "2.0.0"])
     def test_schema_result(self, wfs_version):
         """Test whether the output from get_schema is a wellformed dictionary."""
         wfs = WebFeatureService(WFS_SERVICE_URL, version=wfs_version)
