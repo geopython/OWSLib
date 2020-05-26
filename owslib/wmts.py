@@ -48,6 +48,7 @@ _XLINK_NS = '{http://www.w3.org/1999/xlink}'
 # Version 1.0.0, document 07-057r7
 
 _ABSTRACT_TAG = _OWS_NS + 'Abstract'
+_BOUNDING_BOX_TAG = _OWS_NS + 'BoundingBox'
 _IDENTIFIER_TAG = _OWS_NS + 'Identifier'
 _LOWER_CORNER_TAG = _OWS_NS + 'LowerCorner'
 _OPERATIONS_METADATA_TAG = _OWS_NS + 'OperationsMetadata'
@@ -659,6 +660,31 @@ class TileMatrixSetLink(object):
         return fmt.format(self=self)
 
 
+class BoundingBox(object):
+    """
+    Represents a BoundingBox element
+    """
+
+    def __init__(self, elem) -> None:
+        if elem.tag != _BOUNDING_BOX_TAG:
+            raise ValueError('%s should be a BoundingBox' % elem)
+
+        lc = elem.find(_LOWER_CORNER_TAG)
+        uc = elem.find(_UPPER_CORNER_TAG)
+
+        self.ll = [float(s) for s in lc.text.split()]
+        self.ur = [float(s) for s in uc.text.split()]
+
+        self.crs = elem.attrib.get('crs')
+        self.extent = (self.ll[0], self.ll[1], self.ur[0], self.ur[1])
+
+    def __repr__(self):
+        fmt = ('<BoundingBox'
+               ', crs={self.crs}'
+               ', extent={self.extent}>')
+        return fmt.format(self=self)
+
+
 class ContentMetadata:
     """
     Abstraction for WMTS layer metadata.
@@ -684,9 +710,16 @@ class ContentMetadata:
 
         self.abstract = testXMLValue(elem.find(_ABSTRACT_TAG))
 
-        # bboxes
+        # Bounding boxes
+        # There may be multiple, using different CRSes
+        self.boundingBox = []
+
+        bbs = elem.findall(_BOUNDING_BOX_TAG)
+        for b in bbs:
+            self.boundingBox.append(BoundingBox(b))
+
+        # WGS84 Bounding box
         b = elem.find(_WGS84_BOUNDING_BOX_TAG)
-        self.boundingBox = None
         if b is not None:
             lc = b.find(_LOWER_CORNER_TAG)
             uc = b.find(_UPPER_CORNER_TAG)
