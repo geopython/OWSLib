@@ -234,9 +234,9 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         sortby=None,
     ):
         """Request and return feature data as a file-like object.
-        
+
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
-        
+
         Parameters
         ----------
         typename : list
@@ -256,7 +256,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         storedQueryID : string
             A name identifying a prepared set available in WFS-service
         storedQueryParams : dict
-            Variable amount of extra information sent to server related to 
+            Variable amount of extra information sent to server related to
             storedQueryID to further define the requested data
             {'parameter_name': parameter_value}
         method : string
