@@ -14,7 +14,7 @@ import requests
 import yaml
 
 from owslib import __version__
-from owslib.util import http_get
+from owslib.util import Authentication, http_get
 
 LOGGER = logging.getLogger(__name__)
 
@@ -24,9 +24,10 @@ REQUEST_HEADERS = {
 
 
 class API(object):
-    """Abstraction for OGC API Common version 1.0"""
+    """Abstraction for OGC API - Common version 1.0"""
 
-    def __init__(self, url, json_=None, timeout=30, headers=None, auth=None):
+    def __init__(self, url: str, json_: str = None, timeout: int = 30,
+                 headers: dict = None, auth: Authentication = None):
         """
         Initializer; implements /
 
@@ -62,7 +63,7 @@ class API(object):
             response = http_get(url, headers=self.headers, auth=self.auth).json()
             self.links = response['links']
 
-    def api(self):
+    def api(self) -> dict:
         """
         implements /api
 
@@ -102,7 +103,7 @@ class API(object):
             LOGGER.error(msg)
             raise RuntimeError(msg)
 
-    def conformance(self):
+    def conformance(self) -> dict:
         """
         implements /conformance
 
@@ -112,7 +113,7 @@ class API(object):
         path = 'conformance'
         return self._request(path)
 
-    def collections(self):
+    def collections(self) -> dict:
         """
         implements /collections
 
@@ -122,7 +123,7 @@ class API(object):
         path = 'collections'
         return self._request(path)
 
-    def collection(self, collection_id):
+    def collection(self, collection_id) -> dict:
         """
         implements /collections/{collectionId}
 
@@ -135,7 +136,7 @@ class API(object):
         path = 'collections/{}'.format(collection_id)
         return self._request(path)
 
-    def collection_queryables(self, collection_id):
+    def collection_queryables(self, collection_id) -> dict:
         """
         implements /collections/{collectionId}/queryables
 
@@ -148,7 +149,7 @@ class API(object):
         path = 'collections/{}/queryables'.format(collection_id)
         return self._request(path)
 
-    def _build_url(self, path=None):
+    def _build_url(self, path=None) -> str:
         """
         helper function to build an OGC API URL
 
@@ -170,7 +171,7 @@ class API(object):
 
         return url
 
-    def _request(self, path=None, kwargs={}):
+    def _request(self, path=None, kwargs={}) -> dict:
         """
         helper function for request/response patterns against OGC API endpoints
 
