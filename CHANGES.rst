@@ -11,11 +11,11 @@ A full list of commits for 0.20.0 can be found at:
 
 https://github.com/geopython/OWSLib/commits/0.20.0
 
-- WFS: make wfs:FeatureTypeList optional for 1.1 and 2.0
-- OGC API - Records: initial draft implementation
-- WPS: add support for retrieving data from local filesystem (huard)
-- WMTS: add support for boundingboxes (kordian-kowalski)
-- Authentication: Enable switching off SSL verification (Samweli)
+- WFS: make wfs:FeatureTypeList optional for 1.1 and 2.0 (#673)
+- OGC API - Records: initial draft implementation (#679, #693)
+- WPS: add support for retrieving data from local filesystem (huard, #681)
+- WMTS: add support for boundingboxes (kordian-kowalski, #687)
+- Authentication: Enable switching off SSL verification (Samweli, #685)
 
 
 0.19.2 (2020-03-13)
