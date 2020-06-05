@@ -558,18 +558,18 @@ GetCapabilities
 
 GetObservation
 
-.. include:: ../../tests/doctests/sos_10_ndbc_getobservation.txt
+.. include::  ../../tests/doctests/sos_ngwd.txt
 
 SOS 2.0
 -------
 
 Examples of service metadata and GetObservation
-+++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. include:: ../../tests/_broken/doctests_sphinx/sos_20_52N_demo.txt
 
 Using the GetObservation response decoder for O&M and WaterML2.0 results
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. include:: ../../tests/_broken/doctests_sphinx/sos_20_timeseries_decoder_ioos.txt
 
