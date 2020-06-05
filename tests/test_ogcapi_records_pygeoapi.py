@@ -13,7 +13,7 @@ SERVICE_URL = 'https://dev.api.weather.gc.ca/msc-wis-dcpc'
 def test_ogcapi_records_pygeoapi():
     w = Records(SERVICE_URL)
 
-    assert w.url == 'https://dev.api.weather.gc.ca/msc-wis-dcpc'
+    assert w.url == 'https://dev.api.weather.gc.ca/msc-wis-dcpc/'
     assert w.url_query_string is None
 
     api = w.api()
@@ -30,8 +30,8 @@ def test_ogcapi_records_pygeoapi():
 
     msc_wis_dcpc = w.collection('discovery-metadata')
     assert msc_wis_dcpc['id'] == 'discovery-metadata'
-    assert msc_wis_dcpc['title'] == 'MSC WIS DCPC'
-    assert msc_wis_dcpc['description'] == 'MSC WIS DCPC'
+    assert msc_wis_dcpc['title'] == 'MSC discovery metadata'
+    assert msc_wis_dcpc['description'] == 'MSC discovery metadata'
 
     msc_wis_dcpc_queryables = w.collection_queryables('discovery-metadata')
     assert len(msc_wis_dcpc_queryables['queryables']) == 7
