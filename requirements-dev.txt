@@ -3,4 +3,7 @@ flake8
 pytest>=3.6
 pytest-cov
 Pillow
+sphinx
 tox
+twine
+wheel
