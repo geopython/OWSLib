@@ -234,7 +234,9 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         sortby=None,
     ):
         """Request and return feature data as a file-like object.
+
         #TODO: NOTE: have changed property name from ['*'] to None - check the use of this in WFS 2.0
+
         Parameters
         ----------
         typename : list
@@ -251,6 +253,12 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             List of feature property names. '*' matches all.
         maxfeatures : int
             Maximum number of features to be returned.
+        storedQueryID : string
+            A name identifying a prepared set available in WFS-service
+        storedQueryParams : dict
+            Variable amount of extra information sent to server related to
+            storedQueryID to further define the requested data
+            {'parameter_name': parameter_value}
         method : string
             Qualified name of the HTTP DCP method to use.
         outputFormat: string (optional)
@@ -262,11 +270,18 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (upon presentation) the set of feature instances that
             satify the query.
 
-        There are 3 different modes of use
+        There are 4 different modes of use
 
         1) typename and bbox (simple spatial query)
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
+        4) storedQueryID and optional storedQueryParams
+
+        Raises:
+            ServiceException: If there is an error during the request
+
+        Returns:
+            BytesIO -- Data returned from the service as a file-like object
         """
         storedQueryParams = storedQueryParams or {}
         url = data = None
