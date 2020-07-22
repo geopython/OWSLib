@@ -278,53 +278,62 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             base_url = self.url
         request = {"service": "WFS", "version": self.version, "request": "GetFeature"}
 
-        if not isinstance(typename, list):
-            typename = [typename]
+        # Filter only with POST
+        if not typename and filter and method.lower() == "post":
+            data = filter
+            if self.headers:
+                self.headers["Content-Type"] = "text/xml"
+            else:
+                self.headers={"Content-Type": "text/xml"}
+        else:
+            if not isinstance(typename, list):
+                typename = [typename]
 
-        if srsname is not None:
-            request["srsname"] = str(srsname)
+            if srsname is not None:
+                request["srsname"] = str(srsname)
 
-            # Check, if desired SRS is supported by the service for each
-            # typename. Warning will be thrown if that SRS is not allowed."
-            for name in typename:
-                _ = self.getSRS(srsname, name)
+                # Check, if desired SRS is supported by the service for each
+                # typename. Warning will be thrown if that SRS is not allowed."
+                for name in typename:
+                    _ = self.getSRS(srsname, name)
 
-        # check featureid
-        if featureid:
-            request["featureid"] = ",".join(featureid)
+            # check featureid
+            if featureid:
+                request["featureid"] = ",".join(featureid)
 
-        # bbox
-        elif bbox and typename:
-            request["bbox"] = self.getBBOXKVP(bbox, typename)
+            # bbox
+            elif bbox and typename:
+                request["bbox"] = self.getBBOXKVP(bbox, typename)
 
-        # or filter
-        elif filter and typename:
-            request["filter"] = str(filter)
+            # or filter
+            elif filter and typename:
+                request["filter"] = str(filter)
 
-        assert len(typename) > 0
-        request["typename"] = ",".join(typename)
+            assert len(typename) > 0
+            request["typename"] = ",".join(typename)
 
-        if propertyname is not None:
-            if not isinstance(propertyname, list):
-                propertyname = [propertyname]
-            request["propertyname"] = ",".join(propertyname)
+            if propertyname is not None:
+                if not isinstance(propertyname, list):
+                    propertyname = [propertyname]
+                request["propertyname"] = ",".join(propertyname)
 
-        if sortby is not None:
-            if not isinstance(sortby, list):
-                sortby = [sortby]
-            request["sortby"] = ",".join(sortby)
+            if sortby is not None:
+                if not isinstance(sortby, list):
+                    sortby = [sortby]
+                request["sortby"] = ",".join(sortby)
 
-        if featureversion is not None:
-            request["featureversion"] = str(featureversion)
-        if maxfeatures is not None:
-            request["maxfeatures"] = str(maxfeatures)
-        if startindex is not None:
-            request["startindex"] = str(startindex)
-        if outputFormat is not None:
-            request["outputFormat"] = outputFormat
+            if featureversion is not None:
+                request["featureversion"] = str(featureversion)
+            if maxfeatures is not None:
+                request["maxfeatures"] = str(maxfeatures)
+            if startindex is not None:
+                request["startindex"] = str(startindex)
+            if outputFormat is not None:
+                request["outputFormat"] = outputFormat
 
-        data = urlencode(request)
-        log.debug("Making request: %s?%s" % (base_url, data))
+            data = urlencode(request)
+            log.debug("Making request: %s?%s" % (base_url, data))
+
         u = openURL(base_url, data, method, timeout=self.timeout,
                     headers=self.headers, auth=self.auth)
 
