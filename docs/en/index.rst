@@ -69,6 +69,18 @@ Standards Support
 | `WaterML`_            | 1.0, 1.1, 2.0               |
 +-----------------------+-----------------------------+
 
+OGC API Support
+---------------
+
++---------------------------------------------------+
+| Standard                             | Version(s) |
++======================================+============+
+| `OGC API - Features - Part 1: Core`_ | 1.0        |
++--------------------------------------+------------+
+| `OGC API - Records - Part 1: Core`_  | draft      |
++--------------------------------------+------------+
+
+
 Installation
 ============
 
@@ -796,7 +808,8 @@ Credits
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
 .. _`Swiss GM03`: https://www.geocat.admin.ch/en/dokumentation/gm03.html
-.. _`OGC API`: http://www.ogcapi.org
-
+.. _`OGC API`: https://ogcapi.ogc.org
+.. _`OGC API - Features - Part 1: Core`: https://docs.opengeospatial.org/is/17-069r3/17-069r3.html
+.. _`OGC API - Records - Part 1: Core`: https://github.com/opengeospatial/ogcapi-records
 
 .. include:: ../../CHANGES.rst
