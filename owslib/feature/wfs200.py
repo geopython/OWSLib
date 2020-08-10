@@ -321,7 +321,6 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                 startindex,
                 sortby)
 
-        # If method is 'Post', data will be None here
         u = openURL(url, data, method, timeout=self.timeout, headers=self.headers, auth=self.auth)
 
         # check for service exceptions, rewrap, and return

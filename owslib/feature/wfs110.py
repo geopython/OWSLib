@@ -278,14 +278,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             base_url = self.url
         request = {"service": "WFS", "version": self.version, "request": "GetFeature"}
 
-        # Filter only with POST
-        if not typename and filter and method.lower() == "post":
-            data = filter
-            if self.headers:
-                self.headers["Content-Type"] = "text/xml"
-            else:
-                self.headers={"Content-Type": "text/xml"}
-        else:
+        if method.lower() == "get":
             if not isinstance(typename, list):
                 typename = [typename]
 
@@ -333,6 +326,20 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
             data = urlencode(request)
             log.debug("Making request: %s?%s" % (base_url, data))
+
+        elif method.lower() == "post":
+            base_url, data = self.getPOSTGetFeatureRequest(typename=typename,
+                                                           filter=filter,
+                                                           bbox=bbox,
+                                                           featureid=featureid,
+                                                           featureversion=featureversion,
+                                                           propertyname=propertyname,
+                                                           maxfeatures=maxfeatures,
+                                                           outputFormat=outputFormat,
+                                                           method='Post',
+                                                           startindex=startindex,
+                                                           sortby=sortby,
+                                                           )
 
         u = openURL(base_url, data, method, timeout=self.timeout,
                     headers=self.headers, auth=self.auth)

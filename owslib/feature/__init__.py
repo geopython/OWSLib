@@ -13,7 +13,7 @@ from owslib.etree import etree
 from owslib.feature.schema import get_schema
 from owslib.namespaces import Namespaces
 from owslib import util
-from owslib.feature.postrequest import PostRequest_2_0_0
+from owslib.feature.postrequest import PostRequest_1_1_0, PostRequest_2_0_0
 
 
 class WebFeatureService_(object):
@@ -82,6 +82,10 @@ class WebFeatureService_(object):
 
     def create_post_request(self):
         """Creates an xml POST request according to WFS version."""
+
+        if self.version in ['1.1.0']:
+            return PostRequest_1_1_0()
+
         if self.version in ['2.0', '2.0.0']:
             return PostRequest_2_0_0()
 
@@ -214,21 +218,22 @@ class WebFeatureService_(object):
 
         return base_url + data
 
-    def getPOSTGetFeatureRequest(self,
-                                 typename=None,
-                                 filter=None,
-                                 bbox=None,
-                                 featureid=None,
-                                 featureversion=None,
-                                 propertyname=None,
-                                 maxfeatures=None,
-                                 storedQueryID=None,
-                                 storedQueryParams=None,
-                                 outputFormat=None,
-                                 method="Post",
-                                 startindex=None,
-                                 sortby=None,
-                                 ):
+    def getPOSTGetFeatureRequest(
+        self,
+        typename=None,
+        filter=None,
+        bbox=None,
+        featureid=None,
+        featureversion=None,
+        propertyname=None,
+        maxfeatures=None,
+        storedQueryID=None,
+        storedQueryParams=None,
+        outputFormat=None,
+        method="Post",
+        startindex=None,
+        sortby=None,
+    ):
         """Formulate proper GetFeature request using KVP encoding
         ----------
         typename : list
@@ -312,6 +317,7 @@ class WebFeatureService_(object):
             request.set_sortby(sortby)
 
         data = request.to_string()
+        print(data)
 
         return base_url, data
 
