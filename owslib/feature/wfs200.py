@@ -305,7 +305,17 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             )
             log.debug("GetFeature WFS GET url %s" % url)
         else:
-            (url, data) = self.getPOSTGetFeatureRequest()
+            (url, data) = self.getPOSTGetFeatureRequest(
+                typename,
+                filter,
+                bbox,
+                featureid,
+                propertyname,
+                maxfeatures,
+                outputFormat,
+                "Post",
+                startindex,
+                sortby,)
 
         # If method is 'Post', data will be None here
         u = openURL(url, data, method, timeout=self.timeout, headers=self.headers, auth=self.auth)

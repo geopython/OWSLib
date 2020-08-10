@@ -5,12 +5,15 @@
 #
 # =============================================================================
 
-from owslib.crs import Crs
-
-from urllib.parse import urlencode
 import logging
+from urllib.parse import urlencode
+from owslib.crs import Crs
 from owslib.util import log, Authentication
+from owslib.etree import etree
 from owslib.feature.schema import get_schema
+from owslib.namespaces import Namespaces
+from owslib import util
+from owslib.feature.postrequest import PostRequest_2_0_0
 
 
 class WebFeatureService_(object):
@@ -76,6 +79,11 @@ class WebFeatureService_(object):
                 bbox[3],
                 srs.getcode(),
             )
+
+    def create_post_request(self):
+        """Creates an xml POST request according to WFS version."""
+        if self.version in ['2.0', '2.0.0']:
+            return PostRequest_2_0_0()
 
     def getSRS(self, srsname, typename):
         """Returns None or Crs object for given name
@@ -205,6 +213,62 @@ class WebFeatureService_(object):
         data = urlencode(request, doseq=True)
 
         return base_url + data
+
+    def getPOSTGetFeatureRequest(self,
+                                 typename=None,
+                                 filter=None,
+                                 bbox=None,
+                                 featureid=None,
+                                 propertyname=None,
+                                 maxfeatures=None,
+                                 outputFormat=None,
+                                 method="Post",
+                                 startindex=None,
+                                 sortby=None,
+                                 ):
+
+        base_url = next(
+            (
+                m.get("url")
+                for m in self.getOperationByName("GetFeature").methods
+                if m.get("type").lower() == method.lower()
+            )
+        )
+        base_url = base_url if not base_url.endswith("?") else base_url[:-1]
+
+        if not typename and filter:
+            return base_url, filter
+
+        if typename:
+            typename = (
+                [typename] if isinstance(typename, str) else typename
+            )  # noqa: E721
+            typenames = ",".join(typename)
+
+        request = self.create_post_request()
+        request.create_query(typenames)
+
+        if featureid:
+            request.set_featureid(featureid)
+        elif bbox:
+            request.set_bbox(bbox)
+        elif filter:
+            request.set_filter(filter)
+
+        if maxfeatures:
+            request.set_maxfeatures(maxfeatures)
+        if outputFormat:
+            request.set_outputformat(outputFormat)
+        if startindex:
+            request.set_startindex(startindex)
+        if propertyname:
+            request.set_propertyname(propertyname)
+        if sortby:
+            request.set_sortby(sortby)
+
+        data = request.to_string()
+
+        return base_url, data
 
     def get_schema(self, typename):
         """
