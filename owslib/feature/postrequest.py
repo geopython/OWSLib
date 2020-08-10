@@ -9,9 +9,9 @@ GML32_NAMESPACE = n.get_namespace("gml32")
 FES_NAMESPACE = n.get_namespace("fes")
 
 
-
 class PostRequest():
     """Superclass for POST request building"""
+
     def __init__(self):
         self._root = None
         self._query = None
@@ -20,11 +20,13 @@ class PostRequest():
         self._root.set("outputformat", outputFormat)
 
     def to_string(self):
+        """Returns the xml request in string format"""
         return etree.tostring(self._root)
 
 
 class PostRequest_2_0_0(PostRequest):
-    """XML POST request payload builder for WFS version 2.0.0"""
+    """XML Post request payload builder for WFS version 2.0.0"""
+
     def __init__(self, version='2.0.0'):
         self._root = etree.Element(util.nspath('GetFeature', WFS20_NAMESPACE))
         self._root.set("service", "WFS")

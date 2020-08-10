@@ -248,16 +248,16 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         featureid : list
             List of unique feature ids (string)
         featureversion : string
-            Default is most recent feature version.
+            Default is most recent feature version. (Get method only)
         propertyname : list
             List of feature property names. '*' matches all.
         maxfeatures : int
             Maximum number of features to be returned.
         storedQueryID : string
-            A name identifying a prepared set available in WFS-service
+            A name identifying a prepared set available in WFS-service (Get method only)
         storedQueryParams : dict
             Variable amount of extra information sent to server related to
-            storedQueryID to further define the requested data
+            storedQueryID to further define the requested data (Get method only)
             {'parameter_name': parameter_value}
         method : string
             Qualified name of the HTTP DCP method to use.
@@ -270,12 +270,13 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (upon presentation) the set of feature instances that
             satify the query.
 
-        There are 4 different modes of use
+        There are 5 different modes of use
 
         1) typename and bbox (simple spatial query)
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
-        4) storedQueryID and optional storedQueryParams
+        4) storedQueryID and optional storedQueryParams (Get method only)
+        5) filter only via Post method
 
         Raises:
             ServiceException: If there is an error during the request
@@ -305,17 +306,20 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             )
             log.debug("GetFeature WFS GET url %s" % url)
         else:
-            (url, data) = self.getPOSTGetFeatureRequest(
+            url, data = self.getPOSTGetFeatureRequest(
                 typename,
                 filter,
                 bbox,
                 featureid,
+                featureversion,
                 propertyname,
                 maxfeatures,
+                storedQueryID,
+                storedQueryParams,
                 outputFormat,
                 "Post",
                 startindex,
-                sortby,)
+                sortby)
 
         # If method is 'Post', data will be None here
         u = openURL(url, data, method, timeout=self.timeout, headers=self.headers, auth=self.auth)

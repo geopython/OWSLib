@@ -219,13 +219,58 @@ class WebFeatureService_(object):
                                  filter=None,
                                  bbox=None,
                                  featureid=None,
+                                 featureversion=None,
                                  propertyname=None,
                                  maxfeatures=None,
+                                 storedQueryID=None,
+                                 storedQueryParams=None,
                                  outputFormat=None,
                                  method="Post",
                                  startindex=None,
                                  sortby=None,
                                  ):
+        """Formulate proper GetFeature request using KVP encoding
+        ----------
+        typename : list
+            List of typenames (string)
+        filter : string
+            XML-encoded OGC filter expression.
+        bbox : tuple
+            (left, bottom, right, top) in the feature type's coordinates == (minx, miny, maxx, maxy)
+        featureid : list
+            List of unique feature ids (string)
+        featureversion : string
+            Default is most recent feature version.
+        propertyname : list
+            List of feature property names. '*' matches all.
+        maxfeatures : int
+            Maximum number of features to be returned.
+        method : string
+            Qualified name of the HTTP DCP method to use.
+        outputFormat: string (optional)
+            Requested response format of the request.
+        startindex: int (optional)
+            Start position to return feature set (paging in combination with maxfeatures)
+        sortby: list (optional)
+            List of property names whose values should be used to order
+            (upon presentation) the set of feature instances that
+            satify the query.
+
+        There are 4 different modes of use
+
+        1) typename and bbox (simple spatial query)
+        2) typename and filter (==query) (more expressive)
+        3) featureid (direct access to known features)
+        4) filter only via Post method
+        """
+
+        if featureversion or storedQueryID or storedQueryParams:
+            if featureversion:
+                log.warning("Use of the featureversion argument is not yet implemented with the Post method")
+            if storedQueryID:
+                log.warning("Use of the storedQueryID argument is not yet implemented with the Post method")
+            if storedQueryParams:
+                log.warning("Use of the storedQueryParams argument is not yet implemented with the Post method")
 
         base_url = next(
             (
