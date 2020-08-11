@@ -6,6 +6,7 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+from io import BytesIO
 import logging
 
 from owslib.ogcapi import API
@@ -93,4 +94,5 @@ class Coverages(API):
                 kwargs_['subset'].append(val)
 
         path = 'collections/{}/coverage'.format(collection_id)
-        return self._request(path, False, kwargs_)
+
+        return BytesIO(self._request(path, False, kwargs_))
