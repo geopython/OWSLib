@@ -93,4 +93,4 @@ class Coverages(API):
                 kwargs_['subset'].append(val)
 
         path = 'collections/{}/coverage'.format(collection_id)
-        return self._request(path, kwargs_)
+        return self._request(path, False, kwargs_)
