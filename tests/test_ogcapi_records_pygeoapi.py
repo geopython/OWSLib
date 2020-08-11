@@ -28,6 +28,9 @@ def test_ogcapi_records_pygeoapi():
     collections = w.collections()
     assert len(collections) > 0
 
+    records = w.records()
+#    assert len(records) > 0
+
     msc_wis_dcpc = w.collection('discovery-metadata')
     assert msc_wis_dcpc['id'] == 'discovery-metadata'
     assert msc_wis_dcpc['title'] == 'MSC discovery metadata'

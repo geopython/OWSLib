@@ -28,19 +28,22 @@ def test_ogcapi_features_pygeoapi():
     collections = w.collections()
     assert len(collections) > 0
 
+    feature_collections = w.feature_collections()
+    assert len(feature_collections) > 0
+
     lakes = w.collection('lakes')
     assert lakes['id'] == 'lakes'
     assert lakes['title'] == 'Large Lakes'
     assert lakes['description'] == 'lakes of the world, public domain'
 
     lakes_queryables = w.collection_queryables('lakes')
-    assert len(lakes_queryables['queryables']) == 6
+    assert len(lakes_queryables['queryables']) == 5
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):
         lakes_query = w.collection_items('lakes', limit=0)
 
     lakes_query = w.collection_items('lakes', limit=1)
-    assert lakes_query['numberMatched'] == 25
+    assert lakes_query['numberMatched'] == 26
     assert lakes_query['numberReturned'] == 1
     assert len(lakes_query['features']) == 1

@@ -22,6 +22,22 @@ class Features(API):
         __doc__ = API.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
+    def feature_collections(self) -> dict:
+        """
+        implements /collections filtered on features
+
+        @returns: `dict` of filtered collections object
+        """
+
+        features_ = []
+        collections_ = super().collections()
+
+        for c_ in collections_['collections']:
+            if 'itemType' in c_ and c_['itemType'].lower() == 'feature':
+                features_.append(c_['id'])
+
+        return features_
+
     def collection_items(self, collection_id: str, **kwargs: dict) -> dict:
         """
         implements /collection/{collectionId}/items
