@@ -317,8 +317,6 @@ class WebFeatureService_(object):
             request.set_sortby(sortby)
 
         data = request.to_string()
-        print(data)
-
         return base_url, data
 
     def get_schema(self, typename):
