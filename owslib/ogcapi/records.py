@@ -21,3 +21,19 @@ class Records(Features):
                  headers: dict = None, auth: Authentication = None):
         __doc__ = Features.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
+
+    def records(self) -> dict:
+        """
+        implements /collections filtered on records
+
+        @returns: `dict` of filtered collections object
+        """
+
+        records_ = []
+        collections_ = super().collections()
+
+        for c_ in collections_['collections']:
+            if 'itemType' in c_ and c_['itemType'].lower() == 'record':
+                records_.append(c_['id'])
+
+        return records_

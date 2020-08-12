@@ -19,6 +19,9 @@ def test_ogcapi_features_ldproxy():
     conformance = w.conformance()
     assert len(conformance['conformsTo']) == 5
 
+    feature_collections = w.feature_collections()
+    assert len(feature_collections) >= 0
+
     # TODO: remove pytest.raises once ldproxy is fixed/updated
     with pytest.raises(RuntimeError):
         api = w.api()
