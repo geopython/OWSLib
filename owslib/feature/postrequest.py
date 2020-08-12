@@ -15,9 +15,11 @@ WFS20_NAMESPACE = n.get_namespace("wfs20")
 class PostRequest():
     """Superclass for POST request building"""
 
-    def __init__(self):
-        self._root = None
-        self._query = None
+    def __init__(self, version=None, namespace=None):
+        self._root = etree.Element(util.nspath('GetFeature', namespace))
+        self._root.set("service", "WFS")
+        self._root.set("version", version)
+        self._query = etree.SubElement(self._root, util.nspath('Query', namespace))
 
     def set_startindex(self, startindex):
         self._root.set("startIndex", str(startindex))
@@ -34,11 +36,8 @@ class PostRequest():
 class PostRequest_1_1_0(PostRequest):
     """XML Post request payload builder for WFS version 1.1.0"""
 
-    def __init__(self, version='1.1.0'):
-        self._root = etree.Element(util.nspath('GetFeature', WFS_NAMESPACE))
-        self._root.set("service", "WFS")
-        self._root.set("version", version)
-        self._query = etree.SubElement(self._root, util.nspath('Query', WFS_NAMESPACE))
+    def __init__(self, version='1.1.0', namespace=WFS_NAMESPACE):
+        super().__init__(version, namespace)
 
     def create_query(self, typename):
         """Creates the query tag with the corresponding typenames.
@@ -70,7 +69,6 @@ class PostRequest_1_1_0(PostRequest):
     def set_filter(self, filter):
         f = etree.fromstring(filter)
         sub_elem = f.find(util.nspath("Filter", OGC_NAMESPACE))
-        print(sub_elem)
         self._query.append(sub_elem)
 
     def set_maxfeatures(self, maxfeatures):
@@ -82,7 +80,6 @@ class PostRequest_1_1_0(PostRequest):
     def set_sortby(self, sortby):
         sort_tree = etree.SubElement(self._query, util.nspath("SortBy", OGC_NAMESPACE))
         for s in sortby:
-            print(s)
             prop = etree.SubElement(sort_tree, util.nspath("SortProperty", OGC_NAMESPACE))
             etree.SubElement(prop, util.nspath('PropertyName', OGC_NAMESPACE)).text = s
 
@@ -90,11 +87,8 @@ class PostRequest_1_1_0(PostRequest):
 class PostRequest_2_0_0(PostRequest):
     """XML Post request payload builder for WFS version 2.0.0"""
 
-    def __init__(self, version='2.0.0'):
-        self._root = etree.Element(util.nspath('GetFeature', WFS20_NAMESPACE))
-        self._root.set("service", "WFS")
-        self._root.set("version", version)
-        self._query = etree.SubElement(self._root, util.nspath('Query', WFS20_NAMESPACE))
+    def __init__(self, version='2.0.0', namespace=WFS20_NAMESPACE):
+        super().__init__(version, namespace)
 
     def create_query(self, typename):
         """Creates the query tag with the corresponding typenames.
@@ -127,7 +121,6 @@ class PostRequest_2_0_0(PostRequest):
     def set_filter(self, filter):
         f = etree.fromstring(filter)
         sub_elem = f.find(util.nspath("Filter", FES_NAMESPACE))
-        print(sub_elem)
         self._query.append(sub_elem)
 
     def set_maxfeatures(self, maxfeatures):
@@ -139,6 +132,5 @@ class PostRequest_2_0_0(PostRequest):
     def set_sortby(self, sortby):
         sort_tree = etree.SubElement(self._query, util.nspath("SortBy", FES_NAMESPACE))
         for s in sortby:
-            print(s)
             prop = etree.SubElement(sort_tree, util.nspath("SortProperty", FES_NAMESPACE))
             etree.SubElement(prop, util.nspath('ValueReference', FES_NAMESPACE)).text = s
