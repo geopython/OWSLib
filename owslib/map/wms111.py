@@ -6,6 +6,8 @@
 # Authors : Sean Gillies <sgillies@frii.com>
 #           Julien Anguenot <ja@nuxeo.com>
 #
+# Collaborations : Leanderson Coelho <leanderson.coelhoif@gmail.com>
+#
 # Contact email: sgillies@frii.com
 # =============================================================================
 
@@ -19,6 +21,7 @@ import cgi
 from urllib.parse import urlencode
 
 import warnings
+import re
 
 from owslib.etree import etree
 from owslib.util import (openURL, testXMLValue, extract_xml_list,
@@ -91,31 +94,54 @@ class WebMapService_1_1_1(object):
 
         self.updateSequence = self._capabilities.attrib.get('updateSequence')
 
-        # serviceIdentification metadata
-        serviceelem = self._capabilities.find('Service')
-        self.identification = ServiceIdentification(serviceelem, self.version)
+        # check if exist url in tag
+        result = re.match(r"{(\w*:\/\/)?(\w{3}|\.\w*\.\w*|\.\w*)*(\/?\w)*}", self._capabilities.tag)
+        if result is not None:
+            # serviceIdentification metadata
+            serviceelem = self._capabilities.find('{}Service'.format(result.group()))
+            self.identification = ServiceIdentification(serviceelem, self.version, result.group())
 
-        # serviceProvider metadata
-        self.provider = ServiceProvider(serviceelem)
+            # serviceProvider metadata
+            self.provider = ServiceProvider(serviceelem, result.group())
 
-        # serviceOperations metadata
-        self.operations = []
-        for elem in self._capabilities.find('Capability/Request')[:]:
-            self.operations.append(OperationMetadata(elem))
+            # serviceOperations metadata
+            self.operations = []
+            for elem in self._capabilities.find(str(result.group()) + 'Capability/' + result.group() + 'Request')[:]:
+                self.operations.append(OperationMetadata(elem, result.group()))
 
-        # serviceContents metadata: our assumption is that services use a
-        # top-level layer as a metadata organizer, nothing more.
-        self.contents = OrderedDict()
-        caps = self._capabilities.find('Capability')
+            # serviceContents metadata: our assumption is that services use a
+            # top-level layer as a metadata organizer, nothing more.
+            self.contents = OrderedDict()
+            caps = self._capabilities.find('{}Capability'.format(result.group()))
+        else:
+            # serviceIdentification metadata
+            serviceelem = self._capabilities.find('Service')
+            self.identification = ServiceIdentification(serviceelem, self.version)
+
+            # serviceProvider metadata
+            self.provider = ServiceProvider(serviceelem)
+
+            # serviceOperations metadata
+            self.operations = []
+            for elem in self._capabilities.find('Capability/Request')[:]:
+                self.operations.append(OperationMetadata(elem))
+
+            # serviceContents metadata: our assumption is that services use a
+            # top-level layer as a metadata organizer, nothing more.
+            self.contents = OrderedDict()
+            caps = self._capabilities.find('Capability')
 
         # recursively gather content metadata for all layer elements.
         # To the WebMapService.contents store only metadata of named layers.
-        def gather_layers(parent_elem, parent_metadata):
+        def gather_layers(parent_elem, parent_metadata, urlInTag=''):
+            result = re.match(r"{(\w*:\/\/)?(\w{3}|\.\w*\.\w*|\.\w*)*(\/?\w)*}", parent_elem.tag)
+            if result is not None:
+                urlInTag = result.group()
             layers = []
-            for index, elem in enumerate(parent_elem.findall('Layer')):
+            for index, elem in enumerate(parent_elem.findall('{}Layer'.format(urlInTag))):
                 cm = ContentMetadata(elem, parent=parent_metadata,
                                      index=index + 1,
-                                     parse_remote_metadata=parse_remote_metadata)
+                                     parse_remote_metadata=parse_remote_metadata, urlInTag=urlInTag)
                 if cm.id:
                     if cm.id in self.contents:
                         warnings.warn('Content metadata for layer "%s" already exists. Using child layer' % cm.id)
@@ -353,36 +379,58 @@ class WebMapService_1_1_1(object):
 class ServiceIdentification(object):
     ''' Implements IServiceIdentificationMetadata '''
 
-    def __init__(self, infoset, version):
-        self._root = infoset
-        self.type = testXMLValue(self._root.find('Name'))
-        self.version = version
-        self.title = testXMLValue(self._root.find('Title'))
-        self.abstract = testXMLValue(self._root.find('Abstract'))
-        self.keywords = extract_xml_list(self._root.findall('KeywordList/Keyword'))
-        self.accessconstraints = testXMLValue(self._root.find('AccessConstraints'))
-        self.fees = testXMLValue(self._root.find('Fees'))
+    def __init__(self, infoset, version, urlInTag=None):
+        if urlInTag is None:
+            self._root = infoset
+            self.type = testXMLValue(self._root.find('Name'))
+            self.version = version
+            self.title = testXMLValue(self._root.find('Title'))
+            self.abstract = testXMLValue(self._root.find('Abstract'))
+            self.keywords = extract_xml_list(self._root.findall('KeywordList/Keyword'))
+            self.accessconstraints = testXMLValue(self._root.find('AccessConstraints'))
+            self.fees = testXMLValue(self._root.find('Fees'))
+        else:
+            self._root = infoset
+            self.type = testXMLValue(self._root.find('{}Name'.format(urlInTag)))
+            self.version = version
+            self.title = testXMLValue(self._root.find('{}Title'.format(urlInTag)))
+            self.abstract = testXMLValue(self._root.find('{}Abstract'.format(urlInTag)))
+            self.keywords = extract_xml_list(self._root.findall('{}KeywordList/Keyword'.format(urlInTag)))
+            self.accessconstraints = testXMLValue(self._root.find('{}AccessConstraints'.format(urlInTag)))
+            self.fees = testXMLValue(self._root.find('{}Fees'.format(urlInTag)))
 
 
 class ServiceProvider(object):
     ''' Implements IServiceProviderMetatdata '''
-    def __init__(self, infoset):
+    def __init__(self, infoset, urlInTag=None):
         self._root = infoset
-        name = self._root.find('ContactInformation/ContactPersonPrimary/ContactOrganization')
+        # check if exist url in tag
+        if urlInTag is not None:
+            u = urlInTag
+            name = self._root.find(
+                str(u) + 'ContactInformation/' + str(u) + 'ContactPersonPrimary/' + str(u) + 'ContactOrganization')
+            online_resource = self._root.find('{}OnlineResource'.format(urlInTag))
+            # contact metadata
+            contact = self._root.find('{}ContactInformation'.format(urlInTag))
+        else:
+            name = self._root.find('ContactInformation/ContactPersonPrimary/ContactOrganization')
+            online_resource = self._root.find('OnlineResource')
+            # contact metadata
+            contact = self._root.find('ContactInformation')
+
         if name is not None:
             self.name = name.text
         else:
             self.name = None
+
         self.url = None
-        online_resource = self._root.find('OnlineResource')
         if online_resource is not None:
             self.url = online_resource.attrib.get('{http://www.w3.org/1999/xlink}href', '')
-        # contact metadata
-        contact = self._root.find('ContactInformation')
+
         # sometimes there is a contact block that is empty, so make
         # sure there are children to parse
         if contact is not None and contact[:] != []:
-            self.contact = ContactMetadata(contact)
+            self.contact = ContactMetadata(contact, urlInTag)
         else:
             self.contact = None
 
@@ -409,9 +457,9 @@ class ContentMetadata(AbstractContentMetadata):
     """
 
     def __init__(self, elem, parent=None, children=None, index=0,
-                 parse_remote_metadata=False, timeout=30, auth=None):
+                 parse_remote_metadata=False, timeout=30, auth=None, urlInTag=''):
         super(ContentMetadata, self).__init__(auth)
-        if elem.tag != 'Layer':
+        if elem.tag != '{}Layer'.format(urlInTag):
             raise ValueError('%s should be a Layer' % (elem,))
 
         self.parent = parent
@@ -422,7 +470,7 @@ class ContentMetadata(AbstractContentMetadata):
 
         self._children = children
 
-        self.id = self.name = testXMLValue(elem.find('Name'))
+        self.id = self.name = testXMLValue(elem.find('{}Name'.format(urlInTag)))
 
         # layer attributes
         self.queryable = int(elem.attrib.get('queryable', 0))
@@ -434,14 +482,14 @@ class ContentMetadata(AbstractContentMetadata):
 
         # title is mandatory property
         self.title = None
-        title = testXMLValue(elem.find('Title'))
+        title = testXMLValue(elem.find('{}Title'.format(urlInTag)))
         if title is not None:
             self.title = title.strip()
 
-        self.abstract = testXMLValue(elem.find('Abstract'))
+        self.abstract = testXMLValue(elem.find('{}Abstract'.format(urlInTag)))
 
         # bboxes
-        b = elem.find('BoundingBox')
+        b = elem.find('{}BoundingBox'.format(urlInTag))
         self.boundingBox = None
         if b is not None:
             try:  # sometimes the SRS attribute is (wrongly) not provided
@@ -460,27 +508,28 @@ class ContentMetadata(AbstractContentMetadata):
                 self.boundingBox = self.parent.boundingBox
 
         # ScaleHint
-        sh = elem.find('ScaleHint')
+        sh = elem.find('{}ScaleHint'.format(urlInTag))
         self.scaleHint = None
         if sh is not None:
             if 'min' in sh.attrib and 'max' in sh.attrib:
                 self.scaleHint = {'min': sh.attrib['min'], 'max': sh.attrib['max']}
 
-        attribution = elem.find('Attribution')
+        attribution = elem.find('{}Attribution'.format(urlInTag))
         if attribution is not None:
             self.attribution = dict()
-            title = attribution.find('Title')
-            url = attribution.find('OnlineResource')
-            logo = attribution.find('LogoURL')
+            title = attribution.find('{}Title'.format(urlInTag))
+            url = attribution.find('{}OnlineResource'.format(urlInTag))
+            logo = attribution.find('{}LogoURL'.format(urlInTag))
             if title is not None:
                 self.attribution['title'] = title.text
             if url is not None:
                 self.attribution['url'] = url.attrib['{http://www.w3.org/1999/xlink}href']
             if logo is not None:
                 self.attribution['logo_size'] = (int(logo.attrib['width']), int(logo.attrib['height']))
-                self.attribution['logo_url'] = logo.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+                self.attribution['logo_url'] = logo.find(
+                    str(urlInTag) + 'OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
 
-        b = elem.find('LatLonBoundingBox')
+        b = elem.find('{}LatLonBoundingBox'.format(urlInTag))
         if b is not None:
             self.boundingBoxWGS84 = (
                 float(b.attrib['minx']),
@@ -501,11 +550,11 @@ class ContentMetadata(AbstractContentMetadata):
             self.crsOptions = list(self.parent.crsOptions)
 
         # Look for SRS option attached to this layer
-        if elem.find('SRS') is not None:
+        if elem.find('{}SRS'.format(urlInTag)) is not None:
             # some servers found in the wild use a single SRS
             # tag containing a whitespace separated list of SRIDs
             # instead of several SRS tags. hence the inner loop
-            for srslist in [x.text for x in elem.findall('SRS')]:
+            for srslist in [x.text for x in elem.findall('{}SRS'.format(urlInTag))]:
                 if srslist:
                     for srs in srslist.split():
                         self.crsOptions.append(srs)
@@ -532,25 +581,29 @@ class ContentMetadata(AbstractContentMetadata):
             self.styles = self.parent.styles.copy()
 
         # Get the styles for this layer (items with the same name are replaced)
-        for s in elem.findall('Style'):
-            name = s.find('Name')
-            title = s.find('Title')
-            if name is None or title is None:
-                raise ValueError('%s missing name or title' % (s,))
-            style = {'title': title.text}
+        for s in elem.findall('{}Style'.format(urlInTag)):
+            name = s.find('{}Name'.format(urlInTag))
+            title = s.find('{}Title'.format(urlInTag))
+            if name is None:
+                raise ValueError('%s missing name' % (s,))
+            if title is None:
+                title = ''
+                style = {'title': title}
+            else:
+                style = {'title': title.text}
             # legend url
-            legend = s.find('LegendURL/OnlineResource')
+            legend = s.find(str(urlInTag) + 'LegendURL/' + str(urlInTag) + 'OnlineResource')
             if legend is not None:
                 style['legend'] = legend.attrib['{http://www.w3.org/1999/xlink}href']
             self.styles[name.text] = style
 
         # keywords
-        self.keywords = [f.text for f in elem.findall('KeywordList/Keyword')]
+        self.keywords = [f.text for f in elem.findall(str(urlInTag) + 'KeywordList/' + str(urlInTag) + 'Keyword')]
 
         # timepositions - times for which data is available.
         self.timepositions = None
         self.defaulttimeposition = None
-        for extent in elem.findall('Extent'):
+        for extent in elem.findall('{}Extent'.format(urlInTag)):
             if extent.attrib.get("name").lower() == 'time':
                 if extent.text:
                     self.timepositions = extent.text.split(',')
@@ -559,7 +612,7 @@ class ContentMetadata(AbstractContentMetadata):
 
         # Elevations - available vertical levels
         self.elevations = None
-        for extent in elem.findall('Extent'):
+        for extent in elem.findall('{}Extent'.format(urlInTag)):
             if extent.attrib.get("name").lower() == 'elevation':
                 if extent.text:
                     self.elevations = extent.text.split(',')
@@ -567,26 +620,27 @@ class ContentMetadata(AbstractContentMetadata):
 
         # MetadataURLs
         self.metadataUrls = []
-        for m in elem.findall('MetadataURL'):
+        for m in elem.findall('{}MetadataURL'.format(urlInTag)):
             metadataUrl = {
                 'type': testXMLValue(m.attrib['type'], attrib=True),
-                'format': testXMLValue(m.find('Format')),
-                'url': testXMLValue(m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
+                'format': testXMLValue(m.find('{}Format'.format(urlInTag))),
+                'url': testXMLValue(m.find(
+                    '{}OnlineResource'.format(urlInTag)).attrib['{http://www.w3.org/1999/xlink}href'], attrib=True)
             }
             self.metadataUrls.append(metadataUrl)
 
         # DataURLs
         self.dataUrls = []
-        for m in elem.findall('DataURL'):
+        for m in elem.findall('{}DataURL'.format(urlInTag)):
             dataUrl = {
-                'format': m.find('Format').text.strip(),
-                'url': m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+                'format': m.find('{}Format'.format(urlInTag)).text.strip(),
+                'url': m.find('{}OnlineResource'.format(urlInTag)).attrib['{http://www.w3.org/1999/xlink}href']
             }
             self.dataUrls.append(dataUrl)
 
         self.layers = []
-        for child in elem.findall('Layer'):
-            self.layers.append(ContentMetadata(child, self))
+        for child in elem.findall('{}Layer'.format(urlInTag)):
+            self.layers.append(ContentMetadata(child, self, urlInTag=urlInTag))
 
     def parse_remote_metadata(self, timeout=30):
         """Parse remote metadata for MetadataURL and add it as metadataUrl['metadata']"""
@@ -633,27 +687,37 @@ class OperationMetadata:
 
     Implements IOperationMetadata.
     """
-    def __init__(self, elem):
+    def __init__(self, elem, urlInTag=''):
         """."""
         self.name = xmltag_split(elem.tag)
         # formatOptions
-        self.formatOptions = [f.text for f in elem.findall('Format')]
+        self.formatOptions = [f.text for f in elem.findall('{}Format'.format(urlInTag))]
         self.methods = []
-        for verb in elem.findall('DCPType/HTTP/*'):
-            url = verb.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
+        for verb in elem.findall(str(urlInTag) + 'DCPType/' + str(urlInTag) + 'HTTP/*'):
+            url = verb.find('{}OnlineResource'.format(urlInTag)).attrib['{http://www.w3.org/1999/xlink}href']
             self.methods.append({'type': xmltag_split(verb.tag), 'url': url})
 
 
 class ContactMetadata:
     """Abstraction for contact details advertised in GetCapabilities.
     """
-    def __init__(self, elem):
-        name = elem.find('ContactPersonPrimary/ContactPerson')
+    def __init__(self, elem, urlInTag=None):
+        # check if exist url in tag
+        if urlInTag is not None:
+            name = elem.find(str(urlInTag) + 'ContactPersonPrimary/' + str(urlInTag) + 'ContactPerson')
+            email = elem.find('{}ContactElectronicMailAddress'.format(urlInTag))
+            organization = elem.find(str(urlInTag) + 'ContactPersonPrimary/' + str(urlInTag) + 'ContactOrganization')
+            position = elem.find('{}ContactPosition'.format(urlInTag))
+        else:
+            name = elem.find('ContactPersonPrimary/ContactPerson')
+            email = elem.find('ContactElectronicMailAddress')
+            organization = elem.find('ContactPersonPrimary/ContactOrganization')
+            position = elem.find('ContactPosition')
+
         if name is not None:
             self.name = name.text
         else:
             self.name = None
-        email = elem.find('ContactElectronicMailAddress')
         if email is not None:
             self.email = email.text
         else:
@@ -661,35 +725,40 @@ class ContactMetadata:
         self.address = self.city = self.region = None
         self.postcode = self.country = None
 
-        address = elem.find('ContactAddress')
+        urlBeforeTag = ''
+        # check if exist url in tag
+        if urlInTag is not None:
+            address = elem.find('{}ContactAddress'.format(urlInTag))
+            urlBeforeTag = urlInTag
+        else:
+            address = elem.find('ContactAddress')
+
         if address is not None:
-            street = address.find('Address')
+            street = address.find('{}Address'.format(urlBeforeTag))
             if street is not None:
                 self.address = street.text
 
-            city = address.find('City')
+            city = address.find('{}City'.format(urlBeforeTag))
             if city is not None:
                 self.city = city.text
 
-            region = address.find('StateOrProvince')
+            region = address.find('{}StateOrProvince'.format(urlBeforeTag))
             if region is not None:
                 self.region = region.text
 
-            postcode = address.find('PostCode')
+            postcode = address.find('{}PostCode'.format(urlBeforeTag))
             if postcode is not None:
                 self.postcode = postcode.text
 
-            country = address.find('Country')
+            country = address.find('{}Country'.format(urlBeforeTag))
             if country is not None:
                 self.country = country.text
 
-        organization = elem.find('ContactPersonPrimary/ContactOrganization')
         if organization is not None:
             self.organization = organization.text
         else:
             self.organization = None
 
-        position = elem.find('ContactPosition')
         if position is not None:
             self.position = position.text
         else:
