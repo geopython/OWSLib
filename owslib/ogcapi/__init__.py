@@ -171,14 +171,14 @@ class API(object):
 
         return url
 
-    def _request(self, path=None, as_json=True, kwargs={}) -> dict:
+    def _request(self, path=None, as_dict=True, kwargs={}) -> dict:
         """
         helper function for request/response patterns against OGC API endpoints
 
         @type path: string
         @param path: path of request
-        @type as_json: bool
-        @param as_json: whether to return JSON dict (default True)
+        @type as_dict: bool
+        @param as_dict: whether to return JSON dict (default True)
         @type kwargs: string
         @param kwargs: ``dict`` of keyword value pair request parameters
 
@@ -194,7 +194,7 @@ class API(object):
         if response.status_code != requests.codes.ok:
             raise RuntimeError(response.text)
 
-        if as_json:
+        if as_dict:
             return response.json()
         else:
             return response.content
