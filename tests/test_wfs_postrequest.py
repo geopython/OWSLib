@@ -169,3 +169,130 @@ class TestPostRequest_v_1_1_0():
         assert equal_elem
         assert propertyname == "status"
         assert literal == "rejected"
+
+
+class TestPostRequest_v_2_0_0():
+
+    def test_minimal_query(self):
+        request = postrequest.PostRequest_2_0_0()
+        request.create_query("ns:typename")
+
+        elem = request._root.find(util.nspath("Query", WFS20_NAMESPACE))
+
+        assert elem.get("typenames") == "ns:typename"
+
+    def test_basic_query(self):
+        request = postrequest.PostRequest_2_0_0()
+        request.create_query("ns:typename")
+        request.set_maxfeatures(2)
+        request.set_outputformat('JSON')
+        request.set_startindex(0)
+        request.set_propertyname(["genericName"])
+
+        root = request._root
+        elem = request._query.findtext("PropertyName")
+
+        assert root.get("count") == '2'
+        assert root.get("outputformat") == 'JSON'
+        assert root.get("startIndex") == '0'
+        assert elem == "genericName"
+
+    def test_featureid_query_single(self):
+        request = postrequest.PostRequest_2_0_0()
+        request.create_query("ns:typename")
+        request.set_featureid(["1"])
+
+        filter_elem = request._query.find(util.nspath("Filter", FES_NAMESPACE))
+        equal_elem = filter_elem.find(util.nspath("PropertyIsEqualTo", FES_NAMESPACE))
+        propertyname = equal_elem.findtext(util.nspath("ValueReference", FES_NAMESPACE))
+        literal = equal_elem.findtext(util.nspath("Literal", FES_NAMESPACE))
+
+        assert filter_elem
+        assert equal_elem
+        assert propertyname == "id"
+        assert literal == "1"
+
+    def test_featureid_query_multiple(self):
+        request = postrequest.PostRequest_2_0_0()
+        request.create_query("ns:typename")
+        request.set_featureid(["1", "2", "3"])
+
+        filter_elem = request._query.find(util.nspath("Filter", FES_NAMESPACE))
+        or_elem = filter_elem.find(util.nspath("Or", FES_NAMESPACE))
+        equal_elem = or_elem.findall(util.nspath("PropertyIsEqualTo", FES_NAMESPACE))
+        propertyname = []
+        literal = []
+        for elem in equal_elem:
+            propertyname.append(elem.findtext(util.nspath("ValueReference", FES_NAMESPACE)))
+            literal.append(elem.findtext(util.nspath("Literal", FES_NAMESPACE)))
+
+        assert filter_elem
+        assert or_elem
+        assert len(equal_elem) == 3
+        assert propertyname[0] == "id"
+        assert propertyname[1] == "id"
+        assert propertyname[2] == "id"
+        assert literal[0] == "1"
+        assert literal[1] == "2"
+        assert literal[2] == "3"
+
+    def test_sortby_query_single(self):
+        request = postrequest.PostRequest_2_0_0()
+        request.create_query("ns:typename")
+        request.set_sortby(["id"])
+
+        sort_elem = request._query.find(util.nspath("SortBy", FES_NAMESPACE))
+        sortprop_elem = sort_elem.find(util.nspath("SortProperty", FES_NAMESPACE))
+        propertyname = sortprop_elem.findtext(util.nspath("ValueReference", FES_NAMESPACE))
+
+        assert sort_elem
+        assert sortprop_elem
+        assert propertyname == "id"
+
+    def test_sortby_query_multiple(self):
+        request = postrequest.PostRequest_2_0_0()
+        request.create_query("ns:typename")
+        request.set_sortby(["id", "type"])
+
+        sort_elem = request._query.find(util.nspath("SortBy", FES_NAMESPACE))
+        sortprop_elem = sort_elem.findall(util.nspath("SortProperty", FES_NAMESPACE))
+        propertyname = []
+        for elem in sortprop_elem:
+            propertyname.append(elem.findtext(util.nspath("ValueReference", FES_NAMESPACE)))
+
+        assert sort_elem
+        assert len(sortprop_elem) == 2
+        assert propertyname[0] == "id"
+        assert propertyname[1] == "type"
+
+    def test_bbox_query(self):
+        request = postrequest.PostRequest_2_0_0()
+        request.create_query("ns:typename")
+        request.set_bbox([10, 10, 20, 20])
+
+        filter_elem = request._query.find(util.nspath("Filter", FES_NAMESPACE))
+        bbox_elem = filter_elem.find(util.nspath("BBOX", FES_NAMESPACE))
+        envel_elem = bbox_elem.find(util.nspath("Envelope", GML32_NAMESPACE))
+        lower_elem = envel_elem.findtext(util.nspath("lowerCorner", GML32_NAMESPACE))
+        higher_elem = envel_elem.findtext(util.nspath("upperCorner", GML32_NAMESPACE))
+
+        assert filter_elem
+        assert bbox_elem
+        assert envel_elem
+        assert lower_elem == "10 10"
+        assert higher_elem == "20 20"
+
+    def test_filter_query(self):
+        request = postrequest.PostRequest_2_0_0()
+        request.create_query("ns:typename")
+        request.set_filter(xml_filter_2_0_0)
+
+        filter_elem = request._query.find(util.nspath("Filter", FES_NAMESPACE))
+        equal_elem = filter_elem.find(util.nspath("PropertyIsEqualTo", FES_NAMESPACE))
+        propertyname = equal_elem.findtext(util.nspath("ValueReference", FES_NAMESPACE))
+        literal = equal_elem.findtext(util.nspath("Literal", FES_NAMESPACE))
+
+        assert filter_elem
+        assert equal_elem
+        assert propertyname == "status"
+        assert literal == "rejected"
