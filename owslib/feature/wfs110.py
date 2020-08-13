@@ -328,18 +328,19 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             log.debug("Making request: %s?%s" % (base_url, data))
 
         elif method.lower() == "post":
-            base_url, data = self.getPOSTGetFeatureRequest(typename=typename,
-                                                           filter=filter,
-                                                           bbox=bbox,
-                                                           featureid=featureid,
-                                                           featureversion=featureversion,
-                                                           propertyname=propertyname,
-                                                           maxfeatures=maxfeatures,
-                                                           outputFormat=outputFormat,
-                                                           method='Post',
-                                                           startindex=startindex,
-                                                           sortby=sortby,
-                                                           )
+            base_url, data = self.getPOSTGetFeatureRequest(
+                typename=typename,
+                filter=filter,
+                bbox=bbox,
+                featureid=featureid,
+                featureversion=featureversion,
+                propertyname=propertyname,
+                maxfeatures=maxfeatures,
+                outputFormat=outputFormat,
+                method='Post',
+                startindex=startindex,
+                sortby=sortby,
+            )
 
         u = openURL(base_url, data, method, timeout=self.timeout,
                     headers=self.headers, auth=self.auth)
