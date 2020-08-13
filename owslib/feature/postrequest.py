@@ -36,8 +36,8 @@ class PostRequest():
 class PostRequest_1_1_0(PostRequest):
     """XML Post request payload builder for WFS version 1.1.0"""
 
-    def __init__(self, version='1.1.0', namespace=WFS_NAMESPACE):
-        super().__init__(version, namespace)
+    def __init__(self):
+        super().__init__(version='1.1.0', namespace=WFS_NAMESPACE)
 
     def create_query(self, typename):
         """Creates the query tag with the corresponding typenames.
@@ -87,8 +87,8 @@ class PostRequest_1_1_0(PostRequest):
 class PostRequest_2_0_0(PostRequest):
     """XML Post request payload builder for WFS version 2.0.0"""
 
-    def __init__(self, version='2.0.0', namespace=WFS20_NAMESPACE):
-        super().__init__(version, namespace)
+    def __init__(self):
+        super().__init__(version='2.0.0', namespace=WFS20_NAMESPACE)
 
     def create_query(self, typename):
         """Creates the query tag with the corresponding typenames.
@@ -98,9 +98,8 @@ class PostRequest_2_0_0(PostRequest):
     def set_bbox(self, bbox):
         filter_tree = etree.SubElement(self._query, util.nspath('Filter', FES_NAMESPACE))
         bbox_tree = etree.SubElement(filter_tree, util.nspath('BBOX', FES_NAMESPACE))
-        etree.SubElement(bbox_tree, util.nspath('ValueReference', FES_NAMESPACE))
         coords = etree.SubElement(bbox_tree, util.nspath('Envelope', GML32_NAMESPACE))
-        etree.SubElement(coords, util.nspath('lowerCorner', FES_NAMESPACE)
+        etree.SubElement(coords, util.nspath('lowerCorner', GML32_NAMESPACE)
                          ).text = '{} {}'.format(bbox[0], bbox[1])
         etree.SubElement(coords, util.nspath('upperCorner', GML32_NAMESPACE)
                          ).text = '{} {}'.format(bbox[2], bbox[3])
