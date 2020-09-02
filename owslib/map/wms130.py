@@ -581,9 +581,13 @@ class ContentMetadata(AbstractContentMetadata):
         for s in elem.findall(nspath('Style', WMS_NAMESPACE)):
             name = s.find(nspath('Name', WMS_NAMESPACE))
             title = s.find(nspath('Title', WMS_NAMESPACE))
+            if name is None and title is None:
+                raise ValueError('%s missing name and title' % (s,))
             if name is None or title is None:
-                raise ValueError('%s missing name or title' % (s,))
-            style = {'title': title.text}
+                warnings.warn('%s missing name or title' % (s,))
+            title_ = title.text if not title is None else name.text
+            name_ = name.text if not name is None else title.text
+            style = {'title': title_}
             # legend url
             legend = s.find(nspath('LegendURL/OnlineResource', WMS_NAMESPACE))
             if legend is not None:
@@ -599,7 +603,7 @@ class ContentMetadata(AbstractContentMetadata):
                 lgd_format = lgd.find(nspath('Format', WMS_NAMESPACE))
                 if lgd_format is not None:
                     style['legend_format'] = lgd_format.text.strip()
-            self.styles[name.text] = style
+            self.styles[name_] = style
 
         # keywords
         self.keywords = [f.text for f in elem.findall(nspath('KeywordList/Keyword', WMS_NAMESPACE))]
