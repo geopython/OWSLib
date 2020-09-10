@@ -303,13 +303,13 @@ class WebFeatureService_(object):
         4) filter only via Post method
         """
 
-        if featureversion or storedQueryID or storedQueryParams:
-            if featureversion:
-                log.warning("Use of the featureversion argument is not yet implemented with the Post method")
-            if storedQueryID:
-                log.warning("Use of the storedQueryID argument is not yet implemented with the Post method")
-            if storedQueryParams:
-                log.warning("Use of the storedQueryParams argument is not yet implemented with the Post method")
+        if featureversion:
+            log.warning("Use of the featureversion argument is not yet implemented with the Post method")
+        if storedQueryID:
+            log.warning("Use of the storedQueryID argument is not yet implemented with the Post method")
+        if storedQueryParams:
+            log.warning("Use of the storedQueryParams argument is not yet implemented with the Post method")
+            
         try:
             base_url = next(
                 (
