@@ -69,6 +69,18 @@ Standards Support
 | `WaterML`_            | 1.0, 1.1, 2.0               |
 +-----------------------+-----------------------------+
 
+OGC API Support
+---------------
+
++---------------------------------------------------+
+| Standard                             | Version(s) |
++======================================+============+
+| `OGC API - Features - Part 1: Core`_ | 1.0        |
++--------------------------------------+------------+
+| `OGC API - Records - Part 1: Core`_  | draft      |
++--------------------------------------+------------+
+
+
 Installation
 ============
 
@@ -310,14 +322,17 @@ OGC API - Features 1.0
 .. code-block:: python
 
   >>> from owslib.ogcapi.features import Features
-  >>> w = Features('https://demo.pygeoapi.io/cite')
+  >>> w = Features('https://demo.pygeoapi.io/master')
   >>> w.url
-  'https://demo.pygeoapi.io/cite'
+  'https://demo.pygeoapi.io/master'
   >>> conformance = w.conformance()
   {u'conformsTo': [u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson']}
-  >>> api = w.api()  # OpenAPI definition
+  >>> api = w.api()  # OpenAPI document/
   >>> collections = w.collections()
-  >>> len(collections)
+  >>> len(collections['collections'])
+  13
+  >>> feature_collections = w.feature_collections()
+  >>> len(feature_collections)
   13
   >>> lakes = w.collection('lakes')
   >>> lakes['id']
@@ -333,6 +348,41 @@ OGC API - Features 1.0
   >>> lakes_query['features'][0]['properties']
   {u'scalerank': 0, u'name_alt': None, u'admin': None, u'featureclass': u'Lake', u'id': 0, u'name': u'Lake Baikal'}
 
+OGC API - Coverages 1.0
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+  >>> from owslib.ogcapi.coverages import Coverages
+  >>> w = Coverages('https://dev.api.weather.gc.ca/coverages-demo')
+  >>> w.url
+  'https://dev.api.weather.gc.ca/coverages-demo/')
+  >>> api = w.api()  # OpenAPI document
+  >>> collections = w.collections()
+  >>> len(collections['collections'])
+  3
+  >>> coverages = w.coverages()
+  >>> len(coverages)
+  1
+  >>> gdps = w.collection('gdps-temperature')
+  >>> gdps['id']
+  'gdps-temperature'
+  >>> gdps['title']
+  Global Deterministic Prediction System sample'
+  >>> gdps['description']
+  'Global Deterministic Prediction System sample'
+  >>> domainset = w.coverage_domainset('gdps-temperature')
+  >>> domainset['generalGrid']['axisLabels']
+  ['x', 'y']
+  >>> domainset['generalGrid']['gridLimits']['axisLabels']
+  ['i', 'j']
+  >>> rangetype = w.coverage_rangetype('gdps-temperature')
+  >>> len(rangetype['field'])
+  1
+  >>> rangetype['field'][0]['definition']
+  'float64'
+  >> gdps_coverage_query = w.coverage('gdps-temperature', range_subset=[1])
+
 OGC API - Records 1.0
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -342,9 +392,12 @@ OGC API - Records 1.0
   'https://example.org/records-api'
   >>> conformance = w.conformance()
   {'conformsTo': [u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/core', u'http://www.opengis.net/spec/ogcapi-records/1.0/req/oas30', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/json', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/html']}
-  >>> api = w.api()  # OpenAPI definition
+  >>> api = w.api()  # OpenAPI document
   >>> collections = w.collections()
   >>> len(collections)
+  1
+  >>> records = w.records()
+  >>> len(records)
   1
   >>> my_catalogue = w.collection('my-catalogue')
   >>> my_catalogue['id']
@@ -796,7 +849,8 @@ Credits
 .. _`CIA.vc`: http://cia.vc/stats/project/OWSLib
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
 .. _`Swiss GM03`: https://www.geocat.admin.ch/en/dokumentation/gm03.html
-.. _`OGC API`: http://www.ogcapi.org
-
+.. _`OGC API`: https://ogcapi.ogc.org
+.. _`OGC API - Features - Part 1: Core`: https://docs.opengeospatial.org/is/17-069r3/17-069r3.html
+.. _`OGC API - Records - Part 1: Core`: https://github.com/opengeospatial/ogcapi-records
 
 .. include:: ../../CHANGES.rst

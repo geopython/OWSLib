@@ -93,6 +93,11 @@ def test_wms_capabilities():
     assert wms.exceptions == ['application/vnd.ogc.se_xml']
 
 
+def test_wms_capabilities_style_without_title():
+    xml = open(resource_file('wms_geoserver-cap_no_title.xml'), 'rb').read()
+    wms = WebMapService('url', version='1.1.1', xml=xml)
+
+
 SERVICE_URL = 'http://giswebservices.massgis.state.ma.us/geoserver/wms'
 
 
