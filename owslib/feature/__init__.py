@@ -80,6 +80,40 @@ class WebFeatureService_(object):
                 srs.getcode(),
             )
 
+    def getBBOXPost(self, bbox, typename):
+        """Format bounding box for Post requests
+
+        @param bbox: (minx,miny,maxx,maxy[,srs])
+        @type bbox: List
+        @param typename:  feature name
+        @type typename: String
+        @returns: String properly formated according to version and
+            coordinate reference system
+        """
+        srs = None
+
+        # srs of the bbox is specified in the bbox as fifth paramter
+        if len(bbox) == 5:
+            srs = Crs(bbox[4])
+        # take default srs
+        else:
+            srs = self.contents[typename[0]].crsOptions[0]
+
+        formatted_bbox = [bbox[0], bbox[1], bbox[2], bbox[3]]
+        if self.version in ["1.1.0", "2.0.0"]:
+            if srs.axisorder == "yx" and srs.encoding == "urn":
+                formatted_bbox = [bbox[1], bbox[0], bbox[3], bbox[2]]
+
+            if self.version == "1.1.0":
+                formatted_bbox.append(srs.getcodeurn())
+                return formatted_bbox
+            if self.version == "2.0.0":
+                formatted_bbox.append(srs.getcodeuri1())
+                return formatted_bbox
+        else:
+            formatted_bbox.append(srs.getcode())
+            return formatted_bbox
+
     def create_post_request(self):
         """Creates an xml POST request according to WFS version."""
 
@@ -276,15 +310,16 @@ class WebFeatureService_(object):
                 log.warning("Use of the storedQueryID argument is not yet implemented with the Post method")
             if storedQueryParams:
                 log.warning("Use of the storedQueryParams argument is not yet implemented with the Post method")
-
-        base_url = next(
-            (
-                m.get("url")
-                for m in self.getOperationByName("GetFeature").methods
-                if m.get("type").lower() == method.lower()
+        try:
+            base_url = next(
+                (
+                    m.get("url")
+                    for m in self.getOperationByName("GetFeature").methods
+                    if m.get("type").lower() == method.lower()
+                )
             )
-        )
-        base_url = base_url if not base_url.endswith("?") else base_url[:-1]
+        except StopIteration:
+            base_url = self.url
 
         if not typename and filter:
             return base_url, filter
@@ -301,7 +336,7 @@ class WebFeatureService_(object):
         if featureid:
             request.set_featureid(featureid)
         elif bbox:
-            request.set_bbox(bbox)
+            request.set_bbox(self.getBBOXPost(bbox, typename))
         elif filter:
             request.set_filter(filter)
 
