@@ -48,6 +48,8 @@ class PostRequest_1_1_0(PostRequest):
         filter_tree = etree.SubElement(self._query, util.nspath('Filter', OGC_NAMESPACE))
         bbox_tree = etree.SubElement(filter_tree, util.nspath('BBOX', OGC_NAMESPACE))
         coords = etree.SubElement(bbox_tree, util.nspath('Envelope', GML_NAMESPACE))
+        if len(bbox) > 4:
+            coords.set('srsName', bbox[4])
         etree.SubElement(coords, util.nspath('lowerCorner', GML_NAMESPACE)
                          ).text = '{} {}'.format(bbox[0], bbox[1])
         etree.SubElement(coords, util.nspath('upperCorner', GML_NAMESPACE)
@@ -55,16 +57,11 @@ class PostRequest_1_1_0(PostRequest):
 
     def set_featureid(self, featureid):
         feature_tree = etree.SubElement(self._query, util.nspath('Filter', OGC_NAMESPACE))
-        if len(featureid) > 1:
-            or_operator = etree.SubElement(feature_tree, util.nspath('Or', OGC_NAMESPACE))
+
         for ft in featureid:
-            prop_equal = etree.Element(util.nspath('PropertyIsEqualTo', OGC_NAMESPACE))
-            etree.SubElement(prop_equal, util.nspath('PropertyName', OGC_NAMESPACE)).text = "id"
-            etree.SubElement(prop_equal, util.nspath('Literal', OGC_NAMESPACE)).text = ft
-            if len(featureid) > 1:
-                or_operator.append(prop_equal)
-            else:
-                feature_tree.append(prop_equal)
+            prop_id = etree.Element(util.nspath('GmlObjectId', OGC_NAMESPACE))
+            prop_id.set(util.nspath('id', GML_NAMESPACE), ft)
+            feature_tree.append(prop_id)
 
     def set_filter(self, filter):
         f = etree.fromstring(filter)
@@ -99,6 +96,8 @@ class PostRequest_2_0_0(PostRequest):
         filter_tree = etree.SubElement(self._query, util.nspath('Filter', FES_NAMESPACE))
         bbox_tree = etree.SubElement(filter_tree, util.nspath('BBOX', FES_NAMESPACE))
         coords = etree.SubElement(bbox_tree, util.nspath('Envelope', GML32_NAMESPACE))
+        if len(bbox) > 4:
+            coords.set('srsName', bbox[4])
         etree.SubElement(coords, util.nspath('lowerCorner', GML32_NAMESPACE)
                          ).text = '{} {}'.format(bbox[0], bbox[1])
         etree.SubElement(coords, util.nspath('upperCorner', GML32_NAMESPACE)
@@ -106,16 +105,10 @@ class PostRequest_2_0_0(PostRequest):
 
     def set_featureid(self, featureid):
         feature_tree = etree.SubElement(self._query, util.nspath('Filter', FES_NAMESPACE))
-        if len(featureid) > 1:
-            or_operator = etree.SubElement(feature_tree, util.nspath('Or', FES_NAMESPACE))
         for ft in featureid:
-            prop_equal = etree.Element(util.nspath('PropertyIsEqualTo', FES_NAMESPACE))
-            etree.SubElement(prop_equal, util.nspath('ValueReference', FES_NAMESPACE)).text = "id"
-            etree.SubElement(prop_equal, util.nspath('Literal', FES_NAMESPACE)).text = ft
-            if len(featureid) > 1:
-                or_operator.append(prop_equal)
-            else:
-                feature_tree.append(prop_equal)
+            prop_id = etree.Element(util.nspath('ResourceId', FES_NAMESPACE))
+            prop_id.set('rid', ft)
+            feature_tree.append(prop_id)
 
     def set_filter(self, filter):
         f = etree.fromstring(filter)

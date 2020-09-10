@@ -44,18 +44,20 @@ xml_filter_2_0_0 = """<?xml version="1.0" ?>
     </wfs:GetFeature>
     """
 
+typename = "ns:typename"
+
 
 @pytest.fixture
 def requestv110():
     request = postrequest.PostRequest_1_1_0()
-    request.create_query("ns:typename")
+    request.create_query(typename)
     return request
 
 
 @pytest.fixture
 def requestv200():
     request = postrequest.PostRequest_2_0_0()
-    request.create_query("ns:typename")
+    request.create_query(typename)
     return request
 
 
@@ -65,7 +67,7 @@ class TestPostRequest_v_1_1_0():
 
         elem = requestv110._root.find(util.nspath("Query", WFS_NAMESPACE))
 
-        assert elem.get("typeName") == "ns:typename"
+        assert elem.get("typeName") == typename
 
     def test_basic_query(self, requestv110):
         requestv110.set_maxfeatures(2)
@@ -85,36 +87,25 @@ class TestPostRequest_v_1_1_0():
         requestv110.set_featureid(["1"])
 
         filter_elem = requestv110._query.find(util.nspath("Filter", OGC_NAMESPACE))
-        equal_elem = filter_elem.find(util.nspath("PropertyIsEqualTo", OGC_NAMESPACE))
-        propertyname = equal_elem.findtext(util.nspath("PropertyName", OGC_NAMESPACE))
-        literal = equal_elem.findtext(util.nspath("Literal", OGC_NAMESPACE))
+        resource_elem = filter_elem.find(util.nspath("GmlObjectId", OGC_NAMESPACE))
 
         assert filter_elem
-        assert equal_elem
-        assert propertyname == "id"
-        assert literal == "1"
+        assert resource_elem.get(util.nspath('id', GML_NAMESPACE)) == '1'
 
     def test_featureid_query_multiple(self, requestv110):
         requestv110.set_featureid(["1", "2", "3"])
 
         filter_elem = requestv110._query.find(util.nspath("Filter", OGC_NAMESPACE))
-        or_elem = filter_elem.find(util.nspath("Or", OGC_NAMESPACE))
-        equal_elem = or_elem.findall(util.nspath("PropertyIsEqualTo", OGC_NAMESPACE))
-        propertyname = []
-        literal = []
-        for elem in equal_elem:
-            propertyname.append(elem.findtext(util.nspath("PropertyName", OGC_NAMESPACE)))
-            literal.append(elem.findtext(util.nspath("Literal", OGC_NAMESPACE)))
+        resource_elem = filter_elem.findall(util.nspath("GmlObjectId", OGC_NAMESPACE))
+        ids = []
+        for elem in resource_elem:
+            ids.append(elem.get(util.nspath('id', GML_NAMESPACE)))
 
         assert filter_elem
-        assert or_elem
-        assert len(equal_elem) == 3
-        assert propertyname[0] == "id"
-        assert propertyname[1] == "id"
-        assert propertyname[2] == "id"
-        assert literal[0] == "1"
-        assert literal[1] == "2"
-        assert literal[2] == "3"
+        assert len(ids) == 3
+        assert ids[0] == "1"
+        assert ids[1] == "2"
+        assert ids[2] == "3"
 
     def test_sortby_query_single(self, requestv110):
         requestv110.set_sortby(["id"])
@@ -175,7 +166,7 @@ class TestPostRequest_v_2_0_0():
     def test_minimal_query(self, requestv200):
         elem = requestv200._root.find(util.nspath("Query", WFS20_NAMESPACE))
 
-        assert elem.get("typenames") == "ns:typename"
+        assert elem.get("typenames") == typename
 
     def test_basic_query(self, requestv200):
         requestv200.set_maxfeatures(2)
@@ -195,36 +186,25 @@ class TestPostRequest_v_2_0_0():
         requestv200.set_featureid(["1"])
 
         filter_elem = requestv200._query.find(util.nspath("Filter", FES_NAMESPACE))
-        equal_elem = filter_elem.find(util.nspath("PropertyIsEqualTo", FES_NAMESPACE))
-        propertyname = equal_elem.findtext(util.nspath("ValueReference", FES_NAMESPACE))
-        literal = equal_elem.findtext(util.nspath("Literal", FES_NAMESPACE))
+        resource_elem = filter_elem.find(util.nspath("ResourceId", FES_NAMESPACE))
 
         assert filter_elem
-        assert equal_elem
-        assert propertyname == "id"
-        assert literal == "1"
+        assert resource_elem.get("rid") == "1"
 
     def test_featureid_query_multiple(self, requestv200):
         requestv200.set_featureid(["1", "2", "3"])
 
         filter_elem = requestv200._query.find(util.nspath("Filter", FES_NAMESPACE))
-        or_elem = filter_elem.find(util.nspath("Or", FES_NAMESPACE))
-        equal_elem = or_elem.findall(util.nspath("PropertyIsEqualTo", FES_NAMESPACE))
-        propertyname = []
-        literal = []
-        for elem in equal_elem:
-            propertyname.append(elem.findtext(util.nspath("ValueReference", FES_NAMESPACE)))
-            literal.append(elem.findtext(util.nspath("Literal", FES_NAMESPACE)))
+        resource_elems = filter_elem.findall(util.nspath("ResourceId", FES_NAMESPACE))
+        ids = []
+        for elem in resource_elems:
+            ids.append(elem.get("rid"))
 
         assert filter_elem
-        assert or_elem
-        assert len(equal_elem) == 3
-        assert propertyname[0] == "id"
-        assert propertyname[1] == "id"
-        assert propertyname[2] == "id"
-        assert literal[0] == "1"
-        assert literal[1] == "2"
-        assert literal[2] == "3"
+        assert len(ids) == 3
+        assert ids[0] == "1"
+        assert ids[1] == "2"
+        assert ids[2] == "3"
 
     def test_sortby_query_single(self, requestv200):
         requestv200.set_sortby(["id"])
