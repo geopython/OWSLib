@@ -334,6 +334,9 @@ class WebFeatureService_(object):
         request.create_query(typenames)
 
         if featureid:
+            featureid = (
+                [featureid] if isinstance(featureid, str) else featureid
+            )
             request.set_featureid(featureid)
         elif bbox:
             request.set_bbox(self.getBBOXPost(bbox, typename))
@@ -347,8 +350,14 @@ class WebFeatureService_(object):
         if startindex:
             request.set_startindex(startindex)
         if propertyname:
+            propertyname = (
+                [propertyname] if isinstance(propertyname, str) else propertyname
+            )
             request.set_propertyname(propertyname)
         if sortby:
+            sortby = (
+                [sortby] if isinstance(sortby, str) else sortby
+            )
             request.set_sortby(sortby)
 
         data = request.to_string()
