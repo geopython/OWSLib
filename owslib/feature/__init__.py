@@ -5,14 +5,10 @@
 #
 # =============================================================================
 
-import logging
 from urllib.parse import urlencode
 from owslib.crs import Crs
 from owslib.util import log, Authentication
-from owslib.etree import etree
 from owslib.feature.schema import get_schema
-from owslib.namespaces import Namespaces
-from owslib import util
 from owslib.feature.postrequest import PostRequest_1_1_0, PostRequest_2_0_0
 
 
@@ -309,7 +305,7 @@ class WebFeatureService_(object):
             log.warning("Use of the storedQueryID argument is not yet implemented with the Post method")
         if storedQueryParams:
             log.warning("Use of the storedQueryParams argument is not yet implemented with the Post method")
-            
+
         try:
             base_url = next(
                 (
