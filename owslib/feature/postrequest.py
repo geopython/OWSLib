@@ -21,6 +21,9 @@ class PostRequest():
         self._root.set("version", version)
         self._query = etree.SubElement(self._root, util.nspath('Query', namespace))
 
+    def set_featureversion(self, version):
+        self._query.set("featureVersion", version)
+
     def set_startindex(self, startindex):
         """Set the starting index value for the request"""
         self._root.set("startIndex", str(startindex))
@@ -80,8 +83,7 @@ class PostRequest_1_1_0(PostRequest):
     def set_filter(self, filter):
         """Set filter from existing filter.
 
-        Will integrate the filter tag of a provided xml filter to the current one
-        being built.
+        Will integrate the filter tag of a provided xml filter to the query being built.
 
         Cannot be used with set_bbox() or set_featureid().
         """

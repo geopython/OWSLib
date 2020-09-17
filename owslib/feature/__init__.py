@@ -299,8 +299,6 @@ class WebFeatureService_(object):
         4) filter only via Post method
         """
 
-        if featureversion:
-            log.warning("Use of the featureversion argument is not yet implemented with the Post method")
         if storedQueryID:
             log.warning("Use of the storedQueryID argument is not yet implemented with the Post method")
         if storedQueryParams:
@@ -339,6 +337,8 @@ class WebFeatureService_(object):
         elif filter:
             request.set_filter(filter)
 
+        if featureversion:
+            request.set_featureversion(str(featureversion))
         if maxfeatures:
             request.set_maxfeatures(maxfeatures)
         if outputFormat:
