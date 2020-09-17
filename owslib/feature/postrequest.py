@@ -130,10 +130,10 @@ class PostRequest_2_0_0(PostRequest):
 
     def create_storedquery(self, stored_id, parameters):
         """Create the storedQuery tag and configure it's sub elements and attributes."""
-        storedquery = etree.SubElement(self._root, util.nspath('StoredQuery ', self._wfsnamespace))
+        storedquery = etree.SubElement(self._root, util.nspath('StoredQuery', self._wfsnamespace))
         storedquery.set("id", str(stored_id))
         for param in parameters:
-            p = etree.SubElement(storedquery, util.nspath('Parameter ', self._wfsnamespace))
+            p = etree.SubElement(storedquery, util.nspath('Parameter', self._wfsnamespace))
             p.set("name", param)
             p.text = parameters[param]
 
