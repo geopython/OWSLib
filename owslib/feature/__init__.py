@@ -299,11 +299,6 @@ class WebFeatureService_(object):
         4) filter only via Post method
         """
 
-        if storedQueryID:
-            log.warning("Use of the storedQueryID argument is not yet implemented with the Post method")
-        if storedQueryParams:
-            log.warning("Use of the storedQueryParams argument is not yet implemented with the Post method")
-
         try:
             base_url = next(
                 (
@@ -318,13 +313,20 @@ class WebFeatureService_(object):
         if not typename and filter:
             return base_url, filter
 
+        request = self.create_post_request()
+
+        if storedQueryID:
+            storedQueryParams = storedQueryParams or {}
+            request.create_storedquery(storedQueryID, storedQueryParams)
+            data = request.to_string()
+            return base_url, data
+
         if typename:
             typename = (
                 [typename] if isinstance(typename, str) else typename
             )  # noqa: E721
             typenames = ",".join(typename)
 
-        request = self.create_post_request()
         request.create_query(typenames)
 
         if featureid:
@@ -343,8 +345,6 @@ class WebFeatureService_(object):
             request.set_maxfeatures(maxfeatures)
         if outputFormat:
             request.set_outputformat(outputFormat)
-        if startindex:
-            request.set_startindex(startindex)
         if propertyname:
             propertyname = (
                 [propertyname] if isinstance(propertyname, str) else propertyname
@@ -355,6 +355,8 @@ class WebFeatureService_(object):
                 [sortby] if isinstance(sortby, str) else sortby
             )
             request.set_sortby(sortby)
+        if startindex:
+            request.set_startindex(startindex)
 
         data = request.to_string()
         return base_url, data

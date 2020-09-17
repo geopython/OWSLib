@@ -19,14 +19,14 @@ class PostRequest():
         self._root = etree.Element(util.nspath('GetFeature', namespace))
         self._root.set("service", "WFS")
         self._root.set("version", version)
-        self._query = etree.SubElement(self._root, util.nspath('Query', namespace))
+        self._wfsnamespace = namespace
+        self._query = None
+
+    def _create_query(self, typename):
+        self._query = etree.SubElement(self._root, util.nspath('Query', self._wfsnamespace))
 
     def set_featureversion(self, version):
         self._query.set("featureVersion", version)
-
-    def set_startindex(self, startindex):
-        """Set the starting index value for the request"""
-        self._root.set("startIndex", str(startindex))
 
     def set_propertyname(self, propertyname):
         """Set which feature properties will be returned.
@@ -34,6 +34,10 @@ class PostRequest():
         If not set, will return all properties."""
         for pn in propertyname:
             etree.SubElement(self._query, "PropertyName").text = pn
+
+    def set_startindex(self, startindex):
+        """Set the starting index value for the request"""
+        self._root.set("startIndex", str(startindex))
 
     def to_string(self):
         """Returns the xml request in string format.
@@ -51,6 +55,7 @@ class PostRequest_1_1_0(PostRequest):
     def create_query(self, typename):
         """Creates the query tag with the corresponding typenames.
         Required element for each request."""
+        super()._create_query(typename)
         self._query.set("typeName", typename)
 
     def set_bbox(self, bbox):
@@ -63,10 +68,11 @@ class PostRequest_1_1_0(PostRequest):
         coords = etree.SubElement(bbox_tree, util.nspath('Envelope', GML_NAMESPACE))
         if len(bbox) > 4:
             coords.set('srsName', bbox[4])
-        etree.SubElement(coords, util.nspath('lowerCorner', GML_NAMESPACE)
-                         ).text = '{} {}'.format(bbox[0], bbox[1])
-        etree.SubElement(coords, util.nspath('upperCorner', GML_NAMESPACE)
-                         ).text = '{} {}'.format(bbox[2], bbox[3])
+        lower = etree.SubElement(coords, util.nspath('lowerCorner', GML_NAMESPACE))
+        lower.text = '{} {}'.format(bbox[0], bbox[1])
+
+        upper = etree.SubElement(coords, util.nspath('upperCorner', GML_NAMESPACE))
+        upper.text = '{} {}'.format(bbox[2], bbox[3])
 
     def set_featureid(self, featureid):
         """Set filter by feature id.
@@ -105,8 +111,9 @@ class PostRequest_1_1_0(PostRequest):
         """Set the properties by which the response will be sorted."""
         sort_tree = etree.SubElement(self._query, util.nspath("SortBy", OGC_NAMESPACE))
         for s in sortby:
-            prop = etree.SubElement(sort_tree, util.nspath("SortProperty", OGC_NAMESPACE))
-            etree.SubElement(prop, util.nspath('PropertyName', OGC_NAMESPACE)).text = s
+            prop_elem = etree.SubElement(sort_tree, util.nspath("SortProperty", OGC_NAMESPACE))
+            prop_name = etree.SubElement(prop_elem, util.nspath('PropertyName', OGC_NAMESPACE))
+            prop_name.text = s
 
 
 class PostRequest_2_0_0(PostRequest):
@@ -117,8 +124,18 @@ class PostRequest_2_0_0(PostRequest):
 
     def create_query(self, typename):
         """Creates the query tag with the corresponding typenames.
-        Required element for each request."""
+        Required element for each request ecept for stored queries."""
+        super()._create_query(typename)
         self._query.set("typenames", typename)
+
+    def create_storedquery(self, stored_id, parameters):
+        """Create the storedQuery tag and configure it's sub elements and attributes."""
+        storedquery = etree.SubElement(self._root, util.nspath('StoredQuery ', self._wfsnamespace))
+        storedquery.set("id", str(stored_id))
+        for param in parameters:
+            p = etree.SubElement(storedquery, util.nspath('Parameter ', self._wfsnamespace))
+            p.set("name", param)
+            p.text = parameters[param]
 
     def set_bbox(self, bbox):
         """Set a bbox filter.
@@ -130,10 +147,12 @@ class PostRequest_2_0_0(PostRequest):
         coords = etree.SubElement(bbox_tree, util.nspath('Envelope', GML32_NAMESPACE))
         if len(bbox) > 4:
             coords.set('srsName', bbox[4])
-        etree.SubElement(coords, util.nspath('lowerCorner', GML32_NAMESPACE)
-                         ).text = '{} {}'.format(bbox[0], bbox[1])
-        etree.SubElement(coords, util.nspath('upperCorner', GML32_NAMESPACE)
-                         ).text = '{} {}'.format(bbox[2], bbox[3])
+
+        lower = etree.SubElement(coords, util.nspath('lowerCorner', GML32_NAMESPACE))
+        lower.text = '{} {}'.format(bbox[0], bbox[1])
+
+        upper = etree.SubElement(coords, util.nspath('upperCorner', GML32_NAMESPACE))
+        upper.text = '{} {}'.format(bbox[2], bbox[3])
 
     def set_featureid(self, featureid):
         """Set filter by feature id.
@@ -173,5 +192,6 @@ class PostRequest_2_0_0(PostRequest):
         """Set the properties by which the response will be sorted."""
         sort_tree = etree.SubElement(self._query, util.nspath("SortBy", FES_NAMESPACE))
         for s in sortby:
-            prop = etree.SubElement(sort_tree, util.nspath("SortProperty", FES_NAMESPACE))
-            etree.SubElement(prop, util.nspath('ValueReference', FES_NAMESPACE)).text = s
+            prop_elem = etree.SubElement(sort_tree, util.nspath("SortProperty", FES_NAMESPACE))
+            value = etree.SubElement(prop_elem, util.nspath('ValueReference', FES_NAMESPACE))
+            value.text = s
