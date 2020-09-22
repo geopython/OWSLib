@@ -316,16 +316,19 @@ class WebFeatureService_(object):
         request = self.create_post_request()
 
         if storedQueryID:
+            if self.version in ["1.0.0", "1.1.0"]:
+                log.warning("Stored queries are only supported in version 2.0.0 and above.")
+                return None
+
             storedQueryParams = storedQueryParams or {}
             request.create_storedquery(storedQueryID, storedQueryParams)
             data = request.to_string()
             return base_url, data
 
-        if typename:
-            typename = (
-                [typename] if isinstance(typename, str) else typename
-            )  # noqa: E721
-            typenames = ",".join(typename)
+        typename = (
+            [typename] if isinstance(typename, str) else typename
+        )  # noqa: E721
+        typenames = ",".join(typename)
 
         request.create_query(typenames)
 
