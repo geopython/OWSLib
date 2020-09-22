@@ -182,6 +182,20 @@ class TestPostRequest_v_2_0_0():
         assert root.get("startIndex") == '0'
         assert elem == "genericName"
 
+    def test_create_storedquery(self):
+        stored_params = {"city": "Washington", "elevation_m": "125"}
+        request = postrequest.PostRequest_2_0_0()
+        request.create_storedquery("stored_id_1", stored_params)
+
+        stored_query_elem = request._root.find(util.nspath("StoredQuery", WFS20_NAMESPACE))
+        assert stored_query_elem.get("id") == "stored_id_1"
+
+        params = stored_query_elem.findall(util.nspath("Parameter", WFS20_NAMESPACE))
+        assert params[0].get("name") == "city"
+        assert params[0].text == "Washington"
+        assert params[1].get("name") == "elevation_m"
+        assert params[1].text == "125"
+
     def test_featureid_query_single(self, requestv200):
         requestv200.set_featureid(["1"])
 
