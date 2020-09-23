@@ -248,16 +248,16 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         featureid : list
             List of unique feature ids (string)
         featureversion : string
-            Default is most recent feature version. (Get method only)
+            Default is most recent feature version.
         propertyname : list
             List of feature property names. '*' matches all.
         maxfeatures : int
             Maximum number of features to be returned.
         storedQueryID : string
-            A name identifying a prepared set available in WFS-service (Get method only)
+            A name identifying a prepared set available in WFS-service
         storedQueryParams : dict
             Variable amount of extra information sent to server related to
-            storedQueryID to further define the requested data (Get method only)
+            storedQueryID to further define the requested data
             {'parameter_name': parameter_value}
         method : string
             Qualified name of the HTTP DCP method to use.
@@ -275,7 +275,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         1) typename and bbox (simple spatial query)
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
-        4) storedQueryID and optional storedQueryParams (Get method only)
+        4) storedQueryID and optional storedQueryParams
         5) filter only via Post method
 
         Raises:

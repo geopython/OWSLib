@@ -286,17 +286,26 @@ class WebFeatureService_(object):
             Requested response format of the request.
         startindex: int (optional)
             Start position to return feature set (paging in combination with maxfeatures)
+        storedQueryID : string
+            A name identifying a prepared set available in WFS-service.
+            WFS version 2.0.0 and above only.
+        storedQueryParams : dict
+            Variable amount of extra information sent to server related to
+            storedQueryID to further define the requested data.
+            WFS version 2.0.0 and above only.
+            {'parameter_name': parameter_value}
         sortby: list (optional)
             List of property names whose values should be used to order
             (upon presentation) the set of feature instances that
             satify the query.
 
-        There are 4 different modes of use
+        There are 5 different modes of use
 
         1) typename and bbox (simple spatial query)
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
-        4) filter only via Post method
+        4) storedQueryID and optional storedQueryParams
+        5) filter only via Post method
         """
 
         try:
