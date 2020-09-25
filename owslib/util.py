@@ -593,7 +593,7 @@ def getTypedValue(data_type, value):
 
     # If the default value is empty
     if value is None:
-        return value
+        return
 
     if data_type == 'boolean':
         return True if value.lower() == 'true' else False
