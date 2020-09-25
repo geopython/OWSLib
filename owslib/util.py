@@ -591,6 +591,10 @@ def dump(obj, prefix=''):
 def getTypedValue(data_type, value):
     '''Utility function to cast a string value to the appropriate XSD type. '''
 
+    # If the default value is empty
+    if value is None:
+        return value
+
     if data_type == 'boolean':
         return True if value.lower() == 'true' else False
     elif data_type == 'integer':
