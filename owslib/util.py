@@ -24,6 +24,7 @@ import re
 from copy import deepcopy
 import warnings
 import requests
+from requests.auth import AuthBase
 import codecs
 
 """
@@ -162,8 +163,9 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     rkwargs = {}
 
     rkwargs['timeout'] = timeout
-
-    if auth:
+    if isinstance(auth, AuthBase):
+        rkwargs['auth'] = auth
+    elif auth:
         if username:
             auth.username = username
         if password:
