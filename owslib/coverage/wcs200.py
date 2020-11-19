@@ -130,6 +130,7 @@ class WebCoverageService_2_0_0(WCSBase):
         resz=None,
         parameter=None,
         method="Get",
+        timeout=30,
         **kwargs
     ):
         """Request and return a coverage from the WCS as a file-like object
@@ -213,7 +214,7 @@ class WebCoverageService_2_0_0(WCSBase):
             data += param_list_to_url_string(sizes, 'size')
         log.debug("WCS 2.0.0 DEBUG: Second part of URL: %s" % data)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout)
         return u
 
     def getOperationByName(self, name):
