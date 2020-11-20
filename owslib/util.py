@@ -177,7 +177,11 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
         auth = Authentication(username, password, cert, verify)
     if auth.username and auth.password:
         rkwargs['auth'] = (auth.username, auth.password)
-    rkwargs['cert'] = auth.cert
+    if hasattr(auth, 'cert'):
+        rkwargs['cert'] = auth.cert
+    elif cert:
+        rkwargs['cert'] = cert
+
     rkwargs['verify'] = verify
 
     # FIXUP for WFS in particular, remove xml style namespace
