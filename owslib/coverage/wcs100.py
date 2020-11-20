@@ -95,7 +95,7 @@ class WebCoverageService_1_0_0(WCSBase):
         return items
 
     def getCoverage(self, identifier=None, bbox=None, time=None, format=None, crs=None, width=None, height=None,
-                    resx=None, resy=None, resz=None, parameter=None, method='Get', **kwargs):
+                    resx=None, resy=None, resz=None, parameter=None, method='Get', timeout=30, **kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -154,7 +154,7 @@ class WebCoverageService_1_0_0(WCSBase):
         data = urlencode(request)
         log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s' % data)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout)
         return u
 
     def getOperationByName(self, name):

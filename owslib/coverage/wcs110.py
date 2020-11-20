@@ -141,7 +141,7 @@ class WebCoverageService_1_1_0(WCSBase):
     # TO DO: Handle rest of the  WCS 1.1.0 keyword parameters e.g. GridCRS etc.
     def getCoverage(self, identifier=None, bbox=None, time=None, format=None, store=False, rangesubset=None,
                     gridbaseCRS=None, gridtype=None, gridCS=None, gridorigin=None, gridoffsets=None,
-                    method='Get', **kwargs):
+                    method='Get', timeout=30, **kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -205,7 +205,7 @@ class WebCoverageService_1_1_0(WCSBase):
         # encode and request
         data = urlencode(request)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout)
         return u
 
     def getOperationByName(self, name):
