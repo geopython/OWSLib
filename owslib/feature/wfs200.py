@@ -250,7 +250,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         featureversion : string
             Default is most recent feature version.
         propertyname : list
-            List of feature property names. For Get request, '*' matches all. For Post request, leave blank (None)
+            List of feature property names. For Get request, '*' matches all.
+            For Post request, leave blank (None) to get all properties.
         maxfeatures : int
             Maximum number of features to be returned.
         storedQueryID : string
