@@ -220,7 +220,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         bbox=None,
         featureid=None,
         featureversion=None,
-        propertyname="*",
+        propertyname=None,
         maxfeatures=None,
         srsname=None,
         outputFormat=None,
@@ -243,7 +243,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         featureversion : string
             Default is most recent feature version.
         propertyname : list
-            List of feature property names. '*' matches all.
+            List of feature property names. For Get request, '*' matches all. For Post request, leave blank (None)
         maxfeatures : int
             Maximum number of features to be returned.
         method : string
@@ -304,6 +304,9 @@ class WebFeatureService_1_1_0(WebFeatureService_):
 
             assert len(typename) > 0
             request["typename"] = ",".join(typename)
+
+            if propertyname is None:
+                propertyname = "*"
 
             if propertyname is not None:
                 if not isinstance(propertyname, list):

@@ -277,7 +277,7 @@ class WebFeatureService_(object):
         featureversion : string
             Default is most recent feature version.
         propertyname : list
-            List of feature property names. '*' matches all.
+            List of feature property names. Leave blank (None) for all properties.
         maxfeatures : int
             Maximum number of features to be returned.
         method : string
