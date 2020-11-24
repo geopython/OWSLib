@@ -308,10 +308,9 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             if propertyname is None:
                 propertyname = "*"
 
-            if propertyname is not None:
-                if not isinstance(propertyname, list):
-                    propertyname = [propertyname]
-                request["propertyname"] = ",".join(propertyname)
+            if not isinstance(propertyname, list):
+                propertyname = [propertyname]
+            request["propertyname"] = ",".join(propertyname)
 
             if sortby is not None:
                 if not isinstance(sortby, list):
