@@ -250,7 +250,8 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         featureversion : string
             Default is most recent feature version.
         propertyname : list
-            List of feature property names. '*' matches all.
+            List of feature property names. For Get request, '*' matches all.
+            For Post request, leave blank (None) to get all properties.
         maxfeatures : int
             Maximum number of features to be returned.
         storedQueryID : string
@@ -270,12 +271,13 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             (upon presentation) the set of feature instances that
             satify the query.
 
-        There are 4 different modes of use
+        There are 5 different modes of use
 
         1) typename and bbox (simple spatial query)
         2) typename and filter (==query) (more expressive)
         3) featureid (direct access to known features)
         4) storedQueryID and optional storedQueryParams
+        5) filter only via Post method
 
         Raises:
             ServiceException: If there is an error during the request
@@ -305,9 +307,21 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             )
             log.debug("GetFeature WFS GET url %s" % url)
         else:
-            (url, data) = self.getPOSTGetFeatureRequest()
+            url, data = self.getPOSTGetFeatureRequest(
+                typename,
+                filter,
+                bbox,
+                featureid,
+                featureversion,
+                propertyname,
+                maxfeatures,
+                storedQueryID,
+                storedQueryParams,
+                outputFormat,
+                "Post",
+                startindex,
+                sortby)
 
-        # If method is 'Post', data will be None here
         u = openURL(url, data, method, timeout=self.timeout, headers=self.headers, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
