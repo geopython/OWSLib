@@ -23,7 +23,7 @@ def test_ogcapi_features_pygeoapi():
     assert paths['/collections/lakes'] is not None
 
     conformance = w.conformance()
-    assert len(conformance['conformsTo']) == 4
+    assert len(conformance['conformsTo']) == 9
 
     collections = w.collections()
     assert len(collections) > 0
@@ -37,13 +37,13 @@ def test_ogcapi_features_pygeoapi():
     assert lakes['description'] == 'lakes of the world, public domain'
 
     lakes_queryables = w.collection_queryables('lakes')
-    assert len(lakes_queryables['queryables']) == 5
+    assert len(lakes_queryables['queryables']) == 6
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):
         lakes_query = w.collection_items('lakes', limit=0)
 
-    lakes_query = w.collection_items('lakes', limit=1)
-    assert lakes_query['numberMatched'] == 26
+    lakes_query = w.collection_items('lakes', limit=1, admin='admin-0')
+    assert lakes_query['numberMatched'] == 25
     assert lakes_query['numberReturned'] == 1
     assert len(lakes_query['features']) == 1

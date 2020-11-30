@@ -123,7 +123,7 @@ class API(object):
         path = 'collections'
         return self._request(path)
 
-    def collection(self, collection_id) -> dict:
+    def collection(self, collection_id: str) -> dict:
         """
         implements /collections/{collectionId}
 
@@ -136,7 +136,7 @@ class API(object):
         path = 'collections/{}'.format(collection_id)
         return self._request(path)
 
-    def collection_queryables(self, collection_id) -> dict:
+    def collection_queryables(self, collection_id: str) -> dict:
         """
         implements /collections/{collectionId}/queryables
 
@@ -149,7 +149,7 @@ class API(object):
         path = 'collections/{}/queryables'.format(collection_id)
         return self._request(path)
 
-    def _build_url(self, path=None) -> str:
+    def _build_url(self, path: str = None) -> str:
         """
         helper function to build an OGC API URL
 
@@ -171,7 +171,8 @@ class API(object):
 
         return url
 
-    def _request(self, path=None, as_dict=True, kwargs={}) -> dict:
+    def _request(self, path: str = None, as_dict: bool = True,
+                 kwargs: dict = {}) -> dict:
         """
         helper function for request/response patterns against OGC API endpoints
 

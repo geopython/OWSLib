@@ -62,7 +62,7 @@ class Features(API):
             kwargs['bbox'] = ','.join(kwargs['bbox'])
 
         path = 'collections/{}/items'.format(collection_id)
-        return self._request(path, kwargs)
+        return self._request(path=path, kwargs=kwargs)
 
     def collection_item(self, collection_id: str, identifier: str) -> dict:
         """
@@ -77,4 +77,4 @@ class Features(API):
         """
 
         path = 'collections/{}/items/{}'.format(collection_id, identifier)
-        return self._request(path)
+        return self._request(path=path)
