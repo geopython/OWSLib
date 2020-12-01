@@ -52,7 +52,7 @@ class Coverages(API):
         """
 
         path = 'collections/{}/coverage/domainset'.format(collection_id)
-        return self._request(path, kwargs)
+        return self._request(path=path, kwargs=kwargs)
 
     def coverage_rangetype(self, collection_id: str, **kwargs: dict) -> dict:
         """
@@ -65,7 +65,7 @@ class Coverages(API):
         """
 
         path = 'collections/{}/coverage/rangetype'.format(collection_id)
-        return self._request(path, kwargs)
+        return self._request(path=path, kwargs=kwargs)
 
     def coverage(self, collection_id: str, **kwargs: dict) -> dict:
         """
@@ -95,4 +95,4 @@ class Coverages(API):
 
         path = 'collections/{}/coverage'.format(collection_id)
 
-        return BytesIO(self._request(path, False, kwargs_))
+        return BytesIO(self._request(path=path, as_dict=False, kwargs=kwargs_))
