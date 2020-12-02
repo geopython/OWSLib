@@ -189,9 +189,13 @@ class API(object):
         url = self._build_url(path)
 
         LOGGER.debug('Request: {}'.format(url))
+        LOGGER.debug('Params: {}'.format(kwargs))
 
         response = http_get(url, headers=self.headers, auth=self.auth,
                             params=kwargs)
+
+        LOGGER.debug('URL: {}'.format(response.url))
+
         if response.status_code != requests.codes.ok:
             raise RuntimeError(response.text)
 
