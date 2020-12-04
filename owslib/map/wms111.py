@@ -583,7 +583,7 @@ class ContentMetadata(AbstractContentMetadata):
         self.dataUrls = []
         for m in elem.findall('DataURL'):
             dataUrl = {
-                'format' : testXMLValue(m.find('Format')),
+                'format': testXMLValue(m.find('Format')),
                 'url': m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
             }
             if dataUrl['format']:
