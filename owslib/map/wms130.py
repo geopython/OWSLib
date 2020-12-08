@@ -585,8 +585,8 @@ class ContentMetadata(AbstractContentMetadata):
                 raise ValueError('%s missing name and title' % (s,))
             if name is None or title is None:
                 warnings.warn('%s missing name or title' % (s,))
-            title_ = title.text if not title is None else name.text
-            name_ = name.text if not name is None else title.text
+            title_ = title.text if title is not None else name.text
+            name_ = name.text if name is not None else title.text
             style = {'title': title_}
             # legend url
             legend = s.find(nspath('LegendURL/OnlineResource', WMS_NAMESPACE))

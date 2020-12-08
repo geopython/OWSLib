@@ -104,7 +104,7 @@
     </Exception>
     <inspire_vs:ExtendedCapabilities>
       <inspire_common:MetadataUrl>
-        <inspire_common:URL>https://www.dov.vlaanderen.be/geonetwork/srv/nl/csw?request=GetRecordById&amp;ID=eab36660-76ec-11e0-994d-0002a5d5c51b</inspire_common:URL>
+        <inspire_common:URL>https://www.dov.vlaanderen.be/geonetwork/srv/dut/csw?request=GetRecordById&amp;ID=eab36660-76ec-11e0-994d-0002a5d5c51b</inspire_common:URL>
         <inspire_common:MediaType>application/vnd.ogc.csw.GetRecordByIdResponse_xml</inspire_common:MediaType>
       </inspire_common:MetadataUrl>
       <inspire_common:SupportedLanguages>
@@ -167,7 +167,7 @@
         <BoundingBox CRS="EPSG:31370" minx="22512.0" miny="154145.0" maxx="258199.43" maxy="242848.38"/>
         <MetadataURL type="ISO19115:2003">
           <Format>text/xml</Format>
-          <OnlineResource xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be/geonetwork/srv/nl/csw?Service=CSW&amp;Request=GetRecordById&amp;Version=2.0.2&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=6c39d716-aecc-4fbc-bac8-4f05a49a78d5"/>
+          <OnlineResource xlink:type="simple" xlink:href="https://www.dov.vlaanderen.be/geonetwork/srv/dut/csw?Service=CSW&amp;Request=GetRecordById&amp;Version=2.0.2&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=6c39d716-aecc-4fbc-bac8-4f05a49a78d5"/>
         </MetadataURL>
         <MetadataURL type="ISO19115:2003">
           <Format>text/html</Format>
