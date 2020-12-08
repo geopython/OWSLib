@@ -1,6 +1,19 @@
 Changes
 =======
 
+0.21.0 (2020-12-09)
+-------------------
+
+A full list of commits for 0.21.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.21.0
+
+- OGC API: Added support for Coverages (#699)
+- WFS: Added POST support to WFS GetFeature (#706)
+- WCS: Allow user to specify timeout on WCS GetCoverage calls (#714)
+- WPS: fixed bounding-box (#719)
+- Various fixes: #695, #707, #702, #716, #718, #722, #691, #720
+
 0.20.0 (2020-06-05)
 -------------------
 
