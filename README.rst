@@ -145,7 +145,8 @@ Releasing
   make html
   ./publish.sh
   # update on PyPI (must be a maintainer)
-  python setup.py sdist bdist_wheel --universal upload
+  python setup.py sdist bdist_wheel --universal
+  twine upload dist/*
 
 Support
 -------
