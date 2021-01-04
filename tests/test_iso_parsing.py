@@ -33,7 +33,8 @@ def get_md_resource(file_path):
             'gmd:MD_Metadata', namespaces)) or data.find(
             './/' + util.nspath_eval('gmi:MI_Metadata', namespaces))
 
-        if mdelem is None and data.tag == '{http://www.isotc211.org/2005/gmd}MD_Metadata':
+        if mdelem is None and data.tag in ['{http://www.isotc211.org/2005/gmd}MD_Metadata',
+                                           '{http://www.isotc211.org/2005/gmi}MI_Metadata']:
             mdelem = data
 
     return mdelem
@@ -552,3 +553,38 @@ def test_md_parsing_geobretagne():
     assert ci.includedwithdataset == False
     assert_list(ci.featuretypenames, 0)
     assert_list(ci.featurecatalogues, 0)
+
+
+def test_md_parsing_19115_2():
+    """Test the parsing of a 19115-2 document
+
+    MD_Metadata record available in
+    tests/resources/iso_mi.xml
+
+    """
+    md_resource = get_md_resource(
+        'tests/resources/iso_mi.xml')
+    md = MD_Metadata(md_resource)
+
+    assert type(md) is MD_Metadata
+
+    assert md.identifier == '3f342f64-9348-11df-ba6a-0014c2c00eab'
+
+    ci = md.contentinfo[0]
+    assert ci.type == 'image'
+    assert ci.cloud_cover == '72'
+    assert ci.processing_level == '1.0'
+
+    band = ci.bands[0]
+    assert band.id == 'B1'
+    assert band.units == 'nm'
+    assert band.min == '932'
+    assert band.max == '958'
+
+    plt = md.acquisition.platforms[0]
+    assert plt.identifier == 'LANDSAT_8'
+    assert plt.description == 'Landsat 8'
+
+    inst = plt.instruments[0]
+    assert inst.identifier == 'OLI_TIRS'
+    assert inst.type == 'INS-NOBS'

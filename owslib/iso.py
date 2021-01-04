@@ -20,7 +20,7 @@ from owslib.namespaces import Namespaces
 # default variables
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["gco", "gfc", "gmd", "gml", "gml32", "gmx", "gts", "srv", "xlink"])
+    ns = n.get_namespaces(["gco", "gfc", "gmd", "gmi", "gml", "gml32", "gmx", "gts", "srv", "xlink"])
     ns[None] = n.get_namespace("gmd")
     return ns
 
@@ -49,11 +49,13 @@ class MD_Metadata(object):
             self.locales = []
             self.referencesystem = None
             self.identification = None
+            self.contentinfo = None
             self.serviceidentification = None
             self.identificationinfo = []
             self.contentinfo = []
             self.distribution = None
             self.dataquality = None
+            self.acquisition = None
         else:
             if hasattr(md, 'getroot'):  # standalone document
                 self.xml = etree.tostring(md.getroot())
@@ -149,6 +151,9 @@ class MD_Metadata(object):
             for contentinfo in md.findall(
                     util.nspath_eval('gmd:contentInfo/gmd:MD_FeatureCatalogueDescription', namespaces)):
                 self.contentinfo.append(MD_FeatureCatalogueDescription(contentinfo))
+            for contentinfo in md.findall(
+                    util.nspath_eval('gmd:contentInfo/gmd:MD_ImageDescription', namespaces)):
+                self.contentinfo.append(MD_ImageDescription(contentinfo))
 
             val = md.find(util.nspath_eval('gmd:distributionInfo/gmd:MD_Distribution', namespaces))
 
@@ -162,6 +167,10 @@ class MD_Metadata(object):
                 self.dataquality = DQ_DataQuality(val)
             else:
                 self.dataquality = None
+
+            val = md.find(util.nspath_eval('gmi:acquisitionInformation/gmi:MI_AcquisitionInformation', namespaces))
+            if val is not None:
+                self.acquisition = MI_AcquisitionInformation(val)
 
     def get_default_locale(self):
         """ get default gmd:PT_Locale based on gmd:language """
@@ -1225,3 +1234,97 @@ class FC_ListedValue(object):
 
             val = lv.find(util.nspath_eval('gfc:definition/gco:CharacterString', namespaces))
             self.definition = util.testXMLValue(val)
+
+
+class MD_ImageDescription(object):
+    """Process gmd:MD_ImageDescription"""
+    def __init__(self, img_desc=None):
+        self.type = 'image'
+        self.bands = []
+
+        if img_desc is None:
+            self.attribute_description = None
+            self.cloud_cover = None
+            self.processing_level = None
+        else:
+            val = img_desc.find(util.nspath_eval('gmd:attributeDescription/gco:RecordType', namespaces))
+            self.attribute_description = util.testXMLValue(val)
+
+            val = img_desc.find(util.nspath_eval('gmd:contentType/gmd:MD_CoverageContentTypeCode', namespaces))
+            self.type = util.testXMLAttribute(val, 'codeListValue')
+
+            val = img_desc.find(util.nspath_eval('gmd:cloudCoverPercentage/gco:Real', namespaces))
+            self.cloud_cover = util.testXMLValue(val)
+
+            val = img_desc.find(util.nspath_eval('gmd:processingLevelCode/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
+            self.processing_level = util.testXMLValue(val)
+
+            for i in img_desc.findall(util.nspath_eval('gmd:dimension/gmd:MD_Band', namespaces)):
+                bid = util.testXMLAttribute(i, 'id')
+                self.bands.append(MD_Band(i, bid))
+
+
+class MD_Band(object):
+    """Process gmd:MD_Band"""
+    def __init__(self, band, band_id=None):
+        if band is None:
+            self.id = None
+            self.units = None
+            self.min = None
+            self.max = None
+        else:
+            self.id = band_id
+
+            val = band.find(util.nspath_eval('gmd:units/gml:UnitDefinition/gml:identifier', namespaces))
+            self.units = util.testXMLValue(val)
+
+            val = band.find(util.nspath_eval('gmd:minValue/gco:Real', namespaces))
+            self.min = util.testXMLValue(val)
+
+            val = band.find(util.nspath_eval('gmd:maxValue/gco:Real', namespaces))
+            self.max = util.testXMLValue(val)
+
+
+class MI_AcquisitionInformation(object):
+    """Process gmi:MI_AcquisitionInformation"""
+
+    def __init__(self, acq=None):
+        self.platforms = []
+
+        for i in acq.findall(util.nspath_eval('gmi:platform/gmi:MI_Platform', namespaces)):
+            self.platforms.append(MI_Platform(i))
+
+
+class MI_Platform(object):
+    """Process gmi:MI_Platform"""
+
+    def __init__(self, plt=None):
+        self.instruments = []
+
+        if plt is None:
+            self.identifier = None
+            self.description = None
+        else:
+            val = plt.find(util.nspath_eval('gmi:identifier', namespaces))
+            self.identifier = util.testXMLValue(val)
+
+            val = plt.find(util.nspath_eval('gmi:description', namespaces))
+            self.description = util.testXMLValue(val)
+
+            for i in plt.findall(util.nspath_eval('gmi:instrument/gmi:MI_Instrument', namespaces)):
+                self.instruments.append(MI_Instrument(i))
+
+
+class MI_Instrument(object):
+    """Process gmi:MI_Instrument"""
+
+    def __init__(self, inst=None):
+        if inst is None:
+            self.identifier = None
+            self.type = None
+        else:
+            val = inst.find(util.nspath_eval('gmi:identifier', namespaces))
+            self.identifier = util.testXMLValue(val)
+
+            val = inst.find(util.nspath_eval('gmi:type', namespaces))
+            self.type = util.testXMLValue(val)

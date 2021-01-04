@@ -60,6 +60,8 @@ Standards Support
 +-----------------------+-----------------------------+
 | `ISO 19139`_          | 2007                        |
 +-----------------------+-----------------------------+
+| `ISO 19139-2`_        | 2012                        |
++-----------------------+-----------------------------+
 | `Dublin Core`_        | 1.1                         |
 +-----------------------+-----------------------------+
 | `Swiss GM03`_         | 2.3                         |
@@ -843,6 +845,7 @@ Credits
 .. _`FGDC CSDGM`: https://www.fgdc.gov/metadata/csdgm-standard
 .. _`ISO 19115`: https://www.iso.org/standard/26020.html
 .. _`ISO 19139`: https://www.iso.org/standard/32557.html
+.. _`ISO 19139-2`: https://www.iso.org/standard/57104.html
 .. _`Dublin Core`: https://www.dublincore.org/
 .. _`freenode`: https://freenode.net/
 .. _`OpenHub`: https://www.openhub.net/p/OWSLib
