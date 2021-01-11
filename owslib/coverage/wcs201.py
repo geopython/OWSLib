@@ -60,7 +60,7 @@ class WebCoverageService_2_0_1(WCSBase):
         self.cookies = cookies
         self.ows_common = OwsCommon(version="2.0.1")
         # initialize from saved capability document or access the server
-        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth)
+        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth, timeout=timeout)
         if xml:
             self._capabilities = reader.readString(xml)
         else:

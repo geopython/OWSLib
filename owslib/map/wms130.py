@@ -68,7 +68,8 @@ class WebMapService_1_3_0(object):
 
         # Authentication handled by Reader
         reader = WMSCapabilitiesReader(
-            self.version, url=self.url, headers=headers, auth=self.auth)
+            self.version, url=self.url, headers=headers, auth=self.auth,
+        timeout=timeout)
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server

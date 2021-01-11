@@ -136,7 +136,7 @@ class WebFeatureService_1_0_0(object):
         self.headers = headers
         self.auth = auth or Authentication(username, password)
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth, timeout=timeout)
         if xml:
             self._capabilities = reader.readString(xml)
         else:

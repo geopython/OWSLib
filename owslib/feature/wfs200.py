@@ -121,7 +121,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         self.timeout = timeout
         self.headers = headers
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth, timeout=timeout)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
