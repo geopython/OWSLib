@@ -136,11 +136,11 @@ class WebFeatureService_1_0_0(object):
         self.headers = headers
         self.auth = auth or Authentication(username, password)
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth, timeout=timeout)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
-            self._capabilities = reader.read(self.url)
+            self._capabilities = reader.read(self.url, self.timeout)
         self._buildMetadata(parse_remote_metadata)
 
     def _buildMetadata(self, parse_remote_metadata=False):

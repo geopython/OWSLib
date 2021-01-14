@@ -128,11 +128,11 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.timeout = timeout
         self._capabilities = None
         self.owscommon = OwsCommon("1.0.0")
-        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth, timeout=timeout)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
-            self._capabilities = reader.read(self.url)
+            self._capabilities = reader.read(self.url, self.timeout)
         self._buildMetadata(parse_remote_metadata)
 
     def _buildMetadata(self, parse_remote_metadata=False):
