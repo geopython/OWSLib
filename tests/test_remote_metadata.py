@@ -60,6 +60,7 @@ def mp_wfs_110(monkeypatch):
     monkeypatch.setattr(
         owslib.feature.common.WFSCapabilitiesReader, 'read', read)
 
+
 @pytest.fixture
 def mp_wfs_110_nometadata(monkeypatch):
     """Monkeypatch the call to the remote GetCapabilities request of WFS
@@ -821,6 +822,7 @@ class TestOffline(object):
 
 
 class TestOnline(object):
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
@@ -848,6 +850,7 @@ class TestOnline(object):
         for m in mdrecords:
             assert type(m) is owslib.iso.MD_Metadata
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
@@ -874,6 +877,7 @@ class TestOnline(object):
         for m in mdrecords:
             assert type(m) is owslib.iso.MD_Metadata
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
@@ -897,6 +901,7 @@ class TestOnline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
@@ -922,6 +927,7 @@ class TestOnline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
@@ -946,6 +952,7 @@ class TestOnline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
@@ -969,6 +976,7 @@ class TestOnline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WMS_SERVICE_URL),
                         reason="WMS service is unreachable")
@@ -996,6 +1004,7 @@ class TestOnline(object):
         for m in mdrecords:
             assert type(m) is owslib.iso.MD_Metadata
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WMS_SERVICE_URL),
                         reason="WMS service is unreachable")
@@ -1022,6 +1031,7 @@ class TestOnline(object):
         for m in mdrecords:
             assert type(m) is owslib.iso.MD_Metadata
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WMS_SERVICE_URL),
                         reason="WMS service is unreachable")
@@ -1045,6 +1055,7 @@ class TestOnline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WMS_SERVICE_URL),
                         reason="WMS service is unreachable")
@@ -1070,6 +1081,7 @@ class TestOnline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WMS_SERVICE_URL),
                         reason="WMS service is unreachable")
@@ -1094,6 +1106,7 @@ class TestOnline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WMS_SERVICE_URL),
                         reason="WMS service is unreachable")
