@@ -16,7 +16,7 @@ from owslib.util import OrderedDict
 
 # TODO, we should run all these from local XML documents (as per the WMS and WFS services)
 # CSW_SERVICE_URL = 'http://data.nodc.noaa.gov/geoportal/csw'
-CSW_SERVICE_URL = 'http://demo.pycsw.org/cite/csw'
+CSW_SERVICE_URL = 'https://demo.pycsw.org/cite/csw'
 WCS_SERVICE_URL = 'http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best'
 
 

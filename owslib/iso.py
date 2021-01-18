@@ -1256,7 +1256,8 @@ class MD_ImageDescription(object):
             val = img_desc.find(util.nspath_eval('gmd:cloudCoverPercentage/gco:Real', namespaces))
             self.cloud_cover = util.testXMLValue(val)
 
-            val = img_desc.find(util.nspath_eval('gmd:processingLevelCode/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
+            val = img_desc.find(util.nspath_eval(
+                'gmd:processingLevelCode/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
             self.processing_level = util.testXMLValue(val)
 
             for i in img_desc.findall(util.nspath_eval('gmd:dimension/gmd:MD_Band', namespaces)):
