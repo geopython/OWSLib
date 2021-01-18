@@ -53,7 +53,7 @@ class WebCoverageService_2_0_0(WCSBase):
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self, url, xml, cookies, auth=None):
+    def __init__(self, url, xml, cookies, auth=None, timeout=30):
         super(WebCoverageService_2_0_0, self).__init__(auth=auth)
         self.version = "2.0.0"
         self.url = url
@@ -64,7 +64,7 @@ class WebCoverageService_2_0_0(WCSBase):
         if xml:
             self._capabilities = reader.readString(xml)
         else:
-            self._capabilities = reader.read(self.url)
+            self._capabilities = reader.read(self.url, self.timeout)
 
         # check for exceptions
         se = self._capabilities.find("ServiceException")
