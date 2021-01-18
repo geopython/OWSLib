@@ -12,6 +12,7 @@ jobs:
     env:
         LXML: ${{ matrix.lxml }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_SERVICE_NAME: github
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
