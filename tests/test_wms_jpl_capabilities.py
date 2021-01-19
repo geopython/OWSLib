@@ -101,6 +101,7 @@ def test_wms_capabilities_style_without_title():
 SERVICE_URL = 'http://giswebservices.massgis.state.ma.us/geoserver/wms'
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WMS service is unreachable")
