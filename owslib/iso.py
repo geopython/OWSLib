@@ -171,6 +171,8 @@ class MD_Metadata(object):
             val = md.find(util.nspath_eval('gmi:acquisitionInformation/gmi:MI_AcquisitionInformation', namespaces))
             if val is not None:
                 self.acquisition = MI_AcquisitionInformation(val)
+            else:
+                self.acquisition = None
 
     def get_default_locale(self):
         """ get default gmd:PT_Locale based on gmd:language """
