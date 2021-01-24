@@ -570,6 +570,12 @@ def test_md_parsing_19115_2():
 
     assert md.identifier == '3f342f64-9348-11df-ba6a-0014c2c00eab'
 
+    iden = md.identificationinfo[0]
+
+    assert len(iden.keywords2) == 3
+    assert iden.keywords2[1].thesaurus['title'] == 'My Vocabulary'
+    assert iden.keywords2[1].thesaurus['url'] == 'https://example.org/my-vocab'
+
     ci = md.contentinfo[0]
     assert ci.type == 'image'
     assert ci.cloud_cover == '72'
