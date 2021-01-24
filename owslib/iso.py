@@ -326,6 +326,12 @@ class MD_Keywords(object):
                 thesaurus = val.find(util.nspath_eval('gmd:title/gco:CharacterString', namespaces))
                 self.thesaurus['title'] = util.testXMLValue(thesaurus)
 
+                if self.thesaurus['title'] is None:  # try gmx:Anchor
+                    t = val.find(util.nspath_eval('gmd:title/gmx:Anchor', namespaces))
+                    if t is not None:
+                        self.thesaurus['title'] = util.testXMLValue(t)
+                        self.thesaurus['url'] = t.attrib.get(util.nspath_eval('xlink:href', namespaces))
+
                 thesaurus = val.find(util.nspath_eval('gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces))
                 self.thesaurus['date'] = util.testXMLValue(thesaurus)
 
