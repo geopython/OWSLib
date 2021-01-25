@@ -325,6 +325,7 @@ class MD_Keywords(object):
 
                 thesaurus = val.find(util.nspath_eval('gmd:title/gco:CharacterString', namespaces))
                 self.thesaurus['title'] = util.testXMLValue(thesaurus)
+                self.thesaurus['url'] = None
 
                 if self.thesaurus['title'] is None:  # try gmx:Anchor
                     t = val.find(util.nspath_eval('gmd:title/gmx:Anchor', namespaces))
