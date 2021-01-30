@@ -56,6 +56,7 @@ class WebCoverageService_1_1_0(WCSBase):
 
         self.url = url
         self.cookies = cookies
+        self.timeout = timeout
         # initialize from saved capability document or access the server
         reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth)
         if xml:
