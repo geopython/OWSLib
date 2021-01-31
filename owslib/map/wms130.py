@@ -665,9 +665,11 @@ class ContentMetadata(AbstractContentMetadata):
         self.dataUrls = []
         for m in elem.findall(nspath('DataURL', WMS_NAMESPACE)):
             dataUrl = {
-                'format': m.find(nspath('Format', WMS_NAMESPACE)).text.strip(),
+                'format': m.find(nspath('Format', WMS_NAMESPACE)).text,
                 'url': m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
             }
+            if dataUrl['format'] is not None:
+                dataUrl['format'] = dataUrl['format'].strip()
             self.dataUrls.append(dataUrl)
 
         # FeatureListURLs
