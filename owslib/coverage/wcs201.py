@@ -58,6 +58,7 @@ class WebCoverageService_2_0_1(WCSBase):
         self.version = "2.0.1"
         self.url = url
         self.cookies = cookies
+        self.timeout = timeout
         self.ows_common = OwsCommon(version="2.0.1")
         # initialize from saved capability document or access the server
         reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth)
