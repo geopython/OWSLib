@@ -53,15 +53,15 @@ class WebCoverageService_2_0_1(WCSBase):
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self, url, xml, cookies, auth=None, timeout=30):
-        super(WebCoverageService_2_0_1, self).__init__(auth=auth)
+    def __init__(self, url, xml, cookies, auth=None, timeout=30, headers=None):
+        super(WebCoverageService_2_0_1, self).__init__(auth=auth, headers=headers)
         self.version = "2.0.1"
         self.url = url
         self.cookies = cookies
         self.timeout = timeout
         self.ows_common = OwsCommon(version="2.0.1")
         # initialize from saved capability document or access the server
-        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth)
+        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth, headers=self.headers)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -216,7 +216,7 @@ class WebCoverageService_2_0_1(WCSBase):
 
         log.debug("WCS 2.0.1 DEBUG: Second part of URL: %s" % data)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers)
         return u
 
     def getOperationByName(self, name):
