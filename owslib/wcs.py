@@ -18,7 +18,7 @@ from .coverage import wcs100, wcs110, wcs111, wcsBase, wcs200, wcs201
 from owslib.util import clean_ows_url, Authentication, openURL
 
 
-def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, auth=None,headers=None):
+def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, auth=None, headers=None):
     ''' wcs factory function, returns a version specific WebCoverageService object '''
 
     if not auth:
@@ -39,16 +39,16 @@ def WebCoverageService(url, version=None, xml=None, cookies=None, timeout=30, au
 
     if version == '1.0.0':
         return wcs100.WebCoverageService_1_0_0.__new__(
-            wcs100.WebCoverageService_1_0_0, clean_url, xml, cookies, auth=auth,headers=headers)
+            wcs100.WebCoverageService_1_0_0, clean_url, xml, cookies, auth=auth, headers=headers)
     elif version == '1.1.0':
         return wcs110.WebCoverageService_1_1_0.__new__(
-            wcs110.WebCoverageService_1_1_0, url, xml, cookies, auth=auth,headers=headers)
+            wcs110.WebCoverageService_1_1_0, url, xml, cookies, auth=auth, headers=headers)
     elif version == '1.1.1':
         return wcs111.WebCoverageService_1_1_1.__new__(
-            wcs111.WebCoverageService_1_1_1, url, xml, cookies, auth=auth,headers=headers)
+            wcs111.WebCoverageService_1_1_1, url, xml, cookies, auth=auth, headers=headers)
     elif version == '2.0.0':
         return wcs200.WebCoverageService_2_0_0.__new__(
-            wcs200.WebCoverageService_2_0_0, url, xml, cookies, auth=auth,headers=headers)
+            wcs200.WebCoverageService_2_0_0, url, xml, cookies, auth=auth, headers=headers)
     elif version == '2.0.1':
         return wcs201.WebCoverageService_2_0_1.__new__(
-            wcs201.WebCoverageService_2_0_1, url, xml, cookies, auth=auth,headers=headers)
+            wcs201.WebCoverageService_2_0_1, url, xml, cookies, auth=auth, headers=headers)

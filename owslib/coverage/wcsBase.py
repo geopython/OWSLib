@@ -68,7 +68,7 @@ class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version=None, cookies=None, auth=None,headers=None):
+    def __init__(self, version=None, cookies=None, auth=None, headers=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
