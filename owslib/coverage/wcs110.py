@@ -88,7 +88,7 @@ class WebCoverageService_1_1_0(WCSBase):
         # serviceOperations
         self.operations = []
         for elem in self._capabilities.findall(
-                self.ns.WCS_OWS('OperationsMetadata') + '/' + self.ns.WCS_OWS('Operation')):
+                self.ns.OWS('OperationsMetadata') + '/' + self.ns.OWS('Operation')):
             self.operations.append(Operation(elem, self.ns))
 
         # exceptions - ***********TO DO *************
