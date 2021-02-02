@@ -32,6 +32,7 @@ import re
 from copy import deepcopy
 import warnings
 import requests
+from requests.auth import AuthBase
 import codecs
 
 """
@@ -202,10 +203,14 @@ def openURL(
         verify = verify and auth.verify
     else:
         auth = Authentication(username, password, cert, verify)
+
     if auth.username and auth.password:
-        rkwargs["auth"] = (auth.username, auth.password)
-    rkwargs["cert"] = auth.cert
-    rkwargs["verify"] = verify
+        rkwargs['auth'] = (auth.username, auth.password)
+    elif auth.auth_delegate is not None:
+        rkwargs['auth'] = auth.auth_delegate
+
+    rkwargs['cert'] = auth.cert
+    rkwargs['verify'] = verify
 
     # FIXUP for WFS in particular, remove xml style namespace
     # @TODO does this belong here?
@@ -462,9 +467,11 @@ def http_post(
     else:
         auth = Authentication(username, password)
     if auth.username is not None and auth.password is not None:
-        rkwargs["auth"] = (auth.username, auth.password)
-    rkwargs["verify"] = auth.verify
-    rkwargs["cert"] = auth.cert
+        rkwargs['auth'] = (auth.username, auth.password)
+    elif auth.auth_delegate is not None:
+        rkwargs['auth'] = auth.auth_delegate
+    rkwargs['verify'] = auth.verify
+    rkwargs['cert'] = auth.cert
 
     up = requests.post(url, request, headers=headers, **rkwargs)
     return up.content
@@ -494,7 +501,9 @@ def http_get(*args, **kwargs):
 
     # Build keyword args for call to requests.get()
     if auth.username and auth.password:
-        rkwargs.setdefault("auth", (auth.username, auth.password))
+        rkwargs.setdefault('auth', (auth.username, auth.password))
+    elif auth.auth_delegate is not None:
+        rkwargs['auth'] = auth.auth_delegate
     else:
         rkwargs.setdefault("auth", None)
     rkwargs.setdefault("cert", rkwargs.get("cert"))
@@ -917,13 +926,14 @@ class Authentication(object):
 
     _USERNAME = None
     _PASSWORD = None
+    _AUTH_DELEGATE = None
     _CERT = None
     _VERIFY = None
 
-    def __init__(
-        self, username=None, password=None, cert=None, verify=True, shared=False
-    ):
-        """
+    def __init__(self, username=None, password=None,
+                 cert=None, verify=True, shared=False,
+                 auth_delegate=None):
+        '''
         :param str username=None: Username for basic authentication, None for
             unauthenticated access (or if using cert/verify)
         :param str password=None: Password for basic authentication, None for
@@ -937,12 +947,17 @@ class Authentication(object):
         :param bool shared=False: Set to True to make the values be class-level
             attributes (shared among instances where shared=True) instead of
             instance-level (shared=False, default)
-        """
+        :param AuthBase auth_delegate=None: Instance of requests' AuthBase to
+            allow arbitrary authentication schemes - mutually exclusive with
+            username/password arguments.
+        '''
+
         self.shared = shared
         self.username = username
         self.password = password
         self.cert = cert
         self.verify = verify
+        self.auth_delegate = auth_delegate
 
     @property
     def username(self):
@@ -952,10 +967,15 @@ class Authentication(object):
 
     @username.setter
     def username(self, value):
-        if value is None:
-            pass
-        elif not isinstance(value, str):
-            raise TypeError('Value for "username" must be a str')
+        if value is not None:
+
+            if not isinstance(value, str):
+                raise TypeError('Value for "username" must be a str')
+
+            if self.auth_delegate is not None:
+                raise ValueError('Authentication instances may have username/password or auth_delegate set,'
+                                 ' but not both')
+
         if self.shared:
             self.__class__._USERNAME = value
         else:
@@ -969,10 +989,15 @@ class Authentication(object):
 
     @password.setter
     def password(self, value):
-        if value is None:
-            pass
-        elif not isinstance(value, str):
-            raise TypeError('Value for "password" must be a str')
+        if value is not None:
+
+            if not isinstance(value, str):
+                raise TypeError('Value for "password" must be a str')
+
+            if self.auth_delegate is not None:
+                raise ValueError('Authentication instances may have username/password or auth_delegate set,'
+                                 ' but not both')
+
         if self.shared:
             self.__class__._PASSWORD = value
         else:
@@ -1034,7 +1059,31 @@ class Authentication(object):
             self._verify = value
 
     @property
+    def auth_delegate(self):
+        if self.shared:
+            return self._AUTH_DELEGATE
+        return self._auth_delegate
+
+    @auth_delegate.setter
+    def auth_delegate(self, value):
+        if value is not None:
+            if not isinstance(value, AuthBase):
+                raise TypeError('Value for "auth_delegate" must be an instance of AuthBase')
+
+            if self.username is not None or self.password is not None:
+                raise ValueError('Authentication instances may have username/password or auth_delegate set,'
+                                 ' but not both')
+
+        if self.shared:
+            self.__class__._AUTH_DELEGATE = value
+        else:
+            self._auth_delegate = value
+
+    @property
     def urlopen_kwargs(self):
+        if self.auth_delegate is not None:
+            raise NotImplementedError("The urlopen_kwargs property is not supported when auth_delegate is set")
+
         return {
             "username": self.username,
             "password": self.password,
@@ -1043,11 +1092,6 @@ class Authentication(object):
         }
 
     def __repr__(self, *args, **kwargs):
-        return "<{} shared={} username={} password={} cert={} verify={}>".format(
-            self.__class__.__name__,
-            self.shared,
-            self.username,
-            self.password,
-            self.cert,
-            self.verify,
-        )
+        return '<{} shared={} username={} password={} cert={} verify={} auth_delegate={}>'.format(
+            self.__class__.__name__, self.shared, self.username, self.password, self.cert, self.verify,
+            self.auth_delegate)
