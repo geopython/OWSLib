@@ -29,7 +29,12 @@ import errno
 import dateutil.parser as parser
 from datetime import timedelta
 import logging
-from owslib.util import log, datetime_from_ansi, datetime_from_iso, param_list_to_url_string
+from owslib.util import (
+    log,
+    datetime_from_ansi,
+    datetime_from_iso,
+    param_list_to_url_string,
+)
 
 
 #  function to save writing out WCS namespace in full each time
@@ -53,15 +58,17 @@ class WebCoverageService_2_0_0(WCSBase):
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self, url, xml, cookies, auth=None, timeout=30):
-        super(WebCoverageService_2_0_0, self).__init__(auth=auth)
+    def __init__(self, url, xml, cookies, auth=None, timeout=30, headers=None):
+        super(WebCoverageService_2_0_0, self).__init__(auth=auth, headers=headers)
         self.version = "2.0.0"
         self.url = url
         self.cookies = cookies
         self.timeout = timeout
         self.ows_common = OwsCommon(version="2.0.0")
         # initialize from saved capability document or access the server
-        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth)
+        reader = WCSCapabilitiesReader(
+            self.version, self.cookies, self.auth, headers=self.headers
+        )
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -206,16 +213,24 @@ class WebCoverageService_2_0_0(WCSBase):
         # encode and request
         data = urlencode(request)
         if subsets:
-            data += param_list_to_url_string(subsets, 'subset')
+            data += param_list_to_url_string(subsets, "subset")
         if resolutions:
-            log.debug('Adding vendor-specific RESOLUTION parameter.')
-            data += param_list_to_url_string(resolutions, 'resolution')
+            log.debug("Adding vendor-specific RESOLUTION parameter.")
+            data += param_list_to_url_string(resolutions, "resolution")
         if sizes:
-            log.debug('Adding vendor-specific SIZE parameter.')
-            data += param_list_to_url_string(sizes, 'size')
+            log.debug("Adding vendor-specific SIZE parameter.")
+            data += param_list_to_url_string(sizes, "size")
         log.debug("WCS 2.0.0 DEBUG: Second part of URL: %s" % data)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout)
+        u = openURL(
+            base_url,
+            data,
+            method,
+            self.cookies,
+            auth=self.auth,
+            timeout=timeout,
+            headers=self.headers,
+        )
         return u
 
     def getOperationByName(self, name):
@@ -265,14 +280,18 @@ class ContentMetadata(object):
         if not hasattr(self, "descCov"):
             self.descCov = self._service.getDescribeCoverage(self.id)
         gridelem = self.descCov.find(
-            nsWCS2("CoverageDescription/") + "{http://www.opengis.net/gml/3.2}domainSet/" + "{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors"  # noqa
+            nsWCS2("CoverageDescription/")
+            + "{http://www.opengis.net/gml/3.2}domainSet/"
+            + "{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors"  # noqa
         )
         if gridelem is not None:
             grid = ReferenceableGridByVectors(gridelem)
         else:
             # HERE I LOOK FOR RECTIFIEDGRID
             gridelem = self.descCov.find(
-                nsWCS2("CoverageDescription/") + "{http://www.opengis.net/gml/3.2}domainSet/" + "{http://www.opengis.net/gml/3.2}RectifiedGrid"  # noqa
+                nsWCS2("CoverageDescription/")
+                + "{http://www.opengis.net/gml/3.2}domainSet/"
+                + "{http://www.opengis.net/gml/3.2}RectifiedGrid"  # noqa
             )
             grid = RectifiedGrid(gridelem)
         return grid
@@ -307,7 +326,9 @@ class ContentMetadata(object):
             self.descCov = self._service.getDescribeCoverage(self.id)
 
         gridelem = self.descCov.find(
-            nsWCS2("CoverageDescription/") + "{http://www.opengis.net/gml/3.2}domainSet/" + "{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors"  # noqa
+            nsWCS2("CoverageDescription/")
+            + "{http://www.opengis.net/gml/3.2}domainSet/"
+            + "{http://www.opengis.net/gml/3.3/rgrid}ReferenceableGridByVectors"  # noqa
         )
         if gridelem is not None:
             # irregular time axis
@@ -351,8 +372,8 @@ class ContentMetadata(object):
     timepositions = property(_getTimePositions, None)
 
     def _getOtherBoundingBoxes(self):
-        """ incomplete, should return other bounding boxes not in WGS84
-            #TODO: find any other bounding boxes. Need to check for gml:EnvelopeWithTimePeriod."""
+        """incomplete, should return other bounding boxes not in WGS84
+        #TODO: find any other bounding boxes. Need to check for gml:EnvelopeWithTimePeriod."""
 
         bboxes = []
 
@@ -360,7 +381,9 @@ class ContentMetadata(object):
             self.descCov = self._service.getDescribeCoverage(self.id)
 
         for envelope in self.descCov.findall(
-            nsWCS2("CoverageDescription/") + "{http://www.opengis.net/gml/3.2}boundedBy/" + "{http://www.opengis.net/gml/3.2}Envelope"  # noqa
+            nsWCS2("CoverageDescription/")
+            + "{http://www.opengis.net/gml/3.2}boundedBy/"
+            + "{http://www.opengis.net/gml/3.2}Envelope"  # noqa
         ):
             bbox = {}
             bbox["nativeSrs"] = envelope.attrib["srsName"]
@@ -412,7 +435,11 @@ class ContentMetadata(object):
         # gets any axis descriptions contained in the rangeset (requires a DescribeCoverage call to server).
         axisDescs = []
         for elem in self._service.getDescribeCoverage(self.id).findall(
-            ns("CoverageOffering/") + ns("rangeSet/") + ns("RangeSet/") + ns("axisDescription/") + ns("AxisDescription")
+            ns("CoverageOffering/")
+            + ns("rangeSet/")
+            + ns("RangeSet/")
+            + ns("axisDescription/")
+            + ns("AxisDescription")
         ):
             axisDescs.append(
                 AxisDescription(elem)
@@ -483,7 +510,7 @@ class ReferenceableGridByVectors(Grid):
 
 
 class AxisDescription(object):
-    """ Class to represent the AxisDescription element optionally found as part of the RangeSet and used to
+    """Class to represent the AxisDescription element optionally found as part of the RangeSet and used to
     define ordinates of additional dimensions such as wavelength bands or pressure levels"""
 
     def __init__(self, axisdescElem):
