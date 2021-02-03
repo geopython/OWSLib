@@ -1,4 +1,5 @@
 from owslib.wfs import WebFeatureService
+from owslib.util import ServiceException
 from urllib.parse import urlparse
 from tests.utils import resource_file, sorted_url_query, service_ok
 
@@ -58,7 +59,7 @@ def test_outputformat_wfs_100():
                             version='1.0.0')
     feature = wfs.getfeature(
         typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
-    assert json.dumps(json.loads(feature.read())) == '{...}'
+    assert len(json.loads(feature.read())['features']) == 1
 
 
 @pytest.mark.online
@@ -70,7 +71,7 @@ def test_outputformat_wfs_110():
                             version='1.1.0')
     feature = wfs.getfeature(
         typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
-    assert json.dumps(json.loads(feature.read())) == '{...}'
+    assert len(json.loads(feature.read())['features']) == 1
 
 
 @pytest.mark.online
@@ -82,7 +83,7 @@ def test_outputformat_wfs_200():
                             version='2.0.0')
     feature = wfs.getfeature(
         typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
-    assert json.dumps(json.loads(feature.read())) == '{...}'
+    assert len(json.loads(feature.read())['features']) == 1
 
 
 @pytest.mark.online
@@ -92,10 +93,11 @@ def test_srsname_wfs_100():
     import json
     wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
                             version='1.0.0')
-    feature = wfs.getfeature(
-        typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
-        srsname="EPSG:99999999")
     # ServiceException: Unable to support srsName: EPSG:99999999
+    with pytest.raises(ServiceException):
+        feature = wfs.getfeature(
+            typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
+            srsname="EPSG:99999999")
 
     import json
     wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
@@ -103,7 +105,7 @@ def test_srsname_wfs_100():
     feature = wfs.getfeature(
         typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
         srsname="urn:x-ogc:def:crs:EPSG:4326")
-    assert json.dumps(json.loads(feature.read())) == '{...}'
+    assert len(json.loads(feature.read())['features']) == 1
 
 
 @pytest.mark.online
@@ -114,10 +116,11 @@ def test_srsname_wfs_110():
     wfs = WebFeatureService(
         'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
         version='1.1.0')
-    feature = wfs.getfeature(
-        typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
-        srsname="EPSG:99999999")
-    # ServiceException: SRSNAME EPSG:99999999 not supported.  Options: urn:x-ogc:def:crs:EPSG:102715
+    # ServiceException: Unable to support srsName: EPSG:99999999
+    with pytest.raises(ServiceException):
+        feature = wfs.getfeature(
+            typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
+            srsname="EPSG:99999999")
 
     import json
     wfs = WebFeatureService(
@@ -126,7 +129,7 @@ def test_srsname_wfs_110():
     feature = wfs.getfeature(
         typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
         srsname="urn:x-ogc:def:crs:EPSG:4326")
-    assert json.dumps(json.loads(feature.read())) == '{...}'
+    assert len(json.loads(feature.read())['features']) == 1
 
 
 @pytest.mark.online
