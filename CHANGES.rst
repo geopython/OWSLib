@@ -1,6 +1,37 @@
 Changes
 =======
 
+0.23.0 (2021-02-04)
+-------------------
+
+A full list of commits for 0.23.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.23.0
+
+- WMS: Handle empty <DataURL>.<Format> element in GetCapabilities (#739)
+- WCS: Feature/wcs headers integration (#741)
+- Tests: fix WFS tests (#743)
+- Auth: Support requests AuthBase in addition to basic password authentication (#724)
+- WCS: Fix bug with timeout not assigned (#738)
+- Tests: restore ISO GM03 tests as pytests (#734)
+- ISO: OWS/ISO metadata updates (#736)
+- ISO: add support for ISO 19115 keyword thesaurus URLs via gmx:Anchor (#735)
+- ISO: fix reference (#733)
+
+
+0.22.0 (2021-01-21)
+-------------------
+
+A full list of commits for 0.22.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.22.0
+
+- Tests: Fix tests coveralls (#732)
+- WCS, WFS: Add timeout to get capabilities (#730)
+- Tests: migrate to GitHub actions (#727)
+- ISO: add support for ISO 19115-2 (#726)
+
+
 0.21.0 (2020-12-09)
 -------------------
 
