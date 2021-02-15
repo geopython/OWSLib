@@ -27,7 +27,7 @@ def test_ows_interfaces_csw():
     service = CatalogueServiceWeb(CSW_SERVICE_URL)
     # Check each service instance conforms to OWSLib interface
     service.alias = 'CSW'
-    isinstance(service, owslib.csw.CatalogueServiceWeb)
+    isinstance(service, owslib.catalogue.csw2.CatalogueServiceWeb)
     # URL attribute
     assert service.url == CSW_SERVICE_URL
     # version attribute
