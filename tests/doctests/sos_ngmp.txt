@@ -3,7 +3,7 @@ Imports
 
     >>> from tests.utils import cast_tuple_int_list, resource_file
     >>> from owslib.sos import SensorObservationService
-    >>> from owslib.fes import FilterCapabilities200
+    >>> from owslib.fes2 import FilterCapabilities
     >>> from owslib.ows import OperationsMetadata
     >>> from owslib.crs import Crs
     >>> from datetime import datetime
@@ -154,7 +154,7 @@ OperationsMetadata
 Filter_Capabilities
 
     >>> filter = ngmp.filters
-    >>> isinstance(filter, FilterCapabilities200)
+    >>> isinstance(filter, FilterCapabilities)
     False
 
 
