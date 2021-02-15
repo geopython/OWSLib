@@ -218,13 +218,16 @@ class CatalogueServiceWeb(object):
         """
 
         if xml is not None:
-            self.request = etree.fromstring(xml)
-            val = self.request.find(util.nspath_eval('csw30:Query/csw30:ElementSetName', namespaces))
-            if val is not None:
-                esn = util.testXMLValue(val)
-            val = self.request.attrib.get('outputSchema')
-            if val is not None:
-                outputschema = util.testXMLValue(val, True)
+            if xml.startswith('<'):
+                self.request = etree.fromstring(xml)
+                val = self.request.find(util.nspath_eval('csw30:Query/csw30:ElementSetName', namespaces))
+                if val is not None:
+                    esn = util.testXMLValue(val)
+                val = self.request.attrib.get('outputSchema')
+                if val is not None:
+                    outputschema = util.testXMLValue(val, True)
+            else:
+                self.request = xml
         else:
             # construct request
             node0 = self._setrootelement('csw30:GetRecords')
