@@ -13,6 +13,7 @@ Supports version 2.0.2 and 3.0.0 of the CSW specification.
 """
 
 from .catalogue import csw2, csw3
+from .catalogue.csw2 import CswRecord
 from .util import clean_ows_url, Authentication
 
 
