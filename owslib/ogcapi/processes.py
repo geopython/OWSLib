@@ -19,7 +19,9 @@ LOGGER = logging.getLogger(__name__)
 class Processes(API):
     """Abstraction for OGC API - Processes
 
-    https://ogcapi.ogc.org/processes/overview.html
+    * https://ogcapi.ogc.org/processes/overview.html
+    * https://docs.opengeospatial.org/DRAFTS/18-062.html
+    * https://app.swaggerhub.com/apis/geoprocessing/WPS-all-in-one/1.0-draft.6-SNAPSHOT
     """
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30,
@@ -33,21 +35,17 @@ class Processes(API):
 
         Lists the processes this API offers.
 
-        WPS 1.0.0: GetCapabilities
-
         @returns: `dict` of available processes.
         """
 
         path = 'processes'
         return self._request(path)
 
-    def process(self, process_id: str) -> dict:
+    def process_description(self, process_id: str) -> dict:
         """
         implements: GET /processes/{process-id}
 
         Returns a detailed description of a process.
-
-        WPS 1.0.0: DescribeProcess
 
         @returns: `dict` of a process description.
         """
@@ -55,7 +53,7 @@ class Processes(API):
         path = f'processes/{process_id}'
         return self._request(path)
 
-    def process_jobs(self, process_id: str) -> dict:
+    def job_list(self, process_id: str) -> dict:
         """
         implements: GET /processes/{process-id}/jobs
 
@@ -67,7 +65,7 @@ class Processes(API):
         path = f'processes/{process_id}/jobs'
         return self._request(path)
 
-    def process_execute(self, process_id: str, json: dict) -> dict:
+    def execute(self, process_id: str, json: dict) -> dict:
         """
         implements: POST /processes/{process-id}/jobs
 
@@ -91,7 +89,7 @@ class Processes(API):
 
         return response.json()
 
-    def process_status(self, process_id: str, job_id: str) -> dict:
+    def status(self, process_id: str, job_id: str) -> dict:
         """
         implements: GET /processes/{process-id}/jobs/{job-id}
 
@@ -103,7 +101,7 @@ class Processes(API):
         path = f'processes/{process_id}/jobs/{job_id}'
         return self._request(path)
 
-    def process_cancel(self, process_id: str, job_id: str) -> dict:
+    def cancel(self, process_id: str, job_id: str) -> dict:
         """
         implements: DELETE /processes/{process-id}/jobs/{job-id}
 
@@ -115,7 +113,7 @@ class Processes(API):
         path = f'processes/{process_id}/jobs/{job_id}'
         return self._request(path)
 
-    def process_result(self, process_id: str, job_id: str) -> dict:
+    def result(self, process_id: str, job_id: str) -> dict:
         """
         implements: GET /processes/{process-id}/jobs/{job-id}/results
 

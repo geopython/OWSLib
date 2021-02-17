@@ -31,13 +31,13 @@ def test_ogcapi_processes_52n():
     assert len(processes) > 0
 
     # process description
-    echo = w.process('org.n52.javaps.test.EchoProcess')
+    echo = w.process_description('org.n52.javaps.test.EchoProcess')
     assert echo['id'] == 'org.n52.javaps.test.EchoProcess'
     assert echo['title'] == 'org.n52.javaps.test.EchoProcess'
     # assert "An example process that takes a name as input" in echo['description']
 
     # running jobs
-    jobs = w.process_jobs('org.n52.javaps.test.EchoProcess')
+    jobs = w.job_list('org.n52.javaps.test.EchoProcess')
     assert len(jobs) >= 0
 
     # TODO: post request not allowed at 52n?

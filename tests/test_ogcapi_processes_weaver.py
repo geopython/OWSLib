@@ -33,7 +33,7 @@ def test_ogcapi_processes_weaver():
     # process description
     # TODO: response not as expected {'process': {'id': 'ColibriFlyingpigeon_SubsetBbox'}}
     # should be {'id': 'ColibriFlyingpigeon_SubsetBbox'}
-    # process = w.process('ColibriFlyingpigeon_SubsetBbox')
+    # process = w.process_description('ColibriFlyingpigeon_SubsetBbox')
     # print(process)
     # assert process['process']['id'] == 'ColibriFlyingpigeon_SubsetBbox'
     # assert process['process']['title'] == 'ColibriFlyingpigeon_SubsetBbox'

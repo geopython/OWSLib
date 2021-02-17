@@ -30,18 +30,18 @@ def test_ogcapi_processes_pygeoapi():
     assert len(processes) > 0
 
     # process description
-    hello = w.process('hello-world')
+    hello = w.process_description('hello-world')
     assert hello['id'] == 'hello-world'
     assert hello['title'] == 'Hello World'
     assert "An example process that takes a name as input" in hello['description']
 
     # running jobs
-    jobs = w.process_jobs('hello-world')
+    jobs = w.job_list('hello-world')
     assert len(jobs) >= 0
 
     # execute process in sync mode
     request_json = {"inputs": [{"id": "name", "value": "hello"}], "mode": "sync"}
-    resp = w.process_execute('hello-world', json=request_json)
+    resp = w.execute('hello-world', json=request_json)
     assert len(resp['outputs']) == 1
     assert resp['outputs'][0]['id'] == 'echo'
     assert resp['outputs'][0]['value'] == 'Hello hello!'
