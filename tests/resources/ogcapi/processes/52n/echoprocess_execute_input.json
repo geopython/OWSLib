@@ -1,0 +1,59 @@
+{
+    "inputs": [
+        {
+            "id": "complexInput",
+            "input": {
+                "format": {
+                    "mimeType": "application/xml"
+                },
+                "value": {
+                    "inlineValue": "<test/>"
+                }
+            }
+        },
+        {
+            "id": "literalInput",
+            "input": {
+                "dataType": "double",
+                "value": "0.05"
+            }
+        },
+        {
+            "id": "boundingboxInput",
+            "input": {
+                "bbox": [
+                    51.9,
+                    7,
+                    52,
+                    7.1
+                ],
+                "crs": "EPSG:4326"
+            }
+        }
+    ],
+    "outputs": [
+        {
+            "id": "literalOutput",
+            "format": {
+                "mimeType": "text/plain"
+            },
+            "transmissionMode": "value"
+        },
+        {
+            "id": "boundingboxOutput",
+            "format": {
+                "mimeType": "application/json"
+            },
+            "transmissionMode": "value"
+        },
+        {
+            "id": "complexOutput",
+            "format": {
+                "mimeType": "application/xml"
+            },
+            "transmissionMode": "value"
+        }
+    ],
+    "response": "document",
+    "mode": "async"
+}
