@@ -172,7 +172,7 @@ class API(object):
         return url
 
     def _request(self, path: str = None, as_dict: bool = True,
-                 kwargs: dict = {}) -> dict:
+                 kwargs: dict = None, url: str = None) -> dict:
         """
         helper function for request/response patterns against OGC API endpoints
 
@@ -185,8 +185,10 @@ class API(object):
 
         @returns: response as JSON ``dict``
         """
-
-        url = self._build_url(path)
+        if not kwargs:
+            kwargs = {}
+        if not url:
+            url = self._build_url(path)
 
         LOGGER.debug('Request: {}'.format(url))
         LOGGER.debug('Params: {}'.format(kwargs))
