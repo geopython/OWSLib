@@ -24,17 +24,21 @@ Common Parameters for all request types
 -------------------
 
     -u, --url=[URL] the base URL of the WPS - required
-    -r, --request=[REQUEST] the request type (GetCapabilities, DescribeProcess, Execute) - required 
+    -r, --request=[REQUEST] the request type - required
+                            {GetCapabilities, DescribeProcess, Processes, Execute, GetStatus}  
     -v, --verbose set flag for verbose output - optional (defaults to False)    
-    -o, --output=[FORMAT] format of the response to provide - optional {json, yaml}
+    -o, --output=[FORMAT] format of the response to provide - optional {json, yaml} (default: parse and print items)
+                          when specified, responses are returned directly with the given format
 
 Request Specific Parameters
 ---------------------------
 
-    DescribeProcess
+    DescribeProcess, Execute, GetStatus
         -i, --identifier=[ID] process identifier - required
     Execute
         -d, --data, --json JSON file containing pre-made request to be submitted - required
+    GetStatus
+        -j, --job JobID returned by the Execute request - required
 
 Examples
 --------
@@ -42,12 +46,12 @@ python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r GetCapabilities
 
 python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r Processes
 
-python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r DescribeProcess -i las2tif
+python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r DescribeProcess -i jsonarray2netcdf
 
-python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r Execute -i las2tif -d payload.json
-python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r Execute -i las2tif --json payload.json
+python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r Execute -i jsonarray2netcdf -d payload.json
+python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r Execute -i jsonarray2netcdf --json payload.json
 
-python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r GetStatus -j <JobId>
+python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r GetStatus -i jsonarray2netcdf -j <JobId>
 
     with 'payload.json' contents: 
     
@@ -246,6 +250,6 @@ elif request == 'GetStatus':
     print(f'Status: {data["status"]}')
 
 else:
-    print('\nERROR: Unknown request type')
+    print(f'\nERROR: Unknown request type: {request}')
     usage()
-    sys.exit(6)
+    sys.exit(30)
