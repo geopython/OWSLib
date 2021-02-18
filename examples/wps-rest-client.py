@@ -17,7 +17,7 @@ from owslib.ogcapi.processes import Processes
 
 def usage():
     print("""
-    
+
 Usage: %s [parameters]
 
 Common Parameters for all request types
@@ -25,8 +25,8 @@ Common Parameters for all request types
 
     -u, --url=[URL] the base URL of the WPS - required
     -r, --request=[REQUEST] the request type - required
-                            {GetCapabilities, DescribeProcess, Processes, Execute, GetStatus}  
-    -v, --verbose set flag for verbose output - optional (defaults to False)    
+                            {GetCapabilities, DescribeProcess, Processes, Execute, GetStatus}
+    -v, --verbose set flag for verbose output - optional (defaults to False)
     -o, --output=[FORMAT] format of the response to provide - optional {json, yaml} (default: parse and print items)
                           when specified, responses are returned directly with the given format
 
@@ -53,8 +53,8 @@ python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r Execute -i jsonarr
 
 python wps-rest-client.py -u https://ogc-ades.crim.ca/ADES -r GetStatus -i jsonarray2netcdf -j <JobId>
 
-    with 'payload.json' contents: 
-    
+    with 'payload.json' contents:
+
         {
           "mode": "async",
           "response": "document",
@@ -220,7 +220,7 @@ elif request == 'Execute':
         print(f'\nERROR: Empty JSON data from {data}')
         sys.exit(7)
 
-    status_location = wps.execute(identifier, payload)
+    status_location = wps.execute(identifier, payload).get('location')
     data, success = wps.monitor_execution(location=status_location)
     if output:
         print_content(output, data)

@@ -7,6 +7,7 @@ from owslib.ogcapi.processes import Processes
 SERVICE_URL = 'http://geoprocessing.demo.52north.org:8080/javaps/rest/'
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
