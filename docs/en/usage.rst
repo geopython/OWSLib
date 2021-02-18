@@ -1,5 +1,5 @@
-Old Usage
-=========
+Usage
+=====
 
 WMS
 ---
