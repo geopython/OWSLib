@@ -23,7 +23,7 @@ REQUEST_HEADERS = {
 }
 
 
-class API(object):
+class API:
     """Abstraction for OGC API - Common version 1.0"""
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30,
@@ -113,42 +113,6 @@ class API(object):
         path = 'conformance'
         return self._request(path)
 
-    def collections(self) -> dict:
-        """
-        implements /collections
-
-        @returns: `dict` of collections object
-        """
-
-        path = 'collections'
-        return self._request(path)
-
-    def collection(self, collection_id: str) -> dict:
-        """
-        implements /collections/{collectionId}
-
-        @type collection_id: string
-        @param collection_id: id of collection
-
-        @returns: `dict` of feature collection metadata
-        """
-
-        path = 'collections/{}'.format(collection_id)
-        return self._request(path)
-
-    def collection_queryables(self, collection_id: str) -> dict:
-        """
-        implements /collections/{collectionId}/queryables
-
-        @type collection_id: string
-        @param collection_id: id of collection
-
-        @returns: `dict` of feature collection queryables
-        """
-
-        path = 'collections/{}/queryables'.format(collection_id)
-        return self._request(path)
-
     def _build_url(self, path: str = None) -> str:
         """
         helper function to build an OGC API URL
@@ -205,3 +169,46 @@ class API(object):
             return response.json()
         else:
             return response.content
+
+
+class Collections(API):
+    def __init__(self, url: str, json_: str = None, timeout: int = 30,
+                 headers: dict = None, auth: Authentication = None):
+        __doc__ = API.__doc__  # noqa
+        super().__init__(url, json_, timeout, headers, auth)
+
+    def collections(self) -> dict:
+        """
+        implements /collections
+
+        @returns: `dict` of collections object
+        """
+
+        path = 'collections'
+        return self._request(path)
+
+    def collection(self, collection_id: str) -> dict:
+        """
+        implements /collections/{collectionId}
+
+        @type collection_id: string
+        @param collection_id: id of collection
+
+        @returns: `dict` of feature collection metadata
+        """
+
+        path = 'collections/{}'.format(collection_id)
+        return self._request(path)
+
+    def collection_queryables(self, collection_id: str) -> dict:
+        """
+        implements /collections/{collectionId}/queryables
+
+        @type collection_id: string
+        @param collection_id: id of collection
+
+        @returns: `dict` of feature collection queryables
+        """
+
+        path = 'collections/{}/queryables'.format(collection_id)
+        return self._request(path)
