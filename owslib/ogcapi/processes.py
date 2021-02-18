@@ -7,6 +7,8 @@
 # =============================================================================
 
 import logging
+import time
+from typing import Tuple
 
 import requests
 
@@ -39,7 +41,8 @@ class Processes(API):
         """
 
         path = 'processes'
-        return self._request(path)
+        data = self._request(path)
+        return data["processes"]
 
     def process_description(self, process_id: str) -> dict:
         """
@@ -65,29 +68,31 @@ class Processes(API):
         path = f'processes/{process_id}/jobs'
         return self._request(path)
 
-    def execute(self, process_id: str, json: dict) -> dict:
+    def execute(self, process_id: str, json: dict) -> str:
         """
         implements: POST /processes/{process-id}/jobs
 
         Executes a process, i.e. creates a new job. Inputs and outputs will have
         to be specified in a JSON document that needs to be send in the POST body.
 
-        @returns: `dict` of ...
+        @returns: `str` of the status location
         """
 
         path = f'processes/{process_id}/jobs'
-        return self._request_post(path, json)
+        resp = self._request_post(path, json)
+        data = resp.json()
+        return resp.headers.get("Location", data["location"])
 
-    def _request_post(self, path: str, json: dict) -> dict:
+    def _request_post(self, path: str, json: dict) -> requests.Response:
         # TODO: needs to be implemented in base class
         url = self._build_url(path)
 
-        response = requests.post(url, json=json)
+        resp = requests.post(url, json=json)
 
-        if response.status_code != requests.codes.ok:
-            raise RuntimeError(response.text)
+        if resp.status_code != requests.codes.ok:
+            raise RuntimeError(resp.text)
 
-        return response.json()
+        return resp
 
     def status(self, process_id: str, job_id: str) -> dict:
         """
@@ -124,3 +129,30 @@ class Processes(API):
 
         path = f'processes/{process_id}/jobs/{job_id}/results'
         return self._request(path)
+
+    def monitor_execution(self, process_id: str = None, job_id: str = None, location: str = None,
+                          timeout: int = 3600, delta: int = 10) -> Tuple[dict, bool]:
+        """
+        Job polling of status URL until completion or timeout.
+
+        If `location` is provided, it is used instead.
+
+        @returns: results of the monitoring upon completion as `tuple` of (data, success?)
+        """
+        time.sleep(1)  # small delay to ensure process execution had a change to start before monitoring
+        left = timeout
+        once = True
+        data = None
+        while left >= 0 or once:
+            if location:
+                data = self._request(url=location)
+            else:
+                data = self.status(process_id, job_id)
+            if data['status'] in ['running', 'succeeded']:
+                break
+            if data['status'] == 'failed':
+                return data, False
+            time.sleep(delta)
+            once = False
+            left -= delta
+        return data, data['status'] == 'succeeded'
