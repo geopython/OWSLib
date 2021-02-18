@@ -17,7 +17,7 @@ def test_ogcapi_processes_weaver():
     assert w.url_query_string is None
 
     # TODO: RuntimeError: Did not find service-desc link
-    # api = w.api()
+    api = w.api()
     # assert api['components']['parameters'] is not None
     # paths = api['paths']
     # assert paths is not None
