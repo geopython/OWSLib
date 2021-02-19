@@ -69,8 +69,8 @@ class Processes(API):
         """
 
         path = f'processes/{process_id}/jobs'
-        data = self._request(path)
-        return data
+        jobs_ = m.JobList.parse_obj(self._request(path))
+        return jobs_
 
     def execute(self, process_id: str, json: dict) -> dict:
         """

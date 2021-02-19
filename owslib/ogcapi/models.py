@@ -2,6 +2,10 @@ from enum import Enum
 from typing import Any, List, Union, Optional, Dict
 from pydantic import BaseModel, conint, Field, AnyUrl, Extra
 
+
+# Taken from the openapi schema
+# https://github.com/opengeospatial/ogcapi-processes/tree/master/core/openapi/schemas
+
 # ---- #
 # Enum #
 # ---- #
@@ -194,6 +198,19 @@ class StatusInfo(BaseModel):
     message: Optional[str] = None
     progress: Optional[conint(ge=0, le=100)] = None
     links: Optional[List[Link]] = None
+
+
+class JobList(BaseModel):
+    __root__: List[StatusInfo]
+
+    def __iter__(self):
+        return iter(self.__root__)
+
+    def __getitem__(self, item):
+        return self.__root__[item]
+
+    def __len__(self):
+        return len(self.__root__)
 
 
 class ObservedProperty(BaseModel):
