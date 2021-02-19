@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any, List, Union, Optional, Dict
 
-from pydantic import BaseModel, Extra, conint, Field, AnyUrl
+from pydantic import BaseModel, conint, Field, AnyUrl, Extra
 
 # ---- #
 # Enum #
@@ -69,7 +69,7 @@ class ValuesReference(BaseModel):
 
 class Format(BaseModel):
     mediaType: str
-    schema: Optional[str] = None
+    schema_: Optional[str] = Field(alias='schema', default=None)
     encoding: Optional[str] = None
 
 
@@ -123,8 +123,10 @@ class LiteralDataDomain(BaseModel):
     uom: Optional[NameReferenceType] = None
 
 
+# TODO: Example in ogcapi-processes has `literalDataDomain`, but the schema says `literalDataDomains`
 class LiteralDataType(BaseModel):
-    literalDataDomains: List[LiteralDataDomain]
+    # literalDataDomains: List[LiteralDataDomain]
+    literalDataDomain: LiteralDataDomain
 
 
 class ComplexDataType(BaseModel):
@@ -157,8 +159,17 @@ class InlineOrRefData(BaseModel):
 # IO #
 # -- #
 
+class Input(BaseModel):
+    class Config:
+        extra = Extra.allow
+
+    __root__: Union[InlineOrRefData, BoundingBoxData, Any, List[Union[InlineOrRefData, BoundingBoxData, Any]]]
+
 
 class Output(BaseModel):
+    class Config:
+        extra = Extra.allow
+
     __root__: Any
 
 
@@ -227,3 +238,36 @@ class ProcessSummary(DescriptionType):
 class Process(ProcessSummary):
     inputs: Optional[List[InputDescription]] = None
     outputs: Optional[List[OutputDescription]] = None
+
+
+# Experimenting with adding dunder methods
+class ProcessList(BaseModel):
+    __root__: List[ProcessSummary]
+
+    def __iter__(self):
+        return iter(self.__root__)
+
+    def __getitem__(self, item):
+        return self.__root__[item]
+
+    def __len__(self):
+        return len(self.__root__)
+
+
+class ConfClasses(BaseModel):
+    conformsTo: List[str]
+
+
+class Subscriber(BaseModel):
+    successUri: Optional[AnyUrl] = None
+    inProgressUri: Optional[AnyUrl] = None
+    failedUri: Optional[AnyUrl] = None
+
+
+class Execute(BaseModel):
+    id: str
+    inputs: Optional[Input] = None
+    outputs: Output
+    mode: Mode
+    response: Response
+    subscriber: Optional[Subscriber] = None

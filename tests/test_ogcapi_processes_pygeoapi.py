@@ -45,3 +45,20 @@ def test_ogcapi_processes_pygeoapi():
     assert len(resp['outputs']) == 1
     assert resp['outputs'][0]['id'] == 'echo'
     assert resp['outputs'][0]['value'] == 'Hello hello!'
+
+
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
+                    reason='service is unreachable')
+def test_ogcapi_models_pygeoapi():
+    import owslib.ogcapi.models as m
+    w = Processes(SERVICE_URL)
+
+    conformance = m.ConfClasses.parse_obj(w.conformance())
+
+    assert len(conformance.conformsTo) == 9
+
+    # list processes
+    processes = m.ProcessList.parse_obj(w.processes())
+    assert len(processes) > 0
+
