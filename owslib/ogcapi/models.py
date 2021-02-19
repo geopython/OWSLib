@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, List, Union, Optional, Dict, ForwardRef
+from typing import Any, List, Union, Optional, Dict
 from pydantic import BaseModel, conint, Field, AnyUrl, Extra
 
 # ---- #
@@ -67,7 +67,8 @@ class ValuesReference(BaseModel):
 
 
 class Format(BaseModel):
-    mediaType: str
+    # mediaType: str
+    mimeType: str
     schema_: Optional[str] = Field(alias='schema', default=None)
     encoding: Optional[str] = None
 
@@ -129,7 +130,7 @@ class LiteralDataType(BaseModel):
 
 
 class ComplexDataType(BaseModel):
-    formats: List[FormatDescription]
+    formats: Optional[List[FormatDescription]]
 
 
 class BoundingBoxDataType(BaseModel):
@@ -157,7 +158,7 @@ class InlineOrRefData(BaseModel):
 # -- #
 # IO #
 # -- #
-#Input = ForwardRef("Input")
+# Input = ForwardRef("Input")
 
 
 class Input(BaseModel):
@@ -271,9 +272,20 @@ class Subscriber(BaseModel):
 
 
 class Execute(BaseModel):
-    id: str
+    id: Optional[str]
     inputs: Optional[Input] = None
-    outputs: Output
+    outputs: Optional[Output] = None
     mode: Mode
-    response: Response
+    response: Optional[Response] = None
     subscriber: Optional[Subscriber] = None
+
+
+class LiteralOutput(BaseModel):
+    id: str
+    value: str
+
+
+class Result(BaseModel):
+    jobID: Optional[str]
+    location: Optional[str] = None
+    outputs: Optional[List[LiteralOutput]] = None

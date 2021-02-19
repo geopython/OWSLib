@@ -14,6 +14,7 @@ import requests
 
 from owslib.ogcapi import API
 from owslib.util import Authentication
+from owslib.ogcapi import models as m
 
 LOGGER = logging.getLogger(__name__)
 
@@ -40,11 +41,9 @@ class Processes(API):
         @returns: `list` of available processes.
         """
 
-        processes_ = []
         path = 'processes'
         data = self._request(path)
-        if 'processes' in data:
-            processes_.extend(data["processes"])
+        processes_ = m.ProcessList.parse_obj(data['processes'])
         return processes_
 
     def process_description(self, process_id: str) -> dict:
@@ -57,7 +56,8 @@ class Processes(API):
         """
 
         path = f'processes/{process_id}'
-        return self._request(path)
+        process_ = m.Process.parse_obj(self._request(path))
+        return process_
 
     def job_list(self, process_id: str) -> dict:
         """
@@ -69,7 +69,8 @@ class Processes(API):
         """
 
         path = f'processes/{process_id}/jobs'
-        return self._request(path)
+        data = self._request(path)
+        return data
 
     def execute(self, process_id: str, json: dict) -> dict:
         """
@@ -80,16 +81,17 @@ class Processes(API):
 
         @returns: `dict` of the status location (async) or outputs (sync)
         """
+        # validate input
+        m.Execute.parse_obj(json)
 
-        result = {}
         path = f'processes/{process_id}/jobs'
         resp = self._request_post(path, json)
         data = resp.json()
-        if 'outputs' in data:
-            result['outputs'] = data['outputs']
-        else:
-            result['location'] = resp.headers.get("Location", data.get("location"))
-        return result
+        if 'location' not in data:
+            data['location'] = resp.headers.get("Location")
+        data['jobID'] = data['location'].split('/')[-1]
+        result_ = m.Result.parse_obj(data)
+        return result_
 
     def _request_post(self, path: str, json: dict) -> requests.Response:
         # TODO: needs to be implemented in base class
@@ -112,7 +114,8 @@ class Processes(API):
         """
 
         path = f'processes/{process_id}/jobs/{job_id}'
-        return self._request(path)
+        status_ = m.StatusInfo.parse_obj(self._request(path))
+        return status_
 
     def cancel(self, process_id: str, job_id: str) -> dict:
         """
