@@ -1,0 +1,9 @@
+# conda env create -f environment.yml
+name: owslib
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pip
+  - lxml
+  - owslib>=0.23
