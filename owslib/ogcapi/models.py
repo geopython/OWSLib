@@ -130,7 +130,7 @@ class LiteralDataType(BaseModel):
 
 
 class ComplexDataType(BaseModel):
-    formats: Optional[List[FormatDescription]]
+    formats: Optional[List[FormatDescription]] = None
 
 
 class BoundingBoxDataType(BaseModel):
