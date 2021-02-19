@@ -1,6 +1,5 @@
 from enum import Enum
-from typing import Any, List, Union, Optional, Dict
-
+from typing import Any, List, Union, Optional, Dict, ForwardRef
 from pydantic import BaseModel, conint, Field, AnyUrl, Extra
 
 # ---- #
@@ -158,12 +157,19 @@ class InlineOrRefData(BaseModel):
 # -- #
 # IO #
 # -- #
+#Input = ForwardRef("Input")
+
 
 class Input(BaseModel):
     class Config:
         extra = Extra.allow
 
-    __root__: Union[InlineOrRefData, BoundingBoxData, Any, List[Union[InlineOrRefData, BoundingBoxData, Any]]]
+    # The schema refers to Input. Self-referencing objects are supported with ForwardRef, but getting parsing errors.
+    # See https://pydantic-docs.helpmanual.io/usage/postponed_annotations/
+    __root__: Union[InlineOrRefData, BoundingBoxData, List[Union[InlineOrRefData, BoundingBoxData]]]
+
+
+# Input.update_forward_refs()
 
 
 class Output(BaseModel):
