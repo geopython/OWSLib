@@ -31,18 +31,21 @@ class Processes(API):
         __doc__ = API.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
-    def processes(self) -> dict:
+    def processes(self) -> list:
         """
         implements: GET /processes
 
         Lists the processes this API offers.
 
-        @returns: `dict` of available processes.
+        @returns: `list` of available processes.
         """
 
+        processes_ = []
         path = 'processes'
         data = self._request(path)
-        return data["processes"]
+        if 'processes' in data:
+            processes_.extend(data["processes"])
+        return processes_
 
     def process_description(self, process_id: str) -> dict:
         """
@@ -68,20 +71,25 @@ class Processes(API):
         path = f'processes/{process_id}/jobs'
         return self._request(path)
 
-    def execute(self, process_id: str, json: dict) -> str:
+    def execute(self, process_id: str, json: dict) -> dict:
         """
         implements: POST /processes/{process-id}/jobs
 
         Executes a process, i.e. creates a new job. Inputs and outputs will have
         to be specified in a JSON document that needs to be send in the POST body.
 
-        @returns: `str` of the status location
+        @returns: `dict` of the status location (async) or outputs (sync)
         """
 
+        result = {}
         path = f'processes/{process_id}/jobs'
         resp = self._request_post(path, json)
         data = resp.json()
-        return resp.headers.get("Location", data["location"])
+        if 'outputs' in data:
+            result['outputs'] = data['outputs']
+        else:
+            result['location'] = resp.headers.get("Location", data.get("location"))
+        return result
 
     def _request_post(self, path: str, json: dict) -> requests.Response:
         # TODO: needs to be implemented in base class
@@ -89,7 +97,7 @@ class Processes(API):
 
         resp = requests.post(url, json=json)
 
-        if resp.status_code != requests.codes.ok:
+        if resp.status_code not in [requests.codes.ok, 201]:
             raise RuntimeError(resp.text)
 
         return resp
