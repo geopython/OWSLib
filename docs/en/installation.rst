@@ -13,9 +13,9 @@ PyPI:
 
 .. code-block:: bash
 
-  $ easy_install OWSLib
+  easy_install OWSLib
   # pip works too
-  $ pip install OWSLib
+  pip install OWSLib
 
 Git:
 
@@ -34,29 +34,29 @@ Anaconda:
 
 .. code-block:: bash
 
-  $ conda install -c conda-forge owslib
+  conda install -c conda-forge owslib
 
 openSUSE:
 
 .. code-block:: bash
 
-  $ zypper ar http://download.opensuse.org/repositories/Application:/Geo/openSUSE_12.1/ GEO
-  $ zypper refresh
-  $ zypper install owslib
+  zypper ar http://download.opensuse.org/repositories/Application:/Geo/openSUSE_12.1/ GEO
+  zypper refresh
+  zypper install owslib
 
 CentOS:
 
 .. code-block:: bash
 
-  $ wget -O /etc/yum.repos.d/CentOS-CBS.repo http://download.opensuse.org/repositories/Application:/Geo/CentOS_6/Application:Geo.repo
-  $ yum install owslib
+  wget -O /etc/yum.repos.d/CentOS-CBS.repo http://download.opensuse.org/repositories/Application:/Geo/CentOS_6/Application:Geo.repo
+  yum install owslib
 
 RedHat Enterprise Linux
 
 .. code-block:: bash
 
-  $ wget -O /etc/yum.repos.d/RHEL-CBS.repo http://download.opensuse.org/repositories/Application:/Geo/RHEL_6/Application:Geo.repo
-  $ yum install owslib
+  wget -O /etc/yum.repos.d/RHEL-CBS.repo http://download.opensuse.org/repositories/Application:/Geo/RHEL_6/Application:Geo.repo
+  yum install owslib
 
 Fedora:
 
@@ -66,4 +66,4 @@ Fedora:
 
 .. code-block:: bash
 
-  $ yum install OWSLib
+  yum install OWSLib

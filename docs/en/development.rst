@@ -12,15 +12,15 @@ Testing
 
 .. code-block:: bash
 
-   $ python setup.py test
+   python setup.py test
 
 Or ...
 
 .. code-block:: bash
 
     # install requirements
-    $ pip install -r requirements.txt
-    $ pip install -r requirements-dev.txt # needed for tests only
+    pip install -r requirements.txt
+    pip install -r requirements-dev.txt # needed for tests only
 
     # run tests
     python -m pytest
