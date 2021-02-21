@@ -10,6 +10,18 @@ from pydantic import BaseModel, conint, Field, AnyUrl, Extra
 # Enum #
 # ---- #
 
+class BaseModelList(BaseModel):
+    """Array-time objects defining __root__ as a list."""
+
+    def __iter__(self):
+        return iter(self.__root__)
+
+    def __getitem__(self, item):
+        return self.__root__[item]
+
+    def __len__(self):
+        return len(self.__root__)
+
 
 class Mode(Enum):
     sync = 'sync'
@@ -51,7 +63,7 @@ class TransmissionMode(Enum):
 # ------ #
 
 
-class AllowedValues(BaseModel):
+class AllowedValues(BaseModelList):
     __root__: List[Any]
 
 
@@ -192,6 +204,14 @@ class Link(BaseModel):
     title: Optional[str] = None
 
 
+class LandingPage(BaseModel):
+    title: Optional[str] = Field(None, example='Example processing server')
+    description: Optional[str] = Field(
+        None, example='Example server implementing the OGC API - Processes 1.0'
+    )
+    links: List[Link]
+
+
 class StatusInfo(BaseModel):
     jobID: str
     status: Status
@@ -200,17 +220,8 @@ class StatusInfo(BaseModel):
     links: Optional[List[Link]] = None
 
 
-class JobList(BaseModel):
+class JobList(BaseModelList):
     __root__: List[StatusInfo]
-
-    def __iter__(self):
-        return iter(self.__root__)
-
-    def __getitem__(self, item):
-        return self.__root__[item]
-
-    def __len__(self):
-        return len(self.__root__)
 
 
 class ObservedProperty(BaseModel):
@@ -265,17 +276,8 @@ class Process(ProcessSummary):
 
 
 # Experimenting with adding dunder methods
-class ProcessList(BaseModel):
+class ProcessList(BaseModelList):
     __root__: List[ProcessSummary]
-
-    def __iter__(self):
-        return iter(self.__root__)
-
-    def __getitem__(self, item):
-        return self.__root__[item]
-
-    def __len__(self):
-        return len(self.__root__)
 
 
 class ConfClasses(BaseModel):
