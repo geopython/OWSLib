@@ -19,6 +19,23 @@ from owslib.ogcapi import models as m
 LOGGER = logging.getLogger(__name__)
 
 
+"""
+Notes on FastAPI client 
+-----------------------
+
+FastAPi client proposes this model for sync and async interfaces. 
+```
+client = ApiClient(host="http://localhost")
+sync_apis = SyncApis(client)
+async_apis = AsyncApis(client)
+```
+They seem to wrap async methods with async/await for every API route. Not sure I understand what's the point.
+
+Request inputs are model instances, that are then converted to json. 
+
+
+"""
+
 class Processes(API):
     """Abstraction for OGC API - Processes
 
@@ -83,15 +100,28 @@ class Processes(API):
         """
         # validate input
         m.Execute.parse_obj(json)
-
         path = f'processes/{process_id}/jobs'
         resp = self._request_post(path, json)
+
+        # Carsten, is it a server non-conformity that we can't just return m.Result.parse_obj(resp.json()) ?
         data = resp.json()
         if 'location' not in data:
             data['location'] = resp.headers.get("Location")
         data['jobID'] = data['location'].split('/')[-1]
-        result_ = m.Result.parse_obj(data)
-        return result_
+        return m.Result.parse_obj(data)
+
+    def execute_sync(self, process_id: str, inputs: m.Input = None, outputs: m.Output = None, id: str = None):
+        """Execute process synchronously."""
+        execute = m.Execute(inputs=inputs, outputs=outputs, id=id, mode="sync")
+        return self.execute(process_id, execute.dict())
+
+    def execute_async(self, process_id: str, inputs: m.Input = None, outputs: m.Output = None, id: str = None):
+        """Execute process asynchronously.
+
+        Idea: this could return an instance based on `asyncio.Future`.
+        """
+        execute = m.Execute(inputs=inputs, outputs=outputs, id=id, mode="async")
+        return self.execute(process_id, execute.dict())
 
     def _request_post(self, path: str, json: dict) -> requests.Response:
         # TODO: needs to be implemented in base class

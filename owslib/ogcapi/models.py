@@ -9,6 +9,13 @@ from pydantic import BaseModel, conint, Field, AnyUrl, Extra
 # ---- #
 # Enum #
 # ---- #
+# Note that
+# ```
+# class Config:
+#     use_enum_values = True
+# ```
+# Should be used to ensure enum are json serializable by classes that use them.
+
 
 class BaseModelList(BaseModel):
     """Array-time objects defining __root__ as a list."""
@@ -68,6 +75,9 @@ class AllowedValues(BaseModelList):
 
 
 class Range(BaseModel):
+    class Config:
+        use_enum_values = True
+
     minimumValue: Optional[str] = None
     maximumValue: Optional[str] = None
     spacing: Optional[str] = None
@@ -163,6 +173,7 @@ class BoundingBoxData(BaseModel):
     bbox: List[float] = Field(..., max_items=6, min_items=4)
 
 
+# TODO: one of href / value is required. Need root validator.
 class InlineOrRefData(BaseModel):
     dataType: Optional[NameReferenceType] = None
     uom: Optional[NameReferenceType] = None
@@ -174,19 +185,17 @@ class InlineOrRefData(BaseModel):
 # -- #
 # IO #
 # -- #
-# Input = ForwardRef("Input")
 
-
-class Input(BaseModel):
+class Input(BaseModelList):
     class Config:
         extra = Extra.allow
 
-    # The schema refers to Input. Self-referencing objects are supported with ForwardRef, but getting parsing errors.
     # See https://pydantic-docs.helpmanual.io/usage/postponed_annotations/
-    __root__: Union[InlineOrRefData, BoundingBoxData, List[Union[InlineOrRefData, BoundingBoxData]]]
+    # Forced this to be a list. Got parsing errors when allowing it to be either a List or an object.
+    __root__: List[Union[InlineOrRefData, BoundingBoxData, "Input"]]
 
 
-# Input.update_forward_refs()
+Input.update_forward_refs()
 
 
 class Output(BaseModel):
@@ -213,6 +222,9 @@ class LandingPage(BaseModel):
 
 
 class StatusInfo(BaseModel):
+    class Config:
+        use_enum_values = True
+
     jobID: str
     status: Status
     message: Optional[str] = None
@@ -264,6 +276,9 @@ class OutputDescription(DescriptionType):
 
 
 class ProcessSummary(DescriptionType):
+    class Config:
+        use_enum_values = True
+
     version: str
     jobControlOptions: Optional[List[JobControlOptions]] = None
     outputTransmission: Optional[List[TransmissionMode]] = None
@@ -290,7 +305,11 @@ class Subscriber(BaseModel):
     failedUri: Optional[AnyUrl] = None
 
 
+# TODO: id, outputs, mode and response are required according to schema
 class Execute(BaseModel):
+    class Config:
+        use_enum_values = True
+
     id: Optional[str]
     inputs: Optional[Input] = None
     outputs: Optional[Output] = None

@@ -3,6 +3,7 @@ from tests.utils import service_ok
 import pytest
 
 from owslib.ogcapi.processes import Processes
+import owslib.ogcapi.models as m
 
 SERVICE_URL = 'https://demo.pygeoapi.io/master'
 
@@ -53,6 +54,10 @@ def test_ogcapi_processes_pygeoapi():
     assert result.outputs is None
     assert 'processes/hello-world/jobs' in result.location
     assert result.jobID is not None
+
+    # This fails. There is no `id` in the Input schema.
+    # w.execute_sync('hello-world', inputs=[m.InlineOrRefData(id="name", value="hello")])
+    # w.execute_async('hello-world', inputs=[m.InlineOrRefData(id="name", value="hello")])
 
     # get job status
     # status = w.status('hello-world', result.job_id)
