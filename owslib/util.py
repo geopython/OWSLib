@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 import pytz
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
-from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl, unquote
+from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
 import copy
 
 from io import StringIO, BytesIO
@@ -197,7 +197,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
         rkwargs['data'] = data
 
     elif method.lower() == 'get':
-        rkwargs['params'] = unquote(data) if data else None
+        rkwargs['params'] = data
 
     else:
         raise ValueError("Unknown method ('%s'), expected 'get' or 'post'" % method)
