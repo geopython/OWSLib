@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 from tests.utils import service_ok
 
@@ -151,3 +153,22 @@ def test_ncwms2():
     assert "height=256" in wms.request
     assert "format=image%2Fpng" in wms.request
     assert "transparent=TRUE" in wms.request
+
+
+@pytest.mark.parametrize('wms_version', ['1.1.1', '1.3.0'])
+def test_wms_sends_headers(wms_version):
+    """Test that if headers are provided in the WMS class they are sent
+    when performing HTTP requests (in this case for GetCapabilities)
+    """
+
+    with mock.patch('owslib.util.requests.request', side_effect=RuntimeError) as mock_request:
+        try:
+            WebMapService(
+                'http://example.com/wms',
+                version=wms_version,
+                headers={'User-agent': 'my-app/1.0'}
+            )
+        except RuntimeError:
+
+            assert mock_request.called
+            assert mock_request.call_args[1]['headers'] == {'User-agent': 'my-app/1.0'}
