@@ -692,7 +692,7 @@ class ContentMetadata(AbstractContentMetadata):
                     and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
                 try:
                     content = openURL(
-                        metadataUrl['url'], timeout=timeout, auth=self.auth, headers=self.headers)
+                        metadataUrl['url'], timeout=timeout, auth=self.auth)
                     doc = etree.fromstring(content.read())
 
                     mdelem = doc.find('.//metadata')
