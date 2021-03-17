@@ -843,6 +843,16 @@ class WPSExecution(object):
                 'Unknown process execution status: %s' % self.status)
 
     def isSucceded(self):
+        """
+        Calls self.isSucceeded - deprecated because of spelling mistake,
+        retained for backwards-compatibility.
+        """
+        return self.isSucceeded()
+        
+    def isSucceeded(self):
+        """
+        Returns a boolean regarding the success status of the process.
+        """
         if self.status == 'ProcessSucceeded':
             return True
         else:
@@ -862,7 +872,7 @@ class WPSExecution(object):
                   For backward compatibility it will default to the first output.
         """
 
-        if self.isSucceded():
+        if self.isSucceeded():
             content = b''
             output = None
             if self.processOutputs:
@@ -1905,7 +1915,7 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
         execution.checkStatus(sleepSecs=sleepSecs)
         log.info('Execution status: %s' % execution.status)
 
-    if execution.isSucceded():
+    if execution.isSucceeded():
         if download:
             execution.getOutput(filepath=filepath)
         else:
