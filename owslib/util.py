@@ -135,7 +135,7 @@ class ResponseWrapper(object):
     # @TODO: __getattribute__ for poking at response
 
 def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None,
-            verify=True, cert=None):
+            verify=False, cert=None):
     """
     Function to open URLs.
 
