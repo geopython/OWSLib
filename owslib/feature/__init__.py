@@ -132,7 +132,7 @@ class WebFeatureService_(object):
         elif bbox:
             request['bbox'] = self.getBBOXKVP(bbox,typename)
         elif filter:
-            request['query'] = str(filter)
+            request['filter'] = str(filter)
         if typename:
             typename = [typename] if type(typename) == type("") else typename
             if int(self.version.split('.')[0]) >= 2:
