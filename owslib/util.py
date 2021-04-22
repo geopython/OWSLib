@@ -872,11 +872,11 @@ class Authentication(object):
             username/password arguments.
         '''
         self.shared = shared
-        self.username = username
-        self.password = password
-        self.cert = cert
-        self.verify = verify
-        self.auth_delegate = auth_delegate
+        self._username = username
+        self._password = password
+        self._cert = cert
+        self._verify = verify
+        self._auth_delegate = auth_delegate
 
     @property
     def username(self):
