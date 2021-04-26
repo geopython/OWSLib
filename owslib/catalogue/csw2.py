@@ -308,7 +308,9 @@ class CatalogueServiceWeb(object):
 
     def getrecords2(self, constraints=[], sortby=None, typenames='csw:Record', esn='summary',
                     outputschema=namespaces['csw'], format=outputformat, startposition=0,
-                    maxrecords=10, cql=None, xml=None, resulttype='results'):
+                    maxrecords=10, cql=None, xml=None, resulttype='results',
+                    distributedsearch=False, hopcount=1
+        ):
         """
 
         Construct and process a  GetRecords request
@@ -327,6 +329,8 @@ class CatalogueServiceWeb(object):
         - cql: common query language text.  Note this overrides bbox, qtype, keywords
         - xml: raw XML request.  Note this overrides all other options
         - resulttype: the resultType 'hits', 'results', 'validate' (default is 'results')
+        - distributedsearch: `bool` of whether to trigger distributed search
+        - hopcount: number of message hops before search is terminated (default is 1)
 
         """
 
@@ -358,6 +362,9 @@ class CatalogueServiceWeb(object):
                 node0.set('startPosition', str(startposition))
             node0.set('maxRecords', str(maxrecords))
             node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+
+            if distributedsearch:
+                etree.SubElement(node0, util.nspath_eval('csw:DistributedSearch', namespaces), hopCount=str(hopcount))
 
             node1 = etree.SubElement(node0, util.nspath_eval('csw:Query', namespaces))
             node1.set('typeNames', typenames)

@@ -196,7 +196,8 @@ class CatalogueServiceWeb(object):
 
     def getrecords(self, constraints=[], sortby=None, typenames='csw30:Record', esn='summary',
                    outputschema=namespaces['csw30'], format=outputformat, startposition=0,
-                   maxrecords=10, cql=None, xml=None):
+                   maxrecords=10, cql=None, xml=None, distributedsearch=False, hopcount=2,
+                   federatedcatalogues=[]):
         """
 
         Construct and process a  GetRecords request
@@ -214,6 +215,9 @@ class CatalogueServiceWeb(object):
         - maxrecords: the maximum number of records to return. No records are returned if 0 (default is 10)
         - cql: common query language text.  Note this overrides bbox, qtype, keywords
         - xml: raw XML request.  Note this overrides all other options
+        - distributedsearch: `bool` of whether to trigger distributed search
+        - hopcount: number of message hops before search is terminated (default is 1)
+        - federatedcatalogues: list of CSW 3 URLs
 
         """
 
@@ -244,6 +248,16 @@ class CatalogueServiceWeb(object):
                 node0.set('startPosition', str(startposition))
             node0.set('maxRecords', str(maxrecords))
             node0.set(util.nspath_eval('xsi:schemaLocation', namespaces), schema_location)
+
+            if distributedsearch:
+                node00 = etree.SubElement(node0, util.nspath_eval('csw30:DistributedSearch', namespaces),
+                                          hopCount=str(hopcount), clientId='owslib',
+                                          distributedSearchId='owslib-request')
+
+                if federatedcatalogues:
+                    for fc in federatedcatalogues:
+                        etree.SubElement(node00, util.nspath_eval('csw30:federatedCatalogues', namespaces),
+                                         catalogueURL=fc)
 
             node1 = etree.SubElement(node0, util.nspath_eval('csw30:Query', namespaces))
             node1.set('typeNames', typenames)
