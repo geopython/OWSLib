@@ -878,6 +878,14 @@ class Authentication(object):
         self._verify = verify
         self._auth_delegate = auth_delegate
 
+        # Trigger the setters to validate the parameters. This couldn't be done directly
+        # since some parameters are mutually exclusive.
+        self.username = username
+        self.password = password
+        self.cert = cert
+        self.verify = verify
+        self.auth_delegate = auth_delegate
+
     @property
     def username(self):
         if self.shared:
