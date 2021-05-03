@@ -120,6 +120,7 @@ class WebMapService_1_3_0(object):
                 if cm.id:
                     if cm.id in self.contents:
                         warnings.warn('Content metadata for layer "%s" already exists. Using child layer' % cm.id)
+                        cm.counter = self.contents[cm.id].counter + 1
                     layers.append(cm)
                     self.contents[cm.id] = cm
                 cm.children = gather_layers(elem, cm)
@@ -443,6 +444,8 @@ class ContentMetadata(AbstractContentMetadata):
         self._children = children
 
         self.id = self.name = testXMLValue(elem.find(nspath('Name', WMS_NAMESPACE)))
+        
+        self.counter = 1
 
         # layer attributes
         self.queryable = int(elem.attrib.get('queryable', 0))
