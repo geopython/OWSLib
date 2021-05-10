@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Features &#8212; OWSLib 0.24.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+ 
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32866201-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+  </head><body>
+
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.24.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Features</a></li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="features">
+<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
+<section id="standards-support">
+<h2>Standards Support<a class="headerlink" href="#standards-support" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Standard</p></th>
+<th class="head"><p>Version(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/wms">OGC WMS</a></p></td>
+<td><p>1.1.1, 1.3.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/wfs">OGC WFS</a></p></td>
+<td><p>1.0.0, 1.1.0, 2.0.0, 3.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/wcs">OGC WCS</a></p></td>
+<td><p>1.0.0, 1.1.0, 2.0, 2.0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/wmc">OGC WMC</a></p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/sos">OGC SOS</a></p></td>
+<td><p>1.0.0, 2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/sensorml">OGC SensorML</a></p></td>
+<td><p>1.0.1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/cat">OGC CSW</a></p></td>
+<td><p>2.0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/wps">OGC WPS</a></p></td>
+<td><p>1.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/filter">OGC Filter</a></p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/common">OGC OWS Common</a></p></td>
+<td><p>1.0.0, 1.1.0, 2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/owc">OGC OWS Context</a></p></td>
+<td><p>1.0.0 (alpha/under-review)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://earthdata.nasa.gov/esdis/eso/standards-and-references/directory-interchange-format-dif-standard">NASA DIF</a></p></td>
+<td><p>9.7</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.fgdc.gov/metadata/csdgm-standard">FGDC CSDGM</a></p></td>
+<td><p>1998</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.iso.org/standard/32557.html">ISO 19139</a></p></td>
+<td><p>2007</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.iso.org/standard/57104.html">ISO 19139-2</a></p></td>
+<td><p>2012</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.dublincore.org/">Dublin Core</a></p></td>
+<td><p>1.1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.geocat.admin.ch/en/dokumentation/gm03.html">Swiss GM03</a></p></td>
+<td><p>2.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.opengeospatial.org/standards/wmts">OGC WMTS</a></p></td>
+<td><p>1.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://his.cuahsi.org/wofws.html#waterml">WaterML</a></p></td>
+<td><p>1.0, 1.1, 2.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ogc-api-support">
+<h2>OGC API Support<a class="headerlink" href="#ogc-api-support" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 76%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Standard                             | Version(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://docs.opengeospatial.org/is/17-069r3/17-069r3.html">OGC API - Features - Part 1: Core</a></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/opengeospatial/ogcapi-records">OGC API - Records - Part 1: Core</a></p></td>
+<td><p>draft</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Features</a><ul>
+<li><a class="reference internal" href="#standards-support">Standards Support</a></li>
+<li><a class="reference internal" href="#ogc-api-support">OGC API Support</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">Installation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/features.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.24.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Features</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2010, Tom Kralidis.
+      Last updated on 2021-05-10T09:18:22Z.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.0.
+    </div>
+  </body>
+</html>
