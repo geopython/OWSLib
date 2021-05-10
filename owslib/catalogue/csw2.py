@@ -309,8 +309,7 @@ class CatalogueServiceWeb(object):
     def getrecords2(self, constraints=[], sortby=None, typenames='csw:Record', esn='summary',
                     outputschema=namespaces['csw'], format=outputformat, startposition=0,
                     maxrecords=10, cql=None, xml=None, resulttype='results',
-                    distributedsearch=False, hopcount=1
-        ):
+                    distributedsearch=False, hopcount=1):
         """
 
         Construct and process a  GetRecords request
