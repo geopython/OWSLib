@@ -680,7 +680,7 @@ class CatalogueServiceWeb(object):
                 self.request, None, 'Get', timeout=self.timeout, auth=self.auth
             ).read()
         else:
-            self.request = cleanup_namespaces(self.request)
+            self.request = cleanup_namespaces(etree.fromstring(self.request))
             # Add any namespaces used in the "typeNames" attribute of the
             # csw:Query element to the query's xml namespaces.
             for query in self.request.findall(util.nspath_eval('csw:Query', namespaces)):
