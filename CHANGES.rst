@@ -1,6 +1,16 @@
 Changes
 =======
 
+0.24.1 (2021-05-10)
+-------------------
+
+A full list of commits for 0.24.1 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.24.1
+
+- fix CSW request byte handling (#776)
+
+
 0.24.0 (2021-05-10)
 -------------------
 
