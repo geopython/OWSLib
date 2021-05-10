@@ -848,7 +848,7 @@ class WPSExecution(object):
         retained for backwards-compatibility.
         """
         return self.isSucceeded()
-        
+
     def isSucceeded(self):
         """
         Returns a boolean regarding the success status of the process.
