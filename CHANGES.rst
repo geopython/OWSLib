@@ -1,6 +1,21 @@
 Changes
 =======
 
+0.24.0 (2021-05-10)
+-------------------
+
+A full list of commits for 0.24.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.24.0
+
+- CSW: add CSW 3 client (#746)
+- CSW: add support for distributed search (#771)
+- OGC API: refactor collections for broader use (#753)
+- OACov: add support for scaling (#756)
+- Auth: make most Authentication attributes private (#770)
+- various bug fixes
+
+
 0.23.0 (2021-02-04)
 -------------------
 
