@@ -19,7 +19,7 @@ from owslib.ows import (
     ServiceProvider,
     OperationsMetadata,
 )
-
+from owslib.coverage.wcps import ProcessCoverages
 from urllib.parse import urlencode
 from owslib.util import openURL, testXMLValue
 from owslib.etree import etree
@@ -226,6 +226,10 @@ class WebCoverageService_2_0_1(WCSBase):
                 return item
         raise KeyError("No operation named %s" % name)
 
+    #WCS ProcessCoverages implementation
+    def process(self,query):
+        result = ProcessCoverages.process(self, service_url=self.url, query=query)
+        return result
 
 class ContentMetadata(object):
     """
