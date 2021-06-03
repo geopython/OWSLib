@@ -373,6 +373,7 @@ class MD_DataIdentification(object):
             self.abstract_url = None
             self.purpose = None
             self.status = None
+            self.graphicoverview = []
             self.contact = []
             self.keywords = []
             self.keywords2 = []
@@ -545,6 +546,13 @@ class MD_DataIdentification(object):
             self.purpose = util.testXMLValue(val)
 
             self.status = _testCodeListValue(md.find(util.nspath_eval('gmd:status/gmd:MD_ProgressCode', namespaces)))
+
+            self.graphicoverview = []
+            for val in md.findall(util.nspath_eval('gmd:graphicOverview/gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString', namespaces)):
+                if val is not None:
+                    val2 = util.testXMLValue(val)
+                    if val2 is not None:
+                        self.graphicoverview.append(val2)
 
             self.contact = []
             for i in md.findall(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty', namespaces)):
