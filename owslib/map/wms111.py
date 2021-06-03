@@ -259,7 +259,7 @@ class WebMapService_1_1_1(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
 
         # check for service exceptions, and return
         if u.info().get('Content-Type', '').split(';')[0] in ['application/vnd.ogc.se_xml']:
@@ -326,7 +326,7 @@ class WebMapService_1_1_1(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -601,7 +601,7 @@ class ContentMetadata(AbstractContentMetadata):
                     and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
                 try:
                     content = openURL(
-                        metadataUrl['url'], timeout=timeout, auth=self.auth)
+                        metadataUrl['url'], timeout=timeout, auth=self.auth, headers=self.headers)
                     doc = etree.fromstring(content.read())
 
                     if metadataUrl['type'] == 'FGDC':
