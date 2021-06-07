@@ -59,7 +59,7 @@ class Features(Collections):
         """
 
         if 'bbox' in kwargs:
-            kwargs['bbox'] = ','.join(kwargs['bbox'])
+            kwargs['bbox'] = ','.join(list(map(str, kwargs['bbox'])))
 
         path = 'collections/{}/items'.format(collection_id)
         return self._request(path=path, kwargs=kwargs)
