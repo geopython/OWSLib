@@ -18,6 +18,7 @@ Supports version 2.0.2 (09-026r2).
 from owslib.etree import etree
 from owslib import util
 from owslib.namespaces import Namespaces
+from abc import ABCMeta, abstractmethod
 
 
 # default variables
@@ -389,6 +390,57 @@ class BBox(OgcExpression):
         etree.SubElement(tmp2, util.nspath_eval('gml:upperCorner', namespaces)).text = '{} {}'.format(
             self.bbox[2], self.bbox[3])
         return tmp
+
+
+class TopologicalOpType(OgcExpression, metaclass=ABCMeta):
+    """Abstract base class for topological operators."""
+    @property
+    @abstractmethod
+    def operation(self):
+        """This is a mechanism to ensure this class is subclassed by an actual operation."""
+        pass
+
+    def __init__(self, propertyname, geometry):
+        self.propertyname = propertyname
+        self.geometry = geometry
+
+    def toXML(self):
+        p = etree.Element(util.nspath_eval(f"fes:Filter", namespaces))
+
+        node = etree.Element(util.nspath_eval(f"fes:{self.operation}", namespaces))
+        etree.SubElement(node, util.nspath_eval("fes:ValueReference", namespaces)).text = self.propertyname
+        node.append(self.geometry.toXML())
+
+        p.append(node)
+        return p
+
+
+class Intersects(TopologicalOpType):
+    operation = "Intersects"
+
+
+class Contains(TopologicalOpType):
+    operation = "Contains"
+
+
+class Disjoint(TopologicalOpType):
+    operation = "Disjoint"
+
+
+class Within(TopologicalOpType):
+    operation = "Within"
+
+
+class Touches(TopologicalOpType):
+    operation = "Touches"
+
+
+class Overlaps(TopologicalOpType):
+    operation = "Overlaps"
+
+
+class Equals(TopologicalOpType):
+    operation = "Equals"
 
 
 # BINARY
