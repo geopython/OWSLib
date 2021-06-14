@@ -7,7 +7,7 @@ from owslib.namespaces import Namespaces
 # default variables
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["gml", "ogc", "xsd"])
+    ns = n.get_namespaces(["gml32", "ogc", "xsd"])
     ns[None] = n.get_namespace("ogc")
     return ns
 
@@ -46,20 +46,20 @@ class Point(AbstractGeometryType, _PointBase):
 
     def toXML(self):
         """Return `lxml.etree.Element` object."""
-        node = etree.Element(prefix("gml:Point"))
+        node = etree.Element(prefix("gml32:Point"))
         for key in ["id", "srsName"]:
             if getattr(self, key, None) is not None:
-                node.set(prefix(f"gml:{key}"), getattr(self, key))
+                node.set(prefix(f"gml32:{key}"), getattr(self, key))
 
         for key in ["description", "descriptionReference", "identifier", "name"]:
             content = getattr(self, key)
             if content is not None:
-                etree.SubElement(node, prefix(f"gml:{key}")).text = content
+                etree.SubElement(node, prefix(f"gml32:{key}")).text = content
 
-        coords = etree.SubElement(node, prefix("gml:pos"))
+        coords = etree.SubElement(node, prefix("gml32:pos"))
         coords.text = " ".join([str(c) for c in self.pos])
         for key in ["srsDimension"]:
             if getattr(self, key, None) is not None:
-                node.set(prefix(f"gml:{key}"), getattr(self, key))
+                node.set(prefix(f"gml32:{key}"), getattr(self, key))
 
         return node

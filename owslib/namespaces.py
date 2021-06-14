@@ -19,8 +19,8 @@ class Namespaces(object):
         'gm03': 'http://www.interlis.ch/INTERLIS2.3',
         'gmd': 'http://www.isotc211.org/2005/gmd',
         'gmi': 'http://www.isotc211.org/2005/gmi',
-        'gml': 'http://www.opengis.net/gml/3.2',
-        'gml311': 'http://www.opengis.net/gml',  # Dead link
+        'gml': 'http://www.opengis.net/gml',
+        'gml311': 'http://www.opengis.net/gml',
         'gml32': 'http://www.opengis.net/gml/3.2',
         'gmx': 'http://www.isotc211.org/2005/gmx',
         'gts': 'http://www.isotc211.org/2005/gts',
