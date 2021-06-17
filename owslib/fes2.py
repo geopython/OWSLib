@@ -392,6 +392,16 @@ class BBox(OgcExpression):
         return tmp
 
 
+class Filter(OgcExpression):
+    def __init__(self, filter):
+        self.filter = filter
+
+    def toXML(self):
+        node = etree.Element(util.nspath_eval(f"fes:Filter", namespaces))
+        node.append(self.filter.toXML())
+        return node
+
+
 class TopologicalOpType(OgcExpression, metaclass=ABCMeta):
     """Abstract base class for topological operators."""
     @property
@@ -405,14 +415,11 @@ class TopologicalOpType(OgcExpression, metaclass=ABCMeta):
         self.geometry = geometry
 
     def toXML(self):
-        p = etree.Element(util.nspath_eval(f"fes:Filter", namespaces))
-
         node = etree.Element(util.nspath_eval(f"fes:{self.operation}", namespaces))
         etree.SubElement(node, util.nspath_eval("fes:ValueReference", namespaces)).text = self.propertyname
         node.append(self.geometry.toXML())
 
-        p.append(node)
-        return p
+        return node
 
 
 class Intersects(TopologicalOpType):
