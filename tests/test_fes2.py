@@ -1,6 +1,6 @@
 from owslib import fes2
 from owslib.gml import Point
-from lxml.etree import tostring
+from owslib.etree import etree
 
 
 def test_filter():
@@ -12,4 +12,5 @@ def test_filter():
     )
 
     xml = f.toXML()
-    assert tostring(xml) ==  b'<fes:Filter xmlns:fes="http://www.opengis.net/fes/2.0"><fes:And><fes:Intersects><fes:ValueReference>the_geom</fes:ValueReference><gml32:Point xmlns:gml32="http://www.opengis.net/gml/3.2" gml32:id="qc" gml32:srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"><gml32:pos>-71 46</gml32:pos></gml32:Point></fes:Intersects><fes:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><fes:ValueReference>name</fes:ValueReference><fes:Literal>value</fes:Literal></fes:PropertyIsLike></fes:And></fes:Filter>'
+    assert etree.tostring(xml) ==  b'<fes:Filter ' \
+                                b'xmlns:fes="http://www.opengis.net/fes/2.0"><fes:And><fes:Intersects><fes:ValueReference>the_geom</fes:ValueReference><gml32:Point xmlns:gml32="http://www.opengis.net/gml/3.2" gml32:id="qc" gml32:srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"><gml32:pos>-71 46</gml32:pos></gml32:Point></fes:Intersects><fes:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><fes:ValueReference>name</fes:ValueReference><fes:Literal>value</fes:Literal></fes:PropertyIsLike></fes:And></fes:Filter>'
