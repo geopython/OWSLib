@@ -4,7 +4,7 @@ from owslib.etree import etree
 from owslib import util
 from owslib.namespaces import Namespaces
 
-# default variables
+
 def get_namespaces():
     n = Namespaces()
     ns = n.get_namespaces(["gml32", "ogc", "xsd"])
@@ -37,6 +37,7 @@ class AbstractGeometryType(AbstractGMLType):
 
 @dataclass
 class _PointBase:
+    """This is used to avoid issues arising from non-optional attributes defined after optional attributes."""
     pos: Sequence[float]
 
 
