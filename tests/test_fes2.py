@@ -4,7 +4,7 @@ from owslib import fes2
 from owslib.gml import Point
 from owslib.namespaces import Namespaces
 from owslib import util
-import geojson
+import json
 
 n = Namespaces()
 FES_NAMESPACE = n.get_namespace("fes")
@@ -43,4 +43,4 @@ def test_filter():
     point = Point(id="random", srsName="http://www.opengis.net/gml/srs/epsg.xml#4326", pos=[-129.8, 55.44])
     f = fes2.Filter(fes2.Contains(propertyname="geom", geometry=point))
     r = wfs.getfeature(layer, outputFormat="application/json", method="POST", filter=f.toXML())
-    assert geojson.load(r)["totalFeatures"] == 1
+    assert json.load(r)["totalFeatures"] == 1
