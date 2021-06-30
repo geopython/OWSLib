@@ -548,7 +548,8 @@ class MD_DataIdentification(object):
             self.status = _testCodeListValue(md.find(util.nspath_eval('gmd:status/gmd:MD_ProgressCode', namespaces)))
 
             self.graphicoverview = []
-            for val in md.findall(util.nspath_eval('gmd:graphicOverview/gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString', namespaces)):
+            for val in md.findall(util.nspath_eval(
+                    'gmd:graphicOverview/gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString', namespaces)):
                 if val is not None:
                     val2 = util.testXMLValue(val)
                     if val2 is not None:
