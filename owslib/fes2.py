@@ -397,7 +397,7 @@ class Filter(OgcExpression):
         self.filter = filter
 
     def toXML(self):
-        node = etree.Element(util.nspath_eval(f"fes:Filter", namespaces))
+        node = etree.Element(util.nspath_eval("fes:Filter", namespaces))
         node.append(self.filter.toXML())
         return node
 

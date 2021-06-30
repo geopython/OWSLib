@@ -14,7 +14,10 @@ def get_namespaces():
 
 namespaces = get_namespaces()
 
-prefix = lambda x: util.nspath_eval(x, namespaces)
+
+def prefix(x):
+    """Shorthand to insert namespaces."""
+    return util.nspath_eval(x, namespaces)
 
 
 @dataclass
