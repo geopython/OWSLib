@@ -1,9 +1,21 @@
+import pytest
+from owslib.wfs import WebFeatureService
 from owslib import fes2
 from owslib.gml import Point
-from owslib.etree import etree
+from owslib.namespaces import Namespaces
+from owslib import util
+import geojson
+
+n = Namespaces()
+FES_NAMESPACE = n.get_namespace("fes")
+GML32_NAMESPACE = n.get_namespace("gml32")
 
 
-def test_filter():
+SERVICE_URL = "http://soggy.zoology.ubc.ca:8080/geoserver/wfs"
+
+
+def test_raw_filter():
+    """Just inspect the filter object (not embedded in a getfeature request)."""
     point = Point(id="qc", srsName="http://www.opengis.net/gml/srs/epsg.xml#4326", pos=[-71, 46])
     f = fes2.Filter(
         fes2.And([fes2.Intersects(propertyname="the_geom", geometry=point),
@@ -12,5 +24,23 @@ def test_filter():
     )
 
     xml = f.toXML()
-    assert etree.tostring(xml) ==  b'<fes:Filter ' \
-                                b'xmlns:fes="http://www.opengis.net/fes/2.0"><fes:And><fes:Intersects><fes:ValueReference>the_geom</fes:ValueReference><gml32:Point xmlns:gml32="http://www.opengis.net/gml/3.2" gml32:id="qc" gml32:srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"><gml32:pos>-71 46</gml32:pos></gml32:Point></fes:Intersects><fes:PropertyIsLike wildCard="%" singleChar="_" escapeChar="\\"><fes:ValueReference>name</fes:ValueReference><fes:Literal>value</fes:Literal></fes:PropertyIsLike></fes:And></fes:Filter>'
+
+    # Fairly basic test
+    xml.find(util.nspath("Filter", FES_NAMESPACE))
+    xml.find(util.nspath("And", FES_NAMESPACE))
+    xml.find(util.nspath("Intersects", FES_NAMESPACE))
+    xml.find(util.nspath("Point", GML32_NAMESPACE))
+
+
+@pytest.mark.online
+def test_filter():
+    """A request without filtering will yield 600 entries. With filtering we expect only one.
+
+    Note that this type of topological filtering only works (so far) with WFS 2.0.0 and POST requests.
+    """
+    wfs = WebFeatureService(SERVICE_URL, version="2.0.0")
+    layer = "bcmca:commercialfish_crab"
+    point = Point(id="random", srsName="http://www.opengis.net/gml/srs/epsg.xml#4326", pos=[-129.8, 55.44])
+    f = fes2.Filter(fes2.Contains(propertyname="geom", geometry=point))
+    r = wfs.getfeature(layer, outputFormat="application/json", method="POST", filter=f.toXML())
+    assert geojson.load(r)["totalFeatures"] == 1
