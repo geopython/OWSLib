@@ -173,8 +173,12 @@ class PostRequest_2_0_0(PostRequest):
 
         Cannot be used with set_bbox() or set_featureid().
         """
-        f = etree.fromstring(filter)
-        sub_elem = f.find(util.nspath("Filter", FES_NAMESPACE))
+        if isinstance(filter, str):
+            f = etree.fromstring(filter)
+            sub_elem = f.find(util.nspath("Filter", FES_NAMESPACE))
+        else:
+            sub_elem = filter
+
         self._query.append(sub_elem)
 
     def set_maxfeatures(self, maxfeatures):

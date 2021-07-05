@@ -2,7 +2,7 @@ from owslib.wfs import WebFeatureService
 from owslib.util import ServiceException
 from urllib.parse import urlparse
 from tests.utils import resource_file, sorted_url_query, service_ok
-
+import json
 import pytest
 
 SERVICE_URL = 'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288'
@@ -54,7 +54,6 @@ def test_getfeature():
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_outputformat_wfs_100():
-    import json
     wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
                             version='1.0.0')
     feature = wfs.getfeature(
@@ -66,7 +65,6 @@ def test_outputformat_wfs_100():
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_outputformat_wfs_110():
-    import json
     wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
                             version='1.1.0')
     feature = wfs.getfeature(
@@ -78,7 +76,6 @@ def test_outputformat_wfs_110():
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_outputformat_wfs_200():
-    import json
     wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
                             version='2.0.0')
     feature = wfs.getfeature(
@@ -90,7 +87,6 @@ def test_outputformat_wfs_200():
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_srsname_wfs_100():
-    import json
     wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
                             version='1.0.0')
     # ServiceException: Unable to support srsName: EPSG:99999999
@@ -99,7 +95,6 @@ def test_srsname_wfs_100():
             typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
             srsname="EPSG:99999999")
 
-    import json
     wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
                             version='1.0.0')
     feature = wfs.getfeature(
@@ -112,7 +107,6 @@ def test_srsname_wfs_100():
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_srsname_wfs_110():
-    import json
     wfs = WebFeatureService(
         'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
         version='1.1.0')
@@ -122,7 +116,6 @@ def test_srsname_wfs_110():
             typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
             srsname="EPSG:99999999")
 
-    import json
     wfs = WebFeatureService(
         'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
         version='1.0.0')
