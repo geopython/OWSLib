@@ -116,6 +116,7 @@ from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 from urllib.parse import urlparse
 import warnings
+import math
 
 # namespace definition
 n = Namespaces()
@@ -880,7 +881,7 @@ class WPSExecution(object):
         """
 
         if self.isSucceeded():
-            content = b''
+            content = None
             output = None
             if self.processOutputs:
                 if identifier:
@@ -903,13 +904,22 @@ class WPSExecution(object):
                 elif len(output.data) > 0:
                     if filepath is None:
                         filepath = 'wps.out'
-                    for data in output.data:
-                        content = content + data.encode()
+                    with open(filepath, "wb") as out:
+                        for data in output.data:
+                            out.write(data.encode())
+                        yield 0
+                        return
+
             # write out content
-            if content != b'':
-                out = open(filepath, 'wb')
-                out.write(content)
-                out.close()
+            if content is not None:
+                with open(filepath, 'wb') as out:
+                    size = content.info()["Content-Length"]
+                    steps = math.ceil(int(size) / 8192)
+                    i = 0
+                    for data in content.iter_content(8192):
+                        out.write(data)
+                        i += 1
+                        yield(i / steps)
                 log.info(f'Output written to file: {filepath}')
         else:
             raise Exception(
@@ -1442,10 +1452,11 @@ class Output(InputOutput):
 
         :param username: credentials to access the remote WPS server
         :param password: credentials to access the remote WPS server
+        :return: file-type object ready for reading
         """
         url = self.reference
         if url is None:
-            return b''
+            return None
 
         # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'  # noqa
         # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
@@ -1457,8 +1468,7 @@ class Output(InputOutput):
         # The link is a local file.
         # Useful when running local tests during development.
         if url.startswith("file://"):
-            with open(url[7:]) as f:
-                return f.read()
+            return open(url[7:])
 
         if '?' in url:
             spliturl = url.split('?')
@@ -1473,7 +1483,7 @@ class Output(InputOutput):
                 url, '', method='Get', username=username, password=password,
                 headers=headers, verify=verify, cert=cert)
 
-        return u.read()
+        return u
 
     def writeToDisk(self, path=None, username=None, password=None,
                     headers=None, verify=True, cert=None):
@@ -1490,19 +1500,25 @@ class Output(InputOutput):
         content = self.retrieveData(username, password, headers=headers, verify=verify, cert=cert)
 
         # ExecuteResponse contain embedded output
-        if content == "" and len(self.data) > 0:
+        if content is None and len(self.data) > 0:
             self.fileName = self.identifier
-            for data in self.data:
-                content = content + data
+            self.filePath = path + self.fileName
+            with open(self.filePath, "w") as out:
+                out.write(self.data)
 
         # write out content
-        if content != "":
+        if content is not None:
             if self.fileName == "":
                 self.fileName = self.identifier
             self.filePath = path + self.fileName
-            out = open(self.filePath, 'wb')
-            out.write(content)
-            out.close()
+            with open(self.filePath, 'wb') as out:
+                size = content.info()["Content-Length"]
+                steps = int(size) / 8192
+                i = 0
+                for data in content.iter_content(8192):
+                    out.write(data)
+                    i += 1
+                    yield(i / steps)
             log.info('Output written to file: %s' % self.filePath)
 
 

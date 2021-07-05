@@ -137,6 +137,13 @@ class ResponseWrapper(object):
     def read(self):
         return self._response.content
 
+    def iter_content(self, size:int=8192) -> iter:
+        """
+        Return iter_content function of the requests.Response object with
+        defined size (default 8192)
+        """
+        return self._response.iter_content(size)
+
     def geturl(self):
         return self._response.url.replace('&&', '&')
 
@@ -182,6 +189,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     rkwargs['cert'] = auth.cert
     rkwargs['verify'] = verify
+    rkwargs['stream'] = True
 
     # FIXUP for WFS in particular, remove xml style namespace
     # @TODO does this belong here?

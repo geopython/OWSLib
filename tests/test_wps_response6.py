@@ -47,5 +47,5 @@ def test_wps_response_local_file(tmpdir):
 
     # Retrieve data from local file system
     out = execution.processOutputs[0]
-    txt = out.retrieveData()
+    txt = out.retrieveData().read()
     assert txt == content
