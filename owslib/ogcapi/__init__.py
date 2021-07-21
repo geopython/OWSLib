@@ -151,6 +151,7 @@ class API:
         """
 
         url = self._build_url(path)
+        self.request = url
 
         LOGGER.debug('Request: {}'.format(url))
         LOGGER.debug('Params: {}'.format(kwargs))
