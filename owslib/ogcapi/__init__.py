@@ -59,9 +59,11 @@ class API:
 
         if json_ is not None:  # static JSON string
             self.links = json.loads(json_)['links']
+            self.response = json_
         else:
             response = http_get(url, headers=self.headers, auth=self.auth).json()
             self.links = response['links']
+            self.response = response
 
     def api(self) -> dict:
         """
@@ -163,6 +165,8 @@ class API:
 
         if response.status_code != requests.codes.ok:
             raise RuntimeError(response.text)
+
+        self.request = response.url
 
         if as_dict:
             return response.json()
