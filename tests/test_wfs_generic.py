@@ -50,6 +50,14 @@ def test_getfeature():
         'maxfeatures=2', 'request=GetFeature', 'service=WFS', 'typename=okresy', 'version=1.1.0']
 
 
+def test_verbOptions_wfs_100():
+    with open(resource_file("wfs_dov_getcapabilities_100_verbOptions.xml"), "rb") as f:
+        getcapsin = f.read()
+    wfs = WebFeatureService('http://gis.bnhelp.cz/ows/crwfs', xml=getcapsin, version='1.0.0')
+    verbOptions = [cm.verbOptions for cm in wfs.contents.values()]
+    assert len(verbOptions[0]) == 2
+
+
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
