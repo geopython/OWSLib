@@ -254,7 +254,7 @@ OGC API - Records 1.0
   >>> my_catalogue['description']
   'My catalogue'
   >>> my_catalogue_queryables = w.collection_queryables('my-catalogue')
-  >>> len(my_catalogue_queryables['queryables'])
+  >>> len(my_catalogue_queryables)
   8
   >>> my_catalogue_query = w.collection_items('my-catalogue')
   >>> my_catalogue_query['features'][0]['properties'].keys()
