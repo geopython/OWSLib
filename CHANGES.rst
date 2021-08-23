@@ -1,6 +1,20 @@
 Changes
 =======
 
+0.25.0 (2021-08-23)
+-------------------
+
+A full list of commits for 0.25.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.25.0
+
+- WMS: include custom headers (#763)
+- ISO: add MD_BrowseGraphic support (#757)
+- OGC API: fix bbox handling #779), request/response handling
+- WFS: add support for topological filters (#780)
+- various bug fixes
+
+
 0.24.1 (2021-05-10)
 -------------------
 
