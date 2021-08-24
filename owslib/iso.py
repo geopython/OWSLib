@@ -301,7 +301,7 @@ class CI_ResponsibleParty(object):
             self.role = _testCodeListValue(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
 
 
-class keyword(object):
+class Keyword(object):
     """
     Class for complex keywords, with labels and URLs
     """
@@ -321,7 +321,9 @@ class MD_Keywords(object):
     def __init__(self, md=None):
     
         warnings.warn(
-            'The .keywords_object attribute will become .keywords proper in the next release',
+            'The .keywords_object attribute will become .keywords proper in the next release. '
+            '.keywords_object is a list of ibstances of the Keyword class. '
+            'See for https://github.com/geopython/OWSLib/pull/765 more details.',
             FutureWarning)
     
         if md is None:
@@ -338,7 +340,7 @@ class MD_Keywords(object):
                 val = md.findall(util.nspath_eval('gmd:keyword/gmx:Anchor', namespaces))
             for word in val:
                 self.keywords.append(util.testXMLValue(word))
-                self.keywords_object.append(keyword(word))
+                self.keywords_object.append(Keyword(word))
             self.type = None
             val = md.find(util.nspath_eval('gmd:type/gmd:MD_KeywordTypeCode', namespaces))
             self.type = util.testXMLAttribute(val, 'codeListValue')
