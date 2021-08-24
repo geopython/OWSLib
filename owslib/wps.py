@@ -266,6 +266,7 @@ class WebProcessingService(object):
             verbose=self.verbose,
             auth=self.auth,
             language=self.language,
+            timeout=self.timeout,
         )
         if xml:
             # read from stored XML file
@@ -293,6 +294,7 @@ class WebProcessingService(object):
             verbose=self.verbose,
             auth=self.auth,
             language=self.language,
+            timeout=self.timeout,
         )
         if xml:
             # read from stored XML file
@@ -797,7 +799,12 @@ class WPSExecution(object):
         :param int sleepSecs: number of seconds to sleep before returning control to the caller.
         """
 
-        reader = WPSExecuteReader(verbose=self.verbose, auth=self.auth, language=self.language)
+        reader = WPSExecuteReader(
+            verbose=self.verbose,
+            auth=self.auth,
+            language=self.language,
+            timeout=self.timeout
+        )
         if response is None:
             # override status location
             if url is not None:
@@ -917,7 +924,12 @@ class WPSExecution(object):
         """
 
         self.request = request
-        reader = WPSExecuteReader(verbose=self.verbose, timeout=self.timeout, auth=self.auth)
+        reader = WPSExecuteReader(
+            verbose=self.verbose,
+            auth=self.auth,
+            language=self.language,
+            timeout=self.timeout,
+        )
         response = reader.readFromUrl(
             self.url, request, method='Post', headers=self.headers)
         self.response = response
