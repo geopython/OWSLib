@@ -321,19 +321,19 @@ class MD_Keywords(object):
     def __init__(self, md=None):
         if md is None:
             self.keywords = []
-            self.keyword = []
+            self.keyword_object = []
             self.type = None
             self.thesaurus = None
             self.kwdtype_codeList = 'http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_KeywordTypeCode'
         else:
             self.keywords = []
-            self.keyword = []
+            self.keyword_object = []
             val = md.findall(util.nspath_eval('gmd:keyword/gco:CharacterString', namespaces))
             if len(val) == 0:
                 val = md.findall(util.nspath_eval('gmd:keyword/gmx:Anchor', namespaces))
             for word in val:
                 self.keywords.append(util.testXMLValue(word))
-                self.keyword.append(keyword(word))
+                self.keyword_object.append(keyword(word))
             self.type = None
             val = md.find(util.nspath_eval('gmd:type/gmd:MD_KeywordTypeCode', namespaces))
             self.type = util.testXMLAttribute(val, 'codeListValue')
@@ -396,6 +396,7 @@ class MD_DataIdentification(object):
             self.status = None
             self.contact = []
             self.keywords = []
+            self.keyword_object = []
             self.keywords2 = []
             self.topiccategory = []
             self.supplementalinformation = None
