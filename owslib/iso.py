@@ -30,7 +30,6 @@ namespaces = get_namespaces()
 
 class MD_Metadata(object):
     """ Process gmd:MD_Metadata """
-
     def __init__(self, md=None):
 
         if md is None:
@@ -203,7 +202,6 @@ class PT_Locale(object):
 
 class CI_Date(object):
     """ process CI_Date """
-
     def __init__(self, md=None):
         if md is None:
             self.date = None
@@ -225,7 +223,6 @@ class CI_Date(object):
 
 class CI_ResponsibleParty(object):
     """ process CI_ResponsibleParty """
-
     def __init__(self, md=None):
 
         if md is None:
@@ -370,7 +367,6 @@ class MD_Keywords(object):
 
 class MD_DataIdentification(object):
     """ process MD_DataIdentification """
-
     def __init__(self, md=None, identtype=None):
         if md is None:
             self.identtype = None
@@ -682,7 +678,6 @@ class MD_DataIdentification(object):
 
 class MD_Distributor(object):
     """ process MD_Distributor """
-
     def __init__(self, md=None):
         if md is None:
             self.contact = None
@@ -704,7 +699,6 @@ class MD_Distributor(object):
 
 class MD_Distribution(object):
     """ process MD_Distribution """
-
     def __init__(self, md=None):
         if md is None:
             self.format = None
@@ -735,7 +729,6 @@ class MD_Distribution(object):
 
 class DQ_DataQuality(object):
     ''' process DQ_DataQuality'''
-
     def __init__(self, md=None):
         if md is None:
             self.conformancetitle = []
@@ -804,7 +797,6 @@ class DQ_DataQuality(object):
 
 class SV_ServiceIdentification(object):
     """ process SV_ServiceIdentification """
-
     def __init__(self, md=None):
         if md is None:
             self.title = None
@@ -883,7 +875,6 @@ class SV_ServiceIdentification(object):
 
 class CI_OnlineResource(object):
     """ process CI_OnlineResource """
-
     def __init__(self, md=None):
         if md is None:
             self.url = None
@@ -970,7 +961,6 @@ class EX_GeographicBoundingPolygon(object):
 
 class EX_Extent(object):
     """ process EX_Extent """
-
     def __init__(self, md=None):
         if md is None:
             self.boundingBox = None
@@ -997,7 +987,6 @@ class EX_Extent(object):
 
 class MD_ReferenceSystem(object):
     """ process MD_ReferenceSystem """
-
     def __init__(self, md=None):
         if md is None:
             self.code = None
@@ -1043,7 +1032,6 @@ def _testCodeListValue(elpath):
 
 class CodelistCatalogue(object):
     """ process CT_CodelistCatalogue """
-
     def __init__(self, ct):
         val = ct.find(util.nspath_eval('gmx:name/gco:CharacterString', namespaces))
         self.name = util.testXMLValue(val)
@@ -1095,7 +1083,6 @@ class CodelistCatalogue(object):
 
 class MD_FeatureCatalogueDescription(object):
     """Process gmd:MD_FeatureCatalogueDescription"""
-
     def __init__(self, fcd=None):
         if fcd is None:
             self.xml = None
@@ -1148,7 +1135,6 @@ class MD_FeatureCatalogueDescription(object):
 
 class FC_FeatureCatalogue(object):
     """Process gfc:FC_FeatureCatalogue"""
-
     def __init__(self, fc=None):
         if fc is None:
             self.xml = None
@@ -1188,7 +1174,6 @@ class FC_FeatureCatalogue(object):
 
 class FC_FeatureType(object):
     """Process gfc:FC_FeatureType"""
-
     def __init__(self, ft=None):
         if ft is None:
             self.xml = None
@@ -1230,7 +1215,6 @@ class FC_FeatureType(object):
 
 class FC_FeatureAttribute(object):
     """Process gfc:FC_FeatureAttribute"""
-
     def __init__(self, fa=None):
         if fa is None:
             self.xml = None
@@ -1264,7 +1248,6 @@ class FC_FeatureAttribute(object):
 
 class FC_ListedValue(object):
     """Process gfc:FC_ListedValue"""
-
     def __init__(self, lv=None):
         if lv is None:
             self.xml = None
@@ -1289,7 +1272,6 @@ class FC_ListedValue(object):
 
 class MD_ImageDescription(object):
     """Process gmd:MD_ImageDescription"""
-
     def __init__(self, img_desc=None):
         self.type = 'image'
         self.bands = []
@@ -1319,7 +1301,6 @@ class MD_ImageDescription(object):
 
 class MD_Band(object):
     """Process gmd:MD_Band"""
-
     def __init__(self, band, band_id=None):
         if band is None:
             self.id = None
