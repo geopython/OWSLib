@@ -5,7 +5,7 @@ import io
 from owslib import util
 from owslib.etree import etree
 from owslib.iso import (
-    MD_Metadata,
+    MD_Metadata, Keyword
 )
 from owslib.namespaces import Namespaces
 
@@ -594,3 +594,55 @@ def test_md_parsing_19115_2():
     inst = plt.instruments[0]
     assert inst.identifier == 'OLI_TIRS'
     assert inst.type == 'INS-NOBS'
+
+def test_md_parsing_keywords_anchor():
+    """Test the parsing of MD_Keywords where the keyword is defined by a 
+    gmx:Anchor
+    
+    MD_Metadata record available in
+    tests/resources/iso_keywords_anchor.xml
+    
+    """
+    md_resource = get_md_resource(
+        'tests/resources/iso_keywords_anchor.xml')
+    md = MD_Metadata(md_resource)
+    
+    assert type(md) is MD_Metadata
+    assert md.identifier == 'ie.marine.data:dataset.1135'
+    
+    iden = md.identificationinfo[0]
+    assert len(iden.keywords2) == 1
+    assert len(iden.keywords2[0].keywords_object) == 6
+    assert type(iden.keywords2[0].keywords_object[0]) is Keyword
+    assert iden.keywords2[0].keywords_object[0].name == 'Atmospheric pressure'
+    assert iden.keywords2[0].keywords_object[0].url == 'http://vocab.nerc.ac.uk/collection/A05/current/EV_AIRPRESS/'
+    assert iden.keywords2[0].thesaurus['title'] == 'AtlantOS Essential Variables'
+    assert iden.keywords2[0].thesaurus['url'] == 'http://vocab.nerc.ac.uk/collection/A05/current/'
+    
+def test_md_parsing_keywords_no_anchor():
+    """Test the parsing of MD_Keywords where the keyword is not defined by a 
+    gmx:Anchor
+    
+    MD_Metadata record available in
+    tests/resources/csw_geobretagne_mdmetadata.xml
+
+    """
+    md_resource = get_md_resource(
+        'tests/resources/csw_geobretagne_mdmetadata.xml')
+    md = MD_Metadata(md_resource)
+    assert type(md) is MD_Metadata
+    
+    iden = md.identificationinfo[0]
+    assert len(iden.keywords2) == 6
+    assert len(iden.keywords2[0].keywords_object) == 1
+    assert type(iden.keywords2[0].keywords_object[0]) is Keyword
+    assert iden.keywords2[0].keywords_object[0].name == 'France'
+    assert iden.keywords2[0].keywords_object[0].url is None
+    
+    assert len(iden.keywords2[1].keywords_object) == 7
+    assert iden.keywords2[1].keywords_object[0].name == 'bâtiments'
+    assert iden.keywords2[1].keywords_object[0].url is None
+    assert iden.keywords2[1].keywords_object[1].name == 'adresses'
+    assert iden.keywords2[1].keywords_object[1].url is None
+    assert iden.keywords2[1].keywords_object[2].name == 'parcelles cadastrales'
+    assert iden.keywords2[1].keywords_object[2].url is None
