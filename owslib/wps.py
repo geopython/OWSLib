@@ -1546,7 +1546,9 @@ class Process(object):
         self._root = elem
         self.verbose = verbose
 
-        wpsns = getNamespace(elem)
+        # when process is instantiated from GetCapabilities, elem is 'wps:Process'          => wpsns='wps'
+        # when process is instantiated from DescribeProcess, elem is 'ProcessDescription'   => wpsns=''
+        wpsns = getNamespace(elem) or elem.nsmap.get('wps', '')
 
         def get_bool_attribute(elem, attribute):
             property = elem.get(attribute, '').lower()
@@ -1559,7 +1561,9 @@ class Process(object):
             return value
 
         # <ProcessDescription statusSupported="true" storeSupported="true" ns0:processVersion="1.0.0">
-        self.processVersion = elem.get(nspath('processVersion', ns=wpsns))
+        #   because version attribute is always 'wps:processVersion', wpsns with both variants must be tested
+        #   in order to handle both elem in wpsns='wps' and wpsns='' cases
+        self.processVersion = elem.get(nspath('processVersion', ns=wpsns)) or elem.get(nspath('processVersion'))
         self.statusSupported = get_bool_attribute(elem, "statusSupported")
         self.storeSupported = get_bool_attribute(elem, "storeSupported")
         self.identifier = None
