@@ -1058,10 +1058,11 @@ class ComplexData(object):
     Class that represents a ComplexData element in a WPS document
     """
 
-    def __init__(self, mimeType=None, encoding=None, schema=None):
+    def __init__(self, mimeType=None, encoding=None, schema=None, maximumMegaBytes=None):
         self.mimeType = mimeType
         self.encoding = encoding
         self.schema = schema
+        self.maximumMegabytes = maximumMegaBytes
 
 
 class InputOutput(object):
@@ -1176,7 +1177,7 @@ class InputOutput(object):
         Method to parse a ComplexData or ComplexOutput element.
         """
 
-        # <ComplexData>
+        # <ComplexData maximumMegabytes="200">
         #     <Default>
         #         <Format>
         #            <MimeType>text/xml</MimeType>
@@ -1223,13 +1224,15 @@ class InputOutput(object):
                     )
                 )
 
+            max_mb = complex_data_element.attrib.get("maximumMegabytes")
             for format_element in\
                     complex_data_element.findall('Supported/Format'):
                 self.supportedValues.append(
                     ComplexData(
                         mimeType=testXMLValue(format_element.find('MimeType')),
                         encoding=testXMLValue(format_element.find('Encoding')),
-                        schema=testXMLValue(format_element.find('Schema'))
+                        schema=testXMLValue(format_element.find('Schema')),
+                        maximumMegaBytes=max_mb
                     )
                 )
 
@@ -1240,7 +1243,8 @@ class InputOutput(object):
                         default_format_element.find('MimeType')),
                     encoding=testXMLValue(
                         default_format_element.find('Encoding')),
-                    schema=testXMLValue(default_format_element.find('Schema'))
+                    schema=testXMLValue(default_format_element.find('Schema')),
+                    maximumMegaBytes=max_mb
                 )
 
     def _parseBoundingBoxData(self, element, bboxElementName):
