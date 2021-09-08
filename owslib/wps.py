@@ -1062,7 +1062,7 @@ class ComplexData(object):
         self.mimeType = mimeType
         self.encoding = encoding
         self.schema = schema
-        self.maximumMegabytes = maximumMegaBytes
+        self.maximumMegabytes = maximumMegaBytes  # defined only if provided by ProcessDescription ComplexData
 
 
 class InputOutput(object):
@@ -1224,6 +1224,10 @@ class InputOutput(object):
                     )
                 )
 
+            # Optional attribute 'maximumMegabytes' can be omitted entirely from 'ComplexData'
+            # but in the case it is made available, report it in the format for reference.
+            # This could be used by a file validation step to be respected during process execution
+            # but this check should be done on the server side, so it is only informative here.
             max_mb = complex_data_element.attrib.get("maximumMegabytes")
             for format_element in\
                     complex_data_element.findall('Supported/Format'):
