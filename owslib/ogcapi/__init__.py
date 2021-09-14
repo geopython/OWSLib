@@ -58,11 +58,11 @@ class API:
         self.auth = auth
 
         if json_ is not None:  # static JSON string
-            self.links = json.loads(json_)['links']
+            self.links = json.loads(json_).get('links', [])
             self.response = json_
         else:
             response = http_get(url, headers=self.headers, auth=self.auth).json()
-            self.links = response['links']
+            self.links = response.get('links', [])
             self.response = response
 
     def api(self) -> dict:
