@@ -1,5 +1,6 @@
 from owslib.wfs import WebFeatureService
 from owslib.util import ServiceException
+from owslib.fes import PropertyIsLike, etree
 from urllib.parse import urlparse
 from tests.utils import resource_file, sorted_url_query, service_ok
 import json
@@ -170,3 +171,40 @@ def test_schema_wfs_200():
     assert len(schema['properties']) == 4
     assert schema['properties']['summary'] == 'string'
     assert schema['geometry'] == '3D Polygon'
+
+
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
+                    reason="WFS service is unreachable")
+def test_xmlfilter_wfs_110():
+    wfs = WebFeatureService(
+        'https://services.ga.gov.au/gis/stratunits/ows',
+        version='1.1.0')
+    filter_prop = PropertyIsLike(propertyname='stratunit:geologichistory', literal='Cisuralian - Guadalupian',
+        matchCase=True)
+
+    filterxml = etree.tostring(filter_prop.toXML()).decode("utf-8")
+
+    getfeat_params = {'typename': 'stratunit:StratigraphicUnit', 'filter': filterxml}
+
+    response = wfs.getfeature(**getfeat_params).read()
+    assert b'<stratunit:geologichistory>Cisuralian - Guadalupian</stratunit:geologichistory>' in response
+
+
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
+                    reason="WFS service is unreachable")
+def test_xmlfilter_wfs_200():
+    wfs = WebFeatureService(
+        'https://services.ga.gov.au/gis/stratunits/ows',
+        version='2.0.0')
+    filter_prop = PropertyIsLike(propertyname='stratunit:geologichistory', literal='Cisuralian - Guadalupian',
+        matchCase=True)
+
+    filterxml = etree.tostring(filter_prop.toXML()).decode("utf-8")
+
+    getfeat_params = {'typename': 'stratunit:StratigraphicUnit', 'filter': filterxml}
+
+    response = wfs.getfeature(**getfeat_params).read()
+    assert b'<stratunit:geologichistory>Cisuralian - Guadalupian</stratunit:geologichistory>' in response
+
