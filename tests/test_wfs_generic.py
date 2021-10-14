@@ -59,6 +59,7 @@ def test_verbOptions_wfs_100():
     assert len(verbOptions[0]) == 2
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
@@ -70,6 +71,7 @@ def test_outputformat_wfs_100():
     assert len(json.loads(feature.read())['features']) == 1
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
@@ -81,6 +83,7 @@ def test_outputformat_wfs_110():
     assert len(json.loads(feature.read())['features']) == 1
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
@@ -92,6 +95,7 @@ def test_outputformat_wfs_200():
     assert len(json.loads(feature.read())['features']) == 1
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
@@ -112,6 +116,7 @@ def test_srsname_wfs_100():
     assert len(json.loads(feature.read())['features']) == 1
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
@@ -134,6 +139,7 @@ def test_srsname_wfs_110():
     assert len(json.loads(feature.read())['features']) == 1
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
@@ -147,6 +153,7 @@ def test_schema_wfs_100():
     assert schema['geometry'] == 'Polygon'
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
@@ -160,6 +167,7 @@ def test_schema_wfs_110():
     assert schema['geometry'] == '3D Polygon'
 
 
+@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
@@ -207,4 +215,3 @@ def test_xmlfilter_wfs_200():
 
     response = wfs.getfeature(**getfeat_params).read()
     assert b'<stratunit:geologichistory>Cisuralian - Guadalupian</stratunit:geologichistory>' in response
-
