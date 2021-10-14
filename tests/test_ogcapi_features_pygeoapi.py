@@ -23,7 +23,7 @@ def test_ogcapi_features_pygeoapi():
     assert paths['/collections/lakes'] is not None
 
     conformance = w.conformance()
-    assert len(conformance['conformsTo']) == 16
+    assert len(conformance['conformsTo']) == 21
 
     collections = w.collections()
     assert len(collections) > 0
