@@ -1,7 +1,10 @@
+import pytest
+
 from tests.utils import resource_file, compare_xml, setup_logging
 from owslib.wps import WebProcessingService
 
 
+@pytest.mark.xfail
 def test_wps_response6():
     # Build WPS object; service has been down for some time so skip caps here
     wps = WebProcessingService('http://rsg.pml.ac.uk/wps/vector.cgi', skip_caps=True)
