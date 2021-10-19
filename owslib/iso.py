@@ -8,6 +8,8 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+# flake8: noqa: E501
+
 """ ISO metadata parser """
 
 import warnings
@@ -316,13 +318,12 @@ class MD_Keywords(object):
     Class for the metadata MD_Keywords element
     """
     def __init__(self, md=None):
-    
         warnings.warn(
             'The .keywords_object attribute will become .keywords proper in the next release. '
             '.keywords_object is a list of ibstances of the Keyword class. '
             'See for https://github.com/geopython/OWSLib/pull/765 more details.',
             FutureWarning)
-    
+
         if md is None:
             self.keywords = []
             self.keywords_object = []
