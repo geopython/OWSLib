@@ -1556,7 +1556,7 @@ class Process(object):
 
         # when process is instantiated from GetCapabilities, elem is 'wps:Process'          => wpsns='wps'
         # when process is instantiated from DescribeProcess, elem is 'ProcessDescription'   => wpsns=''
-        wpsns = getNamespace(elem) or elem.nsmap.get('wps', '')
+        wpsns = getNamespace(elem) or n.get_namespace('wps')
 
         def get_bool_attribute(elem, attribute):
             property = elem.get(attribute, '').lower()
