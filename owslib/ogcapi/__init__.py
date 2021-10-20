@@ -6,15 +6,16 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+from copy import deepcopy
 import json
 import logging
-from urllib.parse import urljoin
+from urllib.parse import urlencode, urljoin
 
 import requests
 import yaml
 
 from owslib import __version__
-from owslib.util import Authentication, http_get
+from owslib.util import Authentication, http_get, http_post
 
 LOGGER = logging.getLogger(__name__)
 
@@ -115,7 +116,7 @@ class API:
         path = 'conformance'
         return self._request(path)
 
-    def _build_url(self, path: str = None) -> str:
+    def _build_url(self, path: str = None, params: dict = {}) -> str:
         """
         helper function to build an OGC API URL
 
@@ -132,6 +133,9 @@ class API:
             url = '?'.join([url, self.url_query_string])
         else:
             url = urljoin(url, path)
+
+        if params:
+            url = '?'.join([url, urlencode(params)])
 
         LOGGER.debug('URL: {}'.format(url))
 
@@ -158,8 +162,15 @@ class API:
         LOGGER.debug('Request: {}'.format(url))
         LOGGER.debug('Params: {}'.format(kwargs))
 
-        response = http_get(url, headers=self.headers, auth=self.auth,
-                            params=kwargs)
+        if 'cql' not in kwargs:
+            response = http_get(url, headers=self.headers, auth=self.auth,
+                                params=kwargs)
+        else:
+            LOGGER.debug('CQL query detected')
+            kwargs2 = deepcopy(kwargs)
+            cql = kwargs2.pop('cql')
+            url2 = self._build_url(path, kwargs2)
+            response = http_post(url2, request=cql, auth=self.auth)
 
         LOGGER.debug('URL: {}'.format(response.url))
 

@@ -54,6 +54,10 @@ class Features(Collections):
         @param startindex: start position of results
         @type q: string
         @param q: full text search
+        @type filter: string
+        @param filter: CQL TEXT expression
+        @type cql: dict
+        @param cql: CQL JSON payload
 
         @returns: feature results
         """

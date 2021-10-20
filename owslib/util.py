@@ -413,6 +413,10 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
         'Host': u.netloc,
     }
 
+    if isinstance(request, dict):
+        headers['Content-type'] = 'application/json'
+        headers.pop('Accept')
+
     rkwargs = {}
 
     if auth:
@@ -429,8 +433,10 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     rkwargs['verify'] = auth.verify
     rkwargs['cert'] = auth.cert
 
-    up = requests.post(url, request, headers=headers, **rkwargs)
-    return up.content
+    if not isinstance(request, dict):
+        return requests.post(url, request, headers=headers, **rkwargs)
+    else:
+        return requests.post(url, json=request, headers=headers, **rkwargs)
 
 
 def http_get(*args, **kwargs):

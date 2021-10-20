@@ -266,6 +266,12 @@ OGC API - Records 1.0
   2
   >>> msc_wis_dcpc_query2['numberReturned']
   2
+  >>> my_catalogue_cql_text_query = w.collection_items('my-catalogue', filter="title LIKE 'Roadrunner%'")
+  >>> my_catalogue_cql_text_query['features'][0]['properties']['title']
+  u'Roadrunner ambush locations'
+  >>> my_catalogue_cql_json_query = w.collection_items('my-catalogue', limit=1, cql={'eq': [{ 'property': 'title' }, 'Roadrunner ambush locations']})
+  >>> my_catalogue_cql_json_query['features'][0]['properties']['title']
+  u'Roadrunner ambush locations'
 
 
 WCS
