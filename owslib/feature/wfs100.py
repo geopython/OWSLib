@@ -395,9 +395,9 @@ class ContentMetadata(AbstractContentMetadata):
         self.boundingBoxWGS84 = None
 
         if b is not None and srs is not None:
-            wgs84 = pyproj.Proj("epsg:4326")
+            wgs84 = pyproj.CRS.from_epsg(4326)
             try:
-                src_srs = pyproj.Proj(srs.text)
+                src_srs = pyproj.CRS.from_string(srs.text)
                 transformer = pyproj.Transformer.from_crs(src_srs, wgs84, always_xy=True)
                 mincorner = transformer.transform(b.attrib["minx"], b.attrib["miny"])
                 maxcorner = transformer.transform(b.attrib["maxx"], b.attrib["maxy"])
@@ -410,7 +410,6 @@ class ContentMetadata(AbstractContentMetadata):
                 )
             except RuntimeError:
                 pass
-
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath("SRS"))]
 
