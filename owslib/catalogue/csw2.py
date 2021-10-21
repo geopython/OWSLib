@@ -694,7 +694,7 @@ class CatalogueServiceWeb(object):
 
             self.request = util.element_to_string(self.request, encoding='utf-8')
 
-            self.response = http_post(request_url, self.request, self.lang, self.timeout, auth=self.auth)
+            self.response = http_post(request_url, self.request, self.lang, self.timeout, auth=self.auth).content
 
         # parse result see if it's XML
         self._exml = etree.parse(BytesIO(self.response))

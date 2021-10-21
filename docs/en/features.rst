@@ -49,13 +49,15 @@ Standards Support
 OGC API Support
 ---------------
 
-+---------------------------------------------------+
-| Standard                             | Version(s) |
-+======================================+============+
-| `OGC API - Features - Part 1: Core`_ | 1.0        |
-+--------------------------------------+------------+
-| `OGC API - Records - Part 1: Core`_  | draft      |
-+--------------------------------------+------------+
++--------------------------------------------------------------------------------------+------------+
+| Standard                                                                             | Version(s) |
++======================================================================================+============+
+| `OGC API - Features - Part 1: Core`_                                                 | 1.0        |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Records - Part 1: Core`_                                                  | draft      |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Features - Part 3: Filtering and the Common Query Language (CQL) draft`_  | draft      |
++--------------------------------------------------------------------------------------+------------+
 
 .. _`OGC WMS`: https://www.opengeospatial.org/standards/wms
 .. _`OGC WFS`: https://www.opengeospatial.org/standards/wfs
@@ -83,3 +85,4 @@ OGC API Support
 .. _`OGC API`: https://ogcapi.ogc.org
 .. _`OGC API - Features - Part 1: Core`: https://docs.opengeospatial.org/is/17-069r3/17-069r3.html
 .. _`OGC API - Records - Part 1: Core`: https://github.com/opengeospatial/ogcapi-records
+.. _`OGC API - Features - Part 3: Filtering and the Common Query Language (CQL) draft`: https://docs.ogc.org/DRAFTS/19-079.html
