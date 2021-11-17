@@ -1,6 +1,6 @@
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
-# Copyright (c) 2009 Tom Kralidis
+# Copyright (c) 2021 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -12,7 +12,7 @@ API for OGC Filter Encoding (FE) constructs and metadata.
 
 Filter Encoding: http://www.opengeospatial.org/standards/filter
 
-Currently supports version 1.1.0 (04-095).
+Supports version 1.1.0 (04-095).
 """
 
 from owslib.etree import etree
@@ -211,45 +211,6 @@ class FilterCapabilities(object):
         # Scalar_Capabilities
         self.scalar_comparison_operators = [f.text for f in elem.findall(util.nspath_eval(
             'ogc:Scalar_Capabilities/ogc:ComparisonOperators/ogc:ComparisonOperator', namespaces))]
-
-
-class FilterCapabilities200(object):
-    """Abstraction for Filter_Capabilities 2.0"""
-    def __init__(self, elem):
-
-        if elem is None:
-            self.spatial_operands = []
-            self.spatial_operators = []
-            self.temporal_operators = []
-            self.temporal_operands = []
-            self.scalar_comparison_operators = []
-            self.conformance = []
-            return
-
-        # Spatial_Capabilities
-        self.spatial_operands = [f.attrib.get('name') for f in elem.findall(util.nspath_eval(
-            'fes:Spatial_Capabilities/fes:GeometryOperands/fes:GeometryOperand', namespaces))]
-        self.spatial_operators = []
-        for f in elem.findall(util.nspath_eval(
-                'fes:Spatial_Capabilities/fes:SpatialOperators/fes:SpatialOperator', namespaces)):
-            self.spatial_operators.append(f.attrib['name'])
-
-        # Temporal_Capabilities
-        self.temporal_operands = [f.attrib.get('name') for f in elem.findall(util.nspath_eval(
-            'fes:Temporal_Capabilities/fes:TemporalOperands/fes:TemporalOperand', namespaces))]
-        self.temporal_operators = []
-        for f in elem.findall(util.nspath_eval(
-                'fes:Temporal_Capabilities/fes:TemporalOperators/fes:TemporalOperator', namespaces)):
-            self.temporal_operators.append(f.attrib['name'])
-
-        # Scalar_Capabilities
-        self.scalar_comparison_operators = [f.text for f in elem.findall(util.nspath_eval(
-            'fes:Scalar_Capabilities/fes:ComparisonOperators/fes:ComparisonOperator', namespaces))]
-
-        # Conformance
-        self.conformance = []
-        for f in elem.findall(util.nspath_eval('fes:Conformance/fes:Constraint', namespaces)):
-            self.conformance[f.attrib.get('name')] = f.find(util.nspath_eval('fes:DefaultValue', namespaces)).text
 
 
 def setsortby(parent, propertyname, order='ASC'):

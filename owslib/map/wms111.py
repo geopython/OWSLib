@@ -259,7 +259,7 @@ class WebMapService_1_1_1(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
 
         # check for service exceptions, and return
         if u.info().get('Content-Type', '').split(';')[0] in ['application/vnd.ogc.se_xml']:
@@ -326,7 +326,7 @@ class WebMapService_1_1_1(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -539,8 +539,8 @@ class ContentMetadata(AbstractContentMetadata):
                 raise ValueError('%s missing name and title' % (s,))
             if name is None or title is None:
                 warnings.warn('%s missing name or title' % (s,))
-            title_ = title.text if not title is None else name.text
-            name_ = name.text if not name is None else title.text
+            title_ = title.text if title is not None else name.text
+            name_ = name.text if name is not None else title.text
             style = {'title': title_}
             # legend url
             legend = s.find('LegendURL/OnlineResource')
@@ -583,9 +583,11 @@ class ContentMetadata(AbstractContentMetadata):
         self.dataUrls = []
         for m in elem.findall('DataURL'):
             dataUrl = {
-                'format': m.find('Format').text.strip(),
+                'format': testXMLValue(m.find('Format')),
                 'url': m.find('OnlineResource').attrib['{http://www.w3.org/1999/xlink}href']
             }
+            if dataUrl['format']:
+                dataUrl['format'] = dataUrl['format'].strip()
             self.dataUrls.append(dataUrl)
 
         self.layers = []
@@ -599,7 +601,7 @@ class ContentMetadata(AbstractContentMetadata):
                     and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
                 try:
                     content = openURL(
-                        metadataUrl['url'], timeout=timeout, auth=self.auth)
+                        metadataUrl['url'], timeout=timeout, auth=self.auth, headers=self.headers)
                     doc = etree.fromstring(content.read())
 
                     if metadataUrl['type'] == 'FGDC':

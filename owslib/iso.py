@@ -8,6 +8,8 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+# flake8: noqa: E501
+
 """ ISO metadata parser """
 
 import warnings
@@ -20,7 +22,7 @@ from owslib.namespaces import Namespaces
 # default variables
 def get_namespaces():
     n = Namespaces()
-    ns = n.get_namespaces(["gco", "gfc", "gmd", "gml", "gml32", "gmx", "gts", "srv", "xlink"])
+    ns = n.get_namespaces(["gco", "gfc", "gmd", "gmi", "gml", "gml32", "gmx", "gts", "srv", "xlink"])
     ns[None] = n.get_namespace("gmd")
     return ns
 
@@ -49,11 +51,13 @@ class MD_Metadata(object):
             self.locales = []
             self.referencesystem = None
             self.identification = None
+            self.contentinfo = None
             self.serviceidentification = None
             self.identificationinfo = []
             self.contentinfo = []
             self.distribution = None
             self.dataquality = None
+            self.acquisition = None
         else:
             if hasattr(md, 'getroot'):  # standalone document
                 self.xml = etree.tostring(md.getroot())
@@ -149,6 +153,9 @@ class MD_Metadata(object):
             for contentinfo in md.findall(
                     util.nspath_eval('gmd:contentInfo/gmd:MD_FeatureCatalogueDescription', namespaces)):
                 self.contentinfo.append(MD_FeatureCatalogueDescription(contentinfo))
+            for contentinfo in md.findall(
+                    util.nspath_eval('gmd:contentInfo/gmd:MD_ImageDescription', namespaces)):
+                self.contentinfo.append(MD_ImageDescription(contentinfo))
 
             val = md.find(util.nspath_eval('gmd:distributionInfo/gmd:MD_Distribution', namespaces))
 
@@ -162,6 +169,12 @@ class MD_Metadata(object):
                 self.dataquality = DQ_DataQuality(val)
             else:
                 self.dataquality = None
+
+            val = md.find(util.nspath_eval('gmi:acquisitionInformation/gmi:MI_AcquisitionInformation', namespaces))
+            if val is not None:
+                self.acquisition = MI_AcquisitionInformation(val)
+            else:
+                self.acquisition = None
 
     def get_default_locale(self):
         """ get default gmd:PT_Locale based on gmd:language """
@@ -186,7 +199,7 @@ class PT_Locale(object):
                 util.nspath_eval('gmd:languageCode/gmd:LanguageCode', namespaces)).attrib.get('codeListValue')
             self.charset = md.find(
                 util.nspath_eval('gmd:characterEncoding/gmd:MD_CharacterSetCode', namespaces)).attrib.get(
-                    'codeListValue')
+                'codeListValue')
 
 
 class CI_Date(object):
@@ -273,7 +286,7 @@ class CI_ResponsibleParty(object):
             self.country = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
-                'gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString',  # noqa
+                'gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString',
                 namespaces))
             self.email = util.testXMLValue(val)
 
@@ -287,22 +300,45 @@ class CI_ResponsibleParty(object):
             self.role = _testCodeListValue(md.find(util.nspath_eval('gmd:role/gmd:CI_RoleCode', namespaces)))
 
 
+class Keyword(object):
+    """
+    Class for complex keywords, with labels and URLs
+    """
+    def __init__(self, kw=None):
+        if kw is None:
+            self.name = None
+            self.url = None
+        else:
+            self.name = util.testXMLValue(kw)
+            self.url = kw.attrib.get(util.nspath_eval('xlink:href', namespaces))
+
+
 class MD_Keywords(object):
     """
     Class for the metadata MD_Keywords element
     """
     def __init__(self, md=None):
+        warnings.warn(
+            'The .keywords_object attribute will become .keywords proper in the next release. '
+            '.keywords_object is a list of ibstances of the Keyword class. '
+            'See for https://github.com/geopython/OWSLib/pull/765 more details.',
+            FutureWarning)
+
         if md is None:
             self.keywords = []
+            self.keywords_object = []
             self.type = None
             self.thesaurus = None
-            self.kwdtype_codeList = 'http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_KeywordTypeCode'  # noqa
+            self.kwdtype_codeList = 'http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_KeywordTypeCode'
         else:
             self.keywords = []
+            self.keywords_object = []
             val = md.findall(util.nspath_eval('gmd:keyword/gco:CharacterString', namespaces))
+            if len(val) == 0:
+                val = md.findall(util.nspath_eval('gmd:keyword/gmx:Anchor', namespaces))
             for word in val:
                 self.keywords.append(util.testXMLValue(word))
-
+                self.keywords_object.append(Keyword(word))
             self.type = None
             val = md.find(util.nspath_eval('gmd:type/gmd:MD_KeywordTypeCode', namespaces))
             self.type = util.testXMLAttribute(val, 'codeListValue')
@@ -314,6 +350,13 @@ class MD_Keywords(object):
 
                 thesaurus = val.find(util.nspath_eval('gmd:title/gco:CharacterString', namespaces))
                 self.thesaurus['title'] = util.testXMLValue(thesaurus)
+                self.thesaurus['url'] = None
+
+                if self.thesaurus['title'] is None:  # try gmx:Anchor
+                    t = val.find(util.nspath_eval('gmd:title/gmx:Anchor', namespaces))
+                    if t is not None:
+                        self.thesaurus['title'] = util.testXMLValue(t)
+                        self.thesaurus['url'] = t.attrib.get(util.nspath_eval('xlink:href', namespaces))
 
                 thesaurus = val.find(util.nspath_eval('gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces))
                 self.thesaurus['date'] = util.testXMLValue(thesaurus)
@@ -355,8 +398,10 @@ class MD_DataIdentification(object):
             self.abstract_url = None
             self.purpose = None
             self.status = None
+            self.graphicoverview = []
             self.contact = []
             self.keywords = []
+            self.keywords_object = []
             self.keywords2 = []
             self.topiccategory = []
             self.supplementalinformation = None
@@ -468,7 +513,7 @@ class MD_DataIdentification(object):
 
             self.denominators = []
             for i in md.findall(util.nspath_eval(
-                    'gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer',  # noqa
+                    'gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer',
                     namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
@@ -528,6 +573,14 @@ class MD_DataIdentification(object):
 
             self.status = _testCodeListValue(md.find(util.nspath_eval('gmd:status/gmd:MD_ProgressCode', namespaces)))
 
+            self.graphicoverview = []
+            for val in md.findall(util.nspath_eval(
+                    'gmd:graphicOverview/gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString', namespaces)):
+                if val is not None:
+                    val2 = util.testXMLValue(val)
+                    if val2 is not None:
+                        self.graphicoverview.append(val2)
+
             self.contact = []
             for i in md.findall(util.nspath_eval('gmd:pointOfContact/gmd:CI_ResponsibleParty', namespaces)):
                 o = CI_ResponsibleParty(i)
@@ -566,7 +619,7 @@ class MD_DataIdentification(object):
                 mdkw['thesaurus']['date'] = util.testXMLValue(val)
 
                 val = i.find(util.nspath_eval(
-                    'gmd:MD_Keywords/gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode',  # noqa
+                    'gmd:MD_Keywords/gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode',
                     namespaces))
                 mdkw['thesaurus']['datetype'] = util.testXMLAttribute(val, 'codeListValue')
 
@@ -614,21 +667,21 @@ class MD_DataIdentification(object):
 
                 if val2 is None:
                     val2 = extent.find(util.nspath_eval(
-                        'gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:beginPosition',  # noqa
+                        'gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:beginPosition',
                         namespaces))
                     if val2 is None:
                         val2 = extent.find(util.nspath_eval(
-                            'gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml32:TimePeriod/gml32:beginPosition',  # noqa
+                            'gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml32:TimePeriod/gml32:beginPosition',
                             namespaces))
                     self.temporalextent_start = util.testXMLValue(val2)
 
                 if val3 is None:
                     val3 = extent.find(util.nspath_eval(
-                        'gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition',  # noqa
+                        'gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition',
                         namespaces))
                     if val3 is None:
                         val3 = extent.find(util.nspath_eval(
-                            'gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml32:TimePeriod/gml32:endPosition',  # noqa
+                            'gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml32:TimePeriod/gml32:endPosition',
                             namespaces))
                     self.temporalextent_end = util.testXMLValue(val3)
 
@@ -649,7 +702,7 @@ class MD_Distributor(object):
             self.online = []
 
             for ol in md.findall(util.nspath_eval(
-                'gmd:MD_Distributor/gmd:distributorTransferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource',  # noqa
+                    'gmd:MD_Distributor/gmd:distributorTransferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource',
                     namespaces)):
                 self.online.append(CI_OnlineResource(ol))
 
@@ -699,7 +752,7 @@ class DQ_DataQuality(object):
         else:
             self.conformancetitle = []
             for i in md.findall(util.nspath_eval(
-                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString',  # noqa
+                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString',
                     namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
@@ -707,7 +760,7 @@ class DQ_DataQuality(object):
 
             self.conformancedate = []
             for i in md.findall(util.nspath_eval(
-                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date',  # noqa
+                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date',
                     namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
@@ -715,7 +768,7 @@ class DQ_DataQuality(object):
 
             self.conformancedatetype = []
             for i in md.findall(util.nspath_eval(
-                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode',  # noqa
+                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode',
                     namespaces)):
                 val = _testCodeListValue(i)
                 if val is not None:
@@ -739,13 +792,13 @@ class DQ_DataQuality(object):
                 self.lineage_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
 
             val = md.find(util.nspath_eval(
-                'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString',  # noqa
+                'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString',
                 namespaces))
             self.specificationtitle = util.testXMLValue(val)
 
             self.specificationdate = []
             for i in md.findall(util.nspath_eval(
-                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date',  # noqa
+                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date',
                     namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
@@ -937,7 +990,7 @@ class EX_Extent(object):
                     self.boundingPolygon = EX_GeographicBoundingPolygon(polygonElement)
 
                 val = md.find(util.nspath_eval(
-                    'gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString',  # noqa
+                    'gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString',
                     namespaces))
                 self.description_code = util.testXMLValue(val)
 
@@ -1225,3 +1278,98 @@ class FC_ListedValue(object):
 
             val = lv.find(util.nspath_eval('gfc:definition/gco:CharacterString', namespaces))
             self.definition = util.testXMLValue(val)
+
+
+class MD_ImageDescription(object):
+    """Process gmd:MD_ImageDescription"""
+    def __init__(self, img_desc=None):
+        self.type = 'image'
+        self.bands = []
+
+        if img_desc is None:
+            self.attribute_description = None
+            self.cloud_cover = None
+            self.processing_level = None
+        else:
+            val = img_desc.find(util.nspath_eval('gmd:attributeDescription/gco:RecordType', namespaces))
+            self.attribute_description = util.testXMLValue(val)
+
+            val = img_desc.find(util.nspath_eval('gmd:contentType/gmd:MD_CoverageContentTypeCode', namespaces))
+            self.type = util.testXMLAttribute(val, 'codeListValue')
+
+            val = img_desc.find(util.nspath_eval('gmd:cloudCoverPercentage/gco:Real', namespaces))
+            self.cloud_cover = util.testXMLValue(val)
+
+            val = img_desc.find(util.nspath_eval(
+                'gmd:processingLevelCode/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
+            self.processing_level = util.testXMLValue(val)
+
+            for i in img_desc.findall(util.nspath_eval('gmd:dimension/gmd:MD_Band', namespaces)):
+                bid = util.testXMLAttribute(i, 'id')
+                self.bands.append(MD_Band(i, bid))
+
+
+class MD_Band(object):
+    """Process gmd:MD_Band"""
+    def __init__(self, band, band_id=None):
+        if band is None:
+            self.id = None
+            self.units = None
+            self.min = None
+            self.max = None
+        else:
+            self.id = band_id
+
+            val = band.find(util.nspath_eval('gmd:units/gml:UnitDefinition/gml:identifier', namespaces))
+            self.units = util.testXMLValue(val)
+
+            val = band.find(util.nspath_eval('gmd:minValue/gco:Real', namespaces))
+            self.min = util.testXMLValue(val)
+
+            val = band.find(util.nspath_eval('gmd:maxValue/gco:Real', namespaces))
+            self.max = util.testXMLValue(val)
+
+
+class MI_AcquisitionInformation(object):
+    """Process gmi:MI_AcquisitionInformation"""
+
+    def __init__(self, acq=None):
+        self.platforms = []
+
+        for i in acq.findall(util.nspath_eval('gmi:platform/gmi:MI_Platform', namespaces)):
+            self.platforms.append(MI_Platform(i))
+
+
+class MI_Platform(object):
+    """Process gmi:MI_Platform"""
+
+    def __init__(self, plt=None):
+        self.instruments = []
+
+        if plt is None:
+            self.identifier = None
+            self.description = None
+        else:
+            val = plt.find(util.nspath_eval('gmi:identifier', namespaces))
+            self.identifier = util.testXMLValue(val)
+
+            val = plt.find(util.nspath_eval('gmi:description', namespaces))
+            self.description = util.testXMLValue(val)
+
+            for i in plt.findall(util.nspath_eval('gmi:instrument/gmi:MI_Instrument', namespaces)):
+                self.instruments.append(MI_Instrument(i))
+
+
+class MI_Instrument(object):
+    """Process gmi:MI_Instrument"""
+
+    def __init__(self, inst=None):
+        if inst is None:
+            self.identifier = None
+            self.type = None
+        else:
+            val = inst.find(util.nspath_eval('gmi:identifier', namespaces))
+            self.identifier = util.testXMLValue(val)
+
+            val = inst.find(util.nspath_eval('gmi:type', namespaces))
+            self.type = util.testXMLValue(val)

@@ -1,0 +1,43 @@
+name: build ⚙️
+
+on: [ push, pull_request ]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+        lxml: [true, false]
+    env:
+        LXML: ${{ matrix.lxml }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_SERVICE_NAME: github
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      name: Setup Python ${{ matrix.python-version }}
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install packages
+      run: |
+        sudo apt-get -y install pandoc
+      if: matrix.python-version == 3.6
+    - name: Install requirements 📦
+      run: |
+        pip3 install -e .
+        pip3 install -r requirements.txt
+        pip3 install -r requirements-dev.txt
+        echo "LXML => $LXML"
+        if [ "$LXML" == "true" ]; then pip install lxml; fi
+    - name: run tests ⚙️
+      run: python3 -m pytest
+    - name: run coveralls ⚙️
+      run: coveralls
+      if: matrix.python-version == 3.6
+    - name: build docs 🏗️
+      run: cd docs && make html
+      if: matrix.python-version == 3.6
+    - name: run flake8 ⚙️
+      run: flake8 owslib
+      if: matrix.python-version == 3.6

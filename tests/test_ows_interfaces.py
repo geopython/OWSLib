@@ -16,7 +16,7 @@ from owslib.util import OrderedDict
 
 # TODO, we should run all these from local XML documents (as per the WMS and WFS services)
 # CSW_SERVICE_URL = 'http://data.nodc.noaa.gov/geoportal/csw'
-CSW_SERVICE_URL = 'http://demo.pycsw.org/cite/csw'
+CSW_SERVICE_URL = 'https://demo.pycsw.org/cite/csw'
 WCS_SERVICE_URL = 'http://thredds.ucar.edu/thredds/wcs/grib/NCEP/NAM/CONUS_80km/best'
 
 
@@ -27,7 +27,7 @@ def test_ows_interfaces_csw():
     service = CatalogueServiceWeb(CSW_SERVICE_URL)
     # Check each service instance conforms to OWSLib interface
     service.alias = 'CSW'
-    isinstance(service, owslib.csw.CatalogueServiceWeb)
+    isinstance(service, owslib.catalogue.csw2.CatalogueServiceWeb)
     # URL attribute
     assert service.url == CSW_SERVICE_URL
     # version attribute

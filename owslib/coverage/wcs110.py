@@ -51,17 +51,18 @@ class WebCoverageService_1_1_0(WCSBase):
         else:
             raise KeyError("No content named %s" % name)
 
-    def __init__(self, url, xml, cookies, auth=None):
-        super(WebCoverageService_1_1_0, self).__init__(auth=auth)
+    def __init__(self, url, xml, cookies, auth=None, timeout=30, headers=None):
+        super(WebCoverageService_1_1_0, self).__init__(auth=auth, headers=headers)
 
         self.url = url
         self.cookies = cookies
+        self.timeout = timeout
         # initialize from saved capability document or access the server
-        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth)
+        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth, headers=self.headers)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
-            self._capabilities = reader.read(self.url)
+            self._capabilities = reader.read(self.url, self.timeout)
 
         # check for exceptions
         se = self._capabilities.find(self.ns.OWS('Exception'))
@@ -87,7 +88,7 @@ class WebCoverageService_1_1_0(WCSBase):
         # serviceOperations
         self.operations = []
         for elem in self._capabilities.findall(
-                self.ns.WCS_OWS('OperationsMetadata') + '/' + self.ns.WCS_OWS('Operation') + '/'):
+                self.ns.OWS('OperationsMetadata') + '/' + self.ns.OWS('Operation')):
             self.operations.append(Operation(elem, self.ns))
 
         # exceptions - ***********TO DO *************
@@ -141,7 +142,7 @@ class WebCoverageService_1_1_0(WCSBase):
     # TO DO: Handle rest of the  WCS 1.1.0 keyword parameters e.g. GridCRS etc.
     def getCoverage(self, identifier=None, bbox=None, time=None, format=None, store=False, rangesubset=None,
                     gridbaseCRS=None, gridtype=None, gridCS=None, gridorigin=None, gridoffsets=None,
-                    method='Get', **kwargs):
+                    method='Get', timeout=30, **kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -205,7 +206,7 @@ class WebCoverageService_1_1_0(WCSBase):
         # encode and request
         data = urlencode(request)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers)
         return u
 
     def getOperationByName(self, name):

@@ -27,3 +27,6 @@ tile.jpg
 /.pydevproject
 /.settings/
 /env27/
+
+# notebooks
+.ipynb_checkpoints

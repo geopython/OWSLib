@@ -6,15 +6,16 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+from copy import deepcopy
 import json
 import logging
-from urllib.parse import urljoin
+from urllib.parse import urlencode, urljoin
 
 import requests
 import yaml
 
 from owslib import __version__
-from owslib.util import Authentication, http_get
+from owslib.util import Authentication, http_get, http_post
 
 LOGGER = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ REQUEST_HEADERS = {
 }
 
 
-class API(object):
+class API:
     """Abstraction for OGC API - Common version 1.0"""
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30,
@@ -58,10 +59,12 @@ class API(object):
         self.auth = auth
 
         if json_ is not None:  # static JSON string
-            self.links = json.loads(json_)['links']
+            self.links = json.loads(json_).get('links', [])
+            self.response = json_
         else:
             response = http_get(url, headers=self.headers, auth=self.auth).json()
-            self.links = response['links']
+            self.links = response.get('links', [])
+            self.response = response
 
     def api(self) -> dict:
         """
@@ -113,43 +116,7 @@ class API(object):
         path = 'conformance'
         return self._request(path)
 
-    def collections(self) -> dict:
-        """
-        implements /collections
-
-        @returns: `dict` of collections object
-        """
-
-        path = 'collections'
-        return self._request(path)
-
-    def collection(self, collection_id) -> dict:
-        """
-        implements /collections/{collectionId}
-
-        @type collection_id: string
-        @param collection_id: id of collection
-
-        @returns: `dict` of feature collection metadata
-        """
-
-        path = 'collections/{}'.format(collection_id)
-        return self._request(path)
-
-    def collection_queryables(self, collection_id) -> dict:
-        """
-        implements /collections/{collectionId}/queryables
-
-        @type collection_id: string
-        @param collection_id: id of collection
-
-        @returns: `dict` of feature collection queryables
-        """
-
-        path = 'collections/{}/queryables'.format(collection_id)
-        return self._request(path)
-
-    def _build_url(self, path=None) -> str:
+    def _build_url(self, path: str = None, params: dict = {}) -> str:
         """
         helper function to build an OGC API URL
 
@@ -167,11 +134,15 @@ class API(object):
         else:
             url = urljoin(url, path)
 
+        if params:
+            url = '?'.join([url, urlencode(params)])
+
         LOGGER.debug('URL: {}'.format(url))
 
         return url
 
-    def _request(self, path=None, as_dict=True, kwargs={}) -> dict:
+    def _request(self, path: str = None, as_dict: bool = True,
+                 kwargs: dict = {}) -> dict:
         """
         helper function for request/response patterns against OGC API endpoints
 
@@ -186,15 +157,72 @@ class API(object):
         """
 
         url = self._build_url(path)
+        self.request = url
 
         LOGGER.debug('Request: {}'.format(url))
+        LOGGER.debug('Params: {}'.format(kwargs))
 
-        response = http_get(url, headers=self.headers, auth=self.auth,
-                            params=kwargs)
+        if 'cql' not in kwargs:
+            response = http_get(url, headers=self.headers, auth=self.auth,
+                                params=kwargs)
+        else:
+            LOGGER.debug('CQL query detected')
+            kwargs2 = deepcopy(kwargs)
+            cql = kwargs2.pop('cql')
+            url2 = self._build_url(path, kwargs2)
+            response = http_post(url2, request=cql, auth=self.auth)
+
+        LOGGER.debug('URL: {}'.format(response.url))
+
         if response.status_code != requests.codes.ok:
             raise RuntimeError(response.text)
+
+        self.request = response.url
 
         if as_dict:
             return response.json()
         else:
             return response.content
+
+
+class Collections(API):
+    def __init__(self, url: str, json_: str = None, timeout: int = 30,
+                 headers: dict = None, auth: Authentication = None):
+        __doc__ = API.__doc__  # noqa
+        super().__init__(url, json_, timeout, headers, auth)
+
+    def collections(self) -> dict:
+        """
+        implements /collections
+
+        @returns: `dict` of collections object
+        """
+
+        path = 'collections'
+        return self._request(path)
+
+    def collection(self, collection_id: str) -> dict:
+        """
+        implements /collections/{collectionId}
+
+        @type collection_id: string
+        @param collection_id: id of collection
+
+        @returns: `dict` of feature collection metadata
+        """
+
+        path = 'collections/{}'.format(collection_id)
+        return self._request(path)
+
+    def collection_queryables(self, collection_id: str) -> dict:
+        """
+        implements /collections/{collectionId}/queryables
+
+        @type collection_id: string
+        @param collection_id: id of collection
+
+        @returns: `dict` of feature collection queryables
+        """
+
+        path = 'collections/{}/queryables'.format(collection_id)
+        return self._request(path)

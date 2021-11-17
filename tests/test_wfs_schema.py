@@ -84,6 +84,7 @@ def mp_remote_describefeaturetype_typename_eq_attribute(monkeypatch):
 
 class TestOnline(object):
     """Class grouping online tests for the WFS get_schema method."""
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")
@@ -93,6 +94,7 @@ class TestOnline(object):
         wfs = WebFeatureService(WFS_SERVICE_URL, version=wfs_version)
         schema = wfs.get_schema('dov-pub:Boringen')
 
+    @pytest.mark.xfail
     @pytest.mark.online
     @pytest.mark.skipif(not service_ok(WFS_SERVICE_URL),
                         reason="WFS service is unreachable")

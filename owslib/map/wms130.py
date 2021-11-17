@@ -305,7 +305,7 @@ class WebMapService_1_3_0(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
 
         # need to handle casing in the header keys
         headers = {}
@@ -380,7 +380,7 @@ class WebMapService_1_3_0(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'XML':
@@ -585,8 +585,8 @@ class ContentMetadata(AbstractContentMetadata):
                 raise ValueError('%s missing name and title' % (s,))
             if name is None or title is None:
                 warnings.warn('%s missing name or title' % (s,))
-            title_ = title.text if not title is None else name.text
-            name_ = name.text if not name is None else title.text
+            title_ = title.text if title is not None else name.text
+            name_ = name.text if name is not None else title.text
             style = {'title': title_}
             # legend url
             legend = s.find(nspath('LegendURL/OnlineResource', WMS_NAMESPACE))
@@ -665,9 +665,11 @@ class ContentMetadata(AbstractContentMetadata):
         self.dataUrls = []
         for m in elem.findall(nspath('DataURL', WMS_NAMESPACE)):
             dataUrl = {
-                'format': m.find(nspath('Format', WMS_NAMESPACE)).text.strip(),
+                'format': m.find(nspath('Format', WMS_NAMESPACE)).text,
                 'url': m.find(nspath('OnlineResource', WMS_NAMESPACE)).attrib['{http://www.w3.org/1999/xlink}href']
             }
+            if dataUrl['format'] is not None:
+                dataUrl['format'] = dataUrl['format'].strip()
             self.dataUrls.append(dataUrl)
 
         # FeatureListURLs

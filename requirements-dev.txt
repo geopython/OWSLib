@@ -1,9 +1,15 @@
 -r requirements.txt
 flake8
-pytest>=3.6
+pytest>=3.8
 pytest-cov
 Pillow
 sphinx
+nbsphinx
+ipykernel
+nbconvert
+pandoc
 tox
 twine
 wheel
+coverage
+coveralls

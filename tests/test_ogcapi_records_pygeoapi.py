@@ -29,12 +29,15 @@ def test_ogcapi_records_pygeoapi():
     assert len(collections) > 0
 
     records = w.records()
-#    assert len(records) > 0
+    assert len(records['features']) > 0
 
     msc_wis_dcpc = w.collection('discovery-metadata')
     assert msc_wis_dcpc['id'] == 'discovery-metadata'
     assert msc_wis_dcpc['title'] == 'MSC discovery metadata'
     assert msc_wis_dcpc['description'] == 'MSC discovery metadata'
+    assert w.request == 'https://dev.api.weather.gc.ca/msc-wis-dcpc/collections/discovery-metadata'  # noqa
+    assert w.response is not None
+    assert isinstance(w.response, dict)
 
     msc_wis_dcpc_queryables = w.collection_queryables('discovery-metadata')
     assert len(msc_wis_dcpc_queryables['queryables']) == 7

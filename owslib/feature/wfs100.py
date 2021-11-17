@@ -6,6 +6,7 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
+import itertools
 from owslib import util
 
 from io import BytesIO
@@ -140,7 +141,7 @@ class WebFeatureService_1_0_0(object):
         if xml:
             self._capabilities = reader.readString(xml)
         else:
-            self._capabilities = reader.read(self.url)
+            self._capabilities = reader.read(self.url, self.timeout)
         self._buildMetadata(parse_remote_metadata)
 
     def _buildMetadata(self, parse_remote_metadata=False):
@@ -313,8 +314,7 @@ class WebFeatureService_1_0_0(object):
                 if tree.tag == "{%s}ServiceExceptionReport" % OGC_NAMESPACE:
                     se = tree.find(nspath("ServiceException", OGC_NAMESPACE))
                     raise ServiceException(str(se.text).strip())
-                else:
-                    return BytesIO(data)
+                return BytesIO(data)
         else:
             if have_read:
                 return BytesIO(data)
@@ -395,17 +395,12 @@ class ContentMetadata(AbstractContentMetadata):
         self.boundingBoxWGS84 = None
 
         if b is not None and srs is not None:
-            wgs84 = pyproj.Proj("epsg:4326")
+            wgs84 = pyproj.CRS.from_epsg(4326)
             try:
-                src_srs = pyproj.Proj(srs.text)
-                mincorner = pyproj.transform(
-                    src_srs, wgs84, b.attrib["minx"], b.attrib["miny"],
-                    always_xy=True,
-                )
-                maxcorner = pyproj.transform(
-                    src_srs, wgs84, b.attrib["maxx"], b.attrib["maxy"],
-                    always_xy=True,
-                )
+                src_srs = pyproj.CRS.from_string(srs.text)
+                transformer = pyproj.Transformer.from_crs(src_srs, wgs84, always_xy=True)
+                mincorner = transformer.transform(b.attrib["minx"], b.attrib["miny"])
+                maxcorner = transformer.transform(b.attrib["maxx"], b.attrib["maxy"])
 
                 self.boundingBoxWGS84 = (
                     mincorner[0],
@@ -415,17 +410,14 @@ class ContentMetadata(AbstractContentMetadata):
                 )
             except RuntimeError:
                 pass
-
         # crs options
         self.crsOptions = [Crs(srs.text) for srs in elem.findall(nspath("SRS"))]
 
         # verbs
-        self.verbOptions = [op.tag for op in parent.findall(nspath("Operations/*"))]
-        self.verbOptions + [
-            op.tag
-            for op in elem.findall(nspath("Operations/*"))
-            if op.tag not in self.verbOptions
-        ]
+        ops = itertools.chain(
+            parent.findall(nspath("Operations/*")), elem.findall(nspath("Operations/*"))
+        )
+        self.verbOptions = list({op.tag for op in ops})
 
         # others not used but needed for iContentMetadata harmonisation
         self.styles = None

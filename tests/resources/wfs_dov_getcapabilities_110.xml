@@ -158,7 +158,7 @@
                 </ows:UpperCorner>
             </ows:WGS84BoundingBox>
             <MetadataURL type="19115" format="text/xml">
-                https://www.dov.vlaanderen.be/geonetwork/srv/nl/csw?Service=CSW&amp;Request=GetRecordById&amp;Version=2.0.2&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=6c39d716-aecc-4fbc-bac8-4f05a49a78d5
+                https://www.dov.vlaanderen.be/geonetwork/srv/dut/csw?Service=CSW&amp;Request=GetRecordById&amp;Version=2.0.2&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=6c39d716-aecc-4fbc-bac8-4f05a49a78d5
             </MetadataURL>
             <MetadataURL type="19115" format="text/html">
                 https://www.dov.vlaanderen.be/geonetwork/apps/tabsearch/index.html?hl=dut&amp;uuid=6c39d716-aecc-4fbc-bac8-4f05a49a78d5

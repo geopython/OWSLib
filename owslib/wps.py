@@ -266,6 +266,7 @@ class WebProcessingService(object):
             verbose=self.verbose,
             auth=self.auth,
             language=self.language,
+            timeout=self.timeout,
         )
         if xml:
             # read from stored XML file
@@ -293,6 +294,7 @@ class WebProcessingService(object):
             verbose=self.verbose,
             auth=self.auth,
             language=self.language,
+            timeout=self.timeout,
         )
         if xml:
             # read from stored XML file
@@ -797,7 +799,12 @@ class WPSExecution(object):
         :param int sleepSecs: number of seconds to sleep before returning control to the caller.
         """
 
-        reader = WPSExecuteReader(verbose=self.verbose, auth=self.auth, language=self.language)
+        reader = WPSExecuteReader(
+            verbose=self.verbose,
+            auth=self.auth,
+            language=self.language,
+            timeout=self.timeout
+        )
         if response is None:
             # override status location
             if url is not None:
@@ -843,6 +850,16 @@ class WPSExecution(object):
                 'Unknown process execution status: %s' % self.status)
 
     def isSucceded(self):
+        """
+        Calls self.isSucceeded - deprecated because of spelling mistake,
+        retained for backwards-compatibility.
+        """
+        return self.isSucceeded()
+
+    def isSucceeded(self):
+        """
+        Returns a boolean regarding the success status of the process.
+        """
         if self.status == 'ProcessSucceeded':
             return True
         else:
@@ -862,7 +879,7 @@ class WPSExecution(object):
                   For backward compatibility it will default to the first output.
         """
 
-        if self.isSucceded():
+        if self.isSucceeded():
             content = b''
             output = None
             if self.processOutputs:
@@ -907,7 +924,12 @@ class WPSExecution(object):
         """
 
         self.request = request
-        reader = WPSExecuteReader(verbose=self.verbose, timeout=self.timeout, auth=self.auth)
+        reader = WPSExecuteReader(
+            verbose=self.verbose,
+            auth=self.auth,
+            language=self.language,
+            timeout=self.timeout,
+        )
         response = reader.readFromUrl(
             self.url, request, method='Post', headers=self.headers)
         self.response = response
@@ -1036,10 +1058,11 @@ class ComplexData(object):
     Class that represents a ComplexData element in a WPS document
     """
 
-    def __init__(self, mimeType=None, encoding=None, schema=None):
+    def __init__(self, mimeType=None, encoding=None, schema=None, maximumMegaBytes=None):
         self.mimeType = mimeType
         self.encoding = encoding
         self.schema = schema
+        self.maximumMegabytes = maximumMegaBytes  # defined only if provided by ProcessDescription ComplexData
 
 
 class InputOutput(object):
@@ -1154,7 +1177,7 @@ class InputOutput(object):
         Method to parse a ComplexData or ComplexOutput element.
         """
 
-        # <ComplexData>
+        # <ComplexData maximumMegabytes="200">
         #     <Default>
         #         <Format>
         #            <MimeType>text/xml</MimeType>
@@ -1201,13 +1224,19 @@ class InputOutput(object):
                     )
                 )
 
+            # Optional attribute 'maximumMegabytes' can be omitted entirely from 'ComplexData'
+            # but in the case it is made available, report it in the format for reference.
+            # This could be used by a file validation step to be respected during process execution
+            # but this check should be done on the server side, so it is only informative here.
+            max_mb = complex_data_element.attrib.get("maximumMegabytes")
             for format_element in\
                     complex_data_element.findall('Supported/Format'):
                 self.supportedValues.append(
                     ComplexData(
                         mimeType=testXMLValue(format_element.find('MimeType')),
                         encoding=testXMLValue(format_element.find('Encoding')),
-                        schema=testXMLValue(format_element.find('Schema'))
+                        schema=testXMLValue(format_element.find('Schema')),
+                        maximumMegaBytes=max_mb
                     )
                 )
 
@@ -1218,7 +1247,8 @@ class InputOutput(object):
                         default_format_element.find('MimeType')),
                     encoding=testXMLValue(
                         default_format_element.find('Encoding')),
-                    schema=testXMLValue(default_format_element.find('Schema'))
+                    schema=testXMLValue(default_format_element.find('Schema')),
+                    maximumMegaBytes=max_mb
                 )
 
     def _parseBoundingBoxData(self, element, bboxElementName):
@@ -1398,10 +1428,7 @@ class Output(InputOutput):
                 self.dataType = literalDataElement.get('dataType')
                 if literalDataElement.text is not None and literalDataElement.text.strip() != '':
                     self.data.append(literalDataElement.text.strip())
-            bboxDataElement = dataElement.find(nspath('BoundingBox', ns=namespaces['ows']))
-            if bboxDataElement is not None:
-                # TODO: just a workaround for data-inputs in lineage
-                bboxDataElement = dataElement.find(nspath('BoundingBoxData', ns=namespaces['wps']))
+            bboxDataElement = dataElement.find(nspath('BoundingBoxData', ns=namespaces['wps']))
             if bboxDataElement is not None:
                 self.dataType = "BoundingBoxData"
                 bbox = BoundingBox(bboxDataElement)
@@ -1527,7 +1554,9 @@ class Process(object):
         self._root = elem
         self.verbose = verbose
 
-        wpsns = getNamespace(elem)
+        # when process is instantiated from GetCapabilities, elem is 'wps:Process'          => wpsns='wps'
+        # when process is instantiated from DescribeProcess, elem is 'ProcessDescription'   => wpsns=''
+        wpsns = getNamespace(elem) or n.get_namespace('wps')
 
         def get_bool_attribute(elem, attribute):
             property = elem.get(attribute, '').lower()
@@ -1540,7 +1569,9 @@ class Process(object):
             return value
 
         # <ProcessDescription statusSupported="true" storeSupported="true" ns0:processVersion="1.0.0">
-        self.processVersion = elem.get(nspath('processVersion', ns=wpsns))
+        #   because version attribute is always 'wps:processVersion', wpsns with both variants must be tested
+        #   in order to handle both elem in wpsns='wps' and wpsns='' cases
+        self.processVersion = elem.get(nspath('processVersion', ns=wpsns)) or elem.get(nspath('processVersion'))
         self.statusSupported = get_bool_attribute(elem, "statusSupported")
         self.storeSupported = get_bool_attribute(elem, "storeSupported")
         self.identifier = None
@@ -1908,7 +1939,7 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
         execution.checkStatus(sleepSecs=sleepSecs)
         log.info('Execution status: %s' % execution.status)
 
-    if execution.isSucceded():
+    if execution.isSucceeded():
         if download:
             execution.getOutput(filepath=filepath)
         else:

@@ -7,6 +7,7 @@ class Namespaces(object):
     namespace_dict = {
         'atom': 'http://www.w3.org/2005/Atom',
         'csw': 'http://www.opengis.net/cat/csw/2.0.2',
+        'csw30': 'http://www.opengis.net/cat/csw/3.0',
         'dc': 'http://purl.org/dc/elements/1.1/',
         'dct': 'http://purl.org/dc/terms/',
         'dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',

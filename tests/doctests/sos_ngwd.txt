@@ -3,7 +3,7 @@ Imports
 
     >>> from tests.utils import resource_file
     >>> from owslib.sos import SensorObservationService
-    >>> from owslib.fes import FilterCapabilities200
+    >>> from owslib.fes2 import FilterCapabilities
     >>> from owslib.ows import OperationsMetadata
     >>> from owslib.crs import Crs
     >>> from datetime import datetime
@@ -155,7 +155,7 @@ OperationsMetadata
 Filter_Capabilities
 
     >>> filter = ngwd.filters
-    >>> isinstance(filter, FilterCapabilities200)
+    >>> isinstance(filter, FilterCapabilities)
     False
 
 

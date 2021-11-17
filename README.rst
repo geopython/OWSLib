@@ -1,9 +1,9 @@
 OWSLib
 ======
 
-.. image:: https://travis-ci.org/geopython/OWSLib.svg?branch=master
-   :target: https://travis-ci.org/geopython/OWSLib
-   :alt: Travis Build
+.. image:: https://github.com/geopython/OWSLib/workflows/build%20%E2%9A%99%EF%B8%8F/badge.svg
+   :target: https://github.com/geopython/OWSLib/actions
+   :alt: Build Status
 
 .. image:: https://api.codacy.com/project/badge/Grade/09f15588c99943e3976cdf20b7b32c8d
    :target: https://www.codacy.com/project/cehbrecht/OWSLib/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=geopython/OWSLib&amp;utm_campaign=Badge_Grade_Dashboard
@@ -145,7 +145,8 @@ Releasing
   make html
   ./publish.sh
   # update on PyPI (must be a maintainer)
-  python setup.py sdist bdist_wheel --universal upload
+  python setup.py sdist bdist_wheel --universal
+  twine upload dist/*
 
 Support
 -------

@@ -1,6 +1,89 @@
 Changes
 =======
 
+0.25.0 (2021-08-23)
+-------------------
+
+A full list of commits for 0.25.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.25.0
+
+- WMS: include custom headers (#763)
+- ISO: add MD_BrowseGraphic support (#757)
+- OGC API: fix bbox handling #779), request/response handling
+- WFS: add support for topological filters (#780)
+- various bug fixes
+
+
+0.24.1 (2021-05-10)
+-------------------
+
+A full list of commits for 0.24.1 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.24.1
+
+- fix CSW request byte handling (#776)
+
+
+0.24.0 (2021-05-10)
+-------------------
+
+A full list of commits for 0.24.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.24.0
+
+- CSW: add CSW 3 client (#746)
+- CSW: add support for distributed search (#771)
+- OGC API: refactor collections for broader use (#753)
+- OACov: add support for scaling (#756)
+- Auth: make most Authentication attributes private (#770)
+- various bug fixes
+
+
+0.23.0 (2021-02-04)
+-------------------
+
+A full list of commits for 0.23.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.23.0
+
+- WMS: Handle empty <DataURL>.<Format> element in GetCapabilities (#739)
+- WCS: Feature/wcs headers integration (#741)
+- Tests: fix WFS tests (#743)
+- Auth: Support requests AuthBase in addition to basic password authentication (#724)
+- WCS: Fix bug with timeout not assigned (#738)
+- Tests: restore ISO GM03 tests as pytests (#734)
+- ISO: OWS/ISO metadata updates (#736)
+- ISO: add support for ISO 19115 keyword thesaurus URLs via gmx:Anchor (#735)
+- ISO: fix reference (#733)
+
+
+0.22.0 (2021-01-21)
+-------------------
+
+A full list of commits for 0.22.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.22.0
+
+- Tests: Fix tests coveralls (#732)
+- WCS, WFS: Add timeout to get capabilities (#730)
+- Tests: migrate to GitHub actions (#727)
+- ISO: add support for ISO 19115-2 (#726)
+
+
+0.21.0 (2020-12-09)
+-------------------
+
+A full list of commits for 0.21.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.21.0
+
+- OGC API: Added support for Coverages (#699)
+- WFS: Added POST support to WFS GetFeature (#706)
+- WCS: Allow user to specify timeout on WCS GetCoverage calls (#714)
+- WPS: fixed bounding-box (#719)
+- Various fixes: #695, #707, #702, #716, #718, #722, #691, #720
+
 0.20.0 (2020-06-05)
 -------------------
 

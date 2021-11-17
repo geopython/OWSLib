@@ -62,6 +62,9 @@ class ServiceIdentification(object):
             if f.text is not None:
                 self.keywords.append(f.text)
 
+        val = self._root.find(util.nspath('Keywords/Type', namespace))
+        self.keywords_type = util.testXMLValue(val)
+
         val = self._root.find(util.nspath('AccessConstraints', namespace))
         self.accessconstraints = util.testXMLValue(val)
 

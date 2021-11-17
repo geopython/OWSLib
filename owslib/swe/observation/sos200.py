@@ -2,7 +2,7 @@ from owslib.etree import etree
 from urllib.parse import urlencode, parse_qsl
 from owslib import ows
 from owslib.crs import Crs
-from owslib.fes import FilterCapabilities200
+from owslib.fes2 import FilterCapabilities
 from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, extract_time
 from owslib.namespaces import Namespaces
 from owslib.swe.observation.om import MeasurementObservation
@@ -95,7 +95,7 @@ class SensorObservationService_2_0_0(object):
         # sos:FilterCapabilities
         filters = self._capabilities.find(nspath_eval('sos:Filter_Capabilities', namespaces))
         if filters is not None:
-            self.filters = FilterCapabilities200(filters)
+            self.filters = FilterCapabilities(filters)
         else:
             self.filters = None
 

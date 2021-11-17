@@ -52,6 +52,8 @@ def get_schema(
     if ":" in typename:
         typename = typename.split(":")[1]
     type_element = root.find("./{%s}element" % XS_NAMESPACE)
+    if type_element is None:
+        return None
     complex_type = type_element.attrib["type"].split(":")[1]
     elements = _get_elements(complex_type, root)
     nsmap = None
@@ -125,7 +127,8 @@ def _construct_schema(elements, nsmap):
             schema["geometry"] = mappings[data_type]
             schema["geometry_column"] = name
         else:
-            schema["properties"][name] = data_type.replace(schema_key + ":", "")
+            if schema_key is not None:
+                schema["properties"][name] = data_type.replace(schema_key + ":", "")
 
         if non_nillable:
             schema["required"].append(name)
