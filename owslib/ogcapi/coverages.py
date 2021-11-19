@@ -90,7 +90,7 @@ class Coverages(Collections):
         kwargs_ = {}
 
         if 'range_subset' in kwargs:
-            kwargs_['rangeSubset'] = ','.join(
+            kwargs_['range-subset'] = ','.join(
                 [str(x) for x in kwargs['range_subset']])
 
         for p in ['scale_axes', 'scale_size', 'subset']:
