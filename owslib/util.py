@@ -848,6 +848,23 @@ def is_vector_grid(grid_elem):
     pass
 
 
+def eval_anchor(xpath, attribute_name, namespaces):
+    """Find child value from given root element
+
+    :param xpath: xpath defintion, like {http://foo/bar/namespace}ElementName
+    :param attribute_name: name of possible attribute of given element
+    :param namespace: value of the xml namespace
+    :return: element value or None
+    """
+    val = None
+    iii = xpath.find(nspath_eval(f'{attribute_name}/gco:CharacterString', namespaces))
+    val = testXMLValue(iii)
+    if val is None:
+        iii = xpath.find(nspath_eval(f'{attribute_name}/gmx:Anchor', namespaces))
+        val = testXMLValue(iii)
+    return val
+
+
 class Authentication(object):
 
     _USERNAME = None

@@ -486,21 +486,13 @@ class MD_DataIdentification(object):
                 for ii in i.findall(util.nspath_eval('gmd:useConstraints/gmd:MD_RestrictionCode', namespaces)):
                     val = _testCodeListValue(ii)
                     if val == 'otherRestrictions':
-                        iii = i.find(util.nspath_eval('gmd:otherConstraints/gco:CharacterString', namespaces))
-                        val = util.testXMLValue(iii)
-                        if val is None:
-                            iii = i.find(util.nspath_eval('gmd:otherConstraints/gmx:Anchor', namespaces))
-                            val = util.testXMLValue(iii)
+                        val = util.eval_anchor(i, 'gmd:otherConstraints', namespaces) 
                     if val is not None:
                         self.useconstraints.append(val)
                 for ii in i.findall(util.nspath_eval('gmd:accessConstraints/gmd:MD_RestrictionCode', namespaces)):
                     val = _testCodeListValue(ii)
                     if val == 'otherRestrictions':
-                        iii = i.find(util.nspath_eval('gmd:otherConstraints/gco:CharacterString', namespaces))
-                        val = util.testXMLValue(iii)
-                        if val is None:
-                            iii = i.find(util.nspath_eval('gmd:otherConstraints/gmx:Anchor', namespaces))
-                            val = util.testXMLValue(iii)
+                        val = util.eval_anchor(i, 'gmd:otherConstraints', namespaces) 
                     if val is not None:
                         self.accessconstraints.append(val)
                 for ii in i.findall(util.nspath_eval('gmd:otherConstraints/gco:CharacterString', namespaces)):
@@ -1359,9 +1351,8 @@ class MI_Platform(object):
             self.identifier = None
             self.description = None
         else:
+            val = util.eval_anchor(i, 'gmi:identifier/gmd:MD_Identifier/gmd:code', namespaces) 
             val = plt.find(util.nspath_eval('gmi:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString', namespaces))
-            if val is None:
-                val = plt.find(util.nspath_eval('gmi:identifier/gmd:MD_Identifier/gmd:code/gmx:Anchor', namespaces))
             self.identifier = util.testXMLValue(val)
 
             val = plt.find(util.nspath_eval('gmi:description/gco:CharacterString', namespaces))
@@ -1379,9 +1370,7 @@ class MI_Instrument(object):
             self.identifier = None
             self.type = None
         else:
-            val = inst.find(util.nspath_eval('gmi:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString', namespaces))
-            if val is None:
-                val = inst.find(util.nspath_eval('gmi:identifier/gmd:MD_Identifier/gmd:code/gmx:Anchor', namespaces))
+            val = util.eval_anchor(inst, 'gmi:identifier/gmd:MD_Identifier/gmd:code', namespaces) 
             self.identifier = util.testXMLValue(val)
 
             val = inst.find(util.nspath_eval('gmi:type/gco:CharacterString', namespaces))
