@@ -50,8 +50,8 @@ class Features(Collections):
         @param datetime: time extent or time instant
         @type limit: int
         @param limit: limit number of features
-        @type startindex: int
-        @param startindex: start position of results
+        @type offset: int
+        @param offset: start position of results
         @type q: string
         @param q: full text search
         @type filter: string
