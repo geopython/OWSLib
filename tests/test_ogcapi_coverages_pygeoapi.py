@@ -46,4 +46,4 @@ def test_ogcapi_coverages_pygeoapi():
     assert rangetype['field'][0]['definition'] == 'float64'
 
     with pytest.raises(RuntimeError):
-        w.coverage('gdps-temperature', range_subset=[8])
+        w.coverage('gdps-temperature', properties=[8])

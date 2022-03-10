@@ -73,8 +73,8 @@ class Coverages(Collections):
 
         @type collection_id: string
         @param collection_id: id of collection
-        @type range_subset: list
-        @param range_subset: range subset
+        @type properties: list
+        @param properties: range subset
         @type subset: list of tuples
         @param subset: [(name, lower bound, upper bound)]
         @type scale_size: list of tuples
@@ -89,9 +89,9 @@ class Coverages(Collections):
 
         kwargs_ = {}
 
-        if 'range_subset' in kwargs:
-            kwargs_['range-subset'] = ','.join(
-                [str(x) for x in kwargs['range_subset']])
+        if 'properties' in kwargs:
+            kwargs_['properties'] = ','.join(
+                [str(x) for x in kwargs['properties']])
 
         for p in ['scale_axes', 'scale_size', 'subset']:
             if p in kwargs:
