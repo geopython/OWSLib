@@ -224,7 +224,7 @@ class CatalogueServiceWeb(object):
         """
 
         if xml is not None:
-            if xml.startswith(b'<'):
+            if (isinstance(xml, bytes) and xml.startswith(b'<')) or (isinstance(xml, str) and xml.startswith('<')):
                 self.request = etree.fromstring(xml)
                 val = self.request.find(util.nspath_eval('csw30:Query/csw30:ElementSetName', namespaces))
                 if val is not None:
