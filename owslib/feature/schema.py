@@ -54,8 +54,14 @@ def get_schema(
     type_element = root.find("./{%s}element" % XS_NAMESPACE)
     if type_element is None:
         return None
-    complex_type = type_element.attrib["type"].split(":")[1]
+    try:
+        # without associated xsd, there is no type attribute -> KeyError
+        complex_type = type_element.attrib["type"].split(":")[1]
+    except KeyError:
+        complex_type = None
     elements = _get_elements(complex_type, root)
+        
+    
     nsmap = None
     if hasattr(root, "nsmap"):
         nsmap = root.nsmap
@@ -65,13 +71,22 @@ def get_schema(
 def _get_elements(complex_type, root):
     """Get attribute elements
     """
+    
+    # use variables here to let findall() figure out what to look for
+    if complex_type is None:
+        attribute_name = None
+        attribute_value = None
+    else:
+        attribute_name = 'name'
+        attribute_value = complex_type
+                        
 
     found_elements = []
     element = findall(
         root,
         "{%s}complexType" % XS_NAMESPACE,
-        attribute_name="name",
-        attribute_value=complex_type,
+        attribute_name=attribute_name,
+        attribute_value=attribute_value, # 'vg_exType'
     )[0]
     found_elements = findall(element, "{%s}element" % XS_NAMESPACE)
 
@@ -129,6 +144,10 @@ def _construct_schema(elements, nsmap):
         else:
             if schema_key is not None:
                 schema["properties"][name] = data_type.replace(schema_key + ":", "")
+            else:
+                # there is no xsd:xxxx to split
+                schema["properties"][name] = data_type
+                
 
         if non_nillable:
             schema["required"].append(name)
@@ -137,8 +156,7 @@ def _construct_schema(elements, nsmap):
         return schema
     else:
         return None
-
-
+    
 def _get_describefeaturetype_url(url, version, typename):
     """Get url for describefeaturetype request
 
@@ -175,3 +193,4 @@ def _get_remote_describefeaturetype(url, timeout, headers, auth):
     """
     res = openURL(url, timeout=timeout, headers=headers, auth=auth)
     return etree.fromstring(res.read())
+    
