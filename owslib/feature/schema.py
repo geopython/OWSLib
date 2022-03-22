@@ -25,7 +25,7 @@ GML_NAMESPACES = (
 
 
 def get_schema(
-    url, typename, version="1.0.0", timeout=30, headers=None, username=None, password=None, auth=None
+    url, typename, version="1.0.0", timeout=30, headers=None, username=None, password=None, auth=None, **kwargs
 ):
     """Parses DescribeFeatureType response and creates schema compatible
     with :class:`fiona`
@@ -36,6 +36,7 @@ def get_schema(
     :param int timeout: request timeout
     :param str username: service authentication username
     :param str password: service authentication password
+    :param **kwargs: key/value pairs for optional request parameters
     :param Authentication auth: instance of owslib.util.Authentication
     """
     if auth:
@@ -45,7 +46,11 @@ def get_schema(
             auth.password = password
     else:
         auth = Authentication(username, password)
-    url = _get_describefeaturetype_url(url, version, typename)
+    vendor_kwargs = {}
+    if kwargs:
+        for kw in kwargs:
+            vendor_kwargs[kw] = kwargs[kw]
+    url = _get_describefeaturetype_url(url, version, typename, **vendor_kwargs)
     root = _get_remote_describefeaturetype(url, timeout=timeout,
                                            headers=headers, auth=auth)
 
@@ -139,7 +144,7 @@ def _construct_schema(elements, nsmap):
         return None
 
 
-def _get_describefeaturetype_url(url, version, typename):
+def _get_describefeaturetype_url(url, version, typename, **kwargs):
     """Get url for describefeaturetype request
 
     :return str: url
@@ -159,6 +164,10 @@ def _get_describefeaturetype_url(url, version, typename):
         query_string.append(("version", version))
 
     query_string.append(("typeName", typename))
+    if kwargs:
+        for kw in kwargs:
+            if kw not in params:
+                query_string.append((kw, kwargs[kw]))
 
     urlqs = urlencode(tuple(query_string))
     return url.split("?")[0] + "?" + urlqs

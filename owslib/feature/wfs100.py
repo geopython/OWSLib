@@ -76,8 +76,9 @@ class WebFeatureService_1_0_0(object):
         username=None,
         password=None,
         auth=None,
+        **kwargs,
     ):
-        """ overridden __new__ method
+        """overridden __new__ method
 
         @type url: string
         @param url: url of WFS capabilities document
@@ -90,9 +91,14 @@ class WebFeatureService_1_0_0(object):
         @param username: service authentication username
         @param password: service authentication password
         @param auth: instance of owslib.util.Authentication
+        @param **kwargs: key/value pairs for optional request parameters
         @return: initialized WebFeatureService_1_0_0 object
         """
         obj = object.__new__(self)
+        vendor_kwargs = {}
+        if kwargs:
+            for kw in kwargs:
+                vendor_kwargs[kw] = kwargs[kw]
         obj.__init__(
             url,
             version,
@@ -103,6 +109,7 @@ class WebFeatureService_1_0_0(object):
             username=username,
             password=password,
             auth=auth,
+            **vendor_kwargs,
         )
         return obj
 
@@ -124,6 +131,7 @@ class WebFeatureService_1_0_0(object):
         username=None,
         password=None,
         auth=None,
+        **kwargs,
     ):
         """Initialize."""
         if auth:
@@ -137,7 +145,16 @@ class WebFeatureService_1_0_0(object):
         self.headers = headers
         self.auth = auth or Authentication(username, password)
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
+        self.vendor_kwargs = {}
+        if kwargs:
+            for kw in kwargs:
+                self.vendor_kwargs[kw] = kwargs[kw]
+        reader = WFSCapabilitiesReader(
+            self.version,
+            headers=self.headers,
+            auth=self.auth,
+            **self.vendor_kwargs,
+        )
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -183,10 +200,7 @@ class WebFeatureService_1_0_0(object):
         file-like object.
         NOTE: this is effectively redundant now"""
         reader = WFSCapabilitiesReader(self.version, auth=self.auth)
-        return openURL(
-            reader.capabilities_url(self.url), timeout=self.timeout,
-            headers=self.headers, auth=self.auth
-        )
+        return openURL(reader.capabilities_url(self.url), timeout=self.timeout, headers=self.headers, auth=self.auth)
 
     def items(self):
         """supports dict-like items() access"""
@@ -286,8 +300,7 @@ class WebFeatureService_1_0_0(object):
 
         data = urlencode(request)
         log.debug("Making request: %s?%s" % (base_url, data))
-        u = openURL(base_url, data, method, timeout=self.timeout,
-                    headers=self.headers, auth=self.auth)
+        u = openURL( base_url, data, method, timeout=self.timeout, headers=self.headers, auth=self.auth)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -332,7 +345,7 @@ class WebFeatureService_1_0_0(object):
         Get layer schema compatible with :class:`fiona` schema object
         """
 
-        return get_schema(self.url, typename, self.version, auth=self.auth)
+        return get_schema(self.url, typename, self.version, auth=self.auth, **self.vendor_kwargs)
 
 
 class ServiceIdentification(object):
@@ -398,7 +411,9 @@ class ContentMetadata(AbstractContentMetadata):
             wgs84 = pyproj.CRS.from_epsg(4326)
             try:
                 src_srs = pyproj.CRS.from_string(srs.text)
-                transformer = pyproj.Transformer.from_crs(src_srs, wgs84, always_xy=True)
+                transformer = pyproj.Transformer.from_crs(
+                    src_srs, wgs84, always_xy=True
+                )
                 mincorner = transformer.transform(b.attrib["minx"], b.attrib["miny"])
                 maxcorner = transformer.transform(b.attrib["maxx"], b.attrib["maxy"])
 
@@ -438,11 +453,15 @@ class ContentMetadata(AbstractContentMetadata):
         """Parse remote metadata for MetadataURL of format 'XML' and add it as metadataUrl['metadata']"""
         for metadataUrl in self.metadataUrls:
             if (
-                metadataUrl["url"] is not None and metadataUrl["format"].lower() == "xml"
+                metadataUrl["url"] is not None
+                and metadataUrl["format"].lower() == "xml"
             ):
                 try:
                     content = openURL(
-                        metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth
+                        metadataUrl["url"],
+                        timeout=timeout,
+                        headers=self.headers,
+                        auth=self.auth,
                     )
                     doc = etree.fromstring(content.read())
                     if metadataUrl["type"] == "FGDC":
@@ -453,9 +472,15 @@ class ContentMetadata(AbstractContentMetadata):
                             metadataUrl["metadata"] = None
                     elif metadataUrl["type"] == "TC211":
                         mdelem = doc.find(
-                            ".//" + util.nspath_eval("gmd:MD_Metadata", n.get_namespaces(["gmd"]))
+                            ".//"
+                            + util.nspath_eval(
+                                "gmd:MD_Metadata", n.get_namespaces(["gmd"])
+                            )
                         ) or doc.find(
-                            ".//" + util.nspath_eval("gmi:MI_Metadata", n.get_namespaces(["gmi"]))
+                            ".//"
+                            + util.nspath_eval(
+                                "gmi:MI_Metadata", n.get_namespaces(["gmi"])
+                            )
                         )
                         if mdelem is not None:
                             metadataUrl["metadata"] = MD_Metadata(mdelem)

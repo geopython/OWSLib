@@ -20,7 +20,7 @@ from .util import clean_ows_url, Authentication
 
 
 def WebMapService(url, version='1.1.1', xml=None, username=None, password=None,
-                  parse_remote_metadata=False, timeout=30, headers=None, auth=None):
+                  parse_remote_metadata=False, timeout=30, headers=None, auth=None, **kwargs):
 
     '''wms factory function, returns a version specific WebMapService object
 
@@ -35,6 +35,7 @@ def WebMapService(url, version='1.1.1', xml=None, username=None, password=None,
     @param username: service authentication username
     @param password: service authentication password
     @param auth: instance of owslib.util.Authentication
+    @param **kwargs : extra arguments. Anything else e.g. vendor specific parameters
     @return: initialized WebFeatureService_2_0_0 object
     '''
     if auth:
@@ -45,14 +46,19 @@ def WebMapService(url, version='1.1.1', xml=None, username=None, password=None,
     else:
         auth = Authentication(username, password)
     clean_url = clean_ows_url(url)
+    vendor_kwargs = {}
+    if kwargs:
+        for kw in kwargs:
+            vendor_kwargs[kw] = kwargs[kw]
+
 
     if version in ['1.1.1']:
         return wms111.WebMapService_1_1_1(
             clean_url, version=version, xml=xml, parse_remote_metadata=parse_remote_metadata,
-            timeout=timeout, headers=headers, auth=auth)
+            timeout=timeout, headers=headers, auth=auth, **vendor_kwargs)
     elif version in ['1.3.0']:
         return wms130.WebMapService_1_3_0(
             clean_url, version=version, xml=xml, parse_remote_metadata=parse_remote_metadata,
-            timeout=timeout, headers=headers, auth=auth)
+            timeout=timeout, headers=headers, auth=auth, **vendor_kwargs)
     raise NotImplementedError(
         'The WMS version ({}) you requested is not implemented. Please use 1.1.1 or 1.3.0.'.format(version))

@@ -8,7 +8,15 @@ class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version="1.0", username=None, password=None, headers=None, auth=None):
+    def __init__(
+        self,
+        version="1.0",
+        username=None,
+        password=None,
+        headers=None,
+        auth=None,
+        **kwargs,
+    ):
         """Initialize"""
         self.headers = headers
         if auth:
@@ -19,6 +27,10 @@ class WFSCapabilitiesReader(object):
         self.auth = auth or Authentication(username, password)
         self.version = version
         self._infoset = None
+        self.vendor_kwargs = {}
+        if kwargs:
+            for kw in kwargs:
+                self.vendor_kwargs[kw] = kwargs[kw]
 
     def capabilities_url(self, service_url):
         """Return a capabilities url
@@ -35,6 +47,15 @@ class WFSCapabilitiesReader(object):
             qs.append(("request", "GetCapabilities"))
         if "version" not in params:
             qs.append(("version", self.version))
+
+        if self.vendor_kwargs:
+            if not isinstance(self.vendor_kwargs, dict):
+                raise ValueError(
+                    "vendor_kwargs ('%s'), expected 'dict()'" % self.vendor_kwargs
+                )
+            for param_key, param_value in self.vendor_kwargs.items():
+                if param_key not in params:
+                    qs.append((param_key, param_value))
 
         urlqs = urlencode(tuple(qs))
         return service_url.split("?")[0] + "?" + urlqs

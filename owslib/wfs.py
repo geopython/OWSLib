@@ -19,7 +19,7 @@ from .util import clean_ows_url, Authentication
 
 def WebFeatureService(url, version='1.0.0', xml=None,
                       parse_remote_metadata=False, timeout=30, username=None,
-                      password=None, headers=None, auth=None):
+                      password=None, headers=None, auth=None, **kwargs):
     ''' wfs factory function, returns a version specific WebFeatureService object
 
     @type url: string
@@ -33,6 +33,7 @@ def WebFeatureService(url, version='1.0.0', xml=None,
     @param username: service authentication username
     @param password: service authentication password
     @param auth: instance of owslib.util.Authentication
+    @param **kwargs : extra arguments. Anything else e.g. vendor specific parameters
     @return: initialized WebFeatureService object (version dependent)
     '''
     if auth:
@@ -42,17 +43,24 @@ def WebFeatureService(url, version='1.0.0', xml=None,
             auth.password = password
     else:
         auth = Authentication(username, password)
+    vendor_kwargs = {}
+    if kwargs:
+        for kw in kwargs:
+            vendor_kwargs[kw] = kwargs[kw]
     clean_url = clean_ows_url(url)
 
     if version in ['1.0', '1.0.0']:
         return wfs100.WebFeatureService_1_0_0(
             clean_url, version, xml, parse_remote_metadata,
-            timeout=timeout, headers=headers, auth=auth)
+            timeout=timeout, headers=headers, auth=auth,
+            **vendor_kwargs)
     elif version in ['1.1', '1.1.0']:
         return wfs110.WebFeatureService_1_1_0(
             clean_url, version, xml, parse_remote_metadata,
-            timeout=timeout, headers=headers, auth=auth)
+            timeout=timeout, headers=headers, auth=auth,
+            **vendor_kwargs)
     elif version in ['2.0', '2.0.0']:
         return wfs200.WebFeatureService_2_0_0(
             clean_url, version, xml, parse_remote_metadata,
-            timeout=timeout, headers=headers, auth=auth)
+            timeout=timeout, headers=headers, auth=auth,
+            **vendor_kwargs)

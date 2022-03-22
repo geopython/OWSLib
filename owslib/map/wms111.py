@@ -52,7 +52,8 @@ class WebMapService_1_1_1(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.1.1', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, headers=None, timeout=30, auth=None):
+                 parse_remote_metadata=False, headers=None, timeout=30, auth=None,
+                 **kwargs):
         """Initialize."""
         if auth:
             if username:
@@ -65,10 +66,15 @@ class WebMapService_1_1_1(object):
         self.headers = headers
         self._capabilities = None
         self.auth = auth or Authentication(username, password)
+        self.vendor_kwargs = {}
+        if kwargs:
+            for kw in kwargs:
+                self.vendor_kwargs[kw] = kwargs[kw]
+
 
         # Authentication handled by Reader
         reader = WMSCapabilitiesReader(
-            self.version, url=self.url, headers=headers, auth=self.auth)
+            self.version, url=self.url, headers=headers, auth=self.auth, **self.vendor_kwargs)
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -142,7 +148,7 @@ class WebMapService_1_1_1(object):
         NOTE: this is effectively redundant now"""
 
         reader = WMSCapabilitiesReader(
-            self.version, url=self.url, auth=self.auth)
+            self.version, url=self.url, auth=self.auth, **self.vendor_kwargs)
         u = self._open(reader.capabilities_url(self.url))
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
