@@ -52,7 +52,7 @@ class WebCoverageService_1_1_0(WCSBase):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, xml, cookies, auth=None, timeout=30, headers=None):
-        super(WebCoverageService_1_1_0, self).__init__(auth=auth, headers=headers)
+        super(WebCoverageService_1_1_0, self).__init__(auth=auth, timeout=timeout, headers=headers)
 
         self.url = url
         self.cookies = cookies
