@@ -33,7 +33,7 @@ class ServiceException(Exception):
 class WCSBase(object):
     """Base class to be subclassed by version dependent WCS classes. Provides 'high-level'
     version independent methods"""
-    def __new__(self, url, xml, cookies, auth=None, headers=None):
+    def __new__(self, url, xml, cookies, auth=None, timeout=30, headers=None):
         """ overridden __new__ method
 
         @type url: string
@@ -41,6 +41,7 @@ class WCSBase(object):
         @type xml: string
         @param xml: elementtree object
         @param auth: instance of owslib.util.Authentication
+        @param timeout: HTTP timeout, in seconds
         @param headers: dict for geoserver's request's headers
         @return: inititalised WCSBase object
         """
@@ -48,18 +49,20 @@ class WCSBase(object):
         obj.__init__(url, xml, cookies, auth=auth, headers=headers)
         self.cookies = cookies
         self.headers = headers
+        self.timeout = timeout
         self._describeCoverage = {}  # cache for DescribeCoverage responses
         return obj
 
-    def __init__(self, auth=None, headers=None):
+    def __init__(self, auth=None, timeout=30, headers=None):
         self.auth = auth or Authentication()
         self.headers = headers
+        self.timeout = timeout
 
     def getDescribeCoverage(self, identifier):
         ''' returns a describe coverage document - checks the internal cache to see if it has been fetched before '''
         if identifier not in list(self._describeCoverage.keys()):
             reader = DescribeCoverageReader(
-                self.version, identifier, self.cookies, self.auth, self.headers)
+                self.version, identifier, self.cookies, self.auth, self.timeout, self.headers)
             self._describeCoverage[identifier] = reader.read(self.url)
         return self._describeCoverage[identifier]
 
@@ -68,7 +71,7 @@ class WCSCapabilitiesReader(object):
     """Read and parses WCS capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version=None, cookies=None, auth=None, headers=None):
+    def __init__(self, version=None, cookies=None, auth=None, timeout=30, headers=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -77,6 +80,7 @@ class WCSCapabilitiesReader(object):
         self._infoset = None
         self.cookies = cookies
         self.headers = headers
+        self.timeout = timeout
         self.auth = auth or Authentication()
 
     def capabilities_url(self, service_url):
@@ -128,7 +132,7 @@ class DescribeCoverageReader(object):
     """Read and parses WCS DescribeCoverage document into a lxml.etree infoset
     """
 
-    def __init__(self, version, identifier, cookies, auth=None, headers=None):
+    def __init__(self, version, identifier, cookies, auth=None, timeout=30, headers=None):
         """Initialize
         @type version: string
         @param version: WCS Version parameter e.g '1.0.0'
@@ -138,6 +142,7 @@ class DescribeCoverageReader(object):
         self.identifier = identifier
         self.cookies = cookies
         self.headers = headers
+        self.timeout = timeout
         self.auth = auth or Authentication()
 
     def descCov_url(self, service_url):
