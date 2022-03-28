@@ -128,8 +128,8 @@ class WebMapTileService(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, vendor_kwargs=None, headers=None, auth=None,
-                 timeout=30):
+                 parse_remote_metadata=False, headers=None, auth=None,
+                 timeout=30, **kwargs):
         """Initialize.
 
         Parameters
@@ -147,13 +147,13 @@ class WebMapTileService(object):
             Optional password for authentication.
         parse_remote_metadata: string
             Currently unused.
-        vendor_kwargs : dict
-            Optional vendor-specific parameters to be included in all
-            requests.
         auth : owslib.util.Authentication
             Instance of Authentication class to hold username/password/cert/verify
         timeout : int
             number of seconds for GetTile request
+        **kwargs : additional parameter
+            Optional vendor-specific parameters to be included in all
+            requests.
 
         """
         self.url = clean_ows_url(url)
@@ -163,19 +163,22 @@ class WebMapTileService(object):
             if password:
                 auth.password = password
         self.version = version
-        self.vendor_kwargs = vendor_kwargs
         self._capabilities = None
         self.headers = headers
         self.auth = auth or Authentication(username, password)
         self.timeout = timeout or 30
+        self.vendor_kwargs = {}
+        if kwargs:
+            for kw in kwargs:
+                self.vendor_kwargs[kw] = kwargs[kw]
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(
-            self.version, url=self.url, headers=self.headers, auth=self.auth)
+            self.version, url=self.url, headers=self.headers, auth=self.auth, **self.vendor_kwargs)
         if xml:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
-            self._capabilities = reader.read(self.url, self.vendor_kwargs)
+            self._capabilities = reader.read(self.url)
 
         # Avoid building capabilities metadata if the response is a
         # ServiceExceptionReport.
@@ -813,7 +816,7 @@ class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, auth=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, auth=None, **kwargs):
         """Initialize"""
         self.version = version
         self._infoset = None
@@ -824,9 +827,14 @@ class WMTSCapabilitiesReader:
             if pw:
                 auth.password = pw
         self.auth = auth or Authentication(un, pw)
-        self.headers = headers
+        self.vendor_kwargs = {}
+        self.headers=headers
+        if kwargs:
+            for kw in kwargs:
+                self.vendor_kwargs[kw] = kwargs[kw]
 
-    def capabilities_url(self, service_url, vendor_kwargs=None):
+
+    def capabilities_url(self, service_url):
         """Return a capabilities url
         """
         # Ensure the 'service', 'request', and 'version' parameters,
@@ -839,23 +847,22 @@ class WMTSCapabilitiesReader:
             args['request'] = 'GetCapabilities'
         if 'version' not in args:
             args['version'] = self.version
-        if vendor_kwargs:
-            args.update(vendor_kwargs)
+        if self.vendor_kwargs:
+            args.update(self.vendor_kwargs)
         query = urlencode(args, doseq=True)
         pieces = ParseResult(pieces.scheme, pieces.netloc,
                              pieces.path, pieces.params,
                              query, pieces.fragment)
         return urlunparse(pieces)
 
-    def read(self, service_url, vendor_kwargs=None):
+    def read(self, service_url):
         """Get and parse a WMTS capabilities document, returning an
         elementtree instance
 
         service_url is the base url, to which is appended the service,
-        version, and request parameters. Optional vendor-specific
-        parameters can also be supplied as a dict.
+        version, and request parameters.
         """
-        getcaprequest = self.capabilities_url(service_url, vendor_kwargs)
+        getcaprequest = self.capabilities_url(service_url)
 
         # now split it up again to use the generic openURL function...
         spliturl = getcaprequest.split('?')
