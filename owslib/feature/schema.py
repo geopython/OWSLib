@@ -86,7 +86,7 @@ def _get_elements(complex_type, root):
         root,
         "{%s}complexType" % XS_NAMESPACE,
         attribute_name=attribute_name,
-        attribute_value=attribute_value, # 'vg_exType'
+        attribute_value=attribute_value,
     )[0]
     found_elements = findall(element, "{%s}element" % XS_NAMESPACE)
 
