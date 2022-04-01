@@ -29,8 +29,7 @@ class WFSCapabilitiesReader(object):
         self._infoset = None
         self.vendor_kwargs = {}
         if kwargs:
-            for kw in kwargs:
-                self.vendor_kwargs[kw] = kwargs[kw]
+            self.vendor_kwargs.update(kwargs)
 
     def capabilities_url(self, service_url):
         """Return a capabilities url

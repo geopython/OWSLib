@@ -45,8 +45,7 @@ def WebFeatureService(url, version='1.0.0', xml=None,
         auth = Authentication(username, password)
     vendor_kwargs = {}
     if kwargs:
-        for kw in kwargs:
-            vendor_kwargs[kw] = kwargs[kw]
+        vendor_kwargs.update(kwargs)
     clean_url = clean_ows_url(url)
 
     if version in ['1.0', '1.0.0']:

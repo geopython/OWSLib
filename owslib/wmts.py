@@ -169,8 +169,7 @@ class WebMapTileService(object):
         self.timeout = timeout or 30
         self.vendor_kwargs = {}
         if kwargs:
-            for kw in kwargs:
-                self.vendor_kwargs[kw] = kwargs[kw]
+            self.vendor_kwargs.update(kwargs)
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(
@@ -830,8 +829,7 @@ class WMTSCapabilitiesReader:
         self.vendor_kwargs = {}
         self.headers=headers
         if kwargs:
-            for kw in kwargs:
-                self.vendor_kwargs[kw] = kwargs[kw]
+            self.vendor_kwargs.update(kwargs)
 
 
     def capabilities_url(self, service_url):

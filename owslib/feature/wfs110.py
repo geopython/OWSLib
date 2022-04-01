@@ -86,8 +86,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         obj = object.__new__(self)
         vendor_kwargs = {}
         if kwargs:
-            for kw in kwargs:
-                vendor_kwargs[kw] = kwargs[kw]
+            vendor_kwargs.update(kwargs)
         obj.__init__(
             url,
             version,
@@ -138,8 +137,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self._capabilities = None
         self.vendor_kwargs = {}
         if kwargs:
-            for kw in kwargs:
-                self.vendor_kwargs[kw] = kwargs[kw]
+            self.vendor_kwargs.update(kwargs)
         self.owscommon = OwsCommon("1.0.0")
         reader = WFSCapabilitiesReader(
             self.version,

@@ -68,8 +68,7 @@ class WebMapService_1_1_1(object):
         self.auth = auth or Authentication(username, password)
         self.vendor_kwargs = {}
         if kwargs:
-            for kw in kwargs:
-                self.vendor_kwargs[kw] = kwargs[kw]
+            self.vendor_kwargs.update(kwargs)
 
 
         # Authentication handled by Reader

@@ -23,8 +23,7 @@ class WMSCapabilitiesReader(object):
         self.auth = auth or Authentication(un, pw)
         self.vendor_kwargs = {}
         if kwargs:
-            for kw in kwargs:
-                self.vendor_kwargs[kw] = kwargs[kw]
+            self.vendor_kwargs.update(kwargs)
 
 
         # if self.username and self.password:
