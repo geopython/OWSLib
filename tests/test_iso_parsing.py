@@ -32,7 +32,7 @@ def get_md_resource(file_path):
         mdelem = data.find('.//' + util.nspath_eval(
             'gmd:MD_Metadata', namespaces))
 
-        if mdelem is None
+        if mdelem is None:
             mdelem = data.find(
                 './/' + util.nspath_eval('gmi:MI_Metadata', namespaces))
 
