@@ -336,7 +336,12 @@ class CatalogueServiceWeb(object):
         """
 
         if xml is not None:
-            if xml.startswith(b'<'):
+            if isinstance(xml, bytes):
+                startswith_xml = xml.startswith(b'<')
+            else:  # str
+                startswith_xml = xml.startswith('<')
+
+            if startswith_xml:
                 self.request = etree.fromstring(xml)
                 val = self.request.find(util.nspath_eval('csw:Query/csw:ElementSetName', namespaces))
                 if val is not None:
