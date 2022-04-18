@@ -1,4 +1,4 @@
-from tests.utils import resource_file, compare_xml, setup_logging
+from tests.utils import resource_file, compare_xml
 from owslib.wps import WebProcessingService
 
 

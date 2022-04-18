@@ -1,7 +1,7 @@
 # Simulate a WPS Execute invocation.
 # This test does not execute any live HTTP request, rather it parses XML files containing pre-made HTTP responses.
 
-from tests.utils import resource_file, setup_logging
+from tests.utils import resource_file
 from owslib.wps import WebProcessingService
 
 
