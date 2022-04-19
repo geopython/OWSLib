@@ -31,7 +31,7 @@ def test_raw_filter():
     xml.find(util.nspath("Intersects", FES_NAMESPACE))
     xml.find(util.nspath("Point", GML32_NAMESPACE))
 
-
+@pytest.mark.xfail
 @pytest.mark.online
 def test_filter():
     """A request without filtering will yield 600 entries. With filtering we expect only one.
@@ -39,7 +39,7 @@ def test_filter():
     Note that this type of topological filtering only works (so far) with WFS 2.0.0 and POST requests.
     """
     wfs = WebFeatureService(SERVICE_URL, version="2.0.0")
-    layer = "bcmca:commercialfish_crab"
+    layer = "psf:level4"
     point = Point(id="random", srsName="http://www.opengis.net/gml/srs/epsg.xml#4326", pos=[-129.8, 55.44])
     f = fes2.Filter(fes2.Contains(propertyname="geom", geometry=point))
     r = wfs.getfeature(layer, outputFormat="application/json", method="POST", filter=f.toXML())

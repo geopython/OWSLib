@@ -188,7 +188,7 @@ def test_xmlfilter_wfs_110():
     wfs = WebFeatureService(
         'https://services.ga.gov.au/gis/stratunits/ows',
         version='1.1.0')
-    filter_prop = PropertyIsLike(propertyname='stratunit:geologichistory', literal='Cisuralian - Guadalupian',
+    filter_prop = PropertyIsLike(propertyname='stratunit:GEOLOGICHISTORY', literal='Cisuralian - Guadalupian',
         matchCase=True)
 
     filterxml = etree.tostring(filter_prop.toXML()).decode("utf-8")
@@ -196,7 +196,7 @@ def test_xmlfilter_wfs_110():
     getfeat_params = {'typename': 'stratunit:StratigraphicUnit', 'filter': filterxml}
 
     response = wfs.getfeature(**getfeat_params).read()
-    assert b'<stratunit:geologichistory>Cisuralian - Guadalupian</stratunit:geologichistory>' in response
+    assert b'<stratunit:NAME>Ellen Harkins carbonaceous shale</stratunit:NAME>' in response
 
 
 @pytest.mark.online
@@ -214,4 +214,5 @@ def test_xmlfilter_wfs_200():
     getfeat_params = {'typename': 'stratunit:StratigraphicUnit', 'filter': filterxml}
 
     response = wfs.getfeature(**getfeat_params).read()
-    assert b'<stratunit:geologichistory>Cisuralian - Guadalupian</stratunit:geologichistory>' in response
+    assert b'<stratunit:NAME>Boolgeeda Iron Formation</stratunit:NAME>' in response
+

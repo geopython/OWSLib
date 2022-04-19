@@ -10,7 +10,7 @@ SERVICE_URL = 'https://demo.pycsw.org/cite'
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
-def test_ogcapi_records_pygeoapi():
+def test_ogcapi_records_pycsw():
     w = Records(SERVICE_URL)
 
     assert w.url == 'https://demo.pycsw.org/cite/'
@@ -40,7 +40,7 @@ def test_ogcapi_records_pygeoapi():
     assert isinstance(w.response, dict)
 
     pycsw_cite_demo_queryables = w.collection_queryables('metadata:main')
-    assert len(pycsw_cite_demo_queryables['properties'].keys()) == 60
+    assert len(pycsw_cite_demo_queryables['properties'].keys()) == 11
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):

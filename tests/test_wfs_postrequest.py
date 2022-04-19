@@ -89,7 +89,7 @@ class TestPostRequest_v_1_1_0():
         filter_elem = requestv110._query.find(util.nspath("Filter", OGC_NAMESPACE))
         resource_elem = filter_elem.find(util.nspath("GmlObjectId", OGC_NAMESPACE))
 
-        assert filter_elem
+        assert filter_elem is not None
         assert resource_elem.get(util.nspath('id', GML_NAMESPACE)) == '1'
 
     def test_featureid_query_multiple(self, requestv110):
@@ -101,7 +101,7 @@ class TestPostRequest_v_1_1_0():
         for elem in resource_elem:
             ids.append(elem.get(util.nspath('id', GML_NAMESPACE)))
 
-        assert filter_elem
+        assert filter_elem is not None
         assert len(ids) == 3
         assert ids[0] == "1"
         assert ids[1] == "2"
@@ -114,8 +114,8 @@ class TestPostRequest_v_1_1_0():
         sortprop_elem = sort_elem.find(util.nspath("SortProperty", OGC_NAMESPACE))
         propertyname = sortprop_elem.findtext(util.nspath("PropertyName", OGC_NAMESPACE))
 
-        assert sort_elem
-        assert sortprop_elem
+        assert sort_elem is not None
+        assert sortprop_elem is not None
         assert propertyname == "id"
 
     def test_sortby_query_multiple(self, requestv110):
@@ -127,7 +127,7 @@ class TestPostRequest_v_1_1_0():
         for elem in sortprop_elem:
             propertyname.append(elem.findtext(util.nspath("PropertyName", OGC_NAMESPACE)))
 
-        assert sort_elem
+        assert sort_elem is not None
         assert len(sortprop_elem) == 2
         assert propertyname[0] == "id"
         assert propertyname[1] == "type"
@@ -141,9 +141,9 @@ class TestPostRequest_v_1_1_0():
         lower_elem = envel_elem.findtext(util.nspath("lowerCorner", GML_NAMESPACE))
         higher_elem = envel_elem.findtext(util.nspath("upperCorner", GML_NAMESPACE))
 
-        assert filter_elem
-        assert bbox_elem
-        assert envel_elem
+        assert filter_elem is not None
+        assert bbox_elem is not None
+        assert envel_elem is not None
         assert lower_elem == "10 10"
         assert higher_elem == "20 20"
 
@@ -155,8 +155,8 @@ class TestPostRequest_v_1_1_0():
         propertyname = equal_elem.findtext(util.nspath("PropertyName", OGC_NAMESPACE))
         literal = equal_elem.findtext(util.nspath("Literal", OGC_NAMESPACE))
 
-        assert filter_elem
-        assert equal_elem
+        assert filter_elem is not None
+        assert equal_elem is not None
         assert propertyname == "status"
         assert literal == "rejected"
 
@@ -202,7 +202,7 @@ class TestPostRequest_v_2_0_0():
         filter_elem = requestv200._query.find(util.nspath("Filter", FES_NAMESPACE))
         resource_elem = filter_elem.find(util.nspath("ResourceId", FES_NAMESPACE))
 
-        assert filter_elem
+        assert filter_elem is not None
         assert resource_elem.get("rid") == "1"
 
     def test_featureid_query_multiple(self, requestv200):
@@ -214,7 +214,7 @@ class TestPostRequest_v_2_0_0():
         for elem in resource_elems:
             ids.append(elem.get("rid"))
 
-        assert filter_elem
+        assert filter_elem is not None
         assert len(ids) == 3
         assert ids[0] == "1"
         assert ids[1] == "2"
@@ -227,8 +227,8 @@ class TestPostRequest_v_2_0_0():
         sortprop_elem = sort_elem.find(util.nspath("SortProperty", FES_NAMESPACE))
         propertyname = sortprop_elem.findtext(util.nspath("ValueReference", FES_NAMESPACE))
 
-        assert sort_elem
-        assert sortprop_elem
+        assert sort_elem is not None
+        assert sortprop_elem is not None
         assert propertyname == "id"
 
     def test_sortby_query_multiple(self, requestv200):
@@ -240,7 +240,7 @@ class TestPostRequest_v_2_0_0():
         for elem in sortprop_elem:
             propertyname.append(elem.findtext(util.nspath("ValueReference", FES_NAMESPACE)))
 
-        assert sort_elem
+        assert sort_elem is not None
         assert len(sortprop_elem) == 2
         assert propertyname[0] == "id"
         assert propertyname[1] == "type"
@@ -254,9 +254,9 @@ class TestPostRequest_v_2_0_0():
         lower_elem = envel_elem.findtext(util.nspath("lowerCorner", GML32_NAMESPACE))
         higher_elem = envel_elem.findtext(util.nspath("upperCorner", GML32_NAMESPACE))
 
-        assert filter_elem
-        assert bbox_elem
-        assert envel_elem
+        assert filter_elem is not None
+        assert bbox_elem is not None
+        assert envel_elem is not None
         assert lower_elem == "10 10"
         assert higher_elem == "20 20"
 
@@ -268,7 +268,7 @@ class TestPostRequest_v_2_0_0():
         propertyname = equal_elem.findtext(util.nspath("ValueReference", FES_NAMESPACE))
         literal = equal_elem.findtext(util.nspath("Literal", FES_NAMESPACE))
 
-        assert filter_elem
-        assert equal_elem
+        assert filter_elem is not None
+        assert equal_elem is not None
         assert propertyname == "status"
         assert literal == "rejected"
