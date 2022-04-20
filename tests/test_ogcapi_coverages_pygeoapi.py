@@ -4,7 +4,7 @@ import pytest
 
 from owslib.ogcapi.coverages import Coverages
 
-SERVICE_URL = 'https://dev.api.weather.gc.ca/coverages-demo'
+SERVICE_URL = 'https://demo.pygeoapi.io/master/'
 
 
 @pytest.mark.online
@@ -13,7 +13,7 @@ SERVICE_URL = 'https://dev.api.weather.gc.ca/coverages-demo'
 def test_ogcapi_coverages_pygeoapi():
     w = Coverages(SERVICE_URL)
 
-    assert w.url == 'https://dev.api.weather.gc.ca/coverages-demo/'
+    assert w.url == SERVICE_URL
     assert w.url_query_string is None
 
     api = w.api()
@@ -38,12 +38,15 @@ def test_ogcapi_coverages_pygeoapi():
 
     domainset = w.coverage_domainset('gdps-temperature')
 
-    assert domainset['generalGrid']['axisLabels'] == ['x', 'y']
+    assert domainset['generalGrid']['axisLabels'] == ['Long', 'Lat']
+
     assert domainset['generalGrid']['gridLimits']['axisLabels'] == ['i', 'j']
 
     rangetype = w.coverage_rangetype('gdps-temperature')
     assert len(rangetype['field']) == 1
-    assert rangetype['field'][0]['definition'] == 'float64'
+    assert rangetype['field'][0]['name'] == 'Temperature [C]'
+    assert rangetype['field'][0]['uom']['code'] == '[C]'
+    assert rangetype['field'][0]['encodingInfo']['dataType'] == 'http://www.opengis.net/def/dataType/OGC/0/float64'  # noqa
 
     with pytest.raises(RuntimeError):
         w.coverage('gdps-temperature', properties=[8])
