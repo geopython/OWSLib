@@ -51,7 +51,7 @@ class Coverages(Collections):
         @returns: coverage domainset results
         """
 
-        path = 'collections/{}/coverage/domainset'.format(collection_id)
+        path = f'collections/{collection_id}/coverage/domainset'
         return self._request(path=path, kwargs=kwargs)
 
     def coverage_rangetype(self, collection_id: str, **kwargs: dict) -> dict:
@@ -64,7 +64,7 @@ class Coverages(Collections):
         @returns: coverage rangetype results
         """
 
-        path = 'collections/{}/coverage/rangetype'.format(collection_id)
+        path = f'collections/{collection_id}/coverage/rangetype'
         return self._request(path=path, kwargs=kwargs)
 
     def coverage(self, collection_id: str, **kwargs: dict) -> dict:
@@ -98,18 +98,18 @@ class Coverages(Collections):
                 p2 = p.replace('_', '-')
                 kwargs_[p2] = []
                 for s in kwargs[p2]:
-                    val = '{}({},{})'.format(s[0], s[1], s[2])
+                    val = f'{s[0]}({s[1]},{s[2]})'
                     kwargs_[p2].append(val)
 
         if 'subset' in kwargs:
             subsets_list = []
             for s in kwargs['subset']:
-                subsets_list.append('{}({}:{})'.format(s[0], s[1], s[2]))
+                subsets_list.append(f'{s[0]}({s[1]}:{s[2]})')
             kwargs['subset'] = ','.join(subsets_list)
 
         if 'scale_factor' in kwargs:
             kwargs_['scale-factor'] = int(kwargs['scale_factor'])
 
-        path = 'collections/{}/coverage'.format(collection_id)
+        path = f'collections/{collection_id}/coverage'
 
         return BytesIO(self._request(path=path, as_dict=False, kwargs=kwargs_))
