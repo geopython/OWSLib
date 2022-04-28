@@ -1,7 +1,15 @@
+# =============================================================================
+# Copyright (c) 2021 Ayesha Naeem
+#
+# Author: Ayesha Naeem <ayesha.naeem351999@gmail.com>
+#
+# Contact email: ayesha.naeem351999@gmail.com
+# =============================================================================
+
 from urllib.parse import quote, urlencode
 from owslib.util import Authentication, openURL
 
-class ProcessCoverages(object):
+class ProcessCoverages:
     """Sends the encoded WCPS query to WCS server by using "ProcessCoverage" operation
     """
 
