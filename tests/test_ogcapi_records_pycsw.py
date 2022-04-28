@@ -62,7 +62,7 @@ def test_ogcapi_records_pycsw():
     assert pycsw_cite_demo_query['numberReturned'] == 2
     assert len(pycsw_cite_demo_query['features']) == 2
 
-    cql_json = {'eq': [{'property': 'title'}, 'Lorem ipsum']}
+    cql_json = {'op': '=', 'args': [{'property': 'title'}, 'Lorem ipsum']}
     pycsw_cite_demo_query = w.collection_items('metadata:main', cql=cql_json)
     assert pycsw_cite_demo_query['numberMatched'] == 1
     assert pycsw_cite_demo_query['numberReturned'] == 1
