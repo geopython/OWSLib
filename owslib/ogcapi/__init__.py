@@ -20,7 +20,7 @@ from owslib.util import Authentication, http_get, http_post
 LOGGER = logging.getLogger(__name__)
 
 REQUEST_HEADERS = {
-    'User-Agent': 'OWSLib {} (https://geopython.github.io/OWSLib)'.format(__version__)
+    'User-Agent': f'OWSLib {__version__} (https://geopython.github.io/OWSLib)'
 }
 
 
@@ -94,7 +94,7 @@ class API:
                     break
 
         if url is not None:
-            LOGGER.debug('Request: {}'.format(url))
+            LOGGER.debug(f'Request: {url}')
             response = http_get(url, headers=REQUEST_HEADERS, auth=self.auth)
             if openapi_format == openapi_json_mimetype:
                 content = response.json()
@@ -137,7 +137,7 @@ class API:
         if params:
             url = '?'.join([url, urlencode(params)])
 
-        LOGGER.debug('URL: {}'.format(url))
+        LOGGER.debug(f'URL: {url}')
 
         return url
 
@@ -159,8 +159,8 @@ class API:
         url = self._build_url(path)
         self.request = url
 
-        LOGGER.debug('Request: {}'.format(url))
-        LOGGER.debug('Params: {}'.format(kwargs))
+        LOGGER.debug(f'Request: {url}')
+        LOGGER.debug(f'Params: {kwargs}')
 
         if 'cql' not in kwargs:
             response = http_get(url, headers=self.headers, auth=self.auth,
@@ -172,7 +172,7 @@ class API:
             url2 = self._build_url(path, kwargs2)
             response = http_post(url2, request=cql, auth=self.auth)
 
-        LOGGER.debug('URL: {}'.format(response.url))
+        LOGGER.debug(f'URL: {response.url}')
 
         if response.status_code != requests.codes.ok:
             raise RuntimeError(response.text)
@@ -211,7 +211,7 @@ class Collections(API):
         @returns: `dict` of feature collection metadata
         """
 
-        path = 'collections/{}'.format(collection_id)
+        path = f'collections/{collection_id}'
         return self._request(path)
 
     def collection_queryables(self, collection_id: str) -> dict:
@@ -224,5 +224,5 @@ class Collections(API):
         @returns: `dict` of feature collection queryables
         """
 
-        path = 'collections/{}/queryables'.format(collection_id)
+        path = f'collections/{collection_id}/queryables'
         return self._request(path)
