@@ -93,13 +93,19 @@ class Coverages(Collections):
             kwargs_['properties'] = ','.join(
                 [str(x) for x in kwargs['properties']])
 
-        for p in ['scale_axes', 'scale_size', 'subset']:
+        for p in ['scale_axes', 'scale_size']:
             if p in kwargs:
                 p2 = p.replace('_', '-')
                 kwargs_[p2] = []
                 for s in kwargs[p2]:
                     val = '{}({},{})'.format(s[0], s[1], s[2])
                     kwargs_[p2].append(val)
+
+        if 'subset' in kwargs:
+            subsets_list = []
+            for s in kwargs['subset']:
+                subsets_list.append('{}({}:{})'.format(s[0], s[1], s[2]))
+            kwargs['subset'] = ','.join(subsets_list)
 
         if 'scale_factor' in kwargs:
             kwargs_['scale-factor'] = int(kwargs['scale_factor'])
