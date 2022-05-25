@@ -215,7 +215,7 @@ def parse_entry(entry_node):
         elif link.get("rel") == "via" and not is_empty(link):
             links_via.append(link)
         else:
-            log.warn(
+            log.warning(
                 "unknown link type in Ows Resource entry section: %r", link)
 
     resource_base_dict['properties']['links'].update(
@@ -406,7 +406,7 @@ def decode_atomxml(xml_string):
         elif link.get("rel") == "via" and not is_empty(link):
             links_via.append(link)
         else:
-            log.warn("unknown link type in Ows Context section: %r", link)
+            log.warning("unknown link type in Ows Context section: %r", link)
 
     context_base_dict['properties']['links'].update(
         {"profiles": links_profile})
@@ -543,7 +543,7 @@ def decode_atomxml(xml_string):
         if entry_dict.get("id") is not None:
             resources.append(entry_dict)
         else:
-            log.warn("feature entry has no id, not allowed: skipping!")
+            log.warning("feature entry has no id, not allowed: skipping!")
 
     context_base_dict.update({"features": resources})
     return context_base_dict
@@ -562,16 +562,16 @@ def encode_atomxml(obj_d):
     #     tree = etree.ElementTree(xml_tree)
     #     return tree
     # except TypeError as te:
-    #     log.warn('problem encoding context to xml', te)
+    #     log.warning('problem encoding context to xml', te)
     #     raise te
     # except AttributeError as ae:
-    #     log.warn('problem encoding context to xml', ae)
+    #     log.warning('problem encoding context to xml', ae)
     #     raise ae
     # except ValueError as ve:
-    #     log.warn('problem encoding context to xml', ve)
+    #     log.warning('problem encoding context to xml', ve)
     #     raise ve
     # except ParseError as pe:
-    #     log.warn('problem encoding context to xml', pe)
+    #     log.warning('problem encoding context to xml', pe)
     #     raise pe
     xml_tree = axml_context(obj_d)
     tree = etree.ElementTree(xml_tree)
@@ -598,7 +598,7 @@ def axml_context(d):
             georss = etree.SubElement(xml, ns_elem("georss", "where"))
             georss.append(gml)
         except Exception as ex:
-            log.warn('could encode bbox into georss:where', ex)
+            log.warning('could encode bbox into georss:where', ex)
             pass
 
     context_metadata = [axml_link(do) for do in
@@ -674,7 +674,7 @@ def axml_resource(d):
             georss = etree.SubElement(entry, ns_elem("georss", "where"))
             georss.append(gml)
         except Exception as ex:
-            log.warn('could encode geometry into georss:where', ex)
+            log.warning('could encode geometry into georss:where', ex)
             pass
 
     title = d['properties']['title']
@@ -776,7 +776,7 @@ def axml_creator_app(d):
                 creator_app.set("version", version)
             return creator_app
         except Exception as ex:
-            log.warn('could encode creator_app', ex)
+            log.warning('could encode creator_app', ex)
             return None
 
 
@@ -802,7 +802,7 @@ def axml_display(d):
                     "owc", "mmPerPixel")).text = str(mm_per_pixel)
             return creator_display
         except Exception as ex:
-            log.warn('could encode creator_display', ex)
+            log.warning('could encode creator_display', ex)
             return None
 
 
@@ -833,7 +833,7 @@ def axml_link(d):
                 link.set("length", str(length))
             return link
         except Exception as ex:
-            log.warn('could not encode link', ex)
+            log.warning('could not encode link', ex)
             return None
 
 
@@ -855,7 +855,7 @@ def axml_category(d):
                 category.set("label", label)
             return category
         except Exception as ex:
-            log.warn('could encode category', ex)
+            log.warning('could encode category', ex)
             return None
 
 
@@ -879,7 +879,7 @@ def axml_author(d):
                 etree.SubElement(author, "uri").text = uri
             return author
         except Exception as ex:
-            log.warn('could encode author', ex)
+            log.warning('could encode author', ex)
             return None
 
 
@@ -908,7 +908,7 @@ def axml_offering(d):
             [offering.append(el) for el in styles if el is not None]
             return offering
         except Exception as ex:
-            log.warn('could encode offering', ex)
+            log.warning('could encode offering', ex)
             return None
 
 
@@ -948,7 +948,7 @@ def axml_operation(d):
                 operation.append(result_enc)
             return operation
         except Exception as ex:
-            log.warn('could encode operation', ex)
+            log.warning('could encode operation', ex)
             return None
 
 
@@ -988,7 +988,7 @@ def axml_styleset(d):
                 styleset.append(content_enc)
             return styleset
         except Exception as ex:
-            log.warn('could encode styleset', ex)
+            log.warning('could encode styleset', ex)
             return None
 
 
@@ -1020,5 +1020,5 @@ def axml_content(d):
                 content_elem.text = content
             return content_elem
         except Exception as ex:
-            log.warn('could encode content', ex)
+            log.warning('could encode content', ex)
             return None

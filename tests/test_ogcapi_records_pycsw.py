@@ -10,7 +10,7 @@ SERVICE_URL = 'https://demo.pycsw.org/cite'
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
-def test_ogcapi_records_pygeoapi():
+def test_ogcapi_records_pycsw():
     w = Records(SERVICE_URL)
 
     assert w.url == 'https://demo.pycsw.org/cite/'
@@ -20,10 +20,10 @@ def test_ogcapi_records_pygeoapi():
     assert api['components']['parameters'] is not None
     paths = api['paths']
     assert paths is not None
-    assert paths['/collections/metadata:main'] is not None
+    assert paths['/collections/{collectionId}'] is not None
 
     conformance = w.conformance()
-    assert len(conformance['conformsTo']) == 10
+    assert len(conformance['conformsTo']) == 12
 
     collections = w.collections()
     assert len(collections) > 0
@@ -40,7 +40,7 @@ def test_ogcapi_records_pygeoapi():
     assert isinstance(w.response, dict)
 
     pycsw_cite_demo_queryables = w.collection_queryables('metadata:main')
-    assert len(pycsw_cite_demo_queryables['properties'].keys()) == 60
+    assert len(pycsw_cite_demo_queryables['properties'].keys()) == 11
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):
@@ -62,7 +62,7 @@ def test_ogcapi_records_pygeoapi():
     assert pycsw_cite_demo_query['numberReturned'] == 2
     assert len(pycsw_cite_demo_query['features']) == 2
 
-    cql_json = {'eq': [{'property': 'title'}, 'Lorem ipsum']}
+    cql_json = {'op': '=', 'args': [{'property': 'title'}, 'Lorem ipsum']}
     pycsw_cite_demo_query = w.collection_items('metadata:main', cql=cql_json)
     assert pycsw_cite_demo_query['numberMatched'] == 1
     assert pycsw_cite_demo_query['numberReturned'] == 1

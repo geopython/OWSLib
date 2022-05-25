@@ -4,7 +4,7 @@ import pytest
 
 from owslib.ogcapi.records import Records
 
-SERVICE_URL = 'https://dev.api.weather.gc.ca/msc-wis-dcpc'
+SERVICE_URL = 'https://demo.pygeoapi.io/master/'
 
 
 @pytest.mark.online
@@ -13,45 +13,45 @@ SERVICE_URL = 'https://dev.api.weather.gc.ca/msc-wis-dcpc'
 def test_ogcapi_records_pygeoapi():
     w = Records(SERVICE_URL)
 
-    assert w.url == 'https://dev.api.weather.gc.ca/msc-wis-dcpc/'
+    assert w.url == SERVICE_URL
     assert w.url_query_string is None
 
     api = w.api()
     assert api['components']['parameters'] is not None
     paths = api['paths']
     assert paths is not None
-    assert paths['/collections/discovery-metadata'] is not None
+    assert paths['/collections/dutch-metadata'] is not None
 
     conformance = w.conformance()
-    assert len(conformance['conformsTo']) == 8
+    assert len(conformance['conformsTo']) > 8
 
     collections = w.collections()
     assert len(collections) > 0
 
     records = w.records()
-    assert len(records['features']) > 0
+    assert len(records) == 1
 
-    msc_wis_dcpc = w.collection('discovery-metadata')
-    assert msc_wis_dcpc['id'] == 'discovery-metadata'
-    assert msc_wis_dcpc['title'] == 'MSC discovery metadata'
-    assert msc_wis_dcpc['description'] == 'MSC discovery metadata'
-    assert w.request == 'https://dev.api.weather.gc.ca/msc-wis-dcpc/collections/discovery-metadata'  # noqa
+    dutch_metacat = w.collection('dutch-metadata')
+    assert dutch_metacat['id'] == 'dutch-metadata'
+    assert dutch_metacat['title'] == 'Sample metadata records from Dutch Nationaal georegister'  # noqa
+    assert dutch_metacat['description'] == 'Sample metadata records from Dutch Nationaal georegister'  # noqa
+    assert w.request == f'{SERVICE_URL}collections/dutch-metadata'
     assert w.response is not None
     assert isinstance(w.response, dict)
 
-    msc_wis_dcpc_queryables = w.collection_queryables('discovery-metadata')
-    assert len(msc_wis_dcpc_queryables['queryables']) == 7
+    dutch_metacat_queryables = w.collection_queryables('dutch-metadata')
+    assert len(dutch_metacat_queryables['properties']) == 11
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):
-        msc_wis_dcpc_query = w.collection_items('discovery-metadata', limit=0)
+        dutch_metacat_query = w.collection_items('dutch-metadata', limit=0)
 
-    msc_wis_dcpc_query = w.collection_items('discovery-metadata', limit=1)
-    assert msc_wis_dcpc_query['numberMatched'] == 178
-    assert msc_wis_dcpc_query['numberReturned'] == 1
-    assert len(msc_wis_dcpc_query['features']) == 1
+    dutch_metacat_query = w.collection_items('dutch-metadata', limit=1)
+    assert dutch_metacat_query['numberMatched'] == 198
+    assert dutch_metacat_query['numberReturned'] == 1
+    assert len(dutch_metacat_query['features']) == 1
 
-    msc_wis_dcpc_query = w.collection_items('discovery-metadata', q='metar')
-    assert msc_wis_dcpc_query['numberMatched'] == 2
-    assert msc_wis_dcpc_query['numberReturned'] == 2
-    assert len(msc_wis_dcpc_query['features']) == 2
+    dutch_metacat_query = w.collection_items('dutch-metadata', q='Wegpanorama')
+    assert dutch_metacat_query['numberMatched'] == 2
+    assert dutch_metacat_query['numberReturned'] == 2
+    assert len(dutch_metacat_query['features']) == 2

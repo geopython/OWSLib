@@ -50,8 +50,8 @@ class Features(Collections):
         @param datetime: time extent or time instant
         @type limit: int
         @param limit: limit number of features
-        @type startindex: int
-        @param startindex: start position of results
+        @type offset: int
+        @param offset: start position of results
         @type q: string
         @param q: full text search
         @type filter: string
@@ -65,7 +65,7 @@ class Features(Collections):
         if 'bbox' in kwargs:
             kwargs['bbox'] = ','.join(list(map(str, kwargs['bbox'])))
 
-        path = 'collections/{}/items'.format(collection_id)
+        path = f'collections/{collection_id}/items'
         return self._request(path=path, kwargs=kwargs)
 
     def collection_item(self, collection_id: str, identifier: str) -> dict:
@@ -80,5 +80,5 @@ class Features(Collections):
         @returns: single feature result
         """
 
-        path = 'collections/{}/items/{}'.format(collection_id, identifier)
+        path = f'collections/{collection_id}/items/{identifier}'
         return self._request(path=path)

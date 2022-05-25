@@ -384,7 +384,7 @@ def testXMLAttribute(element, attribute):
     return None
 
 
-def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, password=None, auth=None):
+def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, password=None, auth=None, headers=None):
     """
 
     Invoke an HTTP POST request
@@ -396,6 +396,8 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     - request: the request message
     - lang: the language
     - timeout: timeout in seconds
+    - auth: owslib.util.Auth instance
+    - headers: HTTP headers to send with requests
 
     """
 
@@ -404,7 +406,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
 
     u = urlsplit(url)
 
-    headers = {
+    headers_ = {
         'User-Agent': 'OWSLib (https://geopython.github.io/OWSLib)',
         'Content-type': 'text/xml',
         'Accept': 'text/xml,application/xml',
@@ -413,9 +415,12 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
         'Host': u.netloc,
     }
 
+    if headers:
+        headers_.update(headers)
+
     if isinstance(request, dict):
-        headers['Content-type'] = 'application/json'
-        headers.pop('Accept')
+        headers_['Content-type'] = 'application/json'
+        headers_.pop('Accept')
 
     rkwargs = {}
 
@@ -434,9 +439,9 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     rkwargs['cert'] = auth.cert
 
     if not isinstance(request, dict):
-        return requests.post(url, request, headers=headers, **rkwargs)
+        return requests.post(url, request, headers=headers_, **rkwargs)
     else:
-        return requests.post(url, json=request, headers=headers, **rkwargs)
+        return requests.post(url, json=request, headers=headers_, **rkwargs)
 
 
 def http_get(*args, **kwargs):

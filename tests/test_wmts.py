@@ -87,7 +87,7 @@ def test_wmts_example_informatievlaanderen():
     wmts = WebMapTileService(EXAMPLE_SERVICE_URL)
     assert wmts.identification.type == 'OGC:WMTS'
     assert wmts.identification.version == '1.0.0'
-    assert wmts.identification.title == 'agentschap Informatie Vlaanderen WMTS service'
+    assert wmts.identification.title == 'agentschap Digitaal Vlaanderen WMTS service'
     # assert sorted(list(wmts.contents))[:5] == ['abw', 'ferraris', 'frickx', 'grb_bsk', 'grb_bsk_grijs']
 
 

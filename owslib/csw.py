@@ -18,7 +18,7 @@ from .util import clean_ows_url, Authentication
 
 
 def CatalogueServiceWeb(url, lang='en-US', version='2.0.2', timeout=10, skip_caps=False,
-                        username=None, password=None, auth=None):
+                        username=None, password=None, auth=None, headers=None):
     """
     CSW factory function, returns a version specific CatalogueServiceWeb object
 
@@ -39,6 +39,9 @@ def CatalogueServiceWeb(url, lang='en-US', version='2.0.2', timeout=10, skip_cap
     @param password: password for HTTP basic authentication
     @type auth: string
     @param auth: instance of owslib.util.Authentication
+    @type headers: dict
+    @param headers: HTTP headers to send with requests
+
     @return: initialized CatalogueServiceWeb object
     """
 
@@ -56,12 +59,12 @@ def CatalogueServiceWeb(url, lang='en-US', version='2.0.2', timeout=10, skip_cap
         return csw2.CatalogueServiceWeb(
             clean_url, lang=lang, version=version, timeout=timeout,
             skip_caps=skip_caps, username=username, password=password,
-            auth=auth)
+            auth=auth, headers=headers)
     if version == '3.0.0':
         return csw3.CatalogueServiceWeb(
             clean_url, lang=lang, version=version, timeout=timeout,
             skip_caps=skip_caps, username=username, password=password,
-            auth=auth)
+            auth=auth, headers=headers)
 
     raise NotImplementedError('The CSW version ({}) you requested is'
                               ' not implemented. Please use 2.0.2 or'

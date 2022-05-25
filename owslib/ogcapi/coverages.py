@@ -51,7 +51,7 @@ class Coverages(Collections):
         @returns: coverage domainset results
         """
 
-        path = 'collections/{}/coverage/domainset'.format(collection_id)
+        path = f'collections/{collection_id}/coverage/domainset'
         return self._request(path=path, kwargs=kwargs)
 
     def coverage_rangetype(self, collection_id: str, **kwargs: dict) -> dict:
@@ -64,7 +64,7 @@ class Coverages(Collections):
         @returns: coverage rangetype results
         """
 
-        path = 'collections/{}/coverage/rangetype'.format(collection_id)
+        path = f'collections/{collection_id}/coverage/rangetype'
         return self._request(path=path, kwargs=kwargs)
 
     def coverage(self, collection_id: str, **kwargs: dict) -> dict:
@@ -73,8 +73,8 @@ class Coverages(Collections):
 
         @type collection_id: string
         @param collection_id: id of collection
-        @type range_subset: list
-        @param range_subset: range subset
+        @type properties: list
+        @param properties: range subset
         @type subset: list of tuples
         @param subset: [(name, lower bound, upper bound)]
         @type scale_size: list of tuples
@@ -89,21 +89,27 @@ class Coverages(Collections):
 
         kwargs_ = {}
 
-        if 'range_subset' in kwargs:
-            kwargs_['range-subset'] = ','.join(
-                [str(x) for x in kwargs['range_subset']])
+        if 'properties' in kwargs:
+            kwargs_['properties'] = ','.join(
+                [str(x) for x in kwargs['properties']])
 
-        for p in ['scale_axes', 'scale_size', 'subset']:
+        for p in ['scale_axes', 'scale_size']:
             if p in kwargs:
                 p2 = p.replace('_', '-')
                 kwargs_[p2] = []
                 for s in kwargs[p2]:
-                    val = '{}({},{})'.format(s[0], s[1], s[2])
+                    val = f'{s[0]}({s[1]},{s[2]})'
                     kwargs_[p2].append(val)
+
+        if 'subset' in kwargs:
+            subsets_list = []
+            for s in kwargs['subset']:
+                subsets_list.append(f'{s[0]}({s[1]}:{s[2]})')
+            kwargs['subset'] = ','.join(subsets_list)
 
         if 'scale_factor' in kwargs:
             kwargs_['scale-factor'] = int(kwargs['scale_factor'])
 
-        path = 'collections/{}/coverage'.format(collection_id)
+        path = f'collections/{collection_id}/coverage'
 
         return BytesIO(self._request(path=path, as_dict=False, kwargs=kwargs_))
