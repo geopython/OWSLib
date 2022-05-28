@@ -555,7 +555,7 @@ class MD_DataIdentification(object):
                     elif clv == 'author':
                         self.contributor.append(rp)
 
-            val = md.find(util.nspath_eval('gmd:edition/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:edition/gco:CharacterString', namespaces))
             self.edition = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval('gmd:abstract/gco:CharacterString', namespaces))
