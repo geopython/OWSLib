@@ -1,4 +1,3 @@
-# -*- coding: ISO-8859-15 -*-
 # =============================================================================
 # Copyright (c) 2009 Tom Kralidis
 #
@@ -495,8 +494,10 @@ class MD_DataIdentification(object):
                         val = util.eval_anchor(i, 'gmd:otherConstraints', namespaces) 
                     if val is not None:
                         self.accessconstraints.append(val)
-                for ii in i.findall(util.nspath_eval('gmd:otherConstraints/gco:CharacterString', namespaces)):
+                for ii in i.findall(util.nspath_eval('gmd:otherConstraints', namespaces)):
                     val = util.testXMLValue(ii)
+                    if val is not None:
+                        val = util.eval_anchor(i, 'gmd:otherConstraints', namespaces) 
                     if val is not None:
                         self.otherconstraints.append(val)
 
