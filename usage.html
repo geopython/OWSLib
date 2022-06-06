@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Usage &#8212; OWSLib 0.25.0 documentation</title>
+    <title>Usage &#8212; OWSLib 0.26.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -53,7 +53,7 @@
         <li class="right" >
           <a href="installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.25.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.26.0 documentation</a> &#187;</li> 
       </ul>
     </div>
   
@@ -296,6 +296,12 @@ the same pattern.</p>
 <span class="go">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">msc_wis_dcpc_query2</span><span class="p">[</span><span class="s1">&#39;numberReturned&#39;</span><span class="p">]</span>
 <span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_catalogue_cql_text_query</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">collection_items</span><span class="p">(</span><span class="s1">&#39;my-catalogue&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="s2">&quot;title LIKE &#39;Roadrunner%&#39;&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_catalogue_cql_text_query</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;properties&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
+<span class="go">u&#39;Roadrunner ambush locations&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_catalogue_cql_json_query</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">collection_items</span><span class="p">(</span><span class="s1">&#39;my-catalogue&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cql</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;eq&#39;</span><span class="p">:</span> <span class="p">[{</span> <span class="s1">&#39;property&#39;</span><span class="p">:</span> <span class="s1">&#39;title&#39;</span> <span class="p">},</span> <span class="s1">&#39;Roadrunner ambush locations&#39;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_catalogue_cql_json_query</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;properties&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
+<span class="go">u&#39;Roadrunner ambush locations&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -1991,12 +1997,12 @@ Greatly appreciated :-)</p>
         <li class="right" >
           <a href="installation.html" title="Installation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.25.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.26.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2010, Tom Kralidis.
-      Last updated on 2021-08-23T08:24:12Z.
+      Last updated on 2022-06-06T11:45:24Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.4.
     </div>
   </body>
