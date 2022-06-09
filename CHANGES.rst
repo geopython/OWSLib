@@ -1,6 +1,25 @@
 Changes
 =======
 
+0.26.0 (2022-06-06)
+-------------------
+
+A full list of commits for 0.26.0 can be found at:
+
+https://github.com/geopython/OWSLib/commits/0.26.0
+
+- ISO: extend MD_Keywords for gmx:Anchor (#765)
+- WPS: forward timeout/language parameters (#793)
+- WPS: use 'maximumMegabytes' if available (#796)
+- OGC API: safeguard links
+- OGC API: add support for OGC API - Features - Part 3: CQL (#798)
+- OGC API: rename rangeSubset to properties for coverage queries (#806)
+- OGC API: fix subsets parameterization (#819)
+- CSW: pass headers to HTTP POST requests (#805)
+- WCS: pass timeout to constructors (#812)
+- CSW: fix byte/string handling for XML payloads (#816)
+- ISO: fix gmd:edition parsing (#821)
+
 0.25.0 (2021-08-23)
 -------------------
 
