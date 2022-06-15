@@ -1337,8 +1337,7 @@ class MI_Platform(object):
             self.identifier = None
             self.description = None
         else:
-            val = util.eval_anchor(i, 'gmi:identifier/gmd:MD_Identifier/gmd:code', namespaces) 
-            val = plt.find(util.nspath_eval('gmi:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString', namespaces))
+            val = util.eval_anchor(plt, 'gmi:identifier/gmd:MD_Identifier/gmd:code', namespaces) 
             self.identifier = util.testXMLValue(val)
 
             val = plt.find(util.nspath_eval('gmi:description/gco:CharacterString', namespaces))
