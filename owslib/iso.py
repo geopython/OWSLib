@@ -482,18 +482,6 @@ class MD_DataIdentification(object):
             self.useconstraints = []
             self.otherconstraints = []
             for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints', namespaces)):
-                for ii in i.findall(util.nspath_eval('gmd:useConstraints/gmd:MD_RestrictionCode', namespaces)):
-                    val = _testCodeListValue(ii)
-                    if val == 'otherRestrictions':
-                        val = util.eval_anchor(i, 'gmd:otherConstraints', namespaces) 
-                    if val is not None:
-                        self.useconstraints.append(val)
-                for ii in i.findall(util.nspath_eval('gmd:accessConstraints/gmd:MD_RestrictionCode', namespaces)):
-                    val = _testCodeListValue(ii)
-                    if val == 'otherRestrictions':
-                        val = util.eval_anchor(i, 'gmd:otherConstraints', namespaces) 
-                    if val is not None:
-                        self.accessconstraints.append(val)
                 for ii in i.findall(util.nspath_eval('gmd:otherConstraints', namespaces)):
                     val = util.testXMLValue(ii)
                     if val is not None:
