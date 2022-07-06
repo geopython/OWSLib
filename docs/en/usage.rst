@@ -163,8 +163,8 @@ The `OGC API`_ standards are a clean break from the traditional OGC service arch
 using current design patterns (RESTful, JSON, OpenAPI).  As such, OWSLib the code follows
 the same pattern.
 
-OGC API - Features 1.0
-^^^^^^^^^^^^^^^^^^^^^^
+OGC API - Features 1.0 - Part 1: Core
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -195,8 +195,8 @@ OGC API - Features 1.0
   >>> lakes_query['features'][0]['properties']
   {u'scalerank': 0, u'name_alt': None, u'admin': None, u'featureclass': u'Lake', u'id': 0, u'name': u'Lake Baikal'}
 
-OGC API - Coverages 1.0
-^^^^^^^^^^^^^^^^^^^^^^^
+OGC API - Coverages 1.0 - Part 1: Core
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -230,8 +230,8 @@ OGC API - Coverages 1.0
   'float64'
   >> gdps_coverage_query = w.coverage('gdps-temperature', range_subset=[1])
 
-OGC API - Records 1.0
-^^^^^^^^^^^^^^^^^^^^^
+OGC API - Records 1.0 - Part 1: Core
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   >>> from owslib.ogcapi.records import Records
   >>> w = Records('https://example.org/records-api')
@@ -273,6 +273,21 @@ OGC API - Records 1.0
   >>> my_catalogue_cql_json_query['features'][0]['properties']['title']
   u'Roadrunner ambush locations'
 
+OGC API - Processes 1.0 - Part 1: Core
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+  >>> from owslib.ogcapi.processes import Processes
+  >>> p = Processes(SERVICE_URL)
+
+  >>> processes = p.processes()
+  >>>  hello_world = p.process('hello-world')
+
+  >>> hello_world['id']
+  'hello-world'
+  >>> hello_world['title']
+  'Hello World'
 
 WCS
 ---
