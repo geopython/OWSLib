@@ -40,7 +40,7 @@ def test_ogcapi_records_pycsw():
     assert isinstance(w.response, dict)
 
     pycsw_cite_demo_queryables = w.collection_queryables('metadata:main')
-    assert len(pycsw_cite_demo_queryables['properties'].keys()) == 11
+    assert len(pycsw_cite_demo_queryables['properties'].keys()) == 12
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):
