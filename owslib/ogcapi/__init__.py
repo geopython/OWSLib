@@ -62,7 +62,7 @@ class API:
             self.links = json.loads(json_).get('links', [])
             self.response = json_
         else:
-            response = http_get(url, headers=self.headers, auth=self.auth).json()
+            response = http_get(self.url, headers=self.headers, auth=self.auth).json()
             self.links = response.get('links', [])
             self.response = response
 
