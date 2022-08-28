@@ -200,7 +200,7 @@ class ContentMetadata(object):
     def _get_tilemap(self):
         if self._tile_map is None:
             self._tile_map = TileMap(self.id, headers=self.headers, auth=self.auth)
-            assert(self._tile_map.srs == self.srs)
+            assert self._tile_map.srs == self.srs
         return self._tile_map
 
     @property

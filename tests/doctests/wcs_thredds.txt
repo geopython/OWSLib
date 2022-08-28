@@ -37,7 +37,7 @@ Imports
 
 Print the ids of all layers (actually just the first 3):
    >>> sorted(wcs.contents.keys())
-   ['Absolute_vorticity_isobaric', 'Best_4_layer_lifted_index_layer_between_two_pressure_difference_from_ground_layer', 'Convective_Available_Potential_Energy_layer_between_two_pressure_difference_from_ground_layer', 'Convective_Available_Potential_Energy_surface', 'Convective_inhibition_layer_between_two_pressure_difference_from_ground_layer', 'Convective_inhibition_surface', 'Convective_precipitation_surface_Mixed_intervals_Accumulation', 'Geopotential_height_isobaric', 'Geopotential_height_surface', 'Geopotential_height_zeroDegC_isotherm', 'Mean_Sea_Level_Pressure_NAM_Model_Reduction_msl', 'Parcel_lifted_index_to_500_hPa_layer_between_two_pressure_difference_from_ground_layer', 'Precipitable_water_entire_atmosphere', 'Pressure_cloud_base', 'Pressure_cloud_tops', 'Pressure_maximum_wind', 'Pressure_reduced_to_MSL_msl', 'Pressure_surface', 'Pressure_tropopause', 'Relative_humidity_height_above_ground', 'Relative_humidity_isobaric', 'Relative_humidity_layer_between_two_pressure_difference_from_ground_layer', 'Relative_humidity_zeroDegC_isotherm', 'Storm_relative_helicity_layer_between_two_heights_above_ground_layer', 'Temperature_cloud_tops', 'Temperature_height_above_ground', 'Temperature_isobaric', 'Temperature_layer_between_two_pressure_difference_from_ground_layer', 'Temperature_tropopause', 'Total_precipitation_surface_Mixed_intervals_Accumulation', 'Vertical_velocity_pressure_isobaric', 'u-component_of_wind_height_above_ground', 'u-component_of_wind_isobaric', 'u-component_of_wind_layer_between_two_pressure_difference_from_ground_layer', 'u-component_of_wind_maximum_wind', 'u-component_of_wind_tropopause', 'v-component_of_wind_height_above_ground', 'v-component_of_wind_isobaric', 'v-component_of_wind_layer_between_two_pressure_difference_from_ground_layer', 'v-component_of_wind_maximum_wind', 'v-component_of_wind_tropopause']
+   ['Absolute_vorticity_isobaric', 'Best_4_layer_lifted_index_layer_between_two_pressure_difference_from_ground_layer', 'Convective_Available_Potential_Energy_layer_between_two_pressure_difference_from_ground_layer', 'Convective_Available_Potential_Energy_surface', 'Convective_inhibition_layer_between_two_pressure_difference_from_ground_layer', 'Convective_inhibition_surface', 'Convective_precipitation_surface_Accumulation', 'Geopotential_height_isobaric', 'Geopotential_height_surface', 'Geopotential_height_zeroDegC_isotherm', 'Mean_Sea_Level_Pressure_NAM_Model_Reduction_msl', 'Parcel_lifted_index_to_500_hPa_layer_between_two_pressure_difference_from_ground_layer', 'Precipitable_water_entire_atmosphere', 'Pressure_cloud_base', 'Pressure_cloud_tops', 'Pressure_maximum_wind', 'Pressure_reduced_to_MSL_msl', 'Pressure_surface', 'Pressure_tropopause', 'Relative_humidity_height_above_ground', 'Relative_humidity_isobaric', 'Relative_humidity_layer_between_two_pressure_difference_from_ground_layer', 'Relative_humidity_zeroDegC_isotherm', 'Storm_relative_helicity_layer_between_two_heights_above_ground_layer', 'Temperature_cloud_tops', 'Temperature_height_above_ground', 'Temperature_isobaric', 'Temperature_layer_between_two_pressure_difference_from_ground_layer', 'Temperature_tropopause', 'Total_precipitation_surface_Accumulation', 'Vertical_velocity_pressure_isobaric', 'u-component_of_wind_height_above_ground', 'u-component_of_wind_isobaric', 'u-component_of_wind_layer_between_two_pressure_difference_from_ground_layer', 'u-component_of_wind_maximum_wind', 'u-component_of_wind_tropopause', 'v-component_of_wind_height_above_ground', 'v-component_of_wind_isobaric', 'v-component_of_wind_layer_between_two_pressure_difference_from_ground_layer', 'v-component_of_wind_maximum_wind', 'v-component_of_wind_tropopause']
 
 
 #To further interrogate a single "coverage" get the coverageMetadata object
@@ -48,7 +48,7 @@ Print the ids of all layers (actually just the first 3):
     >>> cvg=wcs['Temperature_tropopause']
 
     >>> cvg.boundingBoxWGS84
-    (-153.58889168336785, 11.747698754311253, -48.59839139638086, 57.48431804715324)
+    (-153.58889302705833, 11.747698472996, -48.59839047148847, 61.585029283566165)
 
     >>> len(cvg.timepositions)>1 #The old test kept failing as the response timepositions kept changign on the server
     True
@@ -72,10 +72,10 @@ Print the ids of all layers (actually just the first 3):
     ['92', '64']
 
     >>> cvg.grid.origin
-    ['-4223.61181640625', '-832.2075805664062']
+    ['-4223.611945747588', '-832.2075711108391']
 
     >>> cvg.grid.offsetvectors
-    [['81.27100140115489', '0.0'], ['0.0', '81.27100467681885']]
+    [['81.27100372314453', '0.0'], ['0.0', '81.27100372314453']]
 
 #Now we have enough information to build a getCoverage request:
     >>> covID='Temperature_tropopause'

@@ -40,18 +40,18 @@ def test_ogcapi_records_pygeoapi():
     assert isinstance(w.response, dict)
 
     dutch_metacat_queryables = w.collection_queryables('dutch-metadata')
-    assert len(dutch_metacat_queryables['properties']) == 11
+    assert len(dutch_metacat_queryables['properties']) == 10
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):
         dutch_metacat_query = w.collection_items('dutch-metadata', limit=0)
 
     dutch_metacat_query = w.collection_items('dutch-metadata', limit=1)
-    assert dutch_metacat_query['numberMatched'] == 198
+    assert dutch_metacat_query['numberMatched'] == 308
     assert dutch_metacat_query['numberReturned'] == 1
     assert len(dutch_metacat_query['features']) == 1
 
     dutch_metacat_query = w.collection_items('dutch-metadata', q='Wegpanorama')
-    assert dutch_metacat_query['numberMatched'] == 2
-    assert dutch_metacat_query['numberReturned'] == 2
-    assert len(dutch_metacat_query['features']) == 2
+    assert dutch_metacat_query['numberMatched'] == 3
+    assert dutch_metacat_query['numberReturned'] == 3
+    assert len(dutch_metacat_query['features']) == 3
