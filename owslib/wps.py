@@ -765,7 +765,7 @@ class WPSExecution(object):
             elif isinstance(output, list):
                 for ouputTuple in output:
                     # tuple (identifier, as_reference) for backward compatibility
-                    if(len(ouputTuple) == 2):
+                    if len(ouputTuple) == 2:
                         (identifier, as_reference) = ouputTuple
                         mime_type = None
                     else:
