@@ -7,6 +7,8 @@
 # =============================================================================
 
 import itertools
+import logging
+
 from owslib import util
 
 from io import BytesIO
@@ -31,7 +33,15 @@ from owslib.feature.common import (
     AbstractContentMetadata,
 )
 
-import pyproj
+LOGGER = logging.getLogger(__name__)
+
+has_pyproj = False
+
+try:
+    import pyproj
+    has_pyproj = True
+except ImportError:
+    LOGGER.warning('pyproj not installed')
 
 n = Namespaces()
 WFS_NAMESPACE = n.get_namespace("wfs")
@@ -394,7 +404,7 @@ class ContentMetadata(AbstractContentMetadata):
         # transform wgs84 bbox from given default bboxt
         self.boundingBoxWGS84 = None
 
-        if b is not None and srs is not None:
+        if has_pyproj and b is not None and srs is not None:
             wgs84 = pyproj.CRS.from_epsg(4326)
             try:
                 src_srs = pyproj.CRS.from_string(srs.text)
