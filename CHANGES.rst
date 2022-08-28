@@ -1,6 +1,17 @@
 Changes
 =======
 
+0.27.1 (2022-08-28)
+-------------------
+
+- remove pyproj as core dependency
+
+0.27.0 (2022-08-28)
+-------------------
+
+- core: update pyproj
+- OGC API: add support for OGC API - Processes
+
 0.26.0 (2022-06-06)
 -------------------
 
