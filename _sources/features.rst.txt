@@ -54,9 +54,13 @@ OGC API Support
 +======================================================================================+============+
 | `OGC API - Features - Part 1: Core`_                                                 | 1.0        |
 +--------------------------------------------------------------------------------------+------------+
+| `OGC API - Coverages - Part 1: Core`_                                                | draft      |
++--------------------------------------------------------------------------------------+------------+
 | `OGC API - Records - Part 1: Core`_                                                  | draft      |
 +--------------------------------------------------------------------------------------+------------+
 | `OGC API - Features - Part 3: Filtering and the Common Query Language (CQL) draft`_  | draft      |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Processes - Part 1: Core`_                                                | 1.0        |
 +--------------------------------------------------------------------------------------+------------+
 
 .. _`OGC WMS`: https://www.opengeospatial.org/standards/wms
@@ -86,3 +90,5 @@ OGC API Support
 .. _`OGC API - Features - Part 1: Core`: https://docs.opengeospatial.org/is/17-069r3/17-069r3.html
 .. _`OGC API - Records - Part 1: Core`: https://github.com/opengeospatial/ogcapi-records
 .. _`OGC API - Features - Part 3: Filtering and the Common Query Language (CQL) draft`: https://docs.ogc.org/DRAFTS/19-079.html
+.. _`OGC API - Coverages - Part 1: Core`: https://docs.ogc.org/DRAFTS/19-087.html
+.. _`OGC API - Processes - Part 1: Core`: https://docs.ogc.org/is/18-062r2/18-062r2.html
