@@ -480,12 +480,12 @@ def http_prepare(*args, **kwargs):
 
 
 def http_get(*args, **kwargs):
-    rkwargs = http_prepare(kwargs)
+    rkwargs = http_prepare(*args, **kwargs)
     return requests.get(*args, **rkwargs)
 
 
 def http_put(*args, **kwargs):
-    rkwargs = http_prepare(kwargs)
+    rkwargs = http_prepare(*args, **kwargs)
 
     if 'data' in kwargs:
         if isinstance(kwargs['data'], dict):
@@ -497,7 +497,7 @@ def http_put(*args, **kwargs):
 
 
 def http_delete(*args, **kwargs):
-    rkwargs = http_prepare(kwargs)
+    rkwargs = http_prepare(*args, **kwargs)
     return requests.delete(*args, **rkwargs)
 
 

@@ -72,7 +72,7 @@ class Features(Collections):
             kwargs2 = deepcopy(kwargs)
             cql = kwargs2.pop('cql')
             path = f'collections/{collection_id}/items?{urlencode(kwargs2)}'
-            return self._request(method='POST', path=path, data=cql, auth=self.auth)
+            return self._request(method='POST', path=path, data=cql, kwargs=kwargs2)
         else:
             path = f'collections/{collection_id}/items'
             return self._request(path=path, kwargs=kwargs)
