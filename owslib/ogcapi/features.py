@@ -1,12 +1,14 @@
 # =============================================================================
-# Copyright (c) 2020 Tom Kralidis
+# Copyright (c) 2022 Tom Kralidis
 #
 # Author: Tom Kralidis <tomkralidis@gmail.com>
 #
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+from copy import deepcopy
 import logging
+from urllib.parse import urlencode
 
 from owslib.ogcapi import Collections
 from owslib.util import Authentication
@@ -65,8 +67,15 @@ class Features(Collections):
         if 'bbox' in kwargs:
             kwargs['bbox'] = ','.join(list(map(str, kwargs['bbox'])))
 
-        path = f'collections/{collection_id}/items'
-        return self._request(path=path, kwargs=kwargs)
+        if 'cql' in kwargs:
+            LOGGER.debug('CQL query detected')
+            kwargs2 = deepcopy(kwargs)
+            cql = kwargs2.pop('cql')
+            path = f'collections/{collection_id}/items?{urlencode(kwargs2)}'
+            return self._request(method='POST', path=path, data=cql, auth=self.auth)
+        else:
+            path = f'collections/{collection_id}/items'
+            return self._request(path=path, kwargs=kwargs)
 
     def collection_item(self, collection_id: str, identifier: str) -> dict:
         """
@@ -82,3 +91,57 @@ class Features(Collections):
 
         path = f'collections/{collection_id}/items/{identifier}'
         return self._request(path=path)
+
+    def collection_item_create(self, collection_id: str, data: str) -> bool:
+        """
+        implements POST /collections/{collectionId}/items
+
+        @type collection_id: string
+        @param collection_id: id of collection
+        @type data: string
+        @param data: raw representation of data
+
+        @returns: single feature result
+        """
+
+        path = f'collections/{collection_id}/items'
+        _ = self._request(method='POST', path=path, data=data)
+
+        return True
+
+    def collection_item_update(self, collection_id: str, identifier: str,
+                               data: str) -> bool:
+        """
+        implements PUT /collections/{collectionId}/items/{featureId}
+
+        @type collection_id: string
+        @param collection_id: id of collection
+        @type identifier: string
+        @param identifier: feature identifier
+        @type data: string
+        @param data: raw representation of data
+
+        @returns: ``bool`` of deletion result
+        """
+
+        path = f'collections/{collection_id}/items/{identifier}'
+        _ = self._request(method='PUT', path=path, data=data)
+
+        return True
+
+    def collection_item_delete(self, collection_id: str, identifier: str) -> bool:
+        """
+        implements DELETE /collections/{collectionId}/items/{featureId}
+
+        @type collection_id: string
+        @param collection_id: id of collection
+        @type identifier: string
+        @param identifier: feature identifier
+
+        @returns: ``bool`` of deletion result
+        """
+
+        path = f'collections/{collection_id}/items/{identifier}'
+        _ = self._request(method='DELETE', path=path)
+
+        return True

@@ -30,7 +30,7 @@ class Processes(Collections):
         """
 
         path = 'processes'
-        return self._request(path)
+        return self._request(path=path)
 
     def process(self, process_id: str) -> dict:
         """
@@ -43,4 +43,4 @@ class Processes(Collections):
         """
 
         path = f'processes/{process_id}'
-        return self._request(path)
+        return self._request(path=path)

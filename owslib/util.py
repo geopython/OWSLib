@@ -1,6 +1,6 @@
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
-# Copyright (c) 2008 Tom Kralidis
+# Copyright (c) 2022 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -444,7 +444,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
         return requests.post(url, json=request, headers=headers_, **rkwargs)
 
 
-def http_get(*args, **kwargs):
+def http_prepare(*args, **kwargs):
     # Copy input kwargs so the dict can be modified
     rkwargs = copy.deepcopy(kwargs)
 
@@ -475,7 +475,30 @@ def http_get(*args, **kwargs):
         rkwargs.setdefault('auth', None)
     rkwargs.setdefault('cert', rkwargs.get('cert'))
     rkwargs.setdefault('verify', rkwargs.get('verify', True))
+
+    return rkwargs
+
+
+def http_get(*args, **kwargs):
+    rkwargs = http_prepare(kwargs)
     return requests.get(*args, **rkwargs)
+
+
+def http_put(*args, **kwargs):
+    rkwargs = http_prepare(kwargs)
+
+    if 'data' in kwargs:
+        if isinstance(kwargs['data'], dict):
+            rkwargs['json'] = kwargs['data']
+        else:
+            rkwargs['data'] = kwargs['data']
+
+    return requests.put(*args, **rkwargs)
+
+
+def http_delete(*args, **kwargs):
+    rkwargs = http_prepare(kwargs)
+    return requests.delete(*args, **rkwargs)
 
 
 def element_to_string(element, encoding=None, xml_declaration=False):
