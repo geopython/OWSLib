@@ -1,5 +1,5 @@
 # =============================================================================
-# Copyright (c) 2020 Tom Kralidis
+# Copyright (c) 2022 Tom Kralidis
 #
 # Author: Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -15,7 +15,8 @@ import requests
 import yaml
 
 from owslib import __version__
-from owslib.util import Authentication, http_get, http_post
+from owslib.util import (Authentication, http_delete, http_get, http_post,
+                         http_put)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -114,7 +115,7 @@ class API:
         """
 
         path = 'conformance'
-        return self._request(path)
+        return self._request(path=path)
 
     def _build_url(self, path: str = None, params: dict = {}) -> str:
         """
@@ -141,15 +142,20 @@ class API:
 
         return url
 
-    def _request(self, path: str = None, as_dict: bool = True,
+    def _request(self, method: str = 'GET', path: str = None,
+                 data: str = None, as_dict: bool = True,
                  kwargs: dict = {}) -> dict:
         """
         helper function for request/response patterns against OGC API endpoints
 
         @type path: string
         @param path: path of request
+        @type method: string
+        @param method: HTTP method (default ``GET``)
+        @type data: string
+        @param data: request data payload
         @type as_dict: bool
-        @param as_dict: whether to return JSON dict (default True)
+        @param as_dict: whether to return JSON dict (default ``True``)
         @type kwargs: string
         @param kwargs: ``dict`` of keyword value pair request parameters
 
@@ -159,28 +165,35 @@ class API:
         url = self._build_url(path)
         self.request = url
 
+        LOGGER.debug(f'Method: {method}')
         LOGGER.debug(f'Request: {url}')
+        LOGGER.debug(f'Data: {data}')
         LOGGER.debug(f'Params: {kwargs}')
 
-        if 'cql' not in kwargs:
+        if method == 'GET':
             response = http_get(url, headers=self.headers, auth=self.auth,
                                 params=kwargs)
-        else:
-            LOGGER.debug('CQL query detected')
-            kwargs2 = deepcopy(kwargs)
-            cql = kwargs2.pop('cql')
-            url2 = self._build_url(path, kwargs2)
-            response = http_post(url2, request=cql, auth=self.auth)
+        elif method == 'POST':
+            response = http_post(url, request=data, auth=self.auth)
+        elif method == 'PUT':
+            response = http_put(url, data=data, auth=self.auth)
+        elif method == 'DELETE':
+            response = http_delete(url, auth=self.auth)
 
         LOGGER.debug(f'URL: {response.url}')
+        LOGGER.debug(f'Response status code: {response.status_code}')
 
-        if response.status_code != requests.codes.ok:
+        if not response:
             raise RuntimeError(response.text)
 
         self.request = response.url
 
         if as_dict:
-            return response.json()
+            if len(response.content) == 0:
+                LOGGER.debug('Empty response')
+                return {}
+            else:
+                return response.json()
         else:
             return response.content
 
@@ -199,7 +212,7 @@ class Collections(API):
         """
 
         path = 'collections'
-        return self._request(path)
+        return self._request(path=path)
 
     def collection(self, collection_id: str) -> dict:
         """
@@ -212,7 +225,7 @@ class Collections(API):
         """
 
         path = f'collections/{collection_id}'
-        return self._request(path)
+        return self._request(path=path)
 
     def collection_queryables(self, collection_id: str) -> dict:
         """
@@ -225,4 +238,4 @@ class Collections(API):
         """
 
         path = f'collections/{collection_id}/queryables'
-        return self._request(path)
+        return self._request(path=path)
