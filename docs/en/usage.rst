@@ -273,6 +273,46 @@ OGC API - Records - Part 1: Core 1.0
   >>> my_catalogue_cql_json_query['features'][0]['properties']['title']
   u'Roadrunner ambush locations'
 
+
+OGC API - Features - Part 4: Create, Replace, Update and Delete
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+
+   This specification applies to both OGC API - Features and OGC API - Records
+
+
+.. code-block:: python
+
+   import json
+   from owslib.ogcapi.records import Records
+
+   record_data = '/path/to/record.json'
+
+   url = 'http://localhost:8000'
+   collection_id = 'metadata:main'
+
+   r = Records(url)
+
+   cat = r.collection(collection_id)
+
+   with open(record_data) as fh:
+       data = json.load(fh)
+
+   identifier = data['id']
+
+   r.collection_item_delete(collection_id, identifier)
+
+   # insert metadata
+   r.collection_item_create(collection_id, data)
+
+   # update metadata
+   r.collection_item_update(collection_id, identifier, data)
+
+   # delete metadata
+   r.collection_item_delete(collection_id, identifier)
+
+
 OGC API - Processes - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -58,7 +58,9 @@ OGC API Support
 +--------------------------------------------------------------------------------------+------------+
 | `OGC API - Records - Part 1: Core`_                                                  | draft      |
 +--------------------------------------------------------------------------------------+------------+
-| `OGC API - Features - Part 3: Filtering and the Common Query Language (CQL) draft`_  | draft      |
+| `OGC API - Features - Part 3: Filtering and the Common Query Language (CQL)`_        | draft      |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Features - Part 4: Create, Replace, Update and Delete`_                   | draft      |
 +--------------------------------------------------------------------------------------+------------+
 | `OGC API - Processes - Part 1: Core`_                                                | 1.0        |
 +--------------------------------------------------------------------------------------+------------+
@@ -89,6 +91,7 @@ OGC API Support
 .. _`OGC API`: https://ogcapi.ogc.org
 .. _`OGC API - Features - Part 1: Core`: https://docs.opengeospatial.org/is/17-069r3/17-069r3.html
 .. _`OGC API - Records - Part 1: Core`: https://github.com/opengeospatial/ogcapi-records
-.. _`OGC API - Features - Part 3: Filtering and the Common Query Language (CQL) draft`: https://docs.ogc.org/DRAFTS/19-079.html
+.. _`OGC API - Features - Part 3: Filtering and the Common Query Language (CQL)`: https://docs.ogc.org/DRAFTS/19-079.html
+.. _`OGC API - Features - Part 4: Create, Replace, Update and Delete`: https://docs.ogc.org/DRAFTS/20-002.html
 .. _`OGC API - Coverages - Part 1: Core`: https://docs.ogc.org/DRAFTS/19-087.html
 .. _`OGC API - Processes - Part 1: Core`: https://docs.ogc.org/is/18-062r2/18-062r2.html
