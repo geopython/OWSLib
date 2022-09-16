@@ -490,6 +490,7 @@ def http_put(*args, **kwargs):
     if 'data' in kwargs:
         if isinstance(kwargs['data'], dict):
             rkwargs['json'] = kwargs['data']
+            rkwargs.pop('data')
         else:
             rkwargs['data'] = kwargs['data']
 
