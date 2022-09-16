@@ -163,7 +163,7 @@ The `OGC API`_ standards are a clean break from the traditional OGC service arch
 using current design patterns (RESTful, JSON, OpenAPI).  As such, OWSLib the code follows
 the same pattern.
 
-OGC API - Features 1.0 - Part 1: Core
+OGC API - Features - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
@@ -195,7 +195,7 @@ OGC API - Features 1.0 - Part 1: Core
   >>> lakes_query['features'][0]['properties']
   {u'scalerank': 0, u'name_alt': None, u'admin': None, u'featureclass': u'Lake', u'id': 0, u'name': u'Lake Baikal'}
 
-OGC API - Coverages 1.0 - Part 1: Core
+OGC API - Coverages - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
@@ -230,7 +230,7 @@ OGC API - Coverages 1.0 - Part 1: Core
   'float64'
   >> gdps_coverage_query = w.coverage('gdps-temperature', range_subset=[1])
 
-OGC API - Records 1.0 - Part 1: Core
+OGC API - Records - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   >>> from owslib.ogcapi.records import Records
@@ -273,7 +273,7 @@ OGC API - Records 1.0 - Part 1: Core
   >>> my_catalogue_cql_json_query['features'][0]['properties']['title']
   u'Roadrunner ambush locations'
 
-OGC API - Processes 1.0 - Part 1: Core
+OGC API - Processes - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
