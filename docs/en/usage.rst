@@ -273,6 +273,22 @@ OGC API - Records - Part 1: Core 1.0
   >>> my_catalogue_cql_json_query['features'][0]['properties']['title']
   u'Roadrunner ambush locations'
 
+  >>> import json
+
+  >>> record_data = 'sample-geojson-record.json'
+
+  >>> with open(record_data) as fh:
+  ..  data = json.load(fh)
+
+  >>> identifier = data['id']
+
+  >>> w.collection_item_create('my-catalogue', data)
+
+  >>> w.collection_item_update('my-catalogue', identifier, data)
+
+  >>> w.collection_item_delete('my-catalogue', identifier)
+
+
 
 OGC API - Features - Part 4: Create, Replace, Update and Delete
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
