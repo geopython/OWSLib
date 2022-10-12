@@ -362,12 +362,14 @@ class WebMapTileService(object):
             # choose random ResourceURL if more than one available
             resindex = randint(0, numres - 1)
             resurl = tileresourceurls[resindex]['template']
-            resurl = resurl.replace('{TileMatrixSet}', tilematrixset)
-            resurl = resurl.replace('{TileMatrix}', tilematrix)
-            resurl = resurl.replace('{TileRow}', str(row))
-            resurl = resurl.replace('{TileCol}', str(column))
-            resurl = resurl.replace('{Style}', style)
-            return resurl
+            return resurl.format(
+                TileMatrixSet = tilematrixset,
+                TileMatrix = tilematrix,
+                TileRow = str(row),
+                TileCol = str(column),
+                Style = style,
+                **kwargs
+            )
 
         return None
 
