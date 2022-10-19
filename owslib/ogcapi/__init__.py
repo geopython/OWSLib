@@ -100,7 +100,7 @@ class API:
             if openapi_format == openapi_json_mimetype:
                 content = response.json()
             elif openapi_format == openapi_yaml_mimetype:
-                content = yaml.load(response.text)
+                content = yaml.safe_load(response.text)
             return content
         else:
             msg = 'Did not find service-desc link'
