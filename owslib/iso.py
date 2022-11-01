@@ -494,6 +494,15 @@ class MD_DataIdentification(object):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.otherconstraints.append(val)
+            for i in md.findall(util.nspath_eval(
+                    'gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints/gmx:Anchor',
+                    namespaces)):
+                val = util.testXMLAttribute(i, util.nspath('href', namespaces["xlink"]))
+                if val is None:
+                    val = util.testXMLValue(i)
+                if val is not None:
+                    self.otherconstraints.append(val)    
+                    
 
             self.securityconstraints = []
             for i in md.findall(util.nspath_eval(
