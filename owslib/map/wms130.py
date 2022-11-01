@@ -18,7 +18,7 @@ from urllib.parse import urlencode
 import warnings
 from math import sqrt
 from owslib.etree import etree
-from owslib.util import (openURL, ServiceException, testXMLValue,
+from owslib.util import (openURL, ServiceException, testXMLValue, testXMLAttribute,
                          extract_xml_list, xmltag_split, OrderedDict, nspath,
                          nspath_eval, bind_url, Authentication)
 from owslib.fgdc import Metadata
@@ -451,6 +451,12 @@ class ContentMetadata(AbstractContentMetadata):
         self.noSubsets = int(elem.attrib.get('noSubsets', 0))
         self.fixedWidth = int(elem.attrib.get('fixedWidth', 0))
         self.fixedHeight = int(elem.attrib.get('fixedHeight', 0))
+
+        idxml = elem.find(nspath('Identifier', WMS_NAMESPACE))
+        self.identifier = testXMLValue(idxml)
+        self.authority = testXMLAttribute(idxml,'authority') 
+        # match this authority to the name attribute of one of the authorityUrls 
+        # on this or parent layers to find full authority url
 
         # title is mandatory property
         self.title = None
