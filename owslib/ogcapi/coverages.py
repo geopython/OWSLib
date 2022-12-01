@@ -8,6 +8,7 @@
 
 from io import BytesIO
 import logging
+from typing import BinaryIO
 
 from owslib.ogcapi import Collections
 from owslib.util import Authentication
@@ -67,7 +68,7 @@ class Coverages(Collections):
         path = f'collections/{collection_id}/coverage/rangetype'
         return self._request(path=path, kwargs=kwargs)
 
-    def coverage(self, collection_id: str, **kwargs: dict) -> dict:
+    def coverage(self, collection_id: str, **kwargs: dict) -> BinaryIO:
         """
         implements /collection/{collectionId}/coverage/
 
