@@ -50,6 +50,8 @@ class Maps(Collections):
         @param collection_id: id of collection
         @type bbox: list
         @param bbox: list of minx,miny,maxx,maxy
+        @type bbox_crs: str
+        @param bbox_crs: CRS of output map
         @type datetime_: string
         @param datetime_: time extent or time instant
         @type width: int
@@ -69,11 +71,13 @@ class Maps(Collections):
 
         if 'bbox' in kwargs:
             kwargs_['bbox'] = ','.join(list(map(str, kwargs['bbox'])))
+        if 'bbox_crs' in kwargs:
+            kwargs_['bbox-crs'] = kwargs['bbox_crs']
         if 'datetime_' in kwargs:
-            kwargs_['datetime'] = kwargs_['datetime_']
+            kwargs_['datetime'] = kwargs['datetime_']
 
-        kwargs_['width'] = kwargs_.get('width', 800)
-        kwargs_['height'] = kwargs_.get('height', 600)
+        kwargs_['width'] = kwargs.get('width', 800)
+        kwargs_['height'] = kwargs.get('height', 600)
 
         kwargs_['transparent'] = str(kwargs.get('transparent', True)).lower()
 
