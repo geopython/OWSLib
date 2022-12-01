@@ -352,17 +352,6 @@ OGC API - Maps - Part 1: Core 1.0
 .. code-block:: python
 
   >>> from owslib.ogcapi.maps import Maps
-  >>> m = Maps(SERVICE_URL)
-
-  >>> maps = m.maps()
-  >>>  hello_world = p.process('hello-world')
-
-  >>> hello_world['id']
-  'hello-world'
-  >>> hello_world['title']
-  'Hello World'
-
-  >>> from owslib.ogcapi.maps import Maps
   >>> m = Maps('http://localhost:5000')
   >>> lakes = m.collection('lakes')
   >>> data = m.map('lakes', width=1200, height=800, transparent=False)
