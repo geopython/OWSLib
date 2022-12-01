@@ -354,7 +354,7 @@ OGC API - Maps - Part 1: Core 1.0
   >>> from owslib.ogcapi.maps import Maps
   >>> m = Maps(SERVICE_URL)
 
-  >>> maps = m.processes()
+  >>> maps = m.maps()
   >>>  hello_world = p.process('hello-world')
 
   >>> hello_world['id']

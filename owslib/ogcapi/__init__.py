@@ -183,7 +183,6 @@ class API:
         LOGGER.debug(f'URL: {response.url}')
         LOGGER.debug(f'Response status code: {response.status_code}')
 
-        print(response.url)
         if not response:
             raise RuntimeError(response.text)
 
