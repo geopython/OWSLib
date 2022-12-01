@@ -48,8 +48,8 @@ class Features(Collections):
         @param collection_id: id of collection
         @type bbox: list
         @param bbox: list of minx,miny,maxx,maxy
-        @type datetime: string
-        @param datetime: time extent or time instant
+        @type datetime_: string
+        @param datetime_: time extent or time instant
         @type limit: int
         @param limit: limit number of features
         @type offset: int
@@ -66,6 +66,8 @@ class Features(Collections):
 
         if 'bbox' in kwargs:
             kwargs['bbox'] = ','.join(list(map(str, kwargs['bbox'])))
+        if 'datetime_' in kwargs:
+            kwargs['datetime'] = kwargs['datetime_']
 
         if 'cql' in kwargs:
             LOGGER.debug('CQL query detected')
