@@ -61,7 +61,7 @@ class Maps(Collections):
         @type transparent: bool
         @param transparent: whether to apply transparecy to
                             output map (default=True)
-        @type style: int
+        @type style: str
         @param style: style name
 
         @returns: map image
