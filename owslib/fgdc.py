@@ -246,11 +246,16 @@ class Keywords(object):
 class Ptcontac(object):
     """ Process ptcontac """
     def __init__(self, md):
-        val = md.find('cntinfo/cntorgp/cntorg')
-        self.cntorg = util.testXMLValue(val)
 
-        val = md.find('cntinfo/cntorgp/cntper')
-        self.cntper = util.testXMLValue(val)
+        ent = md.find('cntinfo/cntorgp')
+        if ent is None:
+            ent = md.find('cntinfo/cntperp')
+
+        if ent is not None:
+            val = ent.find('cntorg')
+            self.cntorg = util.testXMLValue(val)
+            val = ent.find('cntper')
+            self.cntper = util.testXMLValue(val)
 
         val = md.find('cntinfo/cntpos')
         self.cntpos = util.testXMLValue(val)
@@ -323,6 +328,9 @@ class Distinfo(object):
                     digform['name'] = util.testXMLValue(link.find('digtinfo/formname'))
                     digform['url'] = util.testXMLValue(link.find('digtopt/onlinopt/computer/networka/networkr/'))
                     self.stdorder['digform'].append(digform)
+                cnt = val.find('distrib')
+                if cnt is not None:
+                    self.distrib = Ptcontac(cnt)
 
 
 class Metainfo(object):
