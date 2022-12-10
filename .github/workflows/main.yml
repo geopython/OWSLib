@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: ['3.7', '3.8', '3.9']
         lxml: [true, false]
     env:
         LXML: ${{ matrix.lxml }}
@@ -22,7 +22,7 @@ jobs:
     - name: Install packages
       run: |
         sudo apt-get -y install pandoc
-      if: matrix.python-version == 3.6
+      if: matrix.python-version == 3.7
     - name: Install requirements 📦
       run: |
         pip3 install -e .
@@ -34,10 +34,10 @@ jobs:
       run: python3 -m pytest
     - name: run coveralls ⚙️
       run: coveralls
-      if: matrix.python-version == 3.6
+      if: matrix.python-version == 3.7
     - name: build docs 🏗️
       run: cd docs && make html
-      if: matrix.python-version == 3.6
+      if: matrix.python-version == 3.7
     - name: run flake8 ⚙️
       run: flake8 owslib
-      if: matrix.python-version == 3.6
+      if: matrix.python-version == 3.7
