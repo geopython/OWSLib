@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.27.2 (unreleased)
+-------------------
+
+- WFS: Fix set_filter for string inputs (#804)
+
 0.27.1 (2022-08-28)
 -------------------
 

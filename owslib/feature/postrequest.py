@@ -175,7 +175,9 @@ class PostRequest_2_0_0(PostRequest):
         """
         if isinstance(filter, str):
             f = etree.fromstring(filter)
-            sub_elem = f.find(util.nspath("Filter", FES_NAMESPACE))
+            # If this raises an error, it means the filter string does not contain an actual Filter node.
+            sub_elem = f.xpath("//FES:Filter", namespaces={"FES": FES_NAMESPACE})[0]
+
         else:
             sub_elem = filter
 

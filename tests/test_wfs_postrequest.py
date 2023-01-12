@@ -44,6 +44,16 @@ xml_filter_2_0_0 = """<?xml version="1.0" ?>
     </wfs:GetFeature>
     """
 
+raw_2_0_filter = """
+    <fes:Filter  xmlns:fes="http://www.opengis.net/fes/2.0"
+    xmlns:erl="http://xmlns.earthresourceml.org/earthresourceml-lite/1.0">
+          <fes:PropertyIsEqualTo>
+            <fes:ValueReference>reference</fes:ValueReference>
+            <fes:Literal>gold</fes:Literal>
+          </fes:PropertyIsEqualTo>
+    </fes:Filter>
+    """
+
 typename = "ns:typename"
 
 
@@ -272,3 +282,17 @@ class TestPostRequest_v_2_0_0():
         assert equal_elem is not None
         assert propertyname == "status"
         assert literal == "rejected"
+
+    def test_filter_root_query(self, requestv200):
+        """Same as test_filter_query, but the filter is the root element."""
+        requestv200.set_filter(raw_2_0_filter)
+
+        filter_elem = requestv200._query.find(util.nspath("Filter", FES_NAMESPACE))
+        equal_elem = filter_elem.find(util.nspath("PropertyIsEqualTo", FES_NAMESPACE))
+        propertyname = equal_elem.findtext(util.nspath("ValueReference", FES_NAMESPACE))
+        literal = equal_elem.findtext(util.nspath("Literal", FES_NAMESPACE))
+
+        assert filter_elem is not None
+        assert equal_elem is not None
+        assert propertyname == "reference"
+        assert literal == "gold"
