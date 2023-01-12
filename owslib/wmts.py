@@ -363,11 +363,11 @@ class WebMapTileService(object):
             resindex = randint(0, numres - 1)
             resurl = tileresourceurls[resindex]['template']
             return resurl.format(
-                TileMatrixSet = tilematrixset,
-                TileMatrix = tilematrix,
-                TileRow = str(row),
-                TileCol = str(column),
-                Style = style,
+                TileMatrixSet=tilematrixset,
+                TileMatrix=tilematrix,
+                TileRow=str(row),
+                TileCol=str(column),
+                Style=style,
                 **kwargs
             )
 
