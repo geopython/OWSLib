@@ -529,8 +529,7 @@ class ContentMetadata(AbstractContentMetadata):
         else:
             self.abstract = None
         self.keywords = [
-            f.text 
-            for f in elem.findall(nspath("Keywords/Keyword", ns=OWS_NAMESPACE))
+            f.text for f in elem.findall(nspath("Keywords/Keyword", ns=OWS_NAMESPACE))
         ]
 
         # bboxes
