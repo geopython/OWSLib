@@ -66,7 +66,22 @@ class WMSCapabilitiesReader(object):
                     timeout=timeout, headers=self.headers, auth=self.auth)
 
         raw_text = strip_bom(u.read())
-        return etree.fromstring(raw_text)
+        et = etree.fromstring(raw_text)
+
+        # check for response type - if it is not xml then raise an error
+        content_type = u.info()['Content-Type']
+        if content_type != 'text/xml':
+            html_body = et.find('BODY') # this is case-sensitive
+
+            if html_body.text:
+                response_text = html_body.text.strip("\n")
+            else:
+                response_text = raw_text
+
+            raise ValueError("%s responded with Content-Type '%s': '%s'" %
+                (u.geturl(), content_type, response_text))
+
+        return et
 
     def readString(self, st):
         """Parse a WMS capabilities document, returning an elementtree instance.
