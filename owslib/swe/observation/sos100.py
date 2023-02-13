@@ -4,7 +4,7 @@ from urllib.parse import urlencode, parse_qsl
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes import FilterCapabilities
-from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time
+from owslib.util import openURL, testXMLValue, nspath_eval, nspath, extract_time, getXMLTree
 from owslib.namespaces import Namespaces
 
 
@@ -314,7 +314,7 @@ class SosCapabilitiesReader(object):
         getcaprequest = self.capabilities_url(service_url)
         spliturl = getcaprequest.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password)
-        return etree.fromstring(u.read())
+        return getXMLTree(u)
 
     def read_string(self, st):
         """
