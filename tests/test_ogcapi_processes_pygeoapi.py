@@ -29,7 +29,7 @@ def test_ogcapi_processes_pygeoapi():
     assert len(collections) > 0
 
     processes = p.processes()
-    assert len(processes) == 1
+    assert len(processes) == 3
 
     hello_world = p.process('hello-world')
     assert hello_world['id'] == 'hello-world'
