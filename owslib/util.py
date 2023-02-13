@@ -326,35 +326,36 @@ def getXMLInteger(elem, tag):
     return int(e.text.strip())
 
 
-def getXMLTree(responseWrapper):
+def getXMLTree(rsp: ResponseWrapper) -> etree:
     """
     Parse a response into an XML elementtree instance
-    
+    and raise a ValueError if the server returns a
+    non-XML response. The response may contain a useful
+    error message from the server.
+
     Parameters
     ----------
 
-    - responseWrapper: the response wrapper   
+    @param rsp: the ResponseWrapper for the XML request
     """
-    
-    raw_text = strip_bom(responseWrapper.read())
+
+    raw_text = strip_bom(rsp.read())
     et = etree.fromstring(raw_text)
-        
+
     # check for response type - if it is not xml then raise an error
-    content_type = responseWrapper.info()['Content-Type']
-    url = responseWrapper.geturl()
-    
-    if content_type != 'text/xml':
-        html_body = et.find('BODY') # this is case-sensitive
-        print(html_body)
-        print(html_body.text)
-        if html_body and html_body.text:
+    content_type = rsp.info()['Content-Type']
+    url = rsp.geturl()
+
+    if 'text/xml' not in content_type.lower():
+        html_body = et.find('BODY') # note this is case-sensitive
+        if html_body is not None and len(html_body.text) > 0:
             response_text = html_body.text.strip("\n")
         else:
             response_text = raw_text
 
         raise ValueError("%s responded with Content-Type '%s': '%s'" %
             (url, content_type, response_text))
-            
+
     return et
 
 
