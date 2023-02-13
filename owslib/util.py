@@ -348,14 +348,14 @@ def getXMLTree(rsp: ResponseWrapper) -> etree:
 
     xml_types = ['text/xml', 'application/xml', 'application/vnd.ogc.wms_xml']
     if not any(xt in content_type.lower() for xt in xml_types):
-        html_body = et.find('BODY') # note this is case-sensitive
+        html_body = et.find('BODY')  # note this is case-sensitive
         if html_body is not None and len(html_body.text) > 0:
             response_text = html_body.text.strip("\n")
         else:
             response_text = raw_text
 
         raise ValueError("%s responded with Content-Type '%s': '%s'" %
-            (url, content_type, response_text))
+                         (url, content_type, response_text))
 
     return et
 
