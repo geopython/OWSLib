@@ -346,7 +346,7 @@ def getXMLTree(rsp: ResponseWrapper) -> etree:
     content_type = rsp.info()['Content-Type']
     url = rsp.geturl()
 
-    xml_types = ['text/xml', 'application/xml']
+    xml_types = ['text/xml', 'application/xml', 'application/vnd.ogc.wms_xml']
     if not any(xt in content_type.lower() for xt in xml_types):
         html_body = et.find('BODY') # note this is case-sensitive
         if html_body is not None and len(html_body.text) > 0:
