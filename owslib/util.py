@@ -326,6 +326,38 @@ def getXMLInteger(elem, tag):
     return int(e.text.strip())
 
 
+def getXMLTree(responseWrapper):
+    """
+    Parse a response into an XML elementtree instance
+    
+    Parameters
+    ----------
+
+    - responseWrapper: the response wrapper   
+    """
+    
+    raw_text = strip_bom(responseWrapper.read())
+    et = etree.fromstring(raw_text)
+        
+    # check for response type - if it is not xml then raise an error
+    content_type = responseWrapper.info()['Content-Type']
+    url = responseWrapper.geturl()
+    
+    if content_type != 'text/xml':
+        html_body = et.find('BODY') # this is case-sensitive
+        print(html_body)
+        print(html_body.text)
+        if html_body and html_body.text:
+            response_text = html_body.text.strip("\n")
+        else:
+            response_text = raw_text
+
+        raise ValueError("%s responded with Content-Type '%s': '%s'" %
+            (url, content_type, response_text))
+            
+    return et
+
+
 def testXMLValue(val, attrib=False):
     """
 
