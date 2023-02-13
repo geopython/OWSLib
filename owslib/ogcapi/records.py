@@ -22,11 +22,11 @@ class Records(Features):
         __doc__ = Features.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
-    def records(self) -> dict:
+    def records(self) -> list:
         """
         implements /collections filtered on records
 
-        @returns: `dict` of filtered collections object
+        @returns: `list` of filtered collections object
         """
 
         records_ = []

@@ -24,11 +24,11 @@ class Coverages(Collections):
         __doc__ = Collections.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
-    def coverages(self) -> dict:
+    def coverages(self) -> list:
         """
         implements /collections filtered on coverages
 
-        @returns: `dict` of filtered collections object
+        @returns: `list` of filtered collections object
         """
 
         coverages_ = []

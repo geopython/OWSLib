@@ -24,11 +24,11 @@ class Features(Collections):
         __doc__ = Collections.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
-    def feature_collections(self) -> dict:
+    def feature_collections(self) -> list:
         """
         implements /collections filtered on features
 
-        @returns: `dict` of filtered collections object
+        @returns: `list` of filtered collections object
         """
 
         features_ = []

@@ -24,11 +24,11 @@ class Maps(Collections):
         __doc__ = Collections.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
-    def maps(self) -> dict:
+    def maps(self) -> list:
         """
         implements /collections filtered on maps
 
-        @returns: `dict` of filtered collections object
+        @returns: `list` of filtered collections object
         """
 
         maps_ = []
