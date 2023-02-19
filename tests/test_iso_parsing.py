@@ -5,7 +5,7 @@ import io
 from owslib import util
 from owslib.etree import etree
 from owslib.iso import (
-    MD_Metadata, Keyword
+    MD_Metadata, Keyword, MD_Keywords
 )
 from owslib.namespaces import Namespaces
 
@@ -204,96 +204,97 @@ def test_md_parsing_dov():
 
     assert_list(iden.keywords, 5)
 
-    assert type(iden.keywords[0]) is dict
-    assert iden.keywords[0]['type'] == ''
-    assert iden.keywords[0]['thesaurus']['title'] == "GEMET - INSPIRE thema's, versie 1.0"
-    assert iden.keywords[0]['thesaurus']['date'] == '2008-06-01'
-    assert iden.keywords[0]['thesaurus']['datetype'] == 'publication'
-    assert_list(iden.keywords[0]['keywords'], 1)
-    assert iden.keywords[0]['keywords'] == ['Geologie']
+    assert type(iden.keywords[0]) is MD_Keywords
+    assert iden.keywords[0].type == ''
+    assert iden.keywords[0].thesaurus['title'] == "GEMET - INSPIRE thema's, versie 1.0"
+    assert iden.keywords[0].thesaurus['date'] == '2008-06-01'
+    assert iden.keywords[0].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[0].keywords, 1)
+    assert iden.keywords[0].keywords[0].name == 'Geologie'
 
-    assert type(iden.keywords[1]) is dict
-    assert iden.keywords[1]['type'] == ''
-    assert iden.keywords[1]['thesaurus'][
+    assert type(iden.keywords[1]) is MD_Keywords
+    assert iden.keywords[1].type == ''
+    assert iden.keywords[1].thesaurus[
                'title'] == "GEMET - Concepten, versie 2.4"
-    assert iden.keywords[1]['thesaurus']['date'] == '2010-01-13'
-    assert iden.keywords[1]['thesaurus']['datetype'] == 'publication'
-    assert_list(iden.keywords[1]['keywords'], 2)
-    assert iden.keywords[1]['keywords'] == ['grondwater', 'meetnet(werk)']
+    assert iden.keywords[1].thesaurus['date'] == '2010-01-13'
+    assert iden.keywords[1].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[1].keywords, 2)
+    assert iden.keywords[1].keywords[0].name == 'grondwater'
+    assert iden.keywords[1].keywords[1].name == 'meetnet(werk)'
 
-    assert type(iden.keywords[2]) is dict
-    assert iden.keywords[2]['type'] == ''
-    assert iden.keywords[2]['thesaurus'][
+    assert type(iden.keywords[2]) is MD_Keywords
+    assert iden.keywords[2].type == ''
+    assert iden.keywords[2].thesaurus[
                'title'] == "Vlaamse regio's"
-    assert iden.keywords[2]['thesaurus']['date'] == '2013-09-25'
-    assert iden.keywords[2]['thesaurus']['datetype'] == 'publication'
-    assert_list(iden.keywords[2]['keywords'], 1)
-    assert iden.keywords[2]['keywords'] == ['Vlaams Gewest']
+    assert iden.keywords[2].thesaurus['date'] == '2013-09-25'
+    assert iden.keywords[2].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[2].keywords, 1)
+    assert iden.keywords[2].keywords[0].name == 'Vlaams Gewest'
 
-    assert type(iden.keywords[3]) is dict
-    assert iden.keywords[3]['type'] is None
-    assert iden.keywords[3]['thesaurus'][
+    assert type(iden.keywords[3]) is MD_Keywords
+    assert iden.keywords[3].type is None
+    assert iden.keywords[3].thesaurus[
                'title'] == "GDI-Vlaanderen Trefwoorden"
-    assert iden.keywords[3]['thesaurus']['date'] == '2014-02-26'
-    assert iden.keywords[3]['thesaurus']['datetype'] == 'publication'
-    assert_list(iden.keywords[3]['keywords'], 7)
-    assert iden.keywords[3]['keywords'] == [
+    assert iden.keywords[3].thesaurus['date'] == '2014-02-26'
+    assert iden.keywords[3].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[3].keywords, 7)
+    assert [kw.name for kw in iden.keywords[3].keywords] == [
         'Toegevoegd GDI-Vl', 'Herbruikbaar', 'Vlaamse Open data',
         'Kosteloos', 'Lijst M&R INSPIRE', 'Metadata INSPIRE-conform',
         'Metadata GDI-Vl-conform']
 
-    assert type(iden.keywords[4]) is dict
-    assert iden.keywords[4]['type'] is None
-    assert iden.keywords[4]['thesaurus']['title'] == "DOV"
-    assert iden.keywords[4]['thesaurus']['date'] == '2010-12-01'
-    assert iden.keywords[4]['thesaurus']['datetype'] == 'publication'
-    assert_list(iden.keywords[4]['keywords'], 7)
-    assert iden.keywords[4]['keywords'] == [
+    assert type(iden.keywords[4]) is MD_Keywords
+    assert iden.keywords[4].type is None
+    assert iden.keywords[4].thesaurus['title'] == "DOV"
+    assert iden.keywords[4].thesaurus['date'] == '2010-12-01'
+    assert iden.keywords[4].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[4].keywords, 7)
+    assert [kw.name for kw in iden.keywords[4].keywords] == [
         'Ondergrond', 'DOV', 'Vlaanderen', 'monitoring', 'meetnetten',
         'Kaderrichtlijn Water', 'Decreet Integraal waterbeleid']
 
-    assert_list(iden.keywords2, 5)
-    assert iden.keywords2[0].type == ''
-    assert iden.keywords2[0].thesaurus[
+    assert_list(iden.keywords, 5)
+    assert iden.keywords[0].type == ''
+    assert iden.keywords[0].thesaurus[
                'title'] == "GEMET - INSPIRE thema's, versie 1.0"
-    assert iden.keywords2[0].thesaurus['date'] == '2008-06-01'
-    assert iden.keywords2[0].thesaurus['datetype'] == 'publication'
-    assert_list(iden.keywords2[0].keywords, 1)
-    assert iden.keywords2[0].keywords == ['Geologie']
+    assert iden.keywords[0].thesaurus['date'] == '2008-06-01'
+    assert iden.keywords[0].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[0].keywords, 1)
+    assert iden.keywords[0].keywords[0].name == 'Geologie'
 
-    assert iden.keywords2[1].type == ''
-    assert iden.keywords2[1].thesaurus[
+    assert iden.keywords[1].type == ''
+    assert iden.keywords[1].thesaurus[
                'title'] == "GEMET - Concepten, versie 2.4"
-    assert iden.keywords2[1].thesaurus['date'] == '2010-01-13'
-    assert iden.keywords2[1].thesaurus['datetype'] == 'publication'
-    assert_list(iden.keywords2[1].keywords, 2)
-    assert iden.keywords2[1].keywords == ['grondwater', 'meetnet(werk)']
+    assert iden.keywords[1].thesaurus['date'] == '2010-01-13'
+    assert iden.keywords[1].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[1].keywords, 2)
+    assert [kw.name for kw in iden.keywords[1].keywords] == ['grondwater', 'meetnet(werk)']
 
-    assert iden.keywords2[2].type == ''
-    assert iden.keywords2[2].thesaurus[
+    assert iden.keywords[2].type == ''
+    assert iden.keywords[2].thesaurus[
                'title'] == "Vlaamse regio's"
-    assert iden.keywords2[2].thesaurus['date'] == '2013-09-25'
-    assert iden.keywords2[2].thesaurus['datetype'] == 'publication'
-    assert_list(iden.keywords2[2].keywords, 1)
-    assert iden.keywords2[2].keywords == ['Vlaams Gewest']
+    assert iden.keywords[2].thesaurus['date'] == '2013-09-25'
+    assert iden.keywords[2].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[2].keywords, 1)
+    assert iden.keywords[2].keywords[0].name == 'Vlaams Gewest'
 
-    assert iden.keywords2[3].type is None
-    assert iden.keywords2[3].thesaurus[
+    assert iden.keywords[3].type is None
+    assert iden.keywords[3].thesaurus[
                'title'] == "GDI-Vlaanderen Trefwoorden"
-    assert iden.keywords2[3].thesaurus['date'] == '2014-02-26'
-    assert iden.keywords2[3].thesaurus['datetype'] == 'publication'
-    assert_list(iden.keywords2[3].keywords, 7)
-    assert iden.keywords2[3].keywords == [
+    assert iden.keywords[3].thesaurus['date'] == '2014-02-26'
+    assert iden.keywords[3].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[3].keywords, 7)
+    assert [kw.name for kw in iden.keywords[3].keywords] == [
         'Toegevoegd GDI-Vl', 'Herbruikbaar', 'Vlaamse Open data',
         'Kosteloos', 'Lijst M&R INSPIRE', 'Metadata INSPIRE-conform',
         'Metadata GDI-Vl-conform']
 
-    assert iden.keywords2[4].type is None
-    assert iden.keywords2[4].thesaurus['title'] == "DOV"
-    assert iden.keywords2[4].thesaurus['date'] == '2010-12-01'
-    assert iden.keywords2[4].thesaurus['datetype'] == 'publication'
-    assert_list(iden.keywords2[4].keywords, 7)
-    assert iden.keywords2[4].keywords == [
+    assert iden.keywords[4].type is None
+    assert iden.keywords[4].thesaurus['title'] == "DOV"
+    assert iden.keywords[4].thesaurus['date'] == '2010-12-01'
+    assert iden.keywords[4].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[4].keywords, 7)
+    assert [kw.name for kw in iden.keywords[4].keywords] == [
         'Ondergrond', 'DOV', 'Vlaanderen', 'monitoring', 'meetnetten',
         'Kaderrichtlijn Water', 'Decreet Integraal waterbeleid']
 
@@ -437,108 +438,53 @@ def test_md_parsing_geobretagne():
     assert_list(iden.spatialrepresentationtype, 1)
     assert iden.spatialrepresentationtype[0] == 'vector'
 
-    assert_list(iden.keywords, 7)
+    assert_list(iden.keywords, 6)
 
-    assert type(iden.keywords[0]) is dict
-    assert iden.keywords[0]['type'] == 'place'
-    assert iden.keywords[0]['thesaurus']['title'] is None
-    assert iden.keywords[0]['thesaurus']['date'] is None
-    assert iden.keywords[0]['thesaurus']['datetype'] is None
-    assert_list(iden.keywords[0]['keywords'], 1)
-    assert iden.keywords[0]['keywords'] == ['France']
+    assert type(iden.keywords[0]) is MD_Keywords
+    assert iden.keywords[0].type == 'place'
+    assert iden.keywords[0].thesaurus is None
+    assert_list(iden.keywords[0].keywords, 1)
+    assert iden.keywords[0].keywords[0].name == 'France'
 
-    assert type(iden.keywords[1]) is dict
-    assert iden.keywords[1]['type'] is None
-    assert iden.keywords[1]['thesaurus']['title'] is None
-    assert iden.keywords[1]['thesaurus']['date'] is None
-    assert iden.keywords[1]['thesaurus']['datetype'] is None
-    assert_list(iden.keywords[1]['keywords'], 0)
+    assert type(iden.keywords[1]) is MD_Keywords
+    assert iden.keywords[1].type == 'theme'
+    assert iden.keywords[1].thesaurus is None
+    assert_list(iden.keywords[1].keywords, 7)
 
-    assert type(iden.keywords[2]) is dict
-    assert iden.keywords[2]['type'] == 'theme'
-    assert iden.keywords[2]['thesaurus']['title'] is None
-    assert iden.keywords[2]['thesaurus']['date'] is None
-    assert iden.keywords[2]['thesaurus']['datetype'] is None
-    assert_list(iden.keywords[2]['keywords'], 7)
-    assert iden.keywords[2]['keywords'] == [
-        u'bâtiments', 'adresses', 'parcelles cadastrales', 'hydrographie',
-        u'réseaux de transport', u'unités administratives',
-        u'référentiels de coordonnées']
+    assert type(iden.keywords[2]) is MD_Keywords
+    assert iden.keywords[2].type == 'theme'
+    assert iden.keywords[2].thesaurus is None
+    assert_list(iden.keywords[2].keywords, 5)
+    assert [kw.name for kw in iden.keywords[2].keywords] == [
+        'bâtis', 'sections', 'parcelles', 'cadastre', 'cadastrale']
 
-    assert type(iden.keywords[3]) is dict
-    assert iden.keywords[3]['type'] == 'theme'
-    assert iden.keywords[3]['thesaurus']['title'] is None
-    assert iden.keywords[3]['thesaurus']['date'] is None
-    assert iden.keywords[3]['thesaurus']['datetype'] is None
-    assert_list(iden.keywords[3]['keywords'], 5)
-    assert iden.keywords[3]['keywords'] == [
-        u'bâtis', 'sections', 'parcelles', 'cadastre', 'cadastrale']
+    assert type(iden.keywords[3]) is MD_Keywords
+    assert iden.keywords[3].type == 'theme'
+    assert iden.keywords[3].thesaurus is not None
+    assert iden.keywords[3].thesaurus['date'] == '2014-01-13'
+    assert iden.keywords[3].thesaurus['datetype'] == 'publication'
+    assert iden.keywords[3].thesaurus['title'] == 'GéoBretagne v 2.0'
+    assert iden.keywords[3].thesaurus['url'] is None
+    assert_list(iden.keywords[3].keywords, 1)
+    assert [kw.name for kw in iden.keywords[3].keywords] == ['référentiels : cadastre']
 
-    assert type(iden.keywords[4]) is dict
-    assert iden.keywords[4]['type'] == 'theme'
-    assert iden.keywords[4]['thesaurus']['title'] == u"GéoBretagne v 2.0"
-    assert iden.keywords[4]['thesaurus']['date'] == '2014-01-13'
-    assert iden.keywords[4]['thesaurus']['datetype'] == 'publication'
-    assert_list(iden.keywords[4]['keywords'], 1)
-    assert iden.keywords[4]['keywords'] == [u'référentiels : cadastre']
+    assert type(iden.keywords[4]) is MD_Keywords
+    assert iden.keywords[4].type == 'theme'
+    assert iden.keywords[4].thesaurus['title'] == 'INSPIRE themes'
+    assert iden.keywords[4].thesaurus['date'] == '2008-06-01'
+    assert iden.keywords[4].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[4].keywords, 1)
+    assert [kw.name for kw in iden.keywords[4].keywords] == ['Parcelles cadastrales']
 
-    assert type(iden.keywords[5]) is dict
-    assert iden.keywords[5]['type'] == 'theme'
-    assert iden.keywords[5]['thesaurus']['title'] == "INSPIRE themes"
-    assert iden.keywords[5]['thesaurus']['date'] == '2008-06-01'
-    assert iden.keywords[5]['thesaurus']['datetype'] == 'publication'
-    assert_list(iden.keywords[5]['keywords'], 1)
-    assert iden.keywords[5]['keywords'] == ['Parcelles cadastrales']
+    assert type(iden.keywords[5]) is MD_Keywords
+    assert iden.keywords[5].type == 'theme'
+    assert iden.keywords[5].thesaurus['title'] == "GEMET"
+    assert iden.keywords[5].thesaurus['date'] == '2012-07-20'
+    assert iden.keywords[5].thesaurus['datetype'] == 'publication'
+    assert_list(iden.keywords[5].keywords, 2)
+    assert [kw.name for kw in iden.keywords[5].keywords] == ['cadastre', u'bâtiment']
 
-    assert type(iden.keywords[6]) is dict
-    assert iden.keywords[6]['type'] == 'theme'
-    assert iden.keywords[6]['thesaurus']['title'] == "GEMET"
-    assert iden.keywords[6]['thesaurus']['date'] == '2012-07-20'
-    assert iden.keywords[6]['thesaurus']['datetype'] == 'publication'
-    assert_list(iden.keywords[6]['keywords'], 2)
-    assert iden.keywords[6]['keywords'] == ['cadastre', u'bâtiment']
-
-    assert_list(iden.keywords2, 6)
-
-    assert iden.keywords2[0].type == 'place'
-    assert iden.keywords2[0].thesaurus is None
-    assert_list(iden.keywords2[0].keywords, 1)
-    assert iden.keywords2[0].keywords == ['France']
-
-    assert iden.keywords2[1].type == 'theme'
-    assert iden.keywords2[1].thesaurus is None
-    assert_list(iden.keywords2[1].keywords, 7)
-    assert iden.keywords2[1].keywords == [
-        u'bâtiments', 'adresses', 'parcelles cadastrales', 'hydrographie',
-        u'réseaux de transport', u'unités administratives',
-        u'référentiels de coordonnées']
-
-    assert iden.keywords2[2].type == 'theme'
-    assert iden.keywords2[2].thesaurus is None
-    assert_list(iden.keywords2[2].keywords, 5)
-    assert iden.keywords2[2].keywords == [
-        u'bâtis', 'sections', 'parcelles', 'cadastre', 'cadastrale']
-
-    assert iden.keywords2[3].type == 'theme'
-    assert iden.keywords2[3].thesaurus['title'] == u"GéoBretagne v 2.0"
-    assert iden.keywords2[3].thesaurus['date'] == '2014-01-13'
-    assert iden.keywords2[3].thesaurus['datetype'] == 'publication'
-    assert_list(iden.keywords2[3].keywords, 1)
-    assert iden.keywords2[3].keywords == [u'référentiels : cadastre']
-
-    assert iden.keywords2[4].type == 'theme'
-    assert iden.keywords2[4].thesaurus['title'] == "INSPIRE themes"
-    assert iden.keywords2[4].thesaurus['date'] == '2008-06-01'
-    assert iden.keywords2[4].thesaurus['datetype'] == 'publication'
-    assert_list(iden.keywords2[4].keywords, 1)
-    assert iden.keywords2[4].keywords == ['Parcelles cadastrales']
-
-    assert iden.keywords2[5].type == 'theme'
-    assert iden.keywords2[5].thesaurus['title'] == "GEMET"
-    assert iden.keywords2[5].thesaurus['date'] == '2012-07-20'
-    assert iden.keywords2[5].thesaurus['datetype'] == 'publication'
-    assert_list(iden.keywords2[5].keywords, 2)
-    assert iden.keywords2[5].keywords == ['cadastre', u'bâtiment']
+    assert_list(iden.keywords, 6)
 
     assert_list(iden.topiccategory, 1)
     assert iden.topiccategory[0] == 'planningCadastre'
@@ -575,9 +521,9 @@ def test_md_parsing_19115_2():
 
     iden = md.identificationinfo[0]
 
-    assert len(iden.keywords2) == 3
-    assert iden.keywords2[1].thesaurus['title'] == 'My Vocabulary'
-    assert iden.keywords2[1].thesaurus['url'] == 'https://example.org/my-vocab'
+    assert len(iden.keywords) == 3
+    assert iden.keywords[1].thesaurus['title'] == 'My Vocabulary'
+    assert iden.keywords[1].thesaurus['url'] == 'https://example.org/my-vocab'
 
     ci = md.contentinfo[0]
     assert ci.type == 'image'
@@ -614,13 +560,13 @@ def test_md_parsing_keywords_anchor():
     assert md.identifier == 'ie.marine.data:dataset.1135'
     
     iden = md.identificationinfo[0]
-    assert len(iden.keywords2) == 1
-    assert len(iden.keywords2[0].keywords_object) == 6
-    assert type(iden.keywords2[0].keywords_object[0]) is Keyword
-    assert iden.keywords2[0].keywords_object[0].name == 'Atmospheric pressure'
-    assert iden.keywords2[0].keywords_object[0].url == 'http://vocab.nerc.ac.uk/collection/A05/current/EV_AIRPRESS/'
-    assert iden.keywords2[0].thesaurus['title'] == 'AtlantOS Essential Variables'
-    assert iden.keywords2[0].thesaurus['url'] == 'http://vocab.nerc.ac.uk/collection/A05/current/'
+    assert len(iden.keywords) == 1
+    assert len(iden.keywords[0].keywords) == 6
+    assert type(iden.keywords[0].keywords[0]) is Keyword
+    assert iden.keywords[0].keywords[0].name == 'Atmospheric pressure'
+    assert iden.keywords[0].keywords[0].url == 'http://vocab.nerc.ac.uk/collection/A05/current/EV_AIRPRESS/'
+    assert iden.keywords[0].thesaurus['title'] == 'AtlantOS Essential Variables'
+    assert iden.keywords[0].thesaurus['url'] == 'http://vocab.nerc.ac.uk/collection/A05/current/'
     
 def test_md_parsing_keywords_no_anchor():
     """Test the parsing of MD_Keywords where the keyword is not defined by a 
@@ -636,16 +582,16 @@ def test_md_parsing_keywords_no_anchor():
     assert type(md) is MD_Metadata
     
     iden = md.identificationinfo[0]
-    assert len(iden.keywords2) == 6
-    assert len(iden.keywords2[0].keywords_object) == 1
-    assert type(iden.keywords2[0].keywords_object[0]) is Keyword
-    assert iden.keywords2[0].keywords_object[0].name == 'France'
-    assert iden.keywords2[0].keywords_object[0].url is None
+    assert len(iden.keywords) == 6
+    assert len(iden.keywords[0].keywords) == 1
+    assert type(iden.keywords[0].keywords[0]) is Keyword
+    assert iden.keywords[0].keywords[0].name == 'France'
+    assert iden.keywords[0].keywords[0].url is None
     
-    assert len(iden.keywords2[1].keywords_object) == 7
-    assert iden.keywords2[1].keywords_object[0].name == 'bâtiments'
-    assert iden.keywords2[1].keywords_object[0].url is None
-    assert iden.keywords2[1].keywords_object[1].name == 'adresses'
-    assert iden.keywords2[1].keywords_object[1].url is None
-    assert iden.keywords2[1].keywords_object[2].name == 'parcelles cadastrales'
-    assert iden.keywords2[1].keywords_object[2].url is None
+    assert len(iden.keywords[1].keywords) == 7
+    assert iden.keywords[1].keywords[0].name == 'bâtiments'
+    assert iden.keywords[1].keywords[0].url is None
+    assert iden.keywords[1].keywords[1].name == 'adresses'
+    assert iden.keywords[1].keywords[1].url is None
+    assert iden.keywords[1].keywords[2].name == 'parcelles cadastrales'
+    assert iden.keywords[1].keywords[2].url is None
