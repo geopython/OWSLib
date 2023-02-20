@@ -12,8 +12,6 @@
 
 """ ISO metadata parser """
 
-import warnings
-
 from owslib.etree import etree
 from owslib import util
 from owslib.namespaces import Namespaces
@@ -35,6 +33,7 @@ class MD_Metadata(object):
     def __init__(self, md=None):
 
         if md is None:
+            self.md = None
             self.xml = None
             self.identifier = None
             self.parentidentifier = None
@@ -50,7 +49,6 @@ class MD_Metadata(object):
             self.stdver = None
             self.locales = []
             self.referencesystem = None
-            self.identification = None
             self.contentinfo = None
             self.serviceidentification = None
             self.identificationinfo = []
@@ -59,6 +57,7 @@ class MD_Metadata(object):
             self.dataquality = None
             self.acquisition = None
         else:
+            self.md = md
             if hasattr(md, 'getroot'):  # standalone document
                 self.xml = etree.tostring(md.getroot())
             else:  # part of a larger document
@@ -116,28 +115,8 @@ class MD_Metadata(object):
             else:
                 self.referencesystem = None
 
-            # TODO: merge .identificationinfo into .identification
-            warnings.warn(
-                'the .identification and .serviceidentification properties will merge into '
-                '.identification being a list of properties.  This is currently implemented '
-                'in .identificationinfo.  '
-                'Please see https://github.com/geopython/OWSLib/issues/38 for more information',
-                FutureWarning)
-
-            val = md.find(util.nspath_eval('gmd:identificationInfo/gmd:MD_DataIdentification', namespaces))
-            val2 = md.find(util.nspath_eval('gmd:identificationInfo/srv:SV_ServiceIdentification', namespaces))
-
-            if val is not None:
-                self.identification = MD_DataIdentification(val, 'dataset')
-                self.serviceidentification = None
-            elif val2 is not None:
-                self.identification = MD_DataIdentification(val2, 'service')
-                self.serviceidentification = SV_ServiceIdentification(val2)
-            else:
-                self.identification = None
-                self.serviceidentification = None
-
             self.identificationinfo = []
+
             for idinfo in md.findall(util.nspath_eval('gmd:identificationInfo', namespaces)):
                 if len(idinfo) > 0:
                     val = list(idinfo)[0]
@@ -175,6 +154,22 @@ class MD_Metadata(object):
                 self.acquisition = MI_AcquisitionInformation(val)
             else:
                 self.acquisition = None
+
+    def get_all_contacts(self):
+        """get all contacts in document"""
+
+        contacts = []
+
+        for ii in self.identificationinfo:
+            for iic in ii.contact:
+                contacts.append(iic)
+
+            for ct in ['creator', 'publisher', 'contributor']:
+                iict = getattr(ii, ct)
+                if iict:
+                    contacts.append(iict)
+
+        return list(filter(None, contacts))
 
     def get_default_locale(self):
         """ get default gmd:PT_Locale based on gmd:language """
@@ -318,27 +313,18 @@ class MD_Keywords(object):
     Class for the metadata MD_Keywords element
     """
     def __init__(self, md=None):
-        warnings.warn(
-            'The .keywords_object attribute will become .keywords proper in the next release. '
-            '.keywords_object is a list of ibstances of the Keyword class. '
-            'See for https://github.com/geopython/OWSLib/pull/765 more details.',
-            FutureWarning)
-
         if md is None:
             self.keywords = []
-            self.keywords_object = []
             self.type = None
             self.thesaurus = None
             self.kwdtype_codeList = 'http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_KeywordTypeCode'
         else:
             self.keywords = []
-            self.keywords_object = []
             val = md.findall(util.nspath_eval('gmd:keyword/gco:CharacterString', namespaces))
             if len(val) == 0:
                 val = md.findall(util.nspath_eval('gmd:keyword/gmx:Anchor', namespaces))
             for word in val:
-                self.keywords.append(util.testXMLValue(word))
-                self.keywords_object.append(Keyword(word))
+                self.keywords.append(Keyword(word))
             self.type = None
             val = md.find(util.nspath_eval('gmd:type/gmd:MD_KeywordTypeCode', namespaces))
             self.type = util.testXMLAttribute(val, 'codeListValue')
@@ -348,8 +334,8 @@ class MD_Keywords(object):
             if val is not None:
                 self.thesaurus = {}
 
-                thesaurus = val.find(util.nspath_eval('gmd:title/gco:CharacterString', namespaces))
-                self.thesaurus['title'] = util.testXMLValue(thesaurus)
+                title = val.find(util.nspath_eval('gmd:title/gco:CharacterString', namespaces))
+                self.thesaurus['title'] = util.testXMLValue(title)
                 self.thesaurus['url'] = None
 
                 if self.thesaurus['title'] is None:  # try gmx:Anchor
@@ -358,12 +344,12 @@ class MD_Keywords(object):
                         self.thesaurus['title'] = util.testXMLValue(t)
                         self.thesaurus['url'] = t.attrib.get(util.nspath_eval('xlink:href', namespaces))
 
-                thesaurus = val.find(util.nspath_eval('gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces))
-                self.thesaurus['date'] = util.testXMLValue(thesaurus)
+                date_ = val.find(util.nspath_eval('gmd:date/gmd:CI_Date/gmd:date/gco:Date', namespaces))
+                self.thesaurus['date'] = util.testXMLValue(date_)
 
-                thesaurus = val.find(
+                datetype = val.find(
                     util.nspath_eval('gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode', namespaces))
-                self.thesaurus['datetype'] = util.testXMLAttribute(thesaurus, 'codeListValue')
+                self.thesaurus['datetype'] = util.testXMLAttribute(datetype, 'codeListValue')
 
 
 class MD_DataIdentification(object):
@@ -401,8 +387,6 @@ class MD_DataIdentification(object):
             self.graphicoverview = []
             self.contact = []
             self.keywords = []
-            self.keywords_object = []
-            self.keywords2 = []
             self.topiccategory = []
             self.supplementalinformation = None
             self.extent = None
@@ -593,50 +577,9 @@ class MD_DataIdentification(object):
                 if val:
                     self.spatialrepresentationtype.append(val)
 
-            warnings.warn(
-                'The .keywords and .keywords2 properties will merge into the '
-                '.keywords property in the future, with .keywords becoming a list '
-                'of MD_Keywords instances. This is currently implemented in .keywords2. '
-                'Please see https://github.com/geopython/OWSLib/issues/301 for more information',
-                FutureWarning)
-
             self.keywords = []
-
-            for i in md.findall(util.nspath_eval('gmd:descriptiveKeywords', namespaces)):
-                mdkw = {}
-                mdkw['type'] = _testCodeListValue(i.find(util.nspath_eval(
-                    'gmd:MD_Keywords/gmd:type/gmd:MD_KeywordTypeCode', namespaces)))
-
-                mdkw['thesaurus'] = {}
-
-                val = i.find(util.nspath_eval(
-                    'gmd:MD_Keywords/gmd:thesaurusName/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
-                mdkw['thesaurus']['title'] = util.testXMLValue(val)
-
-                val = i.find(util.nspath_eval(
-                    'gmd:MD_Keywords/gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date',
-                    namespaces))
-                mdkw['thesaurus']['date'] = util.testXMLValue(val)
-
-                val = i.find(util.nspath_eval(
-                    'gmd:MD_Keywords/gmd:thesaurusName/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode',
-                    namespaces))
-                mdkw['thesaurus']['datetype'] = util.testXMLAttribute(val, 'codeListValue')
-
-                mdkw['keywords'] = []
-
-                for k in i.findall(util.nspath_eval('gmd:MD_Keywords/gmd:keyword', namespaces)):
-                    val = k.find(util.nspath_eval('gco:CharacterString', namespaces))
-                    if val is not None:
-                        val2 = util.testXMLValue(val)
-                        if val2 is not None:
-                            mdkw['keywords'].append(val2)
-
-                self.keywords.append(mdkw)
-
-            self.keywords2 = []
             for mdkw in md.findall(util.nspath_eval('gmd:descriptiveKeywords/gmd:MD_Keywords', namespaces)):
-                self.keywords2.append(MD_Keywords(mdkw))
+                self.keywords.append(MD_Keywords(mdkw))
 
             self.topiccategory = []
             for i in md.findall(util.nspath_eval('gmd:topicCategory/gmd:MD_TopicCategoryCode', namespaces)):
