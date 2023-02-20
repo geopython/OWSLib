@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Usage &#8212; OWSLib 0.27.2 documentation</title>
+    <title>Usage &#8212; OWSLib 0.28.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -53,7 +53,7 @@
         <li class="right" >
           <a href="installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.27.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.28.0 documentation</a> &#187;</li> 
       </ul>
     </div>
   
@@ -196,8 +196,8 @@ services)</p>
 <p>The <a class="reference internal" href="#ogc-api">OGC API</a> standards are a clean break from the traditional OGC service architecture
 using current design patterns (RESTful, JSON, OpenAPI).  As such, OWSLib the code follows
 the same pattern.</p>
-<div class="section" id="ogc-api-features-1-0-part-1-core">
-<h3>OGC API - Features 1.0 - Part 1: Core<a class="headerlink" href="#ogc-api-features-1-0-part-1-core" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="ogc-api-features-part-1-core-1-0">
+<h3>OGC API - Features - Part 1: Core 1.0<a class="headerlink" href="#ogc-api-features-part-1-core-1-0" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ogcapi.features</span> <span class="kn">import</span> <span class="n">Features</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Features</span><span class="p">(</span><span class="s1">&#39;https://demo.pygeoapi.io/master&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">url</span>
@@ -227,8 +227,8 @@ the same pattern.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="ogc-api-coverages-1-0-part-1-core">
-<h3>OGC API - Coverages 1.0 - Part 1: Core<a class="headerlink" href="#ogc-api-coverages-1-0-part-1-core" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="ogc-api-coverages-part-1-core-1-0">
+<h3>OGC API - Coverages - Part 1: Core 1.0<a class="headerlink" href="#ogc-api-coverages-part-1-core-1-0" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ogcapi.coverages</span> <span class="kn">import</span> <span class="n">Coverages</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Coverages</span><span class="p">(</span><span class="s1">&#39;https://dev.api.weather.gc.ca/coverages-demo&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">url</span>
@@ -261,8 +261,8 @@ the same pattern.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="ogc-api-records-1-0-part-1-core">
-<h3>OGC API - Records 1.0 - Part 1: Core<a class="headerlink" href="#ogc-api-records-1-0-part-1-core" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="ogc-api-records-part-1-core-1-0">
+<h3>OGC API - Records - Part 1: Core 1.0<a class="headerlink" href="#ogc-api-records-part-1-core-1-0" title="Permalink to this headline">¶</a></h3>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ogcapi.records</span> <span class="kn">import</span> <span class="n">Records</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Records</span><span class="p">(</span><span class="s1">&#39;https://example.org/records-api&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">url</span>
@@ -304,9 +304,67 @@ the same pattern.</p>
 <span class="go">u&#39;Roadrunner ambush locations&#39;</span>
 </pre></div>
 </div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">json</span>
+</pre></div>
 </div>
-<div class="section" id="ogc-api-processes-1-0-part-1-core">
-<h3>OGC API - Processes 1.0 - Part 1: Core<a class="headerlink" href="#ogc-api-processes-1-0-part-1-core" title="Permalink to this headline">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">record_data</span> <span class="o">=</span> <span class="s1">&#39;sample-geojson-record.json&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">record_data</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+<span class="go">..  data = json.load(fh)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">identifier</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">collection_item_create</span><span class="p">(</span><span class="s1">&#39;my-catalogue&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">collection_item_update</span><span class="p">(</span><span class="s1">&#39;my-catalogue&#39;</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">collection_item_delete</span><span class="p">(</span><span class="s1">&#39;my-catalogue&#39;</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ogc-api-features-part-4-create-replace-update-and-delete">
+<h3>OGC API - Features - Part 4: Create, Replace, Update and Delete<a class="headerlink" href="#ogc-api-features-part-4-create-replace-update-and-delete" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This specification applies to both OGC API - Features and OGC API - Records</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">owslib.ogcapi.records</span> <span class="kn">import</span> <span class="n">Records</span>
+
+<span class="n">record_data</span> <span class="o">=</span> <span class="s1">&#39;/path/to/record.json&#39;</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:8000&#39;</span>
+<span class="n">collection_id</span> <span class="o">=</span> <span class="s1">&#39;metadata:main&#39;</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">Records</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="n">cat</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">collection</span><span class="p">(</span><span class="n">collection_id</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">record_data</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+
+<span class="n">identifier</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">collection_item_delete</span><span class="p">(</span><span class="n">collection_id</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+
+<span class="c1"># insert metadata</span>
+<span class="n">r</span><span class="o">.</span><span class="n">collection_item_create</span><span class="p">(</span><span class="n">collection_id</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># update metadata</span>
+<span class="n">r</span><span class="o">.</span><span class="n">collection_item_update</span><span class="p">(</span><span class="n">collection_id</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># delete metadata</span>
+<span class="n">r</span><span class="o">.</span><span class="n">collection_item_delete</span><span class="p">(</span><span class="n">collection_id</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ogc-api-processes-part-1-core-1-0">
+<h3>OGC API - Processes - Part 1: Core 1.0<a class="headerlink" href="#ogc-api-processes-part-1-core-1-0" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ogcapi.processes</span> <span class="kn">import</span> <span class="n">Processes</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Processes</span><span class="p">(</span><span class="n">SERVICE_URL</span><span class="p">)</span>
 
@@ -317,6 +375,17 @@ the same pattern.</p>
 <span class="go">&#39;hello-world&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hello_world</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
 <span class="go">&#39;Hello World&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ogc-api-maps-part-1-core-1-0">
+<h3>OGC API - Maps - Part 1: Core 1.0<a class="headerlink" href="#ogc-api-maps-part-1-core-1-0" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">owslib.ogcapi.maps</span> <span class="kn">import</span> <span class="n">Maps</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Maps</span><span class="p">(</span><span class="s1">&#39;http://localhost:5000&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lakes</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">collection</span><span class="p">(</span><span class="s1">&#39;lakes&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="s1">&#39;lakes&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output.png&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">getbuffer</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -1944,10 +2013,12 @@ Greatly appreciated :-)</p>
 <li><a class="reference internal" href="#wms">WMS</a></li>
 <li><a class="reference internal" href="#wfs">WFS</a></li>
 <li><a class="reference internal" href="#ogc-api">OGC API</a><ul>
-<li><a class="reference internal" href="#ogc-api-features-1-0-part-1-core">OGC API - Features 1.0 - Part 1: Core</a></li>
-<li><a class="reference internal" href="#ogc-api-coverages-1-0-part-1-core">OGC API - Coverages 1.0 - Part 1: Core</a></li>
-<li><a class="reference internal" href="#ogc-api-records-1-0-part-1-core">OGC API - Records 1.0 - Part 1: Core</a></li>
-<li><a class="reference internal" href="#ogc-api-processes-1-0-part-1-core">OGC API - Processes 1.0 - Part 1: Core</a></li>
+<li><a class="reference internal" href="#ogc-api-features-part-1-core-1-0">OGC API - Features - Part 1: Core 1.0</a></li>
+<li><a class="reference internal" href="#ogc-api-coverages-part-1-core-1-0">OGC API - Coverages - Part 1: Core 1.0</a></li>
+<li><a class="reference internal" href="#ogc-api-records-part-1-core-1-0">OGC API - Records - Part 1: Core 1.0</a></li>
+<li><a class="reference internal" href="#ogc-api-features-part-4-create-replace-update-and-delete">OGC API - Features - Part 4: Create, Replace, Update and Delete</a></li>
+<li><a class="reference internal" href="#ogc-api-processes-part-1-core-1-0">OGC API - Processes - Part 1: Core 1.0</a></li>
+<li><a class="reference internal" href="#ogc-api-maps-part-1-core-1-0">OGC API - Maps - Part 1: Core 1.0</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wcs">WCS</a></li>
@@ -2013,12 +2084,12 @@ Greatly appreciated :-)</p>
         <li class="right" >
           <a href="installation.html" title="Installation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.27.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.28.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2010, Tom Kralidis.
-      Last updated on 2022-08-28T07:46:28Z.
+      Last updated on 2023-02-20T04:54:14Z.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.4.
     </div>
   </body>

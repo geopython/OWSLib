@@ -163,7 +163,7 @@ The `OGC API`_ standards are a clean break from the traditional OGC service arch
 using current design patterns (RESTful, JSON, OpenAPI).  As such, OWSLib the code follows
 the same pattern.
 
-OGC API - Features 1.0 - Part 1: Core
+OGC API - Features - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
@@ -195,7 +195,7 @@ OGC API - Features 1.0 - Part 1: Core
   >>> lakes_query['features'][0]['properties']
   {u'scalerank': 0, u'name_alt': None, u'admin': None, u'featureclass': u'Lake', u'id': 0, u'name': u'Lake Baikal'}
 
-OGC API - Coverages 1.0 - Part 1: Core
+OGC API - Coverages - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
@@ -230,7 +230,7 @@ OGC API - Coverages 1.0 - Part 1: Core
   'float64'
   >> gdps_coverage_query = w.coverage('gdps-temperature', range_subset=[1])
 
-OGC API - Records 1.0 - Part 1: Core
+OGC API - Records - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   >>> from owslib.ogcapi.records import Records
@@ -273,7 +273,63 @@ OGC API - Records 1.0 - Part 1: Core
   >>> my_catalogue_cql_json_query['features'][0]['properties']['title']
   u'Roadrunner ambush locations'
 
-OGC API - Processes 1.0 - Part 1: Core
+  >>> import json
+
+  >>> record_data = 'sample-geojson-record.json'
+
+  >>> with open(record_data) as fh:
+  ..  data = json.load(fh)
+
+  >>> identifier = data['id']
+
+  >>> w.collection_item_create('my-catalogue', data)
+
+  >>> w.collection_item_update('my-catalogue', identifier, data)
+
+  >>> w.collection_item_delete('my-catalogue', identifier)
+
+
+
+OGC API - Features - Part 4: Create, Replace, Update and Delete
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+
+   This specification applies to both OGC API - Features and OGC API - Records
+
+
+.. code-block:: python
+
+   import json
+   from owslib.ogcapi.records import Records
+
+   record_data = '/path/to/record.json'
+
+   url = 'http://localhost:8000'
+   collection_id = 'metadata:main'
+
+   r = Records(url)
+
+   cat = r.collection(collection_id)
+
+   with open(record_data) as fh:
+       data = json.load(fh)
+
+   identifier = data['id']
+
+   r.collection_item_delete(collection_id, identifier)
+
+   # insert metadata
+   r.collection_item_create(collection_id, data)
+
+   # update metadata
+   r.collection_item_update(collection_id, identifier, data)
+
+   # delete metadata
+   r.collection_item_delete(collection_id, identifier)
+
+
+OGC API - Processes - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
@@ -288,6 +344,20 @@ OGC API - Processes 1.0 - Part 1: Core
   'hello-world'
   >>> hello_world['title']
   'Hello World'
+
+
+OGC API - Maps - Part 1: Core 1.0
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+  >>> from owslib.ogcapi.maps import Maps
+  >>> m = Maps('http://localhost:5000')
+  >>> lakes = m.collection('lakes')
+  >>> data = m.map('lakes', width=1200, height=800, transparent=False)
+  >>> with open("output.png", "wb") as fh:
+  ...     fh.write(data.getbuffer())
+
 
 WCS
 ---
