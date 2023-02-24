@@ -278,11 +278,8 @@ def nspath_eval(xpath, namespaces):
 
 def cleanup_namespaces(element):
     """ Remove unused namespaces from an element """
-    if etree.__name__ == 'lxml.etree':
-        etree.cleanup_namespaces(element)
-        return element
-    else:
-        return etree.fromstring(etree.tostring(element))
+    etree.cleanup_namespaces(element)
+    return element
 
 
 def add_namespaces(root, ns_keys):
@@ -293,35 +290,34 @@ def add_namespaces(root, ns_keys):
 
     ns_keys = [(x, namespaces.get_namespace(x)) for x in ns_keys]
 
-    if etree.__name__ != 'lxml.etree':
-        # We can just add more namespaces when not using lxml.
-        # We can't re-add an existing namespaces.  Get a list of current
-        # namespaces in use
-        existing_namespaces = set()
-        for elem in root.iter():
-            if elem.tag[0] == "{":
-                uri, tag = elem.tag[1:].split("}")
-                existing_namespaces.add(namespaces.get_namespace_from_url(uri))
-        for key, link in ns_keys:
-            if link is not None and key not in existing_namespaces:
-                root.set("xmlns:%s" % key, link)
-        return root
-    else:
-        # lxml does not support setting xmlns attributes
-        # Update the elements nsmap with new namespaces
-        new_map = root.nsmap
-        for key, link in ns_keys:
-            if link is not None:
-                new_map[key] = link
-        # Recreate the root element with updated nsmap
-        new_root = etree.Element(root.tag, nsmap=new_map)
-        # Carry over attributes
-        for a, v in list(root.items()):
-            new_root.set(a, v)
-        # Carry over children
-        for child in root:
-            new_root.append(deepcopy(child))
-        return new_root
+    # lxml does not support setting xmlns attributes
+    # Update the elements nsmap with new namespaces
+    new_map = root.nsmap
+    for key, link in ns_keys:
+        if link is not None:
+            new_map[key] = link
+    # Recreate the root element with updated nsmap
+    new_root = etree.Element(root.tag, nsmap=new_map)
+    # Carry over attributes
+    for a, v in list(root.items()):
+        new_root.set(a, v)
+    # Carry over children
+    for child in root:
+        new_root.append(deepcopy(child))
+    return new_root
+
+    # We can just add more namespaces when not using lxml.
+    # We can't re-add an existing namespaces.  Get a list of current
+    # namespaces in use
+    existing_namespaces = set()
+    for elem in root.iter():
+        if elem.tag[0] == "{":
+            uri, tag = elem.tag[1:].split("}")
+            existing_namespaces.add(namespaces.get_namespace_from_url(uri))
+    for key, link in ns_keys:
+        if link is not None and key not in existing_namespaces:
+            root.set("xmlns:%s" % key, link)
+    return root
 
 
 def getXMLInteger(elem, tag):
@@ -520,21 +516,14 @@ def element_to_string(element, encoding=None, xml_declaration=False):
     if encoding is None:
         encoding = "ISO-8859-1"
 
-    if etree.__name__ == 'lxml.etree':
-        if xml_declaration:
-            if encoding in ['unicode', 'utf-8']:
-                output = '<?xml version="1.0" encoding="utf-8" standalone="no"?>\n{}'.format(
-                    etree.tostring(element, encoding='unicode'))
-            else:
-                output = etree.tostring(element, encoding=encoding, xml_declaration=True)
+    if xml_declaration:
+        if encoding in ['unicode', 'utf-8']:
+            output = '<?xml version="1.0" encoding="utf-8" standalone="no"?>\n{}'.format(
+                etree.tostring(element, encoding='unicode'))
         else:
-            output = etree.tostring(element)
+            output = etree.tostring(element, encoding=encoding, xml_declaration=True)
     else:
-        if xml_declaration:
-            output = '<?xml version="1.0" encoding="{}" standalone="no"?>\n{}'.format(
-                encoding, etree.tostring(element, encoding=encoding))
-        else:
-            output = etree.tostring(element)
+        output = etree.tostring(element)
 
     return output
 
@@ -768,21 +757,6 @@ def bind_url(url):
         elif url.find('&', -1) == -1:  # like http://host/wms?foo=bar
             binder = '&'
     return '%s%s' % (url, binder)
-
-
-def which_etree():
-    """decipher which etree library is being used by OWSLib"""
-
-    which_etree = None
-
-    if 'lxml' in etree.__file__:
-        which_etree = 'lxml.etree'
-    elif 'xml/etree' in etree.__file__:
-        which_etree = 'xml.etree'
-    elif 'elementree' in etree.__file__:
-        which_etree = 'elementtree.ElementTree'
-
-    return which_etree
 
 
 def findall(root, xpath, attribute_name=None, attribute_value=None):
