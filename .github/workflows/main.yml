@@ -8,9 +8,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.7', '3.8', '3.9']
-        lxml: [true, false]
     env:
-        LXML: ${{ matrix.lxml }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_SERVICE_NAME: github
     steps:
@@ -28,8 +26,6 @@ jobs:
         pip3 install -e .
         pip3 install -r requirements.txt
         pip3 install -r requirements-dev.txt
-        echo "LXML => $LXML"
-        if [ "$LXML" == "true" ]; then pip install lxml; fi
     - name: run tests ⚙️
       run: python3 -m pytest
     - name: run coveralls ⚙️

@@ -4,7 +4,7 @@ Installation
 Requirements
 ------------
 
-OWSLib requires a Python interpreter, as well as `ElementTree <https://docs.python.org/2/library/xml.etree.elementtree.html>`_ or `lxml <http://lxml.de>`_ for XML parsing.
+OWSLib requires a Python interpreter, as well as `lxml <https://lxml.de>`_ for XML parsing.
 
 Install
 -------
