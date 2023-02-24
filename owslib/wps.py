@@ -106,6 +106,8 @@ Also, the directory tests/ contains several examples of well-formed "Execute" re
 * The files PMLExecuteRequest*.xml contain requests that can be submitted to the live PML WPS service.
 """
 
+import logging
+
 from owslib.etree import etree
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
@@ -138,6 +140,8 @@ WPS_DEFAULT_VERSION = '1.0.0'
 AUTO = 'auto'
 SYNC = 'sync'
 ASYNC = 'async'
+
+LOGGER = logging.getLogger(__name__)
 
 
 def get_namespaces():
@@ -223,7 +227,7 @@ class WebProcessingService(object):
     Implements IWebProcessingService.
     """
 
-    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False,
+    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, skip_caps=False,
                  headers=None, verify=None, cert=None, timeout=None, auth=None, language=None):
         """
         Initialization method resets the object status.
@@ -238,7 +242,6 @@ class WebProcessingService(object):
         # fields passed in from object initializer
         self.url = clean_ows_url(url)
         self.version = version
-        self.verbose = verbose
         self.headers = headers
         self.timeout = timeout
         self.language = language
@@ -263,7 +266,6 @@ class WebProcessingService(object):
         # read capabilities document
         reader = WPSCapabilitiesReader(
             version=self.version,
-            verbose=self.verbose,
             auth=self.auth,
             language=self.language,
             timeout=self.timeout,
@@ -291,7 +293,6 @@ class WebProcessingService(object):
         # read capabilities document
         reader = WPSDescribeProcessReader(
             version=self.version,
-            verbose=self.verbose,
             auth=self.auth,
             language=self.language,
             timeout=self.timeout,
@@ -342,7 +343,6 @@ class WebProcessingService(object):
         execution = WPSExecution(
             version=self.version,
             url=self.url,
-            verbose=self.verbose,
             headers=self.headers,
             timeout=self.timeout,
             auth=self.auth,
@@ -382,7 +382,7 @@ class WebProcessingService(object):
         processDescriptionElements = rootElement.findall('ProcessDescription')
         processes = []
         for processDescriptionElement in processDescriptionElements:
-            process = Process(processDescriptionElement, verbose=self.verbose)
+            process = Process(processDescriptionElement)
 
             # override existing processes in object metadata, if existing already
             found = False
@@ -421,14 +421,12 @@ class WebProcessingService(object):
             if element.tag.endswith('ServiceIdentification'):
                 self.identification = ServiceIdentification(
                     element, namespace=ns)
-                if self.verbose is True:
-                    dump(self.identification)
+                LOGGER.debug(self.identification)
 
             # <ows:ServiceProvider> metadata
             elif element.tag.endswith('ServiceProvider'):
                 self.provider = ServiceProvider(element, namespace=ns)
-                if self.verbose is True:
-                    dump(self.provider)
+                LOGGER.debug(self.provider)
 
             # <ns0:OperationsMetadata xmlns:ns0="http://www.opengeospatial.net/ows">
             #   <ns0:Operation name="GetCapabilities">
@@ -444,8 +442,7 @@ class WebProcessingService(object):
                 for child in element.findall(nspath('Operation', ns=ns)):
                     self.operations.append(
                         OperationsMetadata(child, namespace=ns))
-                    if self.verbose is True:
-                        dump(self.operations[-1])
+                    LOGGER.debug(self.operations[-1])
 
             # <wps:ProcessOfferings>
             #   <wps:Process ns0:processVersion="1.0.0">
@@ -456,10 +453,9 @@ class WebProcessingService(object):
             # </wps:ProcessOfferings>
             elif element.tag.endswith('ProcessOfferings'):
                 for child in element.findall(nspath('Process', ns=ns)):
-                    p = Process(child, verbose=self.verbose)
+                    p = Process(child)
                     self.processes.append(p)
-                    if self.verbose is True:
-                        dump(self.processes[-1])
+                    LOGGER.debug(self.processes[-1])
 
             # <wps:Languages>
             #   <wps:Default>
@@ -473,8 +469,7 @@ class WebProcessingService(object):
             # </wps:Languages>
             elif element.tag.endswith('Languages'):
                 self.languages = Languages(element)
-                if self.verbose:
-                    dump(self.languages)
+                LOGGER.debug(self.languages)
 
 
 class WPSReader(object):
@@ -482,9 +477,8 @@ class WPSReader(object):
     Superclass for reading a WPS document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=30, auth=None, language=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, timeout=30, auth=None, language=None):
         self.version = version
-        self.verbose = verbose
         self.timeout = timeout
         self.auth = auth or Authentication()
         self.language = language
@@ -537,10 +531,10 @@ class WPSCapabilitiesReader(WPSReader):
     Utility class that reads and parses a WPS GetCapabilities document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None, language=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, timeout=None, auth=None, language=None):
         # superclass initializer
         super(WPSCapabilitiesReader, self).__init__(
-            version=version, verbose=verbose, timeout=timeout, auth=auth, language=language)
+            version=version, timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -563,10 +557,10 @@ class WPSDescribeProcessReader(WPSReader):
     Class that reads and parses a WPS DescribeProcess document into a etree infoset
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None, language=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, timeout=None, auth=None, language=None):
         # superclass initializer
         super(WPSDescribeProcessReader, self).__init__(
-            version=version, verbose=verbose, timeout=timeout, auth=auth, language=language)
+            version=version, timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, identifier, username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -590,9 +584,9 @@ class WPSExecuteReader(WPSReader):
     Class that reads and parses a WPS Execute response document into a etree infoset
     """
 
-    def __init__(self, verbose=False, timeout=None, auth=None, language=None):
+    def __init__(self, timeout=None, auth=None, language=None):
         # superclass initializer
-        super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout, auth=auth, language=language)
+        super(WPSExecuteReader, self).__init__(timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, data={}, method='Get', username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -611,13 +605,12 @@ class WPSExecution(object):
     Class that represents a single WPS process executed on a remote WPS service.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False,
+    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None,
                  headers=None, verify=None, cert=None, timeout=None, auth=None, language=None):
 
         # initialize fields
         self.url = url
         self.version = version
-        self.verbose = verbose
         self.headers = headers
         self.auth = auth or Authentication()
         _fix_auth(self.auth, username, password, verify, cert)
@@ -800,7 +793,6 @@ class WPSExecution(object):
         """
 
         reader = WPSExecuteReader(
-            verbose=self.verbose,
             auth=self.auth,
             language=self.language,
             timeout=self.timeout
@@ -925,7 +917,6 @@ class WPSExecution(object):
 
         self.request = request
         reader = WPSExecuteReader(
-            verbose=self.verbose,
             auth=self.auth,
             language=self.language,
             timeout=self.timeout,
@@ -1028,7 +1019,7 @@ class WPSExecution(object):
                 self._parseExceptionReport(element)
 
         self.process = Process(
-            root.find(nspath('Process', ns=wpsns)), verbose=self.verbose)
+            root.find(nspath('Process', ns=wpsns)))
 
         # <wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
         # xmlns:ows="http://www.opengis.net/ows/1.1"
@@ -1038,8 +1029,7 @@ class WPSExecution(object):
             self.dataInputs[:] = []
         for inputElement in root.findall(nspath('DataInputs/Input', ns=wpsns)):
             self.dataInputs.append(Output(inputElement))
-            if self.verbose is True:
-                dump(self.dataInputs[-1])
+            LOGGER.debug(self.dataInputs[-1])
 
         # <ns:ProcessOutputs>
         # xmlns:ns="http://www.opengis.net/wps/1.0.0"
@@ -1048,8 +1038,7 @@ class WPSExecution(object):
             self.processOutputs[:] = []
         for outputElement in root.findall(nspath('ProcessOutputs/Output', ns=wpsns)):
             self.processOutputs.append(Output(outputElement))
-            if self.verbose is True:
-                dump(self.processOutputs[-1])
+            LOGGER.debug(self.processOutputs[-1])
 
 
 class ComplexData(object):
@@ -1543,7 +1532,7 @@ class Process(object):
     """
     Class that represents a WPS process.
     """
-    def __init__(self, elem, verbose=False):
+    def __init__(self, elem):
         """ Initialization method extracts all available metadata from an XML document (passed in as etree object) """
 
         # <ns0:ProcessDescriptions service="WPS" version="1.0.0"
@@ -1552,7 +1541,6 @@ class Process(object):
         # OR:
         # <ns0:Process ns0:processVersion="1.0.0">
         self._root = elem
-        self.verbose = verbose
 
         # when process is instantiated from GetCapabilities, elem is 'wps:Process'          => wpsns='wps'
         # when process is instantiated from DescribeProcess, elem is 'ProcessDescription'   => wpsns=''
@@ -1617,22 +1605,19 @@ class Process(object):
             elif child.tag.endswith('Metadata'):
                 self.metadata.append(Metadata(child))
 
-        if self.verbose is True:
-            dump(self)
+        LOGGER.debug(self)
 
         # <DataInputs>
         self.dataInputs = []
         for inputElement in elem.findall('DataInputs/Input'):
             self.dataInputs.append(Input(inputElement))
-            if self.verbose is True:
-                dump(self.dataInputs[-1], prefix='\tInput: ')
+            LOGGER.debug(self.dataInputs[-1], prefix='\tInput: ')
 
         # <ProcessOutputs>
         self.processOutputs = []
         for outputElement in elem.findall('ProcessOutputs/Output'):
             self.processOutputs.append(Output(outputElement))
-            if self.verbose is True:
-                dump(self.processOutputs[-1], prefix='\tOutput: ')
+            LOGGER.debug(self.processOutputs[-1], prefix='\tOutput: ')
 
     def __str__(self):
         return "WPS Process: {}, title={}".format(self.identifier or '', self.title or '')

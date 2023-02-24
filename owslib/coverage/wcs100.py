@@ -17,7 +17,6 @@ from owslib.crs import Crs
 import os
 import errno
 
-import logging
 from owslib.util import log, makeString
 
 
@@ -108,10 +107,9 @@ class WebCoverageService_1_0_0(WCSBase):
         http://myhost/mywcs?SERVICE=WCS&REQUEST=GetCoverage&IDENTIFIER=TuMYrRQ4&VERSION=1.1.0&BOUNDINGBOX=-180,-90,180,90&TIME=2792-06-01T00:00:00.0&FORMAT=cf-netcdf
 
         """
-        if log.isEnabledFor(logging.DEBUG):
-            msg = 'WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier={}, bbox={}, time={}, format={}, crs={}, width={}, height={}, resx={}, resy={}, resz={}, parameter={}, method={}, other_arguments={}'  # noqa
-            log.debug(msg.format(
-                identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
+        msg = 'WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier={}, bbox={}, time={}, format={}, crs={}, width={}, height={}, resx={}, resy={}, resz={}, parameter={}, method={}, other_arguments={}'  # noqa
+        log.debug(msg.format(
+            identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
 
         try:
             base_url = next((m.get('url') for m in self.getOperationByName('GetCoverage').methods

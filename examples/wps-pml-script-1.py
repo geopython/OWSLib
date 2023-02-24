@@ -3,8 +3,7 @@
 from owslib.wps import WebProcessingService, monitorExecution
 
 # instantiate WPS client
-verbose = False
-wps = WebProcessingService('http://rsg.pml.ac.uk/wps/generic.cgi', verbose=verbose, skip_caps=True)
+wps = WebProcessingService('http://rsg.pml.ac.uk/wps/generic.cgi', skip_caps=True)
 
 # 1) GetCapabilities
 wps.getcapabilities()

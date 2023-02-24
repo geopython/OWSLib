@@ -22,5 +22,4 @@ def test_wps_request7():
 
     # Compare to cached XML request
     _request = open(resource_file('wps_EmuExecuteRequest7.xml'), 'rb').read()
-    print(request)
     assert compare_xml(request, _request) is True
