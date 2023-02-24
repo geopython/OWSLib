@@ -1,5 +1,5 @@
-from owslib.wps import WebProcessingService
 import owslib.wps
+from owslib.util import log
 
 
 def test_wps_execute_language(monkeypatch):
@@ -8,10 +8,10 @@ def test_wps_execute_language(monkeypatch):
         """Make sure the errors are raised, not only caught and logged"""
         raise AssertionError
 
-    monkeypatch.setattr(owslib.wps.log, "error", raise_on_log_error)
+    monkeypatch.setattr(log, "error", raise_on_log_error)
 
     monkeypatch.setattr(owslib.wps.WPSExecution, "parseResponse", lambda *a: None)
-    wps = WebProcessingService('http://www.example.com', language='fr-CA', skip_caps=True)
+    wps = owslib.wps.WebProcessingService('http://www.example.com', language='fr-CA', skip_caps=True)
     execution = wps.execute('test', [], response=b'<xml></xml>')
 
     assert b'language="fr-CA"' in execution.request

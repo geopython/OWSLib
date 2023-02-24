@@ -7,6 +7,7 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
+import logging as log
 import os
 import sys
 from collections import OrderedDict
@@ -629,7 +630,7 @@ def build_get_url(base_url, params, overwrite=False):
 def dump(obj, prefix=''):
     '''Utility function to print to standard output a generic object with all its attributes.'''
 
-    print(("{} {}.{} : {}".format(prefix, obj.__module__, obj.__class__.__name__, obj.__dict__)))
+    return "{} {}.{} : {}".format(prefix, obj.__module__, obj.__class__.__name__, obj.__dict__)
 
 
 def getTypedValue(data_type, value):
@@ -767,14 +768,6 @@ def bind_url(url):
         elif url.find('&', -1) == -1:  # like http://host/wms?foo=bar
             binder = '&'
     return '%s%s' % (url, binder)
-
-
-import logging
-# Null logging handler
-NullHandler = logging.NullHandler
-
-log = logging.getLogger('owslib')
-log.addHandler(NullHandler())
 
 
 def which_etree():
