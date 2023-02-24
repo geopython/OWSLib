@@ -4,9 +4,7 @@ from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection,
 from owslib.util import dump
 
 # instantiate WPS client
-# setting verbose=True will print out all HTTP request and responses to standard output
-verbose = False
-wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', verbose=verbose, skip_caps=True)
+wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', skip_caps=True)
 
 # 1) GetCapabilities
 # Submits an HTTP GET "GetCapabilities" request to the WPS service and parses the HTTP response.

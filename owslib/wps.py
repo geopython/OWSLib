@@ -113,7 +113,7 @@ from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
 from owslib.util import (testXMLValue, testXMLAttribute, build_get_url, clean_ows_url, dump, getTypedValue,
-                         getNamespace, element_to_string, nspath, openURL, nspath_eval, Authentication)
+                         getNamespace, element_to_string, nspath, openURL, nspath_eval, log, Authentication)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 from urllib.parse import urlparse
@@ -227,7 +227,7 @@ class WebProcessingService(object):
     Implements IWebProcessingService.
     """
 
-    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, verbose=False, skip_caps=False,
+    def __init__(self, url, version=WPS_DEFAULT_VERSION, username=None, password=None, skip_caps=False,
                  headers=None, verify=None, cert=None, timeout=None, auth=None, language=None):
         """
         Initialization method resets the object status.
@@ -242,7 +242,6 @@ class WebProcessingService(object):
         # fields passed in from object initializer
         self.url = clean_ows_url(url)
         self.version = version
-        self.verbose = verbose
         self.headers = headers
         self.timeout = timeout
         self.language = language
@@ -267,7 +266,6 @@ class WebProcessingService(object):
         # read capabilities document
         reader = WPSCapabilitiesReader(
             version=self.version,
-            verbose=self.verbose,
             auth=self.auth,
             language=self.language,
             timeout=self.timeout,
@@ -279,7 +277,7 @@ class WebProcessingService(object):
             self._capabilities = reader.readFromUrl(
                 self.url, headers=self.headers)
 
-        LOGGER.debug(element_to_string(self._capabilities))
+        log.debug(element_to_string(self._capabilities))
 
         # populate the capabilities metadata obects from the XML tree
         self._parseCapabilitiesMetadata(self._capabilities)
@@ -295,7 +293,6 @@ class WebProcessingService(object):
         # read capabilities document
         reader = WPSDescribeProcessReader(
             version=self.version,
-            verbose=self.verbose,
             auth=self.auth,
             language=self.language,
             timeout=self.timeout,
@@ -308,7 +305,7 @@ class WebProcessingService(object):
             rootElement = reader.readFromUrl(
                 self.url, identifier, headers=self.headers)
 
-        LOGGER.info(element_to_string(rootElement))
+        log.info(element_to_string(rootElement))
 
         # build metadata objects
         processes = self._parseProcessMetadata(rootElement)
@@ -342,11 +339,10 @@ class WebProcessingService(object):
         """
 
         # instantiate a WPSExecution object
-        LOGGER.info('Executing WPS request...')
+        log.info('Executing WPS request...')
         execution = WPSExecution(
             version=self.version,
             url=self.url,
-            verbose=self.verbose,
             headers=self.headers,
             timeout=self.timeout,
             auth=self.auth,
@@ -358,7 +354,7 @@ class WebProcessingService(object):
             requestElement = execution.buildRequest(identifier, inputs, output, mode=mode, lineage=lineage)
             request = etree.tostring(requestElement)
             execution.request = request
-        LOGGER.debug(request)
+        log.debug(request)
 
         # submit the request to the live server
         if response is None:
@@ -366,7 +362,7 @@ class WebProcessingService(object):
         else:
             response = etree.fromstring(response)
 
-        LOGGER.debug(etree.tostring(response))
+        log.debug(etree.tostring(response))
 
         # parse response
         execution.parseResponse(response)
@@ -386,7 +382,7 @@ class WebProcessingService(object):
         processDescriptionElements = rootElement.findall('ProcessDescription')
         processes = []
         for processDescriptionElement in processDescriptionElements:
-            process = Process(processDescriptionElement, verbose=self.verbose)
+            process = Process(processDescriptionElement)
 
             # override existing processes in object metadata, if existing already
             found = False
@@ -425,14 +421,12 @@ class WebProcessingService(object):
             if element.tag.endswith('ServiceIdentification'):
                 self.identification = ServiceIdentification(
                     element, namespace=ns)
-                if self.verbose is True:
-                    LOGGER.debug(self.identification)
+                LOGGER.debug(self.identification)
 
             # <ows:ServiceProvider> metadata
             elif element.tag.endswith('ServiceProvider'):
                 self.provider = ServiceProvider(element, namespace=ns)
-                if self.verbose is True:
-                    LOGGER.debug(self.provider)
+                LOGGER.debug(self.provider)
 
             # <ns0:OperationsMetadata xmlns:ns0="http://www.opengeospatial.net/ows">
             #   <ns0:Operation name="GetCapabilities">
@@ -448,8 +442,7 @@ class WebProcessingService(object):
                 for child in element.findall(nspath('Operation', ns=ns)):
                     self.operations.append(
                         OperationsMetadata(child, namespace=ns))
-                    if self.verbose is True:
-                        LOGGER.debug(self.operations[-1])
+                    LOGGER.debug(self.operations[-1])
 
             # <wps:ProcessOfferings>
             #   <wps:Process ns0:processVersion="1.0.0">
@@ -460,10 +453,9 @@ class WebProcessingService(object):
             # </wps:ProcessOfferings>
             elif element.tag.endswith('ProcessOfferings'):
                 for child in element.findall(nspath('Process', ns=ns)):
-                    p = Process(child, verbose=self.verbose)
+                    p = Process(child)
                     self.processes.append(p)
-                    if self.verbose is True:
-                        LOGGER.debug(self.processes[-1])
+                    LOGGER.debug(self.processes[-1])
 
             # <wps:Languages>
             #   <wps:Default>
@@ -477,8 +469,7 @@ class WebProcessingService(object):
             # </wps:Languages>
             elif element.tag.endswith('Languages'):
                 self.languages = Languages(element)
-                if self.verbose:
-                    LOGGER.debug(self.languages)
+                LOGGER.debug(self.languages)
 
 
 class WPSReader(object):
@@ -486,9 +477,8 @@ class WPSReader(object):
     Superclass for reading a WPS document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=30, auth=None, language=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, timeout=30, auth=None, language=None):
         self.version = version
-        self.verbose = verbose
         self.timeout = timeout
         self.auth = auth or Authentication()
         self.language = language
@@ -506,7 +496,7 @@ class WPSReader(object):
             if self.language:
                 data["language"] = self.language
             request_url = build_get_url(url, data, overwrite=True)
-            LOGGER.debug(request_url)
+            log.debug(request_url)
 
             # split URL into base url and query string to use utility function
             spliturl = request_url.split('?')
@@ -541,10 +531,10 @@ class WPSCapabilitiesReader(WPSReader):
     Utility class that reads and parses a WPS GetCapabilities document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None, language=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, timeout=None, auth=None, language=None):
         # superclass initializer
         super(WPSCapabilitiesReader, self).__init__(
-            version=version, verbose=verbose, timeout=timeout, auth=auth, language=language)
+            version=version, timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -567,10 +557,10 @@ class WPSDescribeProcessReader(WPSReader):
     Class that reads and parses a WPS DescribeProcess document into a etree infoset
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, verbose=False, timeout=None, auth=None, language=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, timeout=None, auth=None, language=None):
         # superclass initializer
         super(WPSDescribeProcessReader, self).__init__(
-            version=version, verbose=verbose, timeout=timeout, auth=auth, language=language)
+            version=version, timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, identifier, username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -594,9 +584,9 @@ class WPSExecuteReader(WPSReader):
     Class that reads and parses a WPS Execute response document into a etree infoset
     """
 
-    def __init__(self, verbose=False, timeout=None, auth=None, language=None):
+    def __init__(self, timeout=None, auth=None, language=None):
         # superclass initializer
-        super(WPSExecuteReader, self).__init__(verbose=verbose, timeout=timeout, auth=auth, language=language)
+        super(WPSExecuteReader, self).__init__(timeout=timeout, auth=auth, language=language)
 
     def readFromUrl(self, url, data={}, method='Get', username=None, password=None,
                     headers=None, verify=None, cert=None):
@@ -615,13 +605,12 @@ class WPSExecution(object):
     Class that represents a single WPS process executed on a remote WPS service.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None, verbose=False,
+    def __init__(self, version=WPS_DEFAULT_VERSION, url=None, username=None, password=None,
                  headers=None, verify=None, cert=None, timeout=None, auth=None, language=None):
 
         # initialize fields
         self.url = url
         self.version = version
-        self.verbose = verbose
         self.headers = headers
         self.auth = auth or Authentication()
         _fix_auth(self.auth, username, password, verify, cert)
@@ -668,7 +657,7 @@ class WPSExecution(object):
         if mode is SYNC:
             _async = False
         elif mode is AUTO:
-            LOGGER.warn("Auto mode not available in WPS 1.0.0. Using async mode.")
+            log.warn("Auto mode not available in WPS 1.0.0. Using async mode.")
             _async = True
         else:
             _async = True
@@ -714,7 +703,7 @@ class WPSExecution(object):
             #   </wps:Data>
             # </wps:Input>
             if is_literaldata(val):
-                LOGGER.debug("literaldata %s", key)
+                log.debug("literaldata %s", key)
                 dataElement = etree.SubElement(
                     inputElement, nspath_eval('wps:Data', namespaces))
                 literalDataElement = etree.SubElement(
@@ -739,7 +728,7 @@ class WPSExecution(object):
             #   </wps:Reference>
             # </wps:Input>
             elif is_complexdata(val):
-                LOGGER.debug("complexdata %s", key)
+                log.debug("complexdata %s", key)
                 inputElement.append(val.getXml())
             elif is_boundingboxdata(val):
                 inputElement.append(val.get_xml())
@@ -804,7 +793,6 @@ class WPSExecution(object):
         """
 
         reader = WPSExecuteReader(
-            verbose=self.verbose,
             auth=self.auth,
             language=self.language,
             timeout=self.timeout
@@ -813,13 +801,13 @@ class WPSExecution(object):
             # override status location
             if url is not None:
                 self.statusLocation = url
-            LOGGER.info('\nChecking execution status... (location=%s)' %
-                        self.statusLocation)
+            log.info('\nChecking execution status... (location=%s)' %
+                     self.statusLocation)
             try:
                 response = reader.readFromUrl(
                     self.statusLocation, headers=self.headers)
             except Exception:
-                LOGGER.error("Could not read status document.")
+                log.error("Could not read status document.")
         else:
             response = reader.readFromString(response)
 
@@ -827,16 +815,16 @@ class WPSExecution(object):
         try:
             xml = etree.tostring(response)
         except Exception:
-            LOGGER.error("Could not parse XML response.")
+            log.error("Could not parse XML response.")
         else:
             self.response = xml
-            LOGGER.debug(self.response)
+            log.debug(self.response)
 
             self.parseResponse(response)
 
             # sleep given number of seconds
             if self.isComplete() is False:
-                LOGGER.info('Sleeping %d seconds...' % sleepSecs)
+                log.info('Sleeping %d seconds...' % sleepSecs)
                 sleep(sleepSecs)
 
     def getStatus(self):
@@ -914,7 +902,7 @@ class WPSExecution(object):
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
-                LOGGER.info(f'Output written to file: {filepath}')
+                log.info(f'Output written to file: {filepath}')
         else:
             raise Exception(
                 f"Execution not successfully completed: status={self.status}")
@@ -929,7 +917,6 @@ class WPSExecution(object):
 
         self.request = request
         reader = WPSExecuteReader(
-            verbose=self.verbose,
             auth=self.auth,
             language=self.language,
             timeout=self.timeout,
@@ -966,14 +953,14 @@ class WPSExecution(object):
             self._parseExceptionReport(response)
 
         else:
-            LOGGER.debug('Unknown Response')
+            log.debug('Unknown Response')
 
         # log status, errors
-        LOGGER.info('Execution status=%s' % self.status)
-        LOGGER.info('Percent completed=%s' % self.percentCompleted)
-        LOGGER.info('Status message=%s' % self.statusMessage)
+        log.info('Execution status=%s' % self.status)
+        log.info('Percent completed=%s' % self.percentCompleted)
+        log.info('Status message=%s' % self.statusMessage)
         for error in self.errors:
-            LOGGER.debug(error)
+            dump(error)
 
     def _parseExceptionReport(self, root):
         """
@@ -1032,28 +1019,26 @@ class WPSExecution(object):
                 self._parseExceptionReport(element)
 
         self.process = Process(
-            root.find(nspath('Process', ns=wpsns)), verbose=self.verbose)
+            root.find(nspath('Process', ns=wpsns)))
 
         # <wps:DataInputs xmlns:wps="http://www.opengis.net/wps/1.0.0"
         # xmlns:ows="http://www.opengis.net/ows/1.1"
         # xmlns:xlink="http://www.w3.org/1999/xlink">
         if len(self.dataInputs) > 0:
-            LOGGER.debug('clean data inputs')
+            log.debug('clean data inputs')
             self.dataInputs[:] = []
         for inputElement in root.findall(nspath('DataInputs/Input', ns=wpsns)):
             self.dataInputs.append(Output(inputElement))
-            if self.verbose is True:
-                LOGGER.debug(self.dataInputs[-1])
+            LOGGER.debug(self.dataInputs[-1])
 
         # <ns:ProcessOutputs>
         # xmlns:ns="http://www.opengis.net/wps/1.0.0"
         if len(self.processOutputs) > 0:
-            LOGGER.debug('clean process outputs')
+            log.debug('clean process outputs')
             self.processOutputs[:] = []
         for outputElement in root.findall(nspath('ProcessOutputs/Output', ns=wpsns)):
             self.processOutputs.append(Output(outputElement))
-            if self.verbose is True:
-                LOGGER.debug(self.processOutputs[-1])
+            LOGGER.debug(self.processOutputs[-1])
 
 
 class ComplexData(object):
@@ -1453,7 +1438,7 @@ class Output(InputOutput):
 
         # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'  # noqa
         # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
-        LOGGER.info('Output URL=%s' % url)
+        log.info('Output URL=%s' % url)
 
         # Extract output filepath from base URL
         self.fileName = url.split('/')[-1]
@@ -1507,7 +1492,7 @@ class Output(InputOutput):
             out = open(self.filePath, 'wb')
             out.write(content)
             out.close()
-            LOGGER.info('Output written to file: %s' % self.filePath)
+            log.info('Output written to file: %s' % self.filePath)
 
 
 class WPSException:
@@ -1547,7 +1532,7 @@ class Process(object):
     """
     Class that represents a WPS process.
     """
-    def __init__(self, elem, verbose=False):
+    def __init__(self, elem):
         """ Initialization method extracts all available metadata from an XML document (passed in as etree object) """
 
         # <ns0:ProcessDescriptions service="WPS" version="1.0.0"
@@ -1556,7 +1541,6 @@ class Process(object):
         # OR:
         # <ns0:Process ns0:processVersion="1.0.0">
         self._root = elem
-        self.verbose = verbose
 
         # when process is instantiated from GetCapabilities, elem is 'wps:Process'          => wpsns='wps'
         # when process is instantiated from DescribeProcess, elem is 'ProcessDescription'   => wpsns=''
@@ -1621,22 +1605,19 @@ class Process(object):
             elif child.tag.endswith('Metadata'):
                 self.metadata.append(Metadata(child))
 
-        if self.verbose is True:
-            LOGGER.debug(self)
+        LOGGER.debug(self)
 
         # <DataInputs>
         self.dataInputs = []
         for inputElement in elem.findall('DataInputs/Input'):
             self.dataInputs.append(Input(inputElement))
-            if self.verbose is True:
-                LOGGER.debug(self.dataInputs[-1], prefix='\tInput: ')
+            LOGGER.debug(self.dataInputs[-1], prefix='\tInput: ')
 
         # <ProcessOutputs>
         self.processOutputs = []
         for outputElement in elem.findall('ProcessOutputs/Output'):
             self.processOutputs.append(Output(outputElement))
-            if self.verbose is True:
-                LOGGER.debug(self.processOutputs[-1], prefix='\tOutput: ')
+            LOGGER.debug(self.processOutputs[-1], prefix='\tOutput: ')
 
     def __str__(self):
         return "WPS Process: {}, title={}".format(self.identifier or '', self.title or '')
@@ -1941,7 +1922,7 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     '''
     while execution.isComplete() is False:
         execution.checkStatus(sleepSecs=sleepSecs)
-        LOGGER.info('Execution status: %s' % execution.status)
+        log.info('Execution status: %s' % execution.status)
 
     if execution.isSucceeded():
         if download:
@@ -1949,11 +1930,11 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
         else:
             for output in execution.processOutputs:
                 if output.reference is not None:
-                    LOGGER.info('Output URL=%s' % output.reference)
+                    log.info('Output URL=%s' % output.reference)
     else:
         for ex in execution.errors:
-            LOGGER.error('Error: code=%s, locator=%s, text=%s' %
-                         (ex.code, ex.locator, ex.text))
+            log.error('Error: code=%s, locator=%s, text=%s' %
+                      (ex.code, ex.locator, ex.text))
 
 
 def printValue(value):

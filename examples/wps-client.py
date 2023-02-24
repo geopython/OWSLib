@@ -21,7 +21,6 @@ Common Parameters for all request types
 
     -u, --url=[URL] the base URL of the WPS - required
     -r, --request=[REQUEST] the request type (GetCapabilities, DescribeProcess, Execute) - required 
-    -v, --verbose set flag for verbose output - optional (defaults to False)    
 
 Request Specific Parameters
 ---------------------------
@@ -34,19 +33,19 @@ Request Specific Parameters
 Examples
 --------
 python wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities
-python wps-client.py --verbose --url=http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request=GetCapabilities
+python wps-client.py --url=http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request=GetCapabilities
 python wps-client.py -u http://ceda-wps2.badc.rl.ac.uk/wps -r GetCapabilities
 python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r GetCapabilities
 python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r GetCapabilities
 
 python wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r DescribeProcess -i gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
-python wps-client.py --verbose --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request DescribeProcess --identifier gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
+python wps-client.py --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request DescribeProcess --identifier gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
 python wps-client.py -u http://ceda-wps2.badc.rl.ac.uk/wps -r DescribeProcess -i DoubleIt
 python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r DescribeProcess -i reprojectCoords
 python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r DescribeProcess -i v.mkgrid
 
 python wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r Execute -x ../tests/wps_USGSExecuteRequest1.xml
-python wps-client.py --verbose --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request Execute --xml ../tests/wps_USGSExecuteRequest1.xml
+python wps-client.py --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request Execute --xml ../tests/wps_USGSExecuteRequest1.xml
 python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest4.xml 
 python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest5.xml 
 python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r Execute -x ../tests/wps_PMLExecuteRequest6.xml 
@@ -61,7 +60,7 @@ if len(sys.argv) == 1:
 print('ARGV      :', sys.argv[1:])
     
 try:
-    options, remainder = getopt.getopt(sys.argv[1:], 'u:r:x:i:v', ['url=', 'request=', 'xml=', 'identifier=', 'verbose'])
+    options, remainder = getopt.getopt(sys.argv[1:], 'u:r:x:i:v', ['url=', 'request=', 'xml=', 'identifier='])
 except getopt.GetoptError as err:
     print(str(err))
     usage()
@@ -73,7 +72,6 @@ url = None
 request = None
 identifier = None
 xml = None
-verbose = False
 
 for opt, arg in options:
     if opt in ('-u', '--url'):
@@ -84,8 +82,6 @@ for opt, arg in options:
         xml = open(arg, 'rb').read()
     elif opt in ('-i', '--identifier'):
         identifier = arg
-    elif opt in ('-v', '--verbose'):
-        verbose = True
     else:
         assert False, 'Unhandled option'
    
@@ -95,7 +91,7 @@ if request is None or url is None:
     sys.exit(3)
         
 # instantiate client
-wps = WebProcessingService(url, verbose=verbose, skip_caps=True)
+wps = WebProcessingService(url, skip_caps=True)
 
 if request == 'GetCapabilities':
     wps.getcapabilities()

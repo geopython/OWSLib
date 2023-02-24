@@ -3,8 +3,7 @@
 from owslib.wps import WebProcessingService, WPSExecution, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution, ComplexData, printInputOutput
 from owslib.util import dump
 
-verbose = True
-wps = WebProcessingService('http://ceda-wps2.badc.rl.ac.uk/wps', verbose=verbose)
+wps = WebProcessingService('http://ceda-wps2.badc.rl.ac.uk/wps')
 
 # 1) GetCapabilities
 # GET request: http://ceda-wps2.badc.rl.ac.uk/wps?Service=WPS&Request=GetCapabilities&Format=text/xml
