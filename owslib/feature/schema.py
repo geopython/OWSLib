@@ -13,7 +13,7 @@ import sys
 from urllib.parse import urlencode, parse_qsl
 from owslib.etree import etree
 from owslib.namespaces import Namespaces
-from owslib.util import which_etree, findall, Authentication, openURL
+from owslib.util import findall, Authentication, openURL
 
 MYNS = Namespaces()
 XS_NAMESPACE = MYNS.get_namespace("xs")

@@ -226,11 +226,6 @@ class CatalogueServiceWeb(object):
         else:
             # construct request
             node0 = self._setrootelement('csw:GetRecords')
-            if etree.__name__ != 'lxml.etree':  # apply nsmap manually
-                node0.set('xmlns:ows', namespaces['ows'])
-                node0.set('xmlns:gmd', namespaces['gmd'])
-                node0.set('xmlns:dif', namespaces['dif'])
-                node0.set('xmlns:fgdc', namespaces['fgdc'])
             node0.set('outputSchema', outputschema)
             node0.set('outputFormat', format)
             node0.set('version', self.version)
@@ -354,11 +349,6 @@ class CatalogueServiceWeb(object):
         else:
             # construct request
             node0 = self._setrootelement('csw:GetRecords')
-            if etree.__name__ != 'lxml.etree':  # apply nsmap manually
-                node0.set('xmlns:ows', namespaces['ows'])
-                node0.set('xmlns:gmd', namespaces['gmd'])
-                node0.set('xmlns:dif', namespaces['dif'])
-                node0.set('xmlns:fgdc', namespaces['fgdc'])
             node0.set('outputSchema', outputschema)
             node0.set('outputFormat', format)
             node0.set('version', self.version)
@@ -622,10 +612,7 @@ class CatalogueServiceWeb(object):
             return el
 
     def _setrootelement(self, el):
-        if etree.__name__ == 'lxml.etree':  # apply nsmap
-            return etree.Element(util.nspath_eval(el, namespaces), nsmap=namespaces)
-        else:
-            return etree.Element(util.nspath_eval(el, namespaces))
+        return etree.Element(util.nspath_eval(el, namespaces), nsmap=namespaces)
 
     def _setconstraint(self, parent, qtype=None, propertyname='csw:AnyText', keywords=[], bbox=None, cql=None,
                        identifier=None):
