@@ -39,6 +39,8 @@ See http://geopython.github.io/OWSLib/#installation
 Usage
 -----
 
+.. highlight:: python
+
 Find out what a WMS has to offer. Service metadata::
 
     >>> from owslib.wms import WebMapService
