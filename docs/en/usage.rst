@@ -653,3 +653,13 @@ additionally, possibility to construct OWS Context documents from scratch, and t
   >>> myContext.resources.append(myEntry)
   >>> myContext.to_json()
   >>> myContext.to_atomxml()
+
+OpenSearch
+----------
+
+.. code-block:: python
+
+  >>> from owslib.opensearch import OpenSearch
+  >>> url = 'https://example.org/opensearch'
+  >>> o = OpenSearch(url)
+  >>> results = o.search('application/json', productType='SLC')  # dict of results
