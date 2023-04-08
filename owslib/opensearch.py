@@ -82,6 +82,12 @@ class OpenSearch(object):
         Invoke an OpenSearch search
 
         :param type_: media type of search
+        :param kwargs: `dict` of key value pairs. When an OpenSearch
+                       description document has URL Parameters, kwargs keys must
+                       match accordingly.  When no OpenSearch URL Parameters
+                       are defined, To pass kwargs keys which are OpenSearch
+                       parameters such as `geo:time` or `eo:orbitNumber`, pass
+                       the keys as `geo_time` or `eo_orbitNumber`.
 
         :returns: dict of response
         """
