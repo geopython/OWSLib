@@ -644,7 +644,9 @@ class ContentMetadata(AbstractContentMetadata):
                 if k != 'name':
                     dim_data[k] = v
             # single values and ranges are not differentiated here
-            dim_data['values'] = dim.text.strip().split(',') if dim.text.strip() else None
+            dim_data['values'] = None
+            if dim.text:
+                dim_data['values'] = dim.text.strip().split(',') if dim.text.strip() else None
             self.dimensions[dim_name] = dim_data
 
         # MetadataURLs
