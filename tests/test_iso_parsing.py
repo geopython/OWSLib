@@ -102,9 +102,9 @@ def test_md_parsing_dov():
     assert md.referencesystem.code == '31370'
     assert md.referencesystem.codeSpace == 'EPSG'
 
-    assert_list(md.identificationinfo, 1)
+    assert_list(md.identification, 1)
 
-    iden = md.identificationinfo[0]
+    iden = md.identification[0]
     assert iden.title == 'Grondwatermeetnetten'
     assert iden.alternatetitle == 'Grondwatermeetnetten beschikbaar op DOV'
 
@@ -360,9 +360,9 @@ def test_md_parsing_geobretagne():
     assert md.referencesystem.code == 'RGF93 / CC48 (EPSG:3948)'
     assert md.referencesystem.codeSpace == 'EPSG'
 
-    assert_list(md.identificationinfo, 1)
+    assert_list(md.identification, 1)
 
-    iden = md.identificationinfo[0]
+    iden = md.identification[0]
     assert iden.title == 'Cadastre 2018 en Bretagne'
     assert iden.alternatetitle is None
 
@@ -519,7 +519,7 @@ def test_md_parsing_19115_2():
 
     assert md.identifier == '3f342f64-9348-11df-ba6a-0014c2c00eab'
 
-    iden = md.identificationinfo[0]
+    iden = md.identification[0]
 
     assert len(iden.keywords) == 3
     assert iden.keywords[1].thesaurus['title'] == 'My Vocabulary'
@@ -559,7 +559,7 @@ def test_md_parsing_keywords_anchor():
     assert type(md) is MD_Metadata
     assert md.identifier == 'ie.marine.data:dataset.1135'
     
-    iden = md.identificationinfo[0]
+    iden = md.identification[0]
     assert len(iden.keywords) == 1
     assert len(iden.keywords[0].keywords) == 6
     assert type(iden.keywords[0].keywords[0]) is Keyword
@@ -581,7 +581,7 @@ def test_md_parsing_keywords_no_anchor():
     md = MD_Metadata(md_resource)
     assert type(md) is MD_Metadata
     
-    iden = md.identificationinfo[0]
+    iden = md.identification[0]
     assert len(iden.keywords) == 6
     assert len(iden.keywords[0].keywords) == 1
     assert type(iden.keywords[0].keywords[0]) is Keyword
