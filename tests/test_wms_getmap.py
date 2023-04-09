@@ -122,6 +122,28 @@ def test_getmap_130_national_map():
     assert "height=300" in wms.request
     assert "format=image%2Fpng" in wms.request
     assert "transparent=TRUE" in wms.request
+    assert "bgcolor=0x#FFFFFF" in wms.request
+
+
+@pytest.mark.online
+@pytest.mark.skip(reason="this is a flaky test")
+# @pytest.mark.skipif(not service_ok(SERVICE_URL_NATIONAL_MAP),
+#                    reason="WMS service is unreachable")
+def test_getmap_130_national_map_no_bgcolor():
+    """National Map"""
+    url = SERVICE_URL_NATIONAL_MAP
+    wms = WebMapService(url, version='1.3.0')
+    rsp = wms.getmap(
+        layers=['3'],
+        styles=['default'],
+        srs='CRS:84',
+        bbox=(-176.646, 17.7016, -64.8017, 71.2854),
+        size=(500, 300),
+        format='image/png',
+        transparent=True,
+        bgcolor=None)
+    assert type(rsp) is ResponseWrapper
+    assert "bgcolor" not in wms.request
 
 
 @pytest.mark.online
@@ -153,6 +175,7 @@ def test_ncwms2():
     assert "height=256" in wms.request
     assert "format=image%2Fpng" in wms.request
     assert "transparent=TRUE" in wms.request
+    assert "bgcolor=0x#FFFFFF" in wms.request
 
 
 @pytest.mark.parametrize('wms_version', ['1.1.1', '1.3.0'])

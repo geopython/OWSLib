@@ -175,8 +175,10 @@ class WebMapService_1_1_1(object):
         request['bbox'] = ','.join([repr(x) for x in bbox])
         request['format'] = str(format)
         request['transparent'] = str(transparent).upper()
-        request['bgcolor'] = '0x' + bgcolor[1:7]
         request['exceptions'] = str(exceptions)
+
+        if bgcolor:
+            request['bgcolor'] = '0x' + bgcolor[1:7]
 
         if time is not None:
             request['time'] = str(time)
