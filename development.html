@@ -4,9 +4,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-
-    <title>Development &#8212; OWSLib 0.28.1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Development &#8212; OWSLib 0.29.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -15,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
@@ -53,7 +53,7 @@
         <li class="right" >
           <a href="notebooks/examples/wms.html" title="Interact with a WMS¶"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.28.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.29.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Development</a></li> 
       </ul>
     </div>
@@ -64,30 +64,30 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="development">
+  <div class="section" id="development">
 <h1>Development<a class="headerlink" href="#development" title="Permalink to this heading">¶</a></h1>
 <p>The OWSLib wiki is located at <a class="reference external" href="https://github.com/geopython/OWSLib/wiki">https://github.com/geopython/OWSLib/wiki</a></p>
 <p>The OWSLib source code is available at <a class="reference external" href="https://github.com/geopython/OWSLib">https://github.com/geopython/OWSLib</a></p>
 <p>You can find out about software metrics at the OWSLib OpenHub page at <a class="reference external" href="https://www.openhub.net/p/OWSLib">https://www.openhub.net/p/OWSLib</a>.</p>
-<section id="testing">
+<div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py <span class="nb">test</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span><span class="nb">test</span>
 </pre></div>
 </div>
 <p>Or …</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># install requirements</span>
-pip install -r requirements.txt
-pip install -r requirements-dev.txt <span class="c1"># needed for tests only</span>
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements-dev.txt<span class="w"> </span><span class="c1"># needed for tests only</span>
 
 <span class="c1"># run tests</span>
-python -m pytest
+python<span class="w"> </span>-m<span class="w"> </span>pytest
 
 <span class="c1"># additional pep8 tests</span>
-pep8 owslib/wmts.py
+pep8<span class="w"> </span>owslib/wmts.py
 </pre></div>
 </div>
-</section>
-</section>
+</div>
+</div>
 
 
             <div class="clearer"></div>
@@ -149,14 +149,14 @@ pep8 owslib/wmts.py
         <li class="right" >
           <a href="notebooks/examples/wms.html" title="Interact with a WMS¶"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.28.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OWSLib 0.29.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Development</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2010, Tom Kralidis.
-      Last updated on 2023-02-24T18:42:15Z.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+      Last updated on 2023-04-09T09:21:33Z.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
