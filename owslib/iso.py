@@ -50,8 +50,7 @@ class MD_Metadata(object):
             self.locales = []
             self.referencesystem = None
             self.contentinfo = None
-            self.serviceidentification = None
-            self.identificationinfo = []
+            self.identification = []
             self.contentinfo = []
             self.distribution = None
             self.dataquality = None
@@ -115,18 +114,18 @@ class MD_Metadata(object):
             else:
                 self.referencesystem = None
 
-            self.identificationinfo = []
+            self.identification = []
 
             for idinfo in md.findall(util.nspath_eval('gmd:identificationInfo', namespaces)):
                 if len(idinfo) > 0:
                     val = list(idinfo)[0]
                     tagval = util.xmltag_split(val.tag)
                     if tagval == 'MD_DataIdentification':
-                        self.identificationinfo.append(MD_DataIdentification(val, 'dataset'))
+                        self.identification.append(MD_DataIdentification(val, 'dataset'))
                     elif tagval == 'MD_ServiceIdentification':
-                        self.identificationinfo.append(MD_DataIdentification(val, 'service'))
+                        self.identification.append(MD_DataIdentification(val, 'service'))
                     elif tagval == 'SV_ServiceIdentification':
-                        self.identificationinfo.append(SV_ServiceIdentification(val))
+                        self.identification.append(SV_ServiceIdentification(val))
 
             self.contentinfo = []
             for contentinfo in md.findall(
@@ -160,7 +159,7 @@ class MD_Metadata(object):
 
         contacts = []
 
-        for ii in self.identificationinfo:
+        for ii in self.identification:
             for iic in ii.contact:
                 contacts.append(iic)
 
