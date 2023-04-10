@@ -13,28 +13,31 @@ PyPI:
 
 .. code-block:: bash
 
-  easy_install OWSLib
-  # pip works too
-  pip install OWSLib
+  pip3 install OWSLib
 
 Git:
 
 .. code-block:: bash
 
-  git clone git://github.com/geopython/OWSLib.git
+  git clone https://github.com/geopython/OWSLib.git
 
+UbuntuGIS (`stable`_, `unstable`_):
+
+.. code-block:: bash
+
+  apt-get install python3-owslib
 
 Anaconda:
 
 .. note::
 
-   The OWSLib conda packages are provided by the community, not OSGEO, and therefore there may be
+   The OWSLib conda packages are provided by the community, not OSGeo, and therefore there may be
    multiple packages available.  To search all conda channels: http://anaconda.org/search?q=type%3Aconda+owslib
    However usually conda-forge will be the most up-to-date.
 
 .. code-block:: bash
 
-  conda install -c conda-forge owslib
+ git conda install -c conda-forge owslib
 
 openSUSE:
 
@@ -67,3 +70,6 @@ Fedora:
 .. code-block:: bash
 
   yum install OWSLib
+
+.. _`stable`: https://launchpad.net/%7Eubuntugis/+archive/ubuntu/ppa/+sourcepub/10758317/+listing-archive-extra
+.. _`unstable`: https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable/+sourcepub/10933910/+listing-archive-extra
