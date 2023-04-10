@@ -54,7 +54,7 @@ copyright = '2006-2023, ' + author + ' ' + license
 #
 # The full version, including alpha/beta/rc tags.
 
-file_ = 'owslib/__init__.py'
+file_ = '../owslib/__init__.py'
 filepath = os.path.join(os.path.abspath('..'), file_)
 
 with open(filepath) as fh:
