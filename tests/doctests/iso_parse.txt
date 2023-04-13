@@ -3,7 +3,7 @@ Imports
 
     >>> from tests.utils import resource_file
     >>> from owslib.etree import etree
-	>>> from owslib.iso import MD_Metadata
+    >>> from owslib.iso import MD_Metadata
 
 Print testing some metadata elements
 
@@ -15,14 +15,14 @@ Print testing some metadata elements
     >>> x.identification[1].title
     'Parameter-elevation Regressions on Independent Slopes Model Monthly Climate Data for the Continental United States. February 2013 Snapshot'
 
-	>>> x.identification[1].abstract[0:40]
-	'This dataset was created using the PRISM'
-	
-	>>> x.identification[1].contact.name
-	'Christopher Daley'
-	
-	>>> x.identification[1].contact.email
-	'daley@nacse.org'
+    >>> x.identification[1].abstract[0:40]
+    'This dataset was created using the PRISM'
 
-	>>> x.identification[1].operations[0]['connectpoint'][0].url
-	'http://cida.usgs.gov/thredds/dodsC/prism'
+    >>> x.contact[0].name
+    'Christopher Daley'
+
+    >>> x.contact[0].email
+    'daley@nacse.org'
+
+    >>> x.identification[1].operations[0]['connectpoint'][0].url
+    'http://cida.usgs.gov/thredds/dodsC/prism'

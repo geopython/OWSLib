@@ -747,35 +747,20 @@ class DQ_DataQuality(object):
                     self.specificationdate.append(val)
 
 
-class SV_ServiceIdentification(object):
+class SV_ServiceIdentification(MD_DataIdentification):
     """ process SV_ServiceIdentification """
     def __init__(self, md=None):
+
+        super().__init__(md, 'service')
+
         if md is None:
-            self.title = None
-            self.abstract = None
-            self.contact = None
-            self.identtype = 'service'
             self.type = None
             self.version = None
             self.fees = None
-            self.bbox = None
             self.couplingtype = None
             self.operations = []
             self.operateson = []
         else:
-            val = md.find(util.nspath_eval('gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', namespaces))
-            self.title = util.testXMLValue(val)
-
-            val = md.find(util.nspath_eval('gmd:abstract/gco:CharacterString', namespaces))
-            self.abstract = util.testXMLValue(val)
-
-            self.contact = None
-            val = md.find(util.nspath_eval(
-                'gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty', namespaces))
-            if val is not None:
-                self.contact = CI_ResponsibleParty(val)
-
-            self.identtype = 'service'
             val = md.find(util.nspath_eval('srv:serviceType/gco:LocalName', namespaces))
             self.type = util.testXMLValue(val)
 
@@ -785,13 +770,6 @@ class SV_ServiceIdentification(object):
             val = md.find(util.nspath_eval(
                 'srv:accessProperties/gmd:MD_StandardOrderProcess/gmd:fees/gco:CharacterString', namespaces))
             self.fees = util.testXMLValue(val)
-
-            val = md.find(util.nspath_eval('srv:extent/gmd:EX_Extent', namespaces))
-
-            if val is not None:
-                self.bbox = EX_Extent(val)
-            else:
-                self.bbox = None
 
             self.couplingtype = _testCodeListValue(md.find(util.nspath_eval(
                 'gmd:couplingType/gmd:SV_CouplingType', namespaces)))
