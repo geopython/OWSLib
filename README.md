@@ -157,6 +157,7 @@ Releasing
   make html
   ./publish.sh
   # update on PyPI (must be a maintainer)
+  rm -fr build dist *.egg-info
   python setup.py sdist bdist_wheel --universal
   twine upload dist/*
 
