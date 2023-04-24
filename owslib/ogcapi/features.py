@@ -107,6 +107,15 @@ class Features(Collections):
         """
 
         path = f'collections/{collection_id}/items'
+
+        if isinstance(data, dict):  # JSON
+            LOGGER.debug('Detected JSON payload')
+            self.headers['Content-Type'] = 'application/geo+json'
+        elif data.startswith('<'):  # XML
+            data = data.strip()
+            LOGGER.debug('Detected XML payload')
+            self.headers['Content-Type'] = 'application/xml'
+
         _ = self._request(method='POST', path=path, data=data)
 
         return True
