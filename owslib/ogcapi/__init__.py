@@ -174,7 +174,8 @@ class API:
             response = http_get(url, headers=self.headers, auth=self.auth,
                                 params=kwargs)
         elif method == 'POST':
-            response = http_post(url, request=data, auth=self.auth)
+            response = http_post(url, headers=self.headers, request=data,
+                                 auth=self.auth)
         elif method == 'PUT':
             response = http_put(url, data=data, auth=self.auth)
         elif method == 'DELETE':
