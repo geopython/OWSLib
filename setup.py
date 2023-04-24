@@ -86,7 +86,7 @@ setup(
     author_email='sean.gillies@gmail.com',
     maintainer='Tom Kralidis',
     maintainer_email='tomkralidis@gmail.com',
-    url='https://geopython.github.io/OWSLib',
+    url='https://owslib.readthedocs.io',
     install_requires=reqs,
     python_requires='>=3.6',
     cmdclass={'test': PyTest},
