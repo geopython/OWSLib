@@ -404,7 +404,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     u = urlsplit(url)
 
     headers_ = {
-        'User-Agent': 'OWSLib (https://geopython.github.io/OWSLib)',
+        'User-Agent': 'OWSLib (https://owslib.readthedocs.io',
         'Content-type': 'text/xml',
         'Accept': 'text/xml,application/xml',
         'Accept-Language': lang,

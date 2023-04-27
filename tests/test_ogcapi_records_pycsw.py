@@ -23,7 +23,7 @@ def test_ogcapi_records_pycsw():
     assert paths['/collections/{collectionId}'] is not None
 
     conformance = w.conformance()
-    assert len(conformance['conformsTo']) == 13
+    assert len(conformance['conformsTo']) == 18
 
     collections = w.collections()
     assert len(collections) > 0

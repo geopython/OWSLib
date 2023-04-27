@@ -26,6 +26,7 @@ jobs:
         pip3 install -e .
         pip3 install -r requirements.txt
         pip3 install -r requirements-dev.txt
+        pip3 install -r docs/requirements.txt
     - name: run tests ⚙️
       run: python3 -m pytest
     - name: run coveralls ⚙️

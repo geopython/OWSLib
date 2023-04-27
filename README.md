@@ -1,56 +1,69 @@
-OWSLib
-======
+# OWSLib
 
-.. image:: https://github.com/geopython/OWSLib/workflows/build%20%E2%9A%99%EF%B8%8F/badge.svg
-   :target: https://github.com/geopython/OWSLib/actions
-   :alt: Build Status
+[![Build](https://github.com/geopython/OWSLib/workflows/main.yml/badge.svg)](https://github.com/geopython/OWSLib/actions)
+[![License](https://img.shields.io/github/license/geopython/OWSLib.svg)](https://github.com/geopython/OWSLib/blob/master/LICENSE)
+[![Chat](https://badges.gitter.im/geopython/OWSLib.svg)](https://app.gitter.im/#/room/#geopython_owslib:gitter.im)
 
-.. image:: https://api.codacy.com/project/badge/Grade/09f15588c99943e3976cdf20b7b32c8d
-   :target: https://www.codacy.com/project/cehbrecht/OWSLib/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=geopython/OWSLib&amp;utm_campaign=Badge_Grade_Dashboard
-   :alt: Codacy Check
-
-.. image:: https://img.shields.io/github/license/geopython/OWSLib.svg
-    :target: https://github.com/geopython/OWSLib/blob/master/LICENSE
-    :alt: GitHub license
-
-.. image:: https://badges.gitter.im/geopython/OWSLib.svg
-    :target: https://gitter.im/geopython/OWSLib?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-    :alt: Join the chat at https://gitter.im/geopython/OWSLib
+## Overview
 
 OWSLib is a Python package for client programming with Open Geospatial
 Consortium (OGC) web service (hence OWS) interface standards, and their
 related content models.
 
-Full documentation is available at http://geopython.github.io/OWSLib
+Full documentation is available at https://owslib.readthedocs.io
 
 OWSLib provides a common API for accessing service metadata and wrappers for
 numerous OGC Web Service interfaces.
 
-Dependencies
-------------
+## Installation
 
-OWSLib requires elementtree (standard in 2.5 as xml.etree) or lxml.
+The easiest way to install pywis-pubsub is via the Python [pip](https://pip.pypa.io)
+utility:
 
-Installation
-------------
+```bash
+pip3 install pywis-pubsub
+```
 
-See http://geopython.github.io/OWSLib/#installation
+## Requirements
 
-Usage
------
+- Python 3
+- [virtualenv](https://virtualenv.pypa.io)
 
-Find out what a WMS has to offer. Service metadata::
+### Dependencies
 
-    >>> from owslib.wms import WebMapService
-    >>> wms = WebMapService('http://wms.jpl.nasa.gov/wms.cgi', version='1.1.1')
-    >>> wms.identification.type
-    'OGC:WMS'
-    >>> wms.identification.version
-    '1.1.1'
-    >>> wms.identification.title
-    'JPL Global Imagery Service'
-    >>> wms.identification.abstract
-    'WMS Server maintained by JPL, worldwide satellite imagery.'
+Dependencies are listed in [requirements.txt](requirements.txt). Dependencies
+are automatically installed during OWSLib installation.
+
+### Installing OWSLib
+
+```bash
+# setup virtualenv
+python3 -m venv owslib
+cd owslib
+source bin/activate
+
+# clone codebase and install
+git clone https://github.com/geopython/OWSLib.git
+cd OWSLib
+python3 setup.py install
+```
+
+## Running
+
+Find out what a WMS has to offer. Service metadata:
+
+```python
+
+>>> from owslib.wms import WebMapService
+>>> wms = WebMapService('http://wms.jpl.nasa.gov/wms.cgi', version='1.1.1')
+>>> wms.identification.type
+'OGC:WMS'
+>>> wms.identification.version
+'1.1.1'
+>>> wms.identification.title
+'JPL Global Imagery Service'
+>>> wms.identification.abstract
+'WMS Server maintained by JPL, worldwide satellite imagery.'
 
 Available layers::
 
@@ -132,9 +145,8 @@ Releasing
 .. code-block:: bash
 
   # update version
-  vi VERSION.txt
   vi owslib/__init__.py
-  git commit -m 'update release version' VERSION.txt owslib/__init__.py
+  git commit -m 'update release version' owslib/__init__.py
   # push changes
   git push origin master
   git tag -a x.y.z -m 'tagging OWSLib release x.y.z'
@@ -145,11 +157,12 @@ Releasing
   make html
   ./publish.sh
   # update on PyPI (must be a maintainer)
+  rm -fr build dist *.egg-info
   python setup.py sdist bdist_wheel --universal
   twine upload dist/*
 
 Support
 -------
 
-http://lists.osgeo.org/mailman/listinfo/owslib-users
-http://lists.osgeo.org/mailman/listinfo/owslib-devel
+https://lists.osgeo.org/mailman/listinfo/owslib-users
+https://lists.osgeo.org/mailman/listinfo/owslib-devel

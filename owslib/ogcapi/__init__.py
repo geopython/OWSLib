@@ -21,7 +21,7 @@ from owslib.util import (Authentication, http_delete, http_get, http_post,
 LOGGER = logging.getLogger(__name__)
 
 REQUEST_HEADERS = {
-    'User-Agent': f'OWSLib {__version__} (https://geopython.github.io/OWSLib)'
+    'User-Agent': f'OWSLib {__version__} (https://owslib.readthedocs.io)'
 }
 
 

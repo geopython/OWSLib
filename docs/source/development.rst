@@ -12,18 +12,18 @@ Testing
 
 .. code-block:: bash
 
-   python setup.py test
+   python3 setup.py test
 
 Or ...
 
 .. code-block:: bash
 
     # install requirements
-    pip install -r requirements.txt
-    pip install -r requirements-dev.txt # needed for tests only
+    pip3 install -r requirements.txt
+    pip3 install -r requirements-dev.txt # needed for tests only
 
     # run tests
-    python -m pytest
+    python3 -m pytest
 
-    # additional pep8 tests
-    pep8 owslib/wmts.py
+    # linting
+    flake8 owslib/wmts.py
