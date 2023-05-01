@@ -153,25 +153,24 @@ class WebCoverageService_2_0_0(WCSBase):
 
 
         """
-        if log.isEnabledFor(logging.DEBUG):
-            log.debug(
-                "WCS 2.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s"  # noqa
-                % (
-                    identifier,
-                    bbox,
-                    time,
-                    format,
-                    crs,
-                    width,
-                    height,
-                    resx,
-                    resy,
-                    resz,
-                    parameter,
-                    method,
-                    str(kwargs),
-                )
+        log.debug(
+            "WCS 2.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s"  # noqa
+            % (
+                identifier,
+                bbox,
+                time,
+                format,
+                crs,
+                width,
+                height,
+                resx,
+                resy,
+                resz,
+                parameter,
+                method,
+                str(kwargs),
             )
+        )
 
         try:
             base_url = next(

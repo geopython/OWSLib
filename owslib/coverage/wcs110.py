@@ -156,11 +156,10 @@ class WebCoverageService_1_1_0(WCSBase):
         if store = true, returns a coverages XML file
         if store = false, returns a multipart mime
         """
-        if log.isEnabledFor(logging.DEBUG):
-            msg = 'WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier={}, bbox={}, time={}, format={}, rangesubset={}, gridbaseCRS={}, gridtype={}, gridCS={}, gridorigin={}, gridoffsets={}, method={}, other_arguments={}'  # noqa
-            log.debug(msg.format(
-                identifier, bbox, time, format, rangesubset, gridbaseCRS, gridtype, gridCS,
-                gridorigin, gridoffsets, method, str(kwargs)))
+        msg = 'WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier={}, bbox={}, time={}, format={}, rangesubset={}, gridbaseCRS={}, gridtype={}, gridCS={}, gridorigin={}, gridoffsets={}, method={}, other_arguments={}'  # noqa
+        log.debug(msg.format(
+            identifier, bbox, time, format, rangesubset, gridbaseCRS, gridtype, gridCS,
+            gridorigin, gridoffsets, method, str(kwargs)))
 
         if method == 'Get':
             method = self.ns.WCS_OWS('Get')
