@@ -115,6 +115,7 @@ That's everything needed to make a request for imagery::
     >>> out = open('jpl_mosaic_visb.jpg', 'wb')
     >>> out.write(img.read())
     >>> out.close()
+```
 
 A very similar API exists for WebFeatureService. See
 tests/wfs_MapServerWFSCapabilities.txt for details.
@@ -129,6 +130,7 @@ Logging
 OWSLib logs messages to the 'owslib' named python logger. You may
 configure your application to use the log messages like so:
 
+```python
     >>> import logging
     >>> owslib_log = logging.getLogger('owslib')
     >>> # Add formatting and handlers as needed, for example to log to the console
@@ -138,12 +140,12 @@ configure your application to use the log messages like so:
     >>> # add the handler to the logger
     >>> owslib_log.addHandler(ch)
     >>> owslib_log.setLevel(logging.DEBUG)
+```
 
 Releasing
 ---------
 
-.. code-block:: bash
-
+```bash
   # update version
   vi owslib/__init__.py
   git commit -m 'update release version' owslib/__init__.py
@@ -160,9 +162,10 @@ Releasing
   rm -fr build dist *.egg-info
   python setup.py sdist bdist_wheel --universal
   twine upload dist/*
+```
 
 Support
 -------
 
-https://lists.osgeo.org/mailman/listinfo/owslib-users
-https://lists.osgeo.org/mailman/listinfo/owslib-devel
+- https://lists.osgeo.org/mailman/listinfo/owslib-users
+- https://lists.osgeo.org/mailman/listinfo/owslib-devel
