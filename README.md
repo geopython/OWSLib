@@ -154,10 +154,6 @@ Releasing
   git tag -a x.y.z -m 'tagging OWSLib release x.y.z'
   # push tag
   git push --tags
-  # update live docs
-  cd docs
-  make html
-  ./publish.sh
   # update on PyPI (must be a maintainer)
   rm -fr build dist *.egg-info
   python setup.py sdist bdist_wheel --universal
