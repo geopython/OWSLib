@@ -96,15 +96,14 @@ def _construct_schema(elements, nsmap):
     # if nsmap is defined, use it
     if nsmap:
         for key in nsmap:
-            if nsmap[key] == XS_NAMESPACE:
-                schema_key = key
-            if nsmap[key] in GML_NAMESPACES:
-                gml_key = key
+            if key is not None:
+                if nsmap[key] == XS_NAMESPACE:
+                    schema_key = key
+                if nsmap[key] in GML_NAMESPACES:
+                    gml_key = key
     # if no nsmap is defined, we have to guess
-    if gml_key is None:
+    else:
         gml_key = "gml"
-
-    if schema_key is None:
         schema_key = "xsd"
 
     mappings = {
