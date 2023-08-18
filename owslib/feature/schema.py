@@ -101,9 +101,12 @@ def _construct_schema(elements, nsmap):
                     schema_key = key
                 if nsmap[key] in GML_NAMESPACES:
                     gml_key = key
-    # if no nsmap is defined, we have to guess
-    else:
+
+    # if no nsmap keys are defined, we have to guess
+    if gml_key is None:
         gml_key = "gml"
+
+    if schema_key is None:
         schema_key = "xsd"
 
     mappings = {
