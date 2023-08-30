@@ -21,7 +21,7 @@ The easiest way to install pywis-pubsub is via the Python [pip](https://pip.pypa
 utility:
 
 ```bash
-pip3 install pywis-pubsub
+pip3 install OWSLib
 ```
 
 ## Requirements
