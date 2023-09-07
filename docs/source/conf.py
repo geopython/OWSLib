@@ -28,7 +28,7 @@ extensions = [
 
 # extension nbspinx
 # nbsphinx_timeout = 600
-nbsphinx_execute = 'never'
+# nbsphinx_execute = 'auto'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
