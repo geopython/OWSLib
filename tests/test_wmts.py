@@ -32,7 +32,7 @@ def test_wmts():
                         tilematrixset='EPSG4326_250m', tilematrix='0',
                         row=0, column=0, format="image/jpeg")
     out = open(scratch_file('nasa_modis_terra_truecolour.jpg'), 'wb')
-    bytes_written = out.write(tile.read())
+    _ = out.write(tile.read())
     out.close()
     # Test styles for several layers
     # TODO: fix dict order
@@ -56,7 +56,7 @@ def test_wmts_example_build_tile_request():
         tilematrixset='EPSG4326_500m',
         tilematrix='6',
         row=4, column=4)
-    request = 'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&\
+    _ = 'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&\
 LAYER=VIIRS_CityLights_2012&STYLE=default&TILEMATRIXSET=EPSG4326_500m&\
 TILEMATRIX=6&TILEROW=4&TILECOL=4&FORMAT=image%2Fjpeg'
 
@@ -76,13 +76,16 @@ def test_wmts_example_get_title():
         tilematrix='6',
         row=4, column=4)
     out = open('tile.jpg', 'wb')
-    bytes_written = out.write(img.read())
+    _ = out.write(img.read())
     out.close()
 
 
 EXAMPLE_SERVICE_URL = "http://tile.informatievlaanderen.be/ws/raadpleegdiensten/wmts"
 
 
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(EXAMPLE_SERVICE_URL),
+                    reason="WMTS service is unreachable")
 def test_wmts_example_informatievlaanderen():
     wmts = WebMapTileService(EXAMPLE_SERVICE_URL)
     assert wmts.identification.type == 'OGC:WMTS'
@@ -97,7 +100,7 @@ def test_wmts_example_informatievlaanderen():
 def test_wmts_without_serviceprovider_tag():
     # Test a WMTS without a ServiceProvider tag in Capababilities XML
     from owslib.wmts import WebMapTileService
-    wmts = WebMapTileService(SERVICE_URL_ARCGIS)
+    _ = WebMapTileService(EXAMPLE_SERVICE_URL)
 
 
 SERVICE_URL_REST = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml'
@@ -111,4 +114,4 @@ def test_wmts_rest_only():
     from owslib.wmts import WebMapTileService
     wmts = WebMapTileService(SERVICE_URL_REST)
     tile = wmts.gettile(layer="bmaporthofoto30cm", tilematrix="10", row=357, column=547)
-    assert(tile.info()['Content-Type'] == 'image/jpeg')
+    assert tile.info()['Content-Type'] == 'image/jpeg'
