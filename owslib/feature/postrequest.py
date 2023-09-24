@@ -126,7 +126,7 @@ class PostRequest_2_0_0(PostRequest):
         """Creates the query tag with the corresponding typenames.
         Required element for each request ecept for stored queries."""
         super()._create_query(typename)
-        self._query.set("typenames", typename)
+        self._query.set("typeNames", typename)
 
     def create_storedquery(self, stored_id, parameters):
         """Create the storedQuery tag and configure it's sub elements and attributes."""
