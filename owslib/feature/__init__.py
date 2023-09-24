@@ -348,7 +348,7 @@ class WebFeatureService_(object):
             request.set_featureid(featureid)
         elif bbox:
             request.set_bbox(self.getBBOXPost(bbox, typename))
-        elif filter:
+        elif filter is not None:
             request.set_filter(filter)
 
         if featureversion:
