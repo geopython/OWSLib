@@ -306,19 +306,6 @@ def add_namespaces(root, ns_keys):
         new_root.append(deepcopy(child))
     return new_root
 
-    # We can just add more namespaces when not using lxml.
-    # We can't re-add an existing namespaces.  Get a list of current
-    # namespaces in use
-    existing_namespaces = set()
-    for elem in root.iter():
-        if elem.tag[0] == "{":
-            uri, tag = elem.tag[1:].split("}")
-            existing_namespaces.add(namespaces.get_namespace_from_url(uri))
-    for key, link in ns_keys:
-        if link is not None and key not in existing_namespaces:
-            root.set("xmlns:%s" % key, link)
-    return root
-
 
 def getXMLInteger(elem, tag):
     """
