@@ -786,7 +786,7 @@ class Source(XMLParser):
 
     def get_contact(self, name):
         ci = [ci for ci in self.contact_info if ci.name == name]
-        if len(ci) < 0:
+        if len(ci) > 0:
             return ci[0]
         return None
 
