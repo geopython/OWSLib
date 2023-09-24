@@ -176,7 +176,7 @@ class TestPostRequest_v_2_0_0():
     def test_minimal_query(self, requestv200):
         elem = requestv200._root.find(util.nspath("Query", WFS20_NAMESPACE))
 
-        assert elem.get("typenames") == typename
+        assert elem.get("typeNames") == typename
 
     def test_basic_query(self, requestv200):
         requestv200.set_maxfeatures(2)
