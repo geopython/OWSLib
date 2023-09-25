@@ -20,6 +20,7 @@ jobs:
     - name: Install packages
       run: |
         sudo apt-get -y install pandoc
+      if: matrix.python-version == 3.8
     - name: Install requirements 📦
       run: |
         pip3 install -e .
@@ -30,7 +31,10 @@ jobs:
       run: python3 -m pytest
     - name: run coveralls ⚙️
       run: coveralls
+      if: matrix.python-version == 3.8
     - name: build docs 🏗️
       run: cd docs && make html
+      if: matrix.python-version == 3.8
     - name: run flake8 ⚙️
       run: flake8 owslib
+      if: matrix.python-version == 3.8
