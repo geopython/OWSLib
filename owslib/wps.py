@@ -1611,13 +1611,13 @@ class Process(object):
         self.dataInputs = []
         for inputElement in elem.findall('DataInputs/Input'):
             self.dataInputs.append(Input(inputElement))
-            LOGGER.debug(self.dataInputs[-1], prefix='\tInput: ')
+            LOGGER.debug(self.dataInputs[-1])
 
         # <ProcessOutputs>
         self.processOutputs = []
         for outputElement in elem.findall('ProcessOutputs/Output'):
             self.processOutputs.append(Output(outputElement))
-            LOGGER.debug(self.processOutputs[-1], prefix='\tOutput: ')
+            LOGGER.debug(self.processOutputs[-1])
 
     def __str__(self):
         return "WPS Process: {}, title={}".format(self.identifier or '', self.title or '')
