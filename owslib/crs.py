@@ -1750,12 +1750,15 @@ class Crs(object):
             self.encoding = "uri"
             vals = self.id.split('/')
             self.authority = vals[5].upper()
-            self.code = int(vals[-1])
+            self.code = vals[-1]
+            self.version = vals[-2]
+            if self.version == '0':
+                self.version = None
         elif self.id.find('#') != -1:  # URI Style 2
             self.encoding = "uri"
             vals = self.id.split('#')
             self.authority = vals[0].split('/')[-1].split('.')[0].upper()
-            self.code = int(vals[-1])
+            self.code = vals[-1]
         elif len(values) > 2:  # it's a URN style
             self.naming_authority = values[1]
             self.encoding = "urn"
@@ -1772,21 +1775,20 @@ class Crs(object):
             if len(values) == 7:  # version, even if empty, is included
                 if values[5]:
                     self.version = values[5]
-
-            # code is always the last value
-            try:
-                self.code = int(values[-1])
-            except Exception:
-                self.code = values[-1]
+            self.code = values[-1]
 
         elif len(values) == 2:  # it's an authority:code code
             self.encoding = "code"
             self.authority = values[0].upper()
+            self.code = values[1]
 
-            try:
-                self.code = int(values[1])
-            except Exception:
-                self.code = values[1]
+        # convert code if possible for int mapping with axisorder
+        # if not an int, it can be another code such as CRS84
+        # from http://www.opengis.net/def/crs/OGC/1.3/CRS84
+        try:
+            self.code = int(self.code)
+        except (TypeError, ValueError):
+            pass
 
         # if the user has not forced the axisorder,
         # scan the list of codes that have an axis ordering of
