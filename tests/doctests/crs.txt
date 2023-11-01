@@ -44,3 +44,5 @@
     '1.3'
     >>> c.getcodeurn()
     'urn:ogc:def:crs:OGC:1.3:CRS84'
+    >>> c.getcodeuri1()
+    'http://www.opengis.net/def/crs/OGC/1.3/CRS84'

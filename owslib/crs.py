@@ -1826,7 +1826,11 @@ class Crs(object):
         :returns: String code formated in "http://www.opengis.net/def/crs/EPSG/0/code"
         """
 
-        return 'http://www.opengis.net/def/crs/EPSG/0/%s' % self.code
+        return 'http://www.opengis.net/def/crs/{}/{}/{}'.format(
+            self.authority or "EPSG",
+            self.version or "0",
+            self.code
+        )
 
     def getcodeuri2(self):
         """Create for example "http://www.opengis.net/gml/srs/epsg.xml#4326"
