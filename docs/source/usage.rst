@@ -288,8 +288,6 @@ OGC API - Records - Part 1: Core 1.0
 
   >>> w.collection_item_delete('my-catalogue', identifier)
 
-
-
 OGC API - Features - Part 4: Create, Replace, Update and Delete
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -300,34 +298,33 @@ OGC API - Features - Part 4: Create, Replace, Update and Delete
 
 .. code-block:: python
 
-   import json
-   from owslib.ogcapi.records import Records
+   >>> import json
+   >>> from owslib.ogcapi.records import Records
 
-   record_data = '/path/to/record.json'
+   >>> record_data = '/path/to/record.json'
 
-   url = 'http://localhost:8000'
-   collection_id = 'metadata:main'
+   >>> url = 'http://localhost:8000'
+   >>> collection_id = 'metadata:main'
 
-   r = Records(url)
+   >>> r = Records(url)
 
-   cat = r.collection(collection_id)
+   >>> cat = r.collection(collection_id)
 
-   with open(record_data) as fh:
-       data = json.load(fh)
+   >>> with open(record_data) as fh:
+   ...    data = json.load(fh)
 
-   identifier = data['id']
+   >>> identifier = data['id']
 
-   r.collection_item_delete(collection_id, identifier)
+   >>> r.collection_item_delete(collection_id, identifier)
 
    # insert metadata
-   r.collection_item_create(collection_id, data)
+   >>> r.collection_item_create(collection_id, data)
 
    # update metadata
-   r.collection_item_update(collection_id, identifier, data)
+   >>> r.collection_item_update(collection_id, identifier, data)
 
    # delete metadata
-   r.collection_item_delete(collection_id, identifier)
-
+   >>> r.collection_item_delete(collection_id, identifier)
 
 OGC API - Processes - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -345,7 +342,6 @@ OGC API - Processes - Part 1: Core 1.0
   >>> hello_world['title']
   'Hello World'
 
-
 OGC API - Maps - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -357,6 +353,16 @@ OGC API - Maps - Part 1: Core 1.0
   >>> data = m.map('lakes', width=1200, height=800, transparent=False)
   >>> with open("output.png", "wb") as fh:
   ...     fh.write(data.getbuffer())
+
+OGC API - Environmental Data Retrieval - Part 1: Core 1.0
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+  >>> from owslib.ogcapi.edr import EnvironmentalDataRetrieval
+  >>> e = EnvironmentalDataRetrieval('http://localhost:5000')
+  >>> icoads_sst = m.collection('icoads-sst')
+  >>> data = e.query_data('icoads_sst', 'position', coords='POINT(-75 45)', parameter_names='SST,AIRT')
 
 
 WCS
