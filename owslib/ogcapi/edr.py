@@ -17,7 +17,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class EnvironmentalDataRetrieval(Features):
-    """Abstraction for OGC API - Envirionmental Data Retrieval"""
+    """Abstraction for OGC API - Environmental Data Retrieval"""
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30,
                  headers: dict = None, auth: Authentication = None):
