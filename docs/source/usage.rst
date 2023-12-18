@@ -362,7 +362,7 @@ OGC API - Environmental Data Retrieval - Part 1: Core 1.0
   >>> from owslib.ogcapi.edr import EnvironmentalDataRetrieval
   >>> e = EnvironmentalDataRetrieval('http://localhost:5000')
   >>> icoads_sst = m.collection('icoads-sst')
-  >>> data = e.query_data('icoads_sst', 'position', coords='POINT(-75 45)', parameter_names='SST,AIRT')
+  >>> data = e.query_data('icoads_sst', 'position', coords='POINT(-75 45)', parameter_names=['SST', 'AIRT'])
 
 
 WCS
