@@ -635,13 +635,13 @@ class MD_DataIdentification(printable):
                 self.uom.append(i.get("uom"))
 
             self.resourcelanguagecode = []
-            for i in md.findall(util.nspath_eval('lan:language/lan:LanguageCode', self.namespaces)):
+            for i in md.findall(util.nspath_eval('mri:defaultLocale/lan:PT_Locale/lan:language/lan:LanguageCode', self.namespaces)):
                 val = _testCodeListValue(i)
                 if val is not None:
                     self.resourcelanguagecode.append(val)
 
             self.resourcelanguage = []
-            for i in md.findall(util.nspath_eval('lan:language/gco:CharacterString', self.namespaces)):
+            for i in md.findall(util.nspath_eval('mri:defaultLocale/lan:PT_Locale/lan:language/gco:CharacterString', self.namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.resourcelanguage.append(val)

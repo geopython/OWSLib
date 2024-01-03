@@ -366,6 +366,8 @@ def test_identification(bmd):
     assert bytes(ident.abstract[:62], 'utf-8') == b'Cette collection de donn\xc3\xa9es comprend les zones de surveillance'
     assert ident.accessconstraints[0] == 'license'
     assert ident.uselimitation == []
+    assert ident.resourcelanguage == []
+    assert ident.resourcelanguagecode[0] == 'fre'
     assert ident.alternatetitle == 'PROTECT_CAPT'
     assert ident.graphicoverview[0] == 'https://metawal.wallonie.be/geonetwork/srv/api/records/74f81503-8d39-4ec8-a49a-c76e0cd74946/attachments/PROTECT_CAPT.png'
     assert ident.graphicoverview[1] == 'https://metawal.wallonie.be/geonetwork/srv/api/records/74f81503-8d39-4ec8-a49a-c76e0cd74946/attachments/PROTECT_CAPT_s.png'
