@@ -365,6 +365,7 @@ def test_identification(bmd):
     ident = bmd.identification[0]
     assert bytes(ident.abstract[:62], 'utf-8') == b'Cette collection de donn\xc3\xa9es comprend les zones de surveillance'
     assert ident.accessconstraints[0] == 'license'
+    assert ident.uselimitation == []
     assert ident.alternatetitle == 'PROTECT_CAPT'
     assert ident.graphicoverview[0] == 'https://metawal.wallonie.be/geonetwork/srv/api/records/74f81503-8d39-4ec8-a49a-c76e0cd74946/attachments/PROTECT_CAPT.png'
     assert ident.graphicoverview[1] == 'https://metawal.wallonie.be/geonetwork/srv/api/records/74f81503-8d39-4ec8-a49a-c76e0cd74946/attachments/PROTECT_CAPT_s.png'
@@ -475,6 +476,9 @@ def test_aus(amd):
     assert ident.extent.vertExtMax == '300'
     assert ident.extent.vertExtMin == '-400'
     assert ident.securityconstraints[0] == 'unclassified'
+    assert ident.uselimitation[0] == 'https://creativecommons.org/licenses/by/4.0/'
+    assert ident.accessconstraints[0] == 'license'
+    assert ident.useconstraints[0] == 'license'
     assert ident.funder[0].organization == 'AuScope'
     assert ident.uricode[0] == 'https://geology.data.vic.gov.au/searchAssistant/document.php?q=parent_id:107513'
 

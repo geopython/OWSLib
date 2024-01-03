@@ -576,7 +576,7 @@ class MD_DataIdentification(printable):
             self.uselimitation = []
             self.uselimitation_url = []
             uselimit_values = md.findall(util.nspath_eval(
-                'mri:resourceConstraints/mco:MD_LegalConstraints/mco:useLimitation/gco:CharacterString>', self.namespaces))
+                'mri:resourceConstraints/mco:MD_LegalConstraints/mco:useLimitation/gco:CharacterString', self.namespaces))
             for i in uselimit_values:
                 val = util.testXMLValue(i)
                 if val is not None:
