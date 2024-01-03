@@ -441,6 +441,15 @@ def test_identification_keywords(bmd):
     assert len(keyw[0].keywords) == 2
     assert len(keyw) == 5
 
+def test_get_all_contacts(bmd):
+    """ Test get_all_contacts()
+    """
+    conts = bmd.get_all_contacts()
+    assert(len(conts) == 3)
+    assert conts[0].role == 'pointOfContact'
+    assert conts[1].role == 'custodian'
+    assert conts[2].role == 'owner'
+
 
 @pytest.fixture
 def amd():
