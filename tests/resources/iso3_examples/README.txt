@@ -7,3 +7,4 @@ Acknowledged sources:
 
 https://portal.auscope.org.au/geonetwork: auscope-3d-model.xml
 https://metawal.wallonie.be/geonetwork/: metawal.wallonie.be-catchments.xml, metawal.wallonie.be-srv.xml
+https://github.com/Esri/arcgis-pro-metadata-toolkit: arcgis-sample.xml

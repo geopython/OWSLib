@@ -25,7 +25,7 @@ from owslib import util
 
 
 # ISO 19115 Part 3 XML namespaces
-namespaces = {
+NAMESPACES_V2 = {
         "mdb":"http://standards.iso.org/iso/19115/-3/mdb/2.0",
         "cat":"http://standards.iso.org/iso/19115/-3/cat/1.0",
         "gfc":"http://standards.iso.org/iso/19110/gfc/1.1",
@@ -55,6 +55,38 @@ namespaces = {
         "gml":"http://www.opengis.net/gml",
         "xlink":"http://www.w3.org/1999/xlink",
         "xsi":"http://www.w3.org/2001/XMLSchema-instance"
+}
+
+NAMESPACES_V1 =  {
+        "xsi":"http://www.w3.org/2001/XMLSchema-instance",
+        "cat":"http://standards.iso.org/iso/19115/-3/cat/1.0",
+        "cit":"http://standards.iso.org/iso/19115/-3/cit/1.0",
+        "gcx":"http://standards.iso.org/iso/19115/-3/gcx/1.0",
+        "gex":"http://standards.iso.org/iso/19115/-3/gex/1.0",
+        "lan":"http://standards.iso.org/iso/19115/-3/lan/1.0",
+        "srv":"http://standards.iso.org/iso/19115/-3/srv/2.0",
+        "mac":"http://standards.iso.org/iso/19115/-3/mac/1.0",
+        "mas":"http://standards.iso.org/iso/19115/-3/mas/1.0",
+        "mcc":"http://standards.iso.org/iso/19115/-3/mcc/1.0",
+        "mco":"http://standards.iso.org/iso/19115/-3/mco/1.0",
+        "mda":"http://standards.iso.org/iso/19115/-3/mda/1.0",
+        "mdb":"http://standards.iso.org/iso/19115/-3/mdb/1.0",
+        "mdt":"http://standards.iso.org/iso/19115/-3/mdt/1.0",
+        "mex":"http://standards.iso.org/iso/19115/-3/mex/1.0",
+        "mrl":"http://standards.iso.org/iso/19115/-3/mrl/1.0",
+        "mds":"http://standards.iso.org/iso/19115/-3/mds/1.0",
+        "mmi":"http://standards.iso.org/iso/19115/-3/mmi/1.0",
+        "mpc":"http://standards.iso.org/iso/19115/-3/mpc/1.0",
+        "mrc":"http://standards.iso.org/iso/19115/-3/mrc/1.0",
+        "mrd":"http://standards.iso.org/iso/19115/-3/mrd/1.0",
+        "mri":"http://standards.iso.org/iso/19115/-3/mri/1.0",
+        "mrs":"http://standards.iso.org/iso/19115/-3/mrs/1.0",
+        "msr":"http://standards.iso.org/iso/19115/-3/msr/1.0",
+        "mdq":"http://standards.iso.org/iso/19157/-2/mdq/1.0",
+        "dqc":"http://standards.iso.org/iso/19157/-2/dqc/1.0",
+        "gco":"http://standards.iso.org/iso/19115/-3/gco/1.0",
+        "gml":"http://www.opengis.net/gml/3.2",
+        "xlink":"http://www.w3.org/1999/xlink"
 }
 
 class printable():
@@ -100,6 +132,7 @@ class MD_Metadata(printable):
 
         :param md: etree.Element root
         """
+        self.namespaces = NAMESPACES_V2
         if md is None:
             self.md = None
             self.xml = None
@@ -129,86 +162,91 @@ class MD_Metadata(printable):
             else:  # part of a larger document
                 self.xml = etree.tostring(md)
 
-            val = md.find(util.nspath_eval('mdb:metadataIdentifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', namespaces))
+           # Test mdb version
+            if md.find(util.nspath_eval('mdb:metadataIdentifier', NAMESPACES_V2)) is None and \
+                    md.find(util.nspath_eval('mdb:metadataIdentifier', NAMESPACES_V1)) is not None:
+                self.namespaces = NAMESPACES_V1
+
+            val = md.find(util.nspath_eval('mdb:metadataIdentifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', self.namespaces))
             self.identifier = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('mdb:parentMetadata/cit:CI_Citation/cit:identifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('mdb:parentMetadata/cit:CI_Citation/cit:identifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', self.namespaces))
             self.parentidentifier = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('lan:language/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('lan:language/gco:CharacterString', self.namespaces))
             self.language = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('mdb:identificationInfo/mri:MD_DataIdentification/mri:citation/cit:CI_Citation/cit:identifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('mdb:identificationInfo/mri:MD_DataIdentification/mri:citation/cit:CI_Citation/cit:identifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', self.namespaces))
             self.dataseturi = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('mdb:defaultLocale/lan:PT_Locale/lan:language/lan:LanguageCode', namespaces))
+            val = md.find(util.nspath_eval('mdb:defaultLocale/lan:PT_Locale/lan:language/lan:LanguageCode', self.namespaces))
             self.languagecode = util.testXMLAttribute(val, 'codeListValue')
 
-            val = md.find(util.nspath_eval('mdb:dateInfo/cit:CI_Date/cit:date/gco:DateTime', namespaces))
+            val = md.find(util.nspath_eval('mdb:dateInfo/cit:CI_Date/cit:date/gco:DateTime', self.namespaces))
             self.datestamp = util.testXMLValue(val)
 
             val = md.find(
-                util.nspath_eval('mdb:defaultLocale/lan:PT_Locale/lan:characterEncoding/lan:MD_CharacterSetCode', namespaces))
+                util.nspath_eval('mdb:defaultLocale/lan:PT_Locale/lan:characterEncoding/lan:MD_CharacterSetCode', self.namespaces))
             self.charset = util.testXMLAttribute(val, 'codeListValue')
 
             val = md.find(
-                util.nspath_eval('mdb:metadataScope/mdb:MD_MetadataScope/mdb:resourceScope/mcc:MD_ScopeCode', namespaces))
+                util.nspath_eval('mdb:metadataScope/mdb:MD_MetadataScope/mdb:resourceScope/mcc:MD_ScopeCode', self.namespaces))
             self.hierarchy = util.testXMLAttribute(val, 'codeListValue')
 
             self.contact = []
-            for i in md.findall(util.nspath_eval('mdb:contact/cit:CI_Responsibility', namespaces)):
-                o = CI_Responsibility(i)
+            for i in md.findall(util.nspath_eval('mdb:contact/cit:CI_Responsibility', self.namespaces)):
+                o = CI_Responsibility(self.namespaces, i)
                 self.contact.append(o)
 
             self.datetimestamp = self.datestamp
 
-            val = md.find(util.nspath_eval('mdb:metadataStandard/cit:CI_Citation/cit:title/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('mdb:metadataStandard/cit:CI_Citation/cit:title/gco:CharacterString', self.namespaces))
             self.stdname = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('mdb:metadataStandard/cit:CI_Citation/cit:edition/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('mdb:metadataStandard/cit:CI_Citation/cit:edition/gco:CharacterString', self.namespaces))
             self.stdver = util.testXMLValue(val)
 
             self.locales = []
-            for i in md.findall(util.nspath_eval('mdb:defaultLocale/lan:PT_Locale', namespaces)):
-                self.locales.append(PT_Locale(i))
+            for i in md.findall(util.nspath_eval('mdb:defaultLocale/lan:PT_Locale', self.namespaces)):
+                self.locales.append(PT_Locale(self.namespaces, i))
 
-            val = md.find(util.nspath_eval('mdb:referenceSystemInfo/mrs:MD_ReferenceSystem', namespaces))
+            val = md.find(util.nspath_eval('mdb:referenceSystemInfo/mrs:MD_ReferenceSystem', self.namespaces))
             if val is not None:
-                self.referencesystem = MD_ReferenceSystem(val)
+                self.referencesystem = MD_ReferenceSystem(self.namespaces, val)
             else:
                 self.referencesystem = None
 
             self.identification = []
 
-            for idinfo in md.findall(util.nspath_eval('mdb:identificationInfo', namespaces)):
+            for idinfo in md.findall(util.nspath_eval('mdb:identificationInfo', self.namespaces)):
                 if len(idinfo) > 0:
                     val = list(idinfo)[0]
                     tagval = util.xmltag_split(val.tag)
                     if tagval == 'MD_DataIdentification':
-                        self.identification.append(MD_DataIdentification(val, 'dataset'))
+                        self.identification.append(MD_DataIdentification(self.namespaces, val, 'dataset'))
                     elif tagval == 'MD_ServiceIdentification':
-                        self.identification.append(MD_DataIdentification(val, 'service'))
+                        self.identification.append(MD_DataIdentification(self.namespaces, val, 'service'))
                     elif tagval == 'SV_ServiceIdentification':
-                        self.identification.append(SV_ServiceIdentification(val))
+                        self.identification.append(SV_ServiceIdentification(self.namespaces, val))
 
             self.contentinfo = []
             for contentinfo in md.findall(
-                    util.nspath_eval('mdb:contentInfo/mrc:MD_FeatureCatalogueDescription', namespaces)):
-                self.contentinfo.append(MD_FeatureCatalogueDescription(contentinfo))
+                    util.nspath_eval('mdb:contentInfo/mrc:MD_FeatureCatalogueDescription', self.namespaces)):
+                self.contentinfo.append(MD_FeatureCatalogueDescription(self.namespaces, contentinfo))
             for contentinfo in md.findall(
-                    util.nspath_eval('mdb:contentInfo/mrc:MD_ImageDescription', namespaces)):
-                self.contentinfo.append(MD_ImageDescription(contentinfo))
+                    util.nspath_eval('mdb:contentInfo/mrc:MD_ImageDescription', self.namespaces)):
+                self.contentinfo.append(MD_ImageDescription(self.namespaces, contentinfo))
 
-            val = md.find(util.nspath_eval('mdb:distributionInfo/mrd:MD_Distribution', namespaces))
+            val = md.find(util.nspath_eval('mdb:distributionInfo/mrd:MD_Distribution', self.namespaces))
 
             if val is not None:
-                self.distribution = MD_Distribution(val)
+                self.distribution = MD_Distribution(self.namespaces, val)
             else:
                 self.distribution = None
 
-            val = md.find(util.nspath_eval('mdb:dataQualityInfo/mdq:DQ_DataQuality', namespaces))
+            val = md.find(util.nspath_eval('mdb:dataQualityInfo/mdq:DQ_DataQuality', self.namespaces))
             if val is not None:
-                self.dataquality = DQ_DataQuality(val)
+                self.dataquality = DQ_DataQuality(self.namespaces, val)
             else:
                 self.dataquality = None
 
@@ -246,12 +284,14 @@ class PT_Locale(printable):
     """ Process PT_Locale
     """
 
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses PT_Locale XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: PT_Locale etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.id = None
             self.languagecode = None
@@ -259,9 +299,9 @@ class PT_Locale(printable):
         else:
             self.id = md.attrib.get('id')
             self.languagecode = md.find(
-                util.nspath_eval('lan:language/lan:LanguageCode', namespaces)).attrib.get('codeListValue')
+                util.nspath_eval('lan:language/lan:LanguageCode', self.namespaces)).attrib.get('codeListValue')
             self.charset = md.find(
-                util.nspath_eval('lan:characterEncoding/lan:MD_CharacterSetCode', namespaces)).attrib.get(
+                util.nspath_eval('lan:characterEncoding/lan:MD_CharacterSetCode', self.namespaces)).attrib.get(
                 'codeListValue')
 
 
@@ -269,45 +309,49 @@ class PT_Locale(printable):
 class CI_Date(printable):
     """ Process CI_Date
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses CI_Date XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: CI_Date etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.date = None
             self.type = None
         else:
-            val = md.find(util.nspath_eval('cit:date/gco:Date', namespaces))
+            val = md.find(util.nspath_eval('cit:date/gco:Date', self.namespaces))
             if val is not None:
                 self.date = util.testXMLValue(val)
             else:
-                val = md.find(util.nspath_eval('cit:date/gco:DateTime', namespaces))
+                val = md.find(util.nspath_eval('cit:date/gco:DateTime', self.namespaces))
                 if val is not None:
                     self.date = util.testXMLValue(val)
                 else:
                     self.date = None
 
-            val = md.find(util.nspath_eval('cit:dateType/cit:CI_DateTypeCode', namespaces))
+            val = md.find(util.nspath_eval('cit:dateType/cit:CI_DateTypeCode', self.namespaces))
             self.type = _testCodeListValue(val)
 
 
 class CI_Responsibility(printable):
     """ Process CI_Responsibility
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses CI_Responsibility XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: CI_Responsibility etree.Element
         """
+        self.namespaces = namespaces
+        self.phone = None
+        self.fax = None
         if md is None:
             self.name = None
             self.organization = None
             self.position = None
-            self.phone = None
-            self.fax = None
             self.address = None
             self.city = None
             self.region = None
@@ -317,142 +361,150 @@ class CI_Responsibility(printable):
             self.onlineresource = None
             self.role = None
         else:
-            val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:individual/cit:CI_Individual/cit:name/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:individual/cit:CI_Individual/cit:name/gco:CharacterString', self.namespaces))
             self.name = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:name/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:name/gco:CharacterString', self.namespaces))
             self.organization = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:individual/cit:CI_Individual/cit:positionName/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:individual/cit:CI_Individual/cit:positionName/gco:CharacterString', self.namespaces))
             self.position = util.testXMLValue(val)
 
             # Telephone
-            val_list = md.xpath('cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:phone/cit:CI_Telephone[cit:numberType/cit:CI_TelephoneTypeCode/@codeListValue="voice"]/cit:number/gco:CharacterString', namespaces=namespaces)
+            val_list = md.xpath('cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:phone/cit:CI_Telephone[cit:numberType/cit:CI_TelephoneTypeCode/@codeListValue="voice"]/cit:number/gco:CharacterString', namespaces=self.namespaces)
             if len(val_list) > 0:
                 self.phone = util.testXMLValue(val_list[0])
 
             # Facsimile (Telephone and fax are differentiated by telephone type codes)
-            val_list = md.xpath('cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:phone/cit:CI_Telephone[cit:numberType/cit:CI_TelephoneTypeCode/@codeListValue="facsimile"]/cit:number/gco:CharacterString', namespaces=namespaces)
+            val_list = md.xpath('cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:phone/cit:CI_Telephone[cit:numberType/cit:CI_TelephoneTypeCode/@codeListValue="facsimile"]/cit:number/gco:CharacterString', namespaces=self.namespaces)
             if len(val_list) > 0:
                 self.fax = util.testXMLValue(val_list[0])
 
             val = md.find(util.nspath_eval(
                 'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:deliveryPoint/gco:CharacterString',
-                namespaces))
+                self.namespaces))
             self.address = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
-                'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:city/gco:CharacterString', namespaces))
+                'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:city/gco:CharacterString', self.namespaces))
             self.city = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
                 'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:administrativeArea/gco:CharacterString',
-                namespaces))
+                self.namespaces))
             self.region = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
                 'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:postalCode/gco:CharacterString',
-                namespaces))
+                self.namespaces))
             self.postcode = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
                 'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:country/gco:CharacterString',
-                namespaces))
+                self.namespaces))
             self.country = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
                 'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:electronicMailAddress/gco:CharacterString',
-                namespaces))
+                self.namespaces))
             self.email = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
-                'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:onlineResource/cit:CI_OnlineResource', namespaces))
+                'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:onlineResource/cit:CI_OnlineResource', self.namespaces))
             if val is not None:
-                self.onlineresource = CI_OnlineResource(val)
+                self.onlineresource = CI_OnlineResource(self.namespaces, val)
             else:
                 self.onlineresource = None
-            val = md.find(util.nspath_eval('cit:role/cit:CI_RoleCode', namespaces))
+            val = md.find(util.nspath_eval('cit:role/cit:CI_RoleCode', self.namespaces))
             self.role = _testCodeListValue(val)
 
 
 class Keyword(printable):
     """ Class for complex keywords, with labels and URLs
     """
-    def __init__(self, kw=None):
+    def __init__(self, namespaces, kw=None):
         """
         Parses keyword Element
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param kw: keyword 'gco:CharacterString' or 'gcx:Anchor' etree.Element
         """
+        self.namespaces = namespaces
         if kw is None:
             self.name = None
             self.url = None
         else:
             self.name = util.testXMLValue(kw)
-            self.url = kw.attrib.get(util.nspath_eval('xlink:href', namespaces))
+            self.url = kw.attrib.get(util.nspath_eval('xlink:href', self.namespaces))
 
 
 class MD_Keywords(printable):
     """
     Class for the metadata MD_Keywords element
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses keyword Element
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: keyword etree.Element
         """
-        if md is None:
-            self.keywords = []
-            self.type = None
-            self.thesaurus = None
-            self.kwdtype_codeList = 'http://standards.iso.org/iso/19115/-3/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode'
-        else:
-            self.keywords = []
-            val = md.findall(util.nspath_eval('mri:keyword/gco:CharacterString', namespaces))
+        self.namespaces = namespaces
+        self.thesaurus = None
+        self.keywords = []
+        self.type = None
+        self.kwdtype_codeList = 'http://standards.iso.org/iso/19115/-3/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode'
+
+        if md is not None:
+            val = md.findall(util.nspath_eval('mri:keyword/gco:CharacterString', self.namespaces))
             if len(val) == 0:
-                val = md.findall(util.nspath_eval('mri:keyword/gcx:Anchor', namespaces))
+                val = md.findall(util.nspath_eval('mri:keyword/gcx:Anchor', self.namespaces))
             for word in val:
-                self.keywords.append(Keyword(word))
-            self.type = None
-            val = md.find(util.nspath_eval('mri:type/mri:MD_KeywordTypeCode', namespaces))
+                self.keywords.append(Keyword(self.namespaces, word))
+
+            val = md.find(util.nspath_eval('mri:type/mri:MD_KeywordTypeCode', self.namespaces))
             self.type = util.testXMLAttribute(val, 'codeListValue')
 
-            self.thesaurus = None
-            val = md.find(util.nspath_eval('mri:thesaurusName/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('mri:thesaurusName/gco:CharacterString', self.namespaces))
             if val is not None:
                 self.thesaurus = {}
 
-                title = val.find(util.nspath_eval('cit:title/gco:CharacterString', namespaces))
+                title = val.find(util.nspath_eval('cit:title/gco:CharacterString', self.namespaces))
                 self.thesaurus['title'] = util.testXMLValue(title)
                 self.thesaurus['url'] = None
 
                 if self.thesaurus['title'] is None:  # try gmx:Anchor
-                    t = val.find(util.nspath_eval('cit:title/gcx:Anchor', namespaces))
+                    t = val.find(util.nspath_eval('cit:title/gcx:Anchor', self.namespaces))
                     if t is not None:
                         self.thesaurus['title'] = util.testXMLValue(t)
-                        self.thesaurus['url'] = t.attrib.get(util.nspath_eval('xlink:href', namespaces))
+                        self.thesaurus['url'] = t.attrib.get(util.nspath_eval('xlink:href', self.namespaces))
 
-                date_ = val.find(util.nspath_eval('cit:date/cit:CI_Date/cit:date/gco:Date', namespaces))
+                date_ = val.find(util.nspath_eval('cit:date/cit:CI_Date/cit:date/gco:Date', self.namespaces))
                 self.thesaurus['date'] = util.testXMLValue(date_)
 
                 datetype = val.find(
-                    util.nspath_eval('cit:date/cit:CI_Date/cit:dateType/cit:CI_DateTypeCode', namespaces))
+                    util.nspath_eval('cit:date/cit:CI_Date/cit:dateType/cit:CI_DateTypeCode', self.namespaces))
                 self.thesaurus['datetype'] = util.testXMLAttribute(datetype, 'codeListValue')
 
 
 class MD_DataIdentification(printable):
     """ Process MD_DataIdentification
     """
-    def __init__(self, md=None, identtype=None):
+    def __init__(self, namespaces, md=None, identtype=None):
         """
         Parses MD_DataIdentification XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: MD_DataIdentification etree.Element
         :param identtype: identitication type e.g. 'dataset' if MD_DataIdentification,
                                                    'service' if MD_ServiceIdentification
         """
+        self.namespaces = namespaces
         self.aggregationinfo = None
+        self.bbox = None
+        self.temporalextent_start = None
+        self.temporalextent_end = None
+        self.extent = None
         if md is None:
             self.identtype = None
             self.title = None
@@ -487,26 +539,22 @@ class MD_DataIdentification(printable):
             self.keywords = []
             self.topiccategory = []
             self.supplementalinformation = None
-            self.extent = None
-            self.bbox = None
-            self.temporalextent_start = None
-            self.temporalextent_end = None
             self.spatialrepresentationtype = []
         else:
             self.identtype = identtype
             val = md.find(util.nspath_eval(
-                'mri:citation/cit:CI_Citation/cit:title/gco:CharacterString', namespaces))
+                'mri:citation/cit:CI_Citation/cit:title/gco:CharacterString', self.namespaces))
             self.title = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
-                'mri:citation/cit:CI_Citation/cit:alternateTitle/gco:CharacterString', namespaces))
+                'mri:citation/cit:CI_Citation/cit:alternateTitle/gco:CharacterString', self.namespaces))
             self.alternatetitle = util.testXMLValue(val)
 
             self.uricode = []
             for end_tag in ['gco:CharacterString', 'gcx:Anchor']:
                 _values = md.findall(util.nspath_eval(
                     f"mri:citation/cit:CI_Citation/cit:identifier/mcc:MD_Identifier/mcc:code/{end_tag}",
-                    namespaces))
+                    self.namespaces))
                 for i in _values:
                     val = util.testXMLValue(i)
                     if val is not None:
@@ -515,7 +563,7 @@ class MD_DataIdentification(printable):
             self.uricodespace = []
             for i in md.findall(util.nspath_eval(
                     'mri:citation/cit:CI_Citation/cit:identifier/mcc:MD_Identifier/mcc:codeSpace/gco:CharacterString',
-                    namespaces)):
+                    self.namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.uricodespace.append(val)
@@ -523,13 +571,13 @@ class MD_DataIdentification(printable):
             self.date = []
             self.datetype = []
 
-            for i in md.findall(util.nspath_eval('mri:citation/cit:CI_Citation/cit:date/cit:CI_Date', namespaces)):
-                self.date.append(CI_Date(i))
+            for i in md.findall(util.nspath_eval('mri:citation/cit:CI_Citation/cit:date/cit:CI_Date', self.namespaces)):
+                self.date.append(CI_Date(self.namespaces, i))
 
             self.uselimitation = []
             self.uselimitation_url = []
             uselimit_values = md.findall(util.nspath_eval(
-                'mri:resourceConstraints/mco:MD_LegalConstraints/mco:useLimitation/gco:CharacterString>', namespaces))
+                'mri:resourceConstraints/mco:MD_LegalConstraints/mco:useLimitation/gco:CharacterString>', self.namespaces))
             for i in uselimit_values:
                 val = util.testXMLValue(i)
                 if val is not None:
@@ -538,7 +586,7 @@ class MD_DataIdentification(printable):
             self.accessconstraints = []
             for i in md.findall(util.nspath_eval(
                     'mri:resourceConstraints/mco:MD_LegalConstraints/mco:accessConstraints/mco:MD_RestrictionCode',
-                    namespaces)):
+                    self.namespaces)):
                 val = _testCodeListValue(i)
                 if val is not None:
                     self.accessconstraints.append(val)
@@ -549,7 +597,7 @@ class MD_DataIdentification(printable):
             for end_tag in ['gco:CharacterString', 'gcx:Anchor']:
                 for i in md.findall(util.nspath_eval(
                         f"mri:resourceConstraints/mco:MD_LegalConstraints/mco:otherConstraints/{end_tag}",
-                        namespaces)):
+                        self.namespaces)):
                     val = util.testXMLValue(i)
                     if val is not None:
                         self.otherconstraints.append(val)
@@ -557,7 +605,7 @@ class MD_DataIdentification(printable):
             self.securityconstraints = []
             for i in md.findall(util.nspath_eval(
                     'mri:resourceConstraints/mco:MD_SecurityConstraints/mco:classification/mco:MD_ClassificationCode',
-                    namespaces)):
+                    self.namespaces)):
                 val = _testCodeListValue(i)
                 if val is not None:
                     self.securityconstraints.append(val)
@@ -565,7 +613,7 @@ class MD_DataIdentification(printable):
             self.useconstraints = []
             for i in md.findall(util.nspath_eval(
                     'mri:resourceConstraints/mco:MD_LegalConstraints/mco:useConstraints/mco:MD_RestrictionCode',
-                    namespaces)):
+                    self.namespaces)):
                 val = _testCodeListValue(i)
                 if val is not None:
                     self.useconstraints.append(val)
@@ -573,7 +621,7 @@ class MD_DataIdentification(printable):
             self.denominators = []
             for i in md.findall(util.nspath_eval(
                     'mri:spatialResolution/mri:MD_Resolution/mri:equivalentScale/mri:MD_RepresentativeFraction/mri:denominator/gco:Integer',
-                    namespaces)):
+                    self.namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.denominators.append(val)
@@ -581,20 +629,20 @@ class MD_DataIdentification(printable):
             self.distance = []
             self.uom = []
             for i in md.findall(util.nspath_eval(
-                    'mri:spatialResolution/mri:MD_Resolution/mri:distance/gco:Distance', namespaces)):
+                    'mri:spatialResolution/mri:MD_Resolution/mri:distance/gco:Distance', self.namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.distance.append(val)
                 self.uom.append(i.get("uom"))
 
             self.resourcelanguagecode = []
-            for i in md.findall(util.nspath_eval('lan:language/lan:LanguageCode', namespaces)):
+            for i in md.findall(util.nspath_eval('lan:language/lan:LanguageCode', self.namespaces)):
                 val = _testCodeListValue(i)
                 if val is not None:
                     self.resourcelanguagecode.append(val)
 
             self.resourcelanguage = []
-            for i in md.findall(util.nspath_eval('lan:language/gco:CharacterString', namespaces)):
+            for i in md.findall(util.nspath_eval('lan:language/gco:CharacterString', self.namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.resourcelanguage.append(val)
@@ -603,11 +651,11 @@ class MD_DataIdentification(printable):
             self.publisher = []
             self.contributor = []
             self.funder = []
-            for val in md.findall(util.nspath_eval('mri:pointOfContact/cit:CI_Responsibility', namespaces)):
-                role = val.find(util.nspath_eval('cit:role/cit:CI_RoleCode', namespaces))
+            for val in md.findall(util.nspath_eval('mri:pointOfContact/cit:CI_Responsibility', self.namespaces)):
+                role = val.find(util.nspath_eval('cit:role/cit:CI_RoleCode', self.namespaces))
                 if role is not None:
                     clv = _testCodeListValue(role)
-                    rp = CI_Responsibility(val)
+                    rp = CI_Responsibility(self.namespaces, val)
                     if clv == 'originator':
                         self.creator.append(rp)
                     elif clv == 'publisher':
@@ -617,55 +665,55 @@ class MD_DataIdentification(printable):
                     elif clv == 'funder':
                         self.funder.append(rp)
 
-            val = md.find(util.nspath_eval('cit:CI_Citation/cit:edition/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('cit:CI_Citation/cit:edition/gco:CharacterString', self.namespaces))
             self.edition = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('mri:abstract/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('mri:abstract/gco:CharacterString', self.namespaces))
             self.abstract = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('mri:abstract/gcx:Anchor', namespaces))
+            val = md.find(util.nspath_eval('mri:abstract/gcx:Anchor', self.namespaces))
 
             self.abstract_url = None
             if val is not None:
                 self.abstract = util.testXMLValue(val)
-                self.abstract_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
+                self.abstract_url = val.attrib.get(util.nspath_eval('xlink:href', self.namespaces))
 
-            val = md.find(util.nspath_eval('mri:purpose/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('mri:purpose/gco:CharacterString', self.namespaces))
             self.purpose = util.testXMLValue(val)
 
-            self.status = _testCodeListValue(md.find(util.nspath_eval('mri:status/mri:MD_ProgressCode', namespaces)))
+            self.status = _testCodeListValue(md.find(util.nspath_eval('mri:status/mri:MD_ProgressCode', self.namespaces)))
 
             self.graphicoverview = []
             for val in md.findall(util.nspath_eval(
-                    'mri:graphicOverview/mcc:MD_BrowseGraphic/mcc:fileName/gco:CharacterString', namespaces)):
+                    'mri:graphicOverview/mcc:MD_BrowseGraphic/mcc:fileName/gco:CharacterString', self.namespaces)):
                 if val is not None:
                     val2 = util.testXMLValue(val)
                     if val2 is not None:
                         self.graphicoverview.append(val2)
 
             self.contact = []
-            for i in md.findall(util.nspath_eval('mri:pointOfContact/cit:CI_Responsibility', namespaces)):
-                o = CI_Responsibility(i)
+            for i in md.findall(util.nspath_eval('mri:pointOfContact/cit:CI_Responsibility', self.namespaces)):
+                o = CI_Responsibility(self.namespaces, i)
                 self.contact.append(o)
 
             self.spatialrepresentationtype = []
             for val in md.findall(util.nspath_eval(
-                    'mri:spatialRepresentationType/mcc:MD_SpatialRepresentationTypeCode', namespaces)):
+                    'mri:spatialRepresentationType/mcc:MD_SpatialRepresentationTypeCode', self.namespaces)):
                 val = util.testXMLAttribute(val, 'codeListValue')
                 if val:
                     self.spatialrepresentationtype.append(val)
 
             self.keywords = []
-            for mdkw in md.findall(util.nspath_eval('mri:descriptiveKeywords/mri:MD_Keywords', namespaces)):
-                self.keywords.append(MD_Keywords(mdkw))
+            for mdkw in md.findall(util.nspath_eval('mri:descriptiveKeywords/mri:MD_Keywords', self.namespaces)):
+                self.keywords.append(MD_Keywords(self.namespaces, mdkw))
 
             self.topiccategory = []
-            for i in md.findall(util.nspath_eval('mri:topicCategory/mri:MD_TopicCategoryCode', namespaces)):
+            for i in md.findall(util.nspath_eval('mri:topicCategory/mri:MD_TopicCategoryCode', self.namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.topiccategory.append(val)
 
-            val = md.find(util.nspath_eval('mri:supplementalInformation/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('mri:supplementalInformation/gco:CharacterString', self.namespaces))
             self.supplementalinformation = util.testXMLValue(val)
 
             # There may be multiple geographicElement, create an extent
@@ -674,70 +722,74 @@ class MD_DataIdentification(printable):
             val = None
             val2 = None
             val3 = None
-            extents = md.findall(util.nspath_eval('mri:extent', namespaces))
+            extents = md.findall(util.nspath_eval('mri:extent', self.namespaces))
             for extent in extents:
                 # Parse bounding box and vertical extents
                 if val is None:
-                    for e in extent.findall(util.nspath_eval('gex:EX_Extent/gex:geographicElement', namespaces)):
-                        if e.find(util.nspath_eval('gex:EX_GeographicBoundingBox', namespaces)) is not None or \
-                                e.find(util.nspath_eval('gex:EX_BoundingPolygon', namespaces)) is not None:
+                    for e in extent.findall(util.nspath_eval('gex:EX_Extent/gex:geographicElement', self.namespaces)):
+                        if e.find(util.nspath_eval('gex:EX_GeographicBoundingBox', self.namespaces)) is not None or \
+                                e.find(util.nspath_eval('gex:EX_BoundingPolygon', self.namespaces)) is not None:
                             val = e
                             break
-                    vert_elem = extent.find(util.nspath_eval('gex:EX_Extent/gex:verticalElement', namespaces))
-                    self.extent = EX_Extent(val, vert_elem)
+                    vert_elem = extent.find(util.nspath_eval('gex:EX_Extent/gex:verticalElement', self.namespaces))
+                    self.extent = EX_Extent(self.namespaces, val, vert_elem)
                     self.bbox = self.extent.boundingBox  # for backwards compatibility
 
                 # Parse temporal extent begin
                 if val2 is None:
                     val2 = extent.find(util.nspath_eval(
                         'gex:EX_Extent/gex:temporalElement/gex:EX_TemporalExtent/gex:extent/gml:TimePeriod/gml:beginPosition',
-                        namespaces))
+                        self.namespaces))
                     self.temporalextent_start = util.testXMLValue(val2)
 
                 # Parse temporal extent end
                 if val3 is None:
                     val3 = extent.find(util.nspath_eval(
                         'gex:EX_Extent/gex:temporalElement/gex:EX_TemporalExtent/gex:extent/gml:TimePeriod/gml:endPosition',
-                        namespaces))
+                        self.namespaces))
                     self.temporalextent_end = util.testXMLValue(val3)
 
 
 class MD_Distributor(printable):
     """ Process MD_Distributor
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses MD_Distributor XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: MD_Distributor etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.contact = None
             self.online = []
         else:
             self.contact = None
             val = md.find(util.nspath_eval(
-                'mrd:MD_Distributor/mrd:distributorContact/cit:CI_Responsibility', namespaces))
+                'mrd:MD_Distributor/mrd:distributorContact/cit:CI_Responsibility', self.namespaces))
             if val is not None:
-                self.contact = CI_Responsibility(val)
+                self.contact = CI_Responsibility(self.namespaces, val)
 
             self.online = []
 
             for ol in md.findall(util.nspath_eval(
                     'mrd:MD_Distributor/mrd:distributorTransferOptions/mrd:MD_DigitalTransferOptions/cit:onLine/cit:CI_OnlineResource',
-                    namespaces)):
-                self.online.append(CI_OnlineResource(ol))
+                    self.namespaces)):
+                self.online.append(CI_OnlineResource(self.namespaces, ol))
 
 
 class MD_Distribution(printable):
     """ Process MD_Distribution
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses MD_Distribution XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: MD_Distribution etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.format = None
             self.version = None
@@ -745,78 +797,82 @@ class MD_Distribution(printable):
             self.online = []
         else:
             val = md.find(util.nspath_eval(
-                'mrd:distributionFormat/mrd:MD_Format/mrd:formatSpecificationCitation/cit:CI_Citation/cit:title/gco:CharacterString', namespaces))
+                'mrd:distributionFormat/mrd:MD_Format/mrd:formatSpecificationCitation/cit:CI_Citation/cit:title/gco:CharacterString', self.namespaces))
             self.format = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
-                'mrd:distributionFormat/mrd:MD_Format/mrd:formatSpecificationCitation/cit:CI_Citation/cit:edition/gco:CharacterString', namespaces))
+                'mrd:distributionFormat/mrd:MD_Format/mrd:formatSpecificationCitation/cit:CI_Citation/cit:edition/gco:CharacterString', self.namespaces))
             self.version = util.testXMLValue(val)
 
             self.distributor = []
-            for dist in md.findall(util.nspath_eval('mrd:distributor', namespaces)):
-                self.distributor.append(MD_Distributor(dist))
+            for dist in md.findall(util.nspath_eval('mrd:distributor', self.namespaces)):
+                self.distributor.append(MD_Distributor(self.namespaces, dist))
 
             self.online = []
 
             for ol in md.findall(util.nspath_eval(
                     'mrd:transferOptions/mrd:MD_DigitalTransferOptions/mrd:onLine/cit:CI_OnlineResource',
-                    namespaces)):
-                self.online.append(CI_OnlineResource(ol))
+                    self.namespaces)):
+                self.online.append(CI_OnlineResource(self.namespaces, ol))
 
 
 class DQ_DataQuality(printable):
     """ Process DQ_DataQuality
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
-        Parses DQ_DataQuality XML subtree
+        Parse a portion of DQ_DataQuality XML subtree only taking the first value found
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: DQ_DataQuality etree.Element
         """
-        if md is None:
-            self.conformancetitle = []
-            self.conformancedate = []
-            self.conformancedatetype = []
-            self.conformancedegree = []
-            self.lineage = None
-            self.lineage_url = None
-            self.specificationtitle = None
-            self.specificationdate = []
-        else:
-            val = md.find(util.nspath_eval(
-                'mdq:evaluationProcedure/cit:CI_Citation/cit:title/gco:CharacterString', namespaces))
-            self.conformancetitle = util.testXMLValue(val)
+        self.namespaces = namespaces
+        self.conformancetitle = []
+        self.conformancedate = []
+        self.conformancedatetype = []
+        self.conformancedegree = []
+        self.lineage = None
+        self.lineage_url = None
+        self.specificationtitle = None
+        self.specificationdate = []
+        if md is not None:
+            for conftitle in md.xpath(
+                    'mdq:report/*/mdq:evaluationMethod/mdq:DQ_EvaluationMethod/mdq:evaluationProcedure/cit:CI_Citation/cit:title/gco:CharacterString',
+                    namespaces=self.namespaces):
+                self.conformancetitle.append(util.testXMLValue(conftitle))
 
-            val = md.find(util.nspath_eval(
-                'mdq:evaluationProcedure/cit:CI_Citation/cit:date', namespaces))
-            self.conformancedate = util.testXMLValue(val)
+            for confdate in md.xpath(
+                    'mdq:report/*/mdq:evaluationMethod/mdq:DQ_EvaluationMethod/mdq:evaluationProcedure/cit:CI_Citation/cit:date/cit:CI_Date/cit:date/gco:DateTime',
+                    namespaces=self.namespaces):
+                self.conformancedate.append(util.testXMLValue(confdate))
 
-            val = md.find(util.nspath_eval(
-                'mdq:evaluationProcedure/cit:CI_Citation/cit:date/cit:CI_DateTypeCode', namespaces))
-            self.conformancedatetype = util.testXMLValue(val)
+            for confdatetype in md.xpath(
+                    'mdq:report/*/mdq:evaluationMethod/mdq:DQ_EvaluationMethod/mdq:evaluationProcedure/cit:CI_Citation/cit:date/cit:CI_Date/cit:dateType/cit:CI_DateTypeCode',
+                    namespaces=self.namespaces):
+                print(f"{confdatetype=}")
+                self.conformancedatetype.append(util.testXMLValue(confdatetype))
 
-            val = md.find(util.nspath_eval(
-                'mdq:result/mdq:DQ_QuantitativeResult/mdq:value/gco:Record', namespaces))
-            self.conformancedegree = util.testXMLValue(val)
+            for confdegree in md.xpath(
+                    'mdq:report/*/mdq:result/mdq:DQ_QuantitativeResult/mdq:value/gco:Record',
+                    namespaces=self.namespaces):
+                self.conformancedegree.append(util.testXMLValue(confdegree))
 
-            val = md.find(util.nspath_eval(
-                'mdb:resourceLineage/mrl:LI_Lineage/mrl:statement/gco:CharacterString', namespaces))
-            self.lineage = util.testXMLValue(val)
-
-            val = md.find(util.nspath_eval('mdb:resourceLineage/mrl:LI_Lineage/mrl:statement/gcx:Anchor', namespaces))
-            if val is not None:
-                self.lineage = util.testXMLValue(val)
-                self.lineage_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
+            lins = md.xpath(
+                'mdq:lineage/mrl:LI_Lineage/mrl:statement/*[self::gco:CharacterString or self::gcx:Anchor]',
+                namespaces=self.namespaces)
+            if len(lins) > 0:
+                self.lineage = util.testXMLValue(lins[0])
+                self.lineage_url = lins[0].attrib.get(util.nspath_eval('xlink:href', self.namespaces))
 
             val = md.find(util.nspath_eval(
                 'mdq:report/mdq:DQ_DomainConsistency/mdq:result/mdq:DQ_ConformanceResult/mdq:specification/cit:CI_Citation/cit:title/gco:CharacterString',
-                namespaces))
+                self.namespaces))
             self.specificationtitle = util.testXMLValue(val)
 
             self.specificationdate = []
             for i in md.findall(util.nspath_eval(
-                    'mdq:report/mdq:DQ_DomainConsistency/mdq:result/mdq:DQ_ConformanceResult/mdq:specification/cit:CI_Citation/cit:date/cit:CI_Date',
-                    namespaces)):
+                    'mdq:report/mdq:DQ_DomainConsistency/mdq:result/mdq:DQ_ConformanceResult/mdq:specification/cit:CI_Citation/cit:date/cit:CI_Date/cit:date/gco:DateTime',
+                    self.namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.specificationdate.append(val)
@@ -825,13 +881,15 @@ class DQ_DataQuality(printable):
 class SV_ServiceIdentification(MD_DataIdentification, printable):
     """ Process SV_ServiceIdentification
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses SV_ServiceIdentification XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: SV_ServiceIdentification etree.Element
         """
-        super().__init__(md, 'service')
+        super().__init__(namespaces, md, 'service')
+        self.namespaces = namespaces
 
         if md is None:
             self.type = None
@@ -841,58 +899,60 @@ class SV_ServiceIdentification(MD_DataIdentification, printable):
             self.operations = []
             self.operateson = []
         else:
-            val = md.xpath('srv:serviceType/*[self::gco:LocalName or self::gco:ScopedName]', namespaces=namespaces)
+            val = md.xpath('srv:serviceType/*[self::gco:LocalName or self::gco:ScopedName]', namespaces=self.namespaces)
             if len(val) > 0:
                 self.type = util.testXMLValue(val[0])
 
-            val = md.find(util.nspath_eval('srv:serviceTypeVersion/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('srv:serviceTypeVersion/gco:CharacterString', self.namespaces))
             self.version = util.testXMLValue(val)
 
             val = md.find(util.nspath_eval(
-                'srv:accessProperties/mrd:MD_StandardOrderProcess/mrd:fees/gco:CharacterString', namespaces))
+                'srv:accessProperties/mrd:MD_StandardOrderProcess/mrd:fees/gco:CharacterString', self.namespaces))
             self.fees = util.testXMLValue(val)
 
             self.couplingtype = _testCodeListValue(md.find(util.nspath_eval(
-                'srv:couplingType/srv:SV_CouplingType', namespaces)))
+                'srv:couplingType/srv:SV_CouplingType', self.namespaces)))
 
             self.operations = []
 
-            for i in md.findall(util.nspath_eval('srv:containsOperations', namespaces)):
+            for i in md.findall(util.nspath_eval('srv:containsOperations', self.namespaces)):
                 tmp = {}
                 val = i.find(util.nspath_eval(
-                    'srv:SV_OperationMetadata/srv:operationName/gco:CharacterString', namespaces))
+                    'srv:SV_OperationMetadata/srv:operationName/gco:CharacterString', self.namespaces))
                 tmp['name'] = util.testXMLValue(val)
                 tmp['dcplist'] = []
-                for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:DCP', namespaces)):
-                    tmp2 = _testCodeListValue(d.find(util.nspath_eval('srv:DCPList', namespaces)))
+                for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:DCP', self.namespaces)):
+                    tmp2 = _testCodeListValue(d.find(util.nspath_eval('srv:DCPList', self.namespaces)))
                     tmp['dcplist'].append(tmp2)
 
                 tmp['connectpoint'] = []
 
-                for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:connectPoint', namespaces)):
-                    tmp3 = d.find(util.nspath_eval('cit:CI_OnlineResource', namespaces))
-                    tmp['connectpoint'].append(CI_OnlineResource(tmp3))
+                for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:connectPoint', self.namespaces)):
+                    tmp3 = d.find(util.nspath_eval('cit:CI_OnlineResource', self.namespaces))
+                    tmp['connectpoint'].append(CI_OnlineResource(self.namespaces, tmp3))
                 self.operations.append(tmp)
 
             self.operateson = []
 
-            for i in md.findall(util.nspath_eval('srv:operatesOn', namespaces)):
+            for i in md.findall(util.nspath_eval('srv:operatesOn', self.namespaces)):
                 tmp = {}
                 tmp['uuidref'] = i.attrib.get('uuidref')
-                tmp['href'] = i.attrib.get(util.nspath_eval('xlink:href', namespaces))
-                tmp['title'] = i.attrib.get(util.nspath_eval('xlink:title', namespaces))
+                tmp['href'] = i.attrib.get(util.nspath_eval('xlink:href', self.namespaces))
+                tmp['title'] = i.attrib.get(util.nspath_eval('xlink:title', self.namespaces))
                 self.operateson.append(tmp)
 
 
 class CI_OnlineResource(printable):
     """ Process CI_OnlineResource
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses CI_OnlineResource XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: CI_OnlineResource etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.url = None
             self.protocol = None
@@ -900,68 +960,72 @@ class CI_OnlineResource(printable):
             self.description = None
             self.function = None
         else:
-            val = md.find(util.nspath_eval('cit:linkage/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('cit:linkage/gco:CharacterString', self.namespaces))
             self.url = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('cit:protocol/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('cit:protocol/gco:CharacterString', self.namespaces))
             self.protocol = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('cit:name/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('cit:name/gco:CharacterString', self.namespaces))
             self.name = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('cit:description/gco:CharacterString', namespaces))
+            val = md.find(util.nspath_eval('cit:description/gco:CharacterString', self.namespaces))
             self.description = util.testXMLValue(val)
 
             self.function = _testCodeListValue(md.find(util.nspath_eval(
-                'cit:function/cit:CI_OnLineFunctionCode', namespaces)))
+                'cit:function/cit:CI_OnLineFunctionCode', self.namespaces)))
 
 
 class EX_GeographicBoundingBox(printable):
     """ Process gex:EX_GeographicBoundingBox
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses EX_GeographicBoundingBox XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: EX_GeographicBoundingBox etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.minx = None
             self.maxx = None
             self.miny = None
             self.maxy = None
         else:
-            val = md.find(util.nspath_eval('gex:westBoundLongitude/gco:Decimal', namespaces))
+            val = md.find(util.nspath_eval('gex:westBoundLongitude/gco:Decimal', self.namespaces))
             self.minx = util.testXMLValue(val)
-            val = md.find(util.nspath_eval('gex:eastBoundLongitude/gco:Decimal', namespaces))
+            val = md.find(util.nspath_eval('gex:eastBoundLongitude/gco:Decimal', self.namespaces))
             self.maxx = util.testXMLValue(val)
-            val = md.find(util.nspath_eval('gex:southBoundLatitude/gco:Decimal', namespaces))
+            val = md.find(util.nspath_eval('gex:southBoundLatitude/gco:Decimal', self.namespaces))
             self.miny = util.testXMLValue(val)
-            val = md.find(util.nspath_eval('gex:northBoundLatitude/gco:Decimal', namespaces))
+            val = md.find(util.nspath_eval('gex:northBoundLatitude/gco:Decimal', self.namespaces))
             self.maxy = util.testXMLValue(val)
 
 
 class EX_Polygon(printable):
     """ Process gml32:Polygon
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses EX_Polygon XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: EX_Polygon etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.exterior_ring = None
             self.interior_rings = []
         else:
-            linear_ring = md.find(util.nspath_eval('gml32:Polygon/gml32:exterior/gml32:LinearRing', namespaces))
+            linear_ring = md.find(util.nspath_eval('gml32:Polygon/gml32:exterior/gml32:LinearRing', self.namespaces))
             if linear_ring is not None:
                 self.exterior_ring = self._coordinates_for_ring(linear_ring)
 
-            interior_ring_elements = md.findall(util.nspath_eval('gml32:Polygon/gml32:interior', namespaces))
+            interior_ring_elements = md.findall(util.nspath_eval('gml32:Polygon/gml32:interior', self.namespaces))
             self.interior_rings = []
             for iring_element in interior_ring_elements:
-                linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing', namespaces))
+                linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing', self.namespaces))
                 self.interior_rings.append(self._coordinates_for_ring(linear_ring))
 
     def _coordinates_for_ring(self, linear_ring):
@@ -971,7 +1035,7 @@ class EX_Polygon(printable):
         :returns: coordinate list of float tuples
         """
         coordinates = []
-        positions = linear_ring.findall(util.nspath_eval('gml32:pos', namespaces))
+        positions = linear_ring.findall(util.nspath_eval('gml32:pos', self.namespaces))
         for pos in positions:
             tokens = pos.text.split()
             coords = tuple([float(t) for t in tokens])
@@ -982,36 +1046,40 @@ class EX_Polygon(printable):
 class EX_BoundingPolygon(printable):
     """ Process EX_BoundingPolygon
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses EX_BoundingPolygon XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: EX_BoundingPolygon etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.is_extent = None
             self.polygons = []
         else:
-            val = md.find(util.nspath_eval('gex:extentTypeCode', namespaces))
+            val = md.find(util.nspath_eval('gex:extentTypeCode', self.namespaces))
             self.is_extent = util.testXMLValue(val)
 
-            md_polygons = md.findall(util.nspath_eval('gex:polygon', namespaces))
+            md_polygons = md.findall(util.nspath_eval('gex:polygon', self.namespaces))
 
             self.polygons = []
             for val in md_polygons:
-                self.polygons.append(EX_Polygon(val))
+                self.polygons.append(EX_Polygon(self.namespaces, val))
 
 
 class EX_Extent(printable):
     """ Process EX_Extent
     """
-    def __init__(self, md=None, vert_elem=None):
+    def __init__(self, namespaces, md=None, vert_elem=None):
         """
         Parses EX_Extent XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: EX_Extent etree.Element
         :param vert_elem: vertical extent 'gex:verticalElement' etree.Element
         """
+        self.namespaces = namespaces
         self.boundingBox = None
         self.boundingPolygon = None
         self.description_code = None
@@ -1019,17 +1087,17 @@ class EX_Extent(printable):
         self.vertExtMax = None
         if md is not None:
             # Parse bounding box
-            bboxElement = md.find(util.nspath_eval('gex:EX_GeographicBoundingBox', namespaces))
+            bboxElement = md.find(util.nspath_eval('gex:EX_GeographicBoundingBox', self.namespaces))
             if bboxElement is not None:
-                self.boundingBox = EX_GeographicBoundingBox(bboxElement)
+                self.boundingBox = EX_GeographicBoundingBox(self.namespaces, bboxElement)
 
-            polygonElement = md.find(util.nspath_eval('gex:EX_BoundingPolygon', namespaces))
+            polygonElement = md.find(util.nspath_eval('gex:EX_BoundingPolygon', self.namespaces))
             if polygonElement is not None:
-                self.boundingPolygon = EX_BoundingPolygon(polygonElement)
+                self.boundingPolygon = EX_BoundingPolygon(self.namespaces, polygonElement)
 
             code = md.find(util.nspath_eval(
                 'gex:EX_GeographicDescription/gex:geographicIdentifier/mcc:MD_Identifier/mcc:code/gco:CharacterString',
-                namespaces))
+                self.namespaces))
             self.description_code = util.testXMLValue(code)
 
         # Parse vertical extent
@@ -1037,51 +1105,53 @@ class EX_Extent(printable):
             # Get vertical extent max
             vertext_max = vert_elem.find(util.nspath_eval(
                 'gex:EX_VerticalExtent/gex:maximumValue/gco:Real',
-                namespaces))
+                self.namespaces))
             self.vertExtMax = util.testXMLValue(vertext_max)
 
             # Get vertical extent min
             vertext_min = vert_elem.find(util.nspath_eval(
                 'gex:EX_VerticalExtent/gex:minimumValue/gco:Real',
-                namespaces))
+                self.namespaces))
             self.vertExtMin = util.testXMLValue(vertext_min)
 
 
 class MD_ReferenceSystem(printable):
     """ Process MD_ReferenceSystem
     """
-    def __init__(self, md=None):
+    def __init__(self, namespaces, md=None):
         """
         Parses MD_ReferenceSystem XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param md: MD_ReferenceSystem etree.Element
         """
+        self.namespaces = namespaces
         if md is None:
             self.code = None
             self.codeSpace = None
             self.version = None
         else:
             val = md.find(util.nspath_eval(
-                'mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', namespaces))
+                'mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', self.namespaces))
             if val is not None:
                 self.code = util.testXMLValue(val)
             else:
                 val = md.find(util.nspath_eval(
-                'mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:code/gcx:Anchor', namespaces))
+                'mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:code/gcx:Anchor', self.namespaces))
                 if val is not None:
                     self.code = util.testXMLValue(val)
                 else:
                     self.code = None
 
             val = md.find(util.nspath_eval(
-                'mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:codeSpace/gco:CharacterString', namespaces))
+                'mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:codeSpace/gco:CharacterString', self.namespaces))
             if val is not None:
                 self.codeSpace = util.testXMLValue(val)
             else:
                 self.codeSpace = None
 
             val = md.find(util.nspath_eval(
-                'mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:version/gco:CharacterString', namespaces))
+                'mrs:referenceSystemIdentifier/mcc:MD_Identifier/mcc:version/gco:CharacterString', self.namespaces))
             if val is not None:
                 self.version = util.testXMLValue(val)
             else:
@@ -1089,7 +1159,7 @@ class MD_ReferenceSystem(printable):
 
 
 def _testCodeListValue(elpath):
-    """ Get gco:CodeListValue_Type attribute, else get text content
+    """ Get codeListValue attribute, else get text content
 
     :param elpath: Element path
     :returns: 'codeListValue' attribute of Element or text value or None if elpath is None
@@ -1107,12 +1177,16 @@ def _testCodeListValue(elpath):
 class MD_FeatureCatalogueDescription(printable):
     """Process mrc:MD_FeatureCatalogueDescription
     """
-    def __init__(self, fcd=None):
+    def __init__(self, namespaces, fcd=None):
         """
         Parses MD_FeatureCatalogueDescription XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param fcd: MD_FeatureCatalogueDescription etree.Element
         """
+        self.namespaces = namespaces
+        self.featuretypenames = []
+        self.featurecatalogues = []
         if fcd is None:
             self.xml = None
             self.compliancecode = None
@@ -1128,33 +1202,34 @@ class MD_FeatureCatalogueDescription(printable):
                 self.xml = etree.tostring(fcd)
 
             self.compliancecode = None
-            comp = fcd.find(util.nspath_eval('mrc:complianceCode/gco:Boolean', namespaces))
+            comp = fcd.find(util.nspath_eval('mrc:complianceCode/gco:Boolean', self.namespaces))
             val = util.testXMLValue(comp)
             if val is not None:
                 self.compliancecode = util.getTypedValue('boolean', val)
 
             self.language = []
-            for i in fcd.findall(util.nspath_eval('lan:language/gco:CharacterString', namespaces)):
-                val = util.testXMLValue(i)
+            for i in fcd.findall(util.nspath_eval('mrc:locale/lan:PT_Locale/lan:language/lan:LanguageCode', self.namespaces)):
+                val = _testCodeListValue(i)
                 if val is not None:
                     self.language.append(val)
 
             self.includedwithdataset = None
-            comp = fcd.find(util.nspath_eval('mrc:includedWithDataset/gco:Boolean', namespaces))
+            comp = fcd.find(util.nspath_eval('mrc:includedWithDataset/gco:Boolean', self.namespaces))
             val = util.testXMLValue(comp)
             if val is not None:
                 self.includedwithdataset = util.getTypedValue('boolean', val)
 
             self.featuretypenames = []
-            for i in fcd.findall(util.nspath_eval('mrc:featureTypes/mrc:MD_FeatureTypeInfo/mrc:featureTypeName/gml:CodeType', namespaces)):
-                val = util.testXMLValue(i)
-                if val is not None:
+            for name in fcd.xpath('mrc:featureTypes/mrc:MD_FeatureTypeInfo/mrc:featureTypeName/*[self::gco:LocalName or self::gco:ScopedName]',
+                                   namespaces=self.namespaces):
+                val = util.testXMLValue(name)
+                if ValueError is not None:
                     self.featuretypenames.append(val)
 
             # Gather feature catalogue titles
             self.featurecatalogues = []
             for cit in fcd.findall(util.nspath_eval(
-                    'mrc:featureCatalogueCitation/cit:CI_Citation/cit:title/gco:CharacterString', namespaces)):
+                    'mrc:featureCatalogueCitation/cit:CI_Citation/cit:title/gco:CharacterString', self.namespaces)):
                 val = util.testXMLValue(cit)
                 if val is not None:
                     self.featurecatalogues.append(val)
@@ -1162,61 +1237,64 @@ class MD_FeatureCatalogueDescription(printable):
 class MD_ImageDescription(printable):
     """Process mrc:MD_ImageDescription
     """
-    def __init__(self, img_desc=None):
+    def __init__(self, namespaces, img_desc=None):
         """
         Parses MD_ImageDescription XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param img_desc: MD_ImageDescription etree.Element
         """
+        self.namespaces = namespaces
         self.type = 'image'
         self.bands = []
 
         if img_desc is None:
-            self.attribute_description = None
-            self.cloud_cover = None
-            self.processing_level = None
+            self.attributedescription = None
+            self.cloudcover = None
+            self.processinglevel = None
         else:
-            val = img_desc.find(util.nspath_eval('mrc:attributeDescription/gco:RecordType', namespaces))
-            self.attribute_description = util.testXMLValue(val)
+            attdesc = img_desc.find(util.nspath_eval('mrc:attributeDescription/gco:RecordType', self.namespaces))
+            self.attributedescription = util.testXMLValue(attdesc)
 
-            val = img_desc.find(util.nspath_eval('mrc:attributeGroup/mrc:MD_CoverageContentTypeCode', namespaces))
-            self.type = util.testXMLAttribute(val, 'codeListValue')
+            ctype = img_desc.find(util.nspath_eval('mrc:attributeGroup/mrc:MD_AttributeGroup/mrc:contentType/mrc:MD_CoverageContentTypeCode', self.namespaces))
+            self.type = util.testXMLAttribute(ctype, 'codeListValue')
 
-            val = img_desc.find(util.nspath_eval('mrc:cloudCoverPercentage/gco:Real', namespaces))
-            self.cloud_cover = util.testXMLValue(val)
+            cloudcov = img_desc.find(util.nspath_eval('mrc:cloudCoverPercentage/gco:Real', self.namespaces))
+            self.cloudcover = util.testXMLValue(cloudcov)
 
-            val = img_desc.find(util.nspath_eval(
-                'mrc:processingLevelCode/mcc:MD_Identifier/mcc:code/gco:CharacterString', namespaces))
-            self.processing_level = util.testXMLValue(val)
+            proclvl = img_desc.find(util.nspath_eval(
+                'mrc:processingLevelCode/mcc:MD_Identifier/mcc:code/gco:CharacterString', self.namespaces))
+            self.processinglevel = util.testXMLValue(proclvl)
 
-            for i in img_desc.findall(util.nspath_eval('mrc:attributeGroup/mrc:MD_Band', namespaces)):
-                bid = util.testXMLAttribute(i, 'id')
-                self.bands.append(MD_Band(i, bid))
+            for i in img_desc.findall(util.nspath_eval('mrc:attributeGroup/mrc:MD_AttributeGroup/mrc:attribute/mrc:MD_Band', self.namespaces)):
+                self.bands.append(MD_Band(self.namespaces, i))
 
 
 class MD_Band(printable):
     """Process mrc:MD_Band
     """
-    def __init__(self, band, band_id=None):
+    def __init__(self, namespaces, band):
         """
         Parses MD_Band XML subtree
 
+        :param namespaces: dict of XML namespaces, key is namespace, val is path
         :param band: MD_Band etree.Element
-        :param band_id: optional id attribute
         """
+        self.namespaces = namespaces
         if band is None:
             self.id = None
             self.units = None
             self.min = None
             self.max = None
         else:
-            self.id = band_id
+            seq_id = band.find(util.nspath_eval('mrc:sequenceIdentifier/gco:MemberName/gco:aName/gco:CharacterString', self.namespaces))
+            self.id = util.testXMLValue(seq_id)
 
-            val = band.find(util.nspath_eval('mrc:units/gml:UnitDefinition/gml:identifier', namespaces))
-            self.units = util.testXMLValue(val)
+            units = band.find(util.nspath_eval('mrc:units/gml:UnitDefinition/gml:identifier', self.namespaces))
+            self.units = util.testXMLValue(units)
 
-            val = band.find(util.nspath_eval('mrc:minValue/gco:Real', namespaces))
-            self.min = util.testXMLValue(val)
+            bmin = band.find(util.nspath_eval('mrc:minValue/gco:Real', self.namespaces))
+            self.min = util.testXMLValue(bmin)
 
-            val = band.find(util.nspath_eval('mrc:maxValue/gco:Real', namespaces))
-            self.max = util.testXMLValue(val)
+            bmax = band.find(util.nspath_eval('mrc:maxValue/gco:Real', self.namespaces))
+            self.max = util.testXMLValue(bmax)

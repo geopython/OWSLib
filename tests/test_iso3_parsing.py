@@ -28,6 +28,7 @@
 # =================================================================
 """ Unit tests for pycsw.core.mdb
 This tests its ability to parse ISO19115-3 XML
+
 """
 
 from pathlib import Path
@@ -46,7 +47,16 @@ from owslib.iso_3 import (MD_Metadata, SV_ServiceIdentification, PT_Locale,
 
 pytestmark = pytest.mark.unit
 
+@pytest.fixture
+def ns():
+    """ Create a V2 namespace
+    """
+    md =  MD_Metadata()
+    return md.namespaces
+
 def test_md_metadata_empty():
+    """ Test empty MD_Metadata
+    """
     mdb = MD_Metadata()
     assert mdb.md == None
     assert mdb.xml == None
@@ -70,19 +80,25 @@ def test_md_metadata_empty():
     assert mdb.dataquality == None
     assert mdb.acquisition == None
 
-def test_pt_locale_empty():
-    loc = PT_Locale()
+def test_pt_locale_empty(ns):
+    """ Test empty PT_Locale
+    """
+    loc = PT_Locale(ns)
     assert loc.id == None
     assert loc.languagecode == None
     assert loc.charset == None
 
-def test_ci_date_empty():
-    dat = CI_Date()
+def test_ci_date_empty(ns):
+    """ Test empty CI_Date
+    """
+    dat = CI_Date(ns)
     assert dat.date == None
     assert dat.type == None
 
-def test_ci_responsibility_empty():
-    resp = CI_Responsibility()
+def test_ci_responsibility_empty(ns):
+    """ Test empty 
+    """
+    resp = CI_Responsibility(ns)
     assert resp.name == None
     assert resp.organization == None
     assert resp.position == None
@@ -97,20 +113,26 @@ def test_ci_responsibility_empty():
     assert resp.onlineresource == None
     assert resp.role == None
 
-def test_keyword_empty():
-    keyw = Keyword()
+def test_keyword_empty(ns):
+    """ Test empty Keyword
+    """
+    keyw = Keyword(ns)
     assert keyw.name == None
     assert keyw.url == None
 
-def test_md_keywords_empty():
-    mdk = MD_Keywords()
+def test_md_keywords_empty(ns):
+    """ Test empty MD_Keywords
+    """
+    mdk = MD_Keywords(ns)
     assert mdk.keywords == []
     assert mdk.type == None
     assert mdk.thesaurus == None
     assert mdk.kwdtype_codeList == 'http://standards.iso.org/iso/19115/-3/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode'
 
-def test_md_dataidentification_empty():
-    mdi = MD_DataIdentification()
+def test_md_dataidentification_empty(ns):
+    """ Test empty MD_DataIdentification
+    """
+    mdi = MD_DataIdentification(ns)
     mdi.identtype == None
     assert mdi.title == None
     assert mdi.alternatetitle == None
@@ -150,20 +172,26 @@ def test_md_dataidentification_empty():
     assert mdi.temporalextent_end == None
     assert mdi.spatialrepresentationtype == []
 
-def test_md_distributor_empty():
-    mdd = MD_Distributor()
+def test_md_distributor_empty(ns):
+    """ Test empty MD_Distributor
+    """
+    mdd = MD_Distributor(ns)
     assert mdd.contact == None
     assert mdd.online == []
 
-def test_md_distribution_empty():
-    mdd = MD_Distribution()
+def test_md_distribution_empty(ns):
+    """ Test empty MD_Distribution
+    """
+    mdd = MD_Distribution(ns)
     assert mdd.format == None
     assert mdd.version == None
     assert mdd.distributor == []
     assert mdd.online == []
 
-def test_dq_dataquality_empty():
-    dqd = DQ_DataQuality()
+def test_dq_dataquality_empty(ns):
+    """ Test empty DQ_DataQuality
+    """
+    dqd = DQ_DataQuality(ns)
     assert dqd.conformancetitle == []
     assert dqd.conformancedate == []
     assert dqd.conformancedatetype == []
@@ -173,8 +201,10 @@ def test_dq_dataquality_empty():
     assert dqd.specificationtitle == None
     assert dqd.specificationdate == []
 
-def test_sv_serviceidentification_empty():
-    svs = SV_ServiceIdentification()
+def test_sv_serviceidentification_empty(ns):
+    """ Test empty SV_ServiceIdentification
+    """
+    svs = SV_ServiceIdentification(ns)
     assert svs.type == None
     assert svs.version == None
     assert svs.fees == None
@@ -182,47 +212,61 @@ def test_sv_serviceidentification_empty():
     assert svs.operations == []
     assert svs.operateson == []
 
-def test_ci_onlineresource_empty():
-    cio = CI_OnlineResource()
+def test_ci_onlineresource_empty(ns):
+    """ Test empty CI_OnlineResource
+    """
+    cio = CI_OnlineResource(ns)
     assert cio.url == None
     assert cio.protocol == None
     assert cio.name == None
     assert cio.description == None
     assert cio.function == None
 
-def test_ex_geographicboundingbox_empty():
-    exg = EX_GeographicBoundingBox()
+def test_ex_geographicboundingbox_empty(ns):
+    """ Test empty EX_GeographicBoundingBox
+    """
+    exg = EX_GeographicBoundingBox(ns)
     assert exg.minx == None
     assert exg.maxx == None
     assert exg.miny == None
     assert exg.maxy == None
 
-def test_ex_polygon_empty():
-    exp = EX_Polygon()
+def test_ex_polygon_empty(ns):
+    """ Test empty EX_Polygon
+    """
+    exp = EX_Polygon(ns)
     assert exp.exterior_ring == None
     assert exp.interior_rings == []
 
-def test_ex_boundingpolygon_empty():
-    exb = EX_BoundingPolygon()
+def test_ex_boundingpolygon_empty(ns):
+    """ Test empty EX_BoundingPolygon
+    """
+    exb = EX_BoundingPolygon(ns)
     assert exb.is_extent == None
     assert exb.polygons == []
 
-def test_ex_extent_empty():
-    exe = EX_Extent()
+def test_ex_extent_empty(ns):
+    """ Test empty EX_Extent
+    """
+    exe = EX_Extent(ns)
     assert exe.boundingBox == None
     assert exe.boundingPolygon == None
     assert exe.description_code == None
     assert exe.vertExtMin == None
     assert exe.vertExtMax == None
 
-def test_md_referencesystem_empty():
-    mdr = MD_ReferenceSystem()
+def test_md_referencesystem_empty(ns):
+    """ Test empty MD_ReferenceSystem
+    """
+    mdr = MD_ReferenceSystem(ns)
     assert mdr.code == None
     assert mdr.codeSpace == None
     assert mdr.version == None
 
-def test_md_featurecataloguedescription_empty():
-    mdf = MD_FeatureCatalogueDescription()
+def test_md_featurecataloguedescription_empty(ns):
+    """ Test empty MD_FeatureCatalogueDescription
+    """
+    mdf = MD_FeatureCatalogueDescription(ns)
     assert mdf.xml == None
     assert mdf.compliancecode == None
     assert mdf.language == []
@@ -230,16 +274,20 @@ def test_md_featurecataloguedescription_empty():
     assert mdf.featuretypenames == []
     assert mdf.featurecatalogues == []
 
-def test_md_imagedescription_empty():
-    mdi = MD_ImageDescription()
+def test_md_imagedescription_empty(ns):
+    """ Test empty MD_ImageDescription
+    """
+    mdi = MD_ImageDescription(ns)
     assert mdi.type == 'image'
     assert mdi.bands == []
-    assert mdi.attribute_description == None
-    assert mdi.cloud_cover == None
-    assert mdi.processing_level == None
+    assert mdi.attributedescription == None
+    assert mdi.cloudcover == None
+    assert mdi.processinglevel == None
 
-def test_md_band_empty():
-    mdb = MD_Band(None)
+def test_md_band_empty(ns):
+    """ Test empty MD_Band
+    """
+    mdb = MD_Band(ns, None)
     assert mdb.id == None
     assert mdb.units == None
     assert mdb.min == None
@@ -249,6 +297,8 @@ def test_md_band_empty():
 @pytest.fixture
 def bmd():
     """ Create an MD_Metadata instance from Belgian ISO 19115 Part 3 XML sample
+    
+    Source: https://metawal.wallonie.be/geonetwork
     """
     belgian_sample = str(Path(__file__).parent.parent / "tests" / "resources" / "iso3_examples" / "metawal.wallonie.be-catchments.xml")
     with open(belgian_sample, "r") as f_d:
@@ -391,6 +441,8 @@ def test_identification_keywords(bmd):
 def amd():
     """
     Create an MD_Metadata instance from AuScope 3D Models ISO 19115 Part 3 XML sample
+    
+    Source: https://portal.auscope.org.au/geonetwork
     """
     aust_sample = str(Path(__file__).parent.parent / "tests" / "resources" / "iso3_examples" / "auscope-3d-model.xml")
     with open(aust_sample, "r") as f_d:
@@ -417,6 +469,8 @@ def test_aus(amd):
 def smd():
     """
     Create an MD_Metadata instance from Belgian health & safety ISO 19115 Part 3 XML services sample
+
+    Source: https://metawal.wallonie.be/geonetwork
     """
     belgian_srv_sample = str(Path(__file__).parent.parent / "tests" / "resources" / "iso3_examples" / "metawal.wallonie.be-srv.xml")
     with open(belgian_srv_sample, "r") as f_d:
@@ -444,3 +498,61 @@ def test_service(smd):
     assert(rec_9['uuidref'] == '401a1ac7-7222-4cf8-a7bb-f68090614056')
     assert(rec_9['title'] == '[Brouillon] INSPIRE - Bruit des aéroports wallons (Charleroi et Liège) - Plan d’exposition au bruit en Wallonie (BE)')
     assert(rec_9['href'] == 'https://metawal.wallonie.be/geonetwork/srv/api/records/401a1ac7-7222-4cf8-a7bb-f68090614056')
+
+@pytest.fixture
+def emd():
+    """
+    Create a MD_Metadata instance from ESRI ArcGIS ISO 19115 Part 3 XML artificial sample
+    This uses the older mdb v1 namespaces and has elements not present in other samples
+    e.g. MD_Band
+
+    Source: https://github.com/Esri/arcgis-pro-metadata-toolkit
+    """
+    arcgis_sample = str(Path(__file__).parent.parent / "tests" / "resources" / "iso3_examples" / "arcgis-sample.xml")
+    with open(arcgis_sample, "r") as f_d:
+        xml_list = f_d.readlines()
+        xml_str = ''.join(xml_list)
+        xml_bytes = bytes(xml_str, encoding='utf-8')
+        exml = etree.fromstring(xml_bytes)
+        assert exml is not None
+        return MD_Metadata(exml)
+
+def test_md_featurecataloguedesc(emd):
+    """ Tests MD_FeatureCatalogueDescription
+    """
+    assert emd is not None
+    print(emd.format_me())
+    cont_info = emd.contentinfo[0]
+    assert cont_info.compliancecode == True
+    assert cont_info.includedwithdataset == True
+    assert cont_info.featurecatalogues[0] == "Resource > Content > Feature Catalogue > Feature Catalogue Citation > Titles > Title"
+    assert cont_info.featuretypenames[0] == "Resource > Content > Feature Catalogue > Feature Type > Name"
+    assert cont_info.language == ['fre']
+
+def test_md_imagedescription(emd):
+    """ Tests MD_ImageDescription and MD_Band
+    """
+    assert emd is not None
+    img_desc = emd.contentinfo[1]
+    assert img_desc.type == 'image'
+    assert img_desc.attributedescription == "Resource > Content > Image Description > Attribute Description"
+    assert img_desc.cloudcover == '6.5'
+    assert img_desc.processinglevel == "Resource > Content > Image Description > Processing Level Code > Code"
+    assert img_desc.bands[0].id == "Resource > Content > Image Description > Band > Sequence Identifier"
+    assert img_desc.bands[0].units == "Unified Code of Units of Measure"
+    assert img_desc.bands[0].max == '255.99'
+    assert img_desc.bands[0].min == '0.01'
+
+def test_dq_dataquality(emd):
+    """ Tests DQ_DataQuality
+    """
+    assert emd is not None
+    dq = emd.dataquality
+    assert dq.conformancetitle[0][:90] == "Resource > Data Quality > Report > Evaluation Method > Procedure Citation > Titles > Title"
+    assert dq.conformancedate[0] == '2011-08-01T00:00:00'
+    assert dq.conformancedatetype[0] == 'revision'
+    assert dq.conformancedegree[0][:62] == 'Resource > Data Quality > Report > Quantitative Result > Value'
+    assert dq.lineage == None  # emd does not have lineage within DQ_DataQuality
+    assert dq.lineage_url == None
+    assert dq.specificationtitle == 'Resource > Data Quality > Report > Conformance Result > Specification > Titles > Title (Type=Domain Consistency)'
+    assert dq.specificationdate[0] == '2010-07-01T00:00:00'
