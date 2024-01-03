@@ -465,27 +465,26 @@ class MD_Keywords(printable):
             val = md.find(util.nspath_eval('mri:type/mri:MD_KeywordTypeCode', self.namespaces))
             self.type = util.testXMLAttribute(val, 'codeListValue')
 
-            val = md.find(util.nspath_eval('mri:thesaurusName/gco:CharacterString', self.namespaces))
-            if val is not None:
+            cit = md.find(util.nspath_eval('mri:thesaurusName/cit:CI_Citation', self.namespaces))
+            if cit is not None:
                 self.thesaurus = {}
 
-                title = val.find(util.nspath_eval('cit:title/gco:CharacterString', self.namespaces))
+                title = cit.find(util.nspath_eval('cit:title/gco:CharacterString', self.namespaces))
                 self.thesaurus['title'] = util.testXMLValue(title)
                 self.thesaurus['url'] = None
 
                 if self.thesaurus['title'] is None:  # try gmx:Anchor
-                    t = val.find(util.nspath_eval('cit:title/gcx:Anchor', self.namespaces))
+                    t = cit.find(util.nspath_eval('cit:title/gcx:Anchor', self.namespaces))
                     if t is not None:
                         self.thesaurus['title'] = util.testXMLValue(t)
                         self.thesaurus['url'] = t.attrib.get(util.nspath_eval('xlink:href', self.namespaces))
 
-                date_ = val.find(util.nspath_eval('cit:date/cit:CI_Date/cit:date/gco:Date', self.namespaces))
+                date_ = cit.find(util.nspath_eval('cit:date/cit:CI_Date/cit:date/gco:Date', self.namespaces))
                 self.thesaurus['date'] = util.testXMLValue(date_)
 
-                datetype = val.find(
+                datetype = cit.find(
                     util.nspath_eval('cit:date/cit:CI_Date/cit:dateType/cit:CI_DateTypeCode', self.namespaces))
                 self.thesaurus['datetype'] = util.testXMLAttribute(datetype, 'codeListValue')
-
 
 class MD_DataIdentification(printable):
     """ Process MD_DataIdentification
@@ -849,7 +848,6 @@ class DQ_DataQuality(printable):
             for confdatetype in md.xpath(
                     'mdq:report/*/mdq:evaluationMethod/mdq:DQ_EvaluationMethod/mdq:evaluationProcedure/cit:CI_Citation/cit:date/cit:CI_Date/cit:dateType/cit:CI_DateTypeCode',
                     namespaces=self.namespaces):
-                print(f"{confdatetype=}")
                 self.conformancedatetype.append(util.testXMLValue(confdatetype))
 
             for confdegree in md.xpath(

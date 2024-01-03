@@ -433,6 +433,10 @@ def test_identification_keywords(bmd):
     keyw = bmd.identification[0].keywords
     assert keyw[0].keywords[0].name == 'Sol et sous-sol'
     assert keyw[0].keywords[0].url == 'https://metawal.wallonie.be/thesaurus/theme-geoportail-wallon#SubThemesGeoportailWallon/1030'
+    assert keyw[0].thesaurus['date'] == '2014-01-01'
+    assert keyw[0].thesaurus['datetype'] =='publication'
+    assert keyw[0].thesaurus['title'] == 'Thèmes du géoportail wallon'
+    assert keyw[0].thesaurus['url'] == 'https://metawal.wallonie.be/thesaurus/theme-geoportail-wallon'
     assert keyw[0].type == 'theme'
     assert len(keyw[0].keywords) == 2
     assert len(keyw) == 5
@@ -564,7 +568,6 @@ def test_md_reference_system(emd):
     assert emd.referencesystem.code == 'Resource > Spatial Reference > Reference System > Code'
     assert emd.referencesystem.codeSpace == 'Resource > Spatial Reference > Reference System > Code Space'
     assert emd.referencesystem.version == 'Resource > Spatial Reference > Reference System > Version'
-    print(emd.format_me())
 
 def test_service2(emd):
     """ Tests SV_ServiceIdentification fields not present in other sources
