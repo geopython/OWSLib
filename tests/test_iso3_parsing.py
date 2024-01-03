@@ -561,10 +561,10 @@ def test_dq_dataquality(emd):
     """
     assert emd is not None
     dq = emd.dataquality
-    assert dq.conformancetitle[0][:90] == "Resource > Data Quality > Report > Evaluation Method > Procedure Citation > Titles > Title"
-    assert dq.conformancedate[0] == '2011-08-01T00:00:00'
-    assert dq.conformancedatetype[0] == 'revision'
-    assert dq.conformancedegree[0][:62] == 'Resource > Data Quality > Report > Quantitative Result > Value'
+    assert dq.conformancetitle[0][:90] == "Resource > Data Quality > Report > Conformance Result > Specification > Titles > Title (Ty"
+    assert dq.conformancedate[0] == '2010-07-01T00:00:00'
+    assert dq.conformancedatetype[0] == 'creation'
+    assert dq.conformancedegree[0] == 'true'
     assert dq.lineage == None  # emd does not have lineage within DQ_DataQuality
     assert dq.lineage_url == None
     assert dq.specificationtitle == 'Resource > Data Quality > Report > Conformance Result > Specification > Titles > Title (Type=Domain Consistency)'

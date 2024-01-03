@@ -252,9 +252,9 @@ class MD_Metadata(printable):
 
 
     def get_all_contacts(self):
-        """ Get all contacts in document
+        """ Get all contacts in identification part of document
 
-        :returns: list of contacts
+        :returns: list of CI_Responsibility contacts
         """
         contacts = []
         for ii in self.identification:
@@ -835,23 +835,24 @@ class DQ_DataQuality(printable):
         self.specificationtitle = None
         self.specificationdate = []
         if md is not None:
+            
             for conftitle in md.xpath(
-                    'mdq:report/*/mdq:evaluationMethod/mdq:DQ_EvaluationMethod/mdq:evaluationProcedure/cit:CI_Citation/cit:title/gco:CharacterString',
+                    'mdq:report/mdq:DQ_DomainConsistency/mdq:result/mdq:DQ_ConformanceResult/mdq:specification/cit:CI_Citation/cit:title/gco:CharacterString',
                     namespaces=self.namespaces):
                 self.conformancetitle.append(util.testXMLValue(conftitle))
 
             for confdate in md.xpath(
-                    'mdq:report/*/mdq:evaluationMethod/mdq:DQ_EvaluationMethod/mdq:evaluationProcedure/cit:CI_Citation/cit:date/cit:CI_Date/cit:date/gco:DateTime',
+                    'mdq:report/mdq:DQ_DomainConsistency/mdq:result/mdq:DQ_ConformanceResult/mdq:specification/cit:CI_Citation/cit:date/cit:CI_Date/cit:date/gco:DateTime',
                     namespaces=self.namespaces):
                 self.conformancedate.append(util.testXMLValue(confdate))
 
             for confdatetype in md.xpath(
-                    'mdq:report/*/mdq:evaluationMethod/mdq:DQ_EvaluationMethod/mdq:evaluationProcedure/cit:CI_Citation/cit:date/cit:CI_Date/cit:dateType/cit:CI_DateTypeCode',
+                    'mdq:report/mdq:DQ_DomainConsistency/mdq:result/mdq:DQ_ConformanceResult/mdq:specification/cit:CI_Citation/cit:date/cit:CI_Date/cit:dateType/cit:CI_DateTypeCode',
                     namespaces=self.namespaces):
                 self.conformancedatetype.append(util.testXMLValue(confdatetype))
 
             for confdegree in md.xpath(
-                    'mdq:report/*/mdq:result/mdq:DQ_QuantitativeResult/mdq:value/gco:Record',
+                    'mdq:report/mdq:DQ_DomainConsistency/mdq:result/mdq:DQ_ConformanceResult/mdq:pass/gco:Boolean',
                     namespaces=self.namespaces):
                 self.conformancedegree.append(util.testXMLValue(confdegree))
 
