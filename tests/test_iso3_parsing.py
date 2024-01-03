@@ -47,6 +47,7 @@ from owslib.iso_3 import (MD_Metadata, SV_ServiceIdentification, PT_Locale,
 
 pytestmark = pytest.mark.unit
 
+
 @pytest.fixture
 def ns():
     """ Create a V2 namespace
@@ -521,7 +522,6 @@ def test_md_featurecataloguedesc(emd):
     """ Tests MD_FeatureCatalogueDescription
     """
     assert emd is not None
-    print(emd.format_me())
     cont_info = emd.contentinfo[0]
     assert cont_info.compliancecode == True
     assert cont_info.includedwithdataset == True
@@ -556,3 +556,25 @@ def test_dq_dataquality(emd):
     assert dq.lineage_url == None
     assert dq.specificationtitle == 'Resource > Data Quality > Report > Conformance Result > Specification > Titles > Title (Type=Domain Consistency)'
     assert dq.specificationdate[0] == '2010-07-01T00:00:00'
+
+def test_md_reference_system(emd):
+    """ Tests MD_ReferenceSystem
+    """
+    assert emd is not None
+    assert emd.referencesystem.code == 'Resource > Spatial Reference > Reference System > Code'
+    assert emd.referencesystem.codeSpace == 'Resource > Spatial Reference > Reference System > Code Space'
+    assert emd.referencesystem.version == 'Resource > Spatial Reference > Reference System > Version'
+    print(emd.format_me())
+
+def test_service2(emd):
+    """ Tests SV_ServiceIdentification fields not present in other sources
+    """
+    assert emd is not None
+    srv_ident = emd.identification[0]
+    assert(isinstance(srv_ident, SV_ServiceIdentification))
+    assert(srv_ident.type == "Resource > Service Details > Service Type > Name")
+    assert(srv_ident.version == "Resource > Service Details > Service Type Version")
+    assert(srv_ident.couplingtype == 'loose')
+    assert(srv_ident.fees == "Resource > Service Details > Access Properties > Fees")
+
+

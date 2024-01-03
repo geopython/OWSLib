@@ -921,7 +921,7 @@ class SV_ServiceIdentification(MD_DataIdentification, printable):
                     'srv:SV_OperationMetadata/srv:operationName/gco:CharacterString', self.namespaces))
                 tmp['name'] = util.testXMLValue(val)
                 tmp['dcplist'] = []
-                for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:DCP', self.namespaces)):
+                for d in i.findall(util.nspath_eval('srv:SV_OperationMetadata/srv:distributedComputingPlatform', self.namespaces)):
                     tmp2 = _testCodeListValue(d.find(util.nspath_eval('srv:DCPList', self.namespaces)))
                     tmp['dcplist'].append(tmp2)
 
