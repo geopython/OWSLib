@@ -773,7 +773,7 @@ class MD_Distributor(printable):
             self.online = []
 
             for ol in md.findall(util.nspath_eval(
-                    'mrd:MD_Distributor/mrd:distributorTransferOptions/mrd:MD_DigitalTransferOptions/cit:onLine/cit:CI_OnlineResource',
+                    'mrd:MD_Distributor/mrd:distributorTransferOptions/mrd:MD_DigitalTransferOptions/mrd:onLine/cit:CI_OnlineResource',
                     self.namespaces)):
                 self.online.append(CI_OnlineResource(self.namespaces, ol))
 

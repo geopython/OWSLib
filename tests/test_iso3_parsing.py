@@ -551,7 +551,6 @@ def test_md_featurecataloguedesc(emd):
 def test_md_imagedescription(emd):
     """ Tests MD_ImageDescription and MD_Band
     """
-    assert emd is not None
     img_desc = emd.contentinfo[1]
     assert img_desc.type == 'image'
     assert img_desc.attributedescription == "Resource > Content > Image Description > Attribute Description"
@@ -565,7 +564,6 @@ def test_md_imagedescription(emd):
 def test_dq_dataquality(emd):
     """ Tests DQ_DataQuality
     """
-    assert emd is not None
     dq = emd.dataquality
     assert dq.conformancetitle[0][:90] == "Resource > Data Quality > Report > Conformance Result > Specification > Titles > Title (Ty"
     assert dq.conformancedate[0] == '2010-07-01T00:00:00'
@@ -579,7 +577,6 @@ def test_dq_dataquality(emd):
 def test_md_reference_system(emd):
     """ Tests MD_ReferenceSystem
     """
-    assert emd is not None
     assert emd.referencesystem.code == 'Resource > Spatial Reference > Reference System > Code'
     assert emd.referencesystem.codeSpace == 'Resource > Spatial Reference > Reference System > Code Space'
     assert emd.referencesystem.version == 'Resource > Spatial Reference > Reference System > Version'
@@ -587,12 +584,25 @@ def test_md_reference_system(emd):
 def test_service2(emd):
     """ Tests SV_ServiceIdentification fields not present in other sources
     """
-    assert emd is not None
     srv_ident = emd.identification[0]
     assert(isinstance(srv_ident, SV_ServiceIdentification))
     assert(srv_ident.type == "Resource > Service Details > Service Type > Name")
     assert(srv_ident.version == "Resource > Service Details > Service Type Version")
     assert(srv_ident.couplingtype == 'loose')
     assert(srv_ident.fees == "Resource > Service Details > Access Properties > Fees")
+
+def test_md_distribution(emd):
+    contact = emd.distribution.distributor[0].contact
+    assert contact.address =='Resource > Distribution > Distributor > Contact Information > Address'
+    assert contact.city =='Resource > Distribution > Distributor > Contact Information > City'
+    assert contact.email =='Resource > Distribution > Distributor > Contact Information > Email'
+    assert contact.organization =='Resource > Distribution > Distributor > Organization'
+    assert contact.phone =='Resource > Distribution > Distributor > Contact Information > Phone'
+    assert contact.postcode =='Resource > Distribution > Distributor > Contact Information > Postal Code'
+    assert contact.region =='Resource > Distribution > Distributor > Contact Information > State'
+    assert contact.role =='distributor'
+    online = emd.distribution.online[0]
+    assert online.protocol == 'Resource > Distribution > Digital Transfer Options > Online Resource > Protocol'
+    assert online.url == 'http://Resource_Distribution_Digital_Transfer_Options_Online_Resource_Linkage'
 
 
