@@ -25,6 +25,7 @@ from owslib.util import (
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
+from owslib.iso_3 import MD_Metadata as MD_Metadata_3 # ISO 19115 Part 3 XML
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.feature.schema import get_schema
@@ -470,7 +471,13 @@ class ContentMetadata(AbstractContentMetadata):
                         if mdelem is not None:
                             metadataUrl["metadata"] = MD_Metadata(mdelem)
                         else:
-                            metadataUrl["metadata"] = None
+                            mdelem = doc.find(
+                                ".//" + util.nspath_eval("mdb:MD_Metadata", n.get_namespaces(["mdb"]))
+                            )
+                            if mdelem is not None:
+                                metadataUrl["metadata"] = MD_Metadata_3(mdelem)
+                            else:
+                                metadataUrl["metadata"] = None
                 except Exception:
                     metadataUrl["metadata"] = None
 

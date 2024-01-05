@@ -23,6 +23,7 @@ from owslib.util import (openURL, ServiceException, testXMLValue,
                          nspath_eval, bind_url, Authentication)
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
+from owslib.iso_3 import MD_Metadata_3
 from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.map.common import WMSCapabilitiesReader, AbstractContentMetadata
@@ -709,6 +710,14 @@ class ContentMetadata(AbstractContentMetadata):
                     if mdelem is not None:
                         metadataUrl['metadata'] = MD_Metadata(mdelem)
                         continue
+                    else:
+                        mdelem = doc.find(
+                                ".//" + nspath_eval("mdb:MD_Metadata", n.get_namespaces(["mdb"]))
+                            )
+                        if mdelem is not None:
+                            metadataUrl["metadata"] = MD_Metadata_3(mdelem)
+                        else:
+                            metadataUrl["metadata"] = None
                 except Exception:
                     metadataUrl['metadata'] = None
 
