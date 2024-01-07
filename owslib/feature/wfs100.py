@@ -471,9 +471,7 @@ class ContentMetadata(AbstractContentMetadata):
                         if mdelem is not None:
                             metadataUrl["metadata"] = MD_Metadata(mdelem)
                         else:
-                            mdelem = doc.find(
-                                ".//" + util.nspath_eval("mdb:MD_Metadata", n.get_namespaces(["mdb"]))
-                            )
+                            mdelem = MD_Metadata_3.find_start(doc)
                             if mdelem is not None:
                                 metadataUrl["metadata"] = MD_Metadata_3(mdelem)
                             else:

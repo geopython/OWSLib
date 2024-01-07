@@ -592,6 +592,8 @@ def test_service2(emd):
     assert(srv_ident.fees == "Resource > Service Details > Access Properties > Fees")
 
 def test_md_distribution(emd):
+    """ Test MD_Distribution
+    """
     contact = emd.distribution.distributor[0].contact
     assert contact.address =='Resource > Distribution > Distributor > Contact Information > Address'
     assert contact.city =='Resource > Distribution > Distributor > Contact Information > City'

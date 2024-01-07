@@ -255,6 +255,20 @@ class MD_Metadata(printable):
             else:
                 self.dataquality = None
 
+    @staticmethod
+    def find_start(doc):
+        """ Tests for valid ISO 19115 Part 3 XML and returns the starting tag
+
+        :param doc: lxml Element object
+        :returns: 'mdb:MD_Metadata' lxml Element object
+        """
+        mtags = doc.xpath("//mdb:MD_Metadata", namespaces=NAMESPACES_V2)
+        if len(mtags) > 0:
+            return mtags[0]
+        mtags = doc.xpath("//mdb:MD_Metadata", namespaces=NAMESPACES_V1)
+        if len(mtags) > 0:
+            return mtags[0]
+        return None
 
     def get_all_contacts(self):
         """ Get all contacts in identification part of document
