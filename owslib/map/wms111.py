@@ -25,7 +25,7 @@ from owslib.util import (openURL, testXMLValue, extract_xml_list,
                          bind_url, nspath_eval, Authentication)
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
-from owslib.iso_3 import MD_Metadata as MD_Metadata_3 # ISO 19115 Part 3 XML
+from owslib.iso_3 import MD_Metadata as MD_Metadata_3  # ISO 19115 Part 3 XML
 from owslib.map.common import WMSCapabilitiesReader, AbstractContentMetadata
 from owslib.namespaces import Namespaces
 
