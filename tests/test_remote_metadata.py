@@ -206,14 +206,12 @@ def mp_wms_130_nometadata(monkeypatch):
 def openURL(*args, **kwargs):
     """ Used to patch the 'openURL' call, returning ISO 19139 XML
     """
-    print("@patch openURL")
     return open('tests/resources/csw_dov_getrecordbyid.xml', 'rb')
 
 
 def openURL_3(*args, **kwargs):
     """ Used to patch the 'openURL' call, returning ISO 19115 Part 3 XML
     """
-    print("@patch openURL_3")
     return open('tests/resources/iso3_examples/auscope-3d-model.xml', 'rb')
 
 

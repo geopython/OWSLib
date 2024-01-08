@@ -270,6 +270,33 @@ class MD_Metadata(printable):
             return mtags[0]
         return None
 
+    @staticmethod
+    def handles(outputschema):
+        """ Returns True iff the outputschema is handled by this class
+
+        :param outputschema: outputschema parameter string
+        :returns: True iff the outputschema is handled by this class
+        """
+        return outputschema == NAMESPACES_V1['mdb'] or \
+               outputschema == NAMESPACES_V2['mdb']
+
+    @staticmethod
+    def find_ids(elemtree):
+        """ Finds identifer strings and outer 'mdb:MD_Metadata' Elements
+
+        :param elemtree: lxml.ElementTree to search in
+        :returns: a list of tuples (id string, 'mdb:MD_Metadata' lxml.Element)
+        """
+        for ns in [NAMESPACES_V2, NAMESPACES_V1]:
+            elems = elemtree.findall('.//' + util.nspath_eval('mdb:MD_Metadata', ns))
+            if len(elems) > 0:
+                ret_list = []
+                for i in elems:
+                    val = i.find(util.nspath_eval('mdb:metadataIdentifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', NAMESPACES_V2))
+                    ret_list.append((i, util.testXMLValue(val)))
+                return ret_list
+        return []
+
     def get_all_contacts(self):
         """ Get all contacts in identification part of document
 

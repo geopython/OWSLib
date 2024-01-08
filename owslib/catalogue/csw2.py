@@ -580,11 +580,9 @@ class CatalogueServiceWeb(object):
                 val = i.find(util.nspath_eval('gm03:fileIdentifier', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = GM03(i)
-        elif outputschema == namespaces['mdb']: # ISO 19115 Part 3 XML
-            for i in self._exml.findall('.//' + util.nspath_eval('mdb:MD_Metadata', namespaces)):
-                val = i.find(util.nspath_eval('mdb:metadataIdentifier/mcc:MD_Identifier/mcc:code/gco:CharacterString', namespaces))
-                identifier = self._setidentifierkey(util.testXMLValue(val))
-                self.records[identifier] = MD_Metadata_3(i)
+        elif MD_Metadata_3.handles(outputschema): # ISO 19115 Part 3 XML
+            for elem, id in MD_Metadata_3.find_ids(self._exml):
+                self.records[self._setidentifierkey(id)] = MD_Metadata_3(elem)
             for i in self._exml.findall('.//' + util.nspath_eval('gfc:FC_FeatureCatalogue', namespaces)):
                 identifier = self._setidentifierkey(util.testXMLValue(i.attrib['uuid'], attrib=True))
                 self.records[identifier] = FC_FeatureCatalogue_3(i)
