@@ -20,8 +20,8 @@ from owslib import fes2
 from owslib import util
 from owslib import ows
 from owslib.iso import MD_Metadata, FC_FeatureCatalogue
-from owslib.iso_3 import MD_Metadata as MD_Metadata_3 # ISO 19115 Part 3 XML
-from owslib.iso_3 import FC_FeatureCatalogue as FC_FeatureCatalogue_3 # ISO 19115 Part 3 XML
+from owslib.iso_3 import MD_Metadata as MD_Metadata_3  # ISO 19115 Part 3 XML
+from owslib.iso_3 import FC_FeatureCatalogue as FC_FeatureCatalogue_3  # ISO 19115 Part 3 XML
 from owslib.fgdc import Metadata
 from owslib.dif import DIF
 from owslib.gm03 import GM03
@@ -479,7 +479,7 @@ class CatalogueServiceWeb(object):
                 val = i.find(util.nspath_eval('gm03:fileIdentifier', namespaces))
                 identifier = self._setidentifierkey(util.testXMLValue(val))
                 self.records[identifier] = GM03(i)
-        elif MD_Metadata_3.handles(outputschema): # ISO 19115 Part 3 XML
+        elif MD_Metadata_3.handles(outputschema):  # ISO 19115 Part 3 XML
             for elem, id in MD_Metadata_3.find_ids(self._exml):
                 self.records[self._setidentifierkey(id)] = MD_Metadata_3(elem)
             for i in self._exml.findall('.//' + util.nspath_eval('gfc:FC_FeatureCatalogue', namespaces)):
