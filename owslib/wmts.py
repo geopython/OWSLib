@@ -78,6 +78,14 @@ _SERVICE_METADATA_URL_TAG = _WMTS_NS + 'ServiceMetadataURL'
 _STYLE_TAG = _WMTS_NS + 'Style'
 _STYLE_LEGEND_URL = _WMTS_NS + 'LegendURL'
 
+# Table 9, page 22-23, Parts of Dimensions data structure
+_DIMENSION_TAG = _WMTS_NS + 'Dimension'
+_UOM_TAG = _OWS_NS + 'UOM'
+_DIMENSION_UNIT_SYMBOL_TAG = _WMTS_NS + 'UnitSymbol'
+_DIMENSION_DEFAULT_TAG = _WMTS_NS + 'Default'
+_DIMENSION_CURRENT_TAG = _WMTS_NS + 'Current'
+_DIMENSION_VALUE_TAG = _WMTS_NS + 'Value'
+
 _THEME_TAG = _WMTS_NS + 'Theme'
 _THEMES_TAG = _WMTS_NS + 'Themes'
 _TILE_HEIGHT_TAG = _WMTS_NS + 'TileHeight'
@@ -792,6 +800,65 @@ class ContentMetadata:
         self.keywords = [f.text for f in elem.findall(
                          _KEYWORDS_TAG + '/' + _KEYWORD_TAG)]
         self.infoformats = [f.text for f in elem.findall(_INFO_FORMAT_TAG)]
+
+        self.dimensions = {}
+        for dim in elem.findall(_DIMENSION_TAG):
+            dimension = {}
+
+            identifier = dim.find(_IDENTIFIER_TAG)
+            if identifier is None:
+                # mandatory parameter
+                raise ValueError('%s missing identifier' % (dim,))
+            if identifier.text in self.dimensions:
+                # domain identifier SHALL be unique
+                warnings.warn('%s identifier duplicated, taking first occurence' % (dim,))
+                continue
+
+            values = [f.text for f in dim.findall(_DIMENSION_VALUE_TAG)]
+            if len(values) == 0:
+                 raise ValueError(
+                    '%s list of values can not be empty' % (dim,)
+                )
+            dimension['values'] = values
+
+            title = dim.find(_TITLE_TAG)
+            if title is not None:
+                dimension['title'] = title.text
+
+            abstract = dim.find(_ABSTRACT_TAG)
+            if abstract is not None:
+                dimension['abstract'] = abstract.text
+
+            keywords = [
+                f.text for f in dim.findall(_KEYWORDS_TAG + '/' + _KEYWORD_TAG)
+            ]
+            if keywords:
+                dimension['keywords'] = keywords
+
+            uom = dim.find(_UOM_TAG)
+            if uom is not None:
+                dimension['UOM'] = uom.text
+
+            unit_symbol = dim.find(_DIMENSION_UNIT_SYMBOL_TAG)
+            if unit_symbol is not None:
+                dimension['unit_symbol'] = unit_symbol.text
+
+            default_value = dim.find(_DIMENSION_DEFAULT_TAG)
+            if default_value in ['default', 'current', '', None]:
+                # mandatory parameter
+                raise ValueError(
+                    '%s default value must not be empty or \'default\' or \'current\''
+                    % (dim,)
+                )
+            dimension['default'] = default_value.text
+
+            current = dim.find(_DIMENSION_CURRENT_TAG)
+            if current and current.text == 'true':
+                dimension['current'] = True
+            else:
+                dimension['current'] = False
+
+            self.dimensions[identifier.text] = dimension
 
         self.layers = []
         for child in elem.findall(_LAYER_TAG):
