@@ -27,6 +27,8 @@ def test_wmts():
     # Available Layers:
     assert len(wmts.contents.keys()) > 0
     assert sorted(list(wmts.contents))[0] == 'AIRS_CO_Total_Column_Day'
+    # at least one of the layers have a time dimension parsed
+    assert wmts_dimensions_time_domain_exists(wmts.contents), "No layer has time dimension parsed"
     # Fetch a tile (using some defaults):
     tile = wmts.gettile(layer='MODIS_Terra_CorrectedReflectance_TrueColor',
                         tilematrixset='EPSG4326_250m', tilematrix='0',
@@ -115,3 +117,15 @@ def test_wmts_rest_only():
     wmts = WebMapTileService(SERVICE_URL_REST)
     tile = wmts.gettile(layer="bmaporthofoto30cm", tilematrix="10", row=357, column=547)
     assert tile.info()['Content-Type'] == 'image/jpeg'
+
+def wmts_dimensions_time_domain_exists(input_dict):
+    # returns True if there is a layer with a 'time' dimension
+    # parsed and contains a non-empty default value
+    return any(
+        hasattr(value, 'dimensions') and
+        isinstance(getattr(value, 'dimensions'), dict) and
+        isinstance(value.dimensions['time'], dict) and
+        'default' in value.dimensions['time'] and 
+        len(value.dimensions['time']['default']) > 0
+        for value in input_dict.values()
+    )
