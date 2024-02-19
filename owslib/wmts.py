@@ -816,7 +816,7 @@ class ContentMetadata:
 
             values = [f.text for f in dim.findall(_DIMENSION_VALUE_TAG)]
             if len(values) == 0:
-                 raise ValueError(
+                raise ValueError(
                     '%s list of values can not be empty' % (dim,)
                 )
             dimension['values'] = values
