@@ -19,7 +19,7 @@ def test_opensearch_creodias():
     assert o.description.description == 'Sentinel-1 Collection'
     assert o.description.language == 'en'
 
-    assert len(o.description.urls) == 2
+    assert len(o.description.urls) == 1
 
     assert len(o.description.urls['application/json']['parameters']) > 0
 
