@@ -35,18 +35,16 @@ def test_ogcapi_coverages_pygeoapi():
     assert gdps['id'] == 'gdps-temperature'
     assert gdps['title'] == 'Global Deterministic Prediction System sample'
     assert gdps['description'] == 'Global Deterministic Prediction System sample'  # noqa
+    assert gdps['extent']['spatial']['grid'][0]['cellsCount'] == 2400
+    assert gdps['extent']['spatial']['grid'][0]['resolution'] == 0.15000000000000002  # noqa
+    assert gdps['extent']['spatial']['grid'][1]['cellsCount'] == 1201
+    assert gdps['extent']['spatial']['grid'][1]['resolution'] == 0.15
 
-    domainset = w.coverage_domainset('gdps-temperature')
-
-    assert domainset['generalGrid']['axisLabels'] == ['Long', 'Lat']
-
-    assert domainset['generalGrid']['gridLimits']['axisLabels'] == ['i', 'j']
-
-    rangetype = w.coverage_rangetype('gdps-temperature')
-    assert len(rangetype['field']) == 1
-    assert rangetype['field'][0]['name'] == 'Temperature [C]'
-    assert rangetype['field'][0]['uom']['code'] == '[C]'
-    assert rangetype['field'][0]['encodingInfo']['dataType'] == 'http://www.opengis.net/def/dataType/OGC/0/float64'  # noqa
+    schema = w.collection_schema('gdps-temperature')
+    assert len(schema['properties']) == 1
+    assert schema['properties']['1']['title'] == 'Temperature [C]'
+    assert schema['properties']['1']['type'] == 'number'
+    assert schema['properties']['1']['x-ogc-unit'] == '[C]'
 
     with pytest.raises(RuntimeError):
         w.coverage('gdps-temperature', properties=[8])

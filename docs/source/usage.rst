@@ -218,16 +218,15 @@ OGC API - Coverages - Part 1: Core 1.0
   Global Deterministic Prediction System sample'
   >>> gdps['description']
   'Global Deterministic Prediction System sample'
-  >>> domainset = w.coverage_domainset('gdps-temperature')
-  >>> domainset['generalGrid']['axisLabels']
-  ['x', 'y']
-  >>> domainset['generalGrid']['gridLimits']['axisLabels']
-  ['i', 'j']
-  >>> rangetype = w.coverage_rangetype('gdps-temperature')
-  >>> len(rangetype['field'])
+  >>> gdps['extent']['spatial']['grid'][0]
+  >>> {"cellsCount": 2400, "resolution": 0.15000000000000002 }
+  >>> gdps['extent']['spatial']['grid'][1]
+  >>> {"cellsCount": 1201, "resolution": 0.15}
+  >>> schema = w.collection_schema('gdps-temperature')
+  >>> len(schema['properties'])
   1
-  >>> rangetype['field'][0]['definition']
-  'float64'
+  >>> schema['properties']['1']['type']
+  'number'
   >> gdps_coverage_query = w.coverage('gdps-temperature', range_subset=[1])
 
 OGC API - Records - Part 1: Core 1.0
