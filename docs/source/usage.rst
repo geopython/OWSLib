@@ -227,7 +227,7 @@ OGC API - Coverages - Part 1: Core 1.0
   1
   >>> schema['properties']['1']['type']
   'number'
-  >> gdps_coverage_query = w.coverage('gdps-temperature', range_subset=[1])
+  >> gdps_coverage_data = w.coverage('gdps-temperature', range_subset=[1])
 
 OGC API - Records - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
