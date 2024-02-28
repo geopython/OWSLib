@@ -42,32 +42,6 @@ class Coverages(Collections):
 
         return coverages_
 
-    def coverage_domainset(self, collection_id: str, **kwargs: dict) -> dict:
-        """
-        implements /collection/{collectionId}/coverage/domainset
-
-        @type collection_id: string
-        @param collection_id: id of collection
-
-        @returns: coverage domainset results
-        """
-
-        path = f'collections/{collection_id}/coverage/domainset'
-        return self._request(path=path, kwargs=kwargs)
-
-    def coverage_rangetype(self, collection_id: str, **kwargs: dict) -> dict:
-        """
-        implements /collection/{collectionId}/coverage/rangetype
-
-        @type collection_id: string
-        @param collection_id: id of collection
-
-        @returns: coverage rangetype results
-        """
-
-        path = f'collections/{collection_id}/coverage/rangetype'
-        return self._request(path=path, kwargs=kwargs)
-
     def coverage(self, collection_id: str, **kwargs: dict) -> BinaryIO:
         """
         implements /collection/{collectionId}/coverage/
