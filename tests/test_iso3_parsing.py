@@ -26,7 +26,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 # =================================================================
-""" Unit tests for pycsw.core.mdb
+""" Unit tests for owslib.iso3
 This tests its ability to parse ISO19115-3 XML
 
 """
