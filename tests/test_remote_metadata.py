@@ -209,7 +209,7 @@ def openURL(*args, **kwargs):
     return open('tests/resources/csw_dov_getrecordbyid.xml', 'rb')
 
 
-def openURL_3(*args, **kwargs):
+def openURL3(*args, **kwargs):
     """ Used to patch the 'openURL' call, returning ISO 19115 Part 3 XML
     """
     return open('tests/resources/iso3_examples/auscope-3d-model.xml', 'rb')
@@ -314,7 +314,7 @@ class TestOffline(object):
 
     @pytest.mark.parametrize("openURL_in, lib_in", [
         (openURL, owslib.iso.MD_Metadata),
-        (openURL_3, owslib.iso_3.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
     ])
     def test_wfs_110_noremotemd_parse_single(self, mp_wfs_110_nometadata, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 1.1.0.
@@ -373,7 +373,7 @@ class TestOffline(object):
 
     @pytest.mark.parametrize("openURL_in, lib_in", [
         (openURL, owslib.iso.MD_Metadata),
-        (openURL_3, owslib.iso_3.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
     ])
     def test_wfs_110_remotemd_parse_all(self, mp_wfs_110, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 1.1.0.
@@ -409,7 +409,7 @@ class TestOffline(object):
 
     @pytest.mark.parametrize("openURL_in, lib_in", [
         (openURL, owslib.iso.MD_Metadata),
-        (openURL_3, owslib.iso_3.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
     ])
     def test_wfs_110_remotemd_parse_single(self, mp_wfs_110, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 1.1.0.
@@ -542,7 +542,7 @@ class TestOffline(object):
 
     @pytest.mark.parametrize("openURL_in, lib_in", [
         (openURL, owslib.iso.MD_Metadata),
-        (openURL_3, owslib.iso_3.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
     ])
     def test_wfs_200_remotemd_parse_all(self, mp_wfs_200, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 2.0.0.
@@ -579,7 +579,7 @@ class TestOffline(object):
 
     @pytest.mark.parametrize("openURL_in, lib_in", [
         (openURL, owslib.iso.MD_Metadata),
-        (openURL_3, owslib.iso_3.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
     ])
     def test_wfs_200_remotemd_parse_single(self, mp_wfs_200, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 2.0.0.
@@ -711,7 +711,7 @@ class TestOffline(object):
 
     @pytest.mark.parametrize("openURL_in, lib_in", [
         (openURL, owslib.iso.MD_Metadata),
-        (openURL_3, owslib.iso_3.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
     ])
     def test_wms_130_remotemd_parse_all(self, mp_wms_130, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WMS 1.3.0.
@@ -747,7 +747,7 @@ class TestOffline(object):
 
     @pytest.mark.parametrize("openURL_in, lib_in", [
         (openURL, owslib.iso.MD_Metadata),
-        (openURL_3, owslib.iso_3.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
     ])
     def test_wms_130_remotemd_parse_single(self, mp_wms_130, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WMS 1.3.0.

@@ -18,7 +18,7 @@ from owslib.util import (
 from owslib.etree import etree
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
-from owslib.iso_3 import MD_Metadata as MD_Metadata_3  # ISO 19115 Part 3 XML
+from owslib.iso3 import MD_Metadata as MD_Metadata3  # ISO 19115 Part 3 XML
 from owslib.ows import (
     OwsCommon,
     ServiceIdentification,
@@ -488,9 +488,9 @@ class ContentMetadata(AbstractContentMetadata):
                         if mdelem is not None:
                             metadataUrl["metadata"] = MD_Metadata(mdelem)
                         else:
-                            mdelem = MD_Metadata_3.find_start(doc)
+                            mdelem = MD_Metadata3.find_start(doc)
                             if mdelem is not None:
-                                metadataUrl["metadata"] = MD_Metadata_3(mdelem)
+                                metadataUrl["metadata"] = MD_Metadata3(mdelem)
                             else:
                                 metadataUrl["metadata"] = None
                 except Exception:

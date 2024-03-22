@@ -36,7 +36,7 @@ import pytest
 
 from owslib.etree import etree
 
-from owslib.iso_3 import (MD_Metadata, SV_ServiceIdentification, PT_Locale,
+from owslib.iso3 import (MD_Metadata, SV_ServiceIdentification, PT_Locale,
                           CI_Date, CI_Responsibility, Keyword, MD_Keywords,
                           MD_DataIdentification, MD_Distributor, MD_Distribution,
                           DQ_DataQuality, SV_ServiceIdentification, 

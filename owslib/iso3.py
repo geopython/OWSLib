@@ -14,7 +14,7 @@
     Parsing is initiated by passing in etree root Element to the 'MD_Metadata' constructor:
 
     from owslib.etree import etree
-    from owslib.iso_3 import MD_Metadata
+    from owslib.iso3 import MD_Metadata
 
     exml = etree.fromstring(xml_bytes)
     mdb = MD_Metadata(exml)

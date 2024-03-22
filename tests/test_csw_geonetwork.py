@@ -23,7 +23,7 @@ SERVICE_URL3 = 'https://metawal.wallonie.be/geonetwork/srv/eng/csw'
 @pytest.mark.skipif(not service_ok(SERVICE_URL3),
                     reason='service is unreachable')
 @pytest.mark.parametrize("esn_in", ['full', 'summary'])
-def test_csw_geonetwork_iso_3(esn_in):
+def test_csw_geonetwork_iso3(esn_in):
     """ Test retrieving records from Belgian geonetwork,
     specifically requesting ISO 19115 Part 3 XML records.
     """
