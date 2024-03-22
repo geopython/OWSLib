@@ -50,7 +50,7 @@ class SensorObservationService_1_0_0(object):
         reader = SosCapabilitiesReader(
             version=self.version, url=self.url, username=self.username, password=self.password
         )
-        if xml:  # read from stored xml
+        if xml is not None:  # read from stored xml
             self._capabilities = reader.read_string(xml)
         else:  # read from server
             self._capabilities = reader.read(self.url)
