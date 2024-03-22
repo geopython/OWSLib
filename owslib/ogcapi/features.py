@@ -40,6 +40,19 @@ class Features(Collections):
 
         return features_
 
+    def collection_queryables(self, collection_id: str) -> dict:
+        """
+        implements /collections/{collectionId}/queryables
+
+        @type collection_id: string
+        @param collection_id: id of collection
+
+        @returns: `dict` of feature collection queryables
+        """
+
+        path = f'collections/{collection_id}/queryables'
+        return self._request(path=path)
+
     def collection_items(self, collection_id: str, **kwargs: dict) -> dict:
         """
         implements /collection/{collectionId}/items
