@@ -7,9 +7,8 @@
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-import logging as log
+import logging
 import os
-import sys
 from collections import OrderedDict
 from dateutil import parser
 from datetime import datetime, timedelta
@@ -31,6 +30,10 @@ import codecs
 """
 Utility functions and classes
 """
+
+
+# This is used by other modules
+log = logging.getLogger('owslib')
 
 
 class ServiceException(Exception):
