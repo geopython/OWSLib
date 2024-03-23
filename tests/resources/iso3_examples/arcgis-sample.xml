@@ -1,0 +1,3762 @@
+<?xml version="1.0"?>
+<mdb:MD_Metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cat="http://standards.iso.org/iso/19115/-3/cat/1.0" xmlns:cit="http://standards.iso.org/iso/19115/-3/cit/1.0" xmlns:gcx="http://standards.iso.org/iso/19115/-3/gcx/1.0" xmlns:gex="http://standards.iso.org/iso/19115/-3/gex/1.0" xmlns:lan="http://standards.iso.org/iso/19115/-3/lan/1.0" xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.0" xmlns:mac="http://standards.iso.org/iso/19115/-3/mac/1.0" xmlns:mas="http://standards.iso.org/iso/19115/-3/mas/1.0" xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0" xmlns:mco="http://standards.iso.org/iso/19115/-3/mco/1.0" xmlns:mda="http://standards.iso.org/iso/19115/-3/mda/1.0" xmlns:mdb="http://standards.iso.org/iso/19115/-3/mdb/1.0" xmlns:mdt="http://standards.iso.org/iso/19115/-3/mdt/1.0" xmlns:mex="http://standards.iso.org/iso/19115/-3/mex/1.0" xmlns:mrl="http://standards.iso.org/iso/19115/-3/mrl/1.0" xmlns:mds="http://standards.iso.org/iso/19115/-3/mds/1.0" xmlns:mmi="http://standards.iso.org/iso/19115/-3/mmi/1.0" xmlns:mpc="http://standards.iso.org/iso/19115/-3/mpc/1.0" xmlns:mrc="http://standards.iso.org/iso/19115/-3/mrc/1.0" xmlns:mrd="http://standards.iso.org/iso/19115/-3/mrd/1.0" xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0" xmlns:mrs="http://standards.iso.org/iso/19115/-3/mrs/1.0" xmlns:msr="http://standards.iso.org/iso/19115/-3/msr/1.0" xmlns:mdq="http://standards.iso.org/iso/19157/-2/mdq/1.0" xmlns:dqc="http://standards.iso.org/iso/19157/-2/dqc/1.0" xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<mdb:metadataIdentifier>
+		<mcc:MD_Identifier>
+			<mcc:code>
+				<gco:CharacterString>Metadata &gt; Details &gt; File Identifier</gco:CharacterString>
+			</mcc:code>
+		</mcc:MD_Identifier>
+	</mdb:metadataIdentifier>
+	<mdb:defaultLocale>
+		<lan:PT_Locale>
+			<lan:language>
+				<lan:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng">eng</lan:LanguageCode>
+			</lan:language>
+			<lan:country>
+				<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+			</lan:country>
+			<lan:characterEncoding>
+				<lan:MD_CharacterSetCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+			</lan:characterEncoding>
+		</lan:PT_Locale>
+	</mdb:defaultLocale>
+	<mdb:parentMetadata uuidref="Metadata &gt; Details &gt; Parent Identifier"/>
+	<mdb:metadataScope>
+		<mdb:MD_MetadataScope>
+			<mdb:resourceScope>
+				<mcc:MD_ScopeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ScopeCode" codeListValue="service">service</mcc:MD_ScopeCode>
+			</mdb:resourceScope>
+			<mdb:name>
+				<gco:CharacterString>Metadata &gt; Details &gt; Hierarchy Level Name</gco:CharacterString>
+			</mdb:name>
+		</mdb:MD_MetadataScope>
+	</mdb:metadataScope>
+	<mdb:contact>
+		<cit:CI_Responsibility>
+			<cit:role>
+				<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</cit:CI_RoleCode>
+			</cit:role>
+			<cit:party>
+				<cit:CI_Organisation>
+					<cit:name>
+						<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Organization</gco:CharacterString>
+					</cit:name>
+					<cit:contactInfo>
+						<cit:CI_Contact>
+							<cit:phone>
+								<cit:CI_Telephone>
+									<cit:number>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Phone</gco:CharacterString>
+									</cit:number>
+									<cit:numberType>
+										<cit:CI_TelephoneTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_TelephoneTypeCode" codeListValue="voice">voice</cit:CI_TelephoneTypeCode>
+									</cit:numberType>
+								</cit:CI_Telephone>
+							</cit:phone>
+							<cit:phone>
+								<cit:CI_Telephone>
+									<cit:number>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Phone + TDD/TTY</gco:CharacterString>
+									</cit:number>
+									<cit:numberType>
+										<cit:CI_TelephoneTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_TelephoneTypeCode" codeListValue="voice">voice</cit:CI_TelephoneTypeCode>
+									</cit:numberType>
+								</cit:CI_Telephone>
+							</cit:phone>
+							<cit:phone>
+								<cit:CI_Telephone>
+									<cit:number>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Fax</gco:CharacterString>
+									</cit:number>
+									<cit:numberType>
+										<cit:CI_TelephoneTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_TelephoneTypeCode" codeListValue="facsimile">facsimile</cit:CI_TelephoneTypeCode>
+									</cit:numberType>
+								</cit:CI_Telephone>
+							</cit:phone>
+							<cit:address>
+								<cit:CI_Address>
+									<cit:deliveryPoint>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Address</gco:CharacterString>
+									</cit:deliveryPoint>
+									<cit:city>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; City</gco:CharacterString>
+									</cit:city>
+									<cit:administrativeArea>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; State</gco:CharacterString>
+									</cit:administrativeArea>
+									<cit:postalCode>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Postal Code</gco:CharacterString>
+									</cit:postalCode>
+									<cit:country>
+										<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+									</cit:country>
+									<cit:electronicMailAddress>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+									</cit:electronicMailAddress>
+								</cit:CI_Address>
+							</cit:address>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Metadata_Contacts_Contact_Contact_Information_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+									<cit:applicationProfile>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Online Resource &gt; Profile</gco:CharacterString>
+									</cit:applicationProfile>
+									<cit:name>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Online Resource &gt; Name</gco:CharacterString>
+									</cit:name>
+									<cit:description>
+										<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Online Resource &gt; Description</gco:CharacterString>
+									</cit:description>
+									<cit:function>
+										<cit:CI_OnLineFunctionCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</cit:CI_OnLineFunctionCode>
+									</cit:function>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+							<cit:hoursOfService>
+								<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Hours</gco:CharacterString>
+							</cit:hoursOfService>
+							<cit:contactInstructions>
+								<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Contact Information &gt; Instructions</gco:CharacterString>
+							</cit:contactInstructions>
+						</cit:CI_Contact>
+					</cit:contactInfo>
+					<cit:individual>
+						<cit:CI_Individual>
+							<cit:name>
+								<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Name</gco:CharacterString>
+							</cit:name>
+							<cit:positionName>
+								<gco:CharacterString>Metadata &gt; Contacts &gt; Contact &gt; Position</gco:CharacterString>
+							</cit:positionName>
+						</cit:CI_Individual>
+					</cit:individual>
+				</cit:CI_Organisation>
+			</cit:party>
+		</cit:CI_Responsibility>
+	</mdb:contact>
+	<mdb:dateInfo>
+		<cit:CI_Date>
+			<cit:date>
+				<gco:DateTime>2021-12-07T00:00:00</gco:DateTime>
+			</cit:date>
+			<cit:dateType>
+				<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+			</cit:dateType>
+		</cit:CI_Date>
+	</mdb:dateInfo>
+	<mdb:metadataStandard>
+		<cit:CI_Citation>
+			<cit:title>
+				<gco:CharacterString>ISO 19115-3 Geographic Information - Metadata - Part 1: Fundamentals</gco:CharacterString>
+			</cit:title>
+			<cit:edition>
+				<gco:CharacterString>2014</gco:CharacterString>
+			</cit:edition>
+		</cit:CI_Citation>
+	</mdb:metadataStandard>
+	<mdb:otherLocale>
+		<lan:PT_Locale>
+			<lan:language>
+				<lan:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="fre">fre</lan:LanguageCode>
+			</lan:language>
+			<lan:country>
+				<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="FR">FR</lan:CountryCode>
+			</lan:country>
+			<lan:characterEncoding>
+				<lan:MD_CharacterSetCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+			</lan:characterEncoding>
+		</lan:PT_Locale>
+	</mdb:otherLocale>
+	<mdb:spatialRepresentationInfo>
+		<msr:MD_VectorSpatialRepresentation>
+			<msr:topologyLevel>
+				<msr:MD_TopologyLevelCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_TopologyLevelCode" codeListValue="fullSurfaceGraph">fullSurfaceGraph</msr:MD_TopologyLevelCode>
+			</msr:topologyLevel>
+			<msr:geometricObjects>
+				<msr:MD_GeometricObjects>
+					<msr:geometricObjectType>
+						<msr:MD_GeometricObjectTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_GeometricObjectTypeCode" codeListValue="complex">complex</msr:MD_GeometricObjectTypeCode>
+					</msr:geometricObjectType>
+					<msr:geometricObjectCount>
+						<gco:Integer>27249</gco:Integer>
+					</msr:geometricObjectCount>
+				</msr:MD_GeometricObjects>
+			</msr:geometricObjects>
+		</msr:MD_VectorSpatialRepresentation>
+	</mdb:spatialRepresentationInfo>
+	<mdb:spatialRepresentationInfo>
+		<msr:MD_GridSpatialRepresentation>
+			<msr:numberOfDimensions>
+				<gco:Integer>1</gco:Integer>
+			</msr:numberOfDimensions>
+			<msr:axisDimensionProperties>
+				<msr:MD_Dimension>
+					<msr:dimensionName>
+						<msr:MD_DimensionNameTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_DimensionNameTypeCode" codeListValue="track">track</msr:MD_DimensionNameTypeCode>
+					</msr:dimensionName>
+					<msr:dimensionSize>
+						<gco:Integer>35</gco:Integer>
+					</msr:dimensionSize>
+					<msr:resolution>
+						<gco:Measure uom="[ft_i]">1.0</gco:Measure>
+					</msr:resolution>
+				</msr:MD_Dimension>
+			</msr:axisDimensionProperties>
+			<msr:cellGeometry>
+				<msr:MD_CellGeometryCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_CellGeometryCode" codeListValue="point">point</msr:MD_CellGeometryCode>
+			</msr:cellGeometry>
+			<msr:transformationParameterAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</msr:transformationParameterAvailability>
+		</msr:MD_GridSpatialRepresentation>
+	</mdb:spatialRepresentationInfo>
+	<mdb:spatialRepresentationInfo>
+		<msr:MD_Georectified>
+			<msr:numberOfDimensions>
+				<gco:Integer>3</gco:Integer>
+			</msr:numberOfDimensions>
+			<msr:axisDimensionProperties>
+				<msr:MD_Dimension>
+					<msr:dimensionName>
+						<msr:MD_DimensionNameTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_DimensionNameTypeCode" codeListValue="row">row</msr:MD_DimensionNameTypeCode>
+					</msr:dimensionName>
+					<msr:dimensionSize>
+						<gco:Integer>150</gco:Integer>
+					</msr:dimensionSize>
+					<msr:resolution>
+						<gco:Measure uom="m">5.0</gco:Measure>
+					</msr:resolution>
+				</msr:MD_Dimension>
+			</msr:axisDimensionProperties>
+			<msr:axisDimensionProperties>
+				<msr:MD_Dimension>
+					<msr:dimensionName>
+						<msr:MD_DimensionNameTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_DimensionNameTypeCode" codeListValue="column">column</msr:MD_DimensionNameTypeCode>
+					</msr:dimensionName>
+					<msr:dimensionSize>
+						<gco:Integer>259</gco:Integer>
+					</msr:dimensionSize>
+					<msr:resolution>
+						<gco:Measure uom="m">10.0</gco:Measure>
+					</msr:resolution>
+				</msr:MD_Dimension>
+			</msr:axisDimensionProperties>
+			<msr:axisDimensionProperties>
+				<msr:MD_Dimension>
+					<msr:dimensionName>
+						<msr:MD_DimensionNameTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_DimensionNameTypeCode" codeListValue="vertical">vertical</msr:MD_DimensionNameTypeCode>
+					</msr:dimensionName>
+					<msr:dimensionSize>
+						<gco:Integer>20</gco:Integer>
+					</msr:dimensionSize>
+					<msr:resolution>
+						<gco:Measure uom="m">0.1</gco:Measure>
+					</msr:resolution>
+				</msr:MD_Dimension>
+			</msr:axisDimensionProperties>
+			<msr:cellGeometry>
+				<msr:MD_CellGeometryCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_CellGeometryCode" codeListValue="area">area</msr:MD_CellGeometryCode>
+			</msr:cellGeometry>
+			<msr:transformationParameterAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</msr:transformationParameterAvailability>
+			<msr:checkPointAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</msr:checkPointAvailability>
+			<msr:checkPointDescription>
+				<gco:CharacterString>Resource &gt; Spatial Data Representation &gt; Georectified &gt; Check Point Description</gco:CharacterString>
+			</msr:checkPointDescription>
+			<msr:cornerPoints>
+				<gml:Point>
+					<gml:description>Resource &gt; Spatial Data Representation &gt; Georectified &gt; Corner Point &gt; Description</gml:description>
+					<gml:descriptionReference xlink:href="Resource &gt; Spatial Data Representation &gt; Georectified &gt; Corner Point &gt; Reference"/>
+					<gml:identifier codeSpace="Resource &gt; Spatial Data Representation &gt; Georectified &gt; Corner Point &gt; Identifier Codespace">Resource &gt; Spatial Data Representation &gt; Georectified &gt; Corner Point &gt; Identifier</gml:identifier>
+					<gml:pos>1.0 1.0</gml:pos>
+				</gml:Point>
+			</msr:cornerPoints>
+			<msr:cornerPoints>
+				<gml:Point>
+					<gml:description>Resource &gt; Spatial Data Representation &gt; Georectified &gt; Corner Point &gt; Description</gml:description>
+					<gml:descriptionReference xlink:href="Resource &gt; Spatial Data Representation &gt; Georectified &gt; Corner Point &gt; Reference"/>
+					<gml:identifier codeSpace="Resource &gt; Spatial Data Representation &gt; Georectified &gt; Corner Point &gt; Identifier Codespace">Resource &gt; Spatial Data Representation &gt; Georectified &gt; Corner Point &gt; Identifier</gml:identifier>
+					<gml:pos>7.0 7.0</gml:pos>
+				</gml:Point>
+			</msr:cornerPoints>
+			<msr:centrePoint>
+				<gml:Point>
+					<gml:description>Resource &gt; Spatial Data Representation &gt; Georectified &gt; Center Point &gt; Description</gml:description>
+					<gml:descriptionReference xlink:href="Resource &gt; Spatial Data Representation &gt; Georectified &gt; Center Point &gt; Reference"/>
+					<gml:identifier codeSpace="Resource &gt; Spatial Data Representation &gt; Georectified &gt; Center Point &gt; Identifier Codespace">Resource &gt; Spatial Data Representation &gt; Georectified &gt; Center Point &gt; Identifier</gml:identifier>
+					<gml:pos>4.0 4.0</gml:pos>
+				</gml:Point>
+			</msr:centrePoint>
+			<msr:pointInPixel>
+				<msr:MD_PixelOrientationCode>upperLeft</msr:MD_PixelOrientationCode>
+			</msr:pointInPixel>
+			<msr:transformationDimensionDescription>
+				<gco:CharacterString>Resource &gt; Spatial Data Representation &gt; Georectified &gt; Transformation Dimension Description</gco:CharacterString>
+			</msr:transformationDimensionDescription>
+			<msr:transformationDimensionMapping>
+				<gco:CharacterString>Resource &gt; Spatial Data Representation &gt; Georectified &gt; Transformation Dimension Mapping</gco:CharacterString>
+			</msr:transformationDimensionMapping>
+		</msr:MD_Georectified>
+	</mdb:spatialRepresentationInfo>
+	<mdb:spatialRepresentationInfo>
+		<msr:MD_Georeferenceable>
+			<msr:numberOfDimensions>
+				<gco:Integer>1</gco:Integer>
+			</msr:numberOfDimensions>
+			<msr:axisDimensionProperties>
+				<msr:MD_Dimension>
+					<msr:dimensionName>
+						<msr:MD_DimensionNameTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_DimensionNameTypeCode" codeListValue="time">time</msr:MD_DimensionNameTypeCode>
+					</msr:dimensionName>
+					<msr:dimensionSize>
+						<gco:Integer>140</gco:Integer>
+					</msr:dimensionSize>
+					<msr:resolution>
+						<gco:Measure uom="h">1</gco:Measure>
+					</msr:resolution>
+				</msr:MD_Dimension>
+			</msr:axisDimensionProperties>
+			<msr:cellGeometry>
+				<msr:MD_CellGeometryCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_CellGeometryCode" codeListValue="point">point</msr:MD_CellGeometryCode>
+			</msr:cellGeometry>
+			<msr:transformationParameterAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</msr:transformationParameterAvailability>
+			<msr:controlPointAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</msr:controlPointAvailability>
+			<msr:orientationParameterAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</msr:orientationParameterAvailability>
+			<msr:orientationParameterDescription>
+				<gco:CharacterString>Resource &gt; Spatial Data Representation &gt; Georeferenceable &gt; Orientation Parameter Description</gco:CharacterString>
+			</msr:orientationParameterDescription>
+			<msr:georeferencedParameters>
+				<gco:Record>Resource &gt; Spatial Data Representation &gt; Georeferenceable &gt; Georeferenced Parameters</gco:Record>
+			</msr:georeferencedParameters>
+			<msr:parameterCitation>
+				<cit:CI_Citation>
+					<cit:title>
+						<gco:CharacterString>Resource &gt; Spatial Data Representation &gt; Georeferenceable &gt; Parameter Citation &gt; Titles &gt; Title</gco:CharacterString>
+					</cit:title>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2011-01-01T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:citedResponsibleParty>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; Spatial Data Representation &gt; Georeferenceable &gt; Parameter Citation &gt; Contact &gt; Organization</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Resource &gt; Spatial Data Representation &gt; Georeferenceable &gt; Parameter Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</cit:citedResponsibleParty>
+					<cit:onlineResource>
+						<cit:CI_OnlineResource>
+							<cit:linkage>
+								<gco:CharacterString>http://Resource_Spatial_Data_Representation_Georeferenceable_Parameter_Citation_Online_Resource_Linkage</gco:CharacterString>
+							</cit:linkage>
+							<cit:protocol>
+								<gco:CharacterString>Resource &gt; Spatial Data Representation &gt; Georeferenceable &gt; Parameter Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+							</cit:protocol>
+						</cit:CI_OnlineResource>
+					</cit:onlineResource>
+				</cit:CI_Citation>
+			</msr:parameterCitation>
+		</msr:MD_Georeferenceable>
+	</mdb:spatialRepresentationInfo>
+	<mdb:referenceSystemInfo>
+		<mrs:MD_ReferenceSystem>
+			<mrs:referenceSystemIdentifier>
+				<mcc:MD_Identifier>
+					<mcc:authority>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; Spatial Reference &gt; Reference System &gt; Authority Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2011-07-01T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Resource &gt; Spatial Reference &gt; Reference System &gt; Authority Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Resource &gt; Spatial Reference &gt; Reference System &gt; Authority Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Resource_Spatial_Reference_Reference_System_Authority_Citation_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Resource &gt; Spatial Reference &gt; Reference System &gt; Authority Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mcc:authority>
+					<mcc:code>
+						<gco:CharacterString>Resource &gt; Spatial Reference &gt; Reference System &gt; Code</gco:CharacterString>
+					</mcc:code>
+					<mcc:codeSpace>
+						<gco:CharacterString>Resource &gt; Spatial Reference &gt; Reference System &gt; Code Space</gco:CharacterString>
+					</mcc:codeSpace>
+					<mcc:version>
+						<gco:CharacterString>Resource &gt; Spatial Reference &gt; Reference System &gt; Version</gco:CharacterString>
+					</mcc:version>
+				</mcc:MD_Identifier>
+			</mrs:referenceSystemIdentifier>
+		</mrs:MD_ReferenceSystem>
+	</mdb:referenceSystemInfo>
+	<mdb:identificationInfo>
+		<srv:SV_ServiceIdentification>
+			<mri:citation>
+				<cit:CI_Citation>
+					<cit:title>
+						<gco:CharacterString>Overview &gt; Item Description &gt; Title + Overview &gt; Citation &gt; Titles &gt; Title</gco:CharacterString>
+					</cit:title>
+					<cit:alternateTitle>
+						<gco:CharacterString>Overview &gt; Citation &gt; Titles &gt; Alternate Title</gco:CharacterString>
+					</cit:alternateTitle>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>1994-01-01T06:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>1993-01-01T23:59:59</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>1995-01-01T18:30:59</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2011-09-01T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="notAvailable">notAvailable</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2011-09-03T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="adopted">adopted</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2011-09-02T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="inforceDate">inforceDate</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2011-09-04T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="deprecated">deprecated</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2011-09-05T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="superseded">superseded</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:edition>
+						<gco:CharacterString>Overview &gt; Citation &gt; Edition &gt; Edition</gco:CharacterString>
+					</cit:edition>
+					<cit:editionDate>
+						<gco:DateTime>2011-01-01T00:00:00</gco:DateTime>
+					</cit:editionDate>
+					<cit:identifier>
+						<mcc:MD_Identifier>
+							<mcc:authority>
+								<cit:CI_Citation>
+									<cit:title>
+										<gco:CharacterString>Overview &gt; Citation &gt; Identifier &gt; Authority Citation &gt; Titles &gt; Title</gco:CharacterString>
+									</cit:title>
+									<cit:date>
+										<cit:CI_Date>
+											<cit:date>
+												<gco:DateTime>2010-01-01T00:00:00</gco:DateTime>
+											</cit:date>
+											<cit:dateType>
+												<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+											</cit:dateType>
+										</cit:CI_Date>
+									</cit:date>
+									<cit:citedResponsibleParty>
+										<cit:CI_Responsibility>
+											<cit:role>
+												<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+											</cit:role>
+											<cit:party>
+												<cit:CI_Organisation>
+													<cit:name>
+														<gco:CharacterString>Overview &gt; Citation &gt; Identifier &gt; Authority Citation &gt; Contact &gt; Organization</gco:CharacterString>
+													</cit:name>
+													<cit:contactInfo>
+														<cit:CI_Contact>
+															<cit:address>
+																<cit:CI_Address>
+																	<cit:electronicMailAddress>
+																		<gco:CharacterString>Overview &gt; Citation &gt; Identifier &gt; Authority Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+																	</cit:electronicMailAddress>
+																</cit:CI_Address>
+															</cit:address>
+														</cit:CI_Contact>
+													</cit:contactInfo>
+												</cit:CI_Organisation>
+											</cit:party>
+										</cit:CI_Responsibility>
+									</cit:citedResponsibleParty>
+									<cit:onlineResource>
+										<cit:CI_OnlineResource>
+											<cit:linkage>
+												<gco:CharacterString>http://Overview_Citation_Identifier_Authority_Citation_Online_Resource_Linkage</gco:CharacterString>
+											</cit:linkage>
+											<cit:protocol>
+												<gco:CharacterString>Overview &gt; Citation &gt; Identifier &gt; Authority Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+											</cit:protocol>
+										</cit:CI_OnlineResource>
+									</cit:onlineResource>
+								</cit:CI_Citation>
+							</mcc:authority>
+							<mcc:code>
+								<gco:CharacterString>Overview &gt; Citation &gt; Identifier &gt; Code</gco:CharacterString>
+							</mcc:code>
+						</mcc:MD_Identifier>
+					</cit:identifier>
+					<cit:identifier>
+						<mcc:MD_Identifier>
+							<mcc:code>
+								<gco:CharacterString>Metadata &gt; Details &gt; Dataset URI (NAP Function Code=Web Map Service)</gco:CharacterString>
+							</mcc:code>
+						</mcc:MD_Identifier>
+					</cit:identifier>
+					<cit:citedResponsibleParty>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="originator">originator</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Organization (Role=Originator)</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:phone>
+												<cit:CI_Telephone>
+													<cit:number>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Phone (Role=Originator)</gco:CharacterString>
+													</cit:number>
+													<cit:numberType>
+														<cit:CI_TelephoneTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_TelephoneTypeCode" codeListValue="voice">voice</cit:CI_TelephoneTypeCode>
+													</cit:numberType>
+												</cit:CI_Telephone>
+											</cit:phone>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:deliveryPoint>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Address (Role=Originator)</gco:CharacterString>
+													</cit:deliveryPoint>
+													<cit:city>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; City (Role=Originator)</gco:CharacterString>
+													</cit:city>
+													<cit:administrativeArea>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; State (Role=Originator)</gco:CharacterString>
+													</cit:administrativeArea>
+													<cit:postalCode>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Postal Code (Role=Originator)</gco:CharacterString>
+													</cit:postalCode>
+													<cit:country>
+														<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+													</cit:country>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Email (Role=Originator)</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+									<cit:individual>
+										<cit:CI_Individual>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Name (Role=Originator)</gco:CharacterString>
+											</cit:name>
+											<cit:positionName>
+												<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Position (Role=Originator)</gco:CharacterString>
+											</cit:positionName>
+										</cit:CI_Individual>
+									</cit:individual>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</cit:citedResponsibleParty>
+					<cit:citedResponsibleParty>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Organization (Role=Publisher)</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:deliveryPoint>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Address (Role=Publisher)</gco:CharacterString>
+													</cit:deliveryPoint>
+													<cit:city>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; City (Role=Publisher)</gco:CharacterString>
+													</cit:city>
+													<cit:administrativeArea>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; State (Role=Publisher)</gco:CharacterString>
+													</cit:administrativeArea>
+													<cit:postalCode>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Postal Code (Role=Publisher)</gco:CharacterString>
+													</cit:postalCode>
+													<cit:country>
+														<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+													</cit:country>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Email (Role=Publisher)</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+									<cit:individual>
+										<cit:CI_Individual>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Name (Role=Publisher)</gco:CharacterString>
+											</cit:name>
+											<cit:positionName>
+												<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Position (Role=Publisher)</gco:CharacterString>
+											</cit:positionName>
+										</cit:CI_Individual>
+									</cit:individual>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</cit:citedResponsibleParty>
+					<cit:citedResponsibleParty>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="rightsHolder">rightsHolder</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Organization (NAP Role=Rights Holder)</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:phone>
+												<cit:CI_Telephone>
+													<cit:number>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Phone (NAP Role=Rights Holder)</gco:CharacterString>
+													</cit:number>
+													<cit:numberType>
+														<cit:CI_TelephoneTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_TelephoneTypeCode" codeListValue="voice">voice</cit:CI_TelephoneTypeCode>
+													</cit:numberType>
+												</cit:CI_Telephone>
+											</cit:phone>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:deliveryPoint>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Address (NAP Role=Rights Holder)</gco:CharacterString>
+													</cit:deliveryPoint>
+													<cit:city>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; City (NAP Role=Rights Holder)</gco:CharacterString>
+													</cit:city>
+													<cit:administrativeArea>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; State (NAP Role=Rights Holder)</gco:CharacterString>
+													</cit:administrativeArea>
+													<cit:postalCode>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Postal Code (NAP Role=Rights Holder)</gco:CharacterString>
+													</cit:postalCode>
+													<cit:country>
+														<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+													</cit:country>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Contact Information &gt; Email (NAP Role=Rights Holder)</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+									<cit:individual>
+										<cit:CI_Individual>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Name (NAP Role=Rights Holder)</gco:CharacterString>
+											</cit:name>
+											<cit:positionName>
+												<gco:CharacterString>Overview &gt; Citation Contacts &gt; Contact &gt; Position (NAP Role=Rights Holder)</gco:CharacterString>
+											</cit:positionName>
+										</cit:CI_Individual>
+									</cit:individual>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</cit:citedResponsibleParty>
+					<cit:presentationForm>
+						<cit:CI_PresentationFormCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_PresentationFormCode" codeListValue="mapDigital">mapDigital</cit:CI_PresentationFormCode>
+					</cit:presentationForm>
+					<cit:series>
+						<cit:CI_Series>
+							<cit:name>
+								<gco:CharacterString>Overview &gt; Citation &gt; Series &gt; Name</gco:CharacterString>
+							</cit:name>
+							<cit:issueIdentification>
+								<gco:CharacterString>Overview &gt; Citation &gt; Series &gt; Issue</gco:CharacterString>
+							</cit:issueIdentification>
+							<cit:page>
+								<gco:CharacterString>Overview &gt; Citation &gt; Series &gt; Page</gco:CharacterString>
+							</cit:page>
+						</cit:CI_Series>
+					</cit:series>
+					<cit:otherCitationDetails>
+						<gco:CharacterString>Overview &gt; Citation &gt; Other Details</gco:CharacterString>
+					</cit:otherCitationDetails>
+					<cit:ISBN>
+						<gco:CharacterString>Overview &gt; Citation &gt; ISBN</gco:CharacterString>
+					</cit:ISBN>
+					<cit:ISSN>
+						<gco:CharacterString>Overview &gt; Citation &gt; ISSN</gco:CharacterString>
+					</cit:ISSN>
+					<cit:onlineResource>
+						<cit:CI_OnlineResource>
+							<cit:linkage>
+								<gco:CharacterString>http://Resource_Distribution_Digital_Transfer_Options_Online_Resource_Linkage</gco:CharacterString>
+							</cit:linkage>
+							<cit:protocol>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Digital Transfer Options &gt; Online Resource &gt; Protocol</gco:CharacterString>
+							</cit:protocol>
+						</cit:CI_OnlineResource>
+					</cit:onlineResource>
+				</cit:CI_Citation>
+			</mri:citation>
+			<mri:abstract>
+				<gco:CharacterString>Overview &amp;gt; Item Description &amp;gt; Description/Abstract</gco:CharacterString>
+			</mri:abstract>
+			<mri:purpose>
+				<gco:CharacterString>Overview &gt; Item Description &gt; Summary/Purpose</gco:CharacterString>
+			</mri:purpose>
+			<mri:credit>
+				<gco:CharacterString>Overview &gt; Item Description &gt; Credits + Resource &gt; Details &gt; Credit</gco:CharacterString>
+			</mri:credit>
+			<mri:status>
+				<mcc:MD_ProgressCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ProgressCode" codeListValue="onGoing">onGoing</mcc:MD_ProgressCode>
+			</mri:status>
+			<mri:pointOfContact>
+				<cit:CI_Responsibility>
+					<cit:role>
+						<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</cit:CI_RoleCode>
+					</cit:role>
+					<cit:party>
+						<cit:CI_Individual>
+							<cit:name>
+								<gco:CharacterString>Resource &gt; Points of Contact &gt; Contact &gt; Name</gco:CharacterString>
+							</cit:name>
+							<cit:contactInfo>
+								<cit:CI_Contact>
+									<cit:phone>
+										<cit:CI_Telephone>
+											<cit:number>
+												<gco:CharacterString>Resource &gt; Points of Contact &gt; Contact &gt; Contact Information &gt; Phone</gco:CharacterString>
+											</cit:number>
+											<cit:numberType>
+												<cit:CI_TelephoneTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_TelephoneTypeCode" codeListValue="voice">voice</cit:CI_TelephoneTypeCode>
+											</cit:numberType>
+										</cit:CI_Telephone>
+									</cit:phone>
+									<cit:address>
+										<cit:CI_Address>
+											<cit:deliveryPoint>
+												<gco:CharacterString>Resource &gt; Points of Contact &gt; Contact &gt; Contact Information &gt; Address</gco:CharacterString>
+											</cit:deliveryPoint>
+											<cit:city>
+												<gco:CharacterString>Resource &gt; Points of Contact &gt; Contact &gt; Contact Information &gt; City</gco:CharacterString>
+											</cit:city>
+											<cit:administrativeArea>
+												<gco:CharacterString>Resource &gt; Points of Contact &gt; Contact &gt; Contact Information &gt; State</gco:CharacterString>
+											</cit:administrativeArea>
+											<cit:postalCode>
+												<gco:CharacterString>Resource &gt; Points of Contact &gt; Contact &gt; Contact Information &gt; Zip</gco:CharacterString>
+											</cit:postalCode>
+											<cit:country>
+												<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+											</cit:country>
+											<cit:electronicMailAddress>
+												<gco:CharacterString>Resource &gt; Points of Contact &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+											</cit:electronicMailAddress>
+										</cit:CI_Address>
+									</cit:address>
+									<cit:onlineResource>
+										<cit:CI_OnlineResource>
+											<cit:linkage>
+												<gco:CharacterString>http://Resource_Points_of_Contact_Contact_Contact_Information_Online_Resource_Linkage</gco:CharacterString>
+											</cit:linkage>
+											<cit:protocol>
+												<gco:CharacterString>Resource &gt; Points of Contact &gt; Contact &gt; Contact Information &gt; Online Resource &gt; Protocol</gco:CharacterString>
+											</cit:protocol>
+										</cit:CI_OnlineResource>
+									</cit:onlineResource>
+								</cit:CI_Contact>
+							</cit:contactInfo>
+						</cit:CI_Individual>
+					</cit:party>
+				</cit:CI_Responsibility>
+			</mri:pointOfContact>
+			<mri:spatialRepresentationType>
+				<mcc:MD_SpatialRepresentationTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_SpatialRepresentationTypeCode" codeListValue="vector">vector</mcc:MD_SpatialRepresentationTypeCode>
+			</mri:spatialRepresentationType>
+			<mri:spatialRepresentationType>
+				<mcc:MD_SpatialRepresentationTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_SpatialRepresentationTypeCode" codeListValue="grid">grid</mcc:MD_SpatialRepresentationTypeCode>
+			</mri:spatialRepresentationType>
+			<mri:spatialResolution>
+				<mri:MD_Resolution>
+					<mri:equivalentScale>
+						<mri:MD_RepresentativeFraction>
+							<mri:denominator>
+								<gco:Integer>24000</gco:Integer>
+							</mri:denominator>
+						</mri:MD_RepresentativeFraction>
+					</mri:equivalentScale>
+				</mri:MD_Resolution>
+			</mri:spatialResolution>
+			<mri:spatialResolution>
+				<mri:MD_Resolution>
+					<mri:distance>
+						<gco:Distance uom="m">0.001</gco:Distance>
+					</mri:distance>
+				</mri:MD_Resolution>
+			</mri:spatialResolution>
+			<mri:topicCategory>
+				<mri:MD_TopicCategoryCode>geoscientificInformation</mri:MD_TopicCategoryCode>
+			</mri:topicCategory>
+			<mri:topicCategory>
+				<mri:MD_TopicCategoryCode>imageryBaseMapsEarthCover</mri:MD_TopicCategoryCode>
+			</mri:topicCategory>
+			<mri:extent>
+				<gex:EX_Extent>
+					<gex:description>
+						<gco:CharacterString>Resource &gt; Extents &gt; Extent &gt; Description Bounding boxes created on the Extents page do not have the esriExtentType attribute.</gco:CharacterString>
+					</gex:description>
+					<gex:geographicElement>
+						<gex:EX_GeographicBoundingBox>
+							<gex:extentTypeCode>
+								<gco:Boolean>true</gco:Boolean>
+							</gex:extentTypeCode>
+							<gex:westBoundLongitude>
+								<gco:Decimal>-155</gco:Decimal>
+							</gex:westBoundLongitude>
+							<gex:eastBoundLongitude>
+								<gco:Decimal>-135</gco:Decimal>
+							</gex:eastBoundLongitude>
+							<gex:southBoundLatitude>
+								<gco:Decimal>35</gco:Decimal>
+							</gex:southBoundLatitude>
+							<gex:northBoundLatitude>
+								<gco:Decimal>42</gco:Decimal>
+							</gex:northBoundLatitude>
+						</gex:EX_GeographicBoundingBox>
+					</gex:geographicElement>
+					<gex:geographicElement>
+						<gex:EX_GeographicDescription>
+							<gex:extentTypeCode>
+								<gco:Boolean>true</gco:Boolean>
+							</gex:extentTypeCode>
+							<gex:geographicIdentifier>
+								<mcc:MD_Identifier>
+									<mcc:authority>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>Resource &gt; Extents &gt; Extent &gt; Geographic Description &gt; Authority Citation &gt; Titles &gt; Title</gco:CharacterString>
+											</cit:title>
+											<cit:date>
+												<cit:CI_Date>
+													<cit:date>
+														<gco:DateTime>2011-01-01T00:00:00</gco:DateTime>
+													</cit:date>
+													<cit:dateType>
+														<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+													</cit:dateType>
+												</cit:CI_Date>
+											</cit:date>
+											<cit:citedResponsibleParty>
+												<cit:CI_Responsibility>
+													<cit:role>
+														<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+													</cit:role>
+													<cit:party>
+														<cit:CI_Organisation>
+															<cit:name>
+																<gco:CharacterString>Resource &gt; Extents &gt; Extent &gt; Geographic Description &gt; Authority Citation &gt; Contact &gt; Organization</gco:CharacterString>
+															</cit:name>
+															<cit:contactInfo>
+																<cit:CI_Contact>
+																	<cit:address>
+																		<cit:CI_Address>
+																			<cit:electronicMailAddress>
+																				<gco:CharacterString>Resource &gt; Extents &gt; Extent &gt; Geographic Description &gt; Authority Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+																			</cit:electronicMailAddress>
+																		</cit:CI_Address>
+																	</cit:address>
+																</cit:CI_Contact>
+															</cit:contactInfo>
+														</cit:CI_Organisation>
+													</cit:party>
+												</cit:CI_Responsibility>
+											</cit:citedResponsibleParty>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>http://Resource_Extents_Extent_Geographic_Description_Authority_Citation_Online_Resource_Linkage</gco:CharacterString>
+													</cit:linkage>
+													<cit:protocol>
+														<gco:CharacterString>Resource &gt; Extents &gt; Extent &gt; Geographic Description &gt; Authority Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+													</cit:protocol>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mcc:authority>
+									<mcc:code>
+										<gco:CharacterString>Resource &gt; Extents &gt; Extent &gt; Geographic Description &gt; Code</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</gex:geographicIdentifier>
+						</gex:EX_GeographicDescription>
+					</gex:geographicElement>
+					<gex:temporalElement>
+						<gex:EX_TemporalExtent>
+							<gex:extent>
+								<gml:TimePeriod>
+									<gml:beginPosition>2011-01-01T00:00:01</gml:beginPosition>
+									<gml:endPosition>2011-12-31T23:59:59</gml:endPosition>
+								</gml:TimePeriod>
+							</gex:extent>
+						</gex:EX_TemporalExtent>
+					</gex:temporalElement>
+					<gex:verticalElement>
+						<gex:EX_VerticalExtent>
+							<gex:minimumValue>
+								<gco:Real>0.01</gco:Real>
+							</gex:minimumValue>
+							<gex:maximumValue>
+								<gco:Real>599.99</gco:Real>
+							</gex:maximumValue>
+							<gex:verticalCRS gco:nilReason="other:see_referenceSystemInfo"/>
+						</gex:EX_VerticalExtent>
+					</gex:verticalElement>
+				</gex:EX_Extent>
+			</mri:extent>
+			<mri:extent>
+				<gex:EX_Extent>
+					<gex:description>
+						<gco:CharacterString>A bounding box created on the Item Description page has the esriExtentType attribute set with the value "search". The Item Description page only supports editing a bounding box with that attribute. The bounding box added by the synchronization process has the esriExtentType attribute set with the value "search". This bounding box is preferred when exporting to a standard that only allows one bounding box, such as the FGDC CSDGM.</gco:CharacterString>
+					</gex:description>
+					<gex:geographicElement>
+						<gex:EX_GeographicBoundingBox>
+							<gex:extentTypeCode>
+								<gco:Boolean>true</gco:Boolean>
+							</gex:extentTypeCode>
+							<gex:westBoundLongitude>
+								<gco:Decimal>-180</gco:Decimal>
+							</gex:westBoundLongitude>
+							<gex:eastBoundLongitude>
+								<gco:Decimal>180</gco:Decimal>
+							</gex:eastBoundLongitude>
+							<gex:southBoundLatitude>
+								<gco:Decimal>-90</gco:Decimal>
+							</gex:southBoundLatitude>
+							<gex:northBoundLatitude>
+								<gco:Decimal>90</gco:Decimal>
+							</gex:northBoundLatitude>
+						</gex:EX_GeographicBoundingBox>
+					</gex:geographicElement>
+				</gex:EX_Extent>
+			</mri:extent>
+			<mri:resourceMaintenance>
+				<mmi:MD_MaintenanceInformation>
+					<mmi:maintenanceAndUpdateFrequency>
+						<mmi:MD_MaintenanceFrequencyCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_MaintenanceFrequencyCode" codeListValue="asNeeded">asNeeded</mmi:MD_MaintenanceFrequencyCode>
+					</mmi:maintenanceAndUpdateFrequency>
+					<mmi:maintenanceDate>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2012-01-01T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</mmi:maintenanceDate>
+					<mmi:userDefinedMaintenanceFrequency>
+						<gco:TM_PeriodDuration>P36DT12H</gco:TM_PeriodDuration>
+					</mmi:userDefinedMaintenanceFrequency>
+					<mmi:maintenanceScope>
+						<mcc:MD_Scope>
+							<mcc:level>
+								<mcc:MD_ScopeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ScopeCode" codeListValue="service">service</mcc:MD_ScopeCode>
+							</mcc:level>
+							<mcc:levelDescription>
+								<mcc:MD_ScopeDescription>
+									<mcc:dataset>
+										<gco:CharacterString>Resource &gt; Maintenance &gt; Scope Description &gt; Dataset</gco:CharacterString>
+									</mcc:dataset>
+								</mcc:MD_ScopeDescription>
+							</mcc:levelDescription>
+						</mcc:MD_Scope>
+					</mmi:maintenanceScope>
+					<mmi:maintenanceNote>
+						<gco:CharacterString>Resource &gt; Maintenance &gt; Maintenance Note</gco:CharacterString>
+					</mmi:maintenanceNote>
+					<mmi:contact>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="custodian">custodian</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Individual>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; Maintenance &gt; Contact &gt; Name</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Resource &gt; Maintenance &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+								</cit:CI_Individual>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</mmi:contact>
+				</mmi:MD_MaintenanceInformation>
+			</mri:resourceMaintenance>
+			<mri:graphicOverview>
+				<mcc:MD_BrowseGraphic>
+					<mcc:fileName>
+						<gco:CharacterString>Resource &gt; Details &gt; Browse Graphic &gt; File Name</gco:CharacterString>
+					</mcc:fileName>
+					<mcc:fileDescription>
+						<gco:CharacterString>Resource &gt; Details &gt; Browse Graphic &gt; Description</gco:CharacterString>
+					</mcc:fileDescription>
+					<mcc:fileType>
+						<gco:CharacterString>Resource &gt; Details &gt; Browse Graphic &gt; File Type</gco:CharacterString>
+					</mcc:fileType>
+				</mcc:MD_BrowseGraphic>
+			</mri:graphicOverview>
+			<mri:resourceFormat>
+				<mrd:MD_Format>
+					<mrd:formatSpecificationCitation>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; Details &gt; Distribution Format &gt; Format Name</gco:CharacterString>
+							</cit:title>
+							<cit:alternateTitle>
+								<gco:CharacterString>Resource &gt; Details &gt; Distribution Format &gt; Specification</gco:CharacterString>
+							</cit:alternateTitle>
+							<cit:edition>
+								<gco:CharacterString>Resource &gt; Details &gt; Distribution Format &gt; Format Version</gco:CharacterString>
+							</cit:edition>
+						</cit:CI_Citation>
+					</mrd:formatSpecificationCitation>
+					<mrd:amendmentNumber>
+						<gco:CharacterString>Resource &gt; Details &gt; Distribution Format &gt; Amendment Number</gco:CharacterString>
+					</mrd:amendmentNumber>
+					<mrd:fileDecompressionTechnique>
+						<gco:CharacterString>Resource &gt; Details &gt; Distribution Format &gt; Decompression Technique</gco:CharacterString>
+					</mrd:fileDecompressionTechnique>
+				</mrd:MD_Format>
+			</mri:resourceFormat>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Place Keywords &gt; Keyword1</gco:CharacterString>
+					</mri:keyword>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Place Keywords &gt; Keyword2</gco:CharacterString>
+					</mri:keyword>
+					<mri:type>
+						<mri:MD_KeywordTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#napMD_KeywordTypeCode" codeListValue="place">place</mri:MD_KeywordTypeCode>
+					</mri:type>
+					<mri:thesaurusName>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Place Keywords &gt; Thesaurus Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2010-01-01T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Place Keywords &gt; Thesaurus Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Place Keywords &gt; Thesaurus Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Overview_Topics_Keywords_Place_Keywords_Thesaurus_Citation_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Place Keywords &gt; Thesaurus Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mri:thesaurusName>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Stratum Keywords &gt; Keyword1</gco:CharacterString>
+					</mri:keyword>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Stratum Keywords &gt; Keyword2</gco:CharacterString>
+					</mri:keyword>
+					<mri:type>
+						<mri:MD_KeywordTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#napMD_KeywordTypeCode" codeListValue="stratum">stratum</mri:MD_KeywordTypeCode>
+					</mri:type>
+					<mri:thesaurusName>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Stratum Keywords &gt; Thesaurus Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>1988-08-26T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Stratum Keywords &gt; Thesaurus Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Stratum Keywords &gt; Thesaurus Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+						</cit:CI_Citation>
+					</mri:thesaurusName>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Temporal Keywords &gt; Keyword1</gco:CharacterString>
+					</mri:keyword>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Temporal Keywords &gt; Keyword2</gco:CharacterString>
+					</mri:keyword>
+					<mri:type>
+						<mri:MD_KeywordTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#napMD_KeywordTypeCode" codeListValue="temporal">temporal</mri:MD_KeywordTypeCode>
+					</mri:type>
+					<mri:thesaurusName>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Temporal Keywords &gt; Thesaurus Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>1996-08-22T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Temporal Keywords &gt; Thesaurus Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Temporal Keywords &gt; Thesaurus Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Overview_Topics_Keywords_Temporal_Keywords_Thesaurus_Citation_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Temporal Keywords &gt; Thesaurus Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mri:thesaurusName>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Theme Keywords &gt; Keyword1</gco:CharacterString>
+					</mri:keyword>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Theme Keywords &gt; Keyword2</gco:CharacterString>
+					</mri:keyword>
+					<mri:type>
+						<mri:MD_KeywordTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#napMD_KeywordTypeCode" codeListValue="theme">theme</mri:MD_KeywordTypeCode>
+					</mri:type>
+					<mri:thesaurusName>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Theme Keywords &gt; Thesaurus Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2010-01-01T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Theme Keywords &gt; Thesaurus Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Theme Keywords &gt; Thesaurus Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Overview_Topics_Keywords_Theme_Keywords_Thesaurus_Citation_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Theme Keywords &gt; Thesaurus Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mri:thesaurusName>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Discipline Keywords &gt; Keyword1</gco:CharacterString>
+					</mri:keyword>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Discipline Keywords &gt; Keyword2</gco:CharacterString>
+					</mri:keyword>
+					<mri:type>
+						<mri:MD_KeywordTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#napMD_KeywordTypeCode" codeListValue="discipline">discipline</mri:MD_KeywordTypeCode>
+					</mri:type>
+					<mri:thesaurusName>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Discipline Keywords &gt; Thesaurus Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2007-02-12T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Discipline Keywords &gt; Thesaurus Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Discipline Keywords &gt; Thesaurus Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+						</cit:CI_Citation>
+					</mri:thesaurusName>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Other Keywords &gt; Keyword1</gco:CharacterString>
+					</mri:keyword>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Other Keywords &gt; Keyword2</gco:CharacterString>
+					</mri:keyword>
+					<mri:thesaurusName>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Other Keywords &gt; Thesaurus Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2010-05-10T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Other Keywords &gt; Thesaurus Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Other Keywords &gt; Thesaurus Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Overview_Topics_Keywords_Other_Keywords_Thesaurus_Citation_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Other Keywords &gt; Thesaurus Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mri:thesaurusName>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Subtopic Keywords &gt; Keyword1</gco:CharacterString>
+					</mri:keyword>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Subtopic Keywords &gt; Keyword2</gco:CharacterString>
+					</mri:keyword>
+					<mri:type>
+						<mri:MD_KeywordTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#napMD_KeywordTypeCode" codeListValue="subTopicCategory">subTopicCategory</mri:MD_KeywordTypeCode>
+					</mri:type>
+					<mri:thesaurusName>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Subtopic Keywords &gt; Thesaurus Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2011-10-14T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Subtopic Keywords &gt; Thesaurus Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Subtopic Keywords &gt; Thesaurus Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+						</cit:CI_Citation>
+					</mri:thesaurusName>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Product Keywords &gt; Keyword1</gco:CharacterString>
+					</mri:keyword>
+					<mri:keyword>
+						<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Product Keywords &gt; Keyword2</gco:CharacterString>
+					</mri:keyword>
+					<mri:type>
+						<mri:MD_KeywordTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#napMD_KeywordTypeCode" codeListValue="product">product</mri:MD_KeywordTypeCode>
+					</mri:type>
+					<mri:thesaurusName>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Product Keywords &gt; Thesaurus Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2011-10-13T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Product Keywords &gt; Thesaurus Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Overview &gt; Topics &amp; Keywords &gt; Product Keywords &gt; Thesaurus Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+						</cit:CI_Citation>
+					</mri:thesaurusName>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:descriptiveKeywords>
+				<mri:MD_Keywords>
+					<mri:keyword>
+						<gco:CharacterString>Live Data and Maps</gco:CharacterString>
+					</mri:keyword>
+					<mri:thesaurusName uuidref="723f6998-058e-11dc-8314-0800200c9a66"/>
+				</mri:MD_Keywords>
+			</mri:descriptiveKeywords>
+			<mri:resourceSpecificUsage>
+				<mri:MD_Usage>
+					<mri:specificUsage>
+						<gco:CharacterString>Resource &gt; Details &gt; Usage &gt; Specific Usage</gco:CharacterString>
+					</mri:specificUsage>
+					<mri:usageDateTime>
+						<gml:TimeInstant>
+							<gml:timePosition>2011-10-01T10:00:00</gml:timePosition>
+						</gml:TimeInstant>
+					</mri:usageDateTime>
+					<mri:userDeterminedLimitations>
+						<gco:CharacterString>Resource &gt; Details &gt; Usage &gt; Limitations</gco:CharacterString>
+					</mri:userDeterminedLimitations>
+					<mri:userContactInfo>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="user">user</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; Details &gt; Usage &gt; Contact &gt; Organization</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Resource &gt; Details &gt; Usage &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+									<cit:individual>
+										<cit:CI_Individual>
+											<cit:positionName>
+												<gco:CharacterString>Resource &gt; Details &gt; Usage &gt; Contact &gt; Position</gco:CharacterString>
+											</cit:positionName>
+										</cit:CI_Individual>
+									</cit:individual>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</mri:userContactInfo>
+				</mri:MD_Usage>
+			</mri:resourceSpecificUsage>
+			<mri:resourceConstraints>
+				<mco:MD_Constraints>
+					<mco:useLimitation>
+						<gco:CharacterString>Overview &amp;gt; Item Description &amp;gt; Use Limitation + Resource &amp;gt; Constraints &amp;gt; General Constraints &amp;gt; Use Limitation</gco:CharacterString>
+					</mco:useLimitation>
+				</mco:MD_Constraints>
+			</mri:resourceConstraints>
+			<mri:resourceConstraints>
+				<mco:MD_LegalConstraints>
+					<mco:useLimitation>
+						<gco:CharacterString>Resource &gt; Constraints &gt; Legal Constraints &gt; Use Limitation</gco:CharacterString>
+					</mco:useLimitation>
+					<mco:accessConstraints>
+						<mco:MD_RestrictionCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_RestrictionCode" codeListValue="license">license</mco:MD_RestrictionCode>
+					</mco:accessConstraints>
+					<mco:useConstraints>
+						<mco:MD_RestrictionCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</mco:MD_RestrictionCode>
+					</mco:useConstraints>
+					<mco:otherConstraints>
+						<gco:CharacterString>Resource &gt; Constraints &gt; Legal Constraints &gt; Other Constraints</gco:CharacterString>
+					</mco:otherConstraints>
+				</mco:MD_LegalConstraints>
+			</mri:resourceConstraints>
+			<mri:resourceConstraints>
+				<mco:MD_SecurityConstraints>
+					<mco:useLimitation>
+						<gco:CharacterString>Resource &gt; Constraints &gt; Security Constraints &gt; Use Limitation</gco:CharacterString>
+					</mco:useLimitation>
+					<mco:classification>
+						<mco:MD_ClassificationCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ClassificationCode" codeListValue="restricted">restricted</mco:MD_ClassificationCode>
+					</mco:classification>
+					<mco:userNote>
+						<gco:CharacterString>Resource &gt; Constraints &gt; Security Constraints &gt; User Note</gco:CharacterString>
+					</mco:userNote>
+					<mco:classificationSystem>
+						<gco:CharacterString>Resource &gt; Constraints &gt; Security Constraints &gt; Classification System</gco:CharacterString>
+					</mco:classificationSystem>
+					<mco:handlingDescription>
+						<gco:CharacterString>Resource &gt; Constraints &gt; Security Constraints &gt; Handling Description</gco:CharacterString>
+					</mco:handlingDescription>
+				</mco:MD_SecurityConstraints>
+			</mri:resourceConstraints>
+			<mri:associatedResource>
+				<mri:MD_AssociatedResource>
+					<mri:name>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Titles &gt; Title (Association=Cross Reference)</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2006-06-01T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="originator">originator</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Contact &gt; Organization (Association=Cross Reference)</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Contact &gt; Contact Information &gt; Email (Association=Cross Reference)</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+											<cit:individual>
+												<cit:CI_Individual>
+													<cit:name>
+														<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Contact &gt; Name (Association=Cross Reference)</gco:CharacterString>
+													</cit:name>
+												</cit:CI_Individual>
+											</cit:individual>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Resource_References_Aggregate_Information_Dataset_Citation_Online_Resource_Linkage_Association=Cross_Reference</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Online Resource &gt; Protocol (Association=Cross Reference)</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mri:name>
+					<mri:associationType>
+						<mri:DS_AssociationTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#DS_AssociationTypeCode" codeListValue="crossReference">crossReference</mri:DS_AssociationTypeCode>
+					</mri:associationType>
+					<mri:initiativeType>
+						<mri:DS_InitiativeTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#DS_InitiativeTypeCode" codeListValue="investigation">investigation</mri:DS_InitiativeTypeCode>
+					</mri:initiativeType>
+				</mri:MD_AssociatedResource>
+			</mri:associatedResource>
+			<mri:associatedResource>
+				<mri:MD_AssociatedResource>
+					<mri:name>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Titles &gt; Title (Association=Larger Work)</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2003-09-18T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="originator">originator</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Contact &gt; Organization (Association=Larger Work)</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Contact &gt; Contact Information &gt; Email (Association=Larger Work)</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+											<cit:individual>
+												<cit:CI_Individual>
+													<cit:name>
+														<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Contact &gt; Name (Association=Larger Work)</gco:CharacterString>
+													</cit:name>
+												</cit:CI_Individual>
+											</cit:individual>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Resource_References_Aggregate_Information_Dataset_Citation_Online_Resource_Linkage_Association=Larger_Work</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Resource &gt; References &gt; Aggregate Information &gt; Dataset Citation &gt; Online Resource &gt; Protocol (Association=Larger Work)</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mri:name>
+					<mri:associationType>
+						<mri:DS_AssociationTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#DS_AssociationTypeCode" codeListValue="largerWorkCitation">largerWorkCitation</mri:DS_AssociationTypeCode>
+					</mri:associationType>
+				</mri:MD_AssociatedResource>
+			</mri:associatedResource>
+			<mri:associatedResource>
+				<mri:MD_AssociatedResource>
+					<mri:name>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Overview &gt; Citation &gt; Titles &gt; Collective Title</gco:CharacterString>
+							</cit:title>
+						</cit:CI_Citation>
+					</mri:name>
+					<mri:associationType>
+						<mri:DS_AssociationTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#DS_AssociationTypeCode" codeListValue="collectiveTitle">collectiveTitle</mri:DS_AssociationTypeCode>
+					</mri:associationType>
+				</mri:MD_AssociatedResource>
+			</mri:associatedResource>
+			<srv:serviceType>
+				<gco:ScopedName codeSpace="Resource &gt; Service Details &gt; Service Type &gt; Codespace">Resource &gt; Service Details &gt; Service Type &gt; Name</gco:ScopedName>
+			</srv:serviceType>
+			<srv:serviceTypeVersion>
+				<gco:CharacterString>Resource &gt; Service Details &gt; Service Type Version</gco:CharacterString>
+			</srv:serviceTypeVersion>
+			<srv:accessProperties>
+				<mrd:MD_StandardOrderProcess>
+					<mrd:fees>
+						<gco:CharacterString>Resource &gt; Service Details &gt; Access Properties &gt; Fees</gco:CharacterString>
+					</mrd:fees>
+					<mrd:plannedAvailableDateTime>
+						<gco:DateTime>2011-11-01T06:00:00</gco:DateTime>
+					</mrd:plannedAvailableDateTime>
+					<mrd:orderingInstructions>
+						<gco:CharacterString>Resource &gt; Service Details &gt; Access Properties &gt; Ordering Instructions</gco:CharacterString>
+					</mrd:orderingInstructions>
+					<mrd:turnaround>
+						<gco:CharacterString>Resource &gt; Service Details &gt; Access Properties &gt; Turnaround</gco:CharacterString>
+					</mrd:turnaround>
+				</mrd:MD_StandardOrderProcess>
+			</srv:accessProperties>
+			<srv:couplingType>
+				<srv:SV_CouplingType codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#SV_CouplingType" codeListValue="loose">loose</srv:SV_CouplingType>
+			</srv:couplingType>
+			<srv:coupledResource>
+				<srv:SV_CoupledResource>
+					<srv:scopedName>
+						<gco:ScopedName>Resource &gt; Service Details &gt; Coupled Resource &gt; Identifier</gco:ScopedName>
+					</srv:scopedName>
+					<srv:resourceReference gco:nilReason="missing"/>
+					<srv:operation>
+						<srv:SV_OperationMetadata>
+							<srv:operationName>
+								<gco:CharacterString>Resource &gt; Service Details &gt; Coupled Resource &gt; Operation Name</gco:CharacterString>
+							</srv:operationName>
+							<srv:distributedComputingPlatform gco:nilReason="missing"/>
+							<srv:connectPoint gco:nilReason="missing"/>
+						</srv:SV_OperationMetadata>
+					</srv:operation>
+				</srv:SV_CoupledResource>
+			</srv:coupledResource>
+		</srv:SV_ServiceIdentification>
+	</mdb:identificationInfo>
+	<mdb:contentInfo>
+		<mrc:MD_FeatureCatalogueDescription>
+			<mrc:complianceCode>
+				<gco:Boolean>true</gco:Boolean>
+			</mrc:complianceCode>
+			<mrc:locale>
+				<lan:PT_Locale>
+					<lan:language>
+						<lan:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="fre">fre</lan:LanguageCode>
+					</lan:language>
+					<lan:country>
+						<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="CA">CA</lan:CountryCode>
+					</lan:country>
+					<lan:characterEncoding>
+						<lan:MD_CharacterSetCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+					</lan:characterEncoding>
+				</lan:PT_Locale>
+			</mrc:locale>
+			<mrc:includedWithDataset>
+				<gco:Boolean>true</gco:Boolean>
+			</mrc:includedWithDataset>
+			<mrc:featureTypes>
+				<mrc:MD_FeatureTypeInfo>
+					<mrc:featureTypeName>
+						<gco:ScopedName codeSpace="Resource &gt; Content &gt; Feature Catalogue &gt; Feature Type &gt; Codespace">Resource &gt; Content &gt; Feature Catalogue &gt; Feature Type &gt; Name</gco:ScopedName>
+					</mrc:featureTypeName>
+				</mrc:MD_FeatureTypeInfo>
+			</mrc:featureTypes>
+			<mrc:featureCatalogueCitation>
+				<cit:CI_Citation>
+					<cit:title>
+						<gco:CharacterString>Resource &gt; Content &gt; Feature Catalogue &gt; Feature Catalogue Citation &gt; Titles &gt; Title</gco:CharacterString>
+					</cit:title>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2011-03-15T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:citedResponsibleParty>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; Content &gt; Feature Catalogue &gt; Feature Catalogue Citation &gt; Contact &gt; Organization</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Resource &gt; Content &gt; Feature Catalogue &gt; Feature Catalogue Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</cit:citedResponsibleParty>
+					<cit:onlineResource>
+						<cit:CI_OnlineResource>
+							<cit:linkage>
+								<gco:CharacterString>http://Resource_Content_Feature_Catalogue_Feature_Catalogue_Citation_Online_Resource_Linkage</gco:CharacterString>
+							</cit:linkage>
+							<cit:protocol>
+								<gco:CharacterString>Resource &gt; Content &gt; Feature Catalogue &gt; Feature Catalogue Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+							</cit:protocol>
+						</cit:CI_OnlineResource>
+					</cit:onlineResource>
+				</cit:CI_Citation>
+			</mrc:featureCatalogueCitation>
+		</mrc:MD_FeatureCatalogueDescription>
+	</mdb:contentInfo>
+	<mdb:contentInfo>
+		<mrc:MD_CoverageDescription>
+			<mrc:attributeDescription>
+				<gco:RecordType>Resource &gt; Content &gt; Coverage Description &gt; Attribute Description</gco:RecordType>
+			</mrc:attributeDescription>
+			<mrc:attributeGroup>
+				<mrc:MD_AttributeGroup>
+					<mrc:contentType>
+						<mrc:MD_CoverageContentTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_CoverageContentTypeCode" codeListValue="physicalMeasurement">physicalMeasurement</mrc:MD_CoverageContentTypeCode>
+					</mrc:contentType>
+					<mrc:attribute>
+						<mrc:MD_RangeDimension>
+							<mrc:sequenceIdentifier>
+								<gco:MemberName>
+									<gco:aName>
+										<gco:CharacterString>Resource &gt; Content &gt; Coverage Description &gt; Range Dimension &gt; Sequence Identifier</gco:CharacterString>
+									</gco:aName>
+									<gco:attributeType>
+										<gco:TypeName>
+											<gco:aName>
+												<gco:CharacterString>Resource &gt; Content &gt; Coverage Description &gt; Range Dimension &gt; Sequence Identifier &gt; Type</gco:CharacterString>
+											</gco:aName>
+										</gco:TypeName>
+									</gco:attributeType>
+								</gco:MemberName>
+							</mrc:sequenceIdentifier>
+							<mrc:description>
+								<gco:CharacterString>Resource &gt; Content &gt; Coverage Description &gt; Range Dimension &gt; Descriptor</gco:CharacterString>
+							</mrc:description>
+						</mrc:MD_RangeDimension>
+					</mrc:attribute>
+				</mrc:MD_AttributeGroup>
+			</mrc:attributeGroup>
+		</mrc:MD_CoverageDescription>
+	</mdb:contentInfo>
+	<mdb:contentInfo>
+		<mrc:MD_ImageDescription>
+			<mrc:attributeDescription>
+				<gco:RecordType>Resource &gt; Content &gt; Image Description &gt; Attribute Description</gco:RecordType>
+			</mrc:attributeDescription>
+			<mrc:processingLevelCode>
+				<mcc:MD_Identifier>
+					<mcc:authority>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Processing Level Code &gt; Authority Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2008-09-18T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Processing Level Code &gt; Authority Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Processing Level Code &gt; Authority Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Resource_Content_Image_Description_Processing_Level_Code_Authority_Citation_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Processing Level Code &gt; Authority Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mcc:authority>
+					<mcc:code>
+						<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Processing Level Code &gt; Code</gco:CharacterString>
+					</mcc:code>
+				</mcc:MD_Identifier>
+			</mrc:processingLevelCode>
+			<mrc:attributeGroup>
+				<mrc:MD_AttributeGroup>
+					<mrc:contentType>
+						<mrc:MD_CoverageContentTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_CoverageContentTypeCode" codeListValue="image">image</mrc:MD_CoverageContentTypeCode>
+					</mrc:contentType>
+					<mrc:attribute>
+						<mrc:MD_Band>
+							<mrc:sequenceIdentifier>
+								<gco:MemberName>
+									<gco:aName>
+										<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Band &gt; Sequence Identifier</gco:CharacterString>
+									</gco:aName>
+									<gco:attributeType>
+										<gco:TypeName>
+											<gco:aName>
+												<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Band &gt; Sequence Identifier &gt; Type</gco:CharacterString>
+											</gco:aName>
+										</gco:TypeName>
+									</gco:attributeType>
+								</gco:MemberName>
+							</mrc:sequenceIdentifier>
+							<mrc:description>
+								<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Band &gt; Descriptor</gco:CharacterString>
+							</mrc:description>
+							<mrc:maxValue>
+								<gco:Real>255.99</gco:Real>
+							</mrc:maxValue>
+							<mrc:minValue>
+								<gco:Real>0.01</gco:Real>
+							</mrc:minValue>
+							<mrc:units>
+								<gml:UnitDefinition>
+									<gml:identifier codeSpace="GML_UomSymbol">Unified Code of Units of Measure</gml:identifier>
+									<gml:catalogSymbol codeSpace="http://aurora.regenstrief.org/UCUM">m</gml:catalogSymbol>
+								</gml:UnitDefinition>
+							</mrc:units>
+							<mrc:scaleFactor>
+								<gco:Real>0.98</gco:Real>
+							</mrc:scaleFactor>
+							<mrc:offset>
+								<gco:Real>19.3</gco:Real>
+							</mrc:offset>
+							<mrc:bitsPerValue>
+								<gco:Integer>8</gco:Integer>
+							</mrc:bitsPerValue>
+							<mrc:peakResponse>
+								<gco:Real>225.4</gco:Real>
+							</mrc:peakResponse>
+							<mrc:toneGradation>
+								<gco:Integer>4</gco:Integer>
+							</mrc:toneGradation>
+						</mrc:MD_Band>
+					</mrc:attribute>
+				</mrc:MD_AttributeGroup>
+			</mrc:attributeGroup>
+			<mrc:illuminationElevationAngle>
+				<gco:Real>78.5</gco:Real>
+			</mrc:illuminationElevationAngle>
+			<mrc:illuminationAzimuthAngle>
+				<gco:Real>135.5</gco:Real>
+			</mrc:illuminationAzimuthAngle>
+			<mrc:imagingCondition>
+				<mrc:MD_ImagingConditionCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ImagingConditionCode" codeListValue="shadow">shadow</mrc:MD_ImagingConditionCode>
+			</mrc:imagingCondition>
+			<mrc:imageQualityCode>
+				<mcc:MD_Identifier>
+					<mcc:authority>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Quality Code &gt; Authority Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2008-09-18T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Quality Code &gt; Authority Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Quality Code &gt; Authority Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Resource_Content_Image_Description_Quality_Code_Authority_Citation_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Quality Code &gt; Authority Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mcc:authority>
+					<mcc:code>
+						<gco:CharacterString>Resource &gt; Content &gt; Image Description &gt; Quality Code &gt; Code</gco:CharacterString>
+					</mcc:code>
+				</mcc:MD_Identifier>
+			</mrc:imageQualityCode>
+			<mrc:cloudCoverPercentage>
+				<gco:Real>6.5</gco:Real>
+			</mrc:cloudCoverPercentage>
+			<mrc:compressionGenerationQuantity>
+				<gco:Integer>2</gco:Integer>
+			</mrc:compressionGenerationQuantity>
+			<mrc:triangulationIndicator>
+				<gco:Boolean>true</gco:Boolean>
+			</mrc:triangulationIndicator>
+			<mrc:radiometricCalibrationDataAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</mrc:radiometricCalibrationDataAvailability>
+			<mrc:cameraCalibrationInformationAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</mrc:cameraCalibrationInformationAvailability>
+			<mrc:filmDistortionInformationAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</mrc:filmDistortionInformationAvailability>
+			<mrc:lensDistortionInformationAvailability>
+				<gco:Boolean>true</gco:Boolean>
+			</mrc:lensDistortionInformationAvailability>
+		</mrc:MD_ImageDescription>
+	</mdb:contentInfo>
+	<mdb:distributionInfo>
+		<mrd:MD_Distribution>
+			<mrd:distributionFormat>
+				<mrd:MD_Format>
+					<mrd:formatSpecificationCitation>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distribution Format &gt; Format Name</gco:CharacterString>
+							</cit:title>
+							<cit:edition>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distribution Format &gt; Format Version</gco:CharacterString>
+							</cit:edition>
+						</cit:CI_Citation>
+					</mrd:formatSpecificationCitation>
+				</mrd:MD_Format>
+			</mrd:distributionFormat>
+			<mrd:distributionFormat>
+				<mrd:MD_Format>
+					<mrd:formatSpecificationCitation>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Format Name</gco:CharacterString>
+							</cit:title>
+							<cit:alternateTitle>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Specification</gco:CharacterString>
+							</cit:alternateTitle>
+							<cit:edition>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Format Version</gco:CharacterString>
+							</cit:edition>
+						</cit:CI_Citation>
+					</mrd:formatSpecificationCitation>
+					<mrd:amendmentNumber>
+						<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Amendment Number</gco:CharacterString>
+					</mrd:amendmentNumber>
+					<mrd:fileDecompressionTechnique>
+						<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Decompression Technique</gco:CharacterString>
+					</mrd:fileDecompressionTechnique>
+				</mrd:MD_Format>
+			</mrd:distributionFormat>
+			<mrd:distributor>
+				<mrd:MD_Distributor>
+					<mrd:distributorContact>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="distributor">distributor</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Organization</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:phone>
+												<cit:CI_Telephone>
+													<cit:number>
+														<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Contact Information &gt; Phone</gco:CharacterString>
+													</cit:number>
+													<cit:numberType>
+														<cit:CI_TelephoneTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_TelephoneTypeCode" codeListValue="voice">voice</cit:CI_TelephoneTypeCode>
+													</cit:numberType>
+												</cit:CI_Telephone>
+											</cit:phone>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:deliveryPoint>
+														<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Contact Information &gt; Address</gco:CharacterString>
+													</cit:deliveryPoint>
+													<cit:city>
+														<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Contact Information &gt; City</gco:CharacterString>
+													</cit:city>
+													<cit:administrativeArea>
+														<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Contact Information &gt; State</gco:CharacterString>
+													</cit:administrativeArea>
+													<cit:postalCode>
+														<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Contact Information &gt; Postal Code</gco:CharacterString>
+													</cit:postalCode>
+													<cit:country>
+														<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+													</cit:country>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Contact Information &gt; Email</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</mrd:distributorContact>
+					<mrd:distributionOrderProcess>
+						<mrd:MD_StandardOrderProcess>
+							<mrd:fees>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Ordering Process &gt; Fees</gco:CharacterString>
+							</mrd:fees>
+							<mrd:plannedAvailableDateTime>
+								<gco:DateTime>2011-10-15T13:00:00</gco:DateTime>
+							</mrd:plannedAvailableDateTime>
+							<mrd:orderingInstructions>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Ordering Process &gt; Ordering Instructions</gco:CharacterString>
+							</mrd:orderingInstructions>
+							<mrd:turnaround>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Ordering Process &gt; Turnaround</gco:CharacterString>
+							</mrd:turnaround>
+						</mrd:MD_StandardOrderProcess>
+					</mrd:distributionOrderProcess>
+					<mrd:distributorFormat>
+						<mrd:MD_Format>
+							<mrd:formatSpecificationCitation>
+								<cit:CI_Citation>
+									<cit:title>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Format Name</gco:CharacterString>
+									</cit:title>
+									<cit:alternateTitle>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Specification</gco:CharacterString>
+									</cit:alternateTitle>
+									<cit:edition>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Format Version</gco:CharacterString>
+									</cit:edition>
+								</cit:CI_Citation>
+							</mrd:formatSpecificationCitation>
+							<mrd:amendmentNumber>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Amendment Number</gco:CharacterString>
+							</mrd:amendmentNumber>
+							<mrd:fileDecompressionTechnique>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Distribution Format &gt; Decompression Technique</gco:CharacterString>
+							</mrd:fileDecompressionTechnique>
+						</mrd:MD_Format>
+					</mrd:distributorFormat>
+					<mrd:distributorTransferOptions>
+						<mrd:MD_DigitalTransferOptions>
+							<mrd:unitsOfDistribution>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Units of Distribution</gco:CharacterString>
+							</mrd:unitsOfDistribution>
+							<mrd:transferSize>
+								<gco:Real>1</gco:Real>
+							</mrd:transferSize>
+							<mrd:onLine>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Resource_Distribution_Distributor_Digital_Transfer_Options_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+									<cit:applicationProfile>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Online Resource &gt; Profile</gco:CharacterString>
+									</cit:applicationProfile>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Online Resource &gt; Name</gco:CharacterString>
+									</cit:name>
+									<cit:description>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Online Resource &gt; Description (not a geoportal content type, e.g. Offline Data)</gco:CharacterString>
+									</cit:description>
+									<cit:function>
+										<cit:CI_OnLineFunctionCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_OnLineFunctionCode" codeListValue="download">download</cit:CI_OnLineFunctionCode>
+									</cit:function>
+								</cit:CI_OnlineResource>
+							</mrd:onLine>
+							<mrd:offLine>
+								<mrd:MD_Medium>
+									<mrd:name>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>dvdRom</gco:CharacterString>
+											</cit:title>
+										</cit:CI_Citation>
+									</mrd:name>
+									<mrd:density>
+										<gco:Real>1</gco:Real>
+									</mrd:density>
+									<mrd:densityUnits>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Offline Medium &gt; Density Units (dvdRom Medium Name)</gco:CharacterString>
+									</mrd:densityUnits>
+									<mrd:volumes>
+										<gco:Integer>1</gco:Integer>
+									</mrd:volumes>
+									<mrd:mediumFormat>
+										<mrd:MD_MediumFormatCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_MediumFormatCode" codeListValue="iso9660">iso9660</mrd:MD_MediumFormatCode>
+									</mrd:mediumFormat>
+									<mrd:mediumNote>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Offline Medium &gt; Medium Note (dvdRom Medium Name)</gco:CharacterString>
+									</mrd:mediumNote>
+								</mrd:MD_Medium>
+							</mrd:offLine>
+						</mrd:MD_DigitalTransferOptions>
+					</mrd:distributorTransferOptions>
+					<mrd:distributorTransferOptions>
+						<mrd:MD_DigitalTransferOptions>
+							<mrd:offLine>
+								<mrd:MD_Medium>
+									<mrd:name>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>hardcopy</gco:CharacterString>
+											</cit:title>
+										</cit:CI_Citation>
+									</mrd:name>
+									<mrd:mediumNote>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Offline Medium &gt; Medium Note (hardcopy Medium Name)</gco:CharacterString>
+									</mrd:mediumNote>
+								</mrd:MD_Medium>
+							</mrd:offLine>
+						</mrd:MD_DigitalTransferOptions>
+					</mrd:distributorTransferOptions>
+					<mrd:distributorTransferOptions>
+						<mrd:MD_DigitalTransferOptions>
+							<mrd:offLine>
+								<mrd:MD_Medium>
+									<mrd:name>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>USBFlashDrive</gco:CharacterString>
+											</cit:title>
+										</cit:CI_Citation>
+									</mrd:name>
+									<mrd:mediumFormat>
+										<mrd:MD_MediumFormatCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_MediumFormatCode" codeListValue="UDF">UDF</mrd:MD_MediumFormatCode>
+									</mrd:mediumFormat>
+									<mrd:mediumNote>
+										<gco:CharacterString>Resource &gt; Distribution &gt; Distributor &gt; Digital Transfer Options &gt; Offline Medium &gt; Medium Note (NAP USBFlashDrive Medium Name + UDF Format Code)</gco:CharacterString>
+									</mrd:mediumNote>
+								</mrd:MD_Medium>
+							</mrd:offLine>
+						</mrd:MD_DigitalTransferOptions>
+					</mrd:distributorTransferOptions>
+				</mrd:MD_Distributor>
+			</mrd:distributor>
+			<mrd:transferOptions>
+				<mrd:MD_DigitalTransferOptions>
+					<mrd:transferSize>
+						<gco:Real>2.12</gco:Real>
+					</mrd:transferSize>
+					<mrd:onLine>
+						<cit:CI_OnlineResource>
+							<cit:linkage>
+								<gco:CharacterString>http://Resource_Distribution_Digital_Transfer_Options_Online_Resource_Linkage</gco:CharacterString>
+							</cit:linkage>
+							<cit:protocol>
+								<gco:CharacterString>Resource &gt; Distribution &gt; Digital Transfer Options &gt; Online Resource &gt; Protocol</gco:CharacterString>
+							</cit:protocol>
+						</cit:CI_OnlineResource>
+					</mrd:onLine>
+				</mrd:MD_DigitalTransferOptions>
+			</mrd:transferOptions>
+		</mrd:MD_Distribution>
+	</mdb:distributionInfo>
+	<mdb:dataQualityInfo>
+		<mdq:DQ_DataQuality>
+			<mdq:scope>
+				<mcc:MD_Scope>
+					<mcc:level>
+						<mcc:MD_ScopeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ScopeCode" codeListValue="service">service</mcc:MD_ScopeCode>
+					</mcc:level>
+					<mcc:extent>
+						<gex:EX_Extent>
+							<gex:description>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Extent &gt; Description</gco:CharacterString>
+							</gex:description>
+							<gex:temporalElement>
+								<gex:EX_TemporalExtent>
+									<gex:extent>
+										<gml:TimeInstant>
+											<gml:timePosition>2011-10-12T00:00:00</gml:timePosition>
+										</gml:TimeInstant>
+									</gex:extent>
+								</gex:EX_TemporalExtent>
+							</gex:temporalElement>
+						</gex:EX_Extent>
+					</mcc:extent>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:dataset>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Level Description &gt; Dataset</gco:CharacterString>
+							</mcc:dataset>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+				</mcc:MD_Scope>
+			</mdq:scope>
+			<mdq:report>
+				<mdq:DQ_AbsoluteExternalPositionalAccuracy>
+					<mdq:measure>
+						<mdq:DQ_MeasureReference>
+							<mdq:measureIdentification>
+								<mcc:MD_Identifier>
+									<mcc:authority>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Identifier &gt; Authority Citation &gt; Titles &gt; Title (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+											</cit:title>
+											<cit:date>
+												<cit:CI_Date>
+													<cit:date>
+														<gco:DateTime>2011-08-31T00:00:00</gco:DateTime>
+													</cit:date>
+													<cit:dateType>
+														<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+													</cit:dateType>
+												</cit:CI_Date>
+											</cit:date>
+											<cit:citedResponsibleParty>
+												<cit:CI_Responsibility>
+													<cit:role>
+														<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+													</cit:role>
+													<cit:party>
+														<cit:CI_Organisation>
+															<cit:name>
+																<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Identifier &gt; Authority Citation &gt; Contact &gt; Organization (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+															</cit:name>
+															<cit:contactInfo>
+																<cit:CI_Contact>
+																	<cit:address>
+																		<cit:CI_Address>
+																			<cit:electronicMailAddress>
+																				<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Identifier &gt; Authority Citation &gt; Contact &gt; Contact Information &gt; Email (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+																			</cit:electronicMailAddress>
+																		</cit:CI_Address>
+																	</cit:address>
+																</cit:CI_Contact>
+															</cit:contactInfo>
+														</cit:CI_Organisation>
+													</cit:party>
+												</cit:CI_Responsibility>
+											</cit:citedResponsibleParty>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>http://Resource_Data_Quality_Report_Measure_Identifier_Authority_Citation_Online_Resource_Linkage_Type=Absolute_External_Positional_Accuracy_Dimension=Horizontal</gco:CharacterString>
+													</cit:linkage>
+													<cit:protocol>
+														<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Identifier &gt; Authority Citation &gt; Online Resource &gt; Protocol (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+													</cit:protocol>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mcc:authority>
+									<mcc:code>
+										<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Identifier &gt; Code (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mdq:measureIdentification>
+							<mdq:nameOfMeasure>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Name (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+							</mdq:nameOfMeasure>
+							<mdq:measureDescription>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Description (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+							</mdq:measureDescription>
+						</mdq:DQ_MeasureReference>
+					</mdq:measure>
+					<mdq:evaluationMethod>
+						<mdq:DQ_EvaluationMethod>
+							<mdq:dateTime>
+								<gco:DateTime>2011-10-12T00:00:00</gco:DateTime>
+							</mdq:dateTime>
+							<mdq:evaluationMethodDescription>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Evaluation Method &gt; Description (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+							</mdq:evaluationMethodDescription>
+							<mdq:evaluationProcedure>
+								<cit:CI_Citation>
+									<cit:title>
+										<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Evaluation Method &gt; Procedure Citation &gt; Titles &gt; Title (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+									</cit:title>
+									<cit:date>
+										<cit:CI_Date>
+											<cit:date>
+												<gco:DateTime>2011-08-01T00:00:00</gco:DateTime>
+											</cit:date>
+											<cit:dateType>
+												<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+											</cit:dateType>
+										</cit:CI_Date>
+									</cit:date>
+									<cit:citedResponsibleParty>
+										<cit:CI_Responsibility>
+											<cit:role>
+												<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+											</cit:role>
+											<cit:party>
+												<cit:CI_Organisation>
+													<cit:name>
+														<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Evaluation Method &gt; Procedure Citation &gt; Contact &gt; Organization (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+													</cit:name>
+													<cit:contactInfo>
+														<cit:CI_Contact>
+															<cit:address>
+																<cit:CI_Address>
+																	<cit:electronicMailAddress>
+																		<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Evaluation Method &gt; Procedure Citation &gt; Contact &gt; Contact Information &gt; Email (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+																	</cit:electronicMailAddress>
+																</cit:CI_Address>
+															</cit:address>
+														</cit:CI_Contact>
+													</cit:contactInfo>
+												</cit:CI_Organisation>
+											</cit:party>
+										</cit:CI_Responsibility>
+									</cit:citedResponsibleParty>
+									<cit:onlineResource>
+										<cit:CI_OnlineResource>
+											<cit:linkage>
+												<gco:CharacterString>http://Resource_Data_Quality_Report_Evaluation_Method_Procedure_Citation_Online_Resource_Linkage_Type=Absolute_External_Positional_Accuracy_Dimension=Horizontal</gco:CharacterString>
+											</cit:linkage>
+											<cit:protocol>
+												<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Evaluation Method &gt; Procedure Citation &gt; Online Resource &gt; Protocol (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+											</cit:protocol>
+										</cit:CI_OnlineResource>
+									</cit:onlineResource>
+								</cit:CI_Citation>
+							</mdq:evaluationProcedure>
+							<mdq:evaluationMethodType>
+								<mdq:DQ_EvaluationMethodTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#DQ_EvaluationMethodTypeCode" codeListValue="indirect">indirect</mdq:DQ_EvaluationMethodTypeCode>
+							</mdq:evaluationMethodType>
+						</mdq:DQ_EvaluationMethod>
+					</mdq:evaluationMethod>
+					<mdq:result>
+						<mdq:DQ_ConformanceResult>
+							<mdq:specification>
+								<cit:CI_Citation>
+									<cit:title>
+										<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Specification &gt; Titles &gt; Title (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+									</cit:title>
+									<cit:date>
+										<cit:CI_Date>
+											<cit:date>
+												<gco:DateTime>2009-06-20T00:00:00</gco:DateTime>
+											</cit:date>
+											<cit:dateType>
+												<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+											</cit:dateType>
+										</cit:CI_Date>
+									</cit:date>
+									<cit:citedResponsibleParty>
+										<cit:CI_Responsibility>
+											<cit:role>
+												<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+											</cit:role>
+											<cit:party>
+												<cit:CI_Organisation>
+													<cit:name>
+														<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Specification &gt; Contact &gt; Organization (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+													</cit:name>
+													<cit:contactInfo>
+														<cit:CI_Contact>
+															<cit:address>
+																<cit:CI_Address>
+																	<cit:electronicMailAddress>
+																		<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Specification &gt; Contact &gt; Contact Information &gt; Email (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+																	</cit:electronicMailAddress>
+																</cit:CI_Address>
+															</cit:address>
+														</cit:CI_Contact>
+													</cit:contactInfo>
+												</cit:CI_Organisation>
+											</cit:party>
+										</cit:CI_Responsibility>
+									</cit:citedResponsibleParty>
+									<cit:onlineResource>
+										<cit:CI_OnlineResource>
+											<cit:linkage>
+												<gco:CharacterString>http://Resource_Data_Quality_Report_Conformance_Result_Specification_Online_Resource_Linkage_Type=Absolute_External_Positional_Accuracy_Dimension=Horizontal</gco:CharacterString>
+											</cit:linkage>
+											<cit:protocol>
+												<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Specification &gt; Online Resource &gt; Protocol (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+											</cit:protocol>
+										</cit:CI_OnlineResource>
+									</cit:onlineResource>
+								</cit:CI_Citation>
+							</mdq:specification>
+							<mdq:explanation>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Explanation (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:CharacterString>
+							</mdq:explanation>
+							<mdq:pass>
+								<gco:Boolean>true</gco:Boolean>
+							</mdq:pass>
+						</mdq:DQ_ConformanceResult>
+					</mdq:result>
+					<mdq:result>
+						<mdq:DQ_QuantitativeResult>
+							<mdq:value>
+								<gco:Record>Resource &gt; Data Quality &gt; Report &gt; Quantitative Result &gt; Value (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:Record>
+							</mdq:value>
+							<mdq:valueUnit>
+								<gml:UnitDefinition>
+									<gml:identifier codeSpace="GML_UomSymbol">Unified Code of Units of Measure</gml:identifier>
+									<gml:catalogSymbol codeSpace="http://aurora.regenstrief.org/UCUM">m</gml:catalogSymbol>
+								</gml:UnitDefinition>
+							</mdq:valueUnit>
+							<mdq:valueRecordType>
+								<gco:RecordType>Resource &gt; Data Quality &gt; Report &gt; Quantitative Result &gt; Value Type (Type=Absolute External Positional Accuracy + Dimension=Horizontal)</gco:RecordType>
+							</mdq:valueRecordType>
+						</mdq:DQ_QuantitativeResult>
+					</mdq:result>
+				</mdq:DQ_AbsoluteExternalPositionalAccuracy>
+			</mdq:report>
+			<mdq:report>
+				<mdq:DQ_AbsoluteExternalPositionalAccuracy>
+					<mdq:measure>
+						<mdq:DQ_MeasureReference>
+							<mdq:measureDescription>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Description (Type=Absolute External Positional Accuracy + Dimension=Vertical)</gco:CharacterString>
+							</mdq:measureDescription>
+						</mdq:DQ_MeasureReference>
+					</mdq:measure>
+					<mdq:evaluationMethod>
+						<mdq:DQ_EvaluationMethod>
+							<mdq:evaluationMethodDescription>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Evaluation Method &gt; Description (Type=Absolute External Positional Accuracy + Dimension=Vertical)</gco:CharacterString>
+							</mdq:evaluationMethodDescription>
+						</mdq:DQ_EvaluationMethod>
+					</mdq:evaluationMethod>
+					<mdq:result>
+						<mdq:DQ_QuantitativeResult>
+							<mdq:value>
+								<gco:Record>Resource &gt; Data Quality &gt; Report &gt; Quantitative Result &gt; Value (Type=Absolute External Positional Accuracy + Dimension=Vertical)</gco:Record>
+							</mdq:value>
+							<mdq:valueUnit>
+								<gml:UnitDefinition>
+									<gml:identifier codeSpace="GML_UomSymbol">Unified Code of Units of Measure</gml:identifier>
+									<gml:catalogSymbol codeSpace="http://aurora.regenstrief.org/UCUM">m</gml:catalogSymbol>
+								</gml:UnitDefinition>
+							</mdq:valueUnit>
+						</mdq:DQ_QuantitativeResult>
+					</mdq:result>
+				</mdq:DQ_AbsoluteExternalPositionalAccuracy>
+			</mdq:report>
+			<mdq:report>
+				<mdq:DQ_CompletenessOmission>
+					<mdq:measure>
+						<mdq:DQ_MeasureReference>
+							<mdq:measureDescription>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Description (Type=Completeness Omission)</gco:CharacterString>
+							</mdq:measureDescription>
+						</mdq:DQ_MeasureReference>
+					</mdq:measure>
+					<mdq:result>
+						<mdq:DQ_QuantitativeResult>
+							<mdq:value>
+								<gco:Record>Resource &gt; Data Quality &gt; Report &gt; Quantitative Result &gt; Value (Type=Completeness Omission)</gco:Record>
+							</mdq:value>
+							<mdq:valueUnit>
+								<gml:UnitDefinition>
+									<gml:identifier codeSpace="GML_UomSymbol">Unified Code of Units of Measure</gml:identifier>
+									<gml:catalogSymbol codeSpace="http://aurora.regenstrief.org/UCUM">m</gml:catalogSymbol>
+								</gml:UnitDefinition>
+							</mdq:valueUnit>
+						</mdq:DQ_QuantitativeResult>
+					</mdq:result>
+				</mdq:DQ_CompletenessOmission>
+			</mdq:report>
+			<mdq:report>
+				<mdq:DQ_ConceptualConsistency>
+					<mdq:measure>
+						<mdq:DQ_MeasureReference>
+							<mdq:measureDescription>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Description (Type=Conceptual Consistency)</gco:CharacterString>
+							</mdq:measureDescription>
+						</mdq:DQ_MeasureReference>
+					</mdq:measure>
+					<mdq:result>
+						<mdq:DQ_QuantitativeResult>
+							<mdq:value>
+								<gco:Record>Resource &gt; Data Quality &gt; Report &gt; Quantitative Result &gt; Value (Type=Conceptual Consistency)</gco:Record>
+							</mdq:value>
+							<mdq:valueUnit>
+								<gml:UnitDefinition>
+									<gml:identifier codeSpace="GML_UomSymbol">Unified Code of Units of Measure</gml:identifier>
+									<gml:catalogSymbol codeSpace="http://aurora.regenstrief.org/UCUM">m</gml:catalogSymbol>
+								</gml:UnitDefinition>
+							</mdq:valueUnit>
+						</mdq:DQ_QuantitativeResult>
+					</mdq:result>
+				</mdq:DQ_ConceptualConsistency>
+			</mdq:report>
+			<mdq:report>
+				<mdq:DQ_QuantitativeAttributeAccuracy>
+					<mdq:measure>
+						<mdq:DQ_MeasureReference>
+							<mdq:measureDescription>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Measure &gt; Description (Type=Quantitative Attribute Accuracy)</gco:CharacterString>
+							</mdq:measureDescription>
+						</mdq:DQ_MeasureReference>
+					</mdq:measure>
+					<mdq:evaluationMethod>
+						<mdq:DQ_EvaluationMethod>
+							<mdq:evaluationMethodDescription>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Evaluation Method &gt; Description (Type=Quantitative Attribute Accuracy)</gco:CharacterString>
+							</mdq:evaluationMethodDescription>
+						</mdq:DQ_EvaluationMethod>
+					</mdq:evaluationMethod>
+					<mdq:result>
+						<mdq:DQ_QuantitativeResult>
+							<mdq:value>
+								<gco:Record>Resource &gt; Data Quality &gt; Report &gt; Quantitative Result &gt; Value (Type=Quantitative Attribute Accuracy)</gco:Record>
+							</mdq:value>
+							<mdq:valueUnit>
+								<gml:UnitDefinition>
+									<gml:identifier codeSpace="GML_UomSymbol">Unified Code of Units of Measure</gml:identifier>
+									<gml:catalogSymbol codeSpace="http://aurora.regenstrief.org/UCUM">Cel</gml:catalogSymbol>
+								</gml:UnitDefinition>
+							</mdq:valueUnit>
+						</mdq:DQ_QuantitativeResult>
+					</mdq:result>
+				</mdq:DQ_QuantitativeAttributeAccuracy>
+			</mdq:report>
+			<mdq:report>
+				<mdq:DQ_DomainConsistency>
+					<mdq:result>
+						<mdq:DQ_ConformanceResult>
+							<mdq:specification>
+								<cit:CI_Citation>
+									<cit:title>
+										<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Specification &gt; Titles &gt; Title (Type=Domain Consistency)</gco:CharacterString>
+									</cit:title>
+									<cit:date>
+										<cit:CI_Date>
+											<cit:date>
+												<gco:DateTime>2010-07-01T00:00:00</gco:DateTime>
+											</cit:date>
+											<cit:dateType>
+												<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+											</cit:dateType>
+										</cit:CI_Date>
+									</cit:date>
+									<cit:citedResponsibleParty>
+										<cit:CI_Responsibility>
+											<cit:role>
+												<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+											</cit:role>
+											<cit:party>
+												<cit:CI_Organisation>
+													<cit:name>
+														<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Specification &gt; Contact &gt; Organization (Type=Domain Consistency)</gco:CharacterString>
+													</cit:name>
+													<cit:contactInfo>
+														<cit:CI_Contact>
+															<cit:address>
+																<cit:CI_Address>
+																	<cit:electronicMailAddress>
+																		<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Specification &gt; Contact &gt; Contact Information &gt; Email (Type=Domain Consistency)</gco:CharacterString>
+																	</cit:electronicMailAddress>
+																</cit:CI_Address>
+															</cit:address>
+														</cit:CI_Contact>
+													</cit:contactInfo>
+												</cit:CI_Organisation>
+											</cit:party>
+										</cit:CI_Responsibility>
+									</cit:citedResponsibleParty>
+									<cit:onlineResource>
+										<cit:CI_OnlineResource>
+											<cit:linkage>
+												<gco:CharacterString>http://Resource_Data_Quality_Report_Conformance_Result_Specification_Online_Resource_Linkage_Type=Domain_Consistency</gco:CharacterString>
+											</cit:linkage>
+											<cit:protocol>
+												<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Specification &gt; Online Resource &gt; Protocol (Type=Domain Consistency)</gco:CharacterString>
+											</cit:protocol>
+										</cit:CI_OnlineResource>
+									</cit:onlineResource>
+								</cit:CI_Citation>
+							</mdq:specification>
+							<mdq:explanation>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Report &gt; Conformance Result &gt; Explanation (Type=Domain Consistency)</gco:CharacterString>
+							</mdq:explanation>
+							<mdq:pass>
+								<gco:Boolean>true</gco:Boolean>
+							</mdq:pass>
+						</mdq:DQ_ConformanceResult>
+					</mdq:result>
+				</mdq:DQ_DomainConsistency>
+			</mdq:report>
+		</mdq:DQ_DataQuality>
+	</mdb:dataQualityInfo>
+	<mdb:resourceLineage>
+		<mrl:LI_Lineage>
+			<mrl:statement>
+				<gco:CharacterString>Resource &gt; Lineage &gt; Statement</gco:CharacterString>
+			</mrl:statement>
+			<mrl:scope>
+				<mcc:MD_Scope>
+					<mcc:level>
+						<mcc:MD_ScopeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ScopeCode" codeListValue="service">service</mcc:MD_ScopeCode>
+					</mcc:level>
+					<mcc:extent>
+						<gex:EX_Extent>
+							<gex:description>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Extent &gt; Description</gco:CharacterString>
+							</gex:description>
+							<gex:temporalElement>
+								<gex:EX_TemporalExtent>
+									<gex:extent>
+										<gml:TimeInstant>
+											<gml:timePosition>2011-10-12T00:00:00</gml:timePosition>
+										</gml:TimeInstant>
+									</gex:extent>
+								</gex:EX_TemporalExtent>
+							</gex:temporalElement>
+						</gex:EX_Extent>
+					</mcc:extent>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:dataset>
+								<gco:CharacterString>Resource &gt; Data Quality &gt; Level Description &gt; Dataset</gco:CharacterString>
+							</mcc:dataset>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+				</mcc:MD_Scope>
+			</mrl:scope>
+			<mrl:source>
+				<mrl:LI_Source>
+					<mrl:description>
+						<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Source Description</gco:CharacterString>
+					</mrl:description>
+					<mrl:sourceSpatialResolution>
+						<mri:MD_Resolution>
+							<mri:equivalentScale>
+								<mri:MD_RepresentativeFraction>
+									<mri:denominator>
+										<gco:Integer>250000</gco:Integer>
+									</mri:denominator>
+								</mri:MD_RepresentativeFraction>
+							</mri:equivalentScale>
+						</mri:MD_Resolution>
+					</mrl:sourceSpatialResolution>
+					<mrl:sourceReferenceSystem>
+						<mrs:MD_ReferenceSystem>
+							<mrs:referenceSystemIdentifier>
+								<mcc:MD_Identifier>
+									<mcc:authority>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Reference System &gt; Authority Citation &gt; Titles &gt; Title</gco:CharacterString>
+											</cit:title>
+											<cit:date>
+												<cit:CI_Date>
+													<cit:date>
+														<gco:DateTime>2011-06-15T00:00:00</gco:DateTime>
+													</cit:date>
+													<cit:dateType>
+														<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+													</cit:dateType>
+												</cit:CI_Date>
+											</cit:date>
+											<cit:citedResponsibleParty>
+												<cit:CI_Responsibility>
+													<cit:role>
+														<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="custodian">custodian</cit:CI_RoleCode>
+													</cit:role>
+													<cit:party>
+														<cit:CI_Organisation>
+															<cit:name>
+																<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Reference System &gt; Authority Citation &gt; Contact &gt; Organization</gco:CharacterString>
+															</cit:name>
+															<cit:contactInfo>
+																<cit:CI_Contact>
+																	<cit:address>
+																		<cit:CI_Address>
+																			<cit:electronicMailAddress>
+																				<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Reference System &gt; Authority Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+																			</cit:electronicMailAddress>
+																		</cit:CI_Address>
+																	</cit:address>
+																</cit:CI_Contact>
+															</cit:contactInfo>
+														</cit:CI_Organisation>
+													</cit:party>
+												</cit:CI_Responsibility>
+											</cit:citedResponsibleParty>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>http://Resource_Lineage_Data_Source_Reference_System_Authority_Citation_Online_Resource_Linkage</gco:CharacterString>
+													</cit:linkage>
+													<cit:protocol>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Reference System &gt; Authority Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+													</cit:protocol>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mcc:authority>
+									<mcc:code>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Reference System &gt; Code</gco:CharacterString>
+									</mcc:code>
+									<mcc:codeSpace>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Reference System &gt; Code Space</gco:CharacterString>
+									</mcc:codeSpace>
+									<mcc:version>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Reference System &gt; Version</gco:CharacterString>
+									</mcc:version>
+								</mcc:MD_Identifier>
+							</mrs:referenceSystemIdentifier>
+						</mrs:MD_ReferenceSystem>
+					</mrl:sourceReferenceSystem>
+					<mrl:sourceCitation>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Source Citation &gt; Titles &gt; Title</gco:CharacterString>
+							</cit:title>
+							<cit:alternateTitle>
+								<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Source Citation &gt; Titles &gt; Alternate Title</gco:CharacterString>
+							</cit:alternateTitle>
+							<cit:date>
+								<cit:CI_Date>
+									<cit:date>
+										<gco:DateTime>2011-07-15T00:00:00</gco:DateTime>
+									</cit:date>
+									<cit:dateType>
+										<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+									</cit:dateType>
+								</cit:CI_Date>
+							</cit:date>
+							<cit:citedResponsibleParty>
+								<cit:CI_Responsibility>
+									<cit:role>
+										<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="originator">originator</cit:CI_RoleCode>
+									</cit:role>
+									<cit:party>
+										<cit:CI_Organisation>
+											<cit:name>
+												<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Source Citation &gt; Contact &gt; Organization</gco:CharacterString>
+											</cit:name>
+											<cit:contactInfo>
+												<cit:CI_Contact>
+													<cit:address>
+														<cit:CI_Address>
+															<cit:electronicMailAddress>
+																<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Source Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+															</cit:electronicMailAddress>
+														</cit:CI_Address>
+													</cit:address>
+												</cit:CI_Contact>
+											</cit:contactInfo>
+										</cit:CI_Organisation>
+									</cit:party>
+								</cit:CI_Responsibility>
+							</cit:citedResponsibleParty>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>http://Resource_Lineage_Data_Source_Source_Citation_Online_Resource_Linkage</gco:CharacterString>
+									</cit:linkage>
+									<cit:protocol>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Source Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+									</cit:protocol>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Citation>
+					</mrl:sourceCitation>
+					<mrl:sourceExtent>
+						<gex:EX_Extent>
+							<gex:description>
+								<gco:CharacterString>Resource &gt; Lineage &gt; Data Source &gt; Source Extent &gt; Description</gco:CharacterString>
+							</gex:description>
+							<gex:temporalElement>
+								<gex:EX_TemporalExtent>
+									<gex:extent>
+										<gml:TimeInstant>
+											<gml:timePosition>2011-06-06T00:00:00</gml:timePosition>
+										</gml:TimeInstant>
+									</gex:extent>
+								</gex:EX_TemporalExtent>
+							</gex:temporalElement>
+							<gex:temporalElement>
+								<gex:EX_TemporalExtent>
+									<gex:extent>
+										<gml:TimeInstant>
+											<gml:timePosition>2011-07-14T14:20:00</gml:timePosition>
+										</gml:TimeInstant>
+									</gex:extent>
+								</gex:EX_TemporalExtent>
+							</gex:temporalElement>
+							<gex:temporalElement>
+								<gex:EX_TemporalExtent>
+									<gex:extent>
+										<gml:TimeInstant>
+											<gml:timePosition>2011-08-05T06:05:00</gml:timePosition>
+										</gml:TimeInstant>
+									</gex:extent>
+								</gex:EX_TemporalExtent>
+							</gex:temporalElement>
+						</gex:EX_Extent>
+					</mrl:sourceExtent>
+				</mrl:LI_Source>
+			</mrl:source>
+			<mrl:processStep>
+				<mrl:LI_ProcessStep>
+					<mrl:description>
+						<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Process Description</gco:CharacterString>
+					</mrl:description>
+					<mrl:rationale>
+						<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Rationale</gco:CharacterString>
+					</mrl:rationale>
+					<mrl:stepDateTime>
+						<gml:TimeInstant>
+							<gml:timePosition>2011-10-01T16:10:32</gml:timePosition>
+						</gml:TimeInstant>
+					</mrl:stepDateTime>
+					<mrl:processor>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="processor">processor</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Processor &gt; Organization</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:phone>
+												<cit:CI_Telephone>
+													<cit:number>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Processor &gt; Contact Information &gt; Phone</gco:CharacterString>
+													</cit:number>
+													<cit:numberType>
+														<cit:CI_TelephoneTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_TelephoneTypeCode" codeListValue="voice">voice</cit:CI_TelephoneTypeCode>
+													</cit:numberType>
+												</cit:CI_Telephone>
+											</cit:phone>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:deliveryPoint>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Processor &gt; Contact Information &gt; Address</gco:CharacterString>
+													</cit:deliveryPoint>
+													<cit:city>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Processor &gt; Contact Information &gt; City</gco:CharacterString>
+													</cit:city>
+													<cit:administrativeArea>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Processor &gt; Contact Information &gt; State</gco:CharacterString>
+													</cit:administrativeArea>
+													<cit:postalCode>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Processor &gt; Contact Information &gt; Postal Code</gco:CharacterString>
+													</cit:postalCode>
+													<cit:country>
+														<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+													</cit:country>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Processor &gt; Contact Information &gt; Email</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+									<cit:individual>
+										<cit:CI_Individual>
+											<cit:name>
+												<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Processor &gt; Name</gco:CharacterString>
+											</cit:name>
+										</cit:CI_Individual>
+									</cit:individual>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</mrl:processor>
+					<mrl:source>
+						<mrl:LI_Source>
+							<mrl:description>
+								<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Description (Source Type=Used)</gco:CharacterString>
+							</mrl:description>
+							<mrl:sourceReferenceSystem>
+								<mrs:MD_ReferenceSystem>
+									<mrs:referenceSystemIdentifier>
+										<mcc:MD_Identifier>
+											<mcc:authority>
+												<cit:CI_Citation>
+													<cit:title>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Reference System &gt; Authority Citation &gt; Titles &gt; Title (Source Type=Used)</gco:CharacterString>
+													</cit:title>
+													<cit:date>
+														<cit:CI_Date>
+															<cit:date>
+																<gco:DateTime>2012-07-20T00:00:00</gco:DateTime>
+															</cit:date>
+															<cit:dateType>
+																<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="publication">publication</cit:CI_DateTypeCode>
+															</cit:dateType>
+														</cit:CI_Date>
+													</cit:date>
+													<cit:citedResponsibleParty>
+														<cit:CI_Responsibility>
+															<cit:role>
+																<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="resourceProvider">resourceProvider</cit:CI_RoleCode>
+															</cit:role>
+															<cit:party>
+																<cit:CI_Organisation>
+																	<cit:name>
+																		<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Reference System &gt; Authority Citation &gt; Contact &gt; Organization (Source Type=Used)</gco:CharacterString>
+																	</cit:name>
+																	<cit:contactInfo>
+																		<cit:CI_Contact>
+																			<cit:address>
+																				<cit:CI_Address>
+																					<cit:electronicMailAddress>
+																						<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Reference System &gt; Authority Citation &gt; Contact &gt; Contact Information &gt; Email (Source Type=Used)</gco:CharacterString>
+																					</cit:electronicMailAddress>
+																				</cit:CI_Address>
+																			</cit:address>
+																		</cit:CI_Contact>
+																	</cit:contactInfo>
+																</cit:CI_Organisation>
+															</cit:party>
+														</cit:CI_Responsibility>
+													</cit:citedResponsibleParty>
+													<cit:onlineResource>
+														<cit:CI_OnlineResource>
+															<cit:linkage>
+																<gco:CharacterString>http://Resource_Lineage_Process_Step_Data_Source_Reference_System_Authority_Citation_Online_Resource_Linkage_Source_Type=Used</gco:CharacterString>
+															</cit:linkage>
+															<cit:protocol>
+																<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Reference System &gt; Authority Citation &gt; Online Resource &gt; Protocol (Source Type=Used)</gco:CharacterString>
+															</cit:protocol>
+														</cit:CI_OnlineResource>
+													</cit:onlineResource>
+												</cit:CI_Citation>
+											</mcc:authority>
+											<mcc:code>
+												<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Reference System &gt; Code (Source Type=Used)</gco:CharacterString>
+											</mcc:code>
+											<mcc:codeSpace>
+												<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Reference System &gt; Code Space (Source Type=Used)</gco:CharacterString>
+											</mcc:codeSpace>
+											<mcc:version>
+												<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Reference System &gt; Version (Source Type=Used)</gco:CharacterString>
+											</mcc:version>
+										</mcc:MD_Identifier>
+									</mrs:referenceSystemIdentifier>
+								</mrs:MD_ReferenceSystem>
+							</mrl:sourceReferenceSystem>
+							<mrl:sourceCitation>
+								<cit:CI_Citation>
+									<cit:title>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Titles &gt; Title (Source Type=Used)</gco:CharacterString>
+									</cit:title>
+									<cit:alternateTitle>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Titles &gt; Alternate Title (Source Type=Used)</gco:CharacterString>
+									</cit:alternateTitle>
+									<cit:date>
+										<cit:CI_Date>
+											<cit:date>
+												<gco:DateTime>2011-09-14T00:00:00</gco:DateTime>
+											</cit:date>
+											<cit:dateType>
+												<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+											</cit:dateType>
+										</cit:CI_Date>
+									</cit:date>
+									<cit:citedResponsibleParty>
+										<cit:CI_Responsibility>
+											<cit:role>
+												<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+											</cit:role>
+											<cit:party>
+												<cit:CI_Organisation>
+													<cit:name>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Contact &gt; Organization (Source Type=Used Role=Publisher)</gco:CharacterString>
+													</cit:name>
+													<cit:contactInfo>
+														<cit:CI_Contact>
+															<cit:address>
+																<cit:CI_Address>
+																	<cit:city>
+																		<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Contact &gt; Contact Information &gt; City (Source Type=Used Role=Publisher)</gco:CharacterString>
+																	</cit:city>
+																	<cit:administrativeArea>
+																		<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Contact &gt; Contact Information &gt; State (Source Type=Used Role=Publisher)</gco:CharacterString>
+																	</cit:administrativeArea>
+																	<cit:country>
+																		<lan:CountryCode codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US">US</lan:CountryCode>
+																	</cit:country>
+																	<cit:electronicMailAddress>
+																		<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Contact &gt; Contact Information &gt; Email (Source Type=Used Role=Publisher)</gco:CharacterString>
+																	</cit:electronicMailAddress>
+																</cit:CI_Address>
+															</cit:address>
+														</cit:CI_Contact>
+													</cit:contactInfo>
+												</cit:CI_Organisation>
+											</cit:party>
+										</cit:CI_Responsibility>
+									</cit:citedResponsibleParty>
+									<cit:citedResponsibleParty>
+										<cit:CI_Responsibility>
+											<cit:role>
+												<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="originator">originator</cit:CI_RoleCode>
+											</cit:role>
+											<cit:party>
+												<cit:CI_Organisation>
+													<cit:name>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Contact &gt; Organization (Source Type=Used Role=Originator)</gco:CharacterString>
+													</cit:name>
+													<cit:contactInfo>
+														<cit:CI_Contact>
+															<cit:address>
+																<cit:CI_Address>
+																	<cit:electronicMailAddress>
+																		<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Contact &gt; Contact Information &gt; Email (Source Type=Used Role=Originator)</gco:CharacterString>
+																	</cit:electronicMailAddress>
+																</cit:CI_Address>
+															</cit:address>
+														</cit:CI_Contact>
+													</cit:contactInfo>
+												</cit:CI_Organisation>
+											</cit:party>
+										</cit:CI_Responsibility>
+									</cit:citedResponsibleParty>
+									<cit:onlineResource>
+										<cit:CI_OnlineResource>
+											<cit:linkage>
+												<gco:CharacterString>http://Resource_Lineage_Process_Step_Data_Source_Source_Citation_Online_Resource_Linkage_Source_Type=Used</gco:CharacterString>
+											</cit:linkage>
+											<cit:protocol>
+												<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Online Resource &gt; Protocol (Source Type=Used)</gco:CharacterString>
+											</cit:protocol>
+										</cit:CI_OnlineResource>
+									</cit:onlineResource>
+								</cit:CI_Citation>
+							</mrl:sourceCitation>
+							<mrl:sourceExtent>
+								<gex:EX_Extent>
+									<gex:geographicElement>
+										<gex:EX_GeographicBoundingBox>
+											<gex:extentTypeCode>
+												<gco:Boolean>true</gco:Boolean>
+											</gex:extentTypeCode>
+											<gex:westBoundLongitude>
+												<gco:Decimal>-100</gco:Decimal>
+											</gex:westBoundLongitude>
+											<gex:eastBoundLongitude>
+												<gco:Decimal>-80</gco:Decimal>
+											</gex:eastBoundLongitude>
+											<gex:southBoundLatitude>
+												<gco:Decimal>21.5</gco:Decimal>
+											</gex:southBoundLatitude>
+											<gex:northBoundLatitude>
+												<gco:Decimal>42.5</gco:Decimal>
+											</gex:northBoundLatitude>
+										</gex:EX_GeographicBoundingBox>
+									</gex:geographicElement>
+								</gex:EX_Extent>
+							</mrl:sourceExtent>
+						</mrl:LI_Source>
+					</mrl:source>
+					<mrl:source>
+						<mrl:LI_Source>
+							<mrl:description>
+								<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Description (Source Type=Produced)</gco:CharacterString>
+							</mrl:description>
+							<mrl:sourceCitation>
+								<cit:CI_Citation>
+									<cit:title>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Titles &gt; Title (Source Type=Produced)</gco:CharacterString>
+									</cit:title>
+									<cit:alternateTitle>
+										<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Titles &gt; Alternate Title (Source Type=Produced)</gco:CharacterString>
+									</cit:alternateTitle>
+									<cit:date>
+										<cit:CI_Date>
+											<cit:date>
+												<gco:DateTime>2011-10-14T00:00:00</gco:DateTime>
+											</cit:date>
+											<cit:dateType>
+												<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+											</cit:dateType>
+										</cit:CI_Date>
+									</cit:date>
+									<cit:citedResponsibleParty>
+										<cit:CI_Responsibility>
+											<cit:role>
+												<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="originator">originator</cit:CI_RoleCode>
+											</cit:role>
+											<cit:party>
+												<cit:CI_Organisation>
+													<cit:name>
+														<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Contact &gt; Organization (Source Type=Produced Role=Originator)</gco:CharacterString>
+													</cit:name>
+													<cit:contactInfo>
+														<cit:CI_Contact>
+															<cit:address>
+																<cit:CI_Address>
+																	<cit:electronicMailAddress>
+																		<gco:CharacterString>Resource &gt; Lineage &gt; Process Step &gt; Data Source &gt; Source Citation &gt; Contact &gt; Contact Information &gt; Email (Source Type=Produced Role=Originator)</gco:CharacterString>
+																	</cit:electronicMailAddress>
+																</cit:CI_Address>
+															</cit:address>
+														</cit:CI_Contact>
+													</cit:contactInfo>
+												</cit:CI_Organisation>
+											</cit:party>
+										</cit:CI_Responsibility>
+									</cit:citedResponsibleParty>
+								</cit:CI_Citation>
+							</mrl:sourceCitation>
+						</mrl:LI_Source>
+					</mrl:source>
+				</mrl:LI_ProcessStep>
+			</mrl:processStep>
+		</mrl:LI_Lineage>
+	</mdb:resourceLineage>
+	<mdb:portrayalCatalogueInfo>
+		<mpc:MD_PortrayalCatalogueReference>
+			<mpc:portrayalCatalogueCitation>
+				<cit:CI_Citation>
+					<cit:title>
+						<gco:CharacterString>Resource &gt; References &gt; Portrayal Citation &gt; Titles &gt; Title</gco:CharacterString>
+					</cit:title>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2008-01-01T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:citedResponsibleParty>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="custodian">custodian</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; References &gt; Portrayal Citation &gt; Contact &gt; Organization</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Resource &gt; References &gt; Portrayal Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+									<cit:individual>
+										<cit:CI_Individual>
+											<cit:positionName>
+												<gco:CharacterString>Resource &gt; References &gt; Portrayal Citation &gt; Contact &gt; Position</gco:CharacterString>
+											</cit:positionName>
+										</cit:CI_Individual>
+									</cit:individual>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</cit:citedResponsibleParty>
+					<cit:onlineResource>
+						<cit:CI_OnlineResource>
+							<cit:linkage>
+								<gco:CharacterString>http://Resource_References_Portrayal_Citation_Online_Resource_Linkage</gco:CharacterString>
+							</cit:linkage>
+							<cit:protocol>
+								<gco:CharacterString>Resource &gt; References &gt; Portrayal Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+							</cit:protocol>
+						</cit:CI_OnlineResource>
+					</cit:onlineResource>
+				</cit:CI_Citation>
+			</mpc:portrayalCatalogueCitation>
+		</mpc:MD_PortrayalCatalogueReference>
+	</mdb:portrayalCatalogueInfo>
+	<mdb:metadataConstraints>
+		<mco:MD_Constraints>
+			<mco:useLimitation>
+				<gco:CharacterString>Metadata &gt; Constraints &gt; General Constraints &gt; Use Limitation</gco:CharacterString>
+			</mco:useLimitation>
+		</mco:MD_Constraints>
+	</mdb:metadataConstraints>
+	<mdb:metadataConstraints>
+		<mco:MD_LegalConstraints>
+			<mco:useLimitation>
+				<gco:CharacterString>Metadata &gt; Constraints &gt; Legal Constraints &gt; Use Limitation</gco:CharacterString>
+			</mco:useLimitation>
+			<mco:accessConstraints>
+				<mco:MD_RestrictionCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</mco:MD_RestrictionCode>
+			</mco:accessConstraints>
+			<mco:useConstraints>
+				<mco:MD_RestrictionCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_RestrictionCode" codeListValue="restricted">restricted</mco:MD_RestrictionCode>
+			</mco:useConstraints>
+			<mco:otherConstraints>
+				<gco:CharacterString>Metadata &gt; Constraints &gt; Legal Constraints &gt; Other Constraints</gco:CharacterString>
+			</mco:otherConstraints>
+		</mco:MD_LegalConstraints>
+	</mdb:metadataConstraints>
+	<mdb:metadataConstraints>
+		<mco:MD_SecurityConstraints>
+			<mco:useLimitation>
+				<gco:CharacterString>Metadata &gt; Constraints &gt; Security Constraints &gt; Use Limitation</gco:CharacterString>
+			</mco:useLimitation>
+			<mco:classification>
+				<mco:MD_ClassificationCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ClassificationCode" codeListValue="unclassified">unclassified</mco:MD_ClassificationCode>
+			</mco:classification>
+			<mco:userNote>
+				<gco:CharacterString>Metadata &gt; Constraints &gt; Security Constraints &gt; User Note</gco:CharacterString>
+			</mco:userNote>
+			<mco:classificationSystem>
+				<gco:CharacterString>Metadata &gt; Constraints &gt; Security Constraints &gt; Classification System</gco:CharacterString>
+			</mco:classificationSystem>
+			<mco:handlingDescription>
+				<gco:CharacterString>Metadata &gt; Constraints &gt; Security Constraints &gt; Handling Description</gco:CharacterString>
+			</mco:handlingDescription>
+		</mco:MD_SecurityConstraints>
+	</mdb:metadataConstraints>
+	<mdb:applicationSchemaInfo>
+		<mas:MD_ApplicationSchemaInformation>
+			<mas:name>
+				<cit:CI_Citation>
+					<cit:title>
+						<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Citation &gt; Titles &gt; Title</gco:CharacterString>
+					</cit:title>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2011-04-08T00:00:00</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:citedResponsibleParty>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="publisher">publisher</cit:CI_RoleCode>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Citation &gt; Contact &gt; Organization</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:address>
+												<cit:CI_Address>
+													<cit:electronicMailAddress>
+														<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Citation &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+													</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</cit:citedResponsibleParty>
+					<cit:onlineResource>
+						<cit:CI_OnlineResource>
+							<cit:linkage>
+								<gco:CharacterString>http://Resource_References_Application_Schema_Information_Citation_Online_Resource_Linkage</gco:CharacterString>
+							</cit:linkage>
+							<cit:protocol>
+								<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Citation &gt; Online Resource &gt; Protocol</gco:CharacterString>
+							</cit:protocol>
+						</cit:CI_OnlineResource>
+					</cit:onlineResource>
+				</cit:CI_Citation>
+			</mas:name>
+			<mas:schemaLanguage>
+				<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Schema Language</gco:CharacterString>
+			</mas:schemaLanguage>
+			<mas:constraintLanguage>
+				<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Constraint Language</gco:CharacterString>
+			</mas:constraintLanguage>
+			<mas:schemaAscii>
+				<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; ASCII</gco:CharacterString>
+			</mas:schemaAscii>
+			<mas:graphicsFile>
+				<cit:CI_OnlineResource>
+					<cit:linkage>
+						<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Graphics File Source</gco:CharacterString>
+					</cit:linkage>
+					<cit:name>
+						<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Graphics File</gco:CharacterString>
+					</cit:name>
+				</cit:CI_OnlineResource>
+			</mas:graphicsFile>
+			<mas:softwareDevelopmentFile>
+				<cit:CI_OnlineResource>
+					<cit:linkage>
+						<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Software Development File Source</gco:CharacterString>
+					</cit:linkage>
+					<cit:name>
+						<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Software Development File</gco:CharacterString>
+					</cit:name>
+				</cit:CI_OnlineResource>
+			</mas:softwareDevelopmentFile>
+			<mas:softwareDevelopmentFileFormat>
+				<gco:CharacterString>Resource &gt; References &gt; Application Schema Information &gt; Software Development File Format</gco:CharacterString>
+			</mas:softwareDevelopmentFileFormat>
+		</mas:MD_ApplicationSchemaInformation>
+	</mdb:applicationSchemaInfo>
+	<mdb:metadataMaintenance>
+		<mmi:MD_MaintenanceInformation>
+			<mmi:maintenanceAndUpdateFrequency>
+				<mmi:MD_MaintenanceFrequencyCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_MaintenanceFrequencyCode" codeListValue="unknown">unknown</mmi:MD_MaintenanceFrequencyCode>
+			</mmi:maintenanceAndUpdateFrequency>
+			<mmi:maintenanceDate>
+				<cit:CI_Date>
+					<cit:date>
+						<gco:DateTime>2012-11-01T12:00:00</gco:DateTime>
+					</cit:date>
+					<cit:dateType>
+						<cit:CI_DateTypeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_DateTypeCode" codeListValue="revision">revision</cit:CI_DateTypeCode>
+					</cit:dateType>
+				</cit:CI_Date>
+			</mmi:maintenanceDate>
+			<mmi:userDefinedMaintenanceFrequency>
+				<gco:TM_PeriodDuration>P1Y2M3DT4H5M6S</gco:TM_PeriodDuration>
+			</mmi:userDefinedMaintenanceFrequency>
+			<mmi:maintenanceScope>
+				<mcc:MD_Scope>
+					<mcc:level>
+						<mcc:MD_ScopeCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#MD_ScopeCode" codeListValue="service">service</mcc:MD_ScopeCode>
+					</mcc:level>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:attributes>
+								<gco:CharacterString>Metadata &gt; Maintenance &gt; Scope Description &gt; Attributes</gco:CharacterString>
+							</mcc:attributes>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:features>
+								<gco:CharacterString>Metadata &gt; Maintenance &gt; Scope Description &gt; Features</gco:CharacterString>
+							</mcc:features>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:featureInstances>
+								<gco:CharacterString>Metadata &gt; Maintenance &gt; Scope Description &gt; Feature Instances</gco:CharacterString>
+							</mcc:featureInstances>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:attributeInstances>
+								<gco:CharacterString>Metadata &gt; Maintenance &gt; Scope Description &gt; Attribute Instances</gco:CharacterString>
+							</mcc:attributeInstances>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:dataset>
+								<gco:CharacterString>Metadata &gt; Maintenance &gt; Scope Description &gt; Dataset</gco:CharacterString>
+							</mcc:dataset>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:other>
+								<gco:CharacterString>Metadata &gt; Maintenance &gt; Scope Description &gt; Other Instances</gco:CharacterString>
+							</mcc:other>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+				</mcc:MD_Scope>
+			</mmi:maintenanceScope>
+			<mmi:maintenanceNote>
+				<gco:CharacterString>Last metadata review date: 20211207</gco:CharacterString>
+			</mmi:maintenanceNote>
+			<mmi:maintenanceNote>
+				<gco:CharacterString>Metadata &gt; Maintenance &gt; Maintenance Note</gco:CharacterString>
+			</mmi:maintenanceNote>
+			<mmi:contact>
+				<cit:CI_Responsibility>
+					<cit:role>
+						<cit:CI_RoleCode codeList="standards.iso.org/19115/-3/lan/1.0/codelists.xml#CI_RoleCode" codeListValue="custodian">custodian</cit:CI_RoleCode>
+					</cit:role>
+					<cit:party>
+						<cit:CI_Organisation>
+							<cit:name>
+								<gco:CharacterString>Metadata &gt; Maintenance &gt; Contact &gt; Organization</gco:CharacterString>
+							</cit:name>
+							<cit:contactInfo>
+								<cit:CI_Contact>
+									<cit:address>
+										<cit:CI_Address>
+											<cit:electronicMailAddress>
+												<gco:CharacterString>Metadata &gt; Maintenance &gt; Contact &gt; Contact Information &gt; Email</gco:CharacterString>
+											</cit:electronicMailAddress>
+										</cit:CI_Address>
+									</cit:address>
+								</cit:CI_Contact>
+							</cit:contactInfo>
+						</cit:CI_Organisation>
+					</cit:party>
+				</cit:CI_Responsibility>
+			</mmi:contact>
+		</mmi:MD_MaintenanceInformation>
+	</mdb:metadataMaintenance>
+</mdb:MD_Metadata>

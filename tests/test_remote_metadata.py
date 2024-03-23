@@ -203,18 +203,16 @@ def mp_wms_130_nometadata(monkeypatch):
     monkeypatch.setattr(
         owslib.map.common.WMSCapabilitiesReader, 'read', read)
 
+def openURL(*args, **kwargs):
+    """ Used to patch the 'openURL' call, returning ISO 19139 XML
+    """
+    return open('tests/resources/csw_dov_getrecordbyid.xml', 'rb')
 
-@pytest.fixture
-def mp_remote_md(monkeypatch):
-    def openURL(*args, **kwargs):
-        with open('tests/resources/csw_dov_getrecordbyid.xml', 'r') as f:
-            data = f.read()
-            if type(data) is not bytes:
-                data = data.encode('utf-8')
-            data = etree.fromstring(data)
-        return data
 
-    monkeypatch.setattr(owslib.util, 'openURL', openURL)
+def openURL3(*args, **kwargs):
+    """ Used to patch the 'openURL' call, returning ISO 19115 Part 3 XML
+    """
+    return open('tests/resources/iso3_examples/auscope-3d-model.xml', 'rb')
 
 
 class TestOffline(object):
@@ -314,7 +312,11 @@ class TestOffline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
-    def test_wfs_110_noremotemd_parse_single(self, mp_wfs_110_nometadata):
+    @pytest.mark.parametrize("openURL_in, lib_in", [
+        (openURL, owslib.iso.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
+    ])
+    def test_wfs_110_noremotemd_parse_single(self, mp_wfs_110_nometadata, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 1.1.0.
 
         Tests parsing the remote metadata for a single layer.
@@ -328,6 +330,9 @@ class TestOffline(object):
             Monkeypatch the call to the remote GetCapabilities request.
 
         """
+        import owslib.feature.wfs110
+        monkeypatch.setattr(owslib.feature.wfs110, 'openURL', openURL_in)
+
         wfs = WebFeatureService(url='http://localhost/not_applicable',
                                 version='1.1.0',
                                 parse_remote_metadata=False)
@@ -338,6 +343,9 @@ class TestOffline(object):
         mdrecords = layer.get_metadata()
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
+
+        for m in mdrecords:
+            assert type(m) is lib_in
 
     def test_wfs_110_noremotemd_parse_none(self, mp_wfs_110_nometadata):
         """Test the remote metadata parsing for WFS 1.1.0.
@@ -362,7 +370,12 @@ class TestOffline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
-    def test_wfs_110_remotemd_parse_all(self, mp_wfs_110, mp_remote_md):
+
+    @pytest.mark.parametrize("openURL_in, lib_in", [
+        (openURL, owslib.iso.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
+    ])
+    def test_wfs_110_remotemd_parse_all(self, mp_wfs_110, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 1.1.0.
 
         Tests parsing the remote metadata for all layers.
@@ -374,10 +387,13 @@ class TestOffline(object):
         ----------
         mp_wfs_110 : pytest.fixture
             Monkeypatch the call to the remote GetCapabilities request.
-        mp_remote_md : pytest.fixture
-            Monkeypatch the call to the remote metadata.
+        monkeypatch : pytest.fixture
+            patch the call to the remote openURL.
 
         """
+        import owslib.feature.wfs110
+        monkeypatch.setattr(owslib.feature.wfs110, 'openURL', openURL_in)
+
         wfs = WebFeatureService(url='http://localhost/not_applicable',
                                 version='1.1.0',
                                 parse_remote_metadata=True)
@@ -389,9 +405,13 @@ class TestOffline(object):
         assert len(mdrecords) == 1
 
         for m in mdrecords:
-            assert type(m) is owslib.iso.MD_Metadata
+            assert type(m) is lib_in
 
-    def test_wfs_110_remotemd_parse_single(self, mp_wfs_110, mp_remote_md):
+    @pytest.mark.parametrize("openURL_in, lib_in", [
+        (openURL, owslib.iso.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
+    ])
+    def test_wfs_110_remotemd_parse_single(self, mp_wfs_110, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 1.1.0.
 
         Tests parsing the remote metadata for a single layer.
@@ -403,10 +423,13 @@ class TestOffline(object):
         ----------
         mp_wfs_110 : pytest.fixture
             Monkeypatch the call to the remote GetCapabilities request.
-        mp_remote_md : pytest.fixture
-            Monkeypatch the call to the remote metadata.
+        monkeypatch : pytest.fixture
+            patch the call to the remote openURL.
 
         """
+        import owslib.feature.wfs110
+        monkeypatch.setattr(owslib.feature.wfs110, 'openURL', openURL_in)
+
         wfs = WebFeatureService(url='http://localhost/not_applicable',
                                 version='1.1.0',
                                 parse_remote_metadata=False)
@@ -419,7 +442,7 @@ class TestOffline(object):
         assert len(mdrecords) == 1
 
         for m in mdrecords:
-            assert type(m) is owslib.iso.MD_Metadata
+            assert type(m) is lib_in
 
     def test_wfs_110_remotemd_parse_none(self, mp_wfs_110):
         """Test the remote metadata parsing for WFS 1.1.0.
@@ -516,7 +539,12 @@ class TestOffline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
-    def test_wfs_200_remotemd_parse_all(self, mp_wfs_200, mp_remote_md):
+
+    @pytest.mark.parametrize("openURL_in, lib_in", [
+        (openURL, owslib.iso.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
+    ])
+    def test_wfs_200_remotemd_parse_all(self, mp_wfs_200, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 2.0.0.
 
         Tests parsing the remote metadata for all layers.
@@ -528,10 +556,13 @@ class TestOffline(object):
         ----------
         mp_wfs_200 : pytest.fixture
             Monkeypatch the call to the remote GetCapabilities request.
-        mp_remote_md : pytest.fixture
-            Monkeypatch the call to the remote metadata.
+        monkeypatch : pytest.fixture
+            patch the call to the remote openURL.
 
         """
+        import owslib.feature.wfs200
+        monkeypatch.setattr(owslib.feature.wfs200, 'openURL', openURL_in)
+
         wfs = WebFeatureService(url='http://localhost/not_applicable',
                                 version='2.0.0',
                                 parse_remote_metadata=True)
@@ -540,12 +571,17 @@ class TestOffline(object):
 
         mdrecords = layer.get_metadata()
         assert type(mdrecords) is list
-        assert len(mdrecords) == 1
+        assert len(mdrecords) == 2
 
         for m in mdrecords:
-            assert type(m) is owslib.iso.MD_Metadata
+            assert type(m) is lib_in
 
-    def test_wfs_200_remotemd_parse_single(self, mp_wfs_200, mp_remote_md):
+
+    @pytest.mark.parametrize("openURL_in, lib_in", [
+        (openURL, owslib.iso.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
+    ])
+    def test_wfs_200_remotemd_parse_single(self, mp_wfs_200, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WFS 2.0.0.
 
         Tests parsing the remote metadata for a single layer.
@@ -557,10 +593,13 @@ class TestOffline(object):
         ----------
         mp_wfs_200 : pytest.fixture
             Monkeypatch the call to the remote GetCapabilities request.
-        mp_remote_md : pytest.fixture
-            Monkeypatch the call to the remote metadata.
+        monkeypatch : pytest.fixture
+            patch the call to the remote openURL.
 
         """
+        import owslib.feature.wfs200
+        monkeypatch.setattr(owslib.feature.wfs200, 'openURL', openURL_in)
+
         wfs = WebFeatureService(url='http://localhost/not_applicable',
                                 version='2.0.0',
                                 parse_remote_metadata=False)
@@ -570,10 +609,10 @@ class TestOffline(object):
 
         mdrecords = layer.get_metadata()
         assert type(mdrecords) is list
-        assert len(mdrecords) == 1
+        assert len(mdrecords) == 2
 
         for m in mdrecords:
-            assert type(m) is owslib.iso.MD_Metadata
+            assert type(m) is lib_in
 
     def test_wfs_200_remotemd_parse_none(self, mp_wfs_200):
         """Test the remote metadata parsing for WFS 2.0.0.
@@ -670,7 +709,11 @@ class TestOffline(object):
         assert type(mdrecords) is list
         assert len(mdrecords) == 0
 
-    def test_wms_130_remotemd_parse_all(self, mp_wms_130):
+    @pytest.mark.parametrize("openURL_in, lib_in", [
+        (openURL, owslib.iso.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
+    ])
+    def test_wms_130_remotemd_parse_all(self, mp_wms_130, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WMS 1.3.0.
 
         Tests parsing the remote metadata for all layers.
@@ -682,8 +725,13 @@ class TestOffline(object):
         ----------
         mp_wms_130 : pytest.fixture
             Monkeypatch the call to the remote GetCapabilities request.
+        monkeypatch : pytest.fixture
+            patch the call to the remote openURL.
 
         """
+        import owslib.map.wms130
+        monkeypatch.setattr(owslib.map.wms130, 'openURL', openURL_in)
+
         wms = WebMapService(url='http://localhost/not_applicable',
                             version='1.3.0',
                             parse_remote_metadata=True)
@@ -695,9 +743,13 @@ class TestOffline(object):
         assert len(mdrecords) == 1
 
         for m in mdrecords:
-            assert type(m) is owslib.iso.MD_Metadata
+            assert type(m) is lib_in
 
-    def test_wms_130_remotemd_parse_single(self, mp_wms_130):
+    @pytest.mark.parametrize("openURL_in, lib_in", [
+        (openURL, owslib.iso.MD_Metadata),
+        (openURL3, owslib.iso3.MD_Metadata),
+    ])
+    def test_wms_130_remotemd_parse_single(self, mp_wms_130, monkeypatch, openURL_in, lib_in):
         """Test the remote metadata parsing for WMS 1.3.0.
 
         Tests parsing the remote metadata for a single layer.
@@ -709,8 +761,13 @@ class TestOffline(object):
         ----------
         mp_wms_130 : pytest.fixture
             Monkeypatch the call to the remote GetCapabilities request.
+        monkeypatch : pytest.fixture
+            patch the call to the remote openURL.
 
         """
+        import owslib.map.wms130
+        monkeypatch.setattr(owslib.map.wms130, 'openURL', openURL_in)
+
         wms = WebMapService(url='http://localhost/not_applicable',
                             version='1.3.0',
                             parse_remote_metadata=False)
@@ -723,7 +780,7 @@ class TestOffline(object):
         assert len(mdrecords) == 1
 
         for m in mdrecords:
-            assert type(m) is owslib.iso.MD_Metadata
+            assert type(m) is lib_in
 
     def test_wms_130_remotemd_parse_none(self, mp_wms_130):
         """Test the remote metadata parsing for WMS 1.3.0.
