@@ -240,16 +240,3 @@ class Collections(API):
 
         path = f'collections/{collection_id}/schema'
         return self._request(path=path)
-
-    def collection_queryables(self, collection_id: str) -> dict:
-        """
-        implements /collections/{collectionId}/queryables
-
-        @type collection_id: string
-        @param collection_id: id of collection
-
-        @returns: `dict` of feature collection queryables
-        """
-
-        path = f'collections/{collection_id}/queryables'
-        return self._request(path=path)
