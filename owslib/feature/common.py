@@ -1,5 +1,5 @@
 from owslib.etree import etree
-from owslib.util import Authentication, openURL
+from owslib.util import Authentication, openURL, getXMLTree
 
 from urllib.parse import urlencode, parse_qsl
 
@@ -52,7 +52,7 @@ class WFSCapabilitiesReader(object):
         """
         request = self.capabilities_url(url)
         u = openURL(request, timeout=timeout, headers=self.headers, auth=self.auth)
-        return etree.fromstring(u.read())
+        return getXMLTree(u)
 
     def readString(self, st):
         """Parse a WFS capabilities document, returning an
