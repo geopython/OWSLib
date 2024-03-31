@@ -21,10 +21,10 @@
 ## Part 2: Dynamic Data
 
 ### Datastreams
-- [ ] implement
+- [x] implement
 
 ### Observations
-- [ ] implement
+- [x] implement
 
 ### Control Channels
 - [ ] implement
