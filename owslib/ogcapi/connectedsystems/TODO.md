@@ -11,10 +11,10 @@
 - [x] update methods that don't return anything to return a boolean
 
 ### Sampling Features
-- [ ] implement
+- [x] implement
 
 ### Properties
-- [ ] implement
+- [x] implement
 
 
 -----
@@ -44,5 +44,6 @@
 ---
 
 ## All Parts
+- [ ] Add methods for each class to integrate more closely with Collections
 - [ ] Add tests
 - [ ] add Content-Type selection
