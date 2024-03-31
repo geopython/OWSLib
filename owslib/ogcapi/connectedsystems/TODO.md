@@ -33,10 +33,10 @@
 - [x] implement
 
 ### System Events
-- [ ] implement
+- [x] implement
 - 
 ### System History
-- [ ] implement
+- [x] implement
 
 ---
 ## Part 3: MQTT and Websockets (TBD)
