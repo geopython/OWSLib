@@ -99,7 +99,6 @@ class Systems(Collections):
         path = f'collections/{collection_id}/items'
         return self._request(method='POST', path=path, data=data)
 
-
     def systems(self) -> dict:
         """
         implements /systems
