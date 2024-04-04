@@ -187,10 +187,10 @@ class CatalogueServiceWeb(object):
                 # get the list of values associated with the Domain
                 self.results['values'] = []
 
-                for f in self._exml.findall(util.nspath_eval('csw:DomainValues/csw:ListOfValues/csw:Value', namespaces)):
+                for f in self._exml.findall(util.nspath_eval('csw:DomainValues/csw:ListOfValues/csw:Value', namespaces)): # noqa
                     self.results['values'].append(util.testXMLValue(f))
         except Exception:
-            self.results['values'] = []
+            self.results = {'values': []}
 
     def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None,
                    esn='summary', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0,
@@ -664,16 +664,16 @@ class CatalogueServiceWeb(object):
                     post_verbs = [x for x in op.methods if x.get('type').lower() == 'post']
                     if len(post_verbs) > 1:
                         # Filter by constraints.  We must match a PostEncoding of "XML"
-                        foundXML = False
+                        found_xml = False
                         for pv in post_verbs:
                             for const in pv.get('constraints'):
                                 if const.name.lower() == 'postencoding':
                                     values = [v.lower() for v in const.values]
                                     if 'xml' in values:
                                         request_url = pv.get('url')
-                                        foundXML = True
+                                        found_xml = True
                                         break
-                        if not foundXML: # Well, just use the first one.
+                        if not found_xml:  # Well, just use the first one.
                             request_url = post_verbs[0].get('url')
                     elif len(post_verbs) == 1:
                         request_url = post_verbs[0].get('url')
