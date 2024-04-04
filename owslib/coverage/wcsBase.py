@@ -46,7 +46,7 @@ class WCSBase(object):
         @return: inititalised WCSBase object
         """
         obj = object.__new__(self)
-        obj.__init__(url, xml, cookies, auth=auth, headers=headers)
+        obj.__init__(url, xml, cookies, timeout=timeout, auth=auth, headers=headers)
         self.cookies = cookies
         self.headers = headers
         self.timeout = timeout
