@@ -145,23 +145,25 @@ class CatalogueServiceWeb(object):
         etree.SubElement(node0, util.nspath_eval('csw30:%s' % dtypename, namespaces)).text = dname
 
         self.request = node0
+        try:  # getdomain operation is optional on CSW3, return empty if failing
+            self._invoke()
 
-        self._invoke()
+            if self.exceptionreport is None:
+                self.results = {}
 
-        if self.exceptionreport is None:
-            self.results = {}
+                val = self._exml.find(util.nspath_eval('csw30:DomainValues', namespaces)).attrib.get('type')
+                self.results['type'] = util.testXMLValue(val, True)
 
-            val = self._exml.find(util.nspath_eval('csw30:DomainValues', namespaces)).attrib.get('type')
-            self.results['type'] = util.testXMLValue(val, True)
+                val = self._exml.find(util.nspath_eval('csw30:DomainValues/csw30:%s' % dtypename, namespaces))
+                self.results[dtype] = util.testXMLValue(val)
 
-            val = self._exml.find(util.nspath_eval('csw30:DomainValues/csw30:%s' % dtypename, namespaces))
-            self.results[dtype] = util.testXMLValue(val)
+                # get the list of values associated with the Domain
+                self.results['values'] = []
 
-            # get the list of values associated with the Domain
-            self.results['values'] = []
-
-            for f in self._exml.findall(util.nspath_eval('csw30:DomainValues/csw30:ListOfValues/csw30:Value', namespaces)):  # noqa
-                self.results['values'].append(util.testXMLValue(f))
+                for f in self._exml.findall(util.nspath_eval('csw30:DomainValues/csw30:ListOfValues/csw30:Value', namespaces)):  # noqa
+                    self.results['values'].append(util.testXMLValue(f))
+        except Exception:
+            self.results = {'values': []}
 
     def getrecordbyid(self, id=[], esn='full', outputschema=namespaces['csw30'], format=outputformat):
         """
@@ -557,15 +559,16 @@ class CatalogueServiceWeb(object):
                     post_verbs = [x for x in op.methods if x.get('type').lower() == 'post']
                     if len(post_verbs) > 1:
                         # Filter by constraints.  We must match a PostEncoding of "XML"
+                        found_xml = False
                         for pv in post_verbs:
                             for const in pv.get('constraints'):
                                 if const.name.lower() == 'postencoding':
                                     values = [v.lower() for v in const.values]
                                     if 'xml' in values:
                                         request_url = pv.get('url')
+                                        found_xml = True
                                         break
-                        else:
-                            # Well, just use the first one.
+                        if not found_xml:  # Well, just use the first one.
                             request_url = post_verbs[0].get('url')
                     elif len(post_verbs) == 1:
                         request_url = post_verbs[0].get('url')
