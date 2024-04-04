@@ -664,15 +664,16 @@ class CatalogueServiceWeb(object):
                     post_verbs = [x for x in op.methods if x.get('type').lower() == 'post']
                     if len(post_verbs) > 1:
                         # Filter by constraints.  We must match a PostEncoding of "XML"
+                        foundXML = False
                         for pv in post_verbs:
                             for const in pv.get('constraints'):
                                 if const.name.lower() == 'postencoding':
                                     values = [v.lower() for v in const.values]
                                     if 'xml' in values:
                                         request_url = pv.get('url')
+                                        foundXML = True
                                         break
-                        else:
-                            # Well, just use the first one.
+                        if not foundXML: # Well, just use the first one.
                             request_url = post_verbs[0].get('url')
                     elif len(post_verbs) == 1:
                         request_url = post_verbs[0].get('url')
