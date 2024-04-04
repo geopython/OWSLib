@@ -172,22 +172,25 @@ class CatalogueServiceWeb(object):
 
         self.request = node0
 
-        self._invoke()
+        try:
+            self._invoke()
 
-        if self.exceptionreport is None:
-            self.results = {}
+            if self.exceptionreport is None:
+                self.results = {}
 
-            val = self._exml.find(util.nspath_eval('csw:DomainValues', namespaces)).attrib.get('type')
-            self.results['type'] = util.testXMLValue(val, True)
+                val = self._exml.find(util.nspath_eval('csw:DomainValues', namespaces)).attrib.get('type')
+                self.results['type'] = util.testXMLValue(val, True)
 
-            val = self._exml.find(util.nspath_eval('csw:DomainValues/csw:%s' % dtypename, namespaces))
-            self.results[dtype] = util.testXMLValue(val)
+                val = self._exml.find(util.nspath_eval('csw:DomainValues/csw:%s' % dtypename, namespaces))
+                self.results[dtype] = util.testXMLValue(val)
 
-            # get the list of values associated with the Domain
+                # get the list of values associated with the Domain
+                self.results['values'] = []
+
+                for f in self._exml.findall(util.nspath_eval('csw:DomainValues/csw:ListOfValues/csw:Value', namespaces)):
+                    self.results['values'].append(util.testXMLValue(f))
+        except Exception:
             self.results['values'] = []
-
-            for f in self._exml.findall(util.nspath_eval('csw:DomainValues/csw:ListOfValues/csw:Value', namespaces)):
-                self.results['values'].append(util.testXMLValue(f))
 
     def getrecords(self, qtype=None, keywords=[], typenames='csw:Record', propertyname='csw:AnyText', bbox=None,
                    esn='summary', sortby=None, outputschema=namespaces['csw'], format=outputformat, startposition=0,
@@ -715,7 +718,7 @@ class CatalogueServiceWeb(object):
         ]
 
         if self._exml.getroot().tag not in valid_xpaths:
-            raise RuntimeError('Document is XML, but not CSW-ish')
+            raise RuntimeError(f'Document is XML, but not CSW-ish, {request_url}?{self.request}')
 
         # check if it's an OGC Exception
         val = self._exml.find(util.nspath_eval('ows:Exception', namespaces))
