@@ -25,7 +25,7 @@ BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  fdupes
 Requires:	python
-Requires:       python-dateutil python-pytz
+Requires:       python-dateutil
 
 %description
 OWSLib is a Python package for client programming with Open Geospatial Consortium (OGC) web service (hence OWS) interface standards, and their related content models.

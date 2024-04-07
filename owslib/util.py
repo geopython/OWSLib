@@ -12,8 +12,7 @@ import os
 import sys
 from collections import OrderedDict
 from dateutil import parser
-from datetime import datetime, timedelta
-import pytz
+from datetime import datetime, timedelta, tzinfo
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
 from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
@@ -36,6 +35,20 @@ Utility functions and classes
 class ServiceException(Exception):
     # TODO: this should go in ows common module when refactored.
     pass
+
+
+# Allows marking timestamps as UTC without pulling in all of Pytz
+class TimeZone_UTC(tzinfo):
+        def tzname(self, dt):
+            return "UTC"
+
+        def utcoffset(self, dt):
+            return timedelta(0)
+
+        def dst(self, dt):
+            return timedelta(0)
+
+tz_utc = TimeZone_UTC()
 
 
 # http://stackoverflow.com/questions/6256183/combine-two-dictionaries-of-dictionaries-python
@@ -649,8 +662,7 @@ Would be 2006-07-27T21:10:00Z, not 'now'
     except Exception:
         att = testXMLValue(element.attrib.get('indeterminatePosition'), True)
         if att and att == 'now':
-            dt = datetime.utcnow()
-            dt.replace(tzinfo=pytz.utc)
+            dt = datetime.utcnow().replace(tzinfo=tz_utc)
         else:
             dt = None
     return dt

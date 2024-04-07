@@ -3,7 +3,6 @@ Imports
     >>> from tests.utils import resource_file
     >>> from owslib.swe.sensor.sml import SensorML
     >>> from dateutil import parser
-    >>> import pytz
 
 Initialize
 
