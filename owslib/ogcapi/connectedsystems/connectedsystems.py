@@ -57,7 +57,10 @@ class Systems(Collections):
         """
 
         path = f'collections/{collection_id}/items'
-        return self._request(path=path, **kwargs)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'parent', 'procedure', 'foi', 'observedProperty',
+                  'controlledProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def collection_item(self, collection_id: str, item_id: str) -> dict:
         """
@@ -89,7 +92,7 @@ class Systems(Collections):
         path = f'collections/{collection_id}/items'
         return self._request(method='POST', path=path, data=data)
 
-    def systems(self) -> dict:
+    def systems(self, **kwargs) -> dict:
         """
         implements /systems
 
@@ -97,9 +100,12 @@ class Systems(Collections):
         """
 
         path = 'systems'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'parent', 'procedure', 'foi', 'observedProperty',
+                  'controlledProperty', 'recursive', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def system(self, system_id: str) -> dict:
+    def system(self, system_id: str, **kwargs) -> dict:
         """
         implements /systems/{systemId}
 
@@ -110,7 +116,9 @@ class Systems(Collections):
         """
 
         path = f'systems/{system_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['datetime']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def system_create(self, system_id: str, data: str) -> dict:
         """
@@ -155,7 +163,7 @@ class Systems(Collections):
         path = f'systems/{system_id}'
         return self._request(path=path, method='DELETE')
 
-    def system_components(self, system_id: str) -> dict:
+    def system_components(self, system_id: str, **kwargs) -> dict:
         """
         implements /systems/{systemId}/components
 
@@ -166,7 +174,10 @@ class Systems(Collections):
         """
 
         path = f'systems/{system_id}/components'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'parent', 'procedure', 'foi', 'observedProperty',
+                  'controlledProperty', 'recursive', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def system_components_create(self, system_id: str, data: str) -> dict:
         """
@@ -216,16 +227,18 @@ class Procedures(API):
         __doc__ = API.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
-    def procedures(self) -> dict:
+    def procedures(self, **kwargs) -> dict:
         """
         implements /procedures
         @returns: `dict` of procedures object
         """
 
         path = 'procedures'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'datetime', 'q', 'observedProperty', 'controlledProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def procedure(self, procedure_id: str) -> dict:
+    def procedure(self, procedure_id: str, **kwargs) -> dict:
         """
         implements /procedures/{procedureId}
         @type procedure_id: string
@@ -234,7 +247,9 @@ class Procedures(API):
         """
 
         path = f'procedures/{procedure_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['type', 'id', 'properties', 'geometry', 'bbox', 'links']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def procedure_create(self, data: str) -> dict:
         """
@@ -279,21 +294,25 @@ class Deployments(API):
         __doc__ = API.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def deployments(self) -> dict:
+    def deployments(self, **kwargs) -> dict:
         """ implements /deployments
         @returns: `dict` of deployments object
         """
         path = 'deployments'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'system', 'foi', 'observedProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def deployment(self, deployment_id: str) -> dict:
+    def deployment(self, deployment_id: str, **kwargs) -> dict:
         """ implements /deployments/{deploymentId}
         @type deployment_id: string
         @param deployment_id: id of deployment
         @returns: `dict` of deployment metadata
         """
         path = f'deployments/{deployment_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['type', 'id', 'properties', 'geometry', 'bbox', 'links']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def deployment_create(self, data: str) -> bool:
         """ implements /deployments
@@ -330,14 +349,17 @@ class Deployments(API):
 
         return True
 
-    def deployment_list_deployed_systems(self, deployment_id: str) -> dict:
+    def deployment_list_deployed_systems(self, deployment_id: str, **kwargs) -> dict:
         """ implements /deployments/{deploymentId}/systems
         @type deployment_id: string
         @param deployment_id: id of deployment
         @returns: `dict` of systems in a particular deployment
         """
         path = f'deployments/{deployment_id}/systems'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'procedure', 'foi', 'observedProperty',
+                  'controlledProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def deployment_add_systems_to_deployment(self, deployment_id: str, data: str) -> bool:
         """ implements /deployments/{deploymentId}/systems
@@ -352,7 +374,7 @@ class Deployments(API):
 
         return True
 
-    def deployment_retrieve_system_from_deployment(self, deployment_id: str, system_id: str) -> dict:
+    def deployment_retrieve_system_from_deployment(self, deployment_id: str, system_id: str, **kwargs) -> dict:
         """ implements /deployments/{deploymentId}/systems/{systemId}
         @type deployment_id: string
         @param deployment_id: id of deployment
@@ -361,7 +383,9 @@ class Deployments(API):
         @returns: `dict` of system metadata
         """
         path = f'deployments/{deployment_id}/systems/{system_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['type', 'id', 'properties', 'geometry', 'bbox']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def deployment_update_system_in_deployment(self, deployment_id: str, system_id: str, data: str) -> bool:
         """ implements /deployments/{deploymentId}/systems/{systemId}
@@ -391,14 +415,16 @@ class Deployments(API):
 
         return True
 
-    def deployment_list_deployments_of_system(self, system_id: str) -> dict:
+    def deployment_list_deployments_of_system(self, system_id: str, **kwargs) -> dict:
         """ implements /systems/{systemId}/deployments
         @type system_id: string
         @param system_id: id of system
         @returns: `dict` of deployments of a particular system
         """
         path = f'systems/{system_id}/deployments'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'foi', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
 
 class SamplingFeatures(API):
@@ -407,16 +433,19 @@ class SamplingFeatures(API):
         __doc__ = API.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def sampling_features(self) -> dict:
+    def sampling_features(self, **kwargs) -> dict:
         """
         implements /samplingFeatures
         @returns: `dict` of sampling features object
         """
 
         path = 'samplingFeatures'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'foi', 'observedProperty',
+                  'controlledProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def sampling_feature(self, sampling_feature_id: str) -> dict:
+    def sampling_feature(self, sampling_feature_id: str, *kwargs) -> dict:
         """
         implements /samplingFeatures/{samplingFeatureId}
         @type sampling_feature_id: string
@@ -425,9 +454,11 @@ class SamplingFeatures(API):
         """
 
         path = f'samplingFeatures/{sampling_feature_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['geometry', 'type', 'id', 'properties', 'bbox', 'links']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def sampling_feature_from_system(self, system_id: str) -> dict:
+    def sampling_feature_from_system(self, system_id: str, **kwargs) -> dict:
         """
         implements /samplingFeatures?systemId={systemId}
         @type system_id: string
@@ -436,7 +467,10 @@ class SamplingFeatures(API):
         """
 
         path = f'samplingFeatures?systemId={system_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'foi', 'observedProperty',
+                  'controlledProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def sampling_feature_create(self, data: str) -> dict:
         """
@@ -481,16 +515,18 @@ class Properties(API):
         __doc__ = API.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def properties(self) -> dict:
+    def properties(self, **kwargs) -> dict:
         """
         implements /properties
         @returns: `dict` of properties object
         """
 
         path = 'properties'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'q', 'baseProperty', 'objectType', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def property(self, property_id: str) -> dict:
+    def property(self, property_id: str, **kwargs) -> dict:
         """
         implements /properties/{propertyId}
         @type property_id: string
@@ -499,7 +535,10 @@ class Properties(API):
         """
 
         path = f'properties/{property_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'label', 'description', 'uniqueId', 'baseProperty', 'objectType', 'statistic', 'qualifiers',
+                  'links']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def property_create(self, data: str) -> dict:
         """
@@ -544,14 +583,16 @@ class Datastreams(Collections):
         __doc__ = Collections.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def datastreams(self) -> dict:
+    def datastreams(self, **kwargs) -> dict:
         """
         implements /datastreams
         @returns: `dict` of datastreams object
         """
 
         path = 'datastreams'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'q', 'phenomenonTime', 'resultTime', 'system', 'foi', 'observedProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def datastream(self, datastream_id: str) -> dict:
         """
@@ -562,9 +603,10 @@ class Datastreams(Collections):
         """
 
         path = f'datastreams/{datastream_id}'
+
         return self._request(path=path)
 
-    def datastreams_of_system(self, system_id: str) -> dict:
+    def datastreams_of_system(self, system_id: str, **kwargs) -> dict:
         """
         implements /datastreams?systemId={systemId}
         @type system_id: string
@@ -573,7 +615,9 @@ class Datastreams(Collections):
         """
 
         path = f'datastreams?systemId={system_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['phenomenonTime', 'resultTime', 'q', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def datastream_create_in_system(self, system_id: str, data: str) -> dict:
         """
@@ -612,7 +656,7 @@ class Datastreams(Collections):
         path = f'datastreams/{datastream_id}'
         return self._request(path=path, method='DELETE')
 
-    def datastream_retrieve_schema_for_format(self, datastream_id: str, obs_format: str, type_: str) -> dict:
+    def datastream_retrieve_schema_for_format(self, datastream_id: str, **kwargs) -> dict:
         """
         implements /datastreams/{datastreamId}/schema
         @type datastream_id: string
@@ -624,15 +668,11 @@ class Datastreams(Collections):
 
         @returns: `dict` of schema
         """
-        q_params = {
-            'obsFormat': obs_format
-        }
-
-        if type_ in ['view', 'create', 'replace', 'update']:
-            q_params['type'] = type_
 
         path = f'datastreams/{datastream_id}/schema'
-        return self._request(path=path, kwargs=q_params)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['obsFormat', 'type']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def datastream_update_schema_for_format(self, datastream_id: str, data: str) -> dict:
         """
@@ -656,14 +696,16 @@ class Observations(Collections):
         __doc__ = Collections.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def observations(self) -> dict:
+    def observations(self, **kwargs) -> dict:
         """
         implements /observations
         @returns: `dict` of observations object
         """
 
         path = 'observations'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'phenomenonTime', 'resultTime', 'system', 'foi', 'observedProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def observation(self, observation_id: str) -> dict:
         """
@@ -676,7 +718,7 @@ class Observations(Collections):
         path = f'observations/{observation_id}'
         return self._request(path=path)
 
-    def observations_of_datastream(self, datastream_id: str) -> dict:
+    def observations_of_datastream(self, datastream_id: str, **kwargs) -> dict:
         """
         implements /observations?datastreamId={datastreamId}
         @type datastream_id: string
@@ -685,7 +727,9 @@ class Observations(Collections):
         """
 
         path = f'observations?datastreamId={datastream_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'phenomenonTime', 'resultTime', 'foi', 'observedProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def observations_create_in_datastream(self, datastream_id: str, data: str) -> dict:
         """
@@ -731,14 +775,16 @@ class ControlChannels(Collections):
         __doc__ = Collections.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def controls(self) -> dict:
+    def controls(self, **kwargs) -> dict:
         """
         implements /controls
         @returns: `dict` of control channel objects
         """
 
         path = 'controls'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'q', 'issueTime', 'executionTime', 'system', 'foi', 'controlledProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def control(self, control_id: str) -> dict:
         """
@@ -751,7 +797,7 @@ class ControlChannels(Collections):
         path = f'controls/{control_id}'
         return self._request(path=path)
 
-    def controls_of_system(self, system_id: str) -> dict:
+    def controls_of_system(self, system_id: str, **kwargs) -> dict:
         """
         implements /systems/{system_id}/controls
         @type system_id: string
@@ -760,7 +806,9 @@ class ControlChannels(Collections):
         """
 
         path = f'systems/{system_id}/controls'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'q', 'issueTime', 'executionTime', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def control_create_in_system(self, system_id: str, data: str) -> dict:
         """
@@ -799,7 +847,7 @@ class ControlChannels(Collections):
         path = f'controls/{control_id}'
         return self._request(path=path, method='DELETE')
 
-    def control_retrieve_schema(self, control_id: str) -> dict:
+    def control_retrieve_schema(self, control_id: str, **kwargs) -> dict:
         """
         implements /controls/{control_id}/schema
         @type control_id: string
@@ -808,7 +856,9 @@ class ControlChannels(Collections):
         """
 
         path = f'controls/{control_id}/schema'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['cmdFormat', 'type']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def control_update_schema(self, control_id: str, data: str) -> dict:
         """
@@ -831,14 +881,16 @@ class Commands(Collections):
         __doc__ = Collections.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def commands(self) -> dict:
+    def commands(self, **kwargs) -> dict:
         """
         implements /commands
         @returns: `dict` of commands object
         """
 
         path = 'commands'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'issueTime', 'executionTime', 'system', 'foi', 'controlledProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def command(self, command_id: str) -> dict:
         """
@@ -851,7 +903,7 @@ class Commands(Collections):
         path = f'commands/{command_id}'
         return self._request(path=path)
 
-    def commands_of_control_channel(self, control_id: str) -> dict:
+    def commands_of_control_channel(self, control_id: str, **kwargs) -> dict:
         """
         implements /controls/{control_id}/commands
         @type control_id: string
@@ -860,7 +912,9 @@ class Commands(Collections):
         """
 
         path = f'controls/{control_id}/commands'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'issueTime', 'executionTime', 'foi', 'controlledProperty', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def commands_send_command_in_control_stream(self, control_id: str, data: str) -> dict:
         """
@@ -899,7 +953,7 @@ class Commands(Collections):
         path = f'commands/{command_id}/status'
         return self._request(path=path, data=data, method='POST')
 
-    def commands_retrieve_status_report(self, command_id: str, status_id: str) -> dict:
+    def commands_retrieve_status_report(self, command_id: str, status_id: str, **kwargs) -> dict:
         """
         implements /commands/{commandId}/status/{statusId}
         @type command_id: string
@@ -910,7 +964,9 @@ class Commands(Collections):
         """
 
         path = f'commands/{command_id}/status/{status_id}'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['id', 'reportTime', 'executionTime', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def commands_update_status_report(self, command_id: str, status_id: str, data: str) -> dict:
         """
@@ -947,16 +1003,18 @@ class SystemEvents(Collections):
         __doc__ = Collections.__doc__
         super().__init__(url, json_, timeout, headers)
 
-    def system_events(self) -> dict:
+    def system_events(self, **kwargs) -> dict:
         """
         implements /systemEvents
         @returns: `dict` of system events object
         """
 
         path = 'systemEvents'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['eventTime', 'q', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def system_events_of_specific_system(self, system_id: str) -> dict:
+    def system_events_of_specific_system(self, system_id: str, **kwargs) -> dict:
         """
         implements /systems/{systemId}/events
         @type system_id: string
@@ -965,7 +1023,9 @@ class SystemEvents(Collections):
         """
 
         path = f'systems/{system_id}/events'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['eventTime', 'q', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def system_event_add_se_to_system(self, system_id: str, data: str) -> dict:
         """
@@ -1029,7 +1089,7 @@ class SystemHistory(Collections):
         __doc__ = Collections.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def system_history(self, system_id: str) -> dict:
+    def system_history(self, system_id: str, **kwargs) -> dict:
         """
         implements /systems/{system_id}/history
         @type system_id: string
@@ -1038,7 +1098,9 @@ class SystemHistory(Collections):
         """
 
         path = f'systems/{system_id}/history'
-        return self._request(path=path)
+        query_params = QueryArgs(**kwargs)
+        p_list = ['validTime', 'q', 'limit']
+        return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def system_history_by_id(self, system_id: str, history_id: str) -> dict:
         """
@@ -1080,3 +1142,56 @@ class SystemHistory(Collections):
 
         path = f'systems/{system_id}/history/{history_id}'
         return self._request(path=path, method='DELETE')
+
+
+class QueryArgs:
+
+    def __init__(self, **kwargs):
+        self.params = {}
+        if 'id' in kwargs:
+            self.params['id'] = kwargs['id']
+        if 'bbox' in kwargs:
+            self.params['bbox'] = ','.join(list(map(str, kwargs['bbox'])))
+        if 'datetime' in kwargs:
+            self.params['datetime'] = kwargs['datetime']
+        if 'geom' in kwargs:
+            self.params['geom'] = kwargs['geom']
+        if 'q' in kwargs:
+            self.params['q'] = ','.join(list(map(str, kwargs['q'])))
+        if 'procedure' in kwargs:
+            self.params['procedure'] = kwargs['procedure']
+        if 'parent' in kwargs:
+            self.params.parent = ','.join(list(map(str, kwargs['parent'])))
+        if 'foi' in kwargs:
+            self.params['foi'] = ','.join(list(map(str, kwargs['foi'])))
+        if 'observedProperty' in kwargs:
+            self.params['observedProperty'] = ','.join(list(map(str, kwargs['observedProperty'])))
+        if 'controlledProperty' in kwargs:
+            self.params['controlledProperty'] = ','.join(list(map(str, kwargs['controlledProperty'])))
+        if 'recursive' in kwargs:
+            self.params['recursive'] = kwargs['recursive']
+        if 'limit' in kwargs:
+            self.params['limit'] = kwargs['limit']
+        if 'system' in kwargs:
+            self.params['system'] = ','.join(list(map(str, kwargs['system'])))
+
+    """
+    Validation methods for query parameters
+    """
+
+    def v_sys_req_params(self):
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'parent', 'procedure', 'foi', 'observedProperty',
+                  'controlledProperty', 'recursive', 'limit', 'system']
+        return self.check_params(p_list)
+
+    def v_sys_list_system_deployment_params(self):
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'foi', 'limit']
+        return self.check_params(p_list)
+
+    def v_sys_list_system_sampling_feature_params(self):
+        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'foi', 'observedProperty', 'controlledProperty', 'limit']
+        return self.check_params(p_list)
+
+    def check_params(self, param_list):
+        q_params = {k: v for k, v in self.params.items() if k in param_list}
+        return q_params
