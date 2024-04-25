@@ -407,16 +407,24 @@ class CI_Responsibility(printable):
             self.onlineresource = None
             self.role = None
         else:
-            val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:individual/cit:CI_Individual/cit:name/gco:CharacterString', self.namespaces))
+            # Individual name
+            val = md.find(util.nspath_eval('cit:party/cit:CI_Individual/cit:name/gco:CharacterString', self.namespaces))
             self.name = util.testXMLValue(val)
 
+            # Individual within organisation name
+            if self.name is None:
+                val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:individual/cit:CI_Individual/cit:name/gco:CharacterString', self.namespaces))
+                self.name = util.testXMLValue(val)
+
+            # Organisation name
             val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:name/gco:CharacterString', self.namespaces))
             self.organization = util.testXMLValue(val)
 
+            # Individual within organisation position
             val = md.find(util.nspath_eval('cit:party/cit:CI_Organisation/cit:individual/cit:CI_Individual/cit:positionName/gco:CharacterString', self.namespaces))
             self.position = util.testXMLValue(val)
 
-            # Telephone
+            # Organisation telephone
             val_list = md.xpath('cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:phone/cit:CI_Telephone[cit:numberType/cit:CI_TelephoneTypeCode/@codeListValue="voice"]/cit:number/gco:CharacterString', namespaces=self.namespaces)
             if len(val_list) > 0:
                 self.phone = util.testXMLValue(val_list[0])
@@ -426,6 +434,7 @@ class CI_Responsibility(printable):
             if len(val_list) > 0:
                 self.fax = util.testXMLValue(val_list[0])
 
+            # Organisation address
             val = md.find(util.nspath_eval(
                 'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:deliveryPoint/gco:CharacterString',
                 self.namespaces))
@@ -450,11 +459,13 @@ class CI_Responsibility(printable):
                 self.namespaces))
             self.country = util.testXMLValue(val)
 
+            # Organisation email
             val = md.find(util.nspath_eval(
                 'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:address/cit:CI_Address/cit:electronicMailAddress/gco:CharacterString',
                 self.namespaces))
             self.email = util.testXMLValue(val)
 
+            # Organisation online resources
             val = md.find(util.nspath_eval(
                 'cit:party/cit:CI_Organisation/cit:contactInfo/cit:CI_Contact/cit:onlineResource/cit:CI_OnlineResource', self.namespaces))
             if val is not None:
@@ -586,6 +597,7 @@ class MD_DataIdentification(printable):
             self.supplementalinformation = None
             self.spatialrepresentationtype = []
         else:
+            # Title
             self.identtype = identtype
             val = md.find(util.nspath_eval(
                 'mri:citation/cit:CI_Citation/cit:title/gco:CharacterString', self.namespaces))
@@ -595,6 +607,7 @@ class MD_DataIdentification(printable):
                 'mri:citation/cit:CI_Citation/cit:alternateTitle/gco:CharacterString', self.namespaces))
             self.alternatetitle = util.testXMLValue(val)
 
+            # Identifier
             self.uricode = []
             for end_tag in ['gco:CharacterString', 'gcx:Anchor']:
                 _values = md.findall(util.nspath_eval(
@@ -613,12 +626,14 @@ class MD_DataIdentification(printable):
                 if val is not None:
                     self.uricodespace.append(val)
 
+            # Date
             self.date = []
             self.datetype = []
 
             for i in md.findall(util.nspath_eval('mri:citation/cit:CI_Citation/cit:date/cit:CI_Date', self.namespaces)):
                 self.date.append(CI_Date(self.namespaces, i))
 
+            # Use Limitation
             self.uselimitation = []
             self.uselimitation_url = []
             uselimit_values = md.findall(util.nspath_eval(
@@ -628,6 +643,7 @@ class MD_DataIdentification(printable):
                 if val is not None:
                     self.uselimitation.append(val)
 
+            # Access constraints
             self.accessconstraints = []
             for i in md.findall(util.nspath_eval(
                     'mri:resourceConstraints/mco:MD_LegalConstraints/mco:accessConstraints/mco:MD_RestrictionCode',
@@ -636,8 +652,10 @@ class MD_DataIdentification(printable):
                 if val is not None:
                     self.accessconstraints.append(val)
 
+            # Classification
             self.classification = [] # Left empty - no legal classification equivalent
 
+            # Other constraints
             self.otherconstraints = []
             for end_tag in ['gco:CharacterString', 'gcx:Anchor']:
                 for i in md.findall(util.nspath_eval(
@@ -647,6 +665,7 @@ class MD_DataIdentification(printable):
                     if val is not None:
                         self.otherconstraints.append(val)
 
+            # Security constraints
             self.securityconstraints = []
             for i in md.findall(util.nspath_eval(
                     'mri:resourceConstraints/mco:MD_SecurityConstraints/mco:classification/mco:MD_ClassificationCode',
@@ -655,6 +674,7 @@ class MD_DataIdentification(printable):
                 if val is not None:
                     self.securityconstraints.append(val)
 
+            # Use constraints
             self.useconstraints = []
             for i in md.findall(util.nspath_eval(
                     'mri:resourceConstraints/mco:MD_LegalConstraints/mco:useConstraints/mco:MD_RestrictionCode',
@@ -663,6 +683,7 @@ class MD_DataIdentification(printable):
                 if val is not None:
                     self.useconstraints.append(val)
 
+            # Spatial resolution denominators
             self.denominators = []
             for i in md.findall(util.nspath_eval(
                     'mri:spatialResolution/mri:MD_Resolution/mri:equivalentScale/mri:MD_RepresentativeFraction/mri:denominator/gco:Integer',
@@ -671,6 +692,7 @@ class MD_DataIdentification(printable):
                 if val is not None:
                     self.denominators.append(val)
 
+            # Spatial resolution distance and units of measure
             self.distance = []
             self.uom = []
             for i in md.findall(util.nspath_eval(
@@ -680,12 +702,14 @@ class MD_DataIdentification(printable):
                     self.distance.append(val)
                 self.uom.append(i.get("uom"))
 
+            # Language code
             self.resourcelanguagecode = []
             for i in md.findall(util.nspath_eval('mri:defaultLocale/lan:PT_Locale/lan:language/lan:LanguageCode', self.namespaces)):
                 val = _testCodeListValue(i)
                 if val is not None:
                     self.resourcelanguagecode.append(val)
 
+            # Language
             self.resourcelanguage = []
             for i in md.findall(util.nspath_eval('mri:defaultLocale/lan:PT_Locale/lan:language/gco:CharacterString', self.namespaces)):
                 val = util.testXMLValue(i)
@@ -696,23 +720,46 @@ class MD_DataIdentification(printable):
             self.publisher = []
             self.contributor = []
             self.funder = []
+            # Extract roles from point of contact for resource
             for val in md.findall(util.nspath_eval('mri:pointOfContact/cit:CI_Responsibility', self.namespaces)):
                 role = val.find(util.nspath_eval('cit:role/cit:CI_RoleCode', self.namespaces))
                 if role is not None:
                     clv = _testCodeListValue(role)
                     rp = CI_Responsibility(self.namespaces, val)
-                    if clv == 'originator':
+                    # Creator
+                    if clv in ['originator', 'principalInvestigator', 'author']:
                         self.creator.append(rp)
+                    # Publisher
                     elif clv == 'publisher':
                         self.publisher.append(rp)
-                    elif clv == 'author':
+                    # Contributor
+                    elif clv in ['collaborator', 'coAuthor', 'contributor', 'editor']:
                         self.contributor.append(rp)
-                    elif clv == 'funder':
-                        self.funder.append(rp)
 
+            # Edition
             val = md.find(util.nspath_eval('cit:CI_Citation/cit:edition/gco:CharacterString', self.namespaces))
             self.edition = util.testXMLValue(val)
 
+            # Extract roles from responsible party for resource
+            for val in md.findall(util.nspath_eval('mri:citation/cit:CI_Citation/cit:citedResponsibleParty/cit:CI_Responsibility', self.namespaces)):
+                role = val.find(util.nspath_eval('cit:role/cit:CI_RoleCode', self.namespaces))
+                if role is not None:
+                    clv = _testCodeListValue(role)
+                    rp = CI_Responsibility(self.namespaces, val)
+                    # Creator
+                    if clv in ['originator', 'principalInvestigator', 'author']:
+                        self.creator.append(rp)
+                    # Publisher
+                    elif clv == 'publisher':
+                        self.publisher.append(rp)
+                    # Contributor
+                    elif clv in ['collaborator', 'coAuthor', 'contributor', 'processor', 'editor']:
+                        self.contributor.append(rp)
+                    # Funder
+                    elif clv == 'funder':
+                        self.funder.append(rp)
+
+            # Abstract
             val = md.find(util.nspath_eval('mri:abstract/gco:CharacterString', self.namespaces))
             self.abstract = util.testXMLValue(val)
 
@@ -723,11 +770,14 @@ class MD_DataIdentification(printable):
                 self.abstract = util.testXMLValue(val)
                 self.abstract_url = val.attrib.get(util.nspath_eval('xlink:href', self.namespaces))
 
+            # Purpose
             val = md.find(util.nspath_eval('mri:purpose/gco:CharacterString', self.namespaces))
             self.purpose = util.testXMLValue(val)
 
+            # Status
             self.status = _testCodeListValue(md.find(util.nspath_eval('mri:status/mri:MD_ProgressCode', self.namespaces)))
 
+            # Graphic overview
             self.graphicoverview = []
             for val in md.findall(util.nspath_eval(
                     'mri:graphicOverview/mcc:MD_BrowseGraphic/mcc:fileName/gco:CharacterString', self.namespaces)):
@@ -736,11 +786,13 @@ class MD_DataIdentification(printable):
                     if val2 is not None:
                         self.graphicoverview.append(val2)
 
+            # Point of Contact
             self.contact = []
             for i in md.findall(util.nspath_eval('mri:pointOfContact/cit:CI_Responsibility', self.namespaces)):
                 o = CI_Responsibility(self.namespaces, i)
                 self.contact.append(o)
 
+            # Spatial repreentation type
             self.spatialrepresentationtype = []
             for val in md.findall(util.nspath_eval(
                     'mri:spatialRepresentationType/mcc:MD_SpatialRepresentationTypeCode', self.namespaces)):
@@ -748,16 +800,19 @@ class MD_DataIdentification(printable):
                 if val:
                     self.spatialrepresentationtype.append(val)
 
+            # Keywords
             self.keywords = []
             for mdkw in md.findall(util.nspath_eval('mri:descriptiveKeywords/mri:MD_Keywords', self.namespaces)):
                 self.keywords.append(MD_Keywords(self.namespaces, mdkw))
 
+            # Topic category
             self.topiccategory = []
             for i in md.findall(util.nspath_eval('mri:topicCategory/mri:MD_TopicCategoryCode', self.namespaces)):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.topiccategory.append(val)
 
+            # Supplamental information
             val = md.find(util.nspath_eval('mri:supplementalInformation/gco:CharacterString', self.namespaces))
             self.supplementalinformation = util.testXMLValue(val)
 

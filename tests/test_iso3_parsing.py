@@ -475,13 +475,38 @@ def test_aus(amd):
     """
     assert amd is not None
     ident = amd.identification[0]
+    # Test 3D - vertical extents
     assert ident.extent.vertExtMax == '300'
     assert ident.extent.vertExtMin == '-400'
+    # Test constraints & limitations
     assert ident.securityconstraints[0] == 'unclassified'
     assert ident.uselimitation[0] == 'https://creativecommons.org/licenses/by/4.0/'
     assert ident.accessconstraints[0] == 'license'
     assert ident.useconstraints[0] == 'license'
+    # Test funder
     assert ident.funder[0].organization == 'AuScope'
+    assert ident.funder[0].address == 'Level 2, 700 Swanston Street'
+    assert ident.funder[0].city == 'Carlton'
+    assert ident.funder[0].region == 'Victoria'
+    assert ident.funder[0].country == 'Australia'
+    assert ident.funder[0].postcode == '3053'
+    assert ident.funder[0].email == 'info@auscope.org.au'
+    # Test publisher
+    assert ident.publisher[0].organization == 'Earth Resources Victoria'
+    assert ident.publisher[0].phone == '1300 366 356'
+    assert ident.publisher[0].address == 'GPO Box 2392'
+    assert ident.publisher[0].city == 'Melbourne'
+    assert ident.publisher[0].region == 'Victoria'
+    assert ident.publisher[0].country == 'Australia'
+    assert ident.publisher[0].postcode == '3001'
+    assert ident.publisher[0].email == 'customer.service@ecodev.vic.gov.au'
+    # Test creator
+    assert ident.creator[0].name == 'P.B. SKLADZIEN'
+    # Test contributor
+    assert ident.contributor[0].name == 'C. Jorand'
+    assert ident.contributor[1].name == 'A. Krassay'
+    assert ident.contributor[2].name == 'L. Hall'
+    # Test uricode
     assert ident.uricode[0] == 'https://geology.data.vic.gov.au/searchAssistant/document.php?q=parent_id:107513'
 
 
