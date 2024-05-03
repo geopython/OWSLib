@@ -179,7 +179,7 @@ class API:
             response = http_post(url, headers=self.headers, request=data,
                                  auth=self.auth)
         elif method == 'PUT':
-            response = http_put(url, data=data, auth=self.auth)
+            response = http_put(url, data=data, auth=self.auth, headers=self.headers)
         elif method == 'DELETE':
             response = http_delete(url, auth=self.auth)
 
