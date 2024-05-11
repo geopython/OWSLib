@@ -779,7 +779,7 @@ def datetime_from_iso(iso):
 
 def datetime_from_ansi(ansi):
     """Converts an ansiDate (expressed as a number = the nuber of days since the datum origin of ansi)
-    to a python datetime object.
+    to a Python datetime object.
     """
 
     datumOrigin = datetime(1600, 12, 31, 0, 0, 0)

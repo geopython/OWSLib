@@ -56,7 +56,7 @@ The module can be used to execute three types of requests versus a remote WPS en
         * "inputs" is a dictionary of (key,value) pairs where:
 
             * key is a named input parameter
-            * value is either a string, or any python object that supports a getXml() method
+            * value is either a string, or any Python object that supports a getXml() method
               In particular, a few classes are included in the package to support a FeatuteCollection input:
 
                   * "WFSFeatureCollection" can be used in conjunction with "WFSQuery" to define a FEATURE_COLLECTION
@@ -79,9 +79,9 @@ real-world usage examples that submits a "GetCapabilities", "DescribeProcess" an
 the live USGS and PML servers. To run:
 
 * cd examples
-* python wps-usgs-script.py
-* python wps-pml-script-1.py
-* python wps-pml-script-2.py
+* python3 wps-usgs-script.py
+* python3 wps-pml-script-1.py
+* python3 wps-pml-script-2.py
 
 The file wps-client.py contains a command-line client that can be used to submit a "GetCapabilities",
 "DescribeProcess" or "Execute" request to an arbitrary WPS server. For example, you can run it as follows:
@@ -97,8 +97,8 @@ The directory tests/ includes several doctest-style files wps_*.txt that show ho
 response of cached XML response documents. To run:
 
 * cd tests
-* python -m doctest wps_*.txt
-    ``(or python -m doctest -v wps_*.txt for verbose output)``
+* python3 -m doctest wps_*.txt
+    ``(or python3 -m doctest -v wps_*.txt for verbose output)``
 
 Also, the directory tests/ contains several examples of well-formed "Execute" requests:
 

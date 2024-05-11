@@ -32,23 +32,23 @@ Request Specific Parameters
 
 Examples
 --------
-python wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities
-python wps-client.py --url=http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request=GetCapabilities
-python wps-client.py -u http://ceda-wps2.badc.rl.ac.uk/wps -r GetCapabilities
-python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r GetCapabilities
-python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r GetCapabilities
+python3 wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r GetCapabilities
+python3 wps-client.py --url=http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request=GetCapabilities
+python3 wps-client.py -u http://ceda-wps2.badc.rl.ac.uk/wps -r GetCapabilities
+python3 wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r GetCapabilities
+python3 wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r GetCapabilities
 
-python wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r DescribeProcess -i gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
-python wps-client.py --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request DescribeProcess --identifier gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
-python wps-client.py -u http://ceda-wps2.badc.rl.ac.uk/wps -r DescribeProcess -i DoubleIt
-python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r DescribeProcess -i reprojectCoords
-python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r DescribeProcess -i v.mkgrid
+python3 wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r DescribeProcess -i gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
+python3 wps-client.py --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request DescribeProcess --identifier gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm
+python3 wps-client.py -u http://ceda-wps2.badc.rl.ac.uk/wps -r DescribeProcess -i DoubleIt
+python3 wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r DescribeProcess -i reprojectCoords
+python3 wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r DescribeProcess -i v.mkgrid
 
-python wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r Execute -x ../tests/wps_USGSExecuteRequest1.xml
-python wps-client.py --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request Execute --xml ../tests/wps_USGSExecuteRequest1.xml
-python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest4.xml 
-python wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest5.xml 
-python wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r Execute -x ../tests/wps_PMLExecuteRequest6.xml 
+python3 wps-client.py -u http://cida.usgs.gov/climate/gdp/process/WebProcessingService -r Execute -x ../tests/wps_USGSExecuteRequest1.xml
+python3 wps-client.py --url http://cida.usgs.gov/climate/gdp/process/WebProcessingService --request Execute --xml ../tests/wps_USGSExecuteRequest1.xml
+python3 wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest4.xml 
+python3 wps-client.py -u http://rsg.pml.ac.uk/wps/generic.cgi -r Execute -x ../tests/wps_PMLExecuteRequest5.xml 
+python3 wps-client.py -u http://rsg.pml.ac.uk/wps/vector.cgi -r Execute -x ../tests/wps_PMLExecuteRequest6.xml 
 
 """ % sys.argv[0])
     

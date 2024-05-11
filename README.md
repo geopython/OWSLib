@@ -127,7 +127,7 @@ Map Tile Service (WMTS). Some of those are beta quality.
 
 Logging
 -------
-OWSLib logs messages to the 'owslib' named python logger. You may
+OWSLib logs messages to the 'owslib' named Python logger. You may
 configure your application to use the log messages like so:
 
 ```python
@@ -156,7 +156,7 @@ Releasing
   git push --tags
   # update on PyPI (must be a maintainer)
   rm -fr build dist *.egg-info
-  python setup.py sdist bdist_wheel --universal
+  python3 setup.py sdist bdist_wheel --universal
   twine upload dist/*
 ```
 
