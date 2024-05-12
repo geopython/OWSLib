@@ -4,7 +4,7 @@ import pytest
 
 from owslib.csw import CatalogueServiceWeb
 
-SERVICE_URL = 'https://metadata.bgs.ac.uk/geonetwork/srv/eng/csw'
+SERVICE_URL = 'http://geoportal.ypen.gr/geonetwork/srv/eng/csw'
 
 
 @pytest.mark.online
