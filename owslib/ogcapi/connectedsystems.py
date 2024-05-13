@@ -5,8 +5,12 @@
 #
 #  Contact email: ian@botts-inc.com
 # ==============================================================================
+import logging
+
 from owslib.ogcapi import Collections, API
-from owslib.util import Authentication
+from owslib.util import (Authentication)
+
+LOGGER = logging.getLogger(__name__)
 
 
 class Systems(Collections):
@@ -58,7 +62,7 @@ class Systems(Collections):
 
         path = f'collections/{collection_id}/items'
         query_params = QueryArgs(**kwargs)
-        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'parent', 'procedure', 'foi', 'observedProperty',
+        p_list = ['id', 'uid', 'bbox', 'datetime', 'geom', 'q', 'parent', 'procedure', 'foi', 'observedProperty',
                   'controlledProperty', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
@@ -101,7 +105,7 @@ class Systems(Collections):
 
         path = 'systems'
         query_params = QueryArgs(**kwargs)
-        p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'parent', 'procedure', 'foi', 'observedProperty',
+        p_list = ['id', 'uid', 'bbox', 'datetime', 'geom', 'q', 'parent', 'procedure', 'foi', 'observedProperty',
                   'controlledProperty', 'recursive', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
@@ -120,19 +124,17 @@ class Systems(Collections):
         p_list = ['datetime']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def system_create(self, system_id: str, data: str) -> dict:
+    def system_create(self, data: str) -> dict:
         """
         implements /systems/{systemId}
 
-        @type system_id: string
-        @param system_id: id of system
         @type data: string
         @param data: system data
 
         @returns: `dict` of system metadata
         """
 
-        path = f'systems/{system_id}'
+        path = f'systems/'
         return self._request(path=path, method='POST', data=data)
 
     def system_update(self, system_id: str, data: str) -> dict:
@@ -150,14 +152,14 @@ class Systems(Collections):
         path = f'systems/{system_id}'
         return self._request(path=path, method='PUT', data=data)
 
-    def system_delete(self, system_id: str) -> bool:
+    def system_delete(self, system_id: str) -> dict:
         """
         implements /systems/{systemId}
 
         @type system_id: string
         @param system_id: id of system
 
-        @returns: `bool` of deletion result
+        @returns: `dict` of deletion result, should be empty
         """
 
         path = f'systems/{system_id}'
@@ -361,15 +363,20 @@ class Deployments(API):
                   'controlledProperty', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def deployment_add_systems_to_deployment(self, deployment_id: str, data: str) -> bool:
+    def deployment_add_systems_to_deployment(self, deployment_id: str, data: str, use_member_endpoint=False) -> bool:
         """ implements /deployments/{deploymentId}/systems
         @type deployment_id: string
         @param deployment_id: id of deployment
         @type data: dict
         @param data: JSON object
+        @param use_member_endpoint:
         @returns: `dict` of systems in a particular deployment
         """
-        path = f'deployments/{deployment_id}/systems'
+
+        if use_member_endpoint:
+            path = f'deployments/{deployment_id}/members'
+        else:
+            path = f'deployments/{deployment_id}/systems'
         _ = self._request(path=path, data=data, method='POST')
 
         return True
@@ -428,8 +435,10 @@ class Deployments(API):
 
 
 class SamplingFeatures(API):
+    alternate_sampling_feature_url = None
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
-                 auth: Authentication = None):
+                 auth: Authentication = None, alternate_sampling_feature_url: str = None):
+        self.alternate_sampling_feature_url = alternate_sampling_feature_url
         __doc__ = API.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
@@ -440,12 +449,14 @@ class SamplingFeatures(API):
         """
 
         path = 'samplingFeatures'
+        if self.alternate_sampling_feature_url:
+            path = self.alternate_sampling_feature_url
         query_params = QueryArgs(**kwargs)
         p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'foi', 'observedProperty',
                   'controlledProperty', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def sampling_feature(self, sampling_feature_id: str, *kwargs) -> dict:
+    def sampling_feature(self, sampling_feature_id: str, **kwargs) -> dict:
         """
         implements /samplingFeatures/{samplingFeatureId}
         @type sampling_feature_id: string
@@ -454,33 +465,47 @@ class SamplingFeatures(API):
         """
 
         path = f'samplingFeatures/{sampling_feature_id}'
+        if self.alternate_sampling_feature_url:
+            path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
         query_params = QueryArgs(**kwargs)
         p_list = ['geometry', 'type', 'id', 'properties', 'bbox', 'links']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def sampling_feature_from_system(self, system_id: str, **kwargs) -> dict:
+    def sampling_features_from_system(self, system_id: str, use_fois=False, **kwargs) -> dict:
         """
-        implements /samplingFeatures?systemId={systemId}
+        implements /systems/{systemId}/samplingFeatures
         @type system_id: string
         @param system_id: id of system
+        @type use_fois: bool
+        @param use_fois: use FOIs instead of sampling features in the path
         @returns: `dict` of sampling feature metadata
         """
 
-        path = f'samplingFeatures?systemId={system_id}'
+        path = f'systems/{system_id}/samplingFeatures'
+        if use_fois:
+            path = f'systems/{system_id}/fois'
+
         query_params = QueryArgs(**kwargs)
         p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'foi', 'observedProperty',
                   'controlledProperty', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def sampling_feature_create(self, data: str) -> dict:
+    def sampling_feature_create(self, system_id: str, data: str, use_fois: bool = False) -> dict:
         """
-        implements /samplingFeatures
+        implements /systems/{systemId}/samplingFeatures
+        @type system_id: string
+        @param system_id: id of system to insert sampling feature into
         @type data: dict
         @param data: JSON object
+        @type use_fois: bool
+        @param use_fois: use FOIs instead of samplingfeatures in the pathF
         @returns: `dict` of sampling feature metadata
         """
 
-        path = 'samplingFeatures'
+        path = f'systems/{system_id}/samplingFeatures'
+        if use_fois:
+            path = f'systems/{system_id}/fois'
+
         return self._request(path=path, data=data, method='POST')
 
     def sampling_feature_update(self, sampling_feature_id: str, data: str) -> dict:
@@ -494,6 +519,8 @@ class SamplingFeatures(API):
         """
 
         path = f'samplingFeatures/{sampling_feature_id}'
+        if self.alternate_sampling_feature_url:
+            path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
         return self._request(path=path, data=data, method='PUT')
 
     def sampling_feature_delete(self, sampling_feature_id: str) -> dict:
@@ -505,6 +532,8 @@ class SamplingFeatures(API):
         """
 
         path = f'samplingFeatures/{sampling_feature_id}'
+        if self.alternate_sampling_feature_url:
+            path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
         return self._request(path=path, method='DELETE')
 
 
@@ -608,13 +637,13 @@ class Datastreams(Collections):
 
     def datastreams_of_system(self, system_id: str, **kwargs) -> dict:
         """
-        implements /datastreams?systemId={systemId}
+        implements /systems/{systemId}/datastreams
         @type system_id: string
         @param system_id: id of system
         @returns: `dict` of datastream metadata
         """
 
-        path = f'datastreams?systemId={system_id}'
+        path = f'systems/{system_id}/datastreams'
         query_params = QueryArgs(**kwargs)
         p_list = ['phenomenonTime', 'resultTime', 'q', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
@@ -629,7 +658,8 @@ class Datastreams(Collections):
         @returns: `dict` of datastream metadata
         """
 
-        path = 'systems/{systemId}/datastreams'
+        path = f'systems/{system_id}/datastreams'
+
         return self._request(path=path, data=data, method='POST')
 
     def datastream_update_description(self, datastream_id: str, data: str) -> dict:
@@ -720,13 +750,13 @@ class Observations(Collections):
 
     def observations_of_datastream(self, datastream_id: str, **kwargs) -> dict:
         """
-        implements /observations?datastreamId={datastreamId}
+        implements /datastreams/{datastreamId}/observations
         @type datastream_id: string
         @param datastream_id: id of datastream
         @returns: `dict` of observations object
         """
 
-        path = f'observations?datastreamId={datastream_id}'
+        path = f'datastreams/{datastream_id}/observations'
         query_params = QueryArgs(**kwargs)
         p_list = ['id', 'phenomenonTime', 'resultTime', 'foi', 'observedProperty', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
@@ -999,9 +1029,9 @@ class Commands(Collections):
 
 class SystemEvents(Collections):
 
-    def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None, ):
+    def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None, auth: Authentication = None):
         __doc__ = Collections.__doc__
-        super().__init__(url, json_, timeout, headers)
+        super().__init__(url, json_, timeout, headers, auth=auth)
 
     def system_events(self, **kwargs) -> dict:
         """
@@ -1150,6 +1180,8 @@ class QueryArgs:
         self.params = {}
         if 'id' in kwargs:
             self.params['id'] = kwargs['id']
+        if 'uid' in kwargs:
+            self.params['uid'] = kwargs['uid']
         if 'bbox' in kwargs:
             self.params['bbox'] = ','.join(list(map(str, kwargs['bbox'])))
         if 'datetime' in kwargs:
