@@ -221,6 +221,7 @@ class WebMapService_1_3_0(object):
                exceptions='XML',
                method='Get',
                timeout=None,
+               proxies=None,
                **kwargs
                ):
         """Request and return an image from the WMS as a file-like object.
@@ -308,7 +309,7 @@ class WebMapService_1_3_0(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers, proxies=proxies)
 
         # need to handle casing in the header keys
         headers = {}

@@ -145,7 +145,7 @@ class ResponseWrapper(object):
 
 
 def openURL(url_base, data=None, method='Get', cookies=None, username=None, password=None, timeout=30, headers=None,
-            verify=True, cert=None, auth=None):
+            verify=True, cert=None, auth=None, proxies=None):
     """
     Function to open URLs.
 
@@ -206,7 +206,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
     if cookies is not None:
         rkwargs['cookies'] = cookies
 
-    req = requests.request(method.upper(), url_base, headers=headers, **rkwargs)
+    req = requests.request(method.upper(), url_base, headers=headers, proxies=proxies, **rkwargs)
 
     if req.status_code in [400, 401]:
         raise ServiceException(req.text)

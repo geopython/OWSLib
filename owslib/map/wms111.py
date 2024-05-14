@@ -194,6 +194,7 @@ class WebMapService_1_1_1(object):
                exceptions='application/vnd.ogc.se_xml',
                method='Get',
                timeout=None,
+               proxies=None,
                **kwargs
                ):
         """Request and return an image from the WMS as a file-like object.
@@ -261,7 +262,7 @@ class WebMapService_1_1_1(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers, proxies=proxies)
 
         # check for service exceptions, and return
         if u.info().get('Content-Type', '').split(';')[0] in ['application/vnd.ogc.se_xml']:
