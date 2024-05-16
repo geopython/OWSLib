@@ -8,9 +8,10 @@ class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version="1.0", username=None, password=None, headers=None, auth=None):
+    def __init__(self, version="1.0", username=None, password=None, headers=None, auth=None, proxies=None):
         """Initialize"""
         self.headers = headers
+        self.proxies = proxies
         if auth:
             if username:
                 auth.username = username
@@ -51,7 +52,7 @@ class WFSCapabilitiesReader(object):
             A timeout value (in seconds) for the request.
         """
         request = self.capabilities_url(url)
-        u = openURL(request, timeout=timeout, headers=self.headers, auth=self.auth)
+        u = openURL(request, timeout=timeout, headers=self.headers, auth=self.auth, proxies=self.proxies)
         return etree.fromstring(u.read())
 
     def readString(self, st):
@@ -68,9 +69,10 @@ class WFSCapabilitiesReader(object):
 
 
 class AbstractContentMetadata(object):
-    def __init__(self, headers=None, auth=None):
+    def __init__(self, headers=None, auth=None, proxies=None):
         self.auth = auth or Authentication()
         self.headers = headers
+        self.proxies = proxies
 
     def get_metadata(self):
         return [

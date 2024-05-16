@@ -8,7 +8,7 @@ class WMSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.1.1', url=None, un=None, pw=None, headers=None, auth=None):
+    def __init__(self, version='1.1.1', url=None, un=None, pw=None, headers=None, auth=None, proxies=None):
         """Initialize"""
         self.version = version
         self._infoset = None
@@ -19,6 +19,7 @@ class WMSCapabilitiesReader(object):
             if pw:
                 auth.password = pw
         self.headers = headers
+        self.proxies = proxies
         self.request = None
         self.auth = auth or Authentication(un, pw)
 
@@ -63,7 +64,7 @@ class WMSCapabilitiesReader(object):
         # now split it up again to use the generic openURL function...
         spliturl = self.request.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get',
-                    timeout=timeout, headers=self.headers, auth=self.auth)
+                    timeout=timeout, headers=self.headers, auth=self.auth, proxies=self.proxies)
 
         raw_text = strip_bom(u.read())
         return etree.fromstring(raw_text)

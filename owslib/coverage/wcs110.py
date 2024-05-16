@@ -58,7 +58,7 @@ class WebCoverageService_1_1_0(WCSBase):
         self.cookies = cookies
         self.timeout = timeout
         # initialize from saved capability document or access the server
-        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth, headers=self.headers)
+        reader = WCSCapabilitiesReader(self.version, self.cookies, self.auth, headers=self.headers, proxies=self.proxies)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -205,7 +205,7 @@ class WebCoverageService_1_1_0(WCSBase):
         # encode and request
         data = urlencode(request)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers, proxies=self.proxies)
         return u
 
     def getOperationByName(self, name):

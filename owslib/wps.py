@@ -477,11 +477,12 @@ class WPSReader(object):
     Superclass for reading a WPS document into a lxml.etree infoset.
     """
 
-    def __init__(self, version=WPS_DEFAULT_VERSION, timeout=30, auth=None, language=None):
+    def __init__(self, version=WPS_DEFAULT_VERSION, timeout=30, auth=None, language=None, proxies=None):
         self.version = version
         self.timeout = timeout
         self.auth = auth or Authentication()
         self.language = language
+        self.proxies = proxies
 
     def _readFromUrl(self, url, data, timeout, method='Get', username=None, password=None,
                      headers=None, verify=True, cert=None):
@@ -502,13 +503,13 @@ class WPSReader(object):
             spliturl = request_url.split('?')
             u = openURL(spliturl[0], spliturl[
                         1], method='Get', username=self.auth.username, password=self.auth.password,
-                        headers=headers, verify=self.auth.verify, cert=self.auth.cert, timeout=self.timeout)
+                        headers=headers, verify=self.auth.verify, cert=self.auth.cert, timeout=self.timeout, proxies=self.proxies)
             return etree.fromstring(u.read())
 
         elif method == 'Post':
             u = openURL(url, data, method='Post',
                         username=self.auth.username, password=self.auth.password,
-                        headers=headers, verify=self.auth.verify, cert=self.auth.cert, timeout=timeout)
+                        headers=headers, verify=self.auth.verify, cert=self.auth.cert, timeout=timeout, proxies=self.proxies)
             return etree.fromstring(u.read())
 
         else:
@@ -888,7 +889,7 @@ class WPSExecution(object):
                 if output.reference:
                     content = output.retrieveData(
                         self.auth.username, self.auth.password,
-                        headers=self.headers, verify=self.auth.verify, cert=self.auth.cert)
+                        headers=self.headers, verify=self.auth.verify, cert=self.auth.cert, proxies=self.proxies)
                     if filepath is None:
                         filepath = output.fileName
                 # ExecuteResponse contain embedded output
@@ -1424,7 +1425,7 @@ class Output(InputOutput):
                 if bbox:
                     self.data.append(bbox)
 
-    def retrieveData(self, username=None, password=None, headers=None, verify=True, cert=None):
+    def retrieveData(self, username=None, password=None, headers=None, verify=True, cert=None, proxies=None):
         """
         Method to retrieve data from server-side reference:
         returns "" if the reference is not known.
@@ -1456,16 +1457,16 @@ class Output(InputOutput):
 
             u = openURL(spliturl[0], spliturl[
                         1], method='Get', username=username, password=password,
-                        headers=headers, verify=verify, cert=cert)
+                        headers=headers, verify=verify, cert=cert, proxies=proxies)
         else:
             u = openURL(
                 url, '', method='Get', username=username, password=password,
-                headers=headers, verify=verify, cert=cert)
+                headers=headers, verify=verify, cert=cert, proxies=proxies)
 
         return u.read()
 
     def writeToDisk(self, path=None, username=None, password=None,
-                    headers=None, verify=True, cert=None):
+                    headers=None, verify=True, cert=None, proxies=None):
         """
         Method to write an output of a WPS process to disk:
         it either retrieves the referenced file from the server, or write out the content of response embedded output.
@@ -1476,7 +1477,7 @@ class Output(InputOutput):
         :param password: credentials to access the remote WPS server
         """
         # Check if ExecuteResponse contains reference to server-side output
-        content = self.retrieveData(username, password, headers=headers, verify=verify, cert=cert)
+        content = self.retrieveData(username, password, headers=headers, verify=verify, cert=cert, proxies=proxies)
 
         # ExecuteResponse contain embedded output
         if content == "" and len(self.data) > 0:
