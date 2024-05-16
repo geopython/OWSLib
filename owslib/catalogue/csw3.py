@@ -45,7 +45,7 @@ schema_location = '%s %s' % (namespaces['csw30'], schema)
 class CatalogueServiceWeb(object):
     """ csw request class """
     def __init__(self, url, lang='en-US', version='3.0.0', timeout=10, skip_caps=False,
-                 username=None, password=None, auth=None, headers=None):
+                 username=None, password=None, auth=None, headers=None, proxies=None):
         """
 
         Construct and process a GetCapabilities request
@@ -75,6 +75,7 @@ class CatalogueServiceWeb(object):
         self.timeout = timeout
         self.auth = auth or Authentication(username, password)
         self.headers = headers
+        self.proxies = proxies
         self.service = 'CSW'
         self.exceptionreport = None
         self.owscommon = ows.OwsCommon('2.0.0')
@@ -581,7 +582,7 @@ class CatalogueServiceWeb(object):
             if self.headers:
                 headers_.update(self.headers)
             self.response = openURL(
-                self.request, None, 'Get', timeout=self.timeout, auth=self.auth, headers=headers_
+                self.request, None, 'Get', timeout=self.timeout, auth=self.auth, headers=headers_, proxies=self.proxies).read()
             ).read()
         else:
             self.request = cleanup_namespaces(self.request)

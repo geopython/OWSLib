@@ -25,7 +25,7 @@ GML_NAMESPACES = (
 
 
 def get_schema(
-    url, typename, version="1.0.0", timeout=30, headers=None, username=None, password=None, auth=None
+    url, typename, version="1.0.0", timeout=30, headers=None, username=None, password=None, auth=None, proxies=None
 ):
     """Parses DescribeFeatureType response and creates schema compatible
     with :class:`fiona`
@@ -47,7 +47,7 @@ def get_schema(
         auth = Authentication(username, password)
     url = _get_describefeaturetype_url(url, version, typename)
     root = _get_remote_describefeaturetype(url, timeout=timeout,
-                                           headers=headers, auth=auth)
+                                           headers=headers, auth=auth, proxies=proxies)
 
     if ":" in typename:
         typename = typename.split(":")[1]
@@ -168,7 +168,7 @@ def _get_describefeaturetype_url(url, version, typename):
     return url.split("?")[0] + "?" + urlqs
 
 
-def _get_remote_describefeaturetype(url, timeout, headers, auth):
+def _get_remote_describefeaturetype(url, timeout, headers, auth, proxies=None):
     """Gets the DescribeFeatureType response from the remote server.
 
     :param str url: url of the service
@@ -177,5 +177,5 @@ def _get_remote_describefeaturetype(url, timeout, headers, auth):
 
     :return etree.Element with the root of the DescribeFeatureType response
     """
-    res = openURL(url, timeout=timeout, headers=headers, auth=auth)
+    res = openURL(url, timeout=timeout, headers=headers, auth=auth, proxies=proxies)
     return etree.fromstring(res.read())

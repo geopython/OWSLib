@@ -39,7 +39,7 @@ class TileMapService(object):
     """
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, timeout=30, headers=None, auth=None):
+                 parse_remote_metadata=False, timeout=30, headers=None, auth=None, proxies=None):
         """Initialize."""
         if auth:
             if username:
@@ -50,6 +50,7 @@ class TileMapService(object):
         self.username = username
         self.password = password
         self.headers = headers
+        self.proxies = proxies
         self.auth = auth or Authentication(username, password)
         self.version = version
         self.timeout = timeout
@@ -125,7 +126,7 @@ class TileMapService(object):
         for tileset in tilesets:
             if tileset['order'] == z:
                 url = tileset['href'] + '/' + str(x) + '/' + str(y) + '.' + ext
-                u = openURL(url, '', timeout=timeout or self.timeout, headers=self.headers, auth=self.auth)
+                u = openURL(url, '', timeout=timeout or self.timeout, headers=self.headers, auth=self.auth, proxies=self.proxies)
                 return u
         else:
             raise ValueError('cannot find zoomlevel %i for TileMap' % z)
@@ -253,7 +254,7 @@ class TileMap(object):
     tilesets = None
     profile = None
 
-    def __init__(self, url=None, xml=None, un=None, pw=None, headers=None, auth=None):
+    def __init__(self, url=None, xml=None, un=None, pw=None, headers=None, auth=None, proxies=None):
         self.url = url
         if auth:
             if un:
@@ -262,6 +263,7 @@ class TileMap(object):
                 auth.password = pw
         self.auth = auth or Authentication(un, pw)
         self.headers = headers
+        self.proxies = proxies
         self.tilesets = []
         if xml and not url:
             self.readString(xml)
@@ -304,7 +306,7 @@ class TileMap(object):
                     'order': order})
 
     def read(self, url):
-        u = openURL(url, '', method='Get', headers=self.headers, auth=self.auth)
+        u = openURL(url, '', method='Get', headers=self.headers, auth=self.auth, proxies=self.proxies)
         self._parse(etree.fromstring(u.read()))
 
     def readString(self, st):
@@ -317,7 +319,7 @@ class TMSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, auth=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, auth=None, proxies=None):
         """Initialize"""
         if auth:
             if un:
@@ -328,13 +330,14 @@ class TMSCapabilitiesReader(object):
         self._infoset = None
         self.url = url
         self.headers = headers
+        self.proxies = proxies
         self.auth = auth or Authentication(un, pw)
 
     def read(self, service_url, timeout=30):
         """Get and parse a TMS capabilities document, returning an
         elementtree instance
         """
-        u = openURL(service_url, '', method='Get', timeout=timeout, headers=self.headers, auth=self.auth)
+        u = openURL(service_url, '', method='Get', timeout=timeout, headers=self.headers, auth=self.auth, proxies=self.proxies)
         return etree.fromstring(u.read())
 
     def readString(self, st):

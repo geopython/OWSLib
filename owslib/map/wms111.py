@@ -329,7 +329,7 @@ class WebMapService_1_1_1(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers, proxies=self.proxies)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -412,8 +412,9 @@ class ContentMetadata(AbstractContentMetadata):
     """
 
     def __init__(self, elem, parent=None, children=None, index=0,
-                 parse_remote_metadata=False, timeout=30, auth=None):
+                 parse_remote_metadata=False, timeout=30, auth=None, proxies=None):
         super(ContentMetadata, self).__init__(auth)
+        self.proxies = proxies
         if elem.tag != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
 
@@ -595,7 +596,7 @@ class ContentMetadata(AbstractContentMetadata):
 
         self.layers = []
         for child in elem.findall('Layer'):
-            self.layers.append(ContentMetadata(child, self))
+            self.layers.append(ContentMetadata(child, self, proxies=self.proxies))
 
     def parse_remote_metadata(self, timeout=30):
         """Parse remote metadata for MetadataURL and add it as metadataUrl['metadata']"""
@@ -604,7 +605,7 @@ class ContentMetadata(AbstractContentMetadata):
                     and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
                 try:
                     content = openURL(
-                        metadataUrl['url'], timeout=timeout, auth=self.auth, headers=self.headers)
+                        metadataUrl['url'], timeout=timeout, auth=self.auth, headers=self.headers, proxies=self.proxies)
                     doc = etree.fromstring(content.read())
 
                     if metadataUrl['type'] == 'FGDC':

@@ -1,7 +1,5 @@
 # OWSLib
 
-This fork only adds proxy capability to the getmap owslib functionality. It does not cover the rest of the library. It is just a quick and dirty fix for my customer's needs.
-
 [![Build](https://github.com/geopython/OWSLib/workflows/main.yml/badge.svg)](https://github.com/geopython/OWSLib/actions)
 [![License](https://img.shields.io/github/license/geopython/OWSLib.svg)](https://github.com/geopython/OWSLib/blob/master/LICENSE)
 [![Chat](https://badges.gitter.im/geopython/OWSLib.svg)](https://app.gitter.im/#/room/#geopython_owslib:gitter.im)
