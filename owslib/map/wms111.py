@@ -52,7 +52,7 @@ class WebMapService_1_1_1(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.1.1', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, headers=None, timeout=30, auth=None):
+                 parse_remote_metadata=False, headers=None, timeout=30, auth=None, proxies=None):
         """Initialize."""
         if auth:
             if username:
@@ -63,12 +63,13 @@ class WebMapService_1_1_1(object):
         self.version = version
         self.timeout = timeout
         self.headers = headers
+        self.proxies = proxies
         self._capabilities = None
         self.auth = auth or Authentication(username, password)
 
         # Authentication handled by Reader
         reader = WMSCapabilitiesReader(
-            self.version, url=self.url, headers=headers, auth=self.auth)
+            self.version, url=self.url, headers=headers, auth=self.auth, proxies=self.proxies)
         if xml is not None:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server

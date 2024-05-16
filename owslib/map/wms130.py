@@ -53,7 +53,7 @@ class WebMapService_1_3_0(object):
 
     def __init__(self, url, version='1.3.0', xml=None, username=None,
                  password=None, parse_remote_metadata=False, timeout=30,
-                 headers=None, auth=None):
+                 headers=None, auth=None, proxies=None):
         """initialize"""
         if auth:
             if username:
@@ -64,12 +64,13 @@ class WebMapService_1_3_0(object):
         self.version = version
         self.timeout = timeout
         self.headers = headers
+        self.proxies = proxies
         self._capabilities = None
         self.auth = auth or Authentication(username, password)
 
         # Authentication handled by Reader
         reader = WMSCapabilitiesReader(
-            self.version, url=self.url, headers=headers, auth=self.auth)
+            self.version, url=self.url, headers=headers, auth=self.auth, proxies=proxies)
         if xml is not None:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
