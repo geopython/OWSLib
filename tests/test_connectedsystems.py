@@ -18,130 +18,60 @@ from owslib.ogcapi.connectedsystems import Systems, Deployments, Datastreams, Ob
 from owslib.util import Authentication
 from tests.utils import service_ok
 
-NODE_TEST_OK_URL = 'http://localhost:8585/sensorhub/test'
-TEST_URL = 'http://localhost:8585/sensorhub/api/'
-auth = Authentication('admin', 'admin')
-sml_headers = {'Content-Type': 'application/sml+json'}
-json_headers = {'Content-Type': 'application/json'}
-geojson_headers = {'Content-Type': 'application/geo+json'}
 
-system_definitions = [
-    {"type": "Feature",
-     "properties": {
-         "featureType": "http://www.w3.org/ns/sosa/Sensor",
-         "uid": "urn:osh:sensor:testcase:001",
-         "name": "Test Sensor 001"},
-     "geometry": None},
-    {"type": "Feature",
-     "properties": {
-         "featureType": "http://www.w3.org/ns/sosa/Sensor",
-         "uid": "urn:osh:sensor:testcase:002",
-         "name": "Test Sensor 002"},
-     "geometry": None}
-]
-sys_sml_def = {
-    "type": "SimpleProcess",
-    "uniqueId": "urn:osh:sensor:testsmlsensor:001",
-    "label": "Test SML Sensor",
-    "description": "A Sensor created from an SML document",
-    "definition": "http://www.w3.org/ns/ssn/Sensor"
-}
+class OSHFixtures:
+    NODE_TEST_OK_URL = 'http://localhost:8585/sensorhub/test'
+    TEST_URL = 'http://localhost:8585/sensorhub/api/'
+    auth = Authentication('admin', 'admin')
+    sml_headers = {'Content-Type': 'application/sml+json'}
+    json_headers = {'Content-Type': 'application/json'}
+    geojson_headers = {'Content-Type': 'application/geo+json'}
+    omjson_headers = {'Content-Type': 'application/om+json'}
 
-sml_component = {
-    "type": "SimpleProcess",
-    "uniqueId": "urn:osh:sensor:testcomponent:001",
-    "label": "Test Component",
-    "description": "Test Component Description",
-    "definition": "http://www.w3.org/ns/ssn/Sensor"
-}
+    system_definitions = [
+        {"type": "Feature",
+         "properties": {
+             "featureType": "http://www.w3.org/ns/sosa/Sensor",
+             "uid": "urn:osh:sensor:testcase:001",
+             "name": "Test Sensor 001"},
+         "geometry": None},
+        {"type": "Feature",
+         "properties": {
+             "featureType": "http://www.w3.org/ns/sosa/Sensor",
+             "uid": "urn:osh:sensor:testcase:002",
+             "name": "Test Sensor 002"},
+         "geometry": None}
+    ]
+    sys_sml_def = {
+        "type": "SimpleProcess",
+        "uniqueId": "urn:osh:sensor:testsmlsensor:001",
+        "label": "Test SML Sensor",
+        "description": "A Sensor created from an SML document",
+        "definition": "http://www.w3.org/ns/ssn/Sensor"
+    }
 
-sml_procedure_test_system = {"type": "SimpleProcess",
-                             "uniqueId": "urn:osh:sensor:testsensorwithcomponents:001",
-                             "label": "Test Process/Datastream Sensor",
-                             "description": "A Sensor created to test procedure/datastream creation",
-                             "definition": "http://www.w3.org/ns/ssn/Sensor"}
-sml_procedure = {
-    "type": "SimpleProcess",
-    "id": "123456789",
-    "description": "Test Procedure inserted via OWSLib",
-    "uniqueId": "urn:osh:sensor:testprocedureows:001",
-    "label": "Test Procedure - OWSLib",
-    "definition": "http://www.w3.org/ns/sosa/Procedure"
-}
+    sml_component = {
+        "type": "SimpleProcess",
+        "uniqueId": "urn:osh:sensor:testcomponent:001",
+        "label": "Test Component",
+        "description": "Test Component Description",
+        "definition": "http://www.w3.org/ns/ssn/Sensor"
+    }
 
+    sml_procedure_test_system = {"type": "SimpleProcess",
+                                 "uniqueId": "urn:osh:sensor:testsensorwithcomponents:001",
+                                 "label": "Test Process/Datastream Sensor",
+                                 "description": "A Sensor created to test procedure/datastream creation",
+                                 "definition": "http://www.w3.org/ns/ssn/Sensor"}
+    sml_procedure = {
+        "type": "SimpleProcess",
+        "id": "123456789",
+        "description": "Test Procedure inserted via OWSLib",
+        "uniqueId": "urn:osh:sensor:testprocedureows:001",
+        "label": "Test Procedure - OWSLib",
+        "definition": "http://www.w3.org/ns/sosa/Procedure"
+    }
 
-class TestSystems:
-    systems_api = Systems(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
-
-    def test_system_collections(self):
-        assert False
-
-    def test_collection_queryables(self):
-        assert False
-
-    def test_collection_items(self):
-        assert False
-
-    def test_collection_item(self):
-        assert False
-
-    def test_collection_item_create(self):
-        assert False
-
-    def test_systems(self):
-        list_systems = self.systems_api.systems()
-        assert list_systems is not None
-
-    def test_system(self):
-        list_sys_by_id = self.systems_api.system('94n1f19ld7tlc')
-        assert list_sys_by_id is not None
-
-    def test_system_create(self):
-        self.systems_api.headers = {'Content-Type': 'application/sml+json'}
-        sml_str = json.dumps(sys_sml_def)
-        post_systems = self.systems_api.system_create(sml_str)
-
-        assert post_systems is not None
-
-    def test_system_update(self):
-        sml_desc_copy = sys_sml_def.copy()
-        sml_desc_copy['description'] = 'Updated Description'
-        sml_str = json.dumps(sml_desc_copy)
-        self.systems_api.headers = {'Content-Type': 'application/sml+json'}
-        post_systems = self.systems_api.system_update('blid74chqmses', sml_str)
-
-        check_result = self.systems_api.system('blid74chqmses')
-        print(check_result)
-        assert check_result['properties']['description'] == 'Updated Description'
-
-    def test_system_delete(self):
-        res = self.systems_api.system_delete('blid74chqmses')
-        assert len(res) == 0
-
-
-@pytest.mark.skip("Not implemented by server")
-class TestProcedures:
-    systems_api = Systems(TEST_URL, auth=auth, headers=sml_headers)
-
-    def test_procedures(self):
-        assert False
-
-    def test_procedure(self):
-        assert False
-
-    def test_procedure_create(self):
-        assert False
-
-    def test_procedure_update(self):
-        assert False
-
-    def test_procedure_delete(self):
-        assert False
-
-
-class TestDeployments:
-    systems_api = Systems(TEST_URL, auth=auth, headers=sml_headers)
-    deployment_api = Deployments(TEST_URL, auth=auth, headers=geojson_headers)
     deployment_definition = {
         "type": "Feature",
         "properties": {
@@ -153,66 +83,11 @@ class TestDeployments:
         },
         # "geometry": "POINT(-80.0 35.0)"
     }
+    system_id = 'blid74chqmses'
     deployment_expected_id = "vssamsrio5eb2"
-
-    def test_deployments(self):
-        res = self.deployment_api.deployments()
-        print(res)
-        assert res['items'] is not None
-
-    def test_deployment(self):
-        res = self.deployment_api.deployment(self.deployment_expected_id)
-        assert res is not None
-
-    def test_deployment_create(self):
-        res = self.deployment_api.deployment_create(json.dumps(self.deployment_definition))
-        assert res is not None
-
-    def test_deployment_update(self):
-        self.deployment_definition['properties']['description'] = 'Updated Description of Deployment 001'
-        res = self.deployment_api.deployment_update(self.deployment_expected_id, json.dumps(self.deployment_definition))
-        assert res is not None
-
-    def test_deployment_delete(self):
-        res = self.deployment_api.deployment_delete(self.deployment_expected_id)
-        assert res is not None
-
-    def test_deployment_list_deployed_systems(self):
-        res = self.deployment_api.deployment_list_deployed_systems(self.deployment_expected_id)
-        assert False
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_add_systems_to_deployment(self):
-        system_data = {
-            "href": "http://localhost:8585/sensorhub/api/systems/blid74chqmses"
-        }
-        res = self.deployment_api.deployment_add_systems_to_deployment(self.deployment_expected_id,
-                                                                       json.dumps(system_data), True)
-        print(res)
-        assert res is not None
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_retrieve_system_from_deployment(self):
-        assert False
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_update_system_in_deployment(self):
-        assert False
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_delete_system_in_deployment(self):
-        assert False
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_list_deployments_of_system(self):
-        assert False
-
-
-class TestSamplingFeatures:
-    systems_api = Systems(TEST_URL, auth=auth, headers=sml_headers)
     weatherstation_id = '0s2lbn2n1bnc8'
-    sampling_feature_api = SamplingFeatures(TEST_URL, auth=auth, headers=geojson_headers,
-                                            alternate_sampling_feature_url='featuresOfInterest')
+    datastream_id = 'n7b6c6rtlhbo0'
+
     feature_def = {
         "geometry": {
             "type": "Point",
@@ -237,44 +112,282 @@ class TestSamplingFeatures:
         }
     }
 
+    ds_definition = {
+        "name": "Test Datastream",
+        "outputName": "Test Output #1",
+        "schema": {
+            "obsFormat": "application/swe+json",
+            "encoding": {
+                "type": "JSONEncoding",
+                "vectorAsArrays": False
+            },
+            "recordSchema": {
+                "type": "DataRecord",
+                "label": "Test Datastream Record",
+                "updatable": False,
+                "optional": False,
+                "definition": "http://test.com/Record",
+                "fields": [
+                    {
+                        "type": "Time",
+                        "label": "Test Datastream Time",
+                        "updatable": False,
+                        "optional": False,
+                        "definition": "http://test.com/Time",
+                        "name": "timestamp",
+                        "uom": {
+                            "href": "http://test.com/TimeUOM"
+                        }
+                    },
+                    {
+                        "type": "Boolean",
+                        "label": "Test Datastream Boolean",
+                        "updatable": False,
+                        "optional": False,
+                        "definition": "http://test.com/Boolean",
+                        "name": "testboolean"
+                    }
+                ]
+            }
+        }
+    }
+
+    # systems_api = None
+    # procedure_api = None
+    # deployment_api = None
+    # sampling_feature_api = None
+    # properties_api = None
+    # datastream_api = None
+    # observations_api = None
+    # control_channels_api = None
+    # commands_api = None
+    # system_events_api = None
+    # system_history_api = None
+
+    # @pytest.fixture(scope='module')
+    # def setup(self):
+    systems_api = Systems(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
+    procedure_api = Systems(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
+    deployment_api = Deployments(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
+    sampling_feature_api = SamplingFeatures(TEST_URL, auth=auth, headers=geojson_headers,
+                                            alternate_sampling_feature_url='featuresOfInterest')
+    properties_api = Properties(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
+    datastream_api = Datastreams(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
+    observations_api = Observations(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
+    control_channels_api = ControlChannels(TEST_URL, auth=auth,
+                                           headers={'Content-Type': 'application/json'})
+    commands_api = Commands(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
+    system_events_api = SystemEvents(TEST_URL, auth=auth, headers=omjson_headers)
+    system_history_api = SystemHistory(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
+
+
+class TestSystems:
+
+    @pytest.mark.skip("Not working on server implementation")
+    def test_system_collections(self):
+        assert False
+
+    @pytest.mark.skip("Not working on server implementation")
+    def test_collection_queryables(self):
+        assert False
+
+    @pytest.mark.skip("Not working on server implementation")
+    def test_collection_items(self):
+        assert False
+
+    @pytest.mark.skip("Not working on server implementation")
+    def test_collection_item(self):
+        assert False
+
+    @pytest.mark.skip("Not working on server implementation")
+    def test_collection_item_create(self):
+        assert False
+
+    def test_systems(self):
+        fixtures = OSHFixtures()
+        list_systems = fixtures.systems_api.systems()
+        assert list_systems is not None
+
+    def test_system(self, fixtures):
+        list_sys_by_id = fixtures.systems_api.system('94n1f19ld7tlc')
+        assert list_sys_by_id is not None
+
+    def test_system_create(self, fixtures):
+        fixtures.systems_api.headers = {'Content-Type': 'application/sml+json'}
+        sml_str = json.dumps(fixtures.sys_sml_def)
+        post_systems = fixtures.systems_api.system_create(sml_str)
+
+        assert post_systems is not None
+
+    def test_system_update(self, fixtures):
+        sml_desc_copy = fixtures.sys_sml_def.copy()
+        sml_desc_copy['description'] = 'Updated Description'
+        sml_str = json.dumps(sml_desc_copy)
+        fixtures.systems_api.headers = {'Content-Type': 'application/sml+json'}
+        post_systems = fixtures.systems_api.system_update('blid74chqmses', sml_str)
+
+        check_result = fixtures.systems_api.system('blid74chqmses')
+        print(check_result)
+        assert check_result['properties']['description'] == 'Updated Description'
+
+    def test_preconfiguredsystem_update(self, fixtures):
+        updated_def = {
+            "type": "PhysicalSystem",
+            "id": "0s2lbn2n1bnc8",
+            "uniqueId": "urn:osh:sensor:simweathernetwork:001",
+            "definition": "http://www.w3.org/ns/sosa/Sensor",
+            "label": "Simulated Weather Station Network",
+            "description": "Updated description to include more data!!!",
+            "validTime": [
+                "2024-04-29T02:30:07.961Z",
+                "now"
+            ]
+        }
+        fixtures.systems_api.headers = fixtures.sml_headers
+        res = fixtures.systems_api.system_update('0s2lbn2n1bnc8',
+                                                 json.dumps(updated_def))
+        print(res)
+        assert res is not None
+
+    @pytest.mark.xfail(response="Response doesn't include information to test against")
+    def test_system_delete(self, fixtures):
+        res = fixtures.systems_api.system_delete('blid74chqmses')
+        print(f'res: {res}')
+        assert len(res) == 0
+
+
+@pytest.mark.skip("Not implemented by server")
+class TestProcedures:
+    fixtures = OSHFixtures()
+
+    def test_procedures(self):
+        assert False
+
+    def test_procedure(self):
+        assert False
+
+    def test_procedure_create(self):
+        assert False
+
+    def test_procedure_update(self):
+        assert False
+
+    def test_procedure_delete(self):
+        assert False
+
+
+class TestDeployments:
+    fixtures = OSHFixtures()
+
+    @pytest.mark.skip("Covered by test_deployment_create")
+    def test_deployments(self):
+        res = self.fixtures.deployment_api.deployments()
+        print(res)
+        assert self.fixtures.deployment_expected_id in [x['id'] for x in res['items']]
+
+    @pytest.mark.skip("Covered by test_deployment_create")
+    def test_deployment(self):
+        res = self.fixtures.deployment_api.deployment(self.fixtures.deployment_expected_id)
+        assert res['properties']['name'] == 'Test Deployment 001' and res['id'] == self.fixtures.deployment_expected_id
+
+    def test_deployment_create(self):
+        res1 = self.fixtures.deployment_api.deployment_create(json.dumps(self.fixtures.deployment_definition))
+        assert res1
+        res2 = self.fixtures.deployment_api.deployments()
+        assert self.fixtures.deployment_expected_id in [x['id'] for x in res2['items']]
+        res3 = self.fixtures.deployment_api.deployment(self.fixtures.deployment_expected_id)
+        assert res3['properties']['name'] == 'Test Deployment 001' and res3[
+            'id'] == self.fixtures.deployment_expected_id
+
+    def test_deployment_update(self):
+        self.fixtures.deployment_definition['properties']['description'] = 'Updated Description of Deployment 001'
+        res = self.fixtures.deployment_api.deployment_update(self.fixtures.deployment_expected_id,
+                                                             json.dumps(self.fixtures.deployment_definition))
+        assert res is not None
+
+    def test_deployment_delete(self):
+        res = self.fixtures.deployment_api.deployment_delete(self.fixtures.deployment_expected_id)
+        assert res is not None
+
+    @pytest.mark.skip("Not implemented by server")
+    def test_deployment_list_deployed_systems(self):
+        res = self.fixtures.deployment_api.deployment_list_deployed_systems(self.fixtures.deployment_expected_id)
+        print(res)
+        assert False
+
+    @pytest.mark.skip("Not implemented by server")
+    def test_deployment_add_systems_to_deployment(self):
+        system_data = {
+            "href": "http://localhost:8585/sensorhub/api/systems/blid74chqmses"
+        }
+        res = self.fixtures.deployment_api.deployment_add_systems_to_deployment(self.fixtures.deployment_expected_id,
+                                                                                json.dumps(system_data), True)
+        print(res)
+        assert res is not None
+
+    @pytest.mark.skip("Not implemented by server")
+    def test_deployment_retrieve_system_from_deployment(self):
+        assert False
+
+    @pytest.mark.skip("Not implemented by server")
+    def test_deployment_update_system_in_deployment(self):
+        assert False
+
+    @pytest.mark.skip("Not implemented by server")
+    def test_deployment_delete_system_in_deployment(self):
+        assert False
+
+    @pytest.mark.skip("Not implemented by server")
+    def test_deployment_list_deployments_of_system(self):
+        assert False
+
+
+class TestSamplingFeatures:
+    fixtures = OSHFixtures()
+
     def test_sampling_features(self):
-        res = self.sampling_feature_api.sampling_features()
+        res = self.fixtures.sampling_feature_api.sampling_features()
         assert len(res['items']) > 0
 
     def test_sampling_feature(self):
-        res = self.sampling_feature_api.sampling_feature('c4nce3peo8hvc')
+        res = self.fixtures.sampling_feature_api.sampling_feature('c4nce3peo8hvc')
         assert res['properties']['name'] == 'Station WS013'
 
     def test_sampling_feature_from_system(self):
-        res = self.sampling_feature_api.sampling_features_from_system(self.weatherstation_id, use_fois=True)
+        res = self.fixtures.sampling_feature_api.sampling_features_from_system(self.fixtures.weatherstation_id,
+                                                                               use_fois=True)
         print(len(res['items']))
         assert len(res['items']) == 50
 
     def test_sampling_feature_create(self):
-        self.systems_api.headers = sml_headers
-        system_res = self.systems_api.system_create(json.dumps(sys_sml_def))
-        new_sys_id = self.systems_api.systems(uid=sys_sml_def["uniqueId"])['items'][0]['id']
+        self.fixtures.systems_api.headers = self.fixtures.sml_headers
+        system_res = self.fixtures.systems_api.system_create(json.dumps(self.fixtures.sys_sml_def))
+        new_sys_id = self.fixtures.systems_api.systems(uid=self.fixtures.sys_sml_def["uniqueId"])['items'][0]['id']
         print(f'System ID: {new_sys_id}')
 
-        self.sampling_feature_api.headers = geojson_headers
-        print(f'API Headers: {self.sampling_feature_api.headers}')
-        res = self.sampling_feature_api.sampling_feature_create(new_sys_id, json.dumps(self.feature_def), True)
-        assert self.sampling_feature_api.sampling_features_from_system(new_sys_id, use_fois=True)['items'] > 0
+        self.fixtures.sampling_feature_api.headers = self.fixtures.geojson_headers
+        print(f'API Headers: {self.fixtures.sampling_feature_api.headers}')
+        res = self.fixtures.sampling_feature_api.sampling_feature_create(new_sys_id,
+                                                                         json.dumps(self.fixtures.feature_def), True)
+        assert self.fixtures.sampling_feature_api.sampling_features_from_system(new_sys_id, use_fois=True)['items'] > 0
 
     def test_sampling_feature_update(self):
-        self.sampling_feature_api.headers = geojson_headers
-        self.feature_def['properties']['name'] = 'Updated Name'
-        self.sampling_feature_api.sampling_feature_update('t69fod8tfa47u', json.dumps(self.feature_def))
-        assert self.sampling_feature_api.sampling_feature('t69fod8tfa47u')['properties'][
+        self.fixtures.sampling_feature_api.headers = self.fixtures.geojson_headers
+        self.fixtures.feature_def['properties']['name'] = 'Updated Name'
+        self.fixtures.sampling_feature_api.sampling_feature_update('t69fod8tfa47u',
+                                                                   json.dumps(self.fixtures.feature_def))
+        assert self.fixtures.sampling_feature_api.sampling_feature('t69fod8tfa47u')['properties'][
                    'name'] == 'Updated Name'
 
     def test_sampling_feature_delete(self):
-        res = self.sampling_feature_api.sampling_feature_delete('t69fod8tfa47u')
+        res = self.fixtures.sampling_feature_api.sampling_feature_delete('t69fod8tfa47u')
         print(res)
         assert res == {}
 
 
 class TestProperties:
+    fixtures = OSHFixtures()
+
     def test_properties(self):
         assert False
 
@@ -292,146 +405,73 @@ class TestProperties:
 
 
 class TestDatastreams:
-    ds_api = Datastreams(TEST_URL, auth=auth, headers=json_headers)
-    sys_id = 'blid74chqmses'
-    datastream_id = None
-    ds_definition = {
-        "name": "Test Datastream",
-        "outputName": "Test Output #1",
-        "schema": {
-            "obsFormat": "application/swe+json",
-            "encoding": {
-                "type": "JSONEncoding",
-                "vectorAsArrays": False
-            },
-            "recordSchema": {
-                "type": "DataRecord",
-                "label": "Test Datastream Record",
-                "updatable": False,
-                "optional": False,
-                "definition": "http://test.com/Record",
-                "fields": [
-                    {
-                        "type": "Time",
-                        "label": "Test Datastream Time",
-                        "updatable": False,
-                        "optional": False,
-                        "definition": "http://test.com/Time",
-                        "name": "timestamp",
-                        "uom": {
-                            "href": "http://test.com/TimeUOM"
-                        }
-                    },
-                    {
-                        "type": "Boolean",
-                        "label": "Test Datastream Boolean",
-                        "updatable": False,
-                        "optional": False,
-                        "definition": "http://test.com/Boolean",
-                        "name": "testboolean"
-                    }
-                ]
-            }
-        }
-    }
+    fixtures = OSHFixtures()
 
     def test_datastreams(self):
-        res = self.ds_api.datastreams()
+        res = self.fixtures.datastream_api.datastreams()
         assert res is not None
 
     def test_datastream_creation_and_retrieval(self):
         # insert a datastream first
-        self.ds_api.datastream_create_in_system(self.sys_id, json.dumps(self.ds_definition))
-        ds_created = self.ds_api.datastreams_of_system(self.sys_id)
+        self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
+                                                                 json.dumps(self.fixtures.ds_definition))
+        ds_created = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)
         assert ds_created['items'] is not None
         assert ds_created['items'][0]['name'] == 'Test Datastream'
         self.datastream_id = ds_created['items'][0]['id']
 
-        res = self.ds_api.datastream(self.datastream_id)
+        res = self.fixtures.datastream_api.datastream(self.datastream_id)
         assert res['name'] == 'Test Datastream'
 
     @pytest.mark.skip("Covered by test_datastream_creation_and_retrieval")
     def test_datastreams_of_system(self):
-        res = self.ds_api.datastreams_of_system(self.sys_id)
+        res = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)
         assert res is not None
 
     @pytest.mark.skip("Covered by test_datastream_creation_and_retrieval")
     def test_datastream_create_in_system(self):
-        res = self.ds_api.datastream_create_in_system(self.sys_id, json.dumps(self.ds_definition))
+        res = self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
+                                                                       json.dumps(self.fixtures.ds_definition))
         assert res is not None
 
+    @pytest.mark.xfail(reason="Server generates and error despite format of updated description being correct")
     def test_datastream_update_description(self):
-        self.ds_definition['description'] = 'Updated Description of Datastream'
-        res = self.ds_api.datastream_update_description(self.datastream_id, json.dumps(self.ds_definition))
-        assert res is not None
+        self.fixtures.ds_definition['description'] = 'Updated Description of Datastream'
+        res = self.fixtures.datastream_api.datastream_update_description(self.datastream_id,
+                                                                         json.dumps(self.fixtures.ds_definition))
+        res2 = self.fixtures.datastream_api.datastream(self.datastream_id)
+        assert res2['description'] == 'Updated Description of Datastream'
 
     def test_datastream_delete(self):
-        res = self.ds_api.datastream_delete(self.datastream_id)
+        res = self.fixtures.datastream_api.datastream_delete(self.fixtures.datastream_id)
+        print(res)
         assert res is not None
 
     def test_datastream_retrieve_schema_for_format(self):
-        res = self.ds_api.datastream_retrieve_schema_for_format(self.datastream_id)
+        res = self.fixtures.datastream_api.datastream_retrieve_schema_for_format(self.fixtures.datastream_id)
         assert res is not None
 
     def test_datastream_update_schema_for_format(self):
-        res = self.ds_api.datastream_update_schema_for_format(self.datastream_id, json.dumps(self.ds_definition))
+        res = self.fixtures.datastream_api.datastream_update_schema_for_format(self.fixtures.datastream_id,
+                                                                               json.dumps(self.fixtures.ds_definition))
         assert res is not None
 
 
 class TestObservations:
+    fixtures = OSHFixtures()
+
     system_id = 'blid74chqmses'
-    ds_id = None
-    sys_api = Systems(TEST_URL, auth=auth, headers=sml_headers)
-    ds_api = Datastreams(TEST_URL, auth=auth, headers=json_headers)
-    obs_api = Observations(TEST_URL, auth=auth, headers=json_headers)
+    # ds_id = None
     the_time = datetime.utcnow().isoformat() + 'Z'
 
-    ds_definition = {
-        "name": "Test Datastream",
-        "outputName": "Test Output #1",
-        "schema": {
-            "obsFormat": "application/swe+json",
-            "encoding": {
-                "type": "JSONEncoding",
-                "vectorAsArrays": False
-            },
-            "recordSchema": {
-                "type": "DataRecord",
-                "label": "Test Datastream Record",
-                "updatable": False,
-                "optional": False,
-                "definition": "http://test.com/Record",
-                "fields": [
-                    {
-                        "type": "Time",
-                        "label": "Test Datastream Time",
-                        "updatable": False,
-                        "optional": False,
-                        "definition": "http://test.com/Time",
-                        "name": "timestamp",
-                        "uom": {
-                            "href": "http://test.com/TimeUOM"
-                        }
-                    },
-                    {
-                        "type": "Boolean",
-                        "label": "Test Datastream Boolean",
-                        "updatable": False,
-                        "optional": False,
-                        "definition": "http://test.com/Boolean",
-                        "name": "testboolean"
-                    }
-                ]
-            }
-        }
-    }
-
     def test_observations(self):
-        self.sys_api.headers = sml_headers
-        self.sys_api.system_create(json.dumps(sys_sml_def))
-        self.ds_api.datastream_create_in_system(self.system_id, json.dumps(self.ds_definition))
-        self.ds_id = self.ds_api.datastreams_of_system(self.system_id)['items'][0]['id']
-        print(f'ds_id: {self.ds_id}')
+        self.fixtures.systems_api.headers = self.fixtures.sml_headers
+        self.fixtures.systems_api.system_create(json.dumps(self.fixtures.sys_sml_def))
+        self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
+                                                                 json.dumps(self.fixtures.ds_definition))
+        self.fixtures.ds_id = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)['items'][0][
+            'id']
+        print(f'ds_id: {self.fixtures.ds_id}')
 
         observation = {
             "phenomenonTime": self.the_time,
@@ -441,10 +481,11 @@ class TestObservations:
                 "testboolean": True
             }
         }
-        self.obs_api.headers = {'Content-Type': 'application/om+json'}
-        res = self.obs_api.observations_create_in_datastream(self.ds_id, json.dumps(observation))
+        self.fixtures.observations_api.headers = {'Content-Type': 'application/om+json'}
+        res = self.fixtures.observations_api.observations_create_in_datastream(self.fixtures.ds_id,
+                                                                               json.dumps(observation))
         sleep(0.5)
-        obs = self.obs_api.observations_of_datastream(self.ds_id)
+        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)
         print(f'The Time: {self.the_time}')
         print(f'Obs: {obs}')
         assert obs['items'][0]['phenomenonTime'] == self.the_time
@@ -463,33 +504,36 @@ class TestObservations:
 
     @pytest.mark.xfail(reason="Server appears to have an error not expected according to api spec")
     def test_observations_update(self):
-        self.ds_id = self.ds_api.datastreams_of_system(self.system_id)['items'][0]['id']
-        assert self.ds_id is not None
+        self.fixtures.ds_id = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)['items'][0][
+            'id']
+        assert self.fixtures.ds_id is not None
         observation = {
-            "datastream@id": self.ds_id,
+            "datastream@id": self.fixtures.ds_id,
             "result": {
                 "testboolean": False
             }
         }
-        self.obs_api.headers = {'Content-Type': 'application/om+json'}
-        obs = self.obs_api.observations_of_datastream(self.ds_id)['items'][0]
+        self.fixtures.observations_api.headers = {'Content-Type': 'application/om+json'}
+        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
         print(f'Original Obs: {obs}')
-        res = self.obs_api.observations_update(obs['id'], json.dumps(observation))
-        obs = self.obs_api.observations_of_datastream(self.ds_id)['items'][0]
+        res = self.fixtures.observations_api.observations_update(obs['id'], json.dumps(observation))
+        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
         print(f'Updated Obs: {obs}')
         assert obs['result']['testboolean'] is False
 
     def test_observations_delete(self):
-        self.ds_id = self.ds_api.datastreams_of_system(self.system_id)['items'][0]['id']
-        assert self.ds_id is not None
-        obs = self.obs_api.observations_of_datastream(self.ds_id)['items'][0]
+        self.fixtures.ds_id = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)['items'][0][
+            'id']
+        assert self.fixtures.ds_id is not None
+        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
         print(f'Original Obs: {obs}')
-        res = self.obs_api.observations_delete(obs['id'])
-        obs = self.obs_api.observations_of_datastream(self.ds_id)
+        res = self.fixtures.observations_api.observations_delete(obs['id'])
+        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)
         print(f'Updated Obs: {obs}')
         assert obs['items'] == []
 
 
+@pytest.mark.skip("Requires a subscription to the OSH server")
 class TestControlChannels:
     def test_controls(self):
         assert False
@@ -516,6 +560,7 @@ class TestControlChannels:
         assert False
 
 
+@pytest.mark.skip("Requires a subscription to a Control Stream that is beyond the current scope of the api")
 class TestCommands:
     def test_commands(self):
         assert False
@@ -546,15 +591,16 @@ class TestCommands:
 
 
 class TestSystemEvents:
-    system_id = 'blid74chqmses'
-    sys_api = Systems(TEST_URL, auth=auth, headers=sml_headers)
-    se_api = SystemEvents(TEST_URL, auth=auth, headers={'Content-Type': 'application/om+json'})
+    fixtures = OSHFixtures()
     system_event_def = {
         "resultTime": "2021-03-15T04:53:34Z",
         "result": 23.5
     }
 
     def test_system_events(self):
+        print(self.fixtures)
+        res = self.fixtures.system_events_api.system_events()
+        print(res)
         assert False
 
     def test_system_events_of_specific_system(self):
@@ -574,14 +620,73 @@ class TestSystemEvents:
 
 
 class TestSystemHistory:
+    fixtures = OSHFixtures()
+
     def test_system_history(self):
-        assert False
+        res = self.fixtures.system_history_api.system_history('0s2lbn2n1bnc8')
+        assert len(res['items']) > 0
 
     def test_system_history_by_id(self):
-        assert False
+        res = self.fixtures.system_history_api.system_history_by_id('0s2lbn2n1bnc8', '2024-04-29T02:30:07.961Z')
+        print(res)
+        assert res['id'] == '0s2lbn2n1bnc8'
 
+    @pytest.mark.xfail(
+        reason="OSH only allows history events to in response to updates made directly to the system description")
     def test_system_history_update_description(self):
-        assert False
+        updated_def = {
+            "type": "Feature",
+            "id": "0s2lbn2n1bnc8",
+            "properties": {
+                "uid": "urn:osh:sensor:simweathernetwork:001",
+                "featureType": "http://www.w3.org/ns/sosa/Sensor",
+                "name": "Simulated Weather Station Network",
+                "description": "Updated description to include more data!!!",
+            },
+            "links": [
+                {
+                    "rel": "canonical",
+                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8",
+                    "type": "application/json"
+                },
+                {
+                    "rel": "alternate",
+                    "title": "Detailed description of system in SensorML format",
+                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8",
+                    "type": "application/sml+json"
+                },
+                {
+                    "rel": "members",
+                    "title": "List of subsystems",
+                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8/members",
+                    "type": "application/json"
+                },
+                {
+                    "rel": "datastreams",
+                    "title": "List of system datastreams",
+                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8/datastreams",
+                    "type": "application/json"
+                },
+                {
+                    "rel": "controls",
+                    "title": "List of system control channels",
+                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8/controls",
+                    "type": "application/json"
+                },
+                {
+                    "rel": "samplingFeatures",
+                    "title": "List of system features of interest",
+                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8/featuresOfInterest",
+                    "type": "application/json"
+                }
+            ]
+        }
+        res = self.fixtures.system_history_api.system_history_update_description('0s2lbn2n1bnc8',
+                                                                                 '2024-04-29T02:30:07.961Z',
+                                                                                 json.dumps(updated_def))
+        print(res)
+        assert res is not None
 
+    @pytest.mark.skip(reason="Will break test server")
     def test_system_history_delete(self):
         assert False

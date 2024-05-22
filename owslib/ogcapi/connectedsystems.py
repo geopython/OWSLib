@@ -498,7 +498,7 @@ class SamplingFeatures(API):
         @type data: dict
         @param data: JSON object
         @type use_fois: bool
-        @param use_fois: use FOIs instead of samplingfeatures in the pathF
+        @param use_fois: use FOIs instead of samplingFeatures in the path
         @returns: `dict` of sampling feature metadata
         """
 
