@@ -6,11 +6,62 @@
 #  Contact email: ian@botts-inc.com
 # ==============================================================================
 import logging
+from typing import Callable
 
 from owslib.ogcapi import Collections, API
-from owslib.util import (Authentication)
+from owslib.util import (Authentication, http_get, http_post, http_put, http_delete)
 
 LOGGER = logging.getLogger(__name__)
+
+
+class ConnectedSystems(API):
+    def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
+                 auth: Authentication = None):
+        __doc__ = API.__doc__  # noqa
+        super().__init__(url, json_, timeout, headers, auth)
+
+    def _request(self, method: str = 'GET', path: str = None,
+                 data: str = None, as_dict: bool = True, rc_handler: Callable = None,
+                 kwargs: dict = {}) -> dict:
+
+        url = self._build_url(path)
+        self.request = url
+
+        LOGGER.debug(f'Method: {method}')
+        LOGGER.debug(f'Request: {url}')
+        LOGGER.debug(f'Data: {data}')
+        LOGGER.debug(f'Params: {kwargs}')
+
+        if method == 'GET':
+            response = http_get(url, headers=self.headers, auth=self.auth,
+                                params=kwargs)
+        elif method == 'POST':
+            response = http_post(url, headers=self.headers, request=data,
+                                 auth=self.auth)
+        elif method == 'PUT':
+            response = http_put(url, data=data, auth=self.auth, headers=self.headers)
+        elif method == 'DELETE':
+            response = http_delete(url, auth=self.auth)
+
+        LOGGER.debug(f'URL: {response.url}')
+        LOGGER.debug(f'Response status code: {response.status_code}')
+
+        if not response:
+            raise RuntimeError(response.text)
+
+        self.request = response.url
+
+        if as_dict:
+            if len(response.content) == 0:
+                LOGGER.debug('Empty response')
+                return {}
+            else:
+                return response.json()
+        elif rc_handler is not None:
+            return rc_handler(response)
+        else:
+            return response.content
+
 
 
 class Systems(Collections):

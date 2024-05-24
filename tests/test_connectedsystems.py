@@ -86,7 +86,7 @@ class OSHFixtures:
     system_id = 'blid74chqmses'
     deployment_expected_id = "vssamsrio5eb2"
     weatherstation_id = '0s2lbn2n1bnc8'
-    datastream_id = 'n7b6c6rtlhbo0'
+    datastream_id = 'etbrve0msmrre'
 
     feature_def = {
         "geometry": {
@@ -180,8 +180,12 @@ class OSHFixtures:
     system_events_api = SystemEvents(TEST_URL, auth=auth, headers=omjson_headers)
     system_history_api = SystemHistory(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
 
+    def update_dsid(self, ds_id):
+        self.datastream_id = ds_id
+
 
 class TestSystems:
+    fixtures = OSHFixtures()
 
     @pytest.mark.skip("Not working on server implementation")
     def test_system_collections(self):
@@ -208,29 +212,29 @@ class TestSystems:
         list_systems = fixtures.systems_api.systems()
         assert list_systems is not None
 
-    def test_system(self, fixtures):
-        list_sys_by_id = fixtures.systems_api.system('94n1f19ld7tlc')
+    def test_system(self):
+        list_sys_by_id = self.fixtures.systems_api.system('94n1f19ld7tlc')
         assert list_sys_by_id is not None
 
-    def test_system_create(self, fixtures):
-        fixtures.systems_api.headers = {'Content-Type': 'application/sml+json'}
-        sml_str = json.dumps(fixtures.sys_sml_def)
-        post_systems = fixtures.systems_api.system_create(sml_str)
+    def test_system_create(self):
+        self.fixtures.systems_api.headers = {'Content-Type': 'application/sml+json'}
+        sml_str = json.dumps(self.fixtures.sys_sml_def)
+        post_systems = self.fixtures.systems_api.system_create(sml_str)
 
         assert post_systems is not None
 
-    def test_system_update(self, fixtures):
-        sml_desc_copy = fixtures.sys_sml_def.copy()
+    def test_system_update(self):
+        sml_desc_copy = self.fixtures.sys_sml_def.copy()
         sml_desc_copy['description'] = 'Updated Description'
         sml_str = json.dumps(sml_desc_copy)
-        fixtures.systems_api.headers = {'Content-Type': 'application/sml+json'}
-        post_systems = fixtures.systems_api.system_update('blid74chqmses', sml_str)
+        self.fixtures.systems_api.headers = {'Content-Type': 'application/sml+json'}
+        post_systems = self.fixtures.systems_api.system_update('blid74chqmses', sml_str)
 
-        check_result = fixtures.systems_api.system('blid74chqmses')
+        check_result = self.fixtures.systems_api.system('blid74chqmses')
         print(check_result)
         assert check_result['properties']['description'] == 'Updated Description'
 
-    def test_preconfiguredsystem_update(self, fixtures):
+    def test_preconfiguredsystem_update(self):
         updated_def = {
             "type": "PhysicalSystem",
             "id": "0s2lbn2n1bnc8",
@@ -243,15 +247,15 @@ class TestSystems:
                 "now"
             ]
         }
-        fixtures.systems_api.headers = fixtures.sml_headers
-        res = fixtures.systems_api.system_update('0s2lbn2n1bnc8',
+        self.fixtures.systems_api.headers = self.fixtures.sml_headers
+        res = self.fixtures.systems_api.system_update('0s2lbn2n1bnc8',
                                                  json.dumps(updated_def))
         print(res)
         assert res is not None
 
     @pytest.mark.xfail(response="Response doesn't include information to test against")
-    def test_system_delete(self, fixtures):
-        res = fixtures.systems_api.system_delete('blid74chqmses')
+    def test_system_delete(self):
+        res = self.fixtures.systems_api.system_delete('blid74chqmses')
         print(f'res: {res}')
         assert len(res) == 0
 
@@ -369,7 +373,7 @@ class TestSamplingFeatures:
         print(f'API Headers: {self.fixtures.sampling_feature_api.headers}')
         res = self.fixtures.sampling_feature_api.sampling_feature_create(new_sys_id,
                                                                          json.dumps(self.fixtures.feature_def), True)
-        assert self.fixtures.sampling_feature_api.sampling_features_from_system(new_sys_id, use_fois=True)['items'] > 0
+        assert len(self.fixtures.sampling_feature_api.sampling_features_from_system(new_sys_id, use_fois=True)['items']) > 0
 
     def test_sampling_feature_update(self):
         self.fixtures.sampling_feature_api.headers = self.fixtures.geojson_headers
@@ -385,6 +389,7 @@ class TestSamplingFeatures:
         assert res == {}
 
 
+@pytest.mark.skip("Not implemented by server")
 class TestProperties:
     fixtures = OSHFixtures()
 
@@ -418,9 +423,10 @@ class TestDatastreams:
         ds_created = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)
         assert ds_created['items'] is not None
         assert ds_created['items'][0]['name'] == 'Test Datastream'
-        self.datastream_id = ds_created['items'][0]['id']
+        datastream_id = ds_created['items'][0]['id']
+        self.fixtures.update_dsid(datastream_id)
 
-        res = self.fixtures.datastream_api.datastream(self.datastream_id)
+        res = self.fixtures.datastream_api.datastream(datastream_id)
         assert res['name'] == 'Test Datastream'
 
     @pytest.mark.skip("Covered by test_datastream_creation_and_retrieval")
@@ -442,18 +448,23 @@ class TestDatastreams:
         res2 = self.fixtures.datastream_api.datastream(self.datastream_id)
         assert res2['description'] == 'Updated Description of Datastream'
 
-    def test_datastream_delete(self):
-        res = self.fixtures.datastream_api.datastream_delete(self.fixtures.datastream_id)
-        print(res)
-        assert res is not None
-
     def test_datastream_retrieve_schema_for_format(self):
         res = self.fixtures.datastream_api.datastream_retrieve_schema_for_format(self.fixtures.datastream_id)
+        print(f'Res: {res}')
         assert res is not None
 
+    # Error due to server wanting PUT on main resource url, not ds/id/schema?
+    @pytest.mark.xfail(reason="OSH doesn't separate schema from description so update fails with reference to update on main resource")
     def test_datastream_update_schema_for_format(self):
         res = self.fixtures.datastream_api.datastream_update_schema_for_format(self.fixtures.datastream_id,
                                                                                json.dumps(self.fixtures.ds_definition))
+        print(f'Res: {res}')
+        assert res is not None
+
+    def test_datastream_delete(self):
+        print(f'ds_id: {self.fixtures.datastream_id}')
+        res = self.fixtures.datastream_api.datastream_delete(self.fixtures.datastream_id)
+        print(res)
         assert res is not None
 
 
@@ -590,6 +601,7 @@ class TestCommands:
         assert False
 
 
+@pytest.mark.skip("Requires stream on OSH server")
 class TestSystemEvents:
     fixtures = OSHFixtures()
     system_event_def = {
