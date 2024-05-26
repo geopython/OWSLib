@@ -152,20 +152,6 @@ class OSHFixtures:
         }
     }
 
-    # systems_api = None
-    # procedure_api = None
-    # deployment_api = None
-    # sampling_feature_api = None
-    # properties_api = None
-    # datastream_api = None
-    # observations_api = None
-    # control_channels_api = None
-    # commands_api = None
-    # system_events_api = None
-    # system_history_api = None
-
-    # @pytest.fixture(scope='module')
-    # def setup(self):
     systems_api = Systems(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
     procedure_api = Systems(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
     deployment_api = Deployments(TEST_URL, auth=auth, headers={'Content-Type': 'application/json'})
@@ -249,15 +235,15 @@ class TestSystems:
         }
         self.fixtures.systems_api.headers = self.fixtures.sml_headers
         res = self.fixtures.systems_api.system_update('0s2lbn2n1bnc8',
-                                                 json.dumps(updated_def))
+                                                      json.dumps(updated_def))
         print(res)
         assert res is not None
 
-    @pytest.mark.xfail(response="Response doesn't include information to test against")
+    # @pytest.mark.xfail(response="Response doesn't include information to test against")
     def test_system_delete(self):
         res = self.fixtures.systems_api.system_delete('blid74chqmses')
         print(f'res: {res}')
-        assert len(res) == 0
+        assert res['code'] == 204
 
 
 @pytest.mark.skip("Not implemented by server")
@@ -373,7 +359,8 @@ class TestSamplingFeatures:
         print(f'API Headers: {self.fixtures.sampling_feature_api.headers}')
         res = self.fixtures.sampling_feature_api.sampling_feature_create(new_sys_id,
                                                                          json.dumps(self.fixtures.feature_def), True)
-        assert len(self.fixtures.sampling_feature_api.sampling_features_from_system(new_sys_id, use_fois=True)['items']) > 0
+        assert len(
+            self.fixtures.sampling_feature_api.sampling_features_from_system(new_sys_id, use_fois=True)['items']) > 0
 
     def test_sampling_feature_update(self):
         self.fixtures.sampling_feature_api.headers = self.fixtures.geojson_headers
@@ -386,7 +373,7 @@ class TestSamplingFeatures:
     def test_sampling_feature_delete(self):
         res = self.fixtures.sampling_feature_api.sampling_feature_delete('t69fod8tfa47u')
         print(res)
-        assert res == {}
+        assert res['code'] == 204
 
 
 @pytest.mark.skip("Not implemented by server")
@@ -443,7 +430,7 @@ class TestDatastreams:
     @pytest.mark.xfail(reason="Server generates and error despite format of updated description being correct")
     def test_datastream_update_description(self):
         self.fixtures.ds_definition['description'] = 'Updated Description of Datastream'
-        res = self.fixtures.datastream_api.datastream_update_description(self.datastream_id,
+        res = self.fixtures.datastream_api.datastream_update_description(self.fixtures.datastream_id,
                                                                          json.dumps(self.fixtures.ds_definition))
         res2 = self.fixtures.datastream_api.datastream(self.datastream_id)
         assert res2['description'] == 'Updated Description of Datastream'
@@ -451,10 +438,11 @@ class TestDatastreams:
     def test_datastream_retrieve_schema_for_format(self):
         res = self.fixtures.datastream_api.datastream_retrieve_schema_for_format(self.fixtures.datastream_id)
         print(f'Res: {res}')
-        assert res is not None
+        assert res is not None and len(res) > 0
 
     # Error due to server wanting PUT on main resource url, not ds/id/schema?
-    @pytest.mark.xfail(reason="OSH doesn't separate schema from description so update fails with reference to update on main resource")
+    @pytest.mark.xfail(
+        reason="OSH doesn't separate schema from description so update fails with reference to update on main resource")
     def test_datastream_update_schema_for_format(self):
         res = self.fixtures.datastream_api.datastream_update_schema_for_format(self.fixtures.datastream_id,
                                                                                json.dumps(self.fixtures.ds_definition))
@@ -465,14 +453,12 @@ class TestDatastreams:
         print(f'ds_id: {self.fixtures.datastream_id}')
         res = self.fixtures.datastream_api.datastream_delete(self.fixtures.datastream_id)
         print(res)
-        assert res is not None
+        assert res['code'] == 204
 
 
 class TestObservations:
     fixtures = OSHFixtures()
-
     system_id = 'blid74chqmses'
-    # ds_id = None
     the_time = datetime.utcnow().isoformat() + 'Z'
 
     def test_observations(self):
