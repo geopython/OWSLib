@@ -8,20 +8,22 @@
 import logging
 from typing import Callable
 
+import requests
+
 from owslib.ogcapi import Collections, API
 from owslib.util import (Authentication, http_get, http_post, http_put, http_delete)
 
 LOGGER = logging.getLogger(__name__)
 
 
-class ConnectedSystems(API):
+class ConnectedSystems(Collections):
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
         __doc__ = API.__doc__  # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def _request(self, method: str = 'GET', path: str = None,
-                 data: str = None, as_dict: bool = True, rc_handler: Callable = None,
+                 data: str = None, as_dict: bool = True, resp_handler: Callable = None,
                  kwargs: dict = {}) -> dict:
 
         url = self._build_url(path)
@@ -51,20 +53,38 @@ class ConnectedSystems(API):
 
         self.request = response.url
 
-        if as_dict:
+        if resp_handler is not None:
+            return resp_handler(response)
+        elif as_dict:
             if len(response.content) == 0:
                 LOGGER.debug('Empty response')
                 return {}
             else:
                 return response.json()
-        elif rc_handler is not None:
-            return rc_handler(response)
         else:
             return response.content
 
+    def _default_create_resp_handler(self, response: requests.Response) -> dict:
+        res_id = response.headers.get('Location', None)
+
+        return {'code': response.status_code, 'id': res_id}
+
+    def _default_delete_resp_handler(self, response: requests.Response) -> dict:
+        if response.ok:
+            result = 'Success'
+        else:
+            result = 'Failed'
+        return {'code': response.status_code, 'result': result}
+
+    def _default_update_resp_handler(self, response: requests.Response) -> dict:
+        if response.ok:
+            result = 'Success'
+        else:
+            result = 'Failed'
+        return {'code': response.status_code, 'result': result}
 
 
-class Systems(Collections):
+class Systems(ConnectedSystems):
     """Abstraction for OGC API - Connected Systems - Systems"""
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30,
@@ -186,7 +206,8 @@ class Systems(Collections):
         """
 
         path = f'systems/'
-        return self._request(path=path, method='POST', data=data)
+
+        return self._request(path=path, method='POST', data=data, resp_handler=self._default_create_resp_handler)
 
     def system_update(self, system_id: str, data: str) -> dict:
         """
@@ -201,7 +222,7 @@ class Systems(Collections):
         """
 
         path = f'systems/{system_id}'
-        return self._request(path=path, method='PUT', data=data)
+        return self._request(path=path, method='PUT', data=data, resp_handler=self._default_update_resp_handler)
 
     def system_delete(self, system_id: str) -> dict:
         """
@@ -214,7 +235,7 @@ class Systems(Collections):
         """
 
         path = f'systems/{system_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
     def system_components(self, system_id: str, **kwargs) -> dict:
         """
@@ -245,7 +266,7 @@ class Systems(Collections):
         """
 
         path = f'systems/{system_id}/components'
-        return self._request(method='POST', path=path, data=data)
+        return self._request(method='POST', path=path, data=data, resp_handler=self._default_create_resp_handler)
 
     def system_deployments(self, system_id: str) -> dict:
         """
@@ -274,7 +295,7 @@ class Systems(Collections):
         return self._request(path=path)
 
 
-class Procedures(API):
+class Procedures(ConnectedSystems):
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
         __doc__ = API.__doc__  # noqa
@@ -313,7 +334,7 @@ class Procedures(API):
         """
 
         path = 'procedures'
-        return self._request(path=path, data=data, method='POST')
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def procedure_update(self, procedure_id: str, data: str) -> dict:
         """
@@ -337,10 +358,10 @@ class Procedures(API):
         """
 
         path = f'procedures/{procedure_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
 
-class Deployments(API):
+class Deployments(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
@@ -374,7 +395,7 @@ class Deployments(API):
         @returns: `dict` of deployment metadata
         """
         path = 'deployments'
-        _ = self._request(path=path, data=data, method='POST')
+        _ = self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
         return True
 
@@ -387,7 +408,7 @@ class Deployments(API):
         @returns: `dict` of deployment metadata
         """
         path = f'deployments/{deployment_id}'
-        _ = self._request(path=path, data=data, method='PUT')
+        _ = self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
         return True
 
@@ -398,7 +419,7 @@ class Deployments(API):
         @returns: `dict` of deployment metadata
         """
         path = f'deployments/{deployment_id}'
-        _ = self._request(path=path, method='DELETE')
+        _ = self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
         return True
 
@@ -428,7 +449,7 @@ class Deployments(API):
             path = f'deployments/{deployment_id}/members'
         else:
             path = f'deployments/{deployment_id}/systems'
-        _ = self._request(path=path, data=data, method='POST')
+        _ = self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
         return True
 
@@ -456,7 +477,7 @@ class Deployments(API):
         @returns: `dict` of system metadata
         """
         path = f'deployments/{deployment_id}/systems/{system_id}'
-        _ = self._request(path=path, data=data, method='PUT')
+        _ = self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
         return True
 
@@ -469,7 +490,7 @@ class Deployments(API):
         @returns: `dict` of system metadata
         """
         path = f'deployments/{deployment_id}/systems/{system_id}'
-        _ = self._request(path=path, method='DELETE')
+        _ = self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
         return True
 
@@ -485,8 +506,9 @@ class Deployments(API):
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
 
-class SamplingFeatures(API):
+class SamplingFeatures(ConnectedSystems):
     alternate_sampling_feature_url = None
+
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None, alternate_sampling_feature_url: str = None):
         self.alternate_sampling_feature_url = alternate_sampling_feature_url
@@ -557,7 +579,7 @@ class SamplingFeatures(API):
         if use_fois:
             path = f'systems/{system_id}/fois'
 
-        return self._request(path=path, data=data, method='POST')
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def sampling_feature_update(self, sampling_feature_id: str, data: str) -> dict:
         """
@@ -572,7 +594,7 @@ class SamplingFeatures(API):
         path = f'samplingFeatures/{sampling_feature_id}'
         if self.alternate_sampling_feature_url:
             path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
     def sampling_feature_delete(self, sampling_feature_id: str) -> dict:
         """
@@ -585,10 +607,10 @@ class SamplingFeatures(API):
         path = f'samplingFeatures/{sampling_feature_id}'
         if self.alternate_sampling_feature_url:
             path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
 
-class Properties(API):
+class Properties(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
@@ -629,7 +651,7 @@ class Properties(API):
         """
 
         path = 'properties'
-        return self._request(path=path, data=data, method='POST')
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def property_update(self, property_id: str, data: str) -> dict:
         """
@@ -642,7 +664,7 @@ class Properties(API):
         """
 
         path = f'properties/{property_id}'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
     def property_delete(self, property_id: str) -> dict:
         """
@@ -653,10 +675,10 @@ class Properties(API):
         """
 
         path = f'properties/{property_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
 
-class Datastreams(Collections):
+class Datastreams(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
@@ -711,7 +733,7 @@ class Datastreams(Collections):
 
         path = f'systems/{system_id}/datastreams'
 
-        return self._request(path=path, data=data, method='POST')
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def datastream_update_description(self, datastream_id: str, data: str) -> dict:
         """
@@ -724,7 +746,7 @@ class Datastreams(Collections):
         """
 
         path = f'datastreams/{datastream_id}'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
     def datastream_delete(self, datastream_id: str) -> dict:
         """
@@ -735,7 +757,7 @@ class Datastreams(Collections):
         """
 
         path = f'datastreams/{datastream_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
     def datastream_retrieve_schema_for_format(self, datastream_id: str, **kwargs) -> dict:
         """
@@ -767,10 +789,10 @@ class Datastreams(Collections):
         """
 
         path = f'datastreams/{datastream_id}/schema'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
 
-class Observations(Collections):
+class Observations(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
@@ -823,7 +845,7 @@ class Observations(Collections):
         """
 
         path = f'datastreams/{datastream_id}/observations'
-        return self._request(path=path, data=data, method='POST')
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def observations_update(self, observation_id: str, data: str) -> dict:
         """
@@ -836,7 +858,7 @@ class Observations(Collections):
         """
 
         path = f'observations/{observation_id}'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
     def observations_delete(self, observation_id: str) -> dict:
         """
@@ -846,10 +868,10 @@ class Observations(Collections):
         @returns: `dict` of observation metadata
         """
         path = f'observations/{observation_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
 
-class ControlChannels(Collections):
+class ControlChannels(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
@@ -902,7 +924,7 @@ class ControlChannels(Collections):
         """
 
         path = f'systems/{system_id}/controls'
-        return self._request(path=path, data=data, method='POST')
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def control_update(self, control_id: str, data: str) -> dict:
         """
@@ -915,7 +937,7 @@ class ControlChannels(Collections):
         """
 
         path = f'controls/{control_id}'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
     def control_delete(self, control_id: str) -> dict:
         """
@@ -926,7 +948,7 @@ class ControlChannels(Collections):
         """
 
         path = f'controls/{control_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
     def control_retrieve_schema(self, control_id: str, **kwargs) -> dict:
         """
@@ -952,10 +974,10 @@ class ControlChannels(Collections):
         """
 
         path = f'controls/{control_id}/schema'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
 
-class Commands(Collections):
+class Commands(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
@@ -1008,7 +1030,7 @@ class Commands(Collections):
         """
 
         path = f'controls/{control_id}/commands'
-        return self._request(path=path, data=data, method='POST')
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def commands_delete_command(self, command_id: str) -> dict:
         """
@@ -1019,7 +1041,7 @@ class Commands(Collections):
         """
 
         path = f'commands/{command_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
     def commands_add_status_report(self, command_id: str, data: str) -> dict:
         """
@@ -1032,7 +1054,7 @@ class Commands(Collections):
         """
 
         path = f'commands/{command_id}/status'
-        return self._request(path=path, data=data, method='POST')
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def commands_retrieve_status_report(self, command_id: str, status_id: str, **kwargs) -> dict:
         """
@@ -1062,7 +1084,7 @@ class Commands(Collections):
         """
 
         path = f'commands/{command_id}/status/{status_id}'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
     def commands_delete_status_report(self, command_id: str, status_id: str) -> dict:
         """
@@ -1075,12 +1097,13 @@ class Commands(Collections):
         """
 
         path = f'commands/{command_id}/status/{status_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
 
-class SystemEvents(Collections):
+class SystemEvents(ConnectedSystems):
 
-    def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None, auth: Authentication = None):
+    def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
+                 auth: Authentication = None):
         __doc__ = Collections.__doc__
         super().__init__(url, json_, timeout, headers, auth=auth)
 
@@ -1093,7 +1116,7 @@ class SystemEvents(Collections):
         path = 'systemEvents'
         query_params = QueryArgs(**kwargs)
         p_list = ['eventTime', 'q', 'limit']
-        return self._request(path=path, kwargs=query_params.check_params(p_list))
+        return self._request(path=path, method='GET', kwargs=query_params.check_params(p_list))
 
     def system_events_of_specific_system(self, system_id: str, **kwargs) -> dict:
         """
@@ -1106,7 +1129,7 @@ class SystemEvents(Collections):
         path = f'systems/{system_id}/events'
         query_params = QueryArgs(**kwargs)
         p_list = ['eventTime', 'q', 'limit']
-        return self._request(path=path, kwargs=query_params.check_params(p_list))
+        return self._request(path=path, method='GET', kwargs=query_params.check_params(p_list))
 
     def system_event_add_se_to_system(self, system_id: str, data: str) -> dict:
         """
@@ -1119,7 +1142,7 @@ class SystemEvents(Collections):
         """
 
         path = f'systems/{system_id}/events'
-        return self._request(path=path, data=data)
+        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
 
     def system_event(self, system_id: str, event_id: str) -> dict:
         """
@@ -1147,7 +1170,7 @@ class SystemEvents(Collections):
         """
 
         path = f'systems/{system_id}/events/{event_id}'
-        return self._request(path=path, data=data)
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
     def system_event_delete(self, system_id: str, event_id: str) -> dict:
         """
@@ -1160,10 +1183,10 @@ class SystemEvents(Collections):
         """
 
         path = f'systems/{system_id}/events/{event_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
 
-class SystemHistory(Collections):
+class SystemHistory(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
@@ -1209,7 +1232,7 @@ class SystemHistory(Collections):
         """
 
         path = f'systems/{system_id}/history/{history_id}'
-        return self._request(path=path, data=data, method='PUT')
+        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
 
     def system_history_delete(self, system_id: str, history_id: str) -> dict:
         """
@@ -1222,7 +1245,7 @@ class SystemHistory(Collections):
         """
 
         path = f'systems/{system_id}/history/{history_id}'
-        return self._request(path=path, method='DELETE')
+        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
 
 
 class QueryArgs:
