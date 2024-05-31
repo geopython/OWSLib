@@ -338,18 +338,29 @@ class PT_Locale(printable):
         :param md: PT_Locale etree.Element
         """
         self.namespaces = namespaces
-        if md is None:
-            self.id = None
-            self.languagecode = None
-            self.charset = None
-        else:
-            self.id = md.attrib.get('id')
-            self.languagecode = md.find(
-                util.nspath_eval('lan:language/lan:LanguageCode', self.namespaces)).attrib.get('codeListValue')
-            self.charset = md.find(
-                util.nspath_eval('lan:characterEncoding/lan:MD_CharacterSetCode', self.namespaces)).attrib.get(
-                'codeListValue')
 
+        self.id = None
+        self.languagecode = None
+        self.charset = None
+
+        if md is not None:
+            try:
+                self.id = md.attrib.get('id')
+            except AttributeError:
+                pass
+
+            try:
+                self.languagecode = md.find(
+                    util.nspath_eval('lan:language/lan:LanguageCode', self.namespaces)).attrib.get('codeListValue')
+            except AttributeError:
+                pass
+
+            try:
+                self.charset = md.find(
+                    util.nspath_eval('lan:characterEncoding/lan:MD_CharacterSetCode', self.namespaces)).attrib.get(
+                    'codeListValue')
+            except AttributeError:
+                pass
 
 
 class CI_Date(printable):
@@ -1114,19 +1125,31 @@ class EX_Polygon(printable):
         :param md: EX_Polygon etree.Element
         """
         self.namespaces = namespaces
-        if md is None:
-            self.exterior_ring = None
-            self.interior_rings = []
-        else:
-            linear_ring = md.find(util.nspath_eval('gml32:Polygon/gml32:exterior/gml32:LinearRing', self.namespaces))
-            if linear_ring is not None:
-                self.exterior_ring = self._coordinates_for_ring(linear_ring)
 
-            interior_ring_elements = md.findall(util.nspath_eval('gml32:Polygon/gml32:interior', self.namespaces))
-            self.interior_rings = []
-            for iring_element in interior_ring_elements:
-                linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing', self.namespaces))
-                self.interior_rings.append(self._coordinates_for_ring(linear_ring))
+        self.exterior_ring = None
+        self.interior_rings = []
+
+        if md is not None:
+            try:
+                linear_ring = md.find(util.nspath_eval('gml32:Polygon/gml32:exterior/gml32:LinearRing', self.namespaces))
+                if linear_ring is not None:
+                    self.exterior_ring = self._coordinates_for_ring(linear_ring)
+            except KeyError:
+                pass
+
+            try:
+                interior_ring_elements = md.findall(util.nspath_eval('gml32:Polygon/gml32:interior', self.namespaces))
+                self.interior_rings = []
+                if interior_ring_elements is not None:
+                    for iring_element in interior_ring_elements:
+                        try:
+                            linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing', self.namespaces))
+                            self.interior_rings.append(self._coordinates_for_ring(linear_ring))
+                        except KeyError:
+                            pass
+            except KeyError:
+                pass
+
 
     def _coordinates_for_ring(self, linear_ring):
         """ Get coordinates for gml coordinate ring
