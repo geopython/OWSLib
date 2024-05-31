@@ -1140,12 +1140,13 @@ class EX_Polygon(printable):
             try:
                 interior_ring_elements = md.findall(util.nspath_eval('gml32:Polygon/gml32:interior', self.namespaces))
                 self.interior_rings = []
-                for iring_element in interior_ring_elements:
-                    try:
-                        linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing', self.namespaces))
-                        self.interior_rings.append(self._coordinates_for_ring(linear_ring))
-                    except KeyError:
-                        pass
+                if interior_ring_elements is not None:
+                    for iring_element in interior_ring_elements:
+                        try:
+                            linear_ring = iring_element.find(util.nspath_eval('gml32:LinearRing', self.namespaces))
+                            self.interior_rings.append(self._coordinates_for_ring(linear_ring))
+                        except KeyError:
+                            pass
             except KeyError:
                 pass
 
