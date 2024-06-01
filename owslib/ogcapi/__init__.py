@@ -1,5 +1,5 @@
 # =============================================================================
-# Copyright (c) 2022 Tom Kralidis
+# Copyright (c) 2024 Tom Kralidis
 #
 # Author: Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -55,6 +55,8 @@ class API:
         self.json_ = json_
         self.timeout = timeout
         self.headers = REQUEST_HEADERS
+        self.response_headers = None
+
         if headers:
             self.headers.update(headers)
         self.auth = auth
@@ -188,6 +190,7 @@ class API:
             raise RuntimeError(response.text)
 
         self.request = response.url
+        self.response_headers = response.headers
 
         if as_dict:
             if len(response.content) == 0:
