@@ -6,6 +6,10 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
+from io import BytesIO
+import logging
+from urllib.parse import urlencode
+
 # owslib imports:
 from owslib import util
 from owslib.fgdc import Metadata
@@ -18,16 +22,11 @@ from owslib.crs import Crs
 from owslib.feature import WebFeatureService_
 from owslib.feature.common import (
     WFSCapabilitiesReader,
-    AbstractContentMetadata,
+    AbstractContentMetadata
 )
 from owslib.namespaces import Namespaces
 
-# other imports
-from io import BytesIO
-from urllib.parse import urlencode
-
-import logging
-from owslib.util import log
+LOGGER = logging.getLogger(__name__)
 
 n = Namespaces()
 WFS_NAMESPACE = n.get_namespace("wfs20")
@@ -116,7 +115,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         else:
             auth = Authentication()
         super(WebFeatureService_2_0_0, self).__init__(auth)
-        log.debug("building WFS %s" % url)
+        LOGGER.debug("building WFS %s" % url)
         self.url = url
         self.version = version
         self.timeout = timeout
@@ -306,7 +305,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                 startindex,
                 sortby,
             )
-            log.debug("GetFeature WFS GET url %s" % url)
+            LOGGER.debug("GetFeature WFS GET url %s" % url)
         else:
             url, data = self.getPOSTGetFeatureRequest(
                 typename,

@@ -6,21 +6,19 @@
 # $Id: wfs.py 503 2006-02-01 17:09:12Z dokai $
 # =============================================================================
 
+from io import BytesIO
 import itertools
 import logging
-
-from owslib import util
-
-from io import BytesIO
 from urllib.parse import urlencode
+
 from owslib.util import (
+    nspath_eval,
     testXMLValue,
     extract_xml_list,
     ServiceException,
     xmltag_split,
     Authentication,
-    openURL,
-    log,
+    openURL
 )
 from owslib.etree import etree
 from owslib.fgdc import Metadata
@@ -296,7 +294,7 @@ class WebFeatureService_1_0_0(object):
             request["outputFormat"] = outputFormat
 
         data = urlencode(request)
-        log.debug("Making request: %s?%s" % (base_url, data))
+        LOGGER.debug("Making request: %s?%s" % (base_url, data))
         u = openURL(base_url, data, method, timeout=self.timeout,
                     headers=self.headers, auth=self.auth)
 
@@ -464,9 +462,9 @@ class ContentMetadata(AbstractContentMetadata):
                             metadataUrl["metadata"] = None
                     elif metadataUrl["type"] == "TC211":
                         mdelem = doc.find(
-                            ".//" + util.nspath_eval("gmd:MD_Metadata", n.get_namespaces(["gmd"]))
+                            ".//" + nspath_eval("gmd:MD_Metadata", n.get_namespaces(["gmd"]))
                         ) or doc.find(
-                            ".//" + util.nspath_eval("gmi:MI_Metadata", n.get_namespaces(["gmi"]))
+                            ".//" + nspath_eval("gmi:MI_Metadata", n.get_namespaces(["gmi"]))
                         )
                         if mdelem is not None:
                             metadataUrl["metadata"] = MD_Metadata(mdelem)

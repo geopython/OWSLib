@@ -14,7 +14,6 @@ OGC OWS Context Conceptual Model 1.0 (12-080r2)
 
 from owslib.owscontext.atom import decode_atomxml, encode_atomxml
 from owslib.owscontext.common import GENERIC_OWCSPEC_URL
-# from owslib.util import log
 # TODO make dates from (currently) string to datetime instances
 from owslib.owscontext.common import TimeIntervalFormat
 from owslib.owscontext.common import try_float, try_int, \
