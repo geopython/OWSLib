@@ -3,21 +3,23 @@
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2007 STFC <http://www.stfc.ac.uk>
 #
-# Authors :
+# Authors:
 #          Dominic Lowe <d.lowe@rl.ac.uk>
 #
 # Contact email: d.lowe@rl.ac.uk
 # =============================================================================
 
-from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
-from urllib.parse import urlencode
-from owslib.util import openURL, testXMLValue
-from owslib.etree import etree
-from owslib.crs import Crs
 import os
 import errno
+import logging
+from urllib.parse import urlencode
 
-from owslib.util import log, makeString
+from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
+from owslib.crs import Crs
+from owslib.etree import etree
+from owslib.util import makeString, openURL, testXMLValue
+
+LOGGER = logging.getLogger(__name__)
 
 
 #  function to save writing out WCS namespace in full each time
@@ -108,7 +110,7 @@ class WebCoverageService_1_0_0(WCSBase):
 
         """
         msg = 'WCS 1.0.0 DEBUG: Parameters passed to GetCoverage: identifier={}, bbox={}, time={}, format={}, crs={}, width={}, height={}, resx={}, resy={}, resz={}, parameter={}, method={}, other_arguments={}'  # noqa
-        log.debug(msg.format(
+        LOGGER.debug(msg.format(
             identifier, bbox, time, format, crs, width, height, resx, resy, resz, parameter, method, str(kwargs)))
 
         try:
@@ -117,7 +119,7 @@ class WebCoverageService_1_0_0(WCSBase):
         except StopIteration:
             base_url = self.url
 
-        log.debug('WCS 1.0.0 DEBUG: base url of server: %s' % base_url)
+        LOGGER.debug('WCS 1.0.0 DEBUG: base url of server: %s' % base_url)
 
         # process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service': 'WCS'}
@@ -151,7 +153,7 @@ class WebCoverageService_1_0_0(WCSBase):
 
         # encode and request
         data = urlencode(request)
-        log.debug('WCS 1.0.0 DEBUG: Second part of URL: %s' % data)
+        LOGGER.debug('WCS 1.0.0 DEBUG: Second part of URL: %s' % data)
 
         u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers)
         return u

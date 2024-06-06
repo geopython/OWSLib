@@ -12,15 +12,17 @@ ATOM XML Encoding: http://www.opengeospatial.org/standards/owc
 OGC OWS Context Atom Encoding Standard 1.0 (12-084r2)
 """
 
+import logging
+
 from owslib.etree import etree, ParseError
 from owslib import util
 from owslib.namespaces import Namespaces
-from owslib.util import nspath_eval, element_to_string
-
-from owslib.util import log
-
 from owslib.owscontext.common import is_empty, extract_p, \
     try_int, try_float
+from owslib.util import nspath_eval, element_to_string
+
+
+LOGGER = logging.getLogger(__name__)
 
 # default variables
 add_namespaces = {"georss": "http://www.georss.org/georss",
@@ -111,31 +113,31 @@ def parse_entry(entry_node):
     # <id>ftp://ftp.remotesensing.org/pub/geotiff/samples/gdal_eg/cea.txt</id>
     val = entry_node.find(util.nspath_eval('atom:id', ns))
     id = util.testXMLValue(val)
-    # log.debug("entry :id %s :: %s", id, val)
+    # LOGGER.debug("entry :id %s :: %s", id, val)
     resource_base_dict.update({"id": id})
 
     # <title>GeoTIFF Example</title>
     val = entry_node.find(util.nspath_eval('atom:title', ns))
     title = util.testXMLValue(val)
-    # log.debug("entry: title %s :: %s", id, val)
+    # LOGGER.debug("entry: title %s :: %s", id, val)
     resource_base_dict['properties'].update({"title": title})
 
     # <updated>2011-11-01T00:00:00Z</updated>
     val = entry_node.find(util.nspath_eval('atom:updated', ns))
     update_date = util.testXMLValue(val)
-    # log.debug("entry: updated %s :: %s", update_date, val)
+    # LOGGER.debug("entry: updated %s :: %s", update_date, val)
     resource_base_dict['properties'].update({"updated": update_date})
 
     # <dc:publisher>
     val = entry_node.find(util.nspath_eval('dc:publisher', ns))
     publisher = util.testXMLValue(val)
-    # log.debug("entry: dc:publisher %s :: %s", publisher, val)
+    # LOGGER.debug("entry: dc:publisher %s :: %s", publisher, val)
     resource_base_dict['properties'].update({"publisher": publisher})
 
     # <dc:rights>
     val = entry_node.find(util.nspath_eval('dc:rights', ns))
     rights = util.testXMLValue(val)
-    # log.debug("entry: rights %s :: %s", rights, val)
+    # LOGGER.debug("entry: rights %s :: %s", rights, val)
     resource_base_dict['properties'].update({"rights": rights})
 
     # <georss:where>
@@ -147,13 +149,13 @@ def parse_entry(entry_node):
             xmltxt = element_to_string(
                 list(val)[0], False)
             # TODO here parse geometry??
-            # log.debug("entry: geometry %s :: %s", xmltxt, val)
+            # LOGGER.debug("entry: geometry %s :: %s", xmltxt, val)
             resource_base_dict.update({"geometry": xmltxt.decode('utf-8')})
 
     # <content type = "text" > aka subtitle, aka abstract
     val = entry_node.find(util.nspath_eval('atom:content', ns))
     subtitle = util.testXMLValue(val)
-    # log.debug("entry: subtitle %s :: %s", subtitle, val)
+    # LOGGER.debug("entry: subtitle %s :: %s", subtitle, val)
     resource_base_dict['properties'].update({"abstract": subtitle})
 
     # <author> ..
@@ -173,7 +175,7 @@ def parse_entry(entry_node):
             "email": email,
             "uri": uri
         }
-        # log.debug("entry: author %s :: %s", author, vals)
+        # LOGGER.debug("entry: author %s :: %s", author, vals)
         if not is_empty(author):
             authors.append(author)
 
@@ -205,7 +207,7 @@ def parse_entry(entry_node):
             "title": title,
             "rel": rel
         }
-        # log.debug("entry: link %s :: %s", link, vals)
+        # LOGGER.debug("entry: link %s :: %s", link, vals)
         if link.get("rel") == "alternate" and not is_empty(link):
             links_alternates.append(link)
         elif link.get("rel") == "icon" and not is_empty(link):
@@ -215,7 +217,7 @@ def parse_entry(entry_node):
         elif link.get("rel") == "via" and not is_empty(link):
             links_via.append(link)
         else:
-            log.warning(
+            LOGGER.warning(
                 "unknown link type in Ows Resource entry section: %r", link)
 
     resource_base_dict['properties']['links'].update(
@@ -266,7 +268,7 @@ def parse_entry(entry_node):
                 "request": None if is_empty(req_content) else req_content,
                 "result": None
             }
-            # log.debug("entry: operation %s :: %s", op_dict, vals)
+            # LOGGER.debug("entry: operation %s :: %s", op_dict, vals)
             if not is_empty(op_dict):
                 operations.append(op_dict)
 
@@ -274,7 +276,7 @@ def parse_entry(entry_node):
             util.nspath_eval('owc:content', ns))
         for cont_val in content_nodes:
             content_dict = parse_owc_content(cont_val)
-            # log.debug("entry: content_dict %s :: %s", content_dict, vals)
+            # LOGGER.debug("entry: content_dict %s :: %s", content_dict, vals)
             if not is_empty(content_dict):
                 contents.append(content_dict)
 
@@ -297,7 +299,7 @@ def parse_entry(entry_node):
                 "legendURL": legend_url,
                 "content": None
             }
-            # log.debug("entry: style_set %s :: %s", style_set, vals)
+            # LOGGER.debug("entry: style_set %s :: %s", style_set, vals)
             if not is_empty(style_set):
                 styles.append(style_set)
 
@@ -317,14 +319,14 @@ def parse_entry(entry_node):
     # <owc:minScaleDenominator>2500</owc:minScaleDenominator>
     val = entry_node.find(util.nspath_eval('owc:minScaleDenominator', ns))
     min_scale_denominator = util.testXMLValue(val)
-    # log.debug("entry: min-scale-... %s :: %s", min_scale_denominator, val)
+    # LOGGER.debug("entry: min-scale-... %s :: %s", min_scale_denominator, val)
     resource_base_dict['properties'].update(
         {"minscaledenominator": min_scale_denominator})
 
     # <owc:maxScaleDenominator>25000</owc:maxScaleDenominator>
     val = entry_node.find(util.nspath_eval('owc:maxScaleDenominator', ns))
     max_scale_denominator = util.testXMLValue(val)
-    # log.debug("entry: max_scale_... %s :: %s", max_scale_denominator, val)
+    # LOGGER.debug("entry: max_scale_... %s :: %s", max_scale_denominator, val)
     resource_base_dict['properties'].update(
         {"maxscaledenominator": max_scale_denominator})
     # TODO no examples for folder attribute
@@ -364,18 +366,18 @@ def decode_atomxml(xml_string):
     feed_root = etree.fromstring(xml_string)
     # feed_root = etree.parse(xml_bytes)
     # feed_root xml lang use?
-    # # log.debug(feed_root)
+    # # LOGGER.debug(feed_root)
     # feed xml:lang=en
     # lang = feed_root.get('{http://www.w3.org/XML/1998/namespace}lang')
     lang = util.testXMLAttribute(
         feed_root, '{http://www.w3.org/XML/1998/namespace}lang')
-    # log.debug("lang %s ", lang)
+    # LOGGER.debug("lang %s ", lang)
     context_base_dict['properties'].update({"lang": lang})
 
     # <id>
     val = feed_root.find(util.nspath_eval('atom:id', ns))
     id = util.testXMLValue(val)
-    # log.debug("id %s :: %s", id, val)
+    # LOGGER.debug("id %s :: %s", id, val)
     context_base_dict.update({"id": id})
 
     # <link rel="profile"
@@ -400,13 +402,13 @@ def decode_atomxml(xml_string):
             "title": title,
             "rel": rel
         }
-        # log.debug("link %s :: %s", link, vals)
+        # LOGGER.debug("link %s :: %s", link, vals)
         if link.get("rel") == "profile" and not is_empty(link):
             links_profile.append(link)
         elif link.get("rel") == "via" and not is_empty(link):
             links_via.append(link)
         else:
-            log.warning("unknown link type in Ows Context section: %r", link)
+            LOGGER.warning("unknown link type in Ows Context section: %r", link)
 
     context_base_dict['properties']['links'].update(
         {"profiles": links_profile})
@@ -415,13 +417,13 @@ def decode_atomxml(xml_string):
     # <title>
     val = feed_root.find(util.nspath_eval('atom:title', ns))
     title = util.testXMLValue(val)
-    # log.debug("title %s :: %s", title, val)
+    # LOGGER.debug("title %s :: %s", title, val)
     context_base_dict['properties'].update({"title": title})
 
     # <subtitle type = "html"
     val = feed_root.find(util.nspath_eval('atom:subtitle', ns))
     subtitle = util.testXMLValue(val)
-    # log.debug("subtitle %s :: %s", subtitle, val)
+    # LOGGER.debug("subtitle %s :: %s", subtitle, val)
     context_base_dict['properties'].update({"abstract": subtitle})
 
     # <author> ..
@@ -441,7 +443,7 @@ def decode_atomxml(xml_string):
             "email": email,
             "uri": uri
         }
-        # log.debug("author %s :: %s", author, vals)
+        # LOGGER.debug("author %s :: %s", author, vals)
         if not is_empty(author):
             authors.append(author)
 
@@ -453,32 +455,32 @@ def decode_atomxml(xml_string):
         if len(list(val)) > 0:
             xmltxt = element_to_string(
                 list(val)[0], False)
-            # log.debug("geometry %s :: %s", xmltxt, val)
+            # LOGGER.debug("geometry %s :: %s", xmltxt, val)
             context_base_dict['properties'].update({"bbox": xmltxt.decode('utf-8')})
 
     # <updated>2012-11-04T17:26:23Z</updated>
     val = feed_root.find(util.nspath_eval('atom:updated', ns))
     update_date = util.testXMLValue(val)
-    # log.debug("updated %s :: %s", update_date, val)
+    # LOGGER.debug("updated %s :: %s", update_date, val)
     context_base_dict['properties'].update({"updated": update_date})
 
     # <dc:date>2009-01-23T09:08:56.000Z/2009-01-23T09:14:08.000Z</dc:date>
     val = feed_root.find(util.nspath_eval('dc:date', ns))
     time_interval_of_interest = util.testXMLValue(val)
-    # log.debug("dc:date %s :: %s", time_interval_of_interest, val)
+    # LOGGER.debug("dc:date %s :: %s", time_interval_of_interest, val)
     context_base_dict['properties'].update(
         {"date": time_interval_of_interest})
 
     # <rights>
     val = feed_root.find(util.nspath_eval('atom:rights', ns))
     rights = util.testXMLValue(val)
-    # log.debug("rights %s :: %s", rights, val)
+    # LOGGER.debug("rights %s :: %s", rights, val)
     context_base_dict['properties'].update({"rights": rights})
 
     # <dc:publisher>
     val = feed_root.find(util.nspath_eval('dc:publisher', ns))
     publisher = util.testXMLValue(val)
-    # log.debug("dc:publisher %s :: %s", publisher, val)
+    # LOGGER.debug("dc:publisher %s :: %s", publisher, val)
     context_base_dict['properties'].update({"publisher": publisher})
 
     # <owc:display>
@@ -498,7 +500,7 @@ def decode_atomxml(xml_string):
         "pixelHeight": pixel_height,
         "mmPerPixel": mm_per_pixel
     }
-    # log.debug("display %s :: %s", owc_display, val_display)
+    # LOGGER.debug("display %s :: %s", owc_display, val_display)
     if not is_empty(owc_display):
         context_base_dict['properties'].update({"display": owc_display})
 
@@ -512,7 +514,7 @@ def decode_atomxml(xml_string):
         "version": version,
         "uri": uri
     }
-    # log.debug("generator %s :: %s", owc_generator, val)
+    # LOGGER.debug("generator %s :: %s", owc_generator, val)
     if not is_empty(owc_generator):
         context_base_dict['properties'].update({"generator": owc_generator})
 
@@ -528,7 +530,7 @@ def decode_atomxml(xml_string):
             "scheme": scheme,
             "label": label
         }
-        # log.debug("category %s :: %s", category, vals)
+        # LOGGER.debug("category %s :: %s", category, vals)
         if not is_empty(category):
             categories.append(category)
 
@@ -543,7 +545,7 @@ def decode_atomxml(xml_string):
         if entry_dict.get("id") is not None:
             resources.append(entry_dict)
         else:
-            log.warning("feature entry has no id, not allowed: skipping!")
+            LOGGER.warning("feature entry has no id, not allowed: skipping!")
 
     context_base_dict.update({"features": resources})
     return context_base_dict
@@ -562,16 +564,16 @@ def encode_atomxml(obj_d):
     #     tree = etree.ElementTree(xml_tree)
     #     return tree
     # except TypeError as te:
-    #     log.warning('problem encoding context to xml', te)
+    #     LOGGER.warning('problem encoding context to xml', te)
     #     raise te
     # except AttributeError as ae:
-    #     log.warning('problem encoding context to xml', ae)
+    #     LOGGER.warning('problem encoding context to xml', ae)
     #     raise ae
     # except ValueError as ve:
-    #     log.warning('problem encoding context to xml', ve)
+    #     LOGGER.warning('problem encoding context to xml', ve)
     #     raise ve
     # except ParseError as pe:
-    #     log.warning('problem encoding context to xml', pe)
+    #     LOGGER.warning('problem encoding context to xml', pe)
     #     raise pe
     xml_tree = axml_context(obj_d)
     tree = etree.ElementTree(xml_tree)
@@ -598,7 +600,7 @@ def axml_context(d):
             georss = etree.SubElement(xml, ns_elem("georss", "where"))
             georss.append(gml)
         except Exception as ex:
-            log.warning('could encode bbox into georss:where', ex)
+            LOGGER.warning('could encode bbox into georss:where', ex)
             pass
 
     context_metadata = [axml_link(do) for do in
@@ -674,7 +676,7 @@ def axml_resource(d):
             georss = etree.SubElement(entry, ns_elem("georss", "where"))
             georss.append(gml)
         except Exception as ex:
-            log.warning('could encode geometry into georss:where', ex)
+            LOGGER.warning('could encode geometry into georss:where', ex)
             pass
 
     title = d['properties']['title']
@@ -776,7 +778,7 @@ def axml_creator_app(d):
                 creator_app.set("version", version)
             return creator_app
         except Exception as ex:
-            log.warning('could encode creator_app', ex)
+            LOGGER.warning('could encode creator_app', ex)
             return None
 
 
@@ -802,7 +804,7 @@ def axml_display(d):
                     "owc", "mmPerPixel")).text = str(mm_per_pixel)
             return creator_display
         except Exception as ex:
-            log.warning('could encode creator_display', ex)
+            LOGGER.warning('could encode creator_display', ex)
             return None
 
 
@@ -833,7 +835,7 @@ def axml_link(d):
                 link.set("length", str(length))
             return link
         except Exception as ex:
-            log.warning('could not encode link', ex)
+            LOGGER.warning('could not encode link', ex)
             return None
 
 
@@ -855,7 +857,7 @@ def axml_category(d):
                 category.set("label", label)
             return category
         except Exception as ex:
-            log.warning('could encode category', ex)
+            LOGGER.warning('could encode category', ex)
             return None
 
 
@@ -879,7 +881,7 @@ def axml_author(d):
                 etree.SubElement(author, "uri").text = uri
             return author
         except Exception as ex:
-            log.warning('could encode author', ex)
+            LOGGER.warning('could encode author', ex)
             return None
 
 
@@ -908,7 +910,7 @@ def axml_offering(d):
             [offering.append(el) for el in styles if el is not None]
             return offering
         except Exception as ex:
-            log.warning('could encode offering', ex)
+            LOGGER.warning('could encode offering', ex)
             return None
 
 
@@ -948,7 +950,7 @@ def axml_operation(d):
                 operation.append(result_enc)
             return operation
         except Exception as ex:
-            log.warning('could encode operation', ex)
+            LOGGER.warning('could encode operation', ex)
             return None
 
 
@@ -988,7 +990,7 @@ def axml_styleset(d):
                 styleset.append(content_enc)
             return styleset
         except Exception as ex:
-            log.warning('could encode styleset', ex)
+            LOGGER.warning('could encode styleset', ex)
             return None
 
 
@@ -1020,5 +1022,5 @@ def axml_content(d):
                 content_elem.text = content
             return content_elem
         except Exception as ex:
-            log.warning('could encode content', ex)
+            LOGGER.warning('could encode content', ex)
             return None

@@ -5,11 +5,15 @@
 #
 # =============================================================================
 
+import logging
+
 from urllib.parse import urlencode
 from owslib.crs import Crs
-from owslib.util import log, Authentication
+from owslib.util import Authentication
 from owslib.feature.schema import get_schema
 from owslib.feature.postrequest import PostRequest_1_1_0, PostRequest_2_0_0
+
+LOGGER = logging.getLogger(__name__)
 
 
 class WebFeatureService_(object):
@@ -137,7 +141,7 @@ class WebFeatureService_(object):
             return self.contents[typename].crsOptions[index]
         except ValueError:
             options = ", ".join([crs.id for crs in self.contents[typename].crsOptions])
-            log.warning(
+            LOGGER.warning(
                 "Requested srsName %r is not declared as being "
                 "allowed for requested typename %r. "
                 "Options are: %r.",
@@ -326,7 +330,7 @@ class WebFeatureService_(object):
 
         if storedQueryID:
             if self.version in ["1.0.0", "1.1.0"]:
-                log.warning("Stored queries are only supported in version 2.0.0 and above.")
+                LOGGER.warning("Stored queries are only supported in version 2.0.0 and above.")
                 return None
 
             storedQueryParams = storedQueryParams or {}

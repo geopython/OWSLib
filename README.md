@@ -127,19 +127,19 @@ Map Tile Service (WMTS). Some of those are beta quality.
 
 Logging
 -------
-OWSLib logs messages to the 'owslib' named Python logger. You may
+OWSLib logs messages to module-based named Python loggers. You may
 configure your application to use the log messages like so:
 
 ```python
     >>> import logging
-    >>> owslib_log = logging.getLogger('owslib')
+    >>> LOGGER = logging.getLogger(__name__)
     >>> # Add formatting and handlers as needed, for example to log to the console
     >>> ch = logging.StreamHandler()
     >>> ch.setLevel(logging.DEBUG)
     >>> ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
     >>> # add the handler to the logger
-    >>> owslib_log.addHandler(ch)
-    >>> owslib_log.setLevel(logging.DEBUG)
+    >>> LOGGER.addHandler(ch)
+    >>> LOGGER.setLevel(logging.DEBUG)
 ```
 
 Releasing

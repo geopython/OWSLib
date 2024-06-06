@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 
 def setup_logging(loglevel='INFO'):
     """Helper function to setup logging for tests"""
-    logger = logging.getLogger('owslib')
+    logger = logging.getLogger(__name__)
     logger.setLevel(getattr(logging, loglevel))
     sh = logging.StreamHandler(sys.stdout)
     formatter = logging.Formatter('%(message)s')

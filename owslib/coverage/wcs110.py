@@ -3,7 +3,7 @@
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2007 STFC <http://www.stfc.ac.uk>
 #
-# Authors :
+# Authors:
 #          Dominic Lowe <d.lowe@rl.ac.uk>
 #
 # Contact email: d.lowe@rl.ac.uk
@@ -11,18 +11,18 @@
 
 # NOTE: Does not conform to new interfaces yet #################
 
-from .wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
-from owslib.util import openURL, testXMLValue
-from urllib.parse import urlencode
-from owslib.etree import etree
-import os
 import errno
+import logging
+import os
+from urllib.parse import urlencode
+
+from .wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
+from owslib.etree import etree
 from owslib.coverage import wcsdecoder
 from owslib.crs import Crs
+from owslib.util import openURL, testXMLValue
 
-import logging
-from owslib.util import log
-
+LOGGER = logging.getLogger(__name__)
 
 class Namespaces_1_1_0():
 
@@ -157,7 +157,7 @@ class WebCoverageService_1_1_0(WCSBase):
         if store = false, returns a multipart mime
         """
         msg = 'WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier={}, bbox={}, time={}, format={}, rangesubset={}, gridbaseCRS={}, gridtype={}, gridCS={}, gridorigin={}, gridoffsets={}, method={}, other_arguments={}'  # noqa
-        log.debug(msg.format(
+        LOGGER.debug(msg.format(
             identifier, bbox, time, format, rangesubset, gridbaseCRS, gridtype, gridCS,
             gridorigin, gridoffsets, method, str(kwargs)))
 

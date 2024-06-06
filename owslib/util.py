@@ -1,13 +1,12 @@
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
-# Copyright (c) 2022 Tom Kralidis
+# Copyright (c) 2024 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-import logging as log
 import os
 import sys
 from collections import OrderedDict

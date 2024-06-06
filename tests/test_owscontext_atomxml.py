@@ -19,8 +19,6 @@ from owslib import util
 from owslib.namespaces import Namespaces
 from owslib.util import nspath_eval
 
-from owslib.util import log
-
 from owslib.owscontext.common import is_empty
 
 # default variables
@@ -82,17 +80,12 @@ def test_load_feeds_bulk():
              atom11, atom12, atom13, atom14, atom15, atom16, atom17]
 
     for f in feeds:
-        # logger.debug(f)
         dict_obj = decode_atomxml(f)
         assert dict_obj is not None
-        # logger.debug("dict title: " + dict_obj.get('properties').get('title'))
         owc = OwcContext.from_dict(dict_obj)
         assert owc is not None
-        # logger.debug("owc title: " + owc.title)
         for res in owc.resources:
-            # logger.debug(res.id)
             assert res.title is not None
-            # logger.debug(OwcContext.from_dict(dict_obj).to_json())
 
         jsdata = owc.to_json()
         assert jsdata is not None
@@ -131,17 +124,12 @@ def test_single_atomxml_coding():
     atom1 = open(resource_file(os.path.join('owc_atom_examples', 'wms_meris.xml')), 'rb').read()
     owc = OwcContext.from_atomxml(atom1)
     assert owc is not None
-    # logger.debug("s owc title: " + owc.title)
     for res in owc.resources:
-        # logger.debug("s res id: " + res.id)
         assert res.title is not None
         assert len(res.offerings) > 0
         for off in res.offerings:
-            # logger.debug("s off code: " + off.offering_code)
             assert off.operations is not None
             assert len(off.operations) > 0
-        # for lnk in res.preview:
-        #     logger.debug(lnk.to_dict())
 
     jsdata = owc.to_json()
     assert jsdata is not None
@@ -149,14 +137,9 @@ def test_single_atomxml_coding():
     re_owc = OwcContext.from_json(jsdata)
     assert re_owc is not None
     for res in re_owc.resources:
-        # logger.debug("s res id: " + res.id)
         assert res.title is not None
         assert len(res.offerings) > 0
         for off in res.offerings:
-            # logger.debug("s off code: " + off.offering_code)
             assert off.operations is not None
             assert len(off.operations) > 0
-        # for lnk in res.preview:
-        #     logger.debug(lnk.to_dict())
     assert owc.to_dict() == re_owc.to_dict()
-    # logger.debug(owc.to_json())
