@@ -8,9 +8,6 @@
 
 import json
 from datetime import datetime
-from time import sleep
-
-import pytest
 
 from owslib.ogcapi.connectedsystems import Systems, Deployments, Datastreams, Observations, ControlChannels, Commands, \
     SystemEvents, SystemHistory, SamplingFeatures, Properties
@@ -183,26 +180,6 @@ class OSHFixtures:
 class TestSystems:
     fixtures = OSHFixtures()
 
-    @pytest.mark.skip("Not working on server implementation")
-    def test_system_collections(self):
-        assert False
-
-    @pytest.mark.skip("Not working on server implementation")
-    def test_collection_queryables(self):
-        assert False
-
-    @pytest.mark.skip("Not working on server implementation")
-    def test_collection_items(self):
-        assert False
-
-    @pytest.mark.skip("Not working on server implementation")
-    def test_collection_item(self):
-        assert False
-
-    @pytest.mark.skip("Not working on server implementation")
-    def test_collection_item_create(self):
-        assert False
-
     def test_system_functions(self):
         # insertion of systems
         self.fixtures.systems_api.headers = self.fixtures.sml_headers
@@ -229,38 +206,8 @@ class TestSystems:
             assert res == {}
 
 
-@pytest.mark.skip("Not implemented by server")
-class TestProcedures:
-    fixtures = OSHFixtures()
-
-    def test_procedures(self):
-        assert False
-
-    def test_procedure(self):
-        assert False
-
-    def test_procedure_create(self):
-        assert False
-
-    def test_procedure_update(self):
-        assert False
-
-    def test_procedure_delete(self):
-        assert False
-
-
 class TestDeployments:
     fixtures = OSHFixtures()
-
-    @pytest.mark.skip("Covered by test_deployment_create")
-    def test_deployments(self):
-        res = self.fixtures.deployment_api.deployments()
-        assert self.fixtures.deployment_expected_id in [x['id'] for x in res['items']]
-
-    @pytest.mark.skip("Covered by test_deployment_create")
-    def test_deployment(self):
-        res = self.fixtures.deployment_api.deployment(self.fixtures.deployment_expected_id)
-        assert res['properties']['name'] == 'Test Deployment 001' and res['id'] == self.fixtures.deployment_expected_id
 
     def test_deployment_create(self):
         res1 = self.fixtures.deployment_api.deployment_create(json.dumps(self.fixtures.deployment_definition))
@@ -280,36 +227,6 @@ class TestDeployments:
     def test_deployment_delete(self):
         res = self.fixtures.deployment_api.deployment_delete(self.fixtures.deployment_expected_id)
         assert res is not None
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_list_deployed_systems(self):
-        res = self.fixtures.deployment_api.deployment_list_deployed_systems(self.fixtures.deployment_expected_id)
-        assert False
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_add_systems_to_deployment(self):
-        system_data = {
-            "href": "http://localhost:8585/sensorhub/api/systems/blid74chqmses"
-        }
-        res = self.fixtures.deployment_api.deployment_add_systems_to_deployment(self.fixtures.deployment_expected_id,
-                                                                                json.dumps(system_data), True)
-        assert res is not None
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_retrieve_system_from_deployment(self):
-        assert False
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_update_system_in_deployment(self):
-        assert False
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_delete_system_in_deployment(self):
-        assert False
-
-    @pytest.mark.skip("Not implemented by server")
-    def test_deployment_list_deployments_of_system(self):
-        assert False
 
 
 class TestSamplingFeatures:
@@ -346,26 +263,6 @@ class TestSamplingFeatures:
         res = self.fixtures.sampling_feature_api.sampling_feature_delete(sampling_feature_id, use_fois=True)
         res = self.fixtures.sampling_feature_api.sampling_features(use_fois=True)
         assert res == {'items': []}
-
-
-@pytest.mark.skip("Not implemented by server, to be updated when server is updated")
-class TestProperties:
-    fixtures = OSHFixtures()
-
-    def test_properties(self):
-        assert False
-
-    def test_property(self):
-        assert False
-
-    def test_property_create(self):
-        assert False
-
-    def test_property_update(self):
-        assert False
-
-    def test_property_delete(self):
-        assert False
 
 
 class TestDatastreams:
@@ -430,109 +327,6 @@ class TestObservations:
         assert obs['items'] == []
         delete_all_systems()
 
-    @pytest.mark.xfail(reason="Server appears to have an error not expected according to api spec")
-    def test_observations_update(self):
-        self.fixtures.ds_id = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)['items'][0][
-            'id']
-        assert self.fixtures.ds_id is not None
-        observation = {
-            "datastream@id": self.fixtures.ds_id,
-            "result": {
-                "testboolean": False
-            }
-        }
-        self.fixtures.observations_api.headers = {'Content-Type': 'application/om+json'}
-        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
-        res = self.fixtures.observations_api.observations_update(obs['id'], json.dumps(observation))
-        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
-        assert obs['result']['testboolean'] is False
-
-
-@pytest.mark.skip("Requires a subscription to the OSH server that is not possible for the current test environment")
-class TestControlChannels:
-    def test_controls(self):
-        assert False
-
-    def test_control(self):
-        assert False
-
-    def test_controls_of_system(self):
-        assert False
-
-    def test_control_create_in_system(self):
-        assert False
-
-    def test_control_update(self):
-        assert False
-
-    def test_control_delete(self):
-        assert False
-
-    def test_control_retrieve_schema(self):
-        assert False
-
-    def test_control_update_schema(self):
-        assert False
-
-
-@pytest.mark.skip(
-    "Requires a subscription to a Control Stream that is beyond the current scope of the api implementation of the server")
-class TestCommands:
-    def test_commands(self):
-        assert False
-
-    def test_command(self):
-        assert False
-
-    def test_commands_of_control_channel(self):
-        assert False
-
-    def test_commands_send_command_in_control_stream(self):
-        assert False
-
-    def test_commands_delete_command(self):
-        assert False
-
-    def test_commands_add_status_report(self):
-        assert False
-
-    def test_commands_retrieve_status_report(self):
-        assert False
-
-    def test_commands_update_status_report(self):
-        assert False
-
-    def test_commands_delete_status_report(self):
-        assert False
-
-
-@pytest.mark.skip("Requires stream on OSH server")
-class TestSystemEvents:
-    fixtures = OSHFixtures()
-    system_event_def = {
-        "resultTime": "2021-03-15T04:53:34Z",
-        "result": 23.5
-    }
-
-    def test_system_events(self):
-        res = self.fixtures.system_events_api.system_events()
-        assert False
-
-    def test_system_events_of_specific_system(self):
-        assert False
-
-    def test_system_event_add_se_to_system(self):
-        assert False
-
-    def test_system_event(self):
-        assert False
-
-    def test_system_event_update(self):
-        assert False
-
-    def test_system_event_delete(self):
-        assert False
-
 
 class TestSystemHistory:
     fixtures = OSHFixtures()
@@ -545,65 +339,6 @@ class TestSystemHistory:
         res = self.fixtures.system_history_api.system_history_by_id(system_id=sys_id, history_id=history_id)
         assert res['id'] == sys_id
         delete_all_systems()
-
-    @pytest.mark.xfail(
-        reason="OSH only allows history events to in response to updates made directly to the system description")
-    def test_system_history_update_description(self):
-        updated_def = {
-            "type": "Feature",
-            "id": "0s2lbn2n1bnc8",
-            "properties": {
-                "uid": "urn:osh:sensor:simweathernetwork:001",
-                "featureType": "http://www.w3.org/ns/sosa/Sensor",
-                "name": "Simulated Weather Station Network",
-                "description": "Updated description to include more data!!!",
-            },
-            "links": [
-                {
-                    "rel": "canonical",
-                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8",
-                    "type": "application/json"
-                },
-                {
-                    "rel": "alternate",
-                    "title": "Detailed description of system in SensorML format",
-                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8",
-                    "type": "application/sml+json"
-                },
-                {
-                    "rel": "members",
-                    "title": "List of subsystems",
-                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8/members",
-                    "type": "application/json"
-                },
-                {
-                    "rel": "datastreams",
-                    "title": "List of system datastreams",
-                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8/datastreams",
-                    "type": "application/json"
-                },
-                {
-                    "rel": "controls",
-                    "title": "List of system control channels",
-                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8/controls",
-                    "type": "application/json"
-                },
-                {
-                    "rel": "samplingFeatures",
-                    "title": "List of system features of interest",
-                    "href": "http://localhost:8585/sensorhub/api/systems/0s2lbn2n1bnc8/featuresOfInterest",
-                    "type": "application/json"
-                }
-            ]
-        }
-        res = self.fixtures.system_history_api.system_history_update_description('0s2lbn2n1bnc8',
-                                                                                 '2024-04-29T02:30:07.961Z',
-                                                                                 json.dumps(updated_def))
-        assert res is not None
-
-    @pytest.mark.skip(reason="Will break test server")
-    def test_system_history_delete(self):
-        assert False
 
 
 def create_single_system():
