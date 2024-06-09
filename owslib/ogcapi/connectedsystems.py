@@ -26,25 +26,6 @@ class ConnectedSystems(Collections):
         res = super()._request(method, path, data, as_dict, kwargs)
         return res
 
-    def _default_create_resp_handler(self, response: requests.Response) -> dict:
-        res_id = response.headers.get('Location', None)
-
-        return {'code': response.status_code, 'id': res_id}
-
-    def _default_delete_resp_handler(self, response: requests.Response) -> dict:
-        if response.ok:
-            result = 'Success'
-        else:
-            result = 'Failed'
-        return {'code': response.status_code, 'result': result}
-
-    def _default_update_resp_handler(self, response: requests.Response) -> dict:
-        if response.ok:
-            result = 'Success'
-        else:
-            result = 'Failed'
-        return {'code': response.status_code, 'result': result}
-
 
 class Systems(ConnectedSystems):
     """Abstraction for OGC API - Connected Systems - Systems"""
