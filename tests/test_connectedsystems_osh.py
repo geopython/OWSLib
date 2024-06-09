@@ -213,26 +213,19 @@ class TestSystems:
         sml_desc_copy = self.fixtures.sys_sml_to_update.copy()
         sml_desc_copy['description'] = 'Updated Description'
         sml_str = json.dumps(sml_desc_copy)
-        print(sml_str)
         post_systems = self.fixtures.systems_api.system_update('blid74chqmses', sml_str)
-        print(post_systems)
 
         check_result = self.fixtures.systems_api.system('blid74chqmses')
-        print(check_result)
         assert check_result['properties']['description'] == 'Updated Description'
 
         # deletion of system
         all_systems = self.fixtures.systems_api.systems()
-        print(all_systems)
 
         # clear datastreams
         delete_all_datastreams()
 
         for system in all_systems['items']:
-            print(f'System: {system}')
             res = self.fixtures.systems_api.system_delete(system['id'])
-            print(f'res: {res}')
-            print(f'Code: {self.fixtures.systems_api}')
             assert res == {}
 
 
@@ -262,7 +255,6 @@ class TestDeployments:
     @pytest.mark.skip("Covered by test_deployment_create")
     def test_deployments(self):
         res = self.fixtures.deployment_api.deployments()
-        print(res)
         assert self.fixtures.deployment_expected_id in [x['id'] for x in res['items']]
 
     @pytest.mark.skip("Covered by test_deployment_create")
@@ -292,7 +284,6 @@ class TestDeployments:
     @pytest.mark.skip("Not implemented by server")
     def test_deployment_list_deployed_systems(self):
         res = self.fixtures.deployment_api.deployment_list_deployed_systems(self.fixtures.deployment_expected_id)
-        print(res)
         assert False
 
     @pytest.mark.skip("Not implemented by server")
@@ -302,7 +293,6 @@ class TestDeployments:
         }
         res = self.fixtures.deployment_api.deployment_add_systems_to_deployment(self.fixtures.deployment_expected_id,
                                                                                 json.dumps(system_data), True)
-        print(res)
         assert res is not None
 
     @pytest.mark.skip("Not implemented by server")
@@ -358,7 +348,7 @@ class TestSamplingFeatures:
         assert res == {'items': []}
 
 
-@pytest.mark.skip("Not implemented by server")
+@pytest.mark.skip("Not implemented by server, to be updated when server is updated")
 class TestProperties:
     fixtures = OSHFixtures()
 
@@ -387,20 +377,16 @@ class TestDatastreams:
         # setup systems needed
         self.fixtures.systems_api.headers = self.fixtures.sml_headers
         systems = self.fixtures.systems_api.system_create(json.dumps(self.fixtures.system_definitions))
-        print(systems)
 
         # insert a datastream
         ds_def_str = json.dumps(self.fixtures.ds_definition)
         datastream_create = self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
                                                                                      ds_def_str)
-        print(datastream_create)
 
         # get the datastream id from Location header
         ds_id = self.fixtures.datastream_api.response_headers['Location'].split('/')[-1]
-        print(f'DS ID: {ds_id}')
         ds = self.fixtures.datastream_api.datastream(ds_id)
         ds2 = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)
-        print(ds)
         assert ds['id'] == ds_id
         assert any(x['id'] == ds_id for x in ds2['items'])
 
@@ -409,7 +395,6 @@ class TestDatastreams:
 
         # retrieve the schema for the datastream
         res = self.fixtures.datastream_api.datastream_retrieve_schema_for_format(ds_id)
-        print(f'Res: {res}')
         assert res is not None and len(res) > 0
 
         # delete the datastream
@@ -427,15 +412,6 @@ class TestObservations:
         delete_all_systems()
         system = create_single_system()
         ds = create_single_datastream(system)
-        print(f'ds_id: {ds}')
-
-        # self.fixtures.systems_api.headers = self.fixtures.sml_headers
-        # self.fixtures.systems_api.system_create(json.dumps(self.fixtures.sys_sml_def))
-        # self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
-        #                                                          json.dumps(self.fixtures.ds_definition))
-        # self.fixtures.ds_id = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)['items'][0][
-        #     'id']
-        # print(f'ds_id: {self.fixtures.ds_id}')
 
         observation = {
             "phenomenonTime": self.the_time,
@@ -449,8 +425,6 @@ class TestObservations:
         res = self.fixtures.observations_api.observations_create_in_datastream(ds, json.dumps(observation))
         sleep(0.5)
         obs = self.fixtures.observations_api.observations_of_datastream(ds)
-        print(f'The Time: {self.the_time}')
-        print(f'Obs: {obs}')
         assert obs['items'][0]['phenomenonTime'] == self.the_time
 
     @pytest.mark.skip("Covered by test_observations")
@@ -478,10 +452,8 @@ class TestObservations:
         }
         self.fixtures.observations_api.headers = {'Content-Type': 'application/om+json'}
         obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
-        print(f'Original Obs: {obs}')
         res = self.fixtures.observations_api.observations_update(obs['id'], json.dumps(observation))
         obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
-        print(f'Updated Obs: {obs}')
         assert obs['result']['testboolean'] is False
 
     def test_observations_delete(self):
@@ -489,14 +461,12 @@ class TestObservations:
             'id']
         assert self.fixtures.ds_id is not None
         obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
-        print(f'Original Obs: {obs}')
         res = self.fixtures.observations_api.observations_delete(obs['id'])
         obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)
-        print(f'Updated Obs: {obs}')
         assert obs['items'] == []
 
 
-@pytest.mark.skip("Requires a subscription to the OSH server")
+@pytest.mark.skip("Requires a subscription to the OSH server that is not possible for the current test environment")
 class TestControlChannels:
     def test_controls(self):
         assert False
@@ -523,7 +493,7 @@ class TestControlChannels:
         assert False
 
 
-@pytest.mark.skip("Requires a subscription to a Control Stream that is beyond the current scope of the api")
+@pytest.mark.skip("Requires a subscription to a Control Stream that is beyond the current scope of the api implementation of the server")
 class TestCommands:
     def test_commands(self):
         assert False
@@ -562,9 +532,7 @@ class TestSystemEvents:
     }
 
     def test_system_events(self):
-        print(self.fixtures)
         res = self.fixtures.system_events_api.system_events()
-        print(res)
         assert False
 
     def test_system_events_of_specific_system(self):
@@ -590,11 +558,8 @@ class TestSystemHistory:
         sys_id = create_single_system()
         res = self.fixtures.system_history_api.system_history(sys_id)
         assert len(res['items']) > 0
-        print(res)
         history_id = res['items'][0]['properties']['validTime'][0]
-        print(f'History ID: {history_id}')
         res = self.fixtures.system_history_api.system_history_by_id(system_id=sys_id, history_id=history_id)
-        print(res)
         assert res['id'] == sys_id
 
     @pytest.mark.xfail(
@@ -650,7 +615,6 @@ class TestSystemHistory:
         res = self.fixtures.system_history_api.system_history_update_description('0s2lbn2n1bnc8',
                                                                                  '2024-04-29T02:30:07.961Z',
                                                                                  json.dumps(updated_def))
-        print(res)
         assert res is not None
 
     @pytest.mark.skip(reason="Will break test server")
@@ -662,7 +626,6 @@ def create_single_system():
     OSHFixtures.systems_api.headers = OSHFixtures.sml_headers
     sys_create_res = OSHFixtures.systems_api.system_create(json.dumps(OSHFixtures.system_definitions[0]))
     sys_id = OSHFixtures.systems_api.response_headers['Location'].split('/')[-1]
-    print(sys_id)
     return sys_id
 
 
