@@ -478,21 +478,21 @@ class SamplingFeatures(ConnectedSystems):
         __doc__ = API.__doc__
         super().__init__(url, json_, timeout, headers, auth)
 
-    def sampling_features(self, **kwargs) -> dict:
+    def sampling_features(self, use_fois=False, **kwargs) -> dict:
         """
         implements /samplingFeatures
         @returns: `dict` of sampling features object
         """
 
         path = 'samplingFeatures'
-        if self.alternate_sampling_feature_url:
-            path = self.alternate_sampling_feature_url
+        if use_fois:
+            path = 'fois'
         query_params = QueryArgs(**kwargs)
         p_list = ['id', 'bbox', 'datetime', 'geom', 'q', 'foi', 'observedProperty',
                   'controlledProperty', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def sampling_feature(self, sampling_feature_id: str, **kwargs) -> dict:
+    def sampling_feature(self, sampling_feature_id: str, use_fois=False, **kwargs) -> dict:
         """
         implements /samplingFeatures/{samplingFeatureId}
         @type sampling_feature_id: string
@@ -501,8 +501,8 @@ class SamplingFeatures(ConnectedSystems):
         """
 
         path = f'samplingFeatures/{sampling_feature_id}'
-        if self.alternate_sampling_feature_url:
-            path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
+        if use_fois:
+            path = f'fois/{sampling_feature_id}'
         query_params = QueryArgs(**kwargs)
         p_list = ['geometry', 'type', 'id', 'properties', 'bbox', 'links']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
@@ -544,7 +544,7 @@ class SamplingFeatures(ConnectedSystems):
 
         return self._request(path=path, data=data, method='POST')
 
-    def sampling_feature_update(self, sampling_feature_id: str, data: str) -> dict:
+    def sampling_feature_update(self, sampling_feature_id: str, data: str, use_fois=False) -> dict:
         """
         implements /samplingFeatures/{samplingFeatureId}
         @type sampling_feature_id: string
@@ -555,21 +555,22 @@ class SamplingFeatures(ConnectedSystems):
         """
 
         path = f'samplingFeatures/{sampling_feature_id}'
-        if self.alternate_sampling_feature_url:
-            path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
+        if use_fois:
+            path = f'fois/{sampling_feature_id}'
         return self._request(path=path, data=data, method='PUT')
 
-    def sampling_feature_delete(self, sampling_feature_id: str) -> dict:
+    def sampling_feature_delete(self, sampling_feature_id: str, use_fois=False) -> dict:
         """
         implements /samplingFeatures/{samplingFeatureId}
         @type sampling_feature_id: string
         @param sampling_feature_id: id of sampling feature
         @returns: `dict` of sampling feature metadata
+        @param use_fois:
         """
 
         path = f'samplingFeatures/{sampling_feature_id}'
-        if self.alternate_sampling_feature_url:
-            path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
+        if use_fois:
+            path = f'fois/{sampling_feature_id}'
         return self._request(path=path, method='DELETE')
 
 

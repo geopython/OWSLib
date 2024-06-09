@@ -325,45 +325,37 @@ class TestDeployments:
 class TestSamplingFeatures:
     fixtures = OSHFixtures()
 
-    def test_sampling_features(self):
-        res = self.fixtures.sampling_feature_api.sampling_features()
-        assert len(res['items']) > 0
+    def test_sampling_features_all(self):
+        # setup
+        delete_all_systems()
+        system_id = create_single_system()
 
-    def test_sampling_feature(self):
-        res = self.fixtures.sampling_feature_api.sampling_feature('c4nce3peo8hvc')
-        assert res['properties']['name'] == 'Station WS013'
-
-    def test_sampling_feature_from_system(self):
-        res = self.fixtures.sampling_feature_api.sampling_features_from_system(self.fixtures.weatherstation_id,
-                                                                               use_fois=True)
-        print(len(res['items']))
-        assert len(res['items']) == 50
-
-    def test_sampling_feature_create(self):
-        self.fixtures.systems_api.headers = self.fixtures.sml_headers
-        system_res = self.fixtures.systems_api.system_create(json.dumps(self.fixtures.sys_sml_def))
-        new_sys_id = self.fixtures.systems_api.systems(uid=self.fixtures.sys_sml_def["uniqueId"])['items'][0]['id']
-        print(f'System ID: {new_sys_id}')
-
+        # create a sampling feature
         self.fixtures.sampling_feature_api.headers = self.fixtures.geojson_headers
-        print(f'API Headers: {self.fixtures.sampling_feature_api.headers}')
-        res = self.fixtures.sampling_feature_api.sampling_feature_create(new_sys_id,
+        res = self.fixtures.sampling_feature_api.sampling_feature_create(system_id,
                                                                          json.dumps(self.fixtures.feature_def), True)
-        assert len(
-            self.fixtures.sampling_feature_api.sampling_features_from_system(new_sys_id, use_fois=True)['items']) > 0
+        assert self.fixtures.sampling_feature_api.response_headers['Location'] is not None
+        sampling_feature_id = self.fixtures.sampling_feature_api.response_headers['Location'].split('/')[-1]
 
-    def test_sampling_feature_update(self):
-        self.fixtures.sampling_feature_api.headers = self.fixtures.geojson_headers
-        self.fixtures.feature_def['properties']['name'] = 'Updated Name'
-        self.fixtures.sampling_feature_api.sampling_feature_update('t69fod8tfa47u',
-                                                                   json.dumps(self.fixtures.feature_def))
-        assert self.fixtures.sampling_feature_api.sampling_feature('t69fod8tfa47u')['properties'][
-                   'name'] == 'Updated Name'
+        # get all sampling features
+        res = self.fixtures.sampling_feature_api.sampling_features(use_fois=True)
+        assert len(res['items']) > 0
+        assert any(x['id'] == sampling_feature_id for x in res['items'])
 
-    def test_sampling_feature_delete(self):
-        res = self.fixtures.sampling_feature_api.sampling_feature_delete('t69fod8tfa47u')
-        print(res)
-        assert res['code'] == 204
+        # get the sampling feature we created
+        res = self.fixtures.sampling_feature_api.sampling_feature(sampling_feature_id, use_fois=True)
+        assert res['properties']['name'] == 'Test Station 001'
+        assert res['properties']['featureType'] == 'http://www.w3.org/ns/sosa/Station'
+
+        # get sampling features from a system
+        res = self.fixtures.sampling_feature_api.sampling_features_from_system(system_id, use_fois=True)
+        assert len(res['items']) > 0
+        assert any(x['id'] == sampling_feature_id for x in res['items'])
+
+        # delete the sampling feature
+        res = self.fixtures.sampling_feature_api.sampling_feature_delete(sampling_feature_id, use_fois=True)
+        res = self.fixtures.sampling_feature_api.sampling_features(use_fois=True)
+        assert res == {'items': []}
 
 
 @pytest.mark.skip("Not implemented by server")
@@ -683,6 +675,7 @@ def create_single_datastream(system_id: str):
 def delete_all_systems():
     # delete datastreams first
     delete_all_datastreams()
+    delete_all_sampling_features()
     systems = OSHFixtures.systems_api.systems()
     for system in systems['items']:
         OSHFixtures.systems_api.system_delete(system['id'])
@@ -692,3 +685,9 @@ def delete_all_datastreams():
     datastreams = OSHFixtures.datastream_api.datastreams()
     for ds in datastreams['items']:
         OSHFixtures.datastream_api.datastream_delete(ds['id'])
+
+
+def delete_all_sampling_features():
+    sampling_features = OSHFixtures.sampling_feature_api.sampling_features(use_fois=True)
+    for sf in sampling_features['items']:
+        OSHFixtures.sampling_feature_api.sampling_feature_delete(sf['id'], use_fois=True)
