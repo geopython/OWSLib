@@ -6,12 +6,11 @@
 #  Contact email: ian@botts-inc.com
 # ==============================================================================
 import logging
-from typing import Callable
 
 import requests
 
 from owslib.ogcapi import Collections, API
-from owslib.util import (Authentication, http_get, http_post, http_put, http_delete)
+from owslib.util import (Authentication)
 
 LOGGER = logging.getLogger(__name__)
 
