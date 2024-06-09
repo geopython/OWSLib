@@ -273,17 +273,18 @@ class TestDatastreams:
         delete_all_systems()
         # setup systems needed
         self.fixtures.systems_api.headers = self.fixtures.sml_headers
-        systems = self.fixtures.systems_api.system_create(json.dumps(self.fixtures.system_definitions))
+        # systems = self.fixtures.systems_api.system_create(json.dumps(self.fixtures.system_definitions))
+        system = create_single_system()
 
         # insert a datastream
         ds_def_str = json.dumps(self.fixtures.ds_definition)
-        datastream_create = self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
-                                                                                     ds_def_str)
+        ds_api = Datastreams(self.fixtures.TEST_URL, auth=self.fixtures.auth, headers=self.fixtures.json_headers)
+        datastream_create = ds_api.datastream_create_in_system(system, ds_def_str)
 
         # get the datastream id from Location header
-        ds_id = self.fixtures.datastream_api.response_headers['Location'].split('/')[-1]
-        ds = self.fixtures.datastream_api.datastream(ds_id)
-        ds2 = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)
+        ds_id = ds_api.response_headers['Location'].split('/')[-1]
+        ds = ds_api.datastream(ds_id)
+        ds2 = ds_api.datastreams_of_system(system)
         assert ds['id'] == ds_id
         assert any(x['id'] == ds_id for x in ds2['items'])
 
@@ -291,11 +292,11 @@ class TestDatastreams:
         # update schema has a similar server side issue
 
         # retrieve the schema for the datastream
-        res = self.fixtures.datastream_api.datastream_retrieve_schema_for_format(ds_id)
+        res = ds_api.datastream_retrieve_schema_for_format(ds_id)
         assert res is not None and len(res) > 0
 
         # delete the datastream
-        ds_delete = self.fixtures.datastream_api.datastream_delete(ds_id)
+        ds_delete = ds_api.datastream_delete(ds_id)
         assert ds_delete == {}
 
 
@@ -342,23 +343,25 @@ class TestSystemHistory:
 
 
 def create_single_system():
-    OSHFixtures.systems_api.headers = OSHFixtures.sml_headers
-    sys_create_res = OSHFixtures.systems_api.system_create(json.dumps(OSHFixtures.system_definitions[0]))
-    sys_id = OSHFixtures.systems_api.response_headers['Location'].split('/')[-1]
+    sys_api = Systems(OSHFixtures.TEST_URL, auth=OSHFixtures.auth, headers=OSHFixtures.sml_headers)
+    sys_create_res = sys_api.system_create(json.dumps(OSHFixtures.system_definitions[0]))
+    sys_id = sys_api.response_headers['Location'].split('/')[-1]
     return sys_id
 
 
 def create_single_datastream(system_id: str):
-    result = OSHFixtures.datastream_api.datastream_create_in_system(system_id, json.dumps(OSHFixtures.ds_definition))
-    id = OSHFixtures.datastream_api.response_headers['Location'].split('/')[-1]
-    return id
+    ds_api = Datastreams(OSHFixtures.TEST_URL, auth=OSHFixtures.auth, headers=OSHFixtures.json_headers)
+    result = ds_api.datastream_create_in_system(system_id, json.dumps(OSHFixtures.ds_definition))
+    ds_id = ds_api.response_headers['Location'].split('/')[-1]
+    return ds_id
 
 
 def delete_all_systems():
     # delete datastreams first
     delete_all_datastreams()
     delete_all_sampling_features()
-    systems = OSHFixtures.systems_api.systems()
+    sys_api = Systems(OSHFixtures.TEST_URL, auth=OSHFixtures.auth, headers=OSHFixtures.sml_headers)
+    systems = sys_api.systems()
     for system in systems['items']:
         OSHFixtures.systems_api.system_delete(system['id'])
 
