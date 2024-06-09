@@ -404,18 +404,17 @@ class TestDatastreams:
 
 class TestObservations:
     fixtures = OSHFixtures()
-    system_id = 'blid74chqmses'
-    the_time = datetime.utcnow().isoformat() + 'Z'
 
     def test_observations(self):
         # setup
         delete_all_systems()
         system = create_single_system()
         ds = create_single_datastream(system)
+        the_time = datetime.utcnow().isoformat() + 'Z'
 
         observation = {
-            "phenomenonTime": self.the_time,
-            "resultTime": self.the_time,
+            "phenomenonTime": the_time,
+            "resultTime": the_time,
             "result": {
                 "timestamp": datetime.now().timestamp() * 1000,
                 "testboolean": True
@@ -423,21 +422,13 @@ class TestObservations:
         }
         self.fixtures.observations_api.headers = {'Content-Type': 'application/om+json'}
         res = self.fixtures.observations_api.observations_create_in_datastream(ds, json.dumps(observation))
-        sleep(0.5)
         obs = self.fixtures.observations_api.observations_of_datastream(ds)
-        assert obs['items'][0]['phenomenonTime'] == self.the_time
-
-    @pytest.mark.skip("Covered by test_observations")
-    def test_observation(self):
-        assert False
-
-    @pytest.mark.skip("Covered by test_observations")
-    def test_observations_of_datastream(self):
-        assert False
-
-    @pytest.mark.skip("Covered by test_observations")
-    def test_observations_create_in_datastream(self):
-        assert False
+        assert obs['items'][0]['phenomenonTime'] == the_time
+        obs_id = obs['items'][0]['id']
+        res = self.fixtures.observations_api.observations_delete(obs_id)
+        obs = self.fixtures.observations_api.observations_of_datastream(ds)
+        assert obs['items'] == []
+        delete_all_systems()
 
     @pytest.mark.xfail(reason="Server appears to have an error not expected according to api spec")
     def test_observations_update(self):
@@ -455,15 +446,6 @@ class TestObservations:
         res = self.fixtures.observations_api.observations_update(obs['id'], json.dumps(observation))
         obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
         assert obs['result']['testboolean'] is False
-
-    def test_observations_delete(self):
-        self.fixtures.ds_id = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)['items'][0][
-            'id']
-        assert self.fixtures.ds_id is not None
-        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)['items'][0]
-        res = self.fixtures.observations_api.observations_delete(obs['id'])
-        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)
-        assert obs['items'] == []
 
 
 @pytest.mark.skip("Requires a subscription to the OSH server that is not possible for the current test environment")
@@ -493,7 +475,8 @@ class TestControlChannels:
         assert False
 
 
-@pytest.mark.skip("Requires a subscription to a Control Stream that is beyond the current scope of the api implementation of the server")
+@pytest.mark.skip(
+    "Requires a subscription to a Control Stream that is beyond the current scope of the api implementation of the server")
 class TestCommands:
     def test_commands(self):
         assert False
@@ -561,6 +544,7 @@ class TestSystemHistory:
         history_id = res['items'][0]['properties']['validTime'][0]
         res = self.fixtures.system_history_api.system_history_by_id(system_id=sys_id, history_id=history_id)
         assert res['id'] == sys_id
+        delete_all_systems()
 
     @pytest.mark.xfail(
         reason="OSH only allows history events to in response to updates made directly to the system description")
