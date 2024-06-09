@@ -232,7 +232,8 @@ class TestSystems:
             print(f'System: {system}')
             res = self.fixtures.systems_api.system_delete(system['id'])
             print(f'res: {res}')
-            assert res['code'] == 204
+            print(f'Code: {self.fixtures.systems_api}')
+            assert res == {}
 
 
 @pytest.mark.skip("Not implemented by server")
@@ -388,61 +389,40 @@ class TestProperties:
 class TestDatastreams:
     fixtures = OSHFixtures()
 
-    def test_datastreams(self):
-        res = self.fixtures.datastream_api.datastreams()
-        assert res is not None
+    def test_all_ds_functions(self):
+        # preflight cleanup
+        delete_all_systems()
+        # setup systems needed
+        self.fixtures.systems_api.headers = self.fixtures.sml_headers
+        systems = self.fixtures.systems_api.system_create(json.dumps(self.fixtures.system_definitions))
+        print(systems)
 
-    def test_datastream_creation_and_retrieval(self):
-        # insert a datastream first
-        self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
-                                                                 json.dumps(self.fixtures.ds_definition))
-        ds_created = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)
-        assert ds_created['items'] is not None
-        assert ds_created['items'][0]['name'] == 'Test Datastream'
-        datastream_id = ds_created['items'][0]['id']
-        self.fixtures.update_dsid(datastream_id)
+        # insert a datastream
+        ds_def_str = json.dumps(self.fixtures.ds_definition)
+        datastream_create = self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
+                                                                                     ds_def_str)
+        print(datastream_create)
 
-        res = self.fixtures.datastream_api.datastream(datastream_id)
-        assert res['name'] == 'Test Datastream'
+        # get the datastream id from Location header
+        ds_id = self.fixtures.datastream_api.response_headers['Location'].split('/')[-1]
+        print(f'DS ID: {ds_id}')
+        ds = self.fixtures.datastream_api.datastream(ds_id)
+        ds2 = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)
+        print(ds)
+        assert ds['id'] == ds_id
+        assert any(x['id'] == ds_id for x in ds2['items'])
 
-    @pytest.mark.skip("Covered by test_datastream_creation_and_retrieval")
-    def test_datastreams_of_system(self):
-        res = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)
-        assert res is not None
+        # update the datastream omitted due to server error
+        # update schema has a similar server side issue
 
-    @pytest.mark.skip("Covered by test_datastream_creation_and_retrieval")
-    def test_datastream_create_in_system(self):
-        res = self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
-                                                                       json.dumps(self.fixtures.ds_definition))
-        assert res is not None
-
-    @pytest.mark.xfail(reason="Server generates and error despite format of updated description being correct")
-    def test_datastream_update_description(self):
-        self.fixtures.ds_definition['description'] = 'Updated Description of Datastream'
-        res = self.fixtures.datastream_api.datastream_update_description(self.fixtures.datastream_id,
-                                                                         json.dumps(self.fixtures.ds_definition))
-        res2 = self.fixtures.datastream_api.datastream(self.datastream_id)
-        assert res2['description'] == 'Updated Description of Datastream'
-
-    def test_datastream_retrieve_schema_for_format(self):
-        res = self.fixtures.datastream_api.datastream_retrieve_schema_for_format(self.fixtures.datastream_id)
+        # retrieve the schema for the datastream
+        res = self.fixtures.datastream_api.datastream_retrieve_schema_for_format(ds_id)
         print(f'Res: {res}')
         assert res is not None and len(res) > 0
 
-    # Error due to server wanting PUT on main resource url, not ds/id/schema?
-    @pytest.mark.xfail(
-        reason="OSH doesn't separate schema from description so update fails with reference to update on main resource")
-    def test_datastream_update_schema_for_format(self):
-        res = self.fixtures.datastream_api.datastream_update_schema_for_format(self.fixtures.datastream_id,
-                                                                               json.dumps(self.fixtures.ds_definition))
-        print(f'Res: {res}')
-        assert res is not None
-
-    def test_datastream_delete(self):
-        print(f'ds_id: {self.fixtures.datastream_id}')
-        res = self.fixtures.datastream_api.datastream_delete(self.fixtures.datastream_id)
-        print(res)
-        assert res['code'] == 204
+        # delete the datastream
+        ds_delete = self.fixtures.datastream_api.datastream_delete(ds_id)
+        assert ds_delete == {}
 
 
 class TestObservations:
@@ -451,13 +431,19 @@ class TestObservations:
     the_time = datetime.utcnow().isoformat() + 'Z'
 
     def test_observations(self):
-        self.fixtures.systems_api.headers = self.fixtures.sml_headers
-        self.fixtures.systems_api.system_create(json.dumps(self.fixtures.sys_sml_def))
-        self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
-                                                                 json.dumps(self.fixtures.ds_definition))
-        self.fixtures.ds_id = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)['items'][0][
-            'id']
-        print(f'ds_id: {self.fixtures.ds_id}')
+        # setup
+        delete_all_systems()
+        system = create_single_system()
+        ds = create_single_datastream(system)
+        print(f'ds_id: {ds}')
+
+        # self.fixtures.systems_api.headers = self.fixtures.sml_headers
+        # self.fixtures.systems_api.system_create(json.dumps(self.fixtures.sys_sml_def))
+        # self.fixtures.datastream_api.datastream_create_in_system(self.fixtures.system_id,
+        #                                                          json.dumps(self.fixtures.ds_definition))
+        # self.fixtures.ds_id = self.fixtures.datastream_api.datastreams_of_system(self.fixtures.system_id)['items'][0][
+        #     'id']
+        # print(f'ds_id: {self.fixtures.ds_id}')
 
         observation = {
             "phenomenonTime": self.the_time,
@@ -468,10 +454,9 @@ class TestObservations:
             }
         }
         self.fixtures.observations_api.headers = {'Content-Type': 'application/om+json'}
-        res = self.fixtures.observations_api.observations_create_in_datastream(self.fixtures.ds_id,
-                                                                               json.dumps(observation))
+        res = self.fixtures.observations_api.observations_create_in_datastream(ds, json.dumps(observation))
         sleep(0.5)
-        obs = self.fixtures.observations_api.observations_of_datastream(self.fixtures.ds_id)
+        obs = self.fixtures.observations_api.observations_of_datastream(ds)
         print(f'The Time: {self.the_time}')
         print(f'Obs: {obs}')
         assert obs['items'][0]['phenomenonTime'] == self.the_time
@@ -610,13 +595,15 @@ class TestSystemHistory:
     fixtures = OSHFixtures()
 
     def test_system_history(self):
-        res = self.fixtures.system_history_api.system_history('0s2lbn2n1bnc8')
+        sys_id = create_single_system()
+        res = self.fixtures.system_history_api.system_history(sys_id)
         assert len(res['items']) > 0
-
-    def test_system_history_by_id(self):
-        res = self.fixtures.system_history_api.system_history_by_id('0s2lbn2n1bnc8', '2024-04-29T02:30:07.961Z')
         print(res)
-        assert res['id'] == '0s2lbn2n1bnc8'
+        history_id = res['items'][0]['properties']['validTime'][0]
+        print(f'History ID: {history_id}')
+        res = self.fixtures.system_history_api.system_history_by_id(system_id=sys_id, history_id=history_id)
+        print(res)
+        assert res['id'] == sys_id
 
     @pytest.mark.xfail(
         reason="OSH only allows history events to in response to updates made directly to the system description")
@@ -677,6 +664,20 @@ class TestSystemHistory:
     @pytest.mark.skip(reason="Will break test server")
     def test_system_history_delete(self):
         assert False
+
+
+def create_single_system():
+    OSHFixtures.systems_api.headers = OSHFixtures.sml_headers
+    sys_create_res = OSHFixtures.systems_api.system_create(json.dumps(OSHFixtures.system_definitions[0]))
+    sys_id = OSHFixtures.systems_api.response_headers['Location'].split('/')[-1]
+    print(sys_id)
+    return sys_id
+
+
+def create_single_datastream(system_id: str):
+    result = OSHFixtures.datastream_api.datastream_create_in_system(system_id, json.dumps(OSHFixtures.ds_definition))
+    id = OSHFixtures.datastream_api.response_headers['Location'].split('/')[-1]
+    return id
 
 
 def delete_all_systems():

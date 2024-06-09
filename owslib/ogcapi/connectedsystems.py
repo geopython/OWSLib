@@ -23,46 +23,9 @@ class ConnectedSystems(Collections):
         super().__init__(url, json_, timeout, headers, auth)
 
     def _request(self, method: str = 'GET', path: str = None,
-                 data: str = None, as_dict: bool = True, resp_handler: Callable = None,
-                 kwargs: dict = {}) -> dict:
-
-        url = self._build_url(path)
-        self.request = url
-
-        LOGGER.debug(f'Method: {method}')
-        LOGGER.debug(f'Request: {url}')
-        LOGGER.debug(f'Data: {data}')
-        LOGGER.debug(f'Params: {kwargs}')
-
-        if method == 'GET':
-            response = http_get(url, headers=self.headers, auth=self.auth,
-                                params=kwargs)
-        elif method == 'POST':
-            response = http_post(url, headers=self.headers, request=data,
-                                 auth=self.auth)
-        elif method == 'PUT':
-            response = http_put(url, data=data, auth=self.auth, headers=self.headers)
-        elif method == 'DELETE':
-            response = http_delete(url, auth=self.auth)
-
-        LOGGER.debug(f'URL: {response.url}')
-        LOGGER.debug(f'Response status code: {response.status_code}')
-
-        if not response:
-            raise RuntimeError(response.text)
-
-        self.request = response.url
-
-        if resp_handler is not None:
-            return resp_handler(response)
-        elif as_dict:
-            if len(response.content) == 0:
-                LOGGER.debug('Empty response')
-                return {}
-            else:
-                return response.json()
-        else:
-            return response.content
+                 data: str = None, as_dict: bool = True, kwargs: dict = {}) -> dict:
+        res = super()._request(method, path, data, as_dict, kwargs)
+        return res
 
     def _default_create_resp_handler(self, response: requests.Response) -> dict:
         res_id = response.headers.get('Location', None)
@@ -207,7 +170,7 @@ class Systems(ConnectedSystems):
 
         path = f'systems/'
 
-        return self._request(path=path, method='POST', data=data, resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, method='POST', data=data)
 
     def system_update(self, system_id: str, data: str) -> dict:
         """
@@ -222,7 +185,7 @@ class Systems(ConnectedSystems):
         """
 
         path = f'systems/{system_id}'
-        return self._request(path=path, method='PUT', data=data, resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, method='PUT', data=data)
 
     def system_delete(self, system_id: str) -> dict:
         """
@@ -235,7 +198,7 @@ class Systems(ConnectedSystems):
         """
 
         path = f'systems/{system_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
     def system_components(self, system_id: str, **kwargs) -> dict:
         """
@@ -266,7 +229,7 @@ class Systems(ConnectedSystems):
         """
 
         path = f'systems/{system_id}/components'
-        return self._request(method='POST', path=path, data=data, resp_handler=self._default_create_resp_handler)
+        return self._request(method='POST', path=path, data=data)
 
     def system_deployments(self, system_id: str) -> dict:
         """
@@ -334,7 +297,7 @@ class Procedures(ConnectedSystems):
         """
 
         path = 'procedures'
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def procedure_update(self, procedure_id: str, data: str) -> dict:
         """
@@ -358,7 +321,7 @@ class Procedures(ConnectedSystems):
         """
 
         path = f'procedures/{procedure_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
 
 class Deployments(ConnectedSystems):
@@ -395,7 +358,7 @@ class Deployments(ConnectedSystems):
         @returns: `dict` of deployment metadata
         """
         path = 'deployments'
-        _ = self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        _ = self._request(path=path, data=data, method='POST')
 
         return True
 
@@ -408,7 +371,7 @@ class Deployments(ConnectedSystems):
         @returns: `dict` of deployment metadata
         """
         path = f'deployments/{deployment_id}'
-        _ = self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        _ = self._request(path=path, data=data, method='PUT')
 
         return True
 
@@ -419,7 +382,7 @@ class Deployments(ConnectedSystems):
         @returns: `dict` of deployment metadata
         """
         path = f'deployments/{deployment_id}'
-        _ = self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        _ = self._request(path=path, method='DELETE')
 
         return True
 
@@ -449,7 +412,7 @@ class Deployments(ConnectedSystems):
             path = f'deployments/{deployment_id}/members'
         else:
             path = f'deployments/{deployment_id}/systems'
-        _ = self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        _ = self._request(path=path, data=data, method='POST')
 
         return True
 
@@ -477,7 +440,7 @@ class Deployments(ConnectedSystems):
         @returns: `dict` of system metadata
         """
         path = f'deployments/{deployment_id}/systems/{system_id}'
-        _ = self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        _ = self._request(path=path, data=data, method='PUT')
 
         return True
 
@@ -490,7 +453,7 @@ class Deployments(ConnectedSystems):
         @returns: `dict` of system metadata
         """
         path = f'deployments/{deployment_id}/systems/{system_id}'
-        _ = self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        _ = self._request(path=path, method='DELETE')
 
         return True
 
@@ -579,7 +542,7 @@ class SamplingFeatures(ConnectedSystems):
         if use_fois:
             path = f'systems/{system_id}/fois'
 
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def sampling_feature_update(self, sampling_feature_id: str, data: str) -> dict:
         """
@@ -594,7 +557,7 @@ class SamplingFeatures(ConnectedSystems):
         path = f'samplingFeatures/{sampling_feature_id}'
         if self.alternate_sampling_feature_url:
             path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
     def sampling_feature_delete(self, sampling_feature_id: str) -> dict:
         """
@@ -607,7 +570,7 @@ class SamplingFeatures(ConnectedSystems):
         path = f'samplingFeatures/{sampling_feature_id}'
         if self.alternate_sampling_feature_url:
             path = self.alternate_sampling_feature_url + f'/{sampling_feature_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
 
 class Properties(ConnectedSystems):
@@ -651,7 +614,7 @@ class Properties(ConnectedSystems):
         """
 
         path = 'properties'
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def property_update(self, property_id: str, data: str) -> dict:
         """
@@ -664,7 +627,7 @@ class Properties(ConnectedSystems):
         """
 
         path = f'properties/{property_id}'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
     def property_delete(self, property_id: str) -> dict:
         """
@@ -675,7 +638,7 @@ class Properties(ConnectedSystems):
         """
 
         path = f'properties/{property_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
 
 class Datastreams(ConnectedSystems):
@@ -733,7 +696,7 @@ class Datastreams(ConnectedSystems):
 
         path = f'systems/{system_id}/datastreams'
 
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def datastream_update_description(self, datastream_id: str, data: str) -> dict:
         """
@@ -746,7 +709,7 @@ class Datastreams(ConnectedSystems):
         """
 
         path = f'datastreams/{datastream_id}'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
     def datastream_delete(self, datastream_id: str) -> dict:
         """
@@ -757,7 +720,7 @@ class Datastreams(ConnectedSystems):
         """
 
         path = f'datastreams/{datastream_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
     def datastream_retrieve_schema_for_format(self, datastream_id: str, **kwargs) -> dict:
         """
@@ -789,7 +752,7 @@ class Datastreams(ConnectedSystems):
         """
 
         path = f'datastreams/{datastream_id}/schema'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
 
 class Observations(ConnectedSystems):
@@ -845,7 +808,7 @@ class Observations(ConnectedSystems):
         """
 
         path = f'datastreams/{datastream_id}/observations'
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def observations_update(self, observation_id: str, data: str) -> dict:
         """
@@ -858,7 +821,7 @@ class Observations(ConnectedSystems):
         """
 
         path = f'observations/{observation_id}'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
     def observations_delete(self, observation_id: str) -> dict:
         """
@@ -868,7 +831,7 @@ class Observations(ConnectedSystems):
         @returns: `dict` of observation metadata
         """
         path = f'observations/{observation_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
 
 class ControlChannels(ConnectedSystems):
@@ -924,7 +887,7 @@ class ControlChannels(ConnectedSystems):
         """
 
         path = f'systems/{system_id}/controls'
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def control_update(self, control_id: str, data: str) -> dict:
         """
@@ -937,7 +900,7 @@ class ControlChannels(ConnectedSystems):
         """
 
         path = f'controls/{control_id}'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
     def control_delete(self, control_id: str) -> dict:
         """
@@ -948,7 +911,7 @@ class ControlChannels(ConnectedSystems):
         """
 
         path = f'controls/{control_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
     def control_retrieve_schema(self, control_id: str, **kwargs) -> dict:
         """
@@ -974,7 +937,7 @@ class ControlChannels(ConnectedSystems):
         """
 
         path = f'controls/{control_id}/schema'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
 
 class Commands(ConnectedSystems):
@@ -1030,7 +993,7 @@ class Commands(ConnectedSystems):
         """
 
         path = f'controls/{control_id}/commands'
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def commands_delete_command(self, command_id: str) -> dict:
         """
@@ -1041,7 +1004,7 @@ class Commands(ConnectedSystems):
         """
 
         path = f'commands/{command_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
     def commands_add_status_report(self, command_id: str, data: str) -> dict:
         """
@@ -1054,7 +1017,7 @@ class Commands(ConnectedSystems):
         """
 
         path = f'commands/{command_id}/status'
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def commands_retrieve_status_report(self, command_id: str, status_id: str, **kwargs) -> dict:
         """
@@ -1084,7 +1047,7 @@ class Commands(ConnectedSystems):
         """
 
         path = f'commands/{command_id}/status/{status_id}'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
     def commands_delete_status_report(self, command_id: str, status_id: str) -> dict:
         """
@@ -1097,7 +1060,7 @@ class Commands(ConnectedSystems):
         """
 
         path = f'commands/{command_id}/status/{status_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
 
 class SystemEvents(ConnectedSystems):
@@ -1142,7 +1105,7 @@ class SystemEvents(ConnectedSystems):
         """
 
         path = f'systems/{system_id}/events'
-        return self._request(path=path, data=data, method='POST', resp_handler=self._default_create_resp_handler)
+        return self._request(path=path, data=data, method='POST')
 
     def system_event(self, system_id: str, event_id: str) -> dict:
         """
@@ -1170,7 +1133,7 @@ class SystemEvents(ConnectedSystems):
         """
 
         path = f'systems/{system_id}/events/{event_id}'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
     def system_event_delete(self, system_id: str, event_id: str) -> dict:
         """
@@ -1183,7 +1146,7 @@ class SystemEvents(ConnectedSystems):
         """
 
         path = f'systems/{system_id}/events/{event_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
 
 class SystemHistory(ConnectedSystems):
@@ -1232,7 +1195,7 @@ class SystemHistory(ConnectedSystems):
         """
 
         path = f'systems/{system_id}/history/{history_id}'
-        return self._request(path=path, data=data, method='PUT', resp_handler=self._default_update_resp_handler)
+        return self._request(path=path, data=data, method='PUT')
 
     def system_history_delete(self, system_id: str, history_id: str) -> dict:
         """
@@ -1245,7 +1208,7 @@ class SystemHistory(ConnectedSystems):
         """
 
         path = f'systems/{system_id}/history/{history_id}'
-        return self._request(path=path, method='DELETE', resp_handler=self._default_delete_resp_handler)
+        return self._request(path=path, method='DELETE')
 
 
 class QueryArgs:
