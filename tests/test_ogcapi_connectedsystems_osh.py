@@ -6,11 +6,11 @@
 #  Contact email: ian@botts-inc.com
 # ==============================================================================
 
-import json
 from datetime import datetime
+import json
 
-from owslib.ogcapi.connectedsystems import Systems, Deployments, Datastreams, Observations, ControlChannels, Commands, \
-    SystemEvents, SystemHistory, SamplingFeatures, Properties
+from owslib.ogcapi.connectedsystems import Commands, ControlChannels, Datastreams, Deployments, Observations, \
+    Properties, SamplingFeatures, SystemEvents, SystemHistory, Systems
 from owslib.util import Authentication
 
 

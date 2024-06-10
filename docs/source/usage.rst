@@ -373,7 +373,7 @@ OGC API - Connected Systems -  Part 1: Feature Resources & Part 2: Dynamic Data
 
 .. code-block:: python
 
- >>> from owslib.ogcapi.connectedsystems import {Systems, Datastreams, Observations}
+ >>> from owslib.ogcapi.connectedsystems import Systems, Datastreams, Observations
  >>> s = Systems('http://localhost:5000', auth=('user', 'password'), headers={'Content-Type': 'application/sml+json'})
  >>> ds = Datastreams('http://localhost:5000', auth=('user', 'password'), headers={'Content-Type': 'application/json'})
  >>> obs = Observations('http://localhost:5000', auth=('user', 'password'), headers={'Content-Type': 'application/json'})

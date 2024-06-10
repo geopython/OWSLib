@@ -7,9 +7,7 @@
 # ==============================================================================
 import logging
 
-import requests
-
-from owslib.ogcapi import Collections, API
+from owslib.ogcapi import API, Collections
 from owslib.util import (Authentication)
 
 LOGGER = logging.getLogger(__name__)
