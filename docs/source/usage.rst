@@ -368,7 +368,7 @@ OGC API - Connected Systems -  Part 1: Feature Resources & Part 2: Dynamic Data
 
 .. note::
     The library covers all of parts 1 and 2, the example below is a short overview of the functionality.
-    All CRUD operations are performed in a very similar manner. Please the the Connected Systems API docs
+    All CRUD operations are performed in a very similar manner. Please see the Connected Systems API docs
     for the full lists of properties, encoding requirements and expected responses.
 
 .. code-block:: python
