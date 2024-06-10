@@ -148,7 +148,7 @@ class Systems(ConnectedSystems):
         @returns: `dict` of system metadata
         """
 
-        path = f'systems/'
+        path = 'systems/'
 
         return self._request(path=path, method='POST', data=data)
 
@@ -308,7 +308,7 @@ class Deployments(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
-        __doc__ = API.__doc__
+        __doc__ = API.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def deployments(self, **kwargs) -> dict:
@@ -455,7 +455,7 @@ class SamplingFeatures(ConnectedSystems):
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None, alternate_sampling_feature_url: str = None):
         self.alternate_sampling_feature_url = alternate_sampling_feature_url
-        __doc__ = API.__doc__
+        __doc__ = API.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def sampling_features(self, use_fois=False, **kwargs) -> dict:
@@ -558,7 +558,7 @@ class Properties(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
-        __doc__ = API.__doc__
+        __doc__ = API.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def properties(self, **kwargs) -> dict:
@@ -626,7 +626,7 @@ class Datastreams(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
-        __doc__ = Collections.__doc__
+        __doc__ = Collections.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def datastreams(self, **kwargs) -> dict:
@@ -740,7 +740,7 @@ class Observations(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
-        __doc__ = Collections.__doc__
+        __doc__ = Collections.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def observations(self, **kwargs) -> dict:
@@ -819,7 +819,7 @@ class ControlChannels(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
-        __doc__ = Collections.__doc__
+        __doc__ = Collections.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def controls(self, **kwargs) -> dict:
@@ -925,7 +925,7 @@ class Commands(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
-        __doc__ = Collections.__doc__
+        __doc__ = Collections.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def commands(self, **kwargs) -> dict:
@@ -1048,7 +1048,7 @@ class SystemEvents(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
-        __doc__ = Collections.__doc__
+        __doc__ = Collections.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth=auth)
 
     def system_events(self, **kwargs) -> dict:
@@ -1134,7 +1134,7 @@ class SystemHistory(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
-        __doc__ = Collections.__doc__
+        __doc__ = Collections.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
     def system_history(self, system_id: str, **kwargs) -> dict:
