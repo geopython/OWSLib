@@ -9,6 +9,8 @@
 from datetime import datetime
 import json
 
+import pytest
+
 from owslib.ogcapi.connectedsystems import Commands, ControlChannels, Datastreams, Deployments, Observations, \
     Properties, SamplingFeatures, SystemEvents, SystemHistory, Systems
 from owslib.util import Authentication
@@ -180,6 +182,19 @@ class OSHFixtures:
 class TestSystems:
     fixtures = OSHFixtures()
 
+    def test_system_readonly(self):
+        # get all systems
+        res = self.fixtures.systems_api.systems()
+        assert len(res['items']) > 0
+        check_ids = ["0s2lbn2n1bnc8", "94n1f19ld7tlc"]
+        assert [any(sys_id == item['id'] for item in res['items']) for sys_id in check_ids]
+
+        # get a single system
+        res = self.fixtures.systems_api.system(check_ids[0])
+        assert res is not None
+        assert res['id'] == check_ids[0]
+
+    @pytest.mark.skip(reason="Skip transactional test")
     def test_system_functions(self):
         # insertion of systems
         self.fixtures.systems_api.headers = self.fixtures.sml_headers
@@ -209,6 +224,7 @@ class TestSystems:
 class TestDeployments:
     fixtures = OSHFixtures()
 
+    @pytest.mark.skip(reason="Skip transactional test")
     def test_deployment_create(self):
         res1 = self.fixtures.deployment_api.deployment_create(json.dumps(self.fixtures.deployment_definition))
         assert res1
@@ -218,12 +234,14 @@ class TestDeployments:
         assert res3['properties']['name'] == 'Test Deployment 001' and res3[
             'id'] == self.fixtures.deployment_expected_id
 
+    @pytest.mark.skip(reason="Skip transactional test")
     def test_deployment_update(self):
         self.fixtures.deployment_definition['properties']['description'] = 'Updated Description of Deployment 001'
         res = self.fixtures.deployment_api.deployment_update(self.fixtures.deployment_expected_id,
                                                              json.dumps(self.fixtures.deployment_definition))
         assert res is not None
 
+    @pytest.mark.skip(reason="Skip transactional test")
     def test_deployment_delete(self):
         res = self.fixtures.deployment_api.deployment_delete(self.fixtures.deployment_expected_id)
         assert res is not None
@@ -232,6 +250,16 @@ class TestDeployments:
 class TestSamplingFeatures:
     fixtures = OSHFixtures()
 
+    def test_sampling_features_readonly(self):
+        all_features = self.fixtures.sampling_feature_api.sampling_features(use_fois=True)
+        assert len(all_features['items']) == 51
+
+        feature_id = "c4nce3peo8hvc"
+        feature = self.fixtures.sampling_feature_api.sampling_feature(feature_id, use_fois=True)
+        assert feature['id'] == feature_id
+        assert feature['properties']['name'] == 'Station WS013'
+
+    @pytest.mark.skip(reason="Skip transactional test")
     def test_sampling_features_all(self):
         # setup
         delete_all_systems()
@@ -268,6 +296,17 @@ class TestSamplingFeatures:
 class TestDatastreams:
     fixtures = OSHFixtures()
 
+    def test_datastreams_readonly(self):
+        ds_id = 'kjg2qrcm40rfk'
+        datastreams = self.fixtures.datastream_api.datastreams()
+        assert len(datastreams['items']) > 0
+        assert any(x['id'] == ds_id for x in datastreams['items'])
+
+        datastream = self.fixtures.datastream_api.datastream(ds_id)
+        assert datastream['id'] == ds_id
+        assert datastream['name'] == "Simulated Weather Station Network - weather"
+
+    @pytest.mark.skip(reason="Skip transactional test")
     def test_all_ds_functions(self):
         # preflight cleanup
         delete_all_systems()
@@ -303,6 +342,18 @@ class TestDatastreams:
 class TestObservations:
     fixtures = OSHFixtures()
 
+    def test_observations_readonly(self):
+        ds_id = 'kjg2qrcm40rfk'
+        observations = self.fixtures.observations_api.observations_of_datastream(ds_id)
+        assert len(observations['items']) > 0
+        assert 'result' in observations['items'][0]
+
+        observation_of_ds = self.fixtures.observations_api.observations_of_datastream(ds_id)
+        assert observation_of_ds['items'][0]['result']['stationID'] == "WS013"
+        keys = ['stationID', 'temperature', 'pressure', 'humidity', 'windSpeed', 'windDirection']
+        assert [key in observation_of_ds['items'][0]['result'] for key in keys]
+
+    @pytest.mark.skip(reason="Skip transactional test")
     def test_observations(self):
         # setup
         delete_all_systems()
@@ -333,13 +384,12 @@ class TestSystemHistory:
     fixtures = OSHFixtures()
 
     def test_system_history(self):
-        sys_id = create_single_system()
+        sys_id = '0s2lbn2n1bnc8'
         res = self.fixtures.system_history_api.system_history(sys_id)
         assert len(res['items']) > 0
         history_id = res['items'][0]['properties']['validTime'][0]
         res = self.fixtures.system_history_api.system_history_by_id(system_id=sys_id, history_id=history_id)
         assert res['id'] == sys_id
-        delete_all_systems()
 
 
 def create_single_system():
