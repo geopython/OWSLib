@@ -80,7 +80,8 @@ setup(
         'wcs',
         'capabilities',
         'metadata',
-        'wmts'
+        'wmts',
+        'connectedsystems'
     ]),
     author='Sean Gillies',
     author_email='sean.gillies@gmail.com',

@@ -66,6 +66,10 @@ OGC API Support
 +--------------------------------------------------------------------------------------+------------+
 | `OGC API - Processes - Part 1: Core`_                                                | 1.0        |
 +--------------------------------------------------------------------------------------+------------+
+| `OGC API - Connected Systems - Part 1: Feature Resources`_                           | draft      |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Connected Systems - Part 2: Dynamic Data`_                                | draft      |
++--------------------------------------------------------------------------------------+------------+
 
 .. _`OGC WMS`: https://www.opengeospatial.org/standards/wms
 .. _`OGC WFS`: https://www.opengeospatial.org/standards/wfs
@@ -97,4 +101,6 @@ OGC API Support
 .. _`OGC API - Features - Part 4: Create, Replace, Update and Delete`: https://docs.ogc.org/DRAFTS/20-002.html
 .. _`OGC API - Coverages - Part 1: Core`: https://docs.ogc.org/DRAFTS/19-087.html
 .. _`OGC API - Processes - Part 1: Core`: https://docs.ogc.org/is/18-062r2/18-062r2.html
+.. _`OGC API - Connected Systems - Part 1: Feature Resources`: https://docs.ogc.org/DRAFTS/23-001r0.html
+.. _`OGC API - Connected Systems - Part 2: Dynamic Data`: https://docs.ogc.org/DRAFTS/23-002r0.html
 .. _`OpenSearch`: https://github.com/dewitt/opensearch

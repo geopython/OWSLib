@@ -363,6 +363,86 @@ OGC API - Environmental Data Retrieval - Part 1: Core 1.0
   >>> icoads_sst = m.collection('icoads-sst')
   >>> data = e.query_data('icoads_sst', 'position', coords='POINT(-75 45)', parameter_names=['SST', 'AIRT'])
 
+OGC API - Connected Systems -  Part 1: Feature Resources & Part 2: Dynamic Data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+    The library covers all of parts 1 and 2, the example below is a short overview of the functionality.
+    All CRUD operations are performed in a very similar manner. Please see the Connected Systems API docs
+    for the full lists of properties, encoding requirements and expected responses.
+
+.. code-block:: python
+
+ >>> from owslib.ogcapi.connectedsystems import Systems, Datastreams, Observations
+ >>> s = Systems('http://localhost:5000', auth=('user', 'password'), headers={'Content-Type': 'application/sml+json'})
+ >>> ds = Datastreams('http://localhost:5000', auth=('user', 'password'), headers={'Content-Type': 'application/json'})
+ >>> obs = Observations('http://localhost:5000', auth=('user', 'password'), headers={'Content-Type': 'application/json'})
+ # insert a new system, datastream and observation
+ >>> system_info =  {
+ >>>     "type": "SimpleProcess",
+ >>>     "uniqueId": "urn:osh:sensor:testsmlsensor:001",
+ >>>     "label": "Test SML Sensor",
+ >>>     "description": "A Sensor created from an SML document",
+ >>>     "definition": "http://www.w3.org/ns/ssn/Sensor"
+ >>> }
+ >>> ds_definition = {
+ >>>        "name": "Test Datastream",
+ >>>        "outputName": "Test Output #1",
+ >>>        "schema": {
+ >>>            "obsFormat": "application/swe+json",
+ >>>            "encoding": {
+ >>>                "type": "JSONEncoding",
+ >>>                "vectorAsArrays": False
+ >>>            },
+ >>>            "recordSchema": {
+ >>>                "type": "DataRecord",
+ >>>                "label": "Test Datastream Record",
+ >>>                "updatable": False,
+ >>>                "optional": False,
+ >>>                "definition": "http://test.com/Record",
+ >>>                "fields": [
+ >>>                   {
+ >>>                       "type": "Time",
+ >>>                       "label": "Test Datastream Time",
+ >>>                       "updatable": False,
+ >>>                       "optional": False,
+ >>>                       "definition": "http://test.com/Time",
+ >>>                       "name": "timestamp",
+ >>>                       "uom": {
+ >>>                           "href": "http://test.com/TimeUOM"
+ >>>                       }
+ >>>                   },
+ >>>                   {
+ >>>                       "type": "Boolean",
+ >>>                       "label": "Test Datastream Boolean",
+ >>>                       "updatable": False,
+ >>>                       "optional": False,
+ >>>                       "definition": "http://test.com/Boolean",
+ >>>                       "name": "testboolean"
+ >>>                   }
+ >>>               ]
+ >>>           }
+ >>>       }
+ >>>   }
+ >>> observation = {
+ >>>            "phenomenonTime": the_time,
+ >>>            "resultTime": the_time,
+ >>>            "result": {
+ >>>                "timestamp": datetime.now().timestamp() * 1000,
+ >>>                "testboolean": True
+ >>>            }
+ >>>        }
+ >>> s.create_system(system_info)
+ >>> system_id = s.resource_headers['Location'][0].split('/')[-1]
+ >>> ds.create_datastream(system_id, ds_definition)
+ >>> ds_id = ds.resource_headers['Location'][0].split('/')[-1]
+ >>> obs.create_observation(ds_id, observation)
+ >>> obs_id = obs.resource_headers['Location'][0].split('/')[-1]
+ >>> # retrieve the observations of our datastream
+ >>> observations = obs.get_observations(ds_id)['items']
+ >>>
+
+
 
 WCS
 ---
