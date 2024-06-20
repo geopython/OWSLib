@@ -1,4 +1,3 @@
-# -*- coding: ISO-8859-15 -*-
 # =============================================================================
 # Copyright (c) 2009 Tom Kralidis
 #
@@ -454,14 +453,6 @@ class MD_DataIdentification(object):
                     self.uselimitation.append(val)
                     self.uselimitation_url.append(val1)
 
-            self.accessconstraints = []
-            for i in md.findall(util.nspath_eval(
-                    'gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_RestrictionCode',
-                    namespaces)):
-                val = _testCodeListValue(i)
-                if val is not None:
-                    self.accessconstraints.append(val)
-
             self.classification = []
             for i in md.findall(util.nspath_eval(
                     'gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_ClassificationCode',
@@ -470,13 +461,16 @@ class MD_DataIdentification(object):
                 if val is not None:
                     self.classification.append(val)
 
+            self.accessconstraints = []
+            self.useconstraints = []
             self.otherconstraints = []
-            for i in md.findall(util.nspath_eval(
-                    'gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints/gco:CharacterString',
-                    namespaces)):
-                val = util.testXMLValue(i)
-                if val is not None:
-                    self.otherconstraints.append(val)
+            for i in md.findall(util.nspath_eval('gmd:resourceConstraints/gmd:MD_LegalConstraints', namespaces)):
+                for ii in i.findall(util.nspath_eval('gmd:otherConstraints', namespaces)):
+                    val = util.testXMLValue(ii)
+                    if val is not None:
+                        val = util.eval_anchor(i, 'gmd:otherConstraints', namespaces) 
+                    if val is not None:
+                        self.otherconstraints.append(val)
 
             self.securityconstraints = []
             for i in md.findall(util.nspath_eval(
@@ -485,14 +479,6 @@ class MD_DataIdentification(object):
                 val = _testCodeListValue(i)
                 if val is not None:
                     self.securityconstraints.append(val)
-
-            self.useconstraints = []
-            for i in md.findall(util.nspath_eval(
-                    'gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints/gmd:MD_RestrictionCode',
-                    namespaces)):
-                val = _testCodeListValue(i)
-                if val is not None:
-                    self.useconstraints.append(val)
 
             self.denominators = []
             for i in md.findall(util.nspath_eval(
@@ -522,6 +508,7 @@ class MD_DataIdentification(object):
                 val = util.testXMLValue(i)
                 if val is not None:
                     self.resourcelanguage.append(val)
+
 
             self.creator = []
             self.publisher = []
@@ -1270,10 +1257,10 @@ class MI_Platform(object):
             self.identifier = None
             self.description = None
         else:
-            val = plt.find(util.nspath_eval('gmi:identifier', namespaces))
+            val = util.eval_anchor(plt, 'gmi:identifier/gmd:MD_Identifier/gmd:code', namespaces) 
             self.identifier = util.testXMLValue(val)
 
-            val = plt.find(util.nspath_eval('gmi:description', namespaces))
+            val = plt.find(util.nspath_eval('gmi:description/gco:CharacterString', namespaces))
             self.description = util.testXMLValue(val)
 
             for i in plt.findall(util.nspath_eval('gmi:instrument/gmi:MI_Instrument', namespaces)):
@@ -1288,8 +1275,8 @@ class MI_Instrument(object):
             self.identifier = None
             self.type = None
         else:
-            val = inst.find(util.nspath_eval('gmi:identifier', namespaces))
+            val = util.eval_anchor(inst, 'gmi:identifier/gmd:MD_Identifier/gmd:code', namespaces) 
             self.identifier = util.testXMLValue(val)
 
-            val = inst.find(util.nspath_eval('gmi:type', namespaces))
+            val = inst.find(util.nspath_eval('gmi:type/gco:CharacterString', namespaces))
             self.type = util.testXMLValue(val)
