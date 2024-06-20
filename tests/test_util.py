@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
 import codecs
-from owslib.util import clean_ows_url, build_get_url, strip_bom
+from unittest import mock
+import pytest
+from owslib.util import clean_ows_url, build_get_url, strip_bom, ResponseWrapper, getXMLTree
 
 
 def test_strip_bom():
@@ -44,3 +46,32 @@ def test_build_get_url_overwrite():
     # Use overwrite flag
     assert build_get_url("http://example.org/ows?SERVICE=WPS", {'SERVICE': 'WMS'}, overwrite=True) == \
         'http://example.org/ows?SERVICE=WMS'
+
+
+def test_getXMLTree_valid():
+
+    mock_resp = mock.Mock()
+    mock_resp.url = 'http:///example.org/?service=WFS&request=GetCapabilities&version=2.0.0'
+    mock_resp.content = b'<?xml version="1.0" encoding="UTF-8"?>\n<WFS_Capabilities><ServiceIdentification>' \
+                        b'<Title>Example</Title></ServiceIdentification></WFS_Capabilities>'
+    mock_resp.headers = {'Content-Type': 'text/xml; charset=UTF-8'}
+    resp_wrap = ResponseWrapper(mock_resp)
+
+    et = getXMLTree(resp_wrap)
+    assert et.find('.//Title').text == "Example"
+
+
+def test_getXMLTree_invalid():
+
+    mock_resp = mock.Mock()
+    mock_resp.url = 'http:///example.org/?service=WFS&request=GetCapabilities&version=2.0.0'
+    mock_resp.content = b'<HTML><HEAD></HEAD><BODY BGCOLOR="#FFFFFF">\nmsCGILoadMap(): Web application error. ' \
+                        b'CGI variable &quot;map&quot; is not set.\n</BODY></HTML>'
+    mock_resp.headers = {'Content-Type': 'text/html'}
+    resp_wrap = ResponseWrapper(mock_resp)
+
+    with pytest.raises(ValueError) as ex:
+        getXMLTree(resp_wrap)
+
+    assert str(ex.value) == 'http:///example.org/?service=WFS&request=GetCapabilities&version=2.0.0 responded with Content-Type \'text/html\'' \
+    ': \'msCGILoadMap(): Web application error. CGI variable \"map\" is not set.\''
