@@ -209,7 +209,7 @@ class WebFeatureService_(object):
                 if m.get("type").lower() == method.lower()
             )
         )
-        base_url = base_url if base_url.endswith("?") else base_url + "?"
+        base_url = base_url if base_url.endswith("?") or base_url.endswith('&') else base_url + "?"
 
         request = {"service": "WFS", "version": self.version, "request": "GetFeature"}
 
