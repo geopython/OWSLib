@@ -1,5 +1,5 @@
 # =============================================================================
-# Copyright (c) 2023 Tom Kralidis
+# Copyright (c) 2024 Tom Kralidis
 #
 # Author: Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -89,7 +89,7 @@ setup(
     maintainer_email='tomkralidis@gmail.com',
     url='https://owslib.readthedocs.io',
     install_requires=reqs,
-    python_requires='>=3.6',
+    python_requires='>=3.10',
     cmdclass={'test': PyTest},
     packages=find_packages(exclude=["docs", "etc", "examples", "tests"]),
     classifiers=[
@@ -100,10 +100,6 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Topic :: Scientific/Engineering :: GIS',
+        'Topic :: Scientific/Engineering :: GIS'
     ]
 )
