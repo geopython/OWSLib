@@ -802,7 +802,7 @@ class WPSExecution(object):
             if url is not None:
                 self.statusLocation = url
             LOGGER.info('\nChecking execution status... (location=%s)' %
-                     self.statusLocation)
+                        self.statusLocation)
             try:
                 response = reader.readFromUrl(
                     self.statusLocation, headers=self.headers)
@@ -1934,7 +1934,7 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     else:
         for ex in execution.errors:
             LOGGER.error('Error: code=%s, locator=%s, text=%s' %
-                      (ex.code, ex.locator, ex.text))
+                         (ex.code, ex.locator, ex.text))
 
 
 def printValue(value):

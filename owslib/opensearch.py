@@ -201,7 +201,7 @@ class Description:
                 }
 
                 options = [o.attrib.get('value') for o in p.findall(nspath_eval('parameters:Option', namespaces))]
-                if len(options) > 0 :
+                if len(options) > 0:
                     p_def['options'] = options
 
                 url_def['parameters'][p_name] = p_def
