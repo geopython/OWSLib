@@ -2,4 +2,4 @@ lxml
 python-dateutil
 pytz
 pyyaml
-equests
+requests
