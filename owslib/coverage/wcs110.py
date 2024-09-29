@@ -24,6 +24,7 @@ from owslib.util import openURL, testXMLValue
 
 LOGGER = logging.getLogger(__name__)
 
+
 class Namespaces_1_1_0():
 
     def WCS(self, tag):

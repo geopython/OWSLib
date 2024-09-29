@@ -30,6 +30,8 @@ from owslib.ows import (
 )
 from owslib.util import datetime_from_ansi, datetime_from_iso, openURL, param_list_to_url_string, testXMLValue
 
+LOGGER = logging.getLogger(__name__)
+
 
 #  function to save writing out WCS namespace in full each time
 def ns(tag):
