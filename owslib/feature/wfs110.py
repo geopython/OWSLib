@@ -48,6 +48,8 @@ def get_namespaces():
 
 namespaces = get_namespaces()
 
+LOGGER = logging.getLogger(__name__)
+
 
 class WebFeatureService_1_1_0(WebFeatureService_):
     """Abstraction for OGC Web Feature Service (WFS).
