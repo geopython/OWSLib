@@ -341,6 +341,11 @@ OGC API - Processes - Part 1: Core 1.0
   >>> hello_world['title']
   'Hello World'
 
+  >>> result = p.execute('hello-world', inputs={'name': 'World', 'message': 'Testing from OWSLib'})
+  >>> result
+  {'outputs': [{'id': 'echo', 'value': 'Hello World! Testing from OWSLib'}]}
+
+
 OGC API - Maps - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
