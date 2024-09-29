@@ -34,3 +34,18 @@ def test_ogcapi_processes_pygeoapi():
     hello_world = p.process('hello-world')
     assert hello_world['id'] == 'hello-world'
     assert hello_world['title'] == 'Hello World'
+
+    inputs = {
+        'name': 'World',
+        'message': 'Testing from OWSLib'
+    }
+
+    execution = p.execute('hello-world', inputs=inputs)
+
+    assert execution['outputs'][0]['id'] == 'echo'
+    assert execution['outputs'][0]['value'] == 'Hello World! Testing from OWSLib'  # noqa
+
+    execution = p.execute('hello-world', inputs=inputs, response='raw')
+
+    assert execution['id'] == 'echo'
+    assert execution['value'] == 'Hello World! Testing from OWSLib'

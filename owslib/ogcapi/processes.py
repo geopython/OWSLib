@@ -34,13 +34,50 @@ class Processes(Collections):
 
     def process(self, process_id: str) -> dict:
         """
-        implements /processs/{processId}
+        implements /processses/{processId}
 
         @type process_id: string
         @param process_id: id of process
 
-        @returns: `dict` of process desceription
+        @returns: `dict` of process description
         """
 
         path = f'processes/{process_id}'
         return self._request(path=path)
+
+    def execute(self, process_id: str, inputs: dict, outputs: dict = {},
+                response: str = 'document', async_: bool = False) -> dict:
+        """
+        implements /processes/{processId}/execution
+
+        @type process_id: string
+        @param process_id: id of process
+        @type data: string
+        @param data: request payload
+        @type inputs: inputs
+        @param inputs: input parameters
+        @type outputs: outputs
+        @param outputs: output parameters
+        @type async_: bool
+        @param outputs: whether to execute request in asychronous mode
+
+        @returns: `dict` of response or URL reference to job
+        """
+
+        data = {}
+
+        if inputs:
+            data['inputs'] = inputs
+        if outputs:
+            data['outputs'] = outputs
+
+        data['response'] = response
+
+        if async_:
+            self.headers['Prefer'] = 'respond-async'
+        else:
+            self.headers['Prefer'] = 'respond-sync'
+
+        path = f'processes/{process_id}/execution'
+
+        return self._request(method='POST', path=path, data=data)
