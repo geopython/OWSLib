@@ -160,6 +160,7 @@ class WebFeatureService_(object):
         featureversion=None,
         propertyname=None,
         maxfeatures=None,
+        srsname=None,
         storedQueryID=None,
         storedQueryParams=None,
         outputFormat=None,
@@ -183,6 +184,8 @@ class WebFeatureService_(object):
             List of feature property names. '*' matches all.
         maxfeatures : int
             Maximum number of features to be returned.
+        srsname: string
+            EPSG code to request the data in
         method : string
             Qualified name of the HTTP DCP method to use.
         outputFormat: string (optional)
@@ -238,6 +241,13 @@ class WebFeatureService_(object):
                 request["count"] = str(maxfeatures)
             else:
                 request["maxfeatures"] = str(maxfeatures)
+        if srsname:
+            request["srsname"] = str(srsname)
+
+            # Check if desired SRS is supported by the service for each
+            # typename. Warning will be thrown if that SRS is not allowed.
+            for name in typename:
+                _ = self.getSRS(srsname, name)
         if startindex:
             request["startindex"] = str(startindex)
         if storedQueryID:
