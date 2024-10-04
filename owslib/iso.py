@@ -407,13 +407,24 @@ class MD_DataIdentification(object):
 
             self.uricode = []
             _values = md.findall(util.nspath_eval(
-                'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gco:CharacterString',
+                'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString',
                 namespaces))
             _values += md.findall(util.nspath_eval(
-                'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString',
+                'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gco:CharacterString',
                 namespaces))
             for i in _values:
                 val = util.testXMLValue(i)
+                if val is not None:
+                    self.uricode.append(val)
+            
+            _values = md.findall(util.nspath_eval(
+                'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gmx:Anchor',
+                namespaces))
+            _values += md.findall(util.nspath_eval(
+                'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gmx:Anchor',
+                namespaces))
+            for i in _values:
+                val = util.testXMLValue(i.attrib.get('xlink:href'), True)
                 if val is not None:
                     self.uricode.append(val)
 
