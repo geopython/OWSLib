@@ -9,8 +9,7 @@ import logging
 
 from urllib.parse import urlencode
 from owslib.crs import Crs
-from owslib.util import log, Authentication, build_get_url
-from owslib.util import Authentication
+from owslib.util import Authentication, build_get_url
 from owslib.feature.schema import get_schema
 from owslib.feature.postrequest import PostRequest_1_1_0, PostRequest_2_0_0
 
