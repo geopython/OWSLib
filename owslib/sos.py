@@ -19,7 +19,7 @@ def SensorObservationService(url,
                              version='1.0.0',
                              xml=None,
                              username=None,
-                             password=None,):
+                             password=None,proxies=None,):
     """
     SOS factory function
     :param url: url of capabilities document
@@ -35,8 +35,8 @@ def SensorObservationService(url,
     if version in ['1.0', '1.0.0']:
         return sos100.SensorObservationService_1_0_0.__new__(
             sos100.SensorObservationService_1_0_0, clean_url, version,
-            xml, username, password)
+            xml, username, password, proxies=proxies)
     elif version in ['2.0', '2.0.0']:
         return sos200.SensorObservationService_2_0_0.__new__(
             sos200.SensorObservationService_2_0_0, clean_url, version,
-            xml, username, password)
+            xml, username, password, proxies=proxies)

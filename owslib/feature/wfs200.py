@@ -102,6 +102,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         parse_remote_metadata=False,
         timeout=30,
         headers=None,
+        proxies=None,
         username=None,
         password=None,
         auth=None,
@@ -120,8 +121,9 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         self.version = version
         self.timeout = timeout
         self.headers = headers
+        self.proxies = proxies
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth, proxies=self.proxies)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -204,10 +206,10 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
-        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, auth=self.auth, proxies=self.proxies)
         return openURL(
             reader.capabilities_url(self.url), timeout=self.timeout,
-            headers=self.headers, auth=self.auth
+            headers=self.headers, auth=self.auth, proxies=self.proxies
         )
 
     def items(self):
@@ -322,7 +324,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
                 startindex,
                 sortby)
 
-        u = openURL(url, data, method, timeout=self.timeout, headers=self.headers, auth=self.auth)
+        u = openURL(url, data, method, timeout=self.timeout, headers=self.headers, auth=self.auth, proxies=self.proxies)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -392,7 +394,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
             for kw in list(kwargs.keys()):
                 request[kw] = str(kwargs[kw])
         encoded_request = urlencode(request)
-        u = openURL(base_url + encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth)
+        u = openURL(base_url + encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth, proxies=self.proxies)
         return u.read()
 
     def _getStoredQueries(self):
@@ -422,7 +424,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         }
         encoded_request = urlencode(request)
         u = openURL(
-            base_url, data=encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth
+            base_url, data=encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth, proxies=self.proxies
         )
         tree = etree.fromstring(u.read())
         tempdict = {}
@@ -454,7 +456,7 @@ class WebFeatureService_2_0_0(WebFeatureService_):
         }
         encoded_request = urlencode(request)
         u = openURL(
-            base_url, data=encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth
+            base_url, data=encoded_request, timeout=self.timeout, headers=self.headers, auth=self.auth, proxies=self.proxies
         )
         tree = etree.fromstring(u.read())
         tempdict2 = {}
@@ -595,7 +597,7 @@ class ContentMetadata(AbstractContentMetadata):
         for metadataUrl in self.metadataUrls:
             if metadataUrl["url"] is not None:
                 try:
-                    content = openURL(metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth)
+                    content = openURL(metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth, proxies=self.proxies)
                     doc = etree.fromstring(content.read())
 
                     mdelem = doc.find(".//metadata")

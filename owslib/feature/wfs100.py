@@ -130,6 +130,7 @@ class WebFeatureService_1_0_0(object):
         parse_remote_metadata=False,
         timeout=30,
         headers=None,
+        proxies=None,
         username=None,
         password=None,
         auth=None,
@@ -144,9 +145,10 @@ class WebFeatureService_1_0_0(object):
         self.version = version
         self.timeout = timeout
         self.headers = headers
+        self.proxies = proxies
         self.auth = auth or Authentication(username, password)
         self._capabilities = None
-        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth, proxies=self.proxies)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -178,7 +180,7 @@ class WebFeatureService_1_0_0(object):
         features = self._capabilities.findall(nspath("FeatureTypeList/FeatureType"))
         for feature in features:
             cm = ContentMetadata(
-                feature, featuretypelist, parse_remote_metadata, auth=self.auth
+                feature, featuretypelist, parse_remote_metadata, auth=self.auth, proxies=self.proxies
             )
             self.contents[cm.id] = cm
 
@@ -191,10 +193,10 @@ class WebFeatureService_1_0_0(object):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
-        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, auth=self.auth, proxies=self.proxies)
         return openURL(
             reader.capabilities_url(self.url), timeout=self.timeout,
-            headers=self.headers, auth=self.auth
+            headers=self.headers, auth=self.auth, proxies=self.proxies
         )
 
     def items(self):
@@ -296,7 +298,7 @@ class WebFeatureService_1_0_0(object):
         data = urlencode(request)
         LOGGER.debug("Making request: %s?%s" % (base_url, data))
         u = openURL(base_url, data, method, timeout=self.timeout,
-                    headers=self.headers, auth=self.auth)
+                    headers=self.headers, auth=self.auth, proxies=self.proxies)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -377,7 +379,7 @@ class ContentMetadata(AbstractContentMetadata):
     """
 
     def __init__(
-        self, elem, parent, parse_remote_metadata=False, timeout=30, auth=None
+        self, elem, parent, parse_remote_metadata=False, timeout=30, auth=None, proxies=None
     ):
         """."""
         super(ContentMetadata, self).__init__(auth)
@@ -385,6 +387,7 @@ class ContentMetadata(AbstractContentMetadata):
         self.title = testXMLValue(elem.find(nspath("Title")))
         self.abstract = testXMLValue(elem.find(nspath("Abstract")))
         self.keywords = [f.text for f in elem.findall(nspath("Keywords"))]
+        self.proxies=proxies
 
         # bboxes
         self.boundingBox = None
@@ -451,7 +454,7 @@ class ContentMetadata(AbstractContentMetadata):
             ):
                 try:
                     content = openURL(
-                        metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth
+                        metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth, proxies=self.proxies
                     )
                     doc = etree.fromstring(content.read())
                     if metadataUrl["type"] == "FGDC":
