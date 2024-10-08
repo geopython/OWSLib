@@ -88,7 +88,7 @@ setup(
     maintainer_email='tomkralidis@gmail.com',
     url='https://owslib.readthedocs.io',
     install_requires=reqs,
-    python_requires='>=3.6',
+    python_requires='>=3.10',
     cmdclass={'test': PyTest},
     packages=find_packages(exclude=["docs", "etc", "examples", "tests"]),
     classifiers=[
@@ -100,9 +100,9 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Topic :: Scientific/Engineering :: GIS',
     ]
 )
