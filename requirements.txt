@@ -1,5 +1,5 @@
-dataclasses; python_version < '3.7'
 lxml
 python-dateutil
+pytz
 pyyaml
-requests>=1.0
+requests

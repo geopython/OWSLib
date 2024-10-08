@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # =============================================================================
-# Copyright (c) 2011 Tom Kralidis
+# Copyright (c) 2024 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -8,7 +8,9 @@
 # =============================================================================
 
 from io import BytesIO
+import logging
 from urllib.parse import urlencode
+
 from owslib.util import (
     testXMLValue,
     nspath_eval,
@@ -36,7 +38,7 @@ from owslib.feature.common import (
     AbstractContentMetadata,
 )
 from owslib.namespaces import Namespaces
-from owslib.util import log, openURL
+from owslib.util import openURL
 
 
 def get_namespaces():
@@ -45,6 +47,8 @@ def get_namespaces():
 
 
 namespaces = get_namespaces()
+
+LOGGER = logging.getLogger(__name__)
 
 
 class WebFeatureService_1_1_0(WebFeatureService_):
@@ -328,7 +332,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
                 request["outputFormat"] = outputFormat
 
             data = urlencode(request)
-            log.debug("Making request: %s?%s" % (base_url, data))
+            LOGGER.debug("Making request: %s?%s" % (base_url, data))
 
         elif method.lower() == "post":
             base_url, data = self.getPOSTGetFeatureRequest(

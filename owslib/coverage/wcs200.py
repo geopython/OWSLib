@@ -3,7 +3,7 @@
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2007 STFC <http://www.stfc.ac.uk>
 #
-# Authors :
+# Authors:
 #          Oliver Clements <olcl@pml.ac.uk>
 #
 # Contact email: olcl@pml.ac.uk
@@ -11,25 +11,26 @@
 
 # !!! NOTE: Does not conform to new interfaces yet #################
 
+from datetime import timedelta
+import errno
+import logging
+import os
+from urllib.parse import urlencode
+
+import dateutil.parser as parser
 
 from owslib.coverage.wcsBase import WCSBase, WCSCapabilitiesReader, ServiceException
+from owslib.crs import Crs
+from owslib.etree import etree
 from owslib.ows import (
     OwsCommon,
     ServiceIdentification,
     ServiceProvider,
-    OperationsMetadata,
+    OperationsMetadata
 )
+from owslib.util import datetime_from_ansi, datetime_from_iso, openURL, param_list_to_url_string, testXMLValue
 
-from urllib.parse import urlencode
-from owslib.util import openURL, testXMLValue
-from owslib.etree import etree
-from owslib.crs import Crs
-import os
-import errno
-import dateutil.parser as parser
-from datetime import timedelta
-import logging
-from owslib.util import log, datetime_from_ansi, datetime_from_iso, param_list_to_url_string
+LOGGER = logging.getLogger(__name__)
 
 
 #  function to save writing out WCS namespace in full each time
@@ -153,7 +154,7 @@ class WebCoverageService_2_0_0(WCSBase):
 
 
         """
-        log.debug(
+        LOGGER.debug(
             "WCS 2.0.0 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s"  # noqa
             % (
                 identifier,
@@ -183,7 +184,7 @@ class WebCoverageService_2_0_0(WCSBase):
         except StopIteration:
             base_url = self.url
 
-        log.debug("WCS 2.0.0 DEBUG: base url of server: %s" % base_url)
+        LOGGER.debug("WCS 2.0.0 DEBUG: base url of server: %s" % base_url)
 
         request = {"version": self.version, "request": "GetCoverage", "service": "WCS"}
         assert len(identifier) > 0
@@ -207,12 +208,12 @@ class WebCoverageService_2_0_0(WCSBase):
         if subsets:
             data += param_list_to_url_string(subsets, 'subset')
         if resolutions:
-            log.debug('Adding vendor-specific RESOLUTION parameter.')
+            LOGGER.debug('Adding vendor-specific RESOLUTION parameter.')
             data += param_list_to_url_string(resolutions, 'resolution')
         if sizes:
-            log.debug('Adding vendor-specific SIZE parameter.')
+            LOGGER.debug('Adding vendor-specific SIZE parameter.')
             data += param_list_to_url_string(sizes, 'size')
-        log.debug("WCS 2.0.0 DEBUG: Second part of URL: %s" % data)
+        LOGGER.debug("WCS 2.0.0 DEBUG: Second part of URL: %s" % data)
 
         u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers)
         return u

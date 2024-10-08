@@ -1,13 +1,12 @@
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
-# Copyright (c) 2022 Tom Kralidis
+# Copyright (c) 2024 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-import logging as log
 import os
 import sys
 from collections import OrderedDict
@@ -580,7 +579,7 @@ def getNamespace(element):
         return ""
 
 
-def build_get_url(base_url, params, overwrite=False):
+def build_get_url(base_url, params, overwrite=False, doseq=False):
     ''' Utility function to build a full HTTP GET URL from the service base URL and a dictionary of HTTP parameters.
 
     TODO: handle parameters case-insensitive?
@@ -612,7 +611,7 @@ def build_get_url(base_url, params, overwrite=False):
         if key not in pars:
             qs.append((key, value))
 
-    urlqs = urlencode(tuple(qs))
+    urlqs = urlencode(tuple(qs), doseq=doseq)
     return base_url.split('?')[0] + '?' + urlqs
 
 
@@ -791,7 +790,7 @@ def datetime_from_iso(iso):
 
 def datetime_from_ansi(ansi):
     """Converts an ansiDate (expressed as a number = the nuber of days since the datum origin of ansi)
-    to a python datetime object.
+    to a Python datetime object.
     """
 
     datumOrigin = datetime(1600, 12, 31, 0, 0, 0)

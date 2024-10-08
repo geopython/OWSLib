@@ -56,7 +56,7 @@ The module can be used to execute three types of requests versus a remote WPS en
         * "inputs" is a dictionary of (key,value) pairs where:
 
             * key is a named input parameter
-            * value is either a string, or any python object that supports a getXml() method
+            * value is either a string, or any Python object that supports a getXml() method
               In particular, a few classes are included in the package to support a FeatuteCollection input:
 
                   * "WFSFeatureCollection" can be used in conjunction with "WFSQuery" to define a FEATURE_COLLECTION
@@ -79,9 +79,9 @@ real-world usage examples that submits a "GetCapabilities", "DescribeProcess" an
 the live USGS and PML servers. To run:
 
 * cd examples
-* python wps-usgs-script.py
-* python wps-pml-script-1.py
-* python wps-pml-script-2.py
+* python3 wps-usgs-script.py
+* python3 wps-pml-script-1.py
+* python3 wps-pml-script-2.py
 
 The file wps-client.py contains a command-line client that can be used to submit a "GetCapabilities",
 "DescribeProcess" or "Execute" request to an arbitrary WPS server. For example, you can run it as follows:
@@ -97,8 +97,8 @@ The directory tests/ includes several doctest-style files wps_*.txt that show ho
 response of cached XML response documents. To run:
 
 * cd tests
-* python -m doctest wps_*.txt
-    ``(or python -m doctest -v wps_*.txt for verbose output)``
+* python3 -m doctest wps_*.txt
+    ``(or python3 -m doctest -v wps_*.txt for verbose output)``
 
 Also, the directory tests/ contains several examples of well-formed "Execute" requests:
 
@@ -113,7 +113,7 @@ from owslib.ows import DEFAULT_OWS_NAMESPACE, XLINK_NAMESPACE
 from owslib.ows import ServiceIdentification, ServiceProvider, OperationsMetadata, BoundingBox
 from time import sleep
 from owslib.util import (testXMLValue, testXMLAttribute, build_get_url, clean_ows_url, dump, getTypedValue,
-                         getNamespace, element_to_string, nspath, openURL, nspath_eval, log, Authentication)
+                         getNamespace, element_to_string, nspath, openURL, nspath_eval, Authentication)
 from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 from urllib.parse import urlparse
@@ -277,7 +277,7 @@ class WebProcessingService(object):
             self._capabilities = reader.readFromUrl(
                 self.url, headers=self.headers)
 
-        log.debug(element_to_string(self._capabilities))
+        LOGGER.debug(element_to_string(self._capabilities))
 
         # populate the capabilities metadata obects from the XML tree
         self._parseCapabilitiesMetadata(self._capabilities)
@@ -305,7 +305,7 @@ class WebProcessingService(object):
             rootElement = reader.readFromUrl(
                 self.url, identifier, headers=self.headers)
 
-        log.info(element_to_string(rootElement))
+        LOGGER.info(element_to_string(rootElement))
 
         # build metadata objects
         processes = self._parseProcessMetadata(rootElement)
@@ -339,7 +339,7 @@ class WebProcessingService(object):
         """
 
         # instantiate a WPSExecution object
-        log.info('Executing WPS request...')
+        LOGGER.info('Executing WPS request...')
         execution = WPSExecution(
             version=self.version,
             url=self.url,
@@ -354,7 +354,7 @@ class WebProcessingService(object):
             requestElement = execution.buildRequest(identifier, inputs, output, mode=mode, lineage=lineage)
             request = etree.tostring(requestElement)
             execution.request = request
-        log.debug(request)
+        LOGGER.debug(request)
 
         # submit the request to the live server
         if response is None:
@@ -362,7 +362,7 @@ class WebProcessingService(object):
         else:
             response = etree.fromstring(response)
 
-        log.debug(etree.tostring(response))
+        LOGGER.debug(etree.tostring(response))
 
         # parse response
         execution.parseResponse(response)
@@ -496,7 +496,7 @@ class WPSReader(object):
             if self.language:
                 data["language"] = self.language
             request_url = build_get_url(url, data, overwrite=True)
-            log.debug(request_url)
+            LOGGER.debug(request_url)
 
             # split URL into base url and query string to use utility function
             spliturl = request_url.split('?')
@@ -657,7 +657,7 @@ class WPSExecution(object):
         if mode is SYNC:
             _async = False
         elif mode is AUTO:
-            log.warn("Auto mode not available in WPS 1.0.0. Using async mode.")
+            LOGGER.warn("Auto mode not available in WPS 1.0.0. Using async mode.")
             _async = True
         else:
             _async = True
@@ -703,7 +703,7 @@ class WPSExecution(object):
             #   </wps:Data>
             # </wps:Input>
             if is_literaldata(val):
-                log.debug("literaldata %s", key)
+                LOGGER.debug("literaldata %s", key)
                 dataElement = etree.SubElement(
                     inputElement, nspath_eval('wps:Data', namespaces))
                 literalDataElement = etree.SubElement(
@@ -728,7 +728,7 @@ class WPSExecution(object):
             #   </wps:Reference>
             # </wps:Input>
             elif is_complexdata(val):
-                log.debug("complexdata %s", key)
+                LOGGER.debug("complexdata %s", key)
                 inputElement.append(val.getXml())
             elif is_boundingboxdata(val):
                 inputElement.append(val.get_xml())
@@ -801,13 +801,13 @@ class WPSExecution(object):
             # override status location
             if url is not None:
                 self.statusLocation = url
-            log.info('\nChecking execution status... (location=%s)' %
-                     self.statusLocation)
+            LOGGER.info('\nChecking execution status... (location=%s)' %
+                        self.statusLocation)
             try:
                 response = reader.readFromUrl(
                     self.statusLocation, headers=self.headers)
             except Exception:
-                log.error("Could not read status document.")
+                LOGGER.error("Could not read status document.")
         else:
             response = reader.readFromString(response)
 
@@ -815,16 +815,16 @@ class WPSExecution(object):
         try:
             xml = etree.tostring(response)
         except Exception:
-            log.error("Could not parse XML response.")
+            LOGGER.error("Could not parse XML response.")
         else:
             self.response = xml
-            log.debug(self.response)
+            LOGGER.debug(self.response)
 
             self.parseResponse(response)
 
             # sleep given number of seconds
             if self.isComplete() is False:
-                log.info('Sleeping %d seconds...' % sleepSecs)
+                LOGGER.info('Sleeping %d seconds...' % sleepSecs)
                 sleep(sleepSecs)
 
     def getStatus(self):
@@ -902,7 +902,7 @@ class WPSExecution(object):
                 out = open(filepath, 'wb')
                 out.write(content)
                 out.close()
-                log.info(f'Output written to file: {filepath}')
+                LOGGER.info(f'Output written to file: {filepath}')
         else:
             raise Exception(
                 f"Execution not successfully completed: status={self.status}")
@@ -953,12 +953,12 @@ class WPSExecution(object):
             self._parseExceptionReport(response)
 
         else:
-            log.debug('Unknown Response')
+            LOGGER.debug('Unknown Response')
 
         # log status, errors
-        log.info('Execution status=%s' % self.status)
-        log.info('Percent completed=%s' % self.percentCompleted)
-        log.info('Status message=%s' % self.statusMessage)
+        LOGGER.info('Execution status=%s' % self.status)
+        LOGGER.info('Percent completed=%s' % self.percentCompleted)
+        LOGGER.info('Status message=%s' % self.statusMessage)
         for error in self.errors:
             dump(error)
 
@@ -1025,7 +1025,7 @@ class WPSExecution(object):
         # xmlns:ows="http://www.opengis.net/ows/1.1"
         # xmlns:xlink="http://www.w3.org/1999/xlink">
         if len(self.dataInputs) > 0:
-            log.debug('clean data inputs')
+            LOGGER.debug('clean data inputs')
             self.dataInputs[:] = []
         for inputElement in root.findall(nspath('DataInputs/Input', ns=wpsns)):
             self.dataInputs.append(Output(inputElement))
@@ -1034,7 +1034,7 @@ class WPSExecution(object):
         # <ns:ProcessOutputs>
         # xmlns:ns="http://www.opengis.net/wps/1.0.0"
         if len(self.processOutputs) > 0:
-            log.debug('clean process outputs')
+            LOGGER.debug('clean process outputs')
             self.processOutputs[:] = []
         for outputElement in root.findall(nspath('ProcessOutputs/Output', ns=wpsns)):
             self.processOutputs.append(Output(outputElement))
@@ -1438,7 +1438,7 @@ class Output(InputOutput):
 
         # a) 'http://cida.usgs.gov/climate/gdp/process/RetrieveResultServlet?id=1318528582026OUTPUT.601bb3d0-547f-4eab-8642-7c7d2834459e'  # noqa
         # b) 'http://rsg.pml.ac.uk/wps/wpsoutputs/outputImage-11294Bd6l2a.tif'
-        log.info('Output URL=%s' % url)
+        LOGGER.info('Output URL=%s' % url)
 
         # Extract output filepath from base URL
         self.fileName = url.split('/')[-1]
@@ -1492,7 +1492,7 @@ class Output(InputOutput):
             out = open(self.filePath, 'wb')
             out.write(content)
             out.close()
-            log.info('Output written to file: %s' % self.filePath)
+            LOGGER.info('Output written to file: %s' % self.filePath)
 
 
 class WPSException:
@@ -1922,7 +1922,7 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
     '''
     while execution.isComplete() is False:
         execution.checkStatus(sleepSecs=sleepSecs)
-        log.info('Execution status: %s' % execution.status)
+        LOGGER.info('Execution status: %s' % execution.status)
 
     if execution.isSucceeded():
         if download:
@@ -1930,11 +1930,11 @@ def monitorExecution(execution, sleepSecs=3, download=False, filepath=None):
         else:
             for output in execution.processOutputs:
                 if output.reference is not None:
-                    log.info('Output URL=%s' % output.reference)
+                    LOGGER.info('Output URL=%s' % output.reference)
     else:
         for ex in execution.errors:
-            log.error('Error: code=%s, locator=%s, text=%s' %
-                      (ex.code, ex.locator, ex.text))
+            LOGGER.error('Error: code=%s, locator=%s, text=%s' %
+                         (ex.code, ex.locator, ex.text))
 
 
 def printValue(value):

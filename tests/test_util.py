@@ -28,6 +28,7 @@ def test_clean_ows_url():
 def test_build_get_url():
     assert build_get_url("http://example.org/wps", {'service': 'WPS'}) == 'http://example.org/wps?service=WPS'
     assert build_get_url("http://example.org/wms", {'SERVICE': 'wms'}) == 'http://example.org/wms?SERVICE=wms'
+    assert build_get_url("http://example.org/wms?map=/path/to/foo.map&", {'SERVICE': 'wms'}) == 'http://example.org/wms?map=%2Fpath%2Fto%2Ffoo.map&SERVICE=wms'
     assert build_get_url("http://example.org/wps?service=WPS", {'request': 'GetCapabilities'}) == \
         'http://example.org/wps?service=WPS&request=GetCapabilities'
     assert build_get_url("http://example.org/wps?service=WPS", {'request': 'GetCapabilities'}) == \
@@ -38,6 +39,12 @@ def test_build_get_url():
     # Parameter is case-senstive
     assert build_get_url("http://example.org/ows?SERVICE=WPS", {'service': 'WMS'}) == \
         'http://example.org/ows?SERVICE=WPS&service=WMS'
+    # Test with trailing ampersand and doseq False (default)
+    assert build_get_url("http://example.org/ows?SERVICE=WFS&", {'typename': 'test', 'keys': [1,2]}, doseq=False) == \
+        'http://example.org/ows?SERVICE=WFS&typename=test&keys=%5B1%2C+2%5D'
+    # Test with trailing ampersand and doseq True
+    assert build_get_url("http://example.org/ows?SERVICE=WFS&", {'typename': 'test', 'keys': [1,2]}, doseq=True) == \
+        'http://example.org/ows?SERVICE=WFS&typename=test&keys=1&keys=2'
 
 
 def test_build_get_url_overwrite():

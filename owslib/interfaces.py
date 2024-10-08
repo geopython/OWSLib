@@ -123,7 +123,7 @@ class IWebProcessingService(IService):
     def getcapabilities(**kw):
         """
         Makes a GetCapabilities request to the remote WPS server,
-        returns an XML document wrapped in a python file-like object.
+        returns an XML document wrapped in a Python file-like object.
         """
 
     def describeprocess(**kw):

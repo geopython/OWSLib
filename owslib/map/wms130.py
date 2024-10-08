@@ -28,8 +28,6 @@ from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.map.common import WMSCapabilitiesReader, AbstractContentMetadata
 
-from owslib.util import log
-
 n = Namespaces()
 WMS_NAMESPACE = n.get_namespace("wms")
 OGC_NAMESPACE = n.get_namespace('ogc')

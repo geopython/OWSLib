@@ -197,11 +197,12 @@ class Description:
                 p_def = {
                     'pattern': p.attrib.get('pattern'),
                     'title': p.attrib.get('title'),
-                    'value': p.attrib.get('value'),
-                    'options': []
+                    'value': p.attrib.get('value')
                 }
-                for o in p.findall(nspath_eval('parameters:Option', namespaces)):
-                    p_def['options'].append(o.attrib.get('value'))
+
+                options = [o.attrib.get('value') for o in p.findall(nspath_eval('parameters:Option', namespaces))]
+                if len(options) > 0:
+                    p_def['options'] = options
 
                 url_def['parameters'][p_name] = p_def
 

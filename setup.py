@@ -1,5 +1,5 @@
 # =============================================================================
-# Copyright (c) 2023 Tom Kralidis
+# Copyright (c) 2024 Tom Kralidis
 #
 # Author: Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -80,7 +80,8 @@ setup(
         'wcs',
         'capabilities',
         'metadata',
-        'wmts'
+        'wmts',
+        'connectedsystems'
     ]),
     author='Sean Gillies',
     author_email='sean.gillies@gmail.com',
@@ -99,10 +100,6 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.10',
-        'Programming Language :: Python :: 3.11',
-        'Programming Language :: Python :: 3.12',
-        'Topic :: Scientific/Engineering :: GIS',
+        'Topic :: Scientific/Engineering :: GIS'
     ]
 )
