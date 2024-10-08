@@ -414,7 +414,7 @@ class MD_DataIdentification(object):
                 namespaces))
             for i in _values:
                 val = util.testXMLValue(i)
-                if val is not None:
+                if val not in [None,'']:
                     self.uricode.append(val)
             
             _values = md.findall(util.nspath_eval(
@@ -424,17 +424,31 @@ class MD_DataIdentification(object):
                 'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:code/gmx:Anchor',
                 namespaces))
             for i in _values:
-                val = util.testXMLValue(i.attrib.get('xlink:href'), True)
-                if val is not None:
+                val = util.testXMLValue(i)
+                val1 = i.attrib.get(util.nspath_eval('xlink:href', namespaces))
+                if val1 not in [None,'']:
+                    self.uricode.append(val1)
+                elif val not in [None,'']:
                     self.uricode.append(val)
+                    
 
             self.uricodespace = []
             for i in md.findall(util.nspath_eval(
                     'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:codeSpace/gco:CharacterString',
                     namespaces)):
                 val = util.testXMLValue(i)
-                if val is not None:
+                if val not in [None,'']:
                     self.uricodespace.append(val)
+            for i in md.findall(util.nspath_eval(
+                    'gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:RS_Identifier/gmd:codeSpace/gmx:Anchor',
+                    namespaces)):
+                val = util.testXMLValue(i)
+                val1 = i.attrib.get(util.nspath_eval('xlink:href', namespaces))
+                if val1 not in [None,'']:
+                    self.uricode.append(val1)
+                elif val not in [None,'']:
+                    self.uricode.append(val)
+
 
             self.date = []
             self.datetype = []
