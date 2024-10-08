@@ -38,14 +38,15 @@ class ServiceException(Exception):
 
 # Allows marking timestamps as UTC without pulling in all of Pytz
 class TimeZone_UTC(tzinfo):
-        def tzname(self, dt):
-            return "UTC"
+    def tzname(self, dt):
+        return "UTC"
 
-        def utcoffset(self, dt):
-            return timedelta(0)
+    def utcoffset(self, dt):
+        return timedelta(0)
 
-        def dst(self, dt):
-            return timedelta(0)
+    def dst(self, dt):
+        return timedelta(0)
+
 
 tz_utc = TimeZone_UTC()
 
