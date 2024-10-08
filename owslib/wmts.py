@@ -241,8 +241,8 @@ class WebMapTileService(object):
                     parse_remote_metadata=parse_remote_metadata)
                 if cm.id:
                     if cm.id in self.contents:
-                        msg=('Content metadata for layer "%s" '
-                                       'already exists' % cm.id)
+                        msg = ('Content metadata for layer "%s" '
+                               'already exists' % cm.id)
                         warnings.warn(msg, RuntimeWarning)
                     self.contents[cm.id] = cm
                 gather_layers(elem, cm)
@@ -254,7 +254,7 @@ class WebMapTileService(object):
             if tms.identifier:
                 if tms.identifier in self.tilematrixsets:
                     msg = ('TileMatrixSet with identifier "%s" '
-                                   'already exists' % tms.identifier)
+                           'already exists' % tms.identifier)
                     warnings.warn(msg, RuntimeWarning)
                 self.tilematrixsets[tms.identifier] = tms
 
@@ -263,8 +263,8 @@ class WebMapTileService(object):
             theme = Theme(elem)
             if theme.identifier:
                 if theme.identifier in self.themes:
-                    msg=('Theme with identifier "%s" already exists'
-                                   % theme.identifier)
+                    msg = ('Theme with identifier "%s" already exists'
+                           % theme.identifier)
                     warnings.warn(msg, RuntimeWarning)
                 self.themes[theme.identifier] = theme
 
@@ -523,7 +523,7 @@ class TileMatrixSet(object):
             if tm.identifier:
                 if tm.identifier in self.tilematrix:
                     msg = ('TileMatrix with identifier "%s" '
-                                   'already exists' % tm.identifier)
+                           'already exists' % tm.identifier)
                     warnings.warn(msg, RuntimeWarning)
                 self.tilematrix[tm.identifier] = tm
 
@@ -753,8 +753,7 @@ class ContentMetadata:
             if tmsl.tilematrixset:
                 if tmsl.tilematrixset in self.tilematrixsetlinks:
                     msg = ('TileMatrixSetLink with tilematrixset "%s"'
-                                   ' already exists' %
-                                   tmsl.tilematrixset)
+                           ' already exists' % tmsl.tilematrixset)
                     warnings.warn(msg, RuntimeWarning)
                 self.tilematrixsetlinks[tmsl.tilematrixset] = tmsl
 
