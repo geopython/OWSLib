@@ -3,7 +3,7 @@ from urllib.parse import urlencode, parse_qsl
 from owslib import ows
 from owslib.crs import Crs
 from owslib.fes2 import FilterCapabilities
-from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, extract_time
+from owslib.util import openURL, testXMLValue, testXMLAttribute, nspath_eval, extract_time, getXMLTree
 from owslib.namespaces import Namespaces
 from owslib.swe.observation.om import MeasurementObservation
 from owslib.swe.observation.waterml2 import MeasurementTimeseriesObservation
@@ -331,7 +331,7 @@ class SosCapabilitiesReader(object):
         getcaprequest = self.capabilities_url(service_url)
         spliturl = getcaprequest.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password)
-        return etree.fromstring(u.read())
+        return getXMLTree(u)
 
     def read_string(self, st):
         """

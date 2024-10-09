@@ -34,7 +34,7 @@ import warnings
 from urllib.parse import (urlencode, urlparse, urlunparse, parse_qs,
                           ParseResult)
 from .etree import etree
-from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication, openURL
+from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication, openURL, getXMLTree
 from .fgdc import Metadata
 from .iso import MD_Metadata
 from .ows import ServiceProvider, ServiceIdentification, OperationsMetadata
@@ -933,7 +933,7 @@ class WMTSCapabilitiesReader:
         # now split it up again to use the generic openURL function...
         spliturl = getcaprequest.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get', headers=self.headers, auth=self.auth)
-        return etree.fromstring(u.read())
+        return getXMLTree(u)
 
     def readString(self, st):
         """Parse a WMTS capabilities document, returning an elementtree instance
