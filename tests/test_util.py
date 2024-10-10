@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import codecs
-from owslib.util import clean_ows_url, build_get_url, strip_bom
+from owslib.util import clean_ows_url, build_get_url, strip_bom, tz_utc
+from datetime import datetime, timezone
 
 
 def test_strip_bom():
@@ -51,3 +52,10 @@ def test_build_get_url_overwrite():
     # Use overwrite flag
     assert build_get_url("http://example.org/ows?SERVICE=WPS", {'SERVICE': 'WMS'}, overwrite=True) == \
         'http://example.org/ows?SERVICE=WMS'
+
+
+def test_time_zone_utc():
+    now = datetime.utcnow()
+    as_utc = now.replace(tzinfo=tz_utc)
+    assert(as_utc.isoformat()[-6:] == "+00:00")
+
