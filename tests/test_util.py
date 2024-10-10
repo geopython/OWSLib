@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import codecs
-from owslib.util import clean_ows_url, build_get_url, strip_bom, extract_time, tz_utc
+from owslib.util import clean_ows_url, build_get_url, strip_bom, extract_time
 from owslib.etree import etree
 from datetime import datetime, timezone
 
@@ -57,7 +57,7 @@ def test_build_get_url_overwrite():
 
 def test_time_zone_utc():
     now = datetime.utcnow()
-    as_utc = now.replace(tzinfo=tz_utc)
+    as_utc = now.replace(tzinfo=timezone.utc)
     assert(as_utc.isoformat()[-6:] == "+00:00")
 
 
