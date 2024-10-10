@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import codecs
-from owslib.util import clean_ows_url, build_get_url, strip_bom, tz_utc
+from owslib.util import clean_ows_url, build_get_url, strip_bom, extract_time, tz_utc
+from owslib.etree import etree
 from datetime import datetime, timezone
 
 
@@ -59,3 +60,11 @@ def test_time_zone_utc():
     as_utc = now.replace(tzinfo=tz_utc)
     assert(as_utc.isoformat()[-6:] == "+00:00")
 
+
+def test_extract_time():
+    definite_sample = "<beginPosition>2006-07-27T21:10:00Z</beginPosition>"
+    indefinite_sample = "<endPosition indeterminatePosition=\"now\"></endPosition>"
+    start = extract_time(etree.fromstring(definite_sample))
+    assert(start.isoformat()[-6:] == "+00:00")
+    stop = extract_time(etree.fromstring(indefinite_sample))
+    assert(stop.isoformat()[-6:] == "+00:00")
