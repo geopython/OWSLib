@@ -11,7 +11,7 @@ import os
 import sys
 from collections import OrderedDict
 from dateutil import parser
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
 from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
