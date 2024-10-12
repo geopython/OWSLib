@@ -6,8 +6,7 @@ from tests.utils import resource_file, sorted_url_query, service_ok
 import json
 import pytest
 
-SERVICE_URL = 'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288'
-
+SERVICE_URL = 'https://services.ga.gov.au/gis/stratunits/ows'
 
 def test_caps_info():
     getcapsin = open(resource_file("wfs_HSRS_GetCapabilities_1_1_0.xml"), "rb").read()
@@ -59,59 +58,50 @@ def test_verbOptions_wfs_100():
     assert len(verbOptions[0]) == 2
 
 
-@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_outputformat_wfs_100():
-    wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-                            version='1.0.0')
+    wfs = WebFeatureService(SERVICE_URL, version='1.0.0')
     feature = wfs.getfeature(
-        typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
+        typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json')
     assert len(json.loads(feature.read())['features']) == 1
 
 
-@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_outputformat_wfs_110():
-    wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-                            version='1.1.0')
+    wfs = WebFeatureService(SERVICE_URL, version='1.1.0')
     feature = wfs.getfeature(
-        typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
+        typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json')
     assert len(json.loads(feature.read())['features']) == 1
 
 
-@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_outputformat_wfs_200():
-    wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-                            version='2.0.0')
+    wfs = WebFeatureService(SERVICE_URL, version='2.0.0')
     feature = wfs.getfeature(
-        typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json')
+        typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json')
     assert len(json.loads(feature.read())['features']) == 1
 
 
-@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_srsname_wfs_100():
-    wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-                            version='1.0.0')
+    wfs = WebFeatureService(SERVICE_URL, version='1.0.0')
     # ServiceException: Unable to support srsName: EPSG:99999999
     with pytest.raises(ServiceException):
         feature = wfs.getfeature(
-            typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
+            typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json',
             srsname="EPSG:99999999")
 
-    wfs = WebFeatureService('https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-                            version='1.0.0')
+    wfs = WebFeatureService(SERVICE_URL, version='1.0.0')
     feature = wfs.getfeature(
-        typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
+        typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json',
         srsname="urn:x-ogc:def:crs:EPSG:4326")
     assert len(json.loads(feature.read())['features']) == 1
 
@@ -121,73 +111,76 @@ def test_srsname_wfs_100():
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_srsname_wfs_110():
-    wfs = WebFeatureService(
-        'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-        version='1.1.0')
+    wfs = WebFeatureService(SERVICE_URL, version='1.1.0')
     # ServiceException: Unable to support srsName: EPSG:99999999
     with pytest.raises(ServiceException):
         feature = wfs.getfeature(
-            typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
+            typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json',
             srsname="EPSG:99999999")
 
-    wfs = WebFeatureService(
-        'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-        version='1.0.0')
+    wfs = WebFeatureService(SERVICE_URL, version='1.1.0')
     feature = wfs.getfeature(
-        typename=['sb:Project_Area'], maxfeatures=1, propertyname=None, outputFormat='application/json',
+        typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json',
         srsname="urn:x-ogc:def:crs:EPSG:4326")
     assert len(json.loads(feature.read())['features']) == 1
 
 
-@pytest.mark.xfail
+@pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
+                    reason="WFS service is unreachable")
+def test_srsname_wfs_200():
+    wfs = WebFeatureService(SERVICE_URL, version='2.0.0')
+    # ServiceException: Unable to support srsName: EPSG:99999999
+    with pytest.raises(ServiceException):
+        feature = wfs.getfeature(
+            typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json',
+            srsname="EPSG:99999999")
+
+    wfs = WebFeatureService(SERVICE_URL, version='2.0.0')
+    feature = wfs.getfeature(
+        typename=['stratunit:StratigraphicUnit'], maxfeatures=1, propertyname=None, outputFormat='application/json',
+        srsname="urn:x-ogc:def:crs:EPSG:4326")
+    assert len(json.loads(feature.read())['features']) == 1
+
+
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_schema_wfs_100():
-    wfs = WebFeatureService(
-        'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-        version='1.0.0')
-    schema = wfs.get_schema('footprint')
-    assert len(schema['properties']) == 4
-    assert schema['properties']['summary'] == 'string'
-    assert schema['geometry'] == 'Polygon'
+    wfs = WebFeatureService(SERVICE_URL, version='1.0.0')
+    schema = wfs.get_schema('stratunit:StratigraphicUnit')
+    assert len(schema['properties']) == 33
+    assert schema['properties']['DESCRIPTION'] == 'string'
+    assert schema['geometry'] is None
 
 
-@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_schema_wfs_110():
-    wfs = WebFeatureService(
-        'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-        version='1.1.0')
-    schema = wfs.get_schema('footprint')
-    assert len(schema['properties']) == 4
-    assert schema['properties']['summary'] == 'string'
-    assert schema['geometry'] == '3D Polygon'
+    wfs = WebFeatureService(SERVICE_URL, version='1.1.0')
+    schema = wfs.get_schema('stratunit:StratigraphicUnit')
+    assert len(schema['properties']) == 33
+    assert schema['properties']['DESCRIPTION'] == 'string'
+    assert schema['geometry'] is None
 
 
-@pytest.mark.xfail
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_schema_wfs_200():
-    wfs = WebFeatureService(
-        'https://www.sciencebase.gov/catalogMaps/mapping/ows/53398e51e4b0db25ad10d288',
-        version='2.0.0')
-    schema = wfs.get_schema('footprint')
-    assert len(schema['properties']) == 4
-    assert schema['properties']['summary'] == 'string'
-    assert schema['geometry'] == '3D Polygon'
+    wfs = WebFeatureService(SERVICE_URL, version='2.0.0')
+    schema = wfs.get_schema('stratunit:StratigraphicUnit')
+    assert len(schema['properties']) == 33
+    assert schema['properties']['DESCRIPTION'] == 'string'
+    assert schema['geometry'] is None
 
 
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_xmlfilter_wfs_110():
-    wfs = WebFeatureService(
-        'https://services.ga.gov.au/gis/stratunits/ows',
-        version='1.1.0')
+    wfs = WebFeatureService(SERVICE_URL, version='1.1.0')
     filter_prop = PropertyIsLike(propertyname='stratunit:GEOLOGICHISTORY', literal='Cisuralian - Guadalupian',
         matchCase=True)
 
@@ -203,9 +196,7 @@ def test_xmlfilter_wfs_110():
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_xmlfilter_wfs_200():
-    wfs = WebFeatureService(
-        'https://services.ga.gov.au/gis/stratunits/ows',
-        version='2.0.0')
+    wfs = WebFeatureService(SERVICE_URL,  version='2.0.0')
     filter_prop = PropertyIsLike(propertyname='stratunit:geologichistory', literal='Cisuralian - Guadalupian',
         matchCase=True)
 
