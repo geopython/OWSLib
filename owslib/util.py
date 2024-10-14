@@ -11,8 +11,7 @@ import os
 import sys
 from collections import OrderedDict
 from dateutil import parser
-from datetime import datetime, timedelta
-import pytz
+from datetime import datetime, timedelta, timezone
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
 from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
@@ -648,8 +647,7 @@ Would be 2006-07-27T21:10:00Z, not 'now'
     except Exception:
         att = testXMLValue(element.attrib.get('indeterminatePosition'), True)
         if att and att == 'now':
-            dt = datetime.utcnow()
-            dt.replace(tzinfo=pytz.utc)
+            dt = datetime.utcnow().replace(tzinfo=timezone.utc)
         else:
             dt = None
     return dt

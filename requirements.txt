@@ -1,5 +1,4 @@
 lxml
 python-dateutil
-pytz
 pyyaml
 requests

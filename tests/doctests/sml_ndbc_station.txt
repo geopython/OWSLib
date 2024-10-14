@@ -3,7 +3,7 @@ Imports
     >>> from tests.utils import resource_file
     >>> from owslib.swe.sensor.sml import SensorML
     >>> from dateutil import parser
-    >>> import pytz
+	>>> from datetime import timezone
 
 Initialize
 
@@ -104,7 +104,7 @@ History
     2
 
     >>> event = his[0]
-    >>> parser.parse(event.date).replace(tzinfo=pytz.utc).isoformat()
+    >>> parser.parse(event.date).replace(tzinfo=timezone.utc).isoformat()
     '2010-01-12T00:00:00+00:00'
     >>> event.description
     'Deployment start event'
