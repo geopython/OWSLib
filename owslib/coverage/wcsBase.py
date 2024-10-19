@@ -11,7 +11,7 @@
 
 from urllib.parse import urlencode, parse_qsl
 from owslib.etree import etree
-from owslib.util import Authentication, openURL
+from owslib.util import Authentication, openURL, getXMLTree
 
 
 class ServiceException(Exception):
@@ -118,7 +118,7 @@ class WCSCapabilitiesReader(object):
         """
         request = self.capabilities_url(service_url)
         u = openURL(request, timeout=timeout, cookies=self.cookies, auth=self.auth, headers=self.headers)
-        return etree.fromstring(u.read())
+        return getXMLTree(u)
 
     def readString(self, st):
         """Parse a WCS capabilities document, returning an

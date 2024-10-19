@@ -1,7 +1,7 @@
 from urllib.parse import urlencode, parse_qsl
 
 from owslib.etree import etree
-from owslib.util import strip_bom, Authentication, openURL
+from owslib.util import strip_bom, Authentication, openURL, getXMLTree
 
 
 class WMSCapabilitiesReader(object):
@@ -64,9 +64,7 @@ class WMSCapabilitiesReader(object):
         spliturl = self.request.split('?')
         u = openURL(spliturl[0], spliturl[1], method='Get',
                     timeout=timeout, headers=self.headers, auth=self.auth)
-
-        raw_text = strip_bom(u.read())
-        return etree.fromstring(raw_text)
+        return getXMLTree(u)
 
     def readString(self, st):
         """Parse a WMS capabilities document, returning an elementtree instance.
