@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import codecs
 from unittest import mock
+import pytest
 from owslib.util import clean_ows_url, build_get_url, strip_bom, extract_time, ResponseWrapper, getXMLTree
 from owslib.etree import etree
 from datetime import datetime, timezone
