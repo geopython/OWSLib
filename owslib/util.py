@@ -11,8 +11,7 @@ import os
 import sys
 from collections import OrderedDict
 from dateutil import parser
-from datetime import datetime, timedelta
-import pytz
+from datetime import datetime, timedelta, timezone
 from owslib.etree import etree, ParseError
 from owslib.namespaces import Namespaces
 from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
@@ -600,7 +599,7 @@ def getNamespace(element):
         return ""
 
 
-def build_get_url(base_url, params, overwrite=False):
+def build_get_url(base_url, params, overwrite=False, doseq=False):
     ''' Utility function to build a full HTTP GET URL from the service base URL and a dictionary of HTTP parameters.
 
     TODO: handle parameters case-insensitive?
@@ -632,7 +631,7 @@ def build_get_url(base_url, params, overwrite=False):
         if key not in pars:
             qs.append((key, value))
 
-    urlqs = urlencode(tuple(qs))
+    urlqs = urlencode(tuple(qs), doseq=doseq)
     return base_url.split('?')[0] + '?' + urlqs
 
 
@@ -682,8 +681,7 @@ Would be 2006-07-27T21:10:00Z, not 'now'
     except Exception:
         att = testXMLValue(element.attrib.get('indeterminatePosition'), True)
         if att and att == 'now':
-            dt = datetime.utcnow()
-            dt.replace(tzinfo=pytz.utc)
+            dt = datetime.utcnow().replace(tzinfo=timezone.utc)
         else:
             dt = None
     return dt

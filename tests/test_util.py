@@ -1,8 +1,9 @@
 # -*- coding: UTF-8 -*-
 import codecs
 from unittest import mock
-import pytest
-from owslib.util import clean_ows_url, build_get_url, strip_bom, ResponseWrapper, getXMLTree
+from owslib.util import clean_ows_url, build_get_url, strip_bom, extract_time, ResponseWrapper, getXMLTree
+from owslib.etree import etree
+from datetime import datetime, timezone
 
 
 def test_strip_bom():
@@ -30,6 +31,8 @@ def test_clean_ows_url():
 def test_build_get_url():
     assert build_get_url("http://example.org/wps", {'service': 'WPS'}) == 'http://example.org/wps?service=WPS'
     assert build_get_url("http://example.org/wms", {'SERVICE': 'wms'}) == 'http://example.org/wms?SERVICE=wms'
+    assert build_get_url("http://example.org/wms?map=/path/to/foo.map&", {'SERVICE': 'wms'}) == \
+        'http://example.org/wms?map=%2Fpath%2Fto%2Ffoo.map&SERVICE=wms'
     assert build_get_url("http://example.org/wps?service=WPS", {'request': 'GetCapabilities'}) == \
         'http://example.org/wps?service=WPS&request=GetCapabilities'
     assert build_get_url("http://example.org/wps?service=WPS", {'request': 'GetCapabilities'}) == \
@@ -40,6 +43,12 @@ def test_build_get_url():
     # Parameter is case-senstive
     assert build_get_url("http://example.org/ows?SERVICE=WPS", {'service': 'WMS'}) == \
         'http://example.org/ows?SERVICE=WPS&service=WMS'
+    # Test with trailing ampersand and doseq False (default)
+    assert build_get_url("http://example.org/ows?SERVICE=WFS&", {'typename': 'test', 'keys': [1, 2]}, doseq=False) == \
+        'http://example.org/ows?SERVICE=WFS&typename=test&keys=%5B1%2C+2%5D'
+    # Test with trailing ampersand and doseq True
+    assert build_get_url("http://example.org/ows?SERVICE=WFS&", {'typename': 'test', 'keys': [1, 2]}, doseq=True) == \
+        'http://example.org/ows?SERVICE=WFS&typename=test&keys=1&keys=2'
 
 
 def test_build_get_url_overwrite():
@@ -75,3 +84,18 @@ def test_getXMLTree_invalid():
 
     assert str(ex.value) == 'http:///example.org/?service=WFS&request=GetCapabilities&version=2.0.0 responded with Content-Type \'text/html\'' \
     ': \'msCGILoadMap(): Web application error. CGI variable \"map\" is not set.\''
+
+
+def test_time_zone_utc():
+    now = datetime.utcnow()
+    as_utc = now.replace(tzinfo=timezone.utc)
+    assert as_utc.isoformat()[-6:] == "+00:00"
+
+
+def test_extract_time():
+    definite_sample = "<beginPosition>2006-07-27T21:10:00Z</beginPosition>"
+    indefinite_sample = "<endPosition indeterminatePosition=\"now\"></endPosition>"
+    start = extract_time(etree.fromstring(definite_sample))
+    assert start.isoformat()[-6:] == "+00:00"
+    stop = extract_time(etree.fromstring(indefinite_sample))
+    assert stop.isoformat()[-6:] == "+00:00"

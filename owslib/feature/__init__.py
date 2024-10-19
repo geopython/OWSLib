@@ -9,7 +9,7 @@ import logging
 
 from urllib.parse import urlencode
 from owslib.crs import Crs
-from owslib.util import Authentication
+from owslib.util import Authentication, build_get_url
 from owslib.feature.schema import get_schema
 from owslib.feature.postrequest import PostRequest_1_1_0, PostRequest_2_0_0
 
@@ -160,6 +160,7 @@ class WebFeatureService_(object):
         featureversion=None,
         propertyname=None,
         maxfeatures=None,
+        srsname=None,
         storedQueryID=None,
         storedQueryParams=None,
         outputFormat=None,
@@ -183,6 +184,8 @@ class WebFeatureService_(object):
             List of feature property names. '*' matches all.
         maxfeatures : int
             Maximum number of features to be returned.
+        srsname: string
+            EPSG code to request the data in
         method : string
             Qualified name of the HTTP DCP method to use.
         outputFormat: string (optional)
@@ -209,7 +212,6 @@ class WebFeatureService_(object):
                 if m.get("type").lower() == method.lower()
             )
         )
-        base_url = base_url if base_url.endswith("?") else base_url + "?"
 
         request = {"service": "WFS", "version": self.version, "request": "GetFeature"}
 
@@ -239,6 +241,13 @@ class WebFeatureService_(object):
                 request["count"] = str(maxfeatures)
             else:
                 request["maxfeatures"] = str(maxfeatures)
+        if srsname:
+            request["srsname"] = str(srsname)
+
+            # Check if desired SRS is supported by the service for each
+            # typename. Warning will be thrown if that SRS is not allowed.
+            for name in typename:
+                _ = self.getSRS(srsname, name)
         if startindex:
             request["startindex"] = str(startindex)
         if storedQueryID:
@@ -248,9 +257,7 @@ class WebFeatureService_(object):
         if outputFormat is not None:
             request["outputFormat"] = outputFormat
 
-        data = urlencode(request, doseq=True)
-
-        return base_url + data
+        return build_get_url(base_url, request)
 
     def getPOSTGetFeatureRequest(
         self,

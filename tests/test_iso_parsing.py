@@ -595,3 +595,21 @@ def test_md_parsing_keywords_no_anchor():
     assert iden.keywords[1].keywords[1].url is None
     assert iden.keywords[1].keywords[2].name == 'parcelles cadastrales'
     assert iden.keywords[1].keywords[2].url is None
+
+def test_md_indentifier_anchor():
+    """Test the parsing of identifier where the id is defined by a 
+    gmx:Anchor
+    
+    MD_Metadata record available in
+    tests/resources/csw_iso_identifier.xml
+
+    """
+    md_resource = get_md_resource(
+        'tests/resources/csw_iso_identifier.xml')
+    md = MD_Metadata(md_resource)
+    assert type(md) is MD_Metadata
+    assert md.referencesystem.code == 'ETRS89-GRS80'
+    iden = md.identification[0]
+    assert_list(iden.uricode, 1)
+    assert iden.uricode[0] == 'https://www.nationaalgeoregister.nl/geonetwork/srv/metadata/f44dac86-2228-412f-8355-e56446ca9933'
+    
