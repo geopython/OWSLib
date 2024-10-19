@@ -113,6 +113,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         parse_remote_metadata=False,
         timeout=30,
         headers=None,
+        proxies=None,
         username=None,
         password=None,
         auth=None,
@@ -129,10 +130,11 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         self.url = url
         self.version = version
         self.headers = headers
+        self.proxies = proxies
         self.timeout = timeout
         self._capabilities = None
         self.owscommon = OwsCommon("1.0.0")
-        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, headers=self.headers, auth=self.auth, proxies=self.proxies)
         if xml:
             self._capabilities = reader.readString(xml)
         else:
@@ -204,10 +206,10 @@ class WebFeatureService_1_1_0(WebFeatureService_):
         """Request and return capabilities document from the WFS as a
         file-like object.
         NOTE: this is effectively redundant now"""
-        reader = WFSCapabilitiesReader(self.version, auth=self.auth)
+        reader = WFSCapabilitiesReader(self.version, auth=self.auth, proxies=self.proxies)
         return openURL(
             reader.capabilities_url(self.url), timeout=self.timeout,
-            headers=self.headers, auth=self.auth
+            headers=self.headers, auth=self.auth, proxies=self.proxies
         )
 
     def items(self):
@@ -350,7 +352,7 @@ class WebFeatureService_1_1_0(WebFeatureService_):
             )
 
         u = openURL(base_url, data, method, timeout=self.timeout,
-                    headers=self.headers, auth=self.auth)
+                    headers=self.headers, auth=self.auth, proxies=self.proxies)
 
         # check for service exceptions, rewrap, and return
         # We're going to assume that anything with a content-length > 32k
@@ -397,9 +399,9 @@ class ContentMetadata(AbstractContentMetadata):
     Implements IMetadata.
     """
 
-    def __init__(self, elem, parse_remote_metadata=False, timeout=30, headers=None, auth=None):
+    def __init__(self, elem, parse_remote_metadata=False, timeout=30, headers=None, auth=None, proxies=None):
         """."""
-        super(ContentMetadata, self).__init__(headers=headers, auth=auth)
+        super(ContentMetadata, self).__init__(headers=headers, auth=auth, proxies=proxies)
         self.id = testXMLValue(elem.find(nspath_eval("wfs:Name", namespaces)))
         self.title = testXMLValue(elem.find(nspath_eval("wfs:Title", namespaces)))
         self.abstract = testXMLValue(elem.find(nspath_eval("wfs:Abstract", namespaces)))
@@ -474,7 +476,7 @@ class ContentMetadata(AbstractContentMetadata):
                 metadataUrl["url"] is not None and metadataUrl["format"].lower() == "text/xml"
             ):
                 try:
-                    content = openURL(metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth)
+                    content = openURL(metadataUrl["url"], timeout=timeout, headers=self.headers, auth=self.auth, proxies=self.proxies)
                     doc = etree.fromstring(content.read())
 
                     if metadataUrl["type"] == "FGDC":

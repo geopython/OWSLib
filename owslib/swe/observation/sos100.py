@@ -38,17 +38,18 @@ class SensorObservationService_1_0_0(object):
         else:
             raise KeyError("No Observational Offering with id: %s" % id)
 
-    def __init__(self, url, version='1.0.0', xml=None, username=None, password=None):
+    def __init__(self, url, version='1.0.0', xml=None, username=None, password=None, proxies=None):
         """Initialize."""
         self.url = url
         self.username = username
         self.password = password
         self.version = version
+        self.proxies = proxies
         self._capabilities = None
 
         # Authentication handled by Reader
         reader = SosCapabilitiesReader(
-            version=self.version, url=self.url, username=self.username, password=self.password
+            version=self.version, url=self.url, username=self.username, password=self.password, proxies=self.proxies)
         )
         if xml is not None:  # read from stored xml
             self._capabilities = reader.read_string(xml)
@@ -131,7 +132,7 @@ class SensorObservationService_1_0_0(object):
 
         data = urlencode(request)
 
-        response = openURL(base_url, data, method, username=self.username, password=self.password, **url_kwargs).read()
+        response = openURL(base_url, data, method, username=self.username, password=self.password, proxies=self.proxies, **url_kwargs).read()
 
         tr = etree.fromstring(response)
 
@@ -188,7 +189,7 @@ class SensorObservationService_1_0_0(object):
         data = urlencode(request)
 
         response = openURL(base_url, data, method, username=self.username,
-                           password=self.password, **url_kwargs).read()
+                           password=self.password, proxies=self.proxies, **url_kwargs).read()
         try:
             tr = etree.fromstring(response)
             if tr.tag == nspath_eval("ows:ExceptionReport", namespaces):
@@ -277,11 +278,12 @@ class SosObservationOffering(object):
 
 
 class SosCapabilitiesReader(object):
-    def __init__(self, version="1.0.0", url=None, username=None, password=None):
+    def __init__(self, version="1.0.0", url=None, username=None, password=None, proxies=None):
         self.version = version
         self.url = url
         self.username = username
         self.password = password
+        self.proxies = proxies
 
     def capabilities_url(self, service_url):
         """
@@ -313,7 +315,7 @@ class SosCapabilitiesReader(object):
         """
         getcaprequest = self.capabilities_url(service_url)
         spliturl = getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password)
+        u = openURL(spliturl[0], spliturl[1], method='Get', username=self.username, password=self.password, proxies=self.proxies)
         return etree.fromstring(u.read())
 
     def read_string(self, st):

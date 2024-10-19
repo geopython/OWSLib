@@ -51,7 +51,7 @@ class WebMapService_1_3_0(object):
 
     def __init__(self, url, version='1.3.0', xml=None, username=None,
                  password=None, parse_remote_metadata=False, timeout=30,
-                 headers=None, auth=None):
+                 headers=None, auth=None, proxies=None):
         """initialize"""
         if auth:
             if username:
@@ -62,12 +62,13 @@ class WebMapService_1_3_0(object):
         self.version = version
         self.timeout = timeout
         self.headers = headers
+        self.proxies = proxies
         self._capabilities = None
         self.auth = auth or Authentication(username, password)
 
         # Authentication handled by Reader
         reader = WMSCapabilitiesReader(
-            self.version, url=self.url, headers=headers, auth=self.auth)
+            self.version, url=self.url, headers=headers, auth=self.auth, proxies=proxies)
         if xml is not None:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -115,7 +116,7 @@ class WebMapService_1_3_0(object):
             layers = []
             for index, elem in enumerate(parent_elem.findall(nspath('Layer', WMS_NAMESPACE))):
                 cm = ContentMetadata(elem, parent=parent_metadata, index=index + 1,
-                                     parse_remote_metadata=parse_remote_metadata)
+                                     parse_remote_metadata=parse_remote_metadata, proxies=self.proxies)
                 if cm.id:
                     if cm.id in self.contents:
                         warnings.warn('Content metadata for layer "%s" already exists. Using child layer' % cm.id)
@@ -306,7 +307,7 @@ class WebMapService_1_3_0(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers, proxies=self.proxies)
 
         # need to handle casing in the header keys
         headers = {}
@@ -381,7 +382,7 @@ class WebMapService_1_3_0(object):
 
         self.request = bind_url(base_url) + data
 
-        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
+        u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers, proxies=self.proxies)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'XML':
@@ -429,9 +430,8 @@ class ServiceProvider(object):
 class ContentMetadata(AbstractContentMetadata):
 
     def __init__(self, elem, parent=None, children=None, index=0, parse_remote_metadata=False,
-                 timeout=30, auth=None):
+                 timeout=30, auth=None, proxies=None):
         super(ContentMetadata, self).__init__(auth)
-
         if xmltag_split(elem.tag) != 'Layer':
             raise ValueError('%s should be a Layer' % (elem,))
 
@@ -461,6 +461,7 @@ class ContentMetadata(AbstractContentMetadata):
 
         self.abstract = testXMLValue(elem.find(nspath('Abstract', WMS_NAMESPACE)))
 
+        self.proxies = proxies
         # TODO: what is the preferred response to esri's handling of custom projections
         # in the spatial ref definitions? see
         # http://resources.arcgis.com/en/help/main/10.1/index.html#//00sq000000m1000000
@@ -686,7 +687,7 @@ class ContentMetadata(AbstractContentMetadata):
 
         self.layers = []
         for child in elem.findall(nspath('Layer', WMS_NAMESPACE)):
-            self.layers.append(ContentMetadata(child, self))
+            self.layers.append(ContentMetadata(child, self, proxies=self.proxies))
 
     def parse_remote_metadata(self, timeout=30):
         """Parse remote metadata for MetadataURL and add it as metadataUrl['metadata']"""
@@ -695,7 +696,7 @@ class ContentMetadata(AbstractContentMetadata):
                     and metadataUrl['format'].lower() in ['application/xml', 'text/xml']:  # download URL
                 try:
                     content = openURL(
-                        metadataUrl['url'], timeout=timeout, auth=self.auth)
+                        metadataUrl['url'], timeout=timeout, auth=self.auth, proxies=self.proxies)
                     doc = etree.fromstring(content.read())
 
                     mdelem = doc.find('.//metadata')
