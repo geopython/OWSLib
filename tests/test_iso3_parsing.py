@@ -302,7 +302,7 @@ def bmd():
     Source: https://metawal.wallonie.be/geonetwork
     """
     belgian_sample = str(Path(__file__).parent.parent / "tests" / "resources" / "iso3_examples" / "metawal.wallonie.be-catchments.xml")
-    with open(belgian_sample, "r") as f_d:
+    with open(belgian_sample, "r", encoding="utf-8") as f_d:
         xml_list = f_d.readlines()
         xml_str = ''.join(xml_list)
         xml_bytes = bytes(xml_str, encoding='utf-8')
@@ -462,7 +462,7 @@ def amd():
     Source: https://portal.auscope.org.au/geonetwork
     """
     aust_sample = str(Path(__file__).parent.parent / "tests" / "resources" / "iso3_examples" / "auscope-3d-model.xml")
-    with open(aust_sample, "r") as f_d:
+    with open(aust_sample, "r", encoding="utf-8") as f_d:
         xml_list = f_d.readlines()
         xml_str = ''.join(xml_list)
         xml_bytes = bytes(xml_str, encoding='utf-8')
@@ -518,7 +518,7 @@ def smd():
     Source: https://metawal.wallonie.be/geonetwork
     """
     belgian_srv_sample = str(Path(__file__).parent.parent / "tests" / "resources" / "iso3_examples" / "metawal.wallonie.be-srv.xml")
-    with open(belgian_srv_sample, "r") as f_d:
+    with open(belgian_srv_sample, "r", encoding="utf-8") as f_d:
         xml_list = f_d.readlines()
         xml_str = ''.join(xml_list)
         xml_bytes = bytes(xml_str, encoding='utf-8')
@@ -554,7 +554,7 @@ def emd():
     Source: https://github.com/Esri/arcgis-pro-metadata-toolkit
     """
     arcgis_sample = str(Path(__file__).parent.parent / "tests" / "resources" / "iso3_examples" / "arcgis-sample.xml")
-    with open(arcgis_sample, "r") as f_d:
+    with open(arcgis_sample, "r", encoding="utf-8") as f_d:
         xml_list = f_d.readlines()
         xml_str = ''.join(xml_list)
         xml_bytes = bytes(xml_str, encoding='utf-8')

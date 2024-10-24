@@ -118,6 +118,7 @@ from xml.dom.minidom import parseString
 from owslib.namespaces import Namespaces
 from urllib.parse import urlparse
 import warnings
+import os
 
 # namespace definition
 n = Namespaces()
@@ -1446,7 +1447,11 @@ class Output(InputOutput):
         # The link is a local file.
         # Useful when running local tests during development.
         if url.startswith("file://"):
-            with open(url[7:]) as f:
+            fn = url[7:]
+            # If on Windows and path starts with a '/', remove it
+            if os.name == 'nt' and fn.startswith('/'):
+                fn = fn[1:]
+            with open(fn) as f:
                 return f.read()
 
         if '?' in url:
