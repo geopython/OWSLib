@@ -182,6 +182,7 @@ class OSHFixtures:
 class TestSystems:
     fixtures = OSHFixtures()
 
+    @pytest.mark.online
     def test_system_readonly(self):
         # get all systems
         res = self.fixtures.systems_api.systems()
@@ -250,6 +251,7 @@ class TestDeployments:
 class TestSamplingFeatures:
     fixtures = OSHFixtures()
 
+    @pytest.mark.online
     def test_sampling_features_readonly(self):
         all_features = self.fixtures.sampling_feature_api.sampling_features(use_fois=True)
         assert len(all_features['items']) == 51
@@ -296,6 +298,7 @@ class TestSamplingFeatures:
 class TestDatastreams:
     fixtures = OSHFixtures()
 
+    @pytest.mark.online
     def test_datastreams_readonly(self):
         ds_id = 'kjg2qrcm40rfk'
         datastreams = self.fixtures.datastream_api.datastreams()
@@ -342,6 +345,7 @@ class TestDatastreams:
 class TestObservations:
     fixtures = OSHFixtures()
 
+    @pytest.mark.online
     def test_observations_readonly(self):
         ds_id = 'kjg2qrcm40rfk'
         observations = self.fixtures.observations_api.observations_of_datastream(ds_id)
@@ -383,6 +387,7 @@ class TestObservations:
 class TestSystemHistory:
     fixtures = OSHFixtures()
 
+    @pytest.mark.online
     def test_system_history(self):
         sys_id = '0s2lbn2n1bnc8'
         res = self.fixtures.system_history_api.system_history(sys_id)

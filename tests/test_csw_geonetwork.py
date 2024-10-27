@@ -19,6 +19,7 @@ def test_csw_geonetwork():
 
 SERVICE_URL3 = 'https://metawal.wallonie.be/geonetwork/srv/eng/csw'
 
+@pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL3),
                     reason='service is unreachable')
 @pytest.mark.parametrize("esn_in", ['full', 'summary'])
