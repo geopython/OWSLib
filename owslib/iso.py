@@ -27,6 +27,41 @@ def get_namespaces():
 
 namespaces = get_namespaces()
 
+def testFirstCharOrAnchor(md,xpath):
+    """ function which checks if the first matching element is either charstring or anchor, if anchor, returns {name, url}, else {name} """
+    r = {'name': '', 'url': ''}
+    val = md.find(util.nspath_eval(xpath+'/gco:CharacterString', namespaces))
+    r['name'] = util.testXMLValue(val)
+    if r['name'] in [None,'']:    
+        val = md.find(util.nspath_eval(xpath+'/gmx:Anchor', namespaces))
+        if val is not None:
+            r['name'] = util.testXMLValue(val)
+            r['url'] = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
+    return r
+
+def testAllCharOrAnchor(md,xpath,aslist=True):
+    """ 
+    function which checks for each matching element if it is charstring or anchor, returns {name, uri}
+    the aslist parameter indicates to return 2 lists or single list of objects
+    """
+    ro = []
+    for i in md.findall(util.nspath_eval(xpath+'/gco:CharacterString', namespaces)):
+        r = {'name': '', 'url': ''}
+        r['name'] = util.testXMLValue(i)
+        ro.append(r)
+    for i in md.findall(util.nspath_eval(xpath+'/gmx:Anchor', namespaces)):
+        r = {'name': '', 'url': ''}
+        if i is not None:
+            r['name'] = util.testXMLValue(i)
+            r['url'] = i.attrib.get(util.nspath_eval('xlink:href', namespaces)) 
+            ro.append(r)
+    if aslist:
+        return ro
+    else:
+        return {'name': [i['name'] for i in ro if i['name'] not in [None,'']],
+                'url': [i['url'] for i in ro if i['url'] not in [None,'']]}
+
+
 
 class MD_Metadata(object):
     """ Process gmd:MD_Metadata """
@@ -223,7 +258,9 @@ class CI_ResponsibleParty(object):
 
         if md is None:
             self.name = None
+            self.name_url = None
             self.organization = None
+            self.organization_url = None
             self.position = None
             self.phone = None
             self.fax = None
@@ -236,11 +273,14 @@ class CI_ResponsibleParty(object):
             self.onlineresource = None
             self.role = None
         else:
-            val = md.find(util.nspath_eval('gmd:individualName/gco:CharacterString', namespaces))
-            self.name = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:organisationName/gco:CharacterString', namespaces))
-            self.organization = util.testXMLValue(val)
+            frm = testFirstCharOrAnchor(md,'gmd:individualName')
+            self.name = frm['name']
+            self.name_url = frm['url']
+
+            frm = testFirstCharOrAnchor(md,'gmd:organisationName')
+            self.organization = frm['name']
+            self.organization_url = frm['url']
 
             val = md.find(util.nspath_eval('gmd:positionName/gco:CharacterString', namespaces))
             self.position = util.testXMLValue(val)
@@ -495,22 +535,9 @@ class MD_DataIdentification(object):
                 if val is not None:
                     self.classification.append(val)
 
-            self.otherconstraints = []
-            for i in md.findall(util.nspath_eval(
-                    'gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints/gco:CharacterString',
-                    namespaces)):
-                val = util.testXMLValue(i)
-                if val is not None:
-                    self.otherconstraints.append(val)
-            for i in md.findall(util.nspath_eval(
-                    'gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints/gmx:Anchor',
-                    namespaces)):
-                val = util.testXMLAttribute(i, util.nspath('href', namespaces["xlink"]))
-                if val is None:
-                    val = util.testXMLValue(i)
-                if val is not None:
-                    self.otherconstraints.append(val)    
-                    
+            ocs = testAllCharOrAnchor(md,'gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints', False)
+            self.otherconstraints = ocs['name']
+            self.otherconstraints_url = ocs['url']
 
             self.securityconstraints = []
             for i in md.findall(util.nspath_eval(
@@ -688,25 +715,32 @@ class MD_Distribution(object):
     def __init__(self, md=None):
         if md is None:
             self.format = None
+            self.format_url = None
             self.version = None
+            self.version_url = None
+            self.specification = None
+            self.specification_url = None
             self.distributor = []
             self.online = []
             pass
         else:
-            val = md.find(util.nspath_eval(
-                'gmd:distributionFormat/gmd:MD_Format/gmd:name/gco:CharacterString', namespaces))
-            self.format = util.testXMLValue(val)
+            frm = testFirstCharOrAnchor(md,'gmd:distributionFormat/gmd:MD_Format/gmd:name')
+            self.format = frm['name']
+            self.format_url = frm['url']
+            
+            vrs = testFirstCharOrAnchor(md,'gmd:distributionFormat/gmd:MD_Format/gmd:version')
+            self.version = vrs['name']
+            self.version_url = vrs['url']
 
-            val = md.find(util.nspath_eval(
-                'gmd:distributionFormat/gmd:MD_Format/gmd:version/gco:CharacterString', namespaces))
-            self.version = util.testXMLValue(val)
+            spc = testFirstCharOrAnchor(md,'gmd:distributionFormat/gmd:MD_Format/gmd:specification')
+            self.specification = spc['name']
+            self.specification_url = spc['url']
 
             self.distributor = []
             for dist in md.findall(util.nspath_eval('gmd:distributor', namespaces)):
                 self.distributor.append(MD_Distributor(dist))
 
             self.online = []
-
             for ol in md.findall(util.nspath_eval(
                     'gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource',
                     namespaces)):
@@ -718,6 +752,7 @@ class DQ_DataQuality(object):
     def __init__(self, md=None):
         if md is None:
             self.conformancetitle = []
+            self.conformancetitle_url = []
             self.conformancedate = []
             self.conformancedatetype = []
             self.conformancedegree = []
@@ -726,13 +761,9 @@ class DQ_DataQuality(object):
             self.specificationtitle = None
             self.specificationdate = []
         else:
-            self.conformancetitle = []
-            for i in md.findall(util.nspath_eval(
-                    'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString',
-                    namespaces)):
-                val = util.testXMLValue(i)
-                if val is not None:
-                    self.conformancetitle.append(val)
+            cts = testAllCharOrAnchor(md,'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title', False)
+            self.conformancetitle = cts['name']
+            self.conformancetitle_url = cts['url']
 
             self.conformancedate = []
             for i in md.findall(util.nspath_eval(
@@ -758,14 +789,9 @@ class DQ_DataQuality(object):
                 if val is not None:
                     self.conformancedegree.append(val)
 
-            val = md.find(util.nspath_eval(
-                'gmd:lineage/gmd:LI_Lineage/gmd:statement/gco:CharacterString', namespaces))
-            self.lineage = util.testXMLValue(val)
-
-            val = md.find(util.nspath_eval('gmd:lineage/gmd:LI_Lineage/gmd:statement/gmx:Anchor', namespaces))
-            if val is not None:
-                self.lineage = util.testXMLValue(val)
-                self.lineage_url = val.attrib.get(util.nspath_eval('xlink:href', namespaces))
+            lng = testFirstCharOrAnchor(md, 'gmd:lineage/gmd:LI_Lineage/gmd:statement')
+            self.lineage = lng['name']
+            self.lineage_url = lng['url']
 
             val = md.find(util.nspath_eval(
                 'gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString',
@@ -843,18 +869,33 @@ class CI_OnlineResource(object):
         if md is None:
             self.url = None
             self.protocol = None
+            self.protocol_url = None
             self.name = None
+            self.name_url = None
             self.description = None
+            self.description_url = None
             self.function = None
+            self.applicationprofile = None
+            self.applicationprofile_url = None
         else:
             val = md.find(util.nspath_eval('gmd:linkage/gmd:URL', namespaces))
             self.url = util.testXMLValue(val)
 
-            val = md.find(util.nspath_eval('gmd:protocol/gco:CharacterString', namespaces))
-            self.protocol = util.testXMLValue(val)
+            val = testFirstCharOrAnchor(md,'gmd:protocol')
+            self.protocol = val['name']
+            self.protocol_url = val['url']
 
-            val = md.find(util.nspath_eval('gmd:name/gco:CharacterString', namespaces))
-            self.name = util.testXMLValue(val)
+            val = testFirstCharOrAnchor(md,'gmd:name')
+            self.name = val['name']
+            self.name_url = val['url']
+
+            val = testFirstCharOrAnchor(md,'gmd:description')
+            self.description = val['name']
+            self.description_url = val['url']
+
+            val = testFirstCharOrAnchor(md,'gmd:applicationProfile')
+            self.applicationprofile = val['name']
+            self.applicationprofile_url = val['url']
 
             val = md.find(util.nspath_eval('gmd:description/gco:CharacterString', namespaces))
             self.description = util.testXMLValue(val)
@@ -954,33 +995,23 @@ class MD_ReferenceSystem(object):
     def __init__(self, md=None):
         if md is None:
             self.code = None
+            self.code_url = None
             self.codeSpace = None
+            self.codeSpace_url = None
             self.version = None
+            self.version_url = None
         else:
-            val = md.find(util.nspath_eval(
-                'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code/gco:CharacterString', namespaces))
-            if val is None:
-                val = md.find(util.nspath_eval(
-                    'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code/gmx:Anchor', namespaces))
-            if val is not None:
-                self.code = util.testXMLValue(val)
-            else:
-                self.code = None
+            val = testFirstCharOrAnchor(md,'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code')
+            self.code_url = val['url']      
+            self.code = val['name']
 
-            val = md.find(util.nspath_eval(
-                'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:codeSpace/gco:CharacterString', namespaces))
-            if val is not None:
-                self.codeSpace = util.testXMLValue(val)
-            else:
-                self.codeSpace = None
+            val = testFirstCharOrAnchor(md,'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:codeSpace')
+            self.codeSpace_url = val['url']
+            self.codeSpace = val['name']
 
-            val = md.find(util.nspath_eval(
-                'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:version/gco:CharacterString', namespaces))
-            if val is not None:
-                self.version = util.testXMLValue(val)
-            else:
-                self.version = None
-
+            val = testFirstCharOrAnchor(md,'gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:version')
+            self.version_url = val['url']
+            self.version = val['name']
 
 def _testCodeListValue(elpath):
     """ get gco:CodeListValue_Type attribute, else get text content """
