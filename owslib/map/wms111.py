@@ -172,7 +172,7 @@ class WebMapService_1_1_1(object):
         request['height'] = str(size[1])
 
         request['srs'] = str(srs)
-        request['bbox'] = ','.join([repr(x) for x in bbox])
+        request['bbox'] = ','.join([str(x) for x in bbox])
         request['format'] = str(format)
         request['transparent'] = str(transparent).upper()
         request['exceptions'] = str(exceptions)
