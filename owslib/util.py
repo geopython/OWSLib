@@ -206,7 +206,7 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     req = requests.request(method.upper(), url_base, headers=headers, **rkwargs)
 
-    if req.status_code in [400, 401]:
+    if req.status_code in [400, 401, 403]:
         raise ServiceException(req.text)
 
     if req.status_code in [404, 500, 502, 503, 504]:    # add more if needed
