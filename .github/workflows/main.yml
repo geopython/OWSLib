@@ -27,6 +27,15 @@ jobs:
         pip3 install -r docs/requirements.txt
     - name: run tests ⚙️
       run: python3 -m pytest
+    - name: run tests in offline mode
+      if: matrix.python-version == '3.10'
+      run: |
+          python3 -m pytest \
+            -m "not online" \
+            --disable-socket \
+            --deselect="tests/doctests/wcs_thredds.txt::wcs_thredds.txt" \
+            --deselect="tests/doctests/wfs_MapServerWFSCapabilities.txt::wfs_MapServerWFSCapabilities.txt" \
+            --deselect="tests/doctests/wms_geoserver_mass_gis.txt::wms_geoserver_mass_gis.txt"
     - name: run coveralls ⚙️
       run: coveralls
     - name: build docs 🏗️
