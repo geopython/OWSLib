@@ -58,8 +58,8 @@ def testAllCharOrAnchor(md,xpath,aslist=True):
     if aslist:
         return ro
     else:
-        return {'name': [i['name'] for i in ro if i['name'] not in [None,'']],
-                'url': [i['url'] for i in ro if i['url'] not in [None,'']]}
+        return {'name': [i.get('name', '') for i in ro],
+                'url': [i.get('url', '') for i in ro]}
 
 
 

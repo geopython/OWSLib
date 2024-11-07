@@ -139,7 +139,7 @@ def test_md_parsing_dov():
 
     assert_list(iden.otherconstraints, 2)
     assert iden.otherconstraints_url[
-               0] == "https://inspire.ec.europa.eu/metadata-codelist/ConditionsApplyingToAccessAndUse/noConditionsApply"
+               1] == "https://inspire.ec.europa.eu/metadata-codelist/ConditionsApplyingToAccessAndUse/noConditionsApply"
     assert iden.otherconstraints[
                0] == "Data beschikbaar voor hergebruik volgens de " \
                      "Modellicentie Gratis Hergebruik. Toelichting " \
