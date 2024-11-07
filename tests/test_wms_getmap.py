@@ -4,12 +4,33 @@ import pytest
 from tests.utils import service_ok
 
 from owslib.wms import WebMapService
+from owslib.map.wms130 import WebMapService_1_3_0
 from owslib.util import ServiceException
 from owslib.util import ResponseWrapper
 
 
 SERVICE_URL = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi'
 NCWMS2_URL = "http://wms.stccmop.org:8080/ncWMS2/wms"
+
+
+@pytest.fixture
+def wms():
+    return WebMapService_1_3_0(SERVICE_URL, version='1.3.0')
+
+
+def test_build_getmap_request_bbox_precision(wms):
+    bbox = (-126.123456789, 24.123456789, -66.123456789, 50.123456789)
+    bbox_yx = (bbox[1], bbox[0], bbox[3], bbox[2])
+    request = wms._WebMapService_1_3_0__build_getmap_request(
+        layers=['layer1'],
+        styles=['default'],
+        srs='EPSG:4326',
+        bbox=bbox,
+        format='image/jpeg',
+        size=(250, 250),
+        transparent=True
+    )
+    assert request['bbox'] == ','.join(map(str, bbox_yx))
 
 
 @pytest.mark.online

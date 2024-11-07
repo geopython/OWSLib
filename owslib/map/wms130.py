@@ -182,7 +182,7 @@ class WebMapService_1_3_0(object):
 
         # remapping the srs to crs for the request
         request['crs'] = str(srs)
-        request['bbox'] = ','.join([repr(x) for x in bbox])
+        request['bbox'] = ','.join([str(x) for x in bbox])
         request['format'] = str(format)
         request['transparent'] = str(transparent).upper()
         request['exceptions'] = str(exceptions)
