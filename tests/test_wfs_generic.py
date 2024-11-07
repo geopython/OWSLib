@@ -177,6 +177,7 @@ def test_schema_wfs_200():
 
 
 @pytest.mark.online
+@pytest.mark.skip(reason='HTTP 403 issue. See issue #956')
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_xmlfilter_wfs_110():
@@ -193,6 +194,7 @@ def test_xmlfilter_wfs_110():
 
 
 @pytest.mark.online
+@pytest.mark.skip(reason='HTTP 403 issue. See issue #956')
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
 def test_xmlfilter_wfs_200():
