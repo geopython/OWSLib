@@ -45,48 +45,6 @@ class WebFeatureService_2_0_0(WebFeatureService_):
 
     Implements IWebFeatureService.
     """
-
-    def __new__(
-        self,
-        url,
-        version,
-        xml,
-        parse_remote_metadata=False,
-        timeout=30,
-        headers=None,
-        username=None,
-        password=None,
-        auth=None,
-    ):
-        """ overridden __new__ method
-
-        @type url: string
-        @param url: url of WFS capabilities document
-        @type xml: string
-        @param xml: elementtree object
-        @type parse_remote_metadata: boolean
-        @param parse_remote_metadata: whether to fully process MetadataURL elements
-        @param headers: HTTP headers to send with requests
-        @param timeout: time (in seconds) after which requests should timeout
-        @param username: service authentication username
-        @param password: service authentication password
-        @param auth: instance of owslib.util.Authentication
-        @return: initialized WebFeatureService_2_0_0 object
-        """
-        obj = object.__new__(self)
-        obj.__init__(
-            url,
-            version,
-            xml,
-            parse_remote_metadata,
-            timeout,
-            headers=headers,
-            username=username,
-            password=password,
-            auth=auth,
-        )
-        return obj
-
     def __getitem__(self, name):
         """ check contents dictionary to allow dict like access to service layers"""
         if name in list(self.__getattribute__("contents").keys()):
