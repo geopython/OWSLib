@@ -18,10 +18,15 @@ def wms():
     return WebMapService_1_3_0(SERVICE_URL, version='1.3.0')
 
 
-def test_build_getmap_request_bbox_precision(wms):
+@pytest.mark.parametrize("version", ["1.3.0", "1.1.1"])
+def test_build_getmap_request_bbox_precision(version):
     bbox = (-126.123456789, 24.123456789, -66.123456789, 50.123456789)
     bbox_yx = (bbox[1], bbox[0], bbox[3], bbox[2])
-    request = wms._WebMapService_1_3_0__build_getmap_request(
+
+    m = mock.Mock()
+    type(m).version = mock.PropertyMock(return_value=version)
+
+    request = WebMapService_1_3_0._WebMapService_1_3_0__build_getmap_request(m,
         layers=['layer1'],
         styles=['default'],
         srs='EPSG:4326',
