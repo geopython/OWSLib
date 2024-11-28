@@ -138,7 +138,7 @@ def test_md_parsing_dov():
     assert_list(iden.classification, 0)
 
     assert_list(iden.otherconstraints, 2)
-    assert iden.otherconstraints[
+    assert iden.otherconstraints_url[
                1] == "https://inspire.ec.europa.eu/metadata-codelist/ConditionsApplyingToAccessAndUse/noConditionsApply"
     assert iden.otherconstraints[
                0] == "Data beschikbaar voor hergebruik volgens de " \
@@ -611,7 +611,37 @@ def test_md_indentifier_anchor():
     md = MD_Metadata(md_resource)
     assert type(md) is MD_Metadata
     assert md.referencesystem.code == 'ETRS89-GRS80'
+    assert md.referencesystem.code_url == 'http://www.opengis.net/def/crs/EPSG/0/4937'
+    
     iden = md.identification[0]
     assert_list(iden.uricode, 1)
     assert iden.uricode[0] == 'https://www.nationaalgeoregister.nl/geonetwork/srv/metadata/f44dac86-2228-412f-8355-e56446ca9933'
+    assert iden.contact[0].organization_url == 'http://standaarden.overheid.nl/owms/terms/Ministerie_van_Defensie'
+    assert iden.keywords[0].keywords[0].url == 'http://www.eionet.europa.eu/gemet/nl/inspire-theme/am'
+    assert_list(iden.otherconstraints, 3)
+    assert_list(iden.otherconstraints_url, 3)
+    assert iden.otherconstraints[0] == 'Geen beperkingen'
+    assert iden.otherconstraints_url[0] == 'http://creativecommons.org/publicdomain/mark/1.0/deed.nl' 
+    assert iden.otherconstraints[2] == 'Geen beperkingen voor publieke toegang'
+    assert iden.otherconstraints_url[2] == 'http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations'
     
+    dist = md.distribution
+    assert dist.format_url == 'http://www.iana.org/assignments/media-types/application/gml+xml'
+    assert dist.format == 'gml+xml'
+    assert dist.version == 'GML, version 3.2.1'
+    assert dist.specification_url == 'http://inspire.ec.europa.eu/id/document/tg/hy'
+    assert dist.specification == 'Data specificatie hydrografie'
+    
+    assert dist.online[0].protocol == 'OGC:WMS'
+    assert dist.online[0].protocol_url == 'http://www.opengis.net/def/serviceType/ogc/wms'
+    assert dist.online[0].applicationprofile == 'view'
+    assert dist.online[0].applicationprofile_url == 'http://inspire.ec.europa.eu/metadata-codelist/SpatialDataServiceType/view'
+
+    assert dist.online[2].protocol == 'INSPIRE Atom'
+    assert dist.online[2].protocol_url == 'https://tools.ietf.org/html/rfc4287'
+    assert dist.online[2].applicationprofile == 'download'
+    assert dist.online[2].applicationprofile_url == 'http://inspire.ec.europa.eu/metadata-codelist/SpatialDataServiceType/download'
+
+    assert md.dataquality.lineage == 'Ministerie van Defensie, Koninklijke Marine, Dienst der Hydrografie'
+    assert md.dataquality.conformancetitle[0] == 'VERORDENING (EU) Nr. 1089/2010 VAN DE COMMISSIE van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens'
+    assert md.dataquality.conformancedegree[0] == 'true'
