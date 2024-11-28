@@ -105,7 +105,7 @@ def test_wmts_without_serviceprovider_tag():
     _ = WebMapTileService(EXAMPLE_SERVICE_URL)
 
 
-SERVICE_URL_REST = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml'
+SERVICE_URL_REST = 'https://mapsneu.wien.gv.at/basemapneu/1.0.0/WMTSCapabilities.xml'
 
 
 @pytest.mark.online
