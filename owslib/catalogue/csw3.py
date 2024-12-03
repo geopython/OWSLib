@@ -757,6 +757,19 @@ class Csw30Record(object):
         else:
             self.bbox = None
 
+        val = record.find(util.nspath_eval('dct:spatial', namespaces))
+        self.spatial = None
+        if val is not None:
+            val = util.testXMLValue(val)
+            if len(val.split(',')) == 4:
+                self.bbox = ows.BoundingBox(None, namespaces['ows'])
+                self.bbox.minx = val.split(',')[0]
+                self.bbox.miny = val.split(',')[1]
+                self.bbox.maxx = val.split(',')[2]
+                self.bbox.maxy = val.split(',')[3]
+            else:
+                self.spatial = val
+
         val = record.find(util.nspath_eval('ows200:WGS84BoundingBox', namespaces))
         if val is not None:
             self.bbox_wgs84 = ows.WGS84BoundingBox(val, namespaces['ows'])
