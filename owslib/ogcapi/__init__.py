@@ -129,13 +129,19 @@ class API:
         @returns: fully constructed URL path
         """
 
+        def urljoin_(url2, path2):
+            if '//' not in path2:
+                return urljoin(url2, path2)
+            else:
+                return '/'.join([url2.rstrip('/'), path2])
+
         url = self.url
         if self.url_query_string is not None:
             LOGGER.debug('base URL has a query string')
-            url = urljoin(url, path)
+            url = urljoin_(url, path)
             url = '?'.join([url, self.url_query_string])
         else:
-            url = urljoin(url, path)
+            url = urljoin_(url, path)
 
         if params:
             url = '?'.join([url, urlencode(params)])
