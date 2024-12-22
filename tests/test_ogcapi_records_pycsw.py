@@ -40,7 +40,7 @@ def test_ogcapi_records_pycsw():
     assert isinstance(w.response, dict)
 
     pycsw_cite_demo_queryables = w.collection_queryables('metadata:main')
-    assert len(pycsw_cite_demo_queryables['properties'].keys()) == 13
+    assert len(pycsw_cite_demo_queryables['properties'].keys()) == 14
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):
@@ -67,3 +67,12 @@ def test_ogcapi_records_pycsw():
     assert pycsw_cite_demo_query['numberMatched'] == 1
     assert pycsw_cite_demo_query['numberReturned'] == 1
     assert len(pycsw_cite_demo_query['features']) == 1
+
+
+@pytest.mark.parametrize("path, expected", [
+    ('collections/foo/1', 'https://demo.pycsw.org/cite/collections/foo/1'),
+    ('collections/foo/https://example.org/11', 'https://demo.pycsw.org/cite/collections/foo/https://example.org/11')  # noqa
+])
+def test_ogcapi_build_url(path, expected):
+    w = Records(SERVICE_URL)
+    assert w._build_url(path) == expected
