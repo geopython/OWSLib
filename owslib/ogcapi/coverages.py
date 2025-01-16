@@ -80,7 +80,7 @@ class Coverages(Collections):
             subsets_list = []
             for s in kwargs['subset']:
                 subsets_list.append(f'{s[0]}({s[1]}:{s[2]})')
-            kwargs['subset'] = ','.join(subsets_list)
+            kwargs_['subset'] = ','.join(subsets_list)
 
         if 'scale_factor' in kwargs:
             kwargs_['scale-factor'] = int(kwargs['scale_factor'])
