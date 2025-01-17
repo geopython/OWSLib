@@ -21,6 +21,7 @@ tags
 tester.py
 tags
 .idea/
+.run/
 tile.jpg
 /env/
 /.project
