@@ -58,9 +58,9 @@ class Coverages(Collections):
         @param scale_factor: factor by which to scale the resulting coverage
         @type scale_axes: list of tuples
         @param scale_axes: [(axis name, number)]
-        @type datetime: tuple | str
+        @type datetime: tuple | list | str
         @param datetime:
-            tuple of start/end datetimes or as 'start/end' string
+            tuple or list of start/end datetimes, or as 'start/end' string
             start and end datetimes can be ".." for unbounded value
 
         @returns: coverage data
@@ -89,8 +89,8 @@ class Coverages(Collections):
         if 'scale_factor' in kwargs:
             kwargs_['scale-factor'] = int(kwargs['scale_factor'])
 
-        if "datetime" in kwargs:
-            if isinstance(kwargs['datetime'], tuple):
+        if 'datetime' in kwargs:
+            if isinstance(kwargs['datetime'], (tuple, list)):
                 kwargs_['datetime'] = '/'.join(kwargs['datetime'][:2])
             else:
                 kwargs_['datetime'] = str(kwargs['datetime'])
