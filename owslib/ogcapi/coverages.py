@@ -48,42 +48,84 @@ class Coverages(Collections):
 
         @type collection_id: string
         @param collection_id: id of collection
-        @type properties: list
+        @type properties: tuple | list
         @param properties: range subset
-        @type subset: list of tuples
-        @param subset: [(name, lower bound, upper bound)]
-        @type scale_size: list of tuples
-        @param scale_size: [(axis name, number)]
+        @type subset: list or dict of tuples/lists
+        @param subset:
+            [(name, lower bound, upper bound)]
+            [[name, lower bound, upper bound]]
+            {name: (lower bound, upper bound)}
+            {name: [lower bound, upper bound]}
+        @type scale_size: list of tuples or dict
+        @param scale_size: [(axis name, number)] | {axis name: number}
         @type scale_factor: int
         @param scale_factor: factor by which to scale the resulting coverage
-        @type scale_axes: list of tuples
-        @param scale_axes: [(axis name, number)]
+        @type scale_axes: list of tuples or dict
+        @param scale_axes: [(axis name, number)] | {axis name: number}
+        @type datetime: tuple | list | str
+        @param datetime:
+            tuple or list of start/end datetimes, or as 'start/end' string
+            start and end datetimes can be ".." for unbounded value
 
         @returns: coverage data
         """
 
         kwargs_ = {}
 
-        if 'properties' in kwargs:
-            kwargs_['properties'] = ','.join(
-                [str(x) for x in kwargs['properties']])
+        if isinstance(kwargs.get('properties'), (tuple, list)):
+            kwargs_['properties'] = ','.join([
+                str(x) for x in kwargs['properties']
+            ])
 
         for p in ['scale_axes', 'scale_size']:
             if p in kwargs:
                 p2 = p.replace('_', '-')
+                if isinstance(kwargs[p], (tuple, list)):
+                    items = kwargs[p]
+                elif isinstance(kwargs[p], dict):
+                    items = [
+                        (name, value)
+                        for name, value
+                        in kwargs[p].items()
+                    ]
+                else:
+                    continue
                 kwargs_[p2] = []
-                for s in kwargs[p2]:
-                    val = f'{s[0]}({s[1]},{s[2]})'
-                    kwargs_[p2].append(val)
-
-        if 'subset' in kwargs:
-            subsets_list = []
-            for s in kwargs['subset']:
-                subsets_list.append(f'{s[0]}({s[1]}:{s[2]})')
-            kwargs['subset'] = ','.join(subsets_list)
+                kwargs_[p2] = ",".join(
+                    f'{s[0]}({s[1]})'
+                    for s in items
+                )
 
         if 'scale_factor' in kwargs:
-            kwargs_['scale-factor'] = int(kwargs['scale_factor'])
+            scale_f = float(kwargs['scale_factor'])
+            scale_i = int(scale_f)
+            if scale_i == scale_f:
+                kwargs_['scale-factor'] = scale_i
+            else:
+                kwargs_['scale-factor'] = scale_f
+
+        if 'subset' in kwargs:
+            subset_items = []
+            subset_values = kwargs['subset']
+            if isinstance(subset_values, (tuple, list)):
+                subset_items = subset_values
+            elif isinstance(subset_values, dict):
+                subset_items = [
+                    (name, *values)
+                    for name, values
+                    in subset_values.items()
+                ]
+            if subset_items:
+                kwargs_['subset'] = ','.join([
+                    f'{s[0]}({s[1]}:{s[2]})'
+                    for s in subset_items
+                ])
+
+        if 'datetime' in kwargs:
+            if isinstance(kwargs['datetime'], (tuple, list)):
+                kwargs_['datetime'] = '/'.join(kwargs['datetime'][:2])
+            else:
+                kwargs_['datetime'] = str(kwargs['datetime'])
 
         path = f'collections/{collection_id}/coverage'
 

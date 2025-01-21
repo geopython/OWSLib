@@ -69,6 +69,7 @@ def test_ogcapi_records_pycsw():
     assert len(pycsw_cite_demo_query['features']) == 1
 
 
+@pytest.mark.online
 @pytest.mark.parametrize("path, expected", [
     ('collections/foo/1', 'https://demo.pycsw.org/cite/collections/foo/1'),
     ('collections/foo/https://example.org/11', 'https://demo.pycsw.org/cite/collections/foo/https://example.org/11')  # noqa
