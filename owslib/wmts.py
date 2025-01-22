@@ -34,7 +34,7 @@ import warnings
 from urllib.parse import (urlencode, urlparse, urlunparse, parse_qs,
                           ParseResult)
 from .etree import etree
-from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication, openURL, getXMLTree
+from .util import clean_ows_url, testXMLValue, getXMLInteger, Authentication, openURL, getXMLTree, nspath
 from .fgdc import Metadata
 from .iso import MD_Metadata
 from .ows import ServiceProvider, ServiceIdentification, OperationsMetadata
@@ -227,7 +227,8 @@ class WebMapTileService(object):
         #  REST only WMTS does not have any Operations
         if serviceop is not None:
             for elem in serviceop[:]:
-                self.operations.append(OperationsMetadata(elem))
+                if elem.tag != nspath('ExtendedCapabilities'):
+                    self.operations.append(OperationsMetadata(elem))
 
         # serviceContents metadata: our assumption is that services use
         # a top-level layer as a metadata organizer, nothing more.
