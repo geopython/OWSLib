@@ -9,3 +9,4 @@ twine
 wheel
 coverage
 coveralls
+build

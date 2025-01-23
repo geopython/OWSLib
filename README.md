@@ -17,7 +17,7 @@ numerous OGC Web Service interfaces.
 
 ## Installation
 
-The easiest way to install pywis-pubsub is via the Python [pip](https://pip.pypa.io)
+The easiest way to install OWSLib is via the Python [pip](https://pip.pypa.io)
 utility:
 
 ```bash
@@ -156,7 +156,7 @@ Releasing
   git push --tags
   # update on PyPI (must be a maintainer)
   rm -fr build dist *.egg-info
-  python3 setup.py sdist bdist_wheel --universal
+  python -m build
   twine upload dist/*
 ```
 
