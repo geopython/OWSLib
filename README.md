@@ -156,7 +156,7 @@ Releasing
   git push --tags
   # update on PyPI (must be a maintainer)
   rm -fr build dist *.egg-info
-  python -m build
+  python3 -m build
   twine upload dist/*
 ```
 
