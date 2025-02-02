@@ -6,6 +6,6 @@ pytest-socket
 Pillow
 tox
 twine
-wheel
 coverage
 coveralls
+build
