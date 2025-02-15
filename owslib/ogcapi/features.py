@@ -53,6 +53,57 @@ class Features(Collections):
         path = f'collections/{collection_id}/queryables'
         return self._request(path=path)
 
+    def collection_create(self, data: str) -> bool:
+        """
+        implements POST /collections
+
+        @type collection_id: string
+        @type data: string
+        @param data: collection data
+
+        @returns: single collection result
+        """
+
+        path = 'collections'
+
+        self.headers['Content-Type'] = 'application/json'
+
+        _ = self._request(method='POST', path=path, data=data)
+
+        return True
+
+    def collection_update(self, collection_id: str, data: str) -> bool:
+        """
+        implements PUT /collections/{collectionId}
+
+        @type collection_id: string
+        @param collection_id: id of collection
+        @type data: string
+        @param data: collection data
+
+        @returns: ``bool`` of update result
+        """
+
+        path = f'collections/{collection_id}'
+        _ = self._request(method='PUT', path=path, data=data)
+
+        return True
+
+    def collection_delete(self, collection_id: str) -> bool:
+        """
+        implements DELETE /collections/{collectionId}
+
+        @type collection_id: string
+        @param collection_id: id of collection
+
+        @returns: ``bool`` of deletion result
+        """
+
+        path = f'collections/{collection_id}'
+        _ = self._request(method='DELETE', path=path)
+
+        return True
+
     def collection_items(self, collection_id: str, **kwargs: dict) -> dict:
         """
         implements /collection/{collectionId}/items
@@ -145,7 +196,7 @@ class Features(Collections):
         @type data: string
         @param data: raw representation of data
 
-        @returns: ``bool`` of deletion result
+        @returns: ``bool`` of update result
         """
 
         path = f'collections/{collection_id}/items/{identifier}'
