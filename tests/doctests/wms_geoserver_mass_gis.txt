@@ -107,8 +107,15 @@ Test exceptions
 
 Lastly, test the getcapabilities and getmap methods
 
+    >>> import requests
     >>> wms = WebMapService('http://gis-prod.digital.mass.gov/geoserver/wms', version='1.1.1', timeout=120)
-    >>> img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'], styles=[''], srs='EPSG:4326', bbox=(-70.8, 42, -70, 42.8), size=(300, 300), format='image/jpeg', transparent=True)
-    >>> out = open(scratch_file('massgis_shoreline.jpg'), 'wb')
-    >>> bytes_written = out.write(img.read())
-    >>> out.close()
+    >>> try:
+    ...     img = wms.getmap(layers=['massgis:GISDATA.SHORELINES_ARC'], styles=[''], 
+    ...                      srs='EPSG:4326', bbox=(-70.8, 42, -70, 42.8), size=(300, 300), 
+    ...                      format='image/jpeg', transparent=True)
+    ...     out = open(scratch_file('massgis_shoreline.jpg'), 'wb')
+    ...     bytes_written = out.write(img.read())
+    ...     out.close()
+    ... except requests.exceptions.ConnectTimeout:
+    ...     print("Warning: Connection to the server timed out.")
+
