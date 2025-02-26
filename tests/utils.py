@@ -87,7 +87,11 @@ def service_ok(url, timeout=5):
         if 'html' in resp.headers['content-type']:
             ok = False
         else:
-            ok = resp.ok
+            if resp.ok is False:
+                # URL may refuse HEAD requests, so try with a GET
+                # and use stream=True to only download the headers
+                resp = requests.get(url, timeout=timeout, stream=True)
+                return resp.ok
     except requests.exceptions.ReadTimeout:
         ok = False
     except requests.exceptions.ConnectTimeout:
