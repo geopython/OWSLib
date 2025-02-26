@@ -24,5 +24,6 @@ OWSLib |release| documentation
    development
    support
    logging
+   proxies
    license
    credits
