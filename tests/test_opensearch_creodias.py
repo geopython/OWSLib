@@ -4,13 +4,12 @@ import pytest
 
 from owslib.opensearch import OpenSearch
 
-SERVICE_URL = 'https://finder.creodias.eu/resto/api/collections/Sentinel1/describe.xml'
+SERVICE_URL = 'https://datahub.creodias.eu/resto/api/collections/Sentinel1/describe.xml'
 
 
 @pytest.mark.online
-# service testing is commented out given CREODIAS does not allow HEAD requests
-# @pytest.mark.skipif(not service_ok(SERVICE_URL),
-#                    reason='service is unreachable')
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
+                    reason='service is unreachable')
 def test_opensearch_creodias():
 
     o = OpenSearch(SERVICE_URL)
