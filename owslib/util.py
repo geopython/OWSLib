@@ -342,7 +342,8 @@ def getXMLTree(rsp: ResponseWrapper) -> etree:
     et = etree.fromstring(raw_text)
 
     # check for response type - if it is not xml then raise an error
-    content_type = rsp.info()['Content-Type']
+    # if the server doesn't provide a Content-Type then assume xml
+    content_type = rsp.info().get('Content-Type', 'text/xml')
     url = rsp.geturl()
 
     xml_types = ['text/xml', 'application/xml', 'application/vnd.ogc.wms_xml']
