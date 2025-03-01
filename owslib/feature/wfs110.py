@@ -444,9 +444,11 @@ class ContentMetadata(AbstractContentMetadata):
                     elif metadataUrl["type"] in ["TC211", "19115", "19139"]:
                         mdelem = doc.find(
                             ".//" + nspath_eval("gmd:MD_Metadata", namespaces)
-                        ) or doc.find(
-                            ".//" + nspath_eval("gmi:MI_Metadata", namespaces)
                         )
+                        if mdelem is None:
+                            mdelem = doc.find(
+                                ".//" + nspath_eval("gmi:MI_Metadata", namespaces)
+                            )
                         if mdelem is not None:
                             metadataUrl["metadata"] = MD_Metadata(mdelem)
                         else:
