@@ -71,6 +71,19 @@ def test_getXMLTree_valid():
     assert et.find('.//Title').text == "Example"
 
 
+def test_getXMLTree_valid_missing_content_type():
+
+    mock_resp = mock.Mock()
+    mock_resp.url = 'http:///example.org/?service=WFS&request=GetCapabilities&version=2.0.0'
+    mock_resp.content = b'<?xml version="1.0" encoding="UTF-8"?>\n<WFS_Capabilities><ServiceIdentification>' \
+                        b'<Title>Example</Title></ServiceIdentification></WFS_Capabilities>'
+    mock_resp.headers = {}
+    resp_wrap = ResponseWrapper(mock_resp)
+
+    et = getXMLTree(resp_wrap)
+    assert et.find('.//Title').text == "Example"
+
+
 def test_getXMLTree_invalid():
 
     mock_resp = mock.Mock()
