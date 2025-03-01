@@ -849,14 +849,24 @@ class CswRecord(object):
         for i in record.findall(util.nspath_eval('dc:rights', namespaces)):
             self.rights.append(util.testXMLValue(i))
 
-        val = record.find(util.nspath_eval('dct:spatial', namespaces))
-        self.spatial = util.testXMLValue(val)
-
         val = record.find(util.nspath_eval('ows:BoundingBox', namespaces))
         if val is not None:
             self.bbox = ows.BoundingBox(val, namespaces['ows'])
         else:
             self.bbox = None
+
+        val = record.find(util.nspath_eval('dct:spatial', namespaces))
+        self.spatial = None
+        if val is not None:
+            val = util.testXMLValue(val)
+            if len(val.split(',')) == 4:
+                self.bbox = ows.BoundingBox(None, namespaces['ows'])
+                self.bbox.minx = val.split(',')[0]
+                self.bbox.miny = val.split(',')[1]
+                self.bbox.maxx = val.split(',')[2]
+                self.bbox.maxy = val.split(',')[3]
+            else:
+                self.spatial = val
 
         val = record.find(util.nspath_eval('ows:WGS84BoundingBox', namespaces))
         if val is not None:
