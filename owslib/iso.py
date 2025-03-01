@@ -224,11 +224,14 @@ class PT_Locale(object):
             self.charset = None
         else:
             self.id = md.attrib.get('id')
-            self.languagecode = md.find(
-                util.nspath_eval('gmd:languageCode/gmd:LanguageCode', namespaces)).attrib.get('codeListValue')
-            self.charset = md.find(
-                util.nspath_eval('gmd:characterEncoding/gmd:MD_CharacterSetCode', namespaces)).attrib.get(
-                'codeListValue')
+            self.languagecode = None
+            languagecode = md.find(util.nspath_eval('gmd:languageCode/gmd:LanguageCode', namespaces))
+            if languagecode is not None:
+                self.languagecode = languagecode.attrib.get('codeListValue')
+            self.charset = None
+            charset = md.find(util.nspath_eval('gmd:characterEncoding/gmd:MD_CharacterSetCode', namespaces))
+            if charset is not None:
+                self.charset = charset.attrib.get('codeListValue')
 
 
 class CI_Date(object):
