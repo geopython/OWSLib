@@ -45,8 +45,6 @@ from owslib.iso3 import (MD_Metadata, SV_ServiceIdentification, PT_Locale,
                           MD_ReferenceSystem, MD_FeatureCatalogueDescription,
                           MD_ImageDescription, MD_Band)
 
-pytestmark = pytest.mark.unit
-
 
 @pytest.fixture
 def ns():
