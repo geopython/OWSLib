@@ -70,6 +70,8 @@ def test_ogcapi_records_pycsw():
 
 
 @pytest.mark.online
+@pytest.mark.skipif(not service_ok(SERVICE_URL),
+                    reason='service is unreachable')
 @pytest.mark.parametrize("path, expected", [
     ('collections/foo/1', 'https://demo.pycsw.org/cite/collections/foo/1'),
     ('collections/foo/https://example.org/11', 'https://demo.pycsw.org/cite/collections/foo/https://example.org/11')  # noqa
