@@ -30,6 +30,7 @@ def records():
         return xml_str
 
 
+@pytest.mark.online
 def test_language(records):
     """Test records"""
 
