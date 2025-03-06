@@ -8,8 +8,6 @@ from pytest_httpserver import HTTPServer
 from owslib.csw import CatalogueServiceWeb
 from owslib.fes import PropertyIsEqualTo
 
-SERVICE_URL = "https://inspire-geoportal.ec.europa.eu/srv/eng/csw"
-
 MOCK_SERVER_PORT = 59950
 MOCK_SERVICE_URL = f"http://localhost:{MOCK_SERVER_PORT}/csw"
 
