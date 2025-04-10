@@ -2,3 +2,4 @@ include LICENSE
 include *.md
 include *.rst
 include *.txt
+recursive-exclude tests *
