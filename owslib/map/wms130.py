@@ -584,8 +584,6 @@ class ContentMetadata(AbstractContentMetadata):
             title = s.find(nspath('Title', WMS_NAMESPACE))
             if name is None and title is None:
                 raise ValueError('%s missing name and title' % (s,))
-            if name is None or title is None:
-                warnings.warn('%s missing name or title' % (s,))
             title_ = title.text if title is not None else name.text
             name_ = name.text if name is not None else title.text
             style = {'title': title_}
