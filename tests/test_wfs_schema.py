@@ -173,3 +173,62 @@ class TestOffline(object):
         """
         wfs110 = WebFeatureService(WFS_SERVICE_URL, version='1.1.0')
         schema = wfs110.get_schema('gw_varia:hhz')
+
+    def test_get_datatype(self):
+        """Test the _get_datatype helper function with different XML structures."""
+        from owslib.feature.schema import _get_datatype, XS_NAMESPACE
+        from owslib.etree import etree
+
+        ns = {
+            'xs': XS_NAMESPACE,
+            'gml': 'http://www.opengis.net/gml',
+            'xsd': 'http://www.w3.org/2001/XMLSchema'
+        }
+
+        # Case 1: Type defined as attribute
+        # XML: <element name="field1" type="gml:PointPropertyType"/>
+        element1 = etree.Element('{%s}element' % XS_NAMESPACE,
+                               attrib={'name': 'field1', 'type': 'gml:PointPropertyType'},
+                               nsmap=ns)
+        assert _get_datatype(element1, "xsd", "gml") == "PointPropertyType"
+
+        # Case 2: Reference to another element
+        # XML: <element name="field2" ref="gml:polygonProperty"/>
+        element2 = etree.Element('{%s}element' % XS_NAMESPACE,
+                               attrib={'name': 'field2', 'ref': 'gml:polygonProperty'},
+                               nsmap=ns)
+        assert _get_datatype(element2, "xsd", "gml") == "polygonProperty"
+
+        # Case 3: SimpleType with Restriction
+        # XML:
+        # <element name="field3">
+        #     <simpleType>
+        #         <restriction base="xsd:string"/>
+        #     </simpleType>
+        # </element>
+        element3 = etree.Element('{%s}element' % XS_NAMESPACE, attrib={'name': 'field3'}, nsmap=ns)
+        simple_type = etree.SubElement(element3, '{%s}simpleType' % XS_NAMESPACE)
+        restriction = etree.SubElement(simple_type, '{%s}restriction' % XS_NAMESPACE,
+                                     attrib={'base': 'xsd:string'})
+        assert _get_datatype(element3, "xsd", "gml") == "string"
+
+        # Case 4: Complex Type Definition
+        # XML:
+        # <element name="field4">
+        #     <complexType>
+        #         <sequence>
+        #             <element type="xsd:string"/>
+        #         </sequence>
+        #     </complexType>
+        # </element>
+        element4 = etree.Element('{%s}element' % XS_NAMESPACE, attrib={'name': 'field4'}, nsmap=ns)
+        complex_type = etree.SubElement(element4, '{%s}complexType' % XS_NAMESPACE)
+        sequence = etree.SubElement(complex_type, '{%s}sequence' % XS_NAMESPACE)
+        sub_element = etree.SubElement(sequence, '{%s}element' % XS_NAMESPACE,
+                                     attrib={'type': 'xsd:string'})
+        assert _get_datatype(element4, "xsd", "gml") == "string"
+
+        # Case 5: Unknown structure
+        # XML: <element name="field5"/>
+        element5 = etree.Element('{%s}element' % XS_NAMESPACE, attrib={'name': 'field5'}, nsmap=ns)
+        assert _get_datatype(element5, "xsd", "gml") is None
