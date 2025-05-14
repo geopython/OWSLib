@@ -136,7 +136,7 @@ class WebMapTileService(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, vendor_kwargs=None, headers=None, auth=None,
+                 parse_remote_metadata=False, vendor_kwargs=None, headers=None, cookies=None, auth=None,
                  timeout=30):
         """Initialize.
 
@@ -174,12 +174,13 @@ class WebMapTileService(object):
         self.vendor_kwargs = vendor_kwargs
         self._capabilities = None
         self.headers = headers
+        self.cookies = cookies
         self.auth = auth or Authentication(username, password)
         self.timeout = timeout or 30
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(
-            self.version, url=self.url, headers=self.headers, auth=self.auth)
+            self.version, url=self.url, headers=self.headers, cookies=self.cookies, auth=self.auth)
         if xml is not None:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -456,7 +457,7 @@ class WebMapTileService(object):
             resurl = self.buildTileResource(
                 layer, style, format, tilematrixset, tilematrix,
                 row, column, **vendor_kwargs)
-            u = openURL(resurl, headers=self.headers, auth=self.auth, timeout=self.timeout)
+            u = openURL(resurl, headers=self.headers, cookies=self.cookies, auth=self.auth, timeout=self.timeout)
             return u
 
         # KVP implemetation
@@ -482,7 +483,7 @@ class WebMapTileService(object):
                     base_url = get_verbs[0].get('url')
             except StopIteration:
                 pass
-        u = openURL(base_url, data, headers=self.headers, auth=self.auth, timeout=self.timeout)
+        u = openURL(base_url, data, headers=self.headers, cookies=self.cookies, auth=self.auth, timeout=self.timeout)
 
         # check for service exceptions, and return
         if u.info()['Content-Type'] == 'application/vnd.ogc.se_xml':
@@ -887,7 +888,7 @@ class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, auth=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, cookies=None, auth=None):
         """Initialize"""
         self.version = version
         self._infoset = None
@@ -899,6 +900,7 @@ class WMTSCapabilitiesReader:
                 auth.password = pw
         self.auth = auth or Authentication(un, pw)
         self.headers = headers
+        self.cookies = cookies
 
     def capabilities_url(self, service_url, vendor_kwargs=None):
         """Return a capabilities url
@@ -933,7 +935,7 @@ class WMTSCapabilitiesReader:
 
         # now split it up again to use the generic openURL function...
         spliturl = getcaprequest.split('?')
-        u = openURL(spliturl[0], spliturl[1], method='Get', headers=self.headers, auth=self.auth)
+        u = openURL(spliturl[0], spliturl[1], method='Get', cookies=self.cookies, headers=self.headers, auth=self.auth)
         return getXMLTree(u)
 
     def readString(self, st):
