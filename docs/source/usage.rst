@@ -115,8 +115,9 @@ compatible with a `Fiona schema object <https://fiona.readthedocs.io/en/latest/f
     >>> wfs11.get_schema('bvv:vg_ex')
     >>> {'properties': {'land': 'string', 'modellart': 'string', 'objart': 'string', 'objart_txt': 'string', 'objid': 'string', 'hdu_x': 'short', 'beginn': 'string', 'ende': 'string', 'adm': 'string', 'avg': 'string', 'bez_gem': 'string', 'bez_krs': 'string', 'bez_lan': 'string', 'bez_rbz': 'string', 'sch': 'string'}, 'geometry': '3D MultiPolygon', 'geometry_column': 'geom'}
 
-Download GML using ``typename`` and ``filter``. OWSLib currently only
-support filter building for WFS 1.1 (FE.1.1).
+Download GML using ``typename`` and ``filter``.
+
+Usage with WFS 1.1 (FE.1.1):
 
 ::
 
@@ -126,6 +127,21 @@ support filter building for WFS 1.1 (FE.1.1).
     >>> wfs11 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='1.1.0')
 
     >>> filter = PropertyIsLike(propertyname='bez_gem', literal='Ingolstadt', wildCard='*')
+    >>> filterxml = etree.tostring(filter.toXML()).decode("utf-8")
+    >>> response = wfs11.getfeature(typename='bvv:gmd_ex', filter=filterxml)
+
+Usage with WFS 2.0 (FE.2.0):
+
+::
+
+    >>> from owslib.fes2 import *
+    >>> from owslib.etree import etree
+    >>> from owslib.wfs import WebFeatureService
+    >>> wfs11 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='2.0.0')
+
+    >>> filter = Filter(
+      PropertyIsLike(propertyname='bez_gem', literal='Ingolstadt', wildCard='*')
+    )
     >>> filterxml = etree.tostring(filter.toXML()).decode("utf-8")
     >>> response = wfs11.getfeature(typename='bvv:gmd_ex', filter=filterxml)
 
