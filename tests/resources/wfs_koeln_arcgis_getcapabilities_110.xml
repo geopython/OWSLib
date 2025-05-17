@@ -1,0 +1,1256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wfs:WFS_Capabilities
+ xmlns:wfs="http://www.opengis.net/wfs"
+ xmlns:ogc="http://www.opengis.net/ogc"
+ xmlns:gml="http://www.opengis.net/gml"
+ xmlns:ows="http://www.opengis.net/ows"
+ xmlns:adressen_stadtteil="https://k00364:6443/arcgis/admin/services/adressen_stadtteil/MapServer/WFSServer"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.opengis.net/ogc http://schemas.opengis.net/filter/1.1.0/filter.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/gml.xsd http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsAll.xsd https://k00364:6443/arcgis/admin/services/adressen_stadtteil/MapServer/WFSServer https://geoportal.stadt-koeln.de/arcgis/services/basiskarten/adressen_stadtteil/MapServer/WFSServer?service=wfs%26version=1.1.0%26request=DescribeFeatureType"
+ version="1.1.0"
+>
+<ows:ServiceIdentification>
+  <ows:Title>Adressen je Stadtteil</ows:Title>
+  <ows:Abstract></ows:Abstract>
+  <ows:Keywords>
+    <ows:Keyword>ESRI(LongLat)</ows:Keyword>
+  </ows:Keywords>
+  <ows:ServiceType>WFS</ows:ServiceType>
+  <ows:ServiceTypeVersion>1.1.0</ows:ServiceTypeVersion>
+  <ows:Fees></ows:Fees>
+  <ows:AccessConstraints></ows:AccessConstraints>
+</ows:ServiceIdentification>
+<ows:ServiceProvider>
+  <ows:ProviderName>Stadt Köln - Amt für Stadtentwicklung und Statistik</ows:ProviderName>
+  <ows:ServiceContact>
+    <ows:IndividualName>Raumbezugssystem</ows:IndividualName>
+    <ows:PositionName></ows:PositionName>
+    <ows:ContactInfo>
+    <ows:Phone>
+      <ows:Voice></ows:Voice>
+      <ows:Facsimile></ows:Facsimile>
+    </ows:Phone>
+    <ows:Address>
+      <ows:DeliveryPoint>Willy-Brandt-Platz 2</ows:DeliveryPoint>
+      <ows:City>Köln</ows:City>
+      <ows:AdministrativeArea></ows:AdministrativeArea>
+      <ows:PostalCode>50679</ows:PostalCode>
+      <ows:Country>Deutschland</ows:Country>
+      <ows:ElectronicMailAddress>statistik-rbs@stadt-koeln.de</ows:ElectronicMailAddress>
+    </ows:Address>
+    <ows:OnlineResource xlink:href="https://k00364:6443/arcgis/admin/services/adressen_stadtteil/MapServer/WFSServer"/>
+    <ows:HoursOfService></ows:HoursOfService>
+    <ows:ContactInstructions></ows:ContactInstructions>
+    </ows:ContactInfo>
+    <ows:Role></ows:Role>
+  </ows:ServiceContact>
+</ows:ServiceProvider>
+<ows:OperationsMetadata>
+  <ows:Operation name="GetCapabilities">
+    <ows:DCP>
+      <ows:HTTP>
+        <ows:Get xlink:href="https://geoportal.stadt-koeln.de/arcgis/services/basiskarten/adressen_stadtteil/MapServer/WFSServer?"/>
+        <ows:Post xlink:href="https://geoportal.stadt-koeln.de/arcgis/services/basiskarten/adressen_stadtteil/MapServer/WFSServer"/>
+      </ows:HTTP>
+    </ows:DCP>
+    <ows:Parameter name="AcceptVersions">
+      <ows:Value>1.1.0</ows:Value>
+    </ows:Parameter>
+    <ows:Parameter name="AcceptFormats">
+      <ows:Value>GML3</ows:Value>
+      <ows:Value>text/xml; subtype=gml/3.1.1</ows:Value>
+    </ows:Parameter>
+  </ows:Operation>
+  <ows:Operation name="DescribeFeatureType">
+    <ows:DCP>
+      <ows:HTTP>
+        <ows:Get xlink:href="https://geoportal.stadt-koeln.de/arcgis/services/basiskarten/adressen_stadtteil/MapServer/WFSServer?"/>
+        <ows:Post xlink:href="https://geoportal.stadt-koeln.de/arcgis/services/basiskarten/adressen_stadtteil/MapServer/WFSServer"/>
+      </ows:HTTP>
+    </ows:DCP>
+    <ows:Parameter name="outputFormat">
+      <ows:Value>GML3</ows:Value>
+      <ows:Value>text/xml; subtype=gml/3.1.1</ows:Value>
+    </ows:Parameter>
+  </ows:Operation>
+  <ows:Operation name="GetFeature">
+    <ows:DCP>
+      <ows:HTTP>
+        <ows:Get xlink:href="https://geoportal.stadt-koeln.de/arcgis/services/basiskarten/adressen_stadtteil/MapServer/WFSServer?"/>
+        <ows:Post xlink:href="https://geoportal.stadt-koeln.de/arcgis/services/basiskarten/adressen_stadtteil/MapServer/WFSServer"/>
+      </ows:HTTP>
+    </ows:DCP>
+    <ows:Parameter name="resultType">
+      <ows:Value>results</ows:Value>
+      <ows:Value>hits</ows:Value>
+    </ows:Parameter>
+    <ows:Parameter name="outputFormat">
+      <ows:Value>GML3</ows:Value>
+      <ows:Value>text/xml; subtype=gml/3.1.1</ows:Value>
+    </ows:Parameter>
+  </ows:Operation>
+</ows:OperationsMetadata>
+<wfs:FeatureTypeList>
+    <wfs:Operations>
+      <wfs:Operation>Query</wfs:Operation>
+    </wfs:Operations>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Altstadt_Nord</wfs:Name>
+    <wfs:Title>Altstadt_Nord</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Altstadt_Süd</wfs:Name>
+    <wfs:Title>Altstadt_Süd</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Bayenthal</wfs:Name>
+    <wfs:Title>Bayenthal</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Bickendorf</wfs:Name>
+    <wfs:Title>Bickendorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Bilderstöckchen</wfs:Name>
+    <wfs:Title>Bilderstöckchen</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Blumenberg</wfs:Name>
+    <wfs:Title>Blumenberg</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Bocklemünd_Mengenich</wfs:Name>
+    <wfs:Title>Bocklemünd_Mengenich</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Braunsfeld</wfs:Name>
+    <wfs:Title>Braunsfeld</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Brück</wfs:Name>
+    <wfs:Title>Brück</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Buchforst</wfs:Name>
+    <wfs:Title>Buchforst</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Buchheim</wfs:Name>
+    <wfs:Title>Buchheim</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Chorweiler</wfs:Name>
+    <wfs:Title>Chorweiler</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Dellbrück</wfs:Name>
+    <wfs:Title>Dellbrück</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Deutz</wfs:Name>
+    <wfs:Title>Deutz</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Dünnwald</wfs:Name>
+    <wfs:Title>Dünnwald</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Ehrenfeld</wfs:Name>
+    <wfs:Title>Ehrenfeld</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Eil</wfs:Name>
+    <wfs:Title>Eil</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Elsdorf</wfs:Name>
+    <wfs:Title>Elsdorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Ensen</wfs:Name>
+    <wfs:Title>Ensen</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Esch_Auweiler</wfs:Name>
+    <wfs:Title>Esch_Auweiler</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Finkenberg</wfs:Name>
+    <wfs:Title>Finkenberg</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Flittard</wfs:Name>
+    <wfs:Title>Flittard</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Fühlingen</wfs:Name>
+    <wfs:Title>Fühlingen</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Godorf</wfs:Name>
+    <wfs:Title>Godorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Gremberghoven</wfs:Name>
+    <wfs:Title>Gremberghoven</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Grengel</wfs:Name>
+    <wfs:Title>Grengel</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Hahnwald</wfs:Name>
+    <wfs:Title>Hahnwald</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Heimersdorf</wfs:Name>
+    <wfs:Title>Heimersdorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Höhenberg</wfs:Name>
+    <wfs:Title>Höhenberg</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Höhenhaus</wfs:Name>
+    <wfs:Title>Höhenhaus</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Holweide</wfs:Name>
+    <wfs:Title>Holweide</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Humboldt_Gremberg</wfs:Name>
+    <wfs:Title>Humboldt_Gremberg</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Immendorf</wfs:Name>
+    <wfs:Title>Immendorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Junkersdorf</wfs:Name>
+    <wfs:Title>Junkersdorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Kalk</wfs:Name>
+    <wfs:Title>Kalk</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Klettenberg</wfs:Name>
+    <wfs:Title>Klettenberg</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Langel</wfs:Name>
+    <wfs:Title>Langel</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Libur</wfs:Name>
+    <wfs:Title>Libur</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Lind</wfs:Name>
+    <wfs:Title>Lind</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Lindenthal</wfs:Name>
+    <wfs:Title>Lindenthal</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Lindweiler</wfs:Name>
+    <wfs:Title>Lindweiler</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Longerich</wfs:Name>
+    <wfs:Title>Longerich</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Lövenich</wfs:Name>
+    <wfs:Title>Lövenich</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Marienburg</wfs:Name>
+    <wfs:Title>Marienburg</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Mauenheim</wfs:Name>
+    <wfs:Title>Mauenheim</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Merheim</wfs:Name>
+    <wfs:Title>Merheim</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Merkenich</wfs:Name>
+    <wfs:Title>Merkenich</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Meschenich</wfs:Name>
+    <wfs:Title>Meschenich</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Mülheim</wfs:Name>
+    <wfs:Title>Mülheim</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Müngersdorf</wfs:Name>
+    <wfs:Title>Müngersdorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Neubrück</wfs:Name>
+    <wfs:Title>Neubrück</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Neuehrenfeld</wfs:Name>
+    <wfs:Title>Neuehrenfeld</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Neustadt_Nord</wfs:Name>
+    <wfs:Title>Neustadt_Nord</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Neustadt_Süd</wfs:Name>
+    <wfs:Title>Neustadt_Süd</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Niehl</wfs:Name>
+    <wfs:Title>Niehl</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Nippes</wfs:Name>
+    <wfs:Title>Nippes</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Ossendorf</wfs:Name>
+    <wfs:Title>Ossendorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Ostheim</wfs:Name>
+    <wfs:Title>Ostheim</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Pesch</wfs:Name>
+    <wfs:Title>Pesch</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Poll</wfs:Name>
+    <wfs:Title>Poll</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Porz</wfs:Name>
+    <wfs:Title>Porz</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Raderberg</wfs:Name>
+    <wfs:Title>Raderberg</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Raderthal</wfs:Name>
+    <wfs:Title>Raderthal</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Rath_Heumar</wfs:Name>
+    <wfs:Title>Rath_Heumar</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Riehl</wfs:Name>
+    <wfs:Title>Riehl</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Rodenkirchen</wfs:Name>
+    <wfs:Title>Rodenkirchen</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Roggendorf_Thenhoven</wfs:Name>
+    <wfs:Title>Roggendorf_Thenhoven</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Rondorf</wfs:Name>
+    <wfs:Title>Rondorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Seeberg</wfs:Name>
+    <wfs:Title>Seeberg</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Stammheim</wfs:Name>
+    <wfs:Title>Stammheim</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Sülz</wfs:Name>
+    <wfs:Title>Sülz</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Sürth</wfs:Name>
+    <wfs:Title>Sürth</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Urbach</wfs:Name>
+    <wfs:Title>Urbach</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Vingst</wfs:Name>
+    <wfs:Title>Vingst</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Vogelsang</wfs:Name>
+    <wfs:Title>Vogelsang</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Volkhoven_Weiler</wfs:Name>
+    <wfs:Title>Volkhoven_Weiler</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Wahn</wfs:Name>
+    <wfs:Title>Wahn</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Wahnheide</wfs:Name>
+    <wfs:Title>Wahnheide</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Weiden</wfs:Name>
+    <wfs:Title>Weiden</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Weidenpesch</wfs:Name>
+    <wfs:Title>Weidenpesch</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Weiß</wfs:Name>
+    <wfs:Title>Weiß</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Westhoven</wfs:Name>
+    <wfs:Title>Westhoven</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Widdersdorf</wfs:Name>
+    <wfs:Title>Widdersdorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Worringen</wfs:Name>
+    <wfs:Title>Worringen</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Zollstock</wfs:Name>
+    <wfs:Title>Zollstock</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+  <wfs:FeatureType>
+    <wfs:Name>adressen_stadtteil:Zündorf</wfs:Name>
+    <wfs:Title>Zündorf</wfs:Title>
+    <wfs:DefaultSRS>urn:ogc:def:crs:EPSG::25832</wfs:DefaultSRS>
+    <wfs:OutputFormats>
+      <wfs:Format>GML3</wfs:Format>
+      <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    </wfs:OutputFormats>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>6.80534263 50.83164204</ows:LowerCorner>
+      <ows:UpperCorner>7.13337013 51.08846294</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+  </wfs:FeatureType>
+</wfs:FeatureTypeList>
+<ogc:Filter_Capabilities>
+  <ogc:Spatial_Capabilities>
+    <ogc:GeometryOperands>
+      <ogc:GeometryOperand>gml:Envelope</ogc:GeometryOperand>
+      <ogc:GeometryOperand>gml:Point</ogc:GeometryOperand>
+      <ogc:GeometryOperand>gml:Polygon</ogc:GeometryOperand>
+      <ogc:GeometryOperand>gml:LineString</ogc:GeometryOperand>
+    </ogc:GeometryOperands>
+    <ogc:SpatialOperators>
+      <ogc:SpatialOperator name="BBOX"/>
+      <ogc:SpatialOperator name="Equals"/>
+      <ogc:SpatialOperator name="Disjoint"/>
+      <ogc:SpatialOperator name="Intersects"/>
+      <ogc:SpatialOperator name="Crosses"/>
+      <ogc:SpatialOperator name="Touches"/>
+      <ogc:SpatialOperator name="Within"/>
+      <ogc:SpatialOperator name="Contains"/>
+      <ogc:SpatialOperator name="Overlaps"/>
+    </ogc:SpatialOperators>
+  </ogc:Spatial_Capabilities>
+  <ogc:Scalar_Capabilities>
+    <ogc:LogicalOperators/>
+    <ogc:ComparisonOperators>
+      <ogc:ComparisonOperator>EqualTo</ogc:ComparisonOperator>
+      <ogc:ComparisonOperator>NotEqualTo</ogc:ComparisonOperator>
+      <ogc:ComparisonOperator>LessThan</ogc:ComparisonOperator>
+      <ogc:ComparisonOperator>GreaterThan</ogc:ComparisonOperator>
+      <ogc:ComparisonOperator>LessThanEqualTo</ogc:ComparisonOperator>
+      <ogc:ComparisonOperator>GreaterThanEqualTo</ogc:ComparisonOperator>
+      <ogc:ComparisonOperator>Like</ogc:ComparisonOperator>
+      <ogc:ComparisonOperator>Between</ogc:ComparisonOperator>
+      <ogc:ComparisonOperator>NullCheck</ogc:ComparisonOperator>
+    </ogc:ComparisonOperators>
+  </ogc:Scalar_Capabilities>
+  <ogc:Id_Capabilities>
+    <ogc:EID/>
+    <ogc:FID/>
+  </ogc:Id_Capabilities>
+</ogc:Filter_Capabilities>
+</wfs:WFS_Capabilities>

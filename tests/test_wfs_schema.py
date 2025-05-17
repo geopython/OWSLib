@@ -82,6 +82,9 @@ def mp_remote_describefeaturetype_typename_eq_attribute(monkeypatch):
                         __remote_describefeaturetype)
 
 
+
+
+
 class TestOnline(object):
     """Class grouping online tests for the WFS get_schema method."""
     @pytest.mark.xfail
@@ -173,3 +176,177 @@ class TestOffline(object):
         """
         wfs110 = WebFeatureService(WFS_SERVICE_URL, version='1.1.0')
         schema = wfs110.get_schema('gw_varia:hhz')
+
+    def test_get_datatype_geometry(self):
+        """Test the _get_datatype helper function with geometry types."""
+        from owslib.feature.schema import _get_datatype, XS_NAMESPACE
+        from owslib.etree import etree
+
+        ns = {
+            'xs': XS_NAMESPACE,
+            'gml': 'http://www.opengis.net/gml',
+            'xsd': 'http://www.w3.org/2001/XMLSchema'
+        }
+
+        # Test geometry type
+        # XML: <element name="field1" type="gml:PointPropertyType"/>
+        element = etree.Element('{%s}element' % XS_NAMESPACE,
+                              attrib={'name': 'field1', 'type': 'gml:PointPropertyType'},
+                              nsmap=ns)
+        assert _get_datatype(element, "xsd", "gml") == "PointPropertyType"
+
+    def test_get_datatype_reference(self):
+        """Test the _get_datatype helper function with element references."""
+        from owslib.feature.schema import _get_datatype, XS_NAMESPACE
+        from owslib.etree import etree
+
+        ns = {
+            'xs': XS_NAMESPACE,
+            'gml': 'http://www.opengis.net/gml',
+            'xsd': 'http://www.w3.org/2001/XMLSchema'
+        }
+
+        # Test element reference
+        # XML: <element name="field2" ref="gml:polygonProperty"/>
+        element = etree.Element('{%s}element' % XS_NAMESPACE,
+                              attrib={'name': 'field2', 'ref': 'gml:polygonProperty'},
+                              nsmap=ns)
+        assert _get_datatype(element, "xsd", "gml") == "polygonProperty"
+
+    @pytest.mark.parametrize("data_type", [
+        "xsd:boolean",
+        "xsd:date",
+        "xsd:dateTime",
+        "xsd:double",
+        "xsd:float",
+        "xsd:integer",
+        "xsd:int",
+        "xsd:string",
+    ])
+    def test_get_datatype_simple_types(self, data_type):
+        """Test the _get_datatype helper function with different simple types.
+
+        Parameters
+        ----------
+        data_type : str
+            The XML Schema data type to test
+        """
+        from owslib.feature.schema import _get_datatype, XS_NAMESPACE
+        from owslib.etree import etree
+
+        ns = {
+            'xs': XS_NAMESPACE,
+            'gml': 'http://www.opengis.net/gml',
+            'xsd': 'http://www.w3.org/2001/XMLSchema'
+        }
+
+        # Test simple type with restriction
+        # XML:
+        # <element name="field3">
+        #     <simpleType>
+        #         <restriction base="[data_type]"/>
+        #     </simpleType>
+        # </element>
+        element = etree.Element('{%s}element' % XS_NAMESPACE, attrib={'name': 'field3'}, nsmap=ns)
+        simple_type = etree.SubElement(element, '{%s}simpleType' % XS_NAMESPACE)
+        restriction = etree.SubElement(simple_type, '{%s}restriction' % XS_NAMESPACE,
+                                    attrib={'base': data_type})
+        expected_type = data_type.split(":")[-1]
+        assert _get_datatype(element, "xsd", "gml") == expected_type
+
+    @pytest.mark.parametrize("data_type", [
+        "xsd:boolean",
+        "xsd:date",
+        "xsd:dateTime",
+        "xsd:double",
+        "xsd:float",
+        "xsd:integer",
+        "xsd:int",
+        "xsd:string",
+    ])
+    def test_get_datatype_direct_types(self, data_type):
+        """Test the _get_datatype helper function with direct type attributes.
+
+        Parameters
+        ----------
+        data_type : str
+            The XML Schema data type to test
+        """
+        from owslib.feature.schema import _get_datatype, XS_NAMESPACE
+        from owslib.etree import etree
+
+        ns = {
+            'xs': XS_NAMESPACE,
+            'gml': 'http://www.opengis.net/gml',
+            'xsd': 'http://www.w3.org/2001/XMLSchema'
+        }
+
+        # Test direct type attribute
+        # XML: <element name="field1" type="xsd:string"/>
+        element = etree.Element('{%s}element' % XS_NAMESPACE,
+                              attrib={'name': 'field1', 'type': data_type},
+                              nsmap=ns)
+        expected_type = data_type.split(":")[-1]
+        assert _get_datatype(element, "xsd", "gml") == expected_type
+
+    @pytest.mark.parametrize("data_type", [
+        "xsd:boolean",
+        "xsd:date",
+        "xsd:dateTime",
+        "xsd:double",
+        "xsd:float",
+        "xsd:integer",
+        "xsd:int",
+        "xsd:string",
+    ])
+    def test_get_datatype_complex_types(self, data_type):
+        """Test the _get_datatype helper function with complex type definitions.
+
+        Parameters
+        ----------
+        data_type : str
+            The XML Schema data type to test
+        """
+        from owslib.feature.schema import _get_datatype, XS_NAMESPACE
+        from owslib.etree import etree
+
+        ns = {
+            'xs': XS_NAMESPACE,
+            'gml': 'http://www.opengis.net/gml',
+            'xsd': 'http://www.w3.org/2001/XMLSchema'
+        }
+
+        # Test complex type
+        # XML:
+        # <element name="field4">
+        #     <complexType>
+        #         <sequence>
+        #             <element type="xsd:type"/>
+        #         </sequence>
+        #     </complexType>
+        # </element>
+        element = etree.Element('{%s}element' % XS_NAMESPACE, attrib={'name': 'field4'}, nsmap=ns)
+        complex_type = etree.SubElement(element, '{%s}complexType' % XS_NAMESPACE)
+        sequence = etree.SubElement(complex_type, '{%s}sequence' % XS_NAMESPACE)
+        sub_element = etree.SubElement(sequence, '{%s}element' % XS_NAMESPACE,
+                                    attrib={'type': data_type})
+        expected_type = data_type.split(":")[-1]
+        assert _get_datatype(element, "xsd", "gml") == expected_type
+
+
+
+    def test_get_datatype_unknown(self):
+        """Test the _get_datatype helper function with unknown structure."""
+        from owslib.feature.schema import _get_datatype, XS_NAMESPACE
+        from owslib.etree import etree
+
+        ns = {
+            'xs': XS_NAMESPACE,
+            'gml': 'http://www.opengis.net/gml',
+            'xsd': 'http://www.w3.org/2001/XMLSchema'
+        }
+
+        # Test unknown structure
+        # XML: <element name="field5"/>
+        element = etree.Element('{%s}element' % XS_NAMESPACE, attrib={'name': 'field5'}, nsmap=ns)
+        assert _get_datatype(element, "xsd", "gml") is None

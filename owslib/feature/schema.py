@@ -54,6 +54,7 @@ def get_schema(
     type_element = root.find("./{%s}element" % XS_NAMESPACE)
     if type_element is None:
         return None
+
     complex_type = type_element.attrib["type"].split(":")[1]
     elements = _get_elements(complex_type, root)
     nsmap = None
@@ -78,16 +79,45 @@ def _get_elements(complex_type, root):
     return found_elements
 
 
+def _get_datatype(element, schema_key, gml_key):
+    """Extract the data type from an element based on different XML structure variants.
+
+    :param element: The XML element to extract the data type from
+    :param str schema_key: The XML namespace key for schema elements
+    :param str gml_key: The XML namespace key for GML elements
+    :return: The extracted data type as string
+    """
+    # Case 1: Type defined as attribute
+    if "type" in element.attrib:
+        data_type = element.attrib["type"]
+        # Remove any namespace prefix
+        if ":" in data_type:
+            data_type = data_type.split(":")[-1]
+        return data_type
+    # Case 2: Reference to another element
+    elif "ref" in element.attrib:
+        return element.attrib["ref"].split(":")[-1]
+    # Case 3: Type defined as SimpleType with Restriction
+    simple_type = element.find(".//{%s}restriction" % XS_NAMESPACE)
+    if simple_type is not None:
+        return simple_type.attrib.get("base", "").replace(schema_key + ":", "")
+    # Case 4: Complex Type Definition
+    complex_type = element.find(".//{%s}complexType//{%s}element" % (XS_NAMESPACE, XS_NAMESPACE))
+    if complex_type is not None and "type" in complex_type.attrib:
+        return complex_type.attrib["type"].replace(schema_key + ":", "")
+    return None
+
+
 def _construct_schema(elements, nsmap):
-    """Consruct fiona schema based on given elements
+    """Construct fiona schema based on given elements
 
     :param list Element: list of elements
     :param dict nsmap: namespace map
-
     :return dict: schema
     """
     if elements is None:
         return None
+
     schema = {"properties": {}, "required": [], "geometry": None}
 
     schema_key = None
@@ -123,9 +153,15 @@ def _construct_schema(elements, nsmap):
     }
 
     for element in elements:
-        data_type = element.attrib["type"].replace(gml_key + ":", "")
+        if "name" not in element.attrib:
+            continue
+
         name = element.attrib["name"]
         non_nillable = element.attrib.get("nillable", "false") == "false"
+
+        data_type = _get_datatype(element, schema_key, gml_key)
+        if data_type is None:
+            continue
 
         if data_type in mappings:
             schema["geometry"] = mappings[data_type]

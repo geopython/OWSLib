@@ -83,12 +83,13 @@ def sorted_url_query(url):
 
 def service_ok(url, timeout=5):
     try:
-        resp = requests.head(url, allow_redirects=True, timeout=timeout)
+        resp = requests.get(url, allow_redirects=True, timeout=timeout, stream=True)
         if 'html' in resp.headers.get('content-type', '').lower():
+            resp.close()
             return False
-        if not resp.ok:  # if HEAD is not supported try GET with streaming
-            resp = requests.get(url, timeout=timeout, stream=True)
-        return resp.ok
+        ok = resp.ok
+        resp.close()
+        return ok
     except requests.exceptions.ReadTimeout:
         ok = False
     except requests.exceptions.ConnectTimeout:
