@@ -136,7 +136,7 @@ class WebMapTileService(object):
             raise KeyError("No content named %s" % name)
 
     def __init__(self, url, version='1.0.0', xml=None, username=None, password=None,
-                 parse_remote_metadata=False, vendor_kwargs=None, headers=None, cookies=None, auth=None,
+                 parse_remote_metadata=False, vendor_kwargs=None, headers=None, auth=None, cookies=None,
                  timeout=30):
         """Initialize.
 
@@ -180,7 +180,7 @@ class WebMapTileService(object):
 
         # Authentication handled by Reader
         reader = WMTSCapabilitiesReader(
-            self.version, url=self.url, headers=self.headers, cookies=self.cookies, auth=self.auth)
+            self.version, url=self.url, headers=self.headers, auth=self.auth, cookies=self.cookies)
         if xml is not None:  # read from stored xml
             self._capabilities = reader.readString(xml)
         else:  # read from server
@@ -888,7 +888,7 @@ class WMTSCapabilitiesReader:
     """Read and parse capabilities document into a lxml.etree infoset
     """
 
-    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, cookies=None, auth=None):
+    def __init__(self, version='1.0.0', url=None, un=None, pw=None, headers=None, auth=None, cookies=None):
         """Initialize"""
         self.version = version
         self._infoset = None
