@@ -113,13 +113,19 @@ Download GML using ``typename``, ``bbox`` and ``srsname``.
     >>> str(response.read())
     'b\'<?xml version="1.0" encoding="UTF-8"?><dijken:dijklijnenkaart_rce...\''
 
-Download in other formats (if supported by server).
+Download in other formats (if supported by server) and pagination.
 
 .. code-block:: python
 
+    >>> # Check which output formats are available for GetFeature
+    >>> [o.parameters['outputFormat']['values'] for o in wfs20.operations if o.name=='GetFeature']
+    [['application/gml+xml; version=3.2', 'DXF', 'DXF-ZIP', 'GML2', 'KML', 'SHAPE-ZIP', 'application/json', 'application/vnd.google-earth.kml xml', 
+    'application/vnd.google-earth.kml+xml', 'csv', 'gml3', 'gml32', 'json', 'text/csv', 'text/xml; subtype=gml/2.1.2', 'text/xml; subtype=gml/3.1.1', 'text/xml; subtype=gml/3.2']]
     >>> response = wfs20.getfeature(typename='dijken:dijklijnenkaart_rce', bbox=(173700,440400,178700,441400), srsname='EPSG:28992', outputFormat='application/json')
     >>> response.read()
     b'{"type":"FeatureCollection","features":...'
+    >>> response = wfs20.getfeature(typename='dijken:dijklijnenkaart_rce', srsname='EPSG:4326', maxfeatures=20, startindex=1)
+    'b\'<?xml version="1.0" encoding="UTF-8"?><dijken:dijklijnenkaart_rce...\''
 
 Return a FeatureType's schema via ``DescribeFeatureType``. The dictionary returned is
 compatible with a `Fiona schema object <https://fiona.readthedocs.io/en/latest/fiona.html#fiona.collection.Collection.schema>`_.
