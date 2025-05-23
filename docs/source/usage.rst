@@ -83,55 +83,70 @@ WFS
 ---
 Connect to a WFS and inspect its capabilities.
 
-::
+.. code-block:: python
 
     >>> from owslib.wfs import WebFeatureService
-    >>> wfs11 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='1.1.0')
-    >>> wfs11.identification.title
-    'INSPIRE WFS 2.0 DemoServer Verwaltungsgrenzen Bayern
+    >>> wfs20 = WebFeatureService(url='https://services.rce.geovoorziening.nl/dijken/wfs', version='2.0.0')
+    >>> wfs20.identification.title
+   'Landschapsatlas'
 
-    >>> [operation.name for operation in wfs11.operations]
-    ['GetCapabilities', 'DescribeFeatureType', 'GetFeature', 'GetGmlObject']
+    >>> [operation.name for operation in wfs20.operations]
+    ['GetCapabilities', 'DescribeFeatureType', 'GetFeature', 'GetPropertyValue', 'ListStoredQueries', 'DescribeStoredQueries', 
+    'CreateStoredQuery', 'DropStoredQuery', 'ImplementsBasicWFS', 'ImplementsTransactionalWFS', 'ImplementsLockingWFS', 
+    'KVPEncoding', 'XMLEncoding', 'SOAPEncoding', 'ImplementsInheritance', 'ImplementsRemoteResolve', 'ImplementsResultPaging', 
+    'ImplementsStandardJoins', 'ImplementsSpatialJoins', 'ImplementsTemporalJoins', 'ImplementsFeatureVersioning', 
+    'ManageStoredQueries', 'PagingIsTransactionSafe', 'QueryExpressions']
 
 List FeatureTypes
 
-::
+.. code-block:: python
 
-    >>> list(wfs11.contents)
-    ['bvv:vg_ex', 'bvv:bayern_ex', 'bvv:lkr_ex', 'bvv:regbez_ex', 'bvv:gmd_ex']
+    >>> list(wfs20.contents)
+    ['dijken:dijken_bovenregionale_betekenis', 'dijken:dijklijnenkaart_rce']
 
 Download GML using ``typename``, ``bbox`` and ``srsname``.
 
-::
+.. code-block:: python
 
     >>> # OWSLib will switch the axis order from EN to NE automatically if designated by EPSG-Registry
-    >>> response = wfs11.getfeature(typename='bvv:gmd_ex', bbox=(4500000,5500000,4500500,5500500), srsname='urn:x-ogc:def:crs:EPSG:31468')
+    >>> response = wfs20.getfeature(typename='dijken:dijklijnenkaart_rce', bbox=(173700,440400,178700,441400), srsname='EPSG:28992')
+    >>> str(response.read())
+    'b\'<?xml version="1.0" encoding="UTF-8"?><dijken:dijklijnenkaart_rce...\''
+
+Download in other formats (if supported by server).
+
+.. code-block:: python
+
+    >>> response = wfs20.getfeature(typename='dijken:dijklijnenkaart_rce', bbox=(173700,440400,178700,441400), srsname='EPSG:28992', outputFormat='application/json')
+    >>> response.read()
+    b'{"type":"FeatureCollection","features":...'
 
 Return a FeatureType's schema via ``DescribeFeatureType``. The dictionary returned is
 compatible with a `Fiona schema object <https://fiona.readthedocs.io/en/latest/fiona.html#fiona.collection.Collection.schema>`_.
 
-::
+.. code-block:: python
 
-    >>> wfs11.get_schema('bvv:vg_ex')
-    >>> {'properties': {'land': 'string', 'modellart': 'string', 'objart': 'string', 'objart_txt': 'string', 'objid': 'string', 'hdu_x': 'short', 'beginn': 'string', 'ende': 'string', 'adm': 'string', 'avg': 'string', 'bez_gem': 'string', 'bez_krs': 'string', 'bez_lan': 'string', 'bez_rbz': 'string', 'sch': 'string'}, 'geometry': '3D MultiPolygon', 'geometry_column': 'geom'}
+    >>> wfs20.get_schema('dijken:dijklijnenkaart_rce')
+    {'properties': {'ogc_fid': 'int', 'id': 'string', 'naam': 'string', 'aanleg_beg': 'string', 'aanleg_ein': 'string', 'aanleg_ind': 'string', 'status': 'string', 'herkomst': 'string', 'verdwenen': 'string', 'oorsprfunc': 'string', 'naspfunc': 'string', 'bijzonderh': 'string', 'bron_data': 'string', 'bron_id': 'string', 'bron_geo': 'string', 'rce_zone': 'string', 'waternaam': 'string', 'polder': 'string', 'shape_leng': 'double', 'opmerking': 'string', 'laatst_bew': 'date'}, 'required': ['ogc_fid'], 'geometry': 'GeometryCollection', 'geometry_column': 'wkb_geometry'}
+
 
 Download GML using ``typename`` and ``filter``. OWSLib currently only
 support filter building for WFS 1.1 (FE.1.1).
 
-::
+.. code-block:: python
 
     >>> from owslib.fes import *
     >>> from owslib.etree import etree
     >>> from owslib.wfs import WebFeatureService
-    >>> wfs11 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='1.1.0')
+    >>> wfs10 = WebFeatureService(url='https://services.rce.geovoorziening.nl/dijken/wfs', version='1.1.0')
 
-    >>> filter = PropertyIsLike(propertyname='bez_gem', literal='Ingolstadt', wildCard='*')
+    >>> filter = PropertyIsLike(propertyname='naam', literal='Haarlemmer*', wildCard='*')
     >>> filterxml = etree.tostring(filter.toXML()).decode("utf-8")
-    >>> response = wfs11.getfeature(typename='bvv:gmd_ex', filter=filterxml)
+    >>> response = wfs10.getfeature(typename='dijken:dijklijnenkaart_rce', filter=filterxml)
 
 Save response to a file.
 
-::
+.. code-block:: python
 
     >>> out = open('/tmp/data.gml', 'wb')
     >>> out.write(bytes(response.read(), 'UTF-8'))
@@ -140,21 +155,22 @@ Save response to a file.
 Download GML using ``StoredQueries``\ (only available for WFS 2.0
 services)
 
-::
+.. code-block:: python
 
     >>> from owslib.wfs import WebFeatureService
-    >>> wfs20 = WebFeatureService(url='http://geoserv.weichand.de:8080/geoserver/wfs', version='2.0.0')
+    >>> wfs20 = WebFeatureService(url='https://services.rce.geovoorziening.nl/dijken/wfs', version='2.0.0')
 
     >>> # List StoredQueries
     >>> [storedquery.id for storedquery in wfs20.storedqueries]
-    ['bboxQuery', 'urn:ogc:def:query:OGC-WFS::GetFeatureById', 'GemeindeByGemeindeschluesselEpsg31468', 'DWithinQuery']
+    ['urn:ogc:def:query:OGC-WFS::GetFeatureById']
 
-    >>> # List Parameters for StoredQuery[1]
-    >>> parameter.name for parameter in wfs20.storedqueries[1].parameters]
+    >>> # List Parameters for StoredQuery[0]
+    >>> [parameter.name for parameter in wfs20.storedqueries[0].parameters]
     ['ID']
 
-
-    >>> response = wfs20.getfeature(storedQueryID='urn:ogc:def:query:OGC-WFS::GetFeatureById', storedQueryParams={'ID':'gmd_ex.1'})
+    >>> response = wfs20.getfeature(storedQueryID='urn:ogc:def:query:OGC-WFS::GetFeatureById', storedQueryParams={'ID':'dijklijnenkaart_rce.13364'})
+    >>> str(response.read())
+    'b\'<?xml version="1.0" encoding="UTF-8"?><dijken:dijklijnenkaart_rce...\''
 
 OGC API
 -------
