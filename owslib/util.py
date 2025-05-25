@@ -692,9 +692,12 @@ Would be 2006-07-27T21:10:00Z, not 'now'
 
 def extract_xml_list(elements):
     """
-Some people don't have seperate tags for their keywords and seperate them with
+Some people don't have separate tags for their keywords and separate them with
 a newline. This will extract out all of the keywords correctly.
 """
+    if elements is None:
+        return []
+
     keywords = (re.split(r'[\n\r]+', f.text) for f in elements if f.text)
     flattened = (item.strip() for sublist in keywords for item in sublist)
     remove_blank = [_f for _f in flattened if _f]

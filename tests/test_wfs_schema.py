@@ -9,6 +9,29 @@ WFS_SERVICE_URL = 'https://www.dov.vlaanderen.be/geoserver/wfs?request=GetCapabi
 
 
 @pytest.fixture
+def mp_wfs_100(monkeypatch):
+    """Monkeypatch the call to the remote GetCapabilities request of WFS
+    version 1.0.0.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.fixture
+        PyTest monkeypatch fixture.
+
+    """
+    def read(*args, **kwargs):
+        with open('tests/resources/wfs_mapserver_demo_getcapabilities_100.xml', 'r') as f:
+            data = f.read()
+            if type(data) is not bytes:
+                data = data.encode('utf-8')
+            data = etree.fromstring(data)
+        return data
+
+    monkeypatch.setattr(
+        owslib.feature.common.WFSCapabilitiesReader, 'read', read)
+
+
+@pytest.fixture
 def mp_wfs_110(monkeypatch):
     """Monkeypatch the call to the remote GetCapabilities request of WFS
     version 1.1.0.
@@ -122,7 +145,21 @@ class TestOnline(object):
 
 class TestOffline(object):
     """Class grouping offline tests for the WFS get_schema method."""
-    def test_get_schema(self, mp_wfs_110, mp_remote_describefeaturetype):
+    def test_get_schema_100(self, mp_wfs_100):
+        """Test the get_schema method for a standard schema.
+
+        Parameters
+        ----------
+        mp_wfs_100 : pytest.fixture
+            Monkeypatch the call to the remote GetCapabilities request.
+        """
+        wfs100 = WebFeatureService(WFS_SERVICE_URL, version='1.0.0')
+        assert wfs100.identification.title == 'WFS Demo Server for MapServer'
+        assert wfs100.identification.keywords == []
+        assert list(wfs100.contents) == ['continents', 'cities']
+
+
+    def test_get_schema(self, mp_wfs_100, mp_remote_describefeaturetype):
         """Test the get_schema method for a standard schema.
 
         Parameters
