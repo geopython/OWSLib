@@ -56,19 +56,23 @@ OGC API Support
 +======================================================================================+============+
 | `OGC API - Features - Part 1: Core`_                                                 | 1.0        |
 +--------------------------------------------------------------------------------------+------------+
-| `OGC API - Coverages - Part 1: Core`_                                                | draft      |
-+--------------------------------------------------------------------------------------+------------+
-| `OGC API - Records - Part 1: Core`_                                                  | draft      |
-+--------------------------------------------------------------------------------------+------------+
 | `OGC API - Features - Part 3: Filtering and the Common Query Language (CQL)`_        | draft      |
 +--------------------------------------------------------------------------------------+------------+
 | `OGC API - Features - Part 4: Create, Replace, Update and Delete`_                   | draft      |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Coverages - Part 1: Core`_                                                | draft      |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Maps - Part 1: Core`_                                                     | 1.0        |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Records - Part 1: Core`_                                                  | draft      |
 +--------------------------------------------------------------------------------------+------------+
 | `OGC API - Processes - Part 1: Core`_                                                | 1.0        |
 +--------------------------------------------------------------------------------------+------------+
 | `OGC API - Connected Systems - Part 1: Feature Resources`_                           | draft      |
 +--------------------------------------------------------------------------------------+------------+
 | `OGC API - Connected Systems - Part 2: Dynamic Data`_                                | draft      |
++--------------------------------------------------------------------------------------+------------+
+| `OGC API - Environmental Data Retrieval - Part 1: Core`_                             | 1.0        |
 +--------------------------------------------------------------------------------------+------------+
 
 .. _`OGC WMS`: https://www.opengeospatial.org/standards/wms
@@ -95,12 +99,14 @@ OGC API Support
 .. _`WaterML`: http://his.cuahsi.org/wofws.html#waterml
 .. _`Swiss GM03`: https://www.geocat.admin.ch/en/dokumentation/gm03.html
 .. _`OGC API`: https://ogcapi.ogc.org
-.. _`OGC API - Features - Part 1: Core`: https://docs.opengeospatial.org/is/17-069r3/17-069r3.html
-.. _`OGC API - Records - Part 1: Core`: https://github.com/opengeospatial/ogcapi-records
-.. _`OGC API - Features - Part 3: Filtering and the Common Query Language (CQL)`: https://docs.ogc.org/DRAFTS/19-079.html
-.. _`OGC API - Features - Part 4: Create, Replace, Update and Delete`: https://docs.ogc.org/DRAFTS/20-002.html
+.. _`OGC API - Features - Part 1: Core`: https://docs.ogc.org/is/17-069r4/17-069r4.html
+.. _`OGC API - Features - Part 3: Filtering and the Common Query Language (CQL)`: https://docs.ogc.org/is/19-079r2/19-079r2.html
+.. _`OGC API - Features - Part 4: Create, Replace, Update and Delete`: https://docs.ogc.org/DRAFTS/20-002r1.html
+.. _`OGC API - Records - Part 1: Core`: https://docs.ogc.org/is/20-004r1/20-004r1.html
 .. _`OGC API - Coverages - Part 1: Core`: https://docs.ogc.org/DRAFTS/19-087.html
+.. _`OGC API - Maps - Part 1: Core`: https://docs.ogc.org/is/20-058/20-058.html
 .. _`OGC API - Processes - Part 1: Core`: https://docs.ogc.org/is/18-062r2/18-062r2.html
 .. _`OGC API - Connected Systems - Part 1: Feature Resources`: https://docs.ogc.org/DRAFTS/23-001r0.html
 .. _`OGC API - Connected Systems - Part 2: Dynamic Data`: https://docs.ogc.org/DRAFTS/23-002r0.html
+.. _`OGC API - Environmental Data Retrieval - Part 1: Core`: https://docs.ogc.org/is/19-086r6/19-086r6.html
 .. _`OpenSearch`: https://github.com/dewitt/opensearch
