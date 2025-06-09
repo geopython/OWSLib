@@ -1522,10 +1522,10 @@ class MD_ImageDescription(printable):
             self.cloudcover = util.testXMLValue(cloudcov)
 
             iea = img_desc.find(util.nspath_eval('mrc:illuminationElevationAngle/gco:Real', self.namespaces))
-            self.self.illumination_elevation_angle = util.testXMLValue(iea)
+            self.illumination_elevation_angle = util.testXMLValue(iea)
 
             iaa = img_desc.find(util.nspath_eval('mrc:illuminationAzimuthAngle/gco:Real', self.namespaces))
-            self.self.illumination_azimuth_angle = util.testXMLValue(iaa)
+            self.illumination_azimuth_angle = util.testXMLValue(iaa)
 
             proclvl = img_desc.find(util.nspath_eval(
                 'mrc:processingLevelCode/mcc:MD_Identifier/mcc:code/gco:CharacterString', self.namespaces))
