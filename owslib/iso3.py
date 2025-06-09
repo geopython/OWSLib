@@ -1509,6 +1509,8 @@ class MD_ImageDescription(printable):
             self.attributedescription = None
             self.cloudcover = None
             self.processinglevel = None
+            self.illumination_elevation_angle = None
+            self.illumination_azimuth_angle = None
         else:
             attdesc = img_desc.find(util.nspath_eval('mrc:attributeDescription/gco:RecordType', self.namespaces))
             self.attributedescription = util.testXMLValue(attdesc)
@@ -1518,6 +1520,12 @@ class MD_ImageDescription(printable):
 
             cloudcov = img_desc.find(util.nspath_eval('mrc:cloudCoverPercentage/gco:Real', self.namespaces))
             self.cloudcover = util.testXMLValue(cloudcov)
+
+            iea = img_desc.find(util.nspath_eval('mrc:illuminationElevationAngle/gco:Real', self.namespaces))
+            self.self.illumination_elevation_angle = util.testXMLValue(iea)
+
+            iaa = img_desc.find(util.nspath_eval('mrc:illuminationAzimuthAngle/gco:Real', self.namespaces))
+            self.self.illumination_azimuth_angle = util.testXMLValue(iaa)
 
             proclvl = img_desc.find(util.nspath_eval(
                 'mrc:processingLevelCode/mcc:MD_Identifier/mcc:code/gco:CharacterString', self.namespaces))
