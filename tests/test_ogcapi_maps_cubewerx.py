@@ -28,5 +28,5 @@ def test_ogcapi_maps_pygeoapi():
     assert erm['id'] == 'erm'
     assert erm['title'] == 'EuroRegionalMap'
 
-    data = w.map('erm', width=1200, height=800, transparent=False)
+    data = w.map('erm', width=600, height=400, transparent=False)
     assert isinstance(data, BytesIO)
