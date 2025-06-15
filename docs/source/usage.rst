@@ -211,7 +211,7 @@ OGC API - Features - Part 1: Core 1.0
   >>> w.url
   'https://demo.pygeoapi.io/master'
   >>> conformance = w.conformance()
-  {u'conformsTo': [u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson']}
+  {'conformsTo': ['http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core', 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30', 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html', 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson']}
   >>> api = w.api()  # OpenAPI document/
   >>> collections = w.collections()
   >>> len(collections['collections'])
@@ -231,7 +231,11 @@ OGC API - Features - Part 1: Core 1.0
   6
   >>> lakes_query = w.collection_items('lakes')
   >>> lakes_query['features'][0]['properties']
-  {u'scalerank': 0, u'name_alt': None, u'admin': None, u'featureclass': u'Lake', u'id': 0, u'name': u'Lake Baikal'}
+  {'scalerank': 0, 'name_alt': None, 'admin': None, 'featureclass': 'Lake', 'id': 0, 'name': 'Lake Baikal'}
+  >>> lakes_query = w.collection_items('lakes', name='L. Ontario')
+  >>> len(lakes_querylakes_query['features'][0]['properties']
+  {'id': 0, 'scalerank': 0, 'name': 'Lake Baikal', 'name_alt': 'https://en.wikipedia.org/wiki/Lake_Baikal', 'admin': None, 'featureclass': 'Lake'}
+
 
 OGC API - Coverages - Part 1: Core 1.0
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -275,7 +279,7 @@ OGC API - Records - Part 1: Core 1.0
   >>> w.url
   'https://example.org/records-api'
   >>> conformance = w.conformance()
-  {'conformsTo': [u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html', u'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/core', u'http://www.opengis.net/spec/ogcapi-records/1.0/req/oas30', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/json', u'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/html']}
+  {'conformsTo': ['http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core', 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30', 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html', 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson', 'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/core', 'http://www.opengis.net/spec/ogcapi-records/1.0/req/oas30', 'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/json', 'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/html']}
   >>> api = w.api()  # OpenAPI document
   >>> collections = w.collections()
   >>> len(collections)
@@ -295,9 +299,9 @@ OGC API - Records - Part 1: Core 1.0
   8
   >>> my_catalogue_query = w.collection_items('my-catalogue')
   >>> my_catalogue_query['features'][0]['properties'].keys()
-  [u'title', u'abstract', u'keywords']
+  ['title', 'abstract', 'keywords']
   >>> my_catalogue_query['features'][0]['properties']['title']
-  u'Roadrunner ambush locations'
+  'Roadrunner ambush locations'
   >>> my_catalogue_query2 = w.collection_items('my-catalogue', q='birds')
   >>> msc_wis_dcpc_query2['numberMatched']
   2
@@ -305,10 +309,10 @@ OGC API - Records - Part 1: Core 1.0
   2
   >>> my_catalogue_cql_text_query = w.collection_items('my-catalogue', filter="title LIKE 'Roadrunner%'")
   >>> my_catalogue_cql_text_query['features'][0]['properties']['title']
-  u'Roadrunner ambush locations'
+  'Roadrunner ambush locations'
   >>> my_catalogue_cql_json_query = w.collection_items('my-catalogue', limit=1, cql={'eq': [{ 'property': 'title' }, 'Roadrunner ambush locations']})
   >>> my_catalogue_cql_json_query['features'][0]['properties']['title']
-  u'Roadrunner ambush locations'
+  'Roadrunner ambush locations'
 
   >>> import json
 
