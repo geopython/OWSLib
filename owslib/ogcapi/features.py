@@ -143,7 +143,7 @@ class Features(Collections):
                     sortby = sort_property
                 kwargs['sortby'] = sortby
             except ValueError as err:
-                LOGGER.debug(f'Cannot handle sortby; skipping')
+                LOGGER.debug(f'Cannot handle sortby; skipping: {err}')
 
         if 'cql' in kwargs:
             LOGGER.debug('CQL query detected')
