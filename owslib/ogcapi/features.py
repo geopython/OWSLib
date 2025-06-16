@@ -124,6 +124,8 @@ class Features(Collections):
         @param filter: CQL TEXT expression
         @type cql: dict
         @param cql: CQL JSON payload
+        @type sortby: tuple
+        @param sortby: sort property and direction (`asc`, `desc`)
 
         @returns: feature results
         """
@@ -131,7 +133,17 @@ class Features(Collections):
         if 'bbox' in kwargs:
             kwargs['bbox'] = ','.join(list(map(str, kwargs['bbox'])))
         if 'datetime_' in kwargs:
-            kwargs['datetime'] = kwargs['datetime_']
+            kwargs['datetime'] = kwargs.pop('datetime_')
+        if 'sortby' in kwargs:
+            try:
+                sort_property, sort_order = kwargs.pop('sortby')
+                if sort_order == 'desc':
+                    sortby = f'-{sort_property}'
+                else:
+                    sortby = sort_property
+                kwargs['sortby'] = sortby
+            except ValueError as err:
+                LOGGER.debug(f'Cannot handle sortby; skipping: {err}')
 
         if 'cql' in kwargs:
             LOGGER.debug('CQL query detected')
