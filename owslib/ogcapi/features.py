@@ -135,12 +135,15 @@ class Features(Collections):
         if 'datetime_' in kwargs:
             kwargs['datetime'] = kwargs.pop('datetime_')
         if 'sortby' in kwargs:
-            sort_property, sort_order = kwargs.pop('sortby')
-            if sort_order == 'desc':
-                sortby = f'-{sort_property}'
-            else:
-                sortby = sort_property
-            kwargs['sortby'] = sortby
+            try:
+                sort_property, sort_order = kwargs.pop('sortby')
+                if sort_order == 'desc':
+                    sortby = f'-{sort_property}'
+                else:
+                    sortby = sort_property
+                kwargs['sortby'] = sortby
+            except ValueError as err:
+                LOGGER.debug(f'Cannot handle sortby; skipping')
 
         if 'cql' in kwargs:
             LOGGER.debug('CQL query detected')
