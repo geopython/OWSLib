@@ -37,7 +37,7 @@ Anaconda:
 
 .. code-block:: bash
 
- git conda install -c conda-forge owslib
+  conda install -c conda-forge owslib
 
 openSUSE:
 
