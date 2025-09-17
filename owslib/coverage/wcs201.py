@@ -139,7 +139,7 @@ class WebCoverageService_2_0_1(WCSBase):
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
         example:
-        cvg=wcs.getCoverage(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),
+        cvg=wcs.getCoverage(identifier='TuMYrRQ4', timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),
                             format='cf-netcdf')
 
         is equivalent to:
@@ -149,7 +149,7 @@ class WebCoverageService_2_0_1(WCSBase):
         http://earthserver.pml.ac.uk/rasdaman/ows?&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage
         &COVERAGEID=V2_monthly_CCI_chlor_a_insitu_test&SUBSET=Lat(40,50)&SUBSET=Long(-10,0)&SUBSET=ansi(144883,145000)&FORMAT=application/netcdf
 
-        cvg=wcs.getCoverage(identifier=['myID'], format='application/netcdf', subsets=[('axisName',min,max),
+        cvg=wcs.getCoverage(identifier='myID', format='application/netcdf', subsets=[('axisName',min,max),
                             ('axisName',min,max),('axisName',min,max)])
 
 
@@ -187,8 +187,7 @@ class WebCoverageService_2_0_1(WCSBase):
         LOGGER.debug("WCS 2.0.1 DEBUG: base url of server: %s" % base_url)
 
         request = {"version": self.version, "request": "GetCoverage", "service": "WCS"}
-        assert len(identifier) > 0
-        request["CoverageID"] = identifier[0]
+        request["CoverageID"] = identifier
 
         if crs:
             request["crs"] = crs
