@@ -57,7 +57,7 @@ def test_wcs_200():
     lat_subset = ('Lat', 40, 50)
     long_subset = ('Long', -10, 0)
     formatType = 'application/netcdf'
-    output = wcs.getCoverage(identifier=[covID], format=formatType, subsets=[long_subset, lat_subset, time_subset])
+    output = wcs.getCoverage(identifier=covID, format=formatType, subsets=[long_subset, lat_subset, time_subset])
     f = open(scratch_file('test_wcs_200.nc'), 'wb')
     bytes_written = f.write(output.read())
     f.close()

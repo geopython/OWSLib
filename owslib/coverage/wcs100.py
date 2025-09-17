@@ -102,7 +102,7 @@ class WebCoverageService_1_0_0(WCSBase):
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
         example:
-        cvg=wcs.getCoverage(identifier=['TuMYrRQ4'], timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),
+        cvg=wcs.getCoverage(identifier='TuMYrRQ4', timeSequence=['2792-06-01T00:00:00.0'], bbox=(-112,36,-106,41),
                             format='cf-netcdf')
 
         is equivalent to:
@@ -123,7 +123,6 @@ class WebCoverageService_1_0_0(WCSBase):
 
         # process kwargs
         request = {'version': self.version, 'request': 'GetCoverage', 'service': 'WCS'}
-        assert len(identifier) > 0
         request['Coverage'] = identifier
         # request['identifier'] = ','.join(identifier)
         if bbox:
