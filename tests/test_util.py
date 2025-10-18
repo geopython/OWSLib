@@ -1,10 +1,20 @@
 # -*- coding: UTF-8 -*-
+# =============================================================================
+# Copyright (c) 2025 Tom Kralidis
+#
+# Authors : Tom Kralidis <tomkralidis@gmail.com>
+#
+# Contact email: tomkralidis@gmail.com
+# =============================================================================
+
+
 import codecs
-from unittest import mock
-import pytest
-from owslib.util import clean_ows_url, build_get_url, strip_bom, extract_time, ResponseWrapper, getXMLTree
-from owslib.etree import etree
 from datetime import datetime, timezone
+from unittest import mock
+
+import pytest
+from owslib.etree import etree
+from owslib.util import clean_ows_url, build_get_url, strip_bom, extract_time, ResponseWrapper, getXMLTree, str2bool
 
 
 def test_strip_bom():
@@ -127,3 +137,10 @@ def test_extract_time():
     assert start.isoformat()[-6:] == "+00:00"
     stop = extract_time(etree.fromstring(indefinite_sample))
     assert stop.isoformat()[-6:] == "+00:00"
+
+
+def test_str2bool():
+    assert str2bool('1')
+    assert not str2bool('0')
+    assert int(str2bool('true')) == 1
+    assert int(str2bool('false')) == 0
