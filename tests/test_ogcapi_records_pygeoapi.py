@@ -40,7 +40,7 @@ def test_ogcapi_records_pygeoapi():
     assert isinstance(w.response, dict)
 
     dutch_metacat_queryables = w.collection_queryables('dutch-metadata')
-    assert len(dutch_metacat_queryables['properties']) == 11
+    assert len(dutch_metacat_queryables['properties']) == 10
 
     # Minimum of limit param is 1
     with pytest.raises(RuntimeError):
