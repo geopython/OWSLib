@@ -10,7 +10,7 @@ SERVICE_URL = 'https://demo.pygeoapi.io/master/'
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
-def test_ogcapi_coverages_pygeoapi():
+def test_ogcapi_edr_pygeoapi():
     w = EnvironmentalDataRetrieval(SERVICE_URL)
 
     assert w.url == SERVICE_URL
