@@ -47,7 +47,7 @@ def test_ogcapi_records_pygeoapi():
         dutch_metacat_query = w.collection_items('dutch-metadata', limit=0)
 
     dutch_metacat_query = w.collection_items('dutch-metadata', limit=1)
-    assert dutch_metacat_query['numberMatched'] == 308
+    assert dutch_metacat_query['numberMatched'] == 309
     assert dutch_metacat_query['numberReturned'] == 1
     assert len(dutch_metacat_query['features']) == 1
 
