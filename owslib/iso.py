@@ -201,7 +201,8 @@ class MD_Metadata(object):
             for ct in ['creator', 'publisher', 'contributor']:
                 iict = getattr(ii, ct)
                 if iict:
-                    contacts.append(iict)
+                    for iict2 in iict:
+                        contacts.append(iict2)
 
         return list(filter(None, contacts))
 
