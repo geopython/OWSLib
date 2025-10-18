@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.12"]
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-python@v5
@@ -25,7 +25,7 @@ jobs:
     - name: run tests ⚙️
       run: python3 -m pytest
     - name: run tests in offline mode
-      if: matrix.python-version == '3.10'
+      if: matrix.python-version == '3.12'
       run: |
           python3 -m pytest \
             -m "not online" \

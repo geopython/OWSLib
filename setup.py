@@ -1,5 +1,5 @@
 # =============================================================================
-# Copyright (c) 2024 Tom Kralidis
+# Copyright (c) 2025 Tom Kralidis
 #
 # Author: Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -10,19 +10,6 @@ from pathlib import Path
 import re
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-import sys
-
-
-class PyTest(TestCommand):
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-        import pytest
-        errno = pytest.main(self.test_args)
-        sys.exit(errno)
 
 
 def read(filename, encoding='utf-8'):
@@ -52,7 +39,6 @@ MANIFEST = Path('MANIFEST')
 
 if MANIFEST.exists():
     MANIFEST.unlink()
-
 
 setup(
     name='OWSLib',
@@ -90,13 +76,11 @@ setup(
     url='https://owslib.readthedocs.io',
     install_requires=reqs,
     python_requires='>=3.10',
-    cmdclass={'test': PyTest},
     packages=find_packages(exclude=["docs", "etc", "examples", "tests"]),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
