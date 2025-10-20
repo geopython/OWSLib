@@ -9,19 +9,20 @@
 from datetime import datetime
 import json
 
+from tests.utils import service_ok
+
 import pytest
 
 from owslib.ogcapi.connectedsystems import Commands, ControlChannels, Datastreams, Deployments, Observations, \
     Properties, SamplingFeatures, SystemEvents, SystemHistory, Systems
 from owslib.util import Authentication
 
+# Directs to OSH (Open Sensor Hub) hosted test server
+TEST_URL = 'http://34.67.197.57:8585/sensorhub/api/'
 
 @pytest.fixture(scope="session")
 def fixtures():
     class OSHFixtures:
-        NODE_TEST_OK_URL = 'http://34.67.197.57:8585/sensorhub/test'
-        # Directs to OSH hosted test server
-        TEST_URL = 'http://34.67.197.57:8585/sensorhub/api/'
         auth = Authentication('auto_test', 'automated_tester24')
         sml_headers = {'Content-Type': 'application/sml+json'}
         json_headers = {'Content-Type': 'application/json'}
@@ -214,6 +215,7 @@ def fixtures():
     yield OSHFixtures()
 
 
+@pytest.mark.skipif(not service_ok(TEST_URL), reason="OSH server is unreachable")
 class TestSystems:
     @pytest.mark.online
     def test_system_readonly(self, fixtures):
@@ -255,6 +257,7 @@ class TestSystems:
             assert res == {}
 
 
+@pytest.mark.skipif(not service_ok(TEST_URL), reason="OSH server is unreachable")
 class TestDeployments:
     @pytest.mark.skip(reason="Skip transactional test")
     def test_deployment_create(self, fixtures):
@@ -279,6 +282,7 @@ class TestDeployments:
         assert res is not None
 
 
+@pytest.mark.skipif(not service_ok(TEST_URL), reason="OSH server is unreachable")
 class TestSamplingFeatures:
     @pytest.mark.online
     def test_sampling_features_readonly(self, fixtures):
@@ -324,6 +328,7 @@ class TestSamplingFeatures:
         assert res == {'items': []}
 
 
+@pytest.mark.skipif(not service_ok(TEST_URL), reason="OSH server is unreachable")
 class TestDatastreams:
     @pytest.mark.online
     def test_datastreams_readonly(self, fixtures):
@@ -369,6 +374,7 @@ class TestDatastreams:
         assert ds_delete == {}
 
 
+@pytest.mark.skipif(not service_ok(TEST_URL), reason="OSH server is unreachable")
 class TestObservations:
     @pytest.mark.online
     def test_observations_readonly(self, fixtures):
@@ -409,6 +415,7 @@ class TestObservations:
         fixtures.delete_all_systems()
 
 
+@pytest.mark.skipif(not service_ok(TEST_URL), reason="OSH server is unreachable")
 class TestSystemHistory:
     @pytest.mark.online
     def test_system_history(self, fixtures):
