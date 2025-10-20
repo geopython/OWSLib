@@ -45,7 +45,7 @@ source bin/activate
 # clone codebase and install
 git clone https://github.com/geopython/OWSLib.git
 cd OWSLib
-python3 setup.py install
+pip3 install .
 ```
 
 ## Running

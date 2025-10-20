@@ -12,12 +12,6 @@ Testing
 
 .. code-block:: bash
 
-   python3 setup.py test
-
-Or ...
-
-.. code-block:: bash
-
     # install requirements
     pip3 install -r requirements.txt
     pip3 install -r requirements-dev.txt # needed for tests only
