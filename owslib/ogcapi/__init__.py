@@ -187,7 +187,7 @@ class API:
         elif method == 'PUT':
             response = http_put(url, headers=self.headers, data=data, auth=self.auth)
         elif method == 'DELETE':
-            response = http_delete(url, headers=headers, auth=self.auth)
+            response = http_delete(url, headers=self.headers, auth=self.auth)
 
         LOGGER.debug(f'URL: {response.url}')
         LOGGER.debug(f'Response status code: {response.status_code}')
