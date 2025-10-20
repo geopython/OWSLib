@@ -448,7 +448,7 @@ class ContentMetadata(AbstractContentMetadata):
         self.id = self.name = testXMLValue(elem.find(nspath('Name', WMS_NAMESPACE)))
 
         # layer attributes
-        self.queryable = int(str2bool(elem.attrib.get('queryable'), '0'))
+        self.queryable = int(str2bool(elem.attrib.get('queryable', '0')))
         self.cascaded = int(elem.attrib.get('cascaded', 0))
         self.opaque = int(elem.attrib.get('opaque', 0))
         self.noSubsets = int(elem.attrib.get('noSubsets', 0))
