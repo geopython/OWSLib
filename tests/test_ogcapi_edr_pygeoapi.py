@@ -39,5 +39,5 @@ def test_ogcapi_edr_pygeoapi():
     parameter_names = icoads['parameter_names'].keys()
     assert sorted(parameter_names) == ['AIRT', 'SST', 'UWND', 'VWND']
 
-    response = w.query_data('icoads-sst', 'position', coords='POINT(-75 45)')
+    response = w.query_data('icoads-sst', 'position', coords='POINT(0 0)')
     assert isinstance(response, dict)
