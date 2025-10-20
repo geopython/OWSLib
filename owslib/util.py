@@ -1,30 +1,31 @@
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
-# Copyright (c) 2024 Tom Kralidis
+# Copyright (c) 2025 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
 # Contact email: tomkralidis@gmail.com
 # =============================================================================
 
-import os
-import sys
+import codecs
 from collections import OrderedDict
-from dateutil import parser
-from datetime import datetime, timedelta, timezone
-from owslib.etree import etree, ParseError
-from owslib.namespaces import Namespaces
-from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
 import copy
-
-from io import StringIO, BytesIO
-
-import re
 from copy import deepcopy
+from datetime import datetime, timedelta, timezone
+from io import StringIO, BytesIO
+import os
+import re
+import sys
+from typing import Union
+from urllib.parse import urlsplit, urlencode, urlparse, parse_qs, urlunparse, parse_qsl
 import warnings
+
+from dateutil import parser
 import requests
 from requests.auth import AuthBase
-import codecs
+
+from owslib.etree import etree, ParseError
+from owslib.namespaces import Namespaces
 
 """
 Utility functions and classes
@@ -1047,3 +1048,23 @@ class Authentication(object):
         return '<{} shared={} username={} password={} cert={} verify={} auth_delegate={}>'.format(
             self.__class__.__name__, self.shared, self.username, self.password, self.cert, self.verify,
             self.auth_delegate)
+
+
+def str2bool(value: Union[bool, str]) -> bool:
+    """
+    helper function to return Python boolean
+    type (source: https://stackoverflow.com/a/715468)
+
+    :param value: value to be evaluated
+
+    :returns: `bool` of whether the value is boolean-ish
+    """
+
+    value2 = False
+
+    if isinstance(value, bool):
+        value2 = value
+    else:
+        value2 = value.lower() in ('yes', 'true', 't', '1', 'on')
+
+    return value2

@@ -2,9 +2,11 @@
 # =============================================================================
 # Copyright (c) 2004, 2006 Sean C. Gillies
 # Copyright (c) 2005 Nuxeo SARL <http://nuxeo.com>
+# Copyright (c) 2025 Tom Kralidis
 #
 # Authors : Sean Gillies <sgillies@frii.com>
 #           Julien Anguenot <ja@nuxeo.com>
+#           Tom Kralidis <tomkralidis@gmail.com>
 #
 # Contact email: sgillies@frii.com
 # =============================================================================
@@ -20,7 +22,7 @@ from math import sqrt
 from owslib.etree import etree
 from owslib.util import (openURL, ServiceException, testXMLValue,
                          extract_xml_list, xmltag_split, OrderedDict, nspath,
-                         nspath_eval, bind_url, Authentication)
+                         nspath_eval, bind_url, Authentication, str2bool)
 from owslib.fgdc import Metadata
 from owslib.iso import MD_Metadata
 from owslib.iso3 import MD_Metadata as MD_Metadata3  # ISO 19115 Part 3 XML
@@ -446,7 +448,7 @@ class ContentMetadata(AbstractContentMetadata):
         self.id = self.name = testXMLValue(elem.find(nspath('Name', WMS_NAMESPACE)))
 
         # layer attributes
-        self.queryable = int(elem.attrib.get('queryable', 0))
+        self.queryable = int(str2bool(elem.attrib.get('queryable'), '0'))
         self.cascaded = int(elem.attrib.get('cascaded', 0))
         self.opaque = int(elem.attrib.get('opaque', 0))
         self.noSubsets = int(elem.attrib.get('noSubsets', 0))
