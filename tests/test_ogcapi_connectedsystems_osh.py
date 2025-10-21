@@ -453,214 +453,7 @@ def server_data(system_definitions, system_ids, feature_id, feature_definition, 
     yield ServerData
 
 
-# class TestSystems:
-#     @pytest.mark.online
-#     def test_system_readonly(self, fixtures):
-#         with HTTPServer(port=fixtures.port) as ts:
-#             ts.expect_request(f'/systems/{fixtures.system_id}').respond_with_json(
-#                 {"items": fixtures.system_definitions})
-#         # get all systems
-#         res = fixtures.systems_api.systems()
-#         assert len(res['items']) > 0
-#         check_ids = ["0s2lbn2n1bnc8", "94n1f19ld7tlc"]
-#         assert [any(sys_id == item['id'] for item in res['items']) for sys_id in check_ids]
-#
-#         # get a single system
-#         res = fixtures.systems_api.system(check_ids[0])
-#         assert res is not None
-#         assert res['id'] == check_ids[0]
-#
-#     @pytest.mark.skip(reason="Skip transactional test")
-#     def test_system_functions(self, fixtures):
-#         # insertion of systems
-#         fixtures.systems_api.headers = fixtures.sml_headers
-#         sys_create_res = fixtures.systems_api.system_create(json.dumps(fixtures.system_definitions))
-#         assert sys_create_res is not None
-#
-#         # update of system and retrieval
-#         sml_desc_copy = fixtures.sys_sml_to_update.copy()
-#         sml_desc_copy['description'] = 'Updated Description'
-#         sml_str = json.dumps(sml_desc_copy)
-#         post_systems = fixtures.systems_api.system_update('blid74chqmses', sml_str)
-#
-#         check_result = fixtures.systems_api.system('blid74chqmses')
-#         assert check_result['properties']['description'] == 'Updated Description'
-#
-#         # deletion of system
-#         all_systems = fixtures.systems_api.systems()
-#
-#         # clear datastreams
-#         fixtures.delete_all_datastreams()
-#
-#         for system in all_systems['items']:
-#             res = fixtures.systems_api.system_delete(system['id'])
-#             assert res == {}
-#
-#
-# class TestDeployments:
-#     @pytest.mark.skip(reason="Skip transactional test")
-#     def test_deployment_create(self, fixtures):
-#         res1 = fixtures.deployment_api.deployment_create(json.dumps(fixtures.deployment_definition))
-#         assert res1
-#         res2 = fixtures.deployment_api.deployments()
-#         assert fixtures.deployment_expected_id in [x['id'] for x in res2['items']]
-#         res3 = fixtures.deployment_api.deployment(fixtures.deployment_expected_id)
-#         assert res3['properties']['name'] == 'Test Deployment 001' and res3[
-#             'id'] == fixtures.deployment_expected_id
-#
-#     @pytest.mark.skip(reason="Skip transactional test")
-#     def test_deployment_update(self, fixtures):
-#         fixtures.deployment_definition['properties']['description'] = 'Updated Description of Deployment 001'
-#         res = fixtures.deployment_api.deployment_update(fixtures.deployment_expected_id,
-#                                                         json.dumps(fixtures.deployment_definition))
-#         assert res is not None
-#
-#     @pytest.mark.skip(reason="Skip transactional test")
-#     def test_deployment_delete(self, fixtures):
-#         res = fixtures.deployment_api.deployment_delete(fixtures.deployment_expected_id)
-#         assert res is not None
-#
-#
-# class TestSamplingFeatures:
-#     @pytest.mark.online
-#     def test_sampling_features_readonly(self, fixtures):
-#         all_features = fixtures.sampling_feature_api.sampling_features(use_fois=True)
-#         assert len(all_features['items']) == 51
-#
-#         feature_id = "c4nce3peo8hvc"
-#         feature = fixtures.sampling_feature_api.sampling_feature(feature_id, use_fois=True)
-#         assert feature['id'] == feature_id
-#         assert feature['properties']['name'] == 'Station WS013'
-#
-#     @pytest.mark.skip(reason="Skip transactional test")
-#     def test_sampling_features_all(self, fixtures):
-#         # setup
-#         fixtures.delete_all_systems()
-#         system_id = fixtures.create_single_system()
-#
-#         # create a sampling feature
-#         fixtures.sampling_feature_api.headers = fixtures.geojson_headers
-#         res = fixtures.sampling_feature_api.sampling_feature_create(system_id,
-#                                                                     json.dumps(fixtures.feature_def), True)
-#         assert fixtures.sampling_feature_api.response_headers['Location'] is not None
-#         sampling_feature_id = fixtures.sampling_feature_api.response_headers['Location'].split('/')[-1]
-#
-#         # get all sampling features
-#         res = fixtures.sampling_feature_api.sampling_features(use_fois=True)
-#         assert len(res['items']) > 0
-#         assert any(x['id'] == sampling_feature_id for x in res['items'])
-#
-#         # get the sampling feature we created
-#         res = fixtures.sampling_feature_api.sampling_feature(sampling_feature_id, use_fois=True)
-#         assert res['properties']['name'] == 'Test Station 001'
-#         assert res['properties']['featureType'] == 'http://www.w3.org/ns/sosa/Station'
-#
-#         # get sampling features from a system
-#         res = fixtures.sampling_feature_api.sampling_features_from_system(system_id, use_fois=True)
-#         assert len(res['items']) > 0
-#         assert any(x['id'] == sampling_feature_id for x in res['items'])
-#
-#         # delete the sampling feature
-#         res = fixtures.sampling_feature_api.sampling_feature_delete(sampling_feature_id, use_fois=True)
-#         res = fixtures.sampling_feature_api.sampling_features(use_fois=True)
-#         assert res == {'items': []}
-#
-#
-# class TestDatastreams:
-#     @pytest.mark.online
-#     def test_datastreams_readonly(self, fixtures):
-#         ds_id = 'kjg2qrcm40rfk'
-#         datastreams = fixtures.datastream_api.datastreams()
-#         assert len(datastreams['items']) > 0
-#         assert any(x['id'] == ds_id for x in datastreams['items'])
-#
-#         datastream = fixtures.datastream_api.datastream(ds_id)
-#         assert datastream['id'] == ds_id
-#         assert datastream['name'] == "Simulated Weather Station Network - weather"
-#
-#     @pytest.mark.skip(reason="Skip transactional test")
-#     def test_all_ds_functions(self, fixtures):
-#         # preflight cleanup
-#         fixtures.delete_all_systems()
-#         # setup systems needed
-#         fixtures.systems_api.headers = fixtures.sml_headers
-#         # systems = fixtures.systems_api.system_create(json.dumps(fixtures.system_definitions))
-#         system = fixtures.create_single_system()
-#
-#         # insert a datastream
-#         ds_def_str = json.dumps(fixtures.ds_definition)
-#         ds_api = Datastreams(fixtures.TEST_URL, auth=fixtures.auth, headers=fixtures.json_headers)
-#         datastream_create = ds_api.datastream_create_in_system(system, ds_def_str)
-#
-#         # get the datastream id from Location header
-#         ds_id = ds_api.response_headers['Location'].split('/')[-1]
-#         ds = ds_api.datastream(ds_id)
-#         ds2 = ds_api.datastreams_of_system(system)
-#         assert ds['id'] == ds_id
-#         assert any(x['id'] == ds_id for x in ds2['items'])
-#
-#         # update the datastream omitted due to server error
-#         # update schema has a similar server side issue
-#
-#         # retrieve the schema for the datastream
-#         res = ds_api.datastream_retrieve_schema_for_format(ds_id)
-#         assert res is not None and len(res) > 0
-#
-#         # delete the datastream
-#         ds_delete = ds_api.datastream_delete(ds_id)
-#         assert ds_delete == {}
-#
-#
-# class TestObservations:
-#     @pytest.mark.online
-#     def test_observations_readonly(self, fixtures):
-#         ds_id = 'kjg2qrcm40rfk'
-#         observations = fixtures.observations_api.observations_of_datastream(ds_id)
-#         assert len(observations['items']) > 0
-#         assert 'result' in observations['items'][0]
-#
-#         observation_of_ds = fixtures.observations_api.observations_of_datastream(ds_id)
-#         assert observation_of_ds['items'][0]['result']['stationID'] == "WS013"
-#         keys = ['stationID', 'temperature', 'pressure', 'humidity', 'windSpeed', 'windDirection']
-#         assert [key in observation_of_ds['items'][0]['result'] for key in keys]
-#
-#     @pytest.mark.skip(reason="Skip transactional test")
-#     def test_observations(self, fixtures):
-#         # setup
-#         fixtures.delete_all_systems()
-#         system = fixtures.create_single_system()
-#         ds = fixtures.create_single_datastream(system)
-#         the_time = datetime.utcnow().isoformat() + 'Z'
-#
-#         observation = {
-#             "phenomenonTime": the_time,
-#             "resultTime": the_time,
-#             "result": {
-#                 "timestamp": datetime.now().timestamp() * 1000,
-#                 "testboolean": True
-#             }
-#         }
-#         fixtures.observations_api.headers = {'Content-Type': 'application/om+json'}
-#         res = fixtures.observations_api.observations_create_in_datastream(ds, json.dumps(observation))
-#         obs = fixtures.observations_api.observations_of_datastream(ds)
-#         assert obs['items'][0]['phenomenonTime'] == the_time
-#         obs_id = obs['items'][0]['id']
-#         res = fixtures.observations_api.observations_delete(obs_id)
-#         obs = fixtures.observations_api.observations_of_datastream(ds)
-#         assert obs['items'] == []
-#         fixtures.delete_all_systems()
-#
-#
-# class TestSystemHistory:
-#     @pytest.mark.online
-#     def test_system_history(self, fixtures):
-#         sys_id = '0s2lbn2n1bnc8'
-#         res = fixtures.system_history_api.system_history(sys_id)
-#         assert len(res['items']) > 0
-#         history_id = res['items'][0]['properties']['validTime'][0]
-#         res = fixtures.system_history_api.system_history_by_id(system_id=sys_id, history_id=history_id)
-#         assert res['id'] == sys_id
-
+@pytest.mark.online
 def test_systems_get(server_data, system_ids, system_definitions):
     with HTTPServer(port=8585) as ts:
         # This is not strictly what a server would respond with, but sufficient for testing
@@ -671,6 +464,8 @@ def test_systems_get(server_data, system_ids, system_definitions):
             system_definitions[system_ids[0]])
         ts.expect_request('/sensorhub/api/systems/94n1f19ld7tlc').respond_with_json(
             system_definitions[system_ids[1]])
+        ts.expect_request(f'/sensorhub/api/systems', method='POST').respond_with_json({}, status=201, headers={
+            'Location': 'http://localhost:8585/sensorhub/api/systems/insertedsystem001'})
 
         systems_api = Systems('http://localhost:8585/sensorhub/api/', auth=None,
                               headers={'Content-Type': 'application/json'})
@@ -687,6 +482,7 @@ def test_systems_get(server_data, system_ids, system_definitions):
         assert res == system_definitions[check_ids[0]]
 
 
+@pytest.mark.online
 def test_datastreams_get(server_data, datastream_ids, datastream_definitions):
     with HTTPServer(port=8585) as ts:
         ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
@@ -710,6 +506,8 @@ def test_datastreams_get(server_data, datastream_ids, datastream_definitions):
             assert res is not None
             assert res == datastream_definitions
 
+
+@pytest.mark.online
 def test_observations_get(server_data, observation_ids, observations_definitions):
     with HTTPServer(port=8585) as ts:
         ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
@@ -734,6 +532,7 @@ def test_observations_get(server_data, observation_ids, observations_definitions
             assert res == observations_definitions[obs_id]
 
 
+@pytest.mark.online
 def test_controlstreams_get(server_data, controlstream_ids, controlstream_definitions):
     with HTTPServer(port=8585) as ts:
         ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
@@ -756,6 +555,8 @@ def test_controlstreams_get(server_data, controlstream_ids, controlstream_defini
         assert res is not None
         assert res == controlstream_definitions.get(controlstream_ids[0])
 
+
+@pytest.mark.online
 def test_commands_get(server_data, command_ids, command_definitions):
     with HTTPServer(port=8585) as ts:
         ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
