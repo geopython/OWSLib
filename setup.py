@@ -9,7 +9,6 @@
 from pathlib import Path
 import re
 from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
 
 
 def read(filename, encoding='utf-8'):
