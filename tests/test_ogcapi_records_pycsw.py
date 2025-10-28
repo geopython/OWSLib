@@ -11,7 +11,7 @@ SERVICE_URL = 'https://demo.pycsw.org/cite'
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason='service is unreachable')
 def test_ogcapi_records_pycsw():
-    w = Records(SERVICE_URL)
+    w = Records(SERVICE_URL, timeout=60)
 
     assert w.url == 'https://demo.pycsw.org/cite/'
     assert w.url_query_string is None
@@ -77,5 +77,5 @@ def test_ogcapi_records_pycsw():
     ('collections/foo/https://example.org/11', 'https://demo.pycsw.org/cite/collections/foo/https://example.org/11')  # noqa
 ])
 def test_ogcapi_build_url(path, expected):
-    w = Records(SERVICE_URL)
+    w = Records(SERVICE_URL, timeout=60)
     assert w._build_url(path) == expected
