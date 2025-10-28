@@ -813,51 +813,51 @@ class Observations(ConnectedSystems):
         return self._request(path=path, method='DELETE')
 
 
-class ControlChannels(ConnectedSystems):
+class ControlStreams(ConnectedSystems):
 
     def __init__(self, url: str, json_: str = None, timeout: int = 30, headers: dict = None,
                  auth: Authentication = None):
         __doc__ = Collections.__doc__   # noqa
         super().__init__(url, json_, timeout, headers, auth)
 
-    def controls(self, **kwargs) -> dict:
+    def controlstreams(self, **kwargs) -> dict:
         """
-        implements /controls
+        implements /controlstreams
         @returns: `dict` of control channel objects
         """
 
-        path = 'controls'
+        path = 'controlstreams'
         query_params = QueryArgs(**kwargs)
         p_list = ['id', 'q', 'issueTime', 'executionTime', 'system', 'foi', 'controlledProperty', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
-    def control(self, control_id: str) -> dict:
+    def controlstream(self, control_id: str) -> dict:
         """
-        implements /controls/{control_id}
+        implements /controlstreams/{control_id}
         @type control_id: string
         @param control_id: id of control channel
         @returns: `dict` of control channels
         """
 
-        path = f'controls/{control_id}'
+        path = f'controlstreams/{control_id}'
         return self._request(path=path)
 
     def controls_of_system(self, system_id: str, **kwargs) -> dict:
         """
-        implements /systems/{system_id}/controls
+        implements /systems/{system_id}/controlstreams
         @type system_id: string
         @param system_id: id of system
         @returns: `dict` of control channels
         """
 
-        path = f'systems/{system_id}/controls'
+        path = f'systems/{system_id}/controlstreams'
         query_params = QueryArgs(**kwargs)
         p_list = ['id', 'q', 'issueTime', 'executionTime', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def control_create_in_system(self, system_id: str, data: str) -> dict:
         """
-        implements /controls
+        implements /controlstreams
         @type system_id: string
         @param system_id: id of system
         @type data: dict
@@ -865,12 +865,12 @@ class ControlChannels(ConnectedSystems):
         @returns: `dict` of control channels
         """
 
-        path = f'systems/{system_id}/controls'
+        path = f'systems/{system_id}/controlstreams'
         return self._request(path=path, data=data, method='POST')
 
     def control_update(self, control_id: str, data: str) -> dict:
         """
-        implements /controls/{control_id}
+        implements /controlstreams/{control_id}
         @type control_id: string
         @param control_id: id of control channel
         @type data: dict
@@ -878,36 +878,36 @@ class ControlChannels(ConnectedSystems):
         @returns: `dict` of control channels
         """
 
-        path = f'controls/{control_id}'
+        path = f'controlstreams/{control_id}'
         return self._request(path=path, data=data, method='PUT')
 
     def control_delete(self, control_id: str) -> dict:
         """
-        implements /controls/{control_id}
+        implements /controlstreams/{control_id}
         @type control_id: string
         @param control_id: id of control channel
         @returns: `dict` of control channels
         """
 
-        path = f'controls/{control_id}'
+        path = f'controlstreams/{control_id}'
         return self._request(path=path, method='DELETE')
 
     def control_retrieve_schema(self, control_id: str, **kwargs) -> dict:
         """
-        implements /controls/{control_id}/schema
+        implements /controlstreams/{control_id}/schema
         @type control_id: string
         @param control_id: id of control channel
         @returns: `dict` of control channels
         """
 
-        path = f'controls/{control_id}/schema'
+        path = f'controlstreams/{control_id}/schema'
         query_params = QueryArgs(**kwargs)
         p_list = ['cmdFormat', 'type']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def control_update_schema(self, control_id: str, data: str) -> dict:
         """
-        implements /controls/{control_id}/schema
+        implements /controlstreams/{control_id}/schema
         @type control_id: string
         @param control_id: id of control channel
         @type data: dict
@@ -915,7 +915,7 @@ class ControlChannels(ConnectedSystems):
         @returns: `dict` of control channels
         """
 
-        path = f'controls/{control_id}/schema'
+        path = f'controlstreams/{control_id}/schema'
         return self._request(path=path, data=data, method='PUT')
 
 
@@ -950,20 +950,20 @@ class Commands(ConnectedSystems):
 
     def commands_of_control_channel(self, control_id: str, **kwargs) -> dict:
         """
-        implements /controls/{control_id}/commands
+        implements /controlstreams/{control_id}/commands
         @type control_id: string
         @param control_id: id of control channel
         @returns: `dict` of commands object
         """
 
-        path = f'controls/{control_id}/commands'
+        path = f'controlstreams/{control_id}/commands'
         query_params = QueryArgs(**kwargs)
         p_list = ['id', 'issueTime', 'executionTime', 'foi', 'controlledProperty', 'limit']
         return self._request(path=path, kwargs=query_params.check_params(p_list))
 
     def commands_send_command_in_control_stream(self, control_id: str, data: str) -> dict:
         """
-        implements /commands
+        implements /controlstreams/{control_id}/commands
         @type control_id: string
         @param control_id: id of control channel
         @type data: dict
@@ -971,7 +971,7 @@ class Commands(ConnectedSystems):
         @returns: `dict` of command metadata
         """
 
-        path = f'controls/{control_id}/commands'
+        path = f'controlstreams/{control_id}/commands'
         return self._request(path=path, data=data, method='POST')
 
     def commands_delete_command(self, command_id: str) -> dict:
