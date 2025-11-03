@@ -579,3 +579,93 @@ def test_commands_get(server_data, command_ids, command_definitions):
             res = commands_api.command(cmd_id)
             assert res is not None
             assert res == command_definitions[cmd_id]
+
+
+#  Tests for resource creation don't work well against a mocked server since the design of the core OGC api request method does not make the headers available
+@pytest.mark.online
+def test_system_insert(server_data, system_definitions, system_ids):
+    with HTTPServer(port=8585) as ts:
+        ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
+        # ts.expect_request('/sensorhub/api/systems').respond_with_json(
+        #     (server_data.systems))
+        ts.expect_request(f'/sensorhub/api/systems', method='POST').respond_with_json({}, status=201, headers={
+            'Location': f'http://localhost:8585/sensorhub/api/systems/{system_ids[0]}'})
+
+        systems_api = Systems('http://localhost:8585/sensorhub/api/', auth=None,
+                              headers={'Content-Type': 'application/json'})
+
+        # insert a system
+        res = systems_api.system_create(json.dumps(system_definitions.get(system_ids[0])))
+        assert res == {}
+
+
+@pytest.mark.online
+def test_datastream_insert(server_data, datastream_definitions, datastream_ids, system_ids):
+    with HTTPServer(port=8585) as ts:
+        ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
+        ts.expect_request(f'/sensorhub/api/systems/{system_ids[0]}/datastreams', method='POST').respond_with_json({},
+                                                                                                                  status=201,
+                                                                                                                  headers={
+                                                                                                                      'Location': f'http://localhost:8585/sensorhub/api/datastreams/{datastream_ids[0]}'})
+
+        datastream_api = Datastreams('http://localhost:8585/sensorhub/api/', auth=None,
+                                     headers={'Content-Type': 'application/json'})
+
+        # insert a datastream
+        res = datastream_api.datastream_create_in_system(system_ids[0], json.dumps(
+            datastream_definitions.get(datastream_ids[0])))
+        assert res == {}
+
+
+@pytest.mark.online
+def test_observation_insert(server_data, observations_definitions, observation_ids, datastream_ids):
+    with HTTPServer(port=8585) as ts:
+        ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
+        ts.expect_request(f'/sensorhub/api/datastreams/{datastream_ids[0]}/observations',
+                          method='POST').respond_with_json({}, status=201, headers={
+            'Location': f'http://localhost:8585/sensorhub/api/observations/{observation_ids[0]}'})
+
+        observations_api = Observations('http://localhost:8585/sensorhub/api/', auth=None,
+                                        headers={'Content-Type': 'application/json'})
+
+        # insert an observation
+        res = observations_api.observations_create_in_datastream(datastream_ids[0], json.dumps(
+            observations_definitions.get(observation_ids[0])))
+        assert res == {}
+
+
+@pytest.mark.online
+def test_controlstream_insert(server_data, controlstream_definitions, controlstream_ids, system_ids):
+    with (HTTPServer(port=8585) as ts):
+        ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
+        ts.expect_request(f'/sensorhub/api/systems/{system_ids[0]}/controlstreams',
+                          method='POST'
+                          ).respond_with_json({},
+                                              status=201,
+                                              headers={
+                                                  'Location': f'http://localhost:8585/sensorhub/api/controlstreams/{controlstream_ids[0]}'})
+
+        control_channels_api = ControlStreams('http://localhost:8585/sensorhub/api/', auth=None,
+                                              headers={'Content-Type': 'application/json'})
+
+        # insert a control stream
+        res = control_channels_api.control_create_in_system(system_ids[0], json.dumps(
+            controlstream_definitions.get(controlstream_ids[0])))
+        assert res == {}
+
+
+@pytest.mark.online
+def test_command_insert(server_data, command_definitions, command_ids, controlstream_ids):
+    with HTTPServer(port=8585) as ts:
+        ts.expect_request('/sensorhub/api/').respond_with_json({"title": "SensorHub OGC API - Connected Systems"})
+        ts.expect_request(f'/sensorhub/api/controlstreams/{controlstream_ids[0]}/commands',
+                          method='POST').respond_with_json({}, status=201, headers={
+            'Location': f'http://localhost:8585/sensorhub/api/commands/{command_ids[0]}'})
+
+        commands_api = Commands('http://localhost:8585/sensorhub/api/', auth=None,
+                                headers={'Content-Type': 'application/json'})
+
+        # insert a command
+        res = commands_api.commands_send_command_in_control_stream(controlstream_ids[0], json.dumps(
+            command_definitions.get(command_ids[0])))
+        assert res == {}

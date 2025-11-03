@@ -146,7 +146,7 @@ class Systems(ConnectedSystems):
         @returns: `dict` of system metadata
         """
 
-        path = 'systems/'
+        path = 'systems'
 
         return self._request(path=path, method='POST', data=data)
 
