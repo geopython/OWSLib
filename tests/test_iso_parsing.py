@@ -57,6 +57,19 @@ def assert_list(var, length):
     assert type(var) is list
     assert len(var) == length
 
+def test_md_parsing_srv():
+    """Test the parsing of a metadatarecord from DOV
+
+    GetRecordById response available in
+    tests/resources/csw_dov_getrecordbyid.xml
+
+    """
+    md_resource = get_md_resource('tests/resources/iso19139_srv.xml')
+    md = MD_Metadata(md_resource)
+
+    assert type(md) is MD_Metadata
+    assert len(md.identification) > 0
+
 
 def test_md_parsing_dov():
     """Test the parsing of a metadatarecord from DOV
