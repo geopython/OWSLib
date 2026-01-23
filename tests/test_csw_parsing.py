@@ -26,7 +26,7 @@ def get_md_resource(file_path):
     """
     namespaces = Namespaces().get_namespaces(keys=('dc', 'dct', 'ows', 'rdf', 'gml', 'csw'))
 
-    with io.open(file_path, mode='r', encoding='utf-8') as f:
+    with open(file_path, mode='r', encoding='utf-8') as f:
         data = f.read().encode('utf-8')
         mdelem = etree.fromstring(data)
 
@@ -64,6 +64,6 @@ def test_spatial_parsing():
     md_resource = get_md_resource('tests/resources/9250AA67-F3AC-6C12-0CB9-0662231AA181_dc2.xml')
     md = CswRecord(md_resource)
 
-    assert type(md) is CswRecord
+    assert isinstance(md, CswRecord)
     assert md.title == "Feasibility of Using the Two-Source Energy Balance Model (TSEB) with Sentinel-2 and Sentinel-3 Images to Analyze the Spatio-Temporal Variability of Vine Water Status in a Vineyard"
     assert md.bbox.minx == '-180'

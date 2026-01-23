@@ -859,12 +859,13 @@ class CswRecord(object):
         self.spatial = None
         if val is not None:
             val = util.testXMLValue(val)
-            if len(val.split(',')) == 4:
+            bbox_tokens = val.split(',')
+            if len(bbox_tokens) == 4:
                 self.bbox = ows.BoundingBox(None, namespaces['ows'])
-                self.bbox.minx = val.split(',')[0]
-                self.bbox.miny = val.split(',')[1]
-                self.bbox.maxx = val.split(',')[2]
-                self.bbox.maxy = val.split(',')[3]
+                self.bbox.minx = bbox_tokens[0]
+                self.bbox.miny = bbox_tokens[1]
+                self.bbox.maxx = bbox_tokens[2]
+                self.bbox.maxy = bbox_tokens[3]
             else:
                 self.spatial = val
 
