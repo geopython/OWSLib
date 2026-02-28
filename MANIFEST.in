@@ -1,5 +1,2 @@
-prune binder
-prune etc
+# this file controls the contents of sdist
 prune tests
-prune examples
-global-exclude *.py[cod\] __pycache__ *.so
