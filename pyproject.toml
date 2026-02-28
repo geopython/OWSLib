@@ -56,6 +56,5 @@ ignore = ["F401", "E402"]
 max-line-length = 120
 exclude = [".git", "__pycache__", "docs/source/conf.py,", "build", "dist", "examples", "etc"]
 
-[tool.setuptools.packages.find]
-where = ["owslib"]
-exclude = ["tests"]
+[tool.setuptools]
+packages = ["owslib"]

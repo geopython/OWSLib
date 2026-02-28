@@ -1,0 +1,5 @@
+prune binder
+prune etc
+prune tests
+prune examples
+global-exclude *.py[cod\] __pycache__ *.so
