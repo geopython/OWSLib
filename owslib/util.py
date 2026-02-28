@@ -1,6 +1,6 @@
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
-# Copyright (c) 2025 Tom Kralidis
+# Copyright (c) 2026 Tom Kralidis
 #
 # Authors : Tom Kralidis <tomkralidis@gmail.com>
 #
@@ -12,6 +12,7 @@ from collections import OrderedDict
 import copy
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
+import importlib.metadata
 from io import StringIO, BytesIO
 import os
 import re
@@ -1068,3 +1069,13 @@ def str2bool(value: Union[bool, str]) -> bool:
         value2 = value.lower() in ('yes', 'true', 't', '1', 'on')
 
     return value2
+
+
+def get_package_version() -> str:
+    """
+    Helper function to get package version
+
+    :returns: `str` of version of package
+    """
+
+    return importlib.metadata.version('OWSLib')
