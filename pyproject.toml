@@ -1,3 +1,61 @@
 [build-system]
-requires = ["setuptools>=46.4", "wheel"]
+requires = ["setuptools<69", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "OWSLib"
+version = "0.36.dev0"
+description = "OGC Web Service utility library"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "BSD-3-Clause"}
+keywords = ["gis", "ogc", "ogcapi", "ows", "opensearch", "iso", "19115", "fgdc", "dif", "ows", "wfs", "wms", "sos", "csw", "wps", "wcs", "capabilities", "metadata", "wmts", "connectedsystems"]
+authors = [
+    {name = "Sean Gillies", email = "sean.gillies@gmail.com"},
+    {name = "Tom Kralidis", email = "tomkralidis@gmail.com"}
+]
+maintainers = [
+    {name = "Tom Kralidis", email = "tomkralidis@gmail.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering :: GIS"
+]
+dependencies = [
+    "lxml",
+    "python-dateutil",
+    "pyyaml",
+    "requests"
+]
+
+[project.optional-dependencies]
+dev = ["flake8", "flake8-pyproject", "pytest", "pytest-cov", "pytest_httpserver", "pytest-socket", "Pillow", "tox", "twine", "coverage", "coveralls", "build"]
+docs = ["ipykernel", "nbconvert", "nbsphinx", "pypandoc", "sphinx==8.1.3"]
+release = ["build", "twine", "wheel"]
+test = ["pytest"]
+
+[project.urls]
+homepage = "https://geopython.github.io/OWSLib"
+source = "https://github.com/geopython/OWSLib"
+documentation = "https://geopython.github.io/OWSLib"
+issues = "https://github.com/geopython/OWSLib/issues"
+
+[tool.pytest]
+addopts = ["-v", "-rxs", "-s", "--color=yes", "--tb=native", "--ignore=setup.py", "--doctest-modules", "--doctest-glob='tests/**/*.txt'", "--cov-report=term-missing", "--cov=owslib"]
+
+norecursedirs = [".git", "docs", "examples", "etc", "cov*", "*.egg*", "pytest*", ".tox", "_broken"]
+markers = ["online: test requires online resources."]
+
+[tool.flake8]
+ignore = ["F401", "E402"]
+max-line-length = 120
+exclude = [".git", "__pycache__", "docs/source/conf.py,", "build", "dist", "examples", "etc"]
+
+# ensure all subpackages are found
+[tool.setuptools.packages.find]
+include = ["owslib*"]
