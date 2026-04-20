@@ -208,10 +208,10 @@ def openURL(url_base, data=None, method='Get', cookies=None, username=None, pass
 
     req = requests.request(method.upper(), url_base, headers=headers, **rkwargs)
 
-    if req.status_code in [400, 401, 403]:
+    if req.status_code == 400:
         raise ServiceException(req.text)
 
-    if req.status_code in [404, 500, 502, 503, 504]:    # add more if needed
+    if req.status_code in [401, 403, 404, 500, 502, 503, 504]:    # add more if needed
         req.raise_for_status()
 
     # check for service exceptions without the http header set
