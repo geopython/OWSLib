@@ -28,6 +28,7 @@ from owslib.crs import Crs
 from owslib.namespaces import Namespaces
 from owslib.feature.schema import get_schema
 from owslib.feature.common import (
+    CapabilitiesError,
     WFSCapabilitiesReader,
     AbstractContentMetadata,
 )
@@ -112,6 +113,12 @@ class WebFeatureService_1_0_0(object):
         self._buildMetadata(parse_remote_metadata)
 
     def _buildMetadata(self, parse_remote_metadata=False):
+        # check if expected version matches actual version in XML
+        actual_wfs_version = self._capabilities.attrib.get("version")
+        if not actual_wfs_version.startswith(self.version):
+            error_message = f"WFS version mismatch. Actual: {actual_wfs_version}, Requested: {self.version}"
+            raise CapabilitiesError(error_message)
+
         """set up capabilities metadata objects: """
 
         self.updateSequence = self._capabilities.attrib.get("updateSequence")
