@@ -3,6 +3,7 @@ from owslib.util import Authentication, openURL, getXMLTree
 
 from urllib.parse import urlencode, parse_qsl
 
+
 class CapabilitiesError(Exception):
     pass
 
