@@ -10,14 +10,45 @@ You can find out about software metrics at the OWSLib OpenHub page at https://ww
 Testing
 -------
 
+Create a virtual environment and install OWSLib with the development dependencies:
+
 .. code-block:: bash
 
-    # install requirements
-    pip3 install -r requirements.txt
-    pip3 install -r requirements-dev.txt # needed for tests only
+    python3 -m venv owslibenv
+    source owslibenv/bin/activate
 
-    # run tests
+    git clone https://github.com/geopython/OWSLib.git
+    cd OWSLib
+
+    pip install -e ".[dev]"
+
+Run the test suite:
+
+.. code-block:: bash
+
     python3 -m pytest
 
-    # linting
-    flake8 owslib/wmts.py
+Run linting:
+
+.. code-block:: bash
+
+    flake8 owslib/
+
+Documentation
+-------------
+
+To build the documentation locally:
+
+.. code-block:: bash
+
+    pip install -e ".[docs]"
+    cd docs && make html
+
+Release
+-------
+
+To install the release tooling:
+
+.. code-block:: bash
+
+    pip install -e ".[release]"
