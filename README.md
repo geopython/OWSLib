@@ -31,7 +31,7 @@ pip3 install OWSLib
 
 ### Dependencies
 
-Dependencies are listed in [requirements.txt](requirements.txt). Dependencies
+Dependencies are listed in [pyproject.toml](pyproject.toml). Dependencies
 are automatically installed during OWSLib installation.
 
 ### Installing OWSLib
