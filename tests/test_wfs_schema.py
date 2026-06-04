@@ -159,7 +159,7 @@ class TestOffline(object):
         assert list(wfs100.contents) == ['continents', 'cities']
 
 
-    def test_get_schema(self, mp_wfs_100, mp_remote_describefeaturetype):
+    def test_get_schema(self, mp_wfs_110, mp_remote_describefeaturetype):
         """Test the get_schema method for a standard schema.
 
         Parameters

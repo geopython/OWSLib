@@ -1,3 +1,4 @@
+from owslib.feature.common import CapabilitiesError
 from owslib.wfs import WebFeatureService
 from owslib.util import ServiceException
 from owslib.fes import PropertyIsLike, etree
@@ -57,6 +58,40 @@ def test_verbOptions_wfs_100():
     verbOptions = [cm.verbOptions for cm in wfs.contents.values()]
     assert len(verbOptions[0]) == 2
 
+def create_mismatch_test_params():
+    """Build combinations of mismatching WFS versions"""
+    params = []
+    version_info = {
+        '1.0.0': "wfs_dov_getcapabilities_100_verbOptions.xml",
+        '1.1.0': "wfs_HSRS_GetCapabilities_1_1_0.xml",
+        '2.0.0': "wfs_CUZK_GetCapabilities_2_0_0.xml",
+    }
+
+    for expected_version in version_info.keys():
+        # get versions other than current one
+        other_versions = list(version_info.keys() - {expected_version})
+
+        for other_version in other_versions:
+            file_name = version_info[other_version]
+
+            def make_param(version):
+                test_id = f"expects '{version}', but gets '{other_version}'"
+                return pytest.param(version, file_name, id=test_id)
+
+            # create test case for both variants of the version number (e.g. '1.0' and '1.0.0')
+            version_variants = [expected_version[0:3], expected_version]
+            params.extend([make_param(variant) for variant in version_variants])
+
+    return params
+
+
+@pytest.mark.parametrize("expected_version, xml_path_with_other_version", create_mismatch_test_params() )
+def test_raises_error_on_version_mismatch(expected_version, xml_path_with_other_version):
+    DUMMY_URL = 'http://gis.bnhelp.cz/ows/crwfs'
+    xml = open(resource_file(xml_path_with_other_version), "rb").read()
+
+    with pytest.raises(CapabilitiesError):
+        WebFeatureService(DUMMY_URL, xml=xml, version=expected_version)
 
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
