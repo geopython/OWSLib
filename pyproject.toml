@@ -3,8 +3,8 @@ requires = ["setuptools<69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "OWSLib"
-version = "0.36.0"
+name = "owslib"
+version = "0.37.dev0"
 description = "OGC Web Service utility library"
 readme = "README.md"
 requires-python = ">=3.12"
