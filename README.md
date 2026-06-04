@@ -148,7 +148,7 @@ Releasing
 ```bash
   # update version
   vi pyproject.toml  # update [project]/version
-  git commit -m 'update release version' owslib/__init__.py
+  git commit -m 'update release version' owslib/pyproject.toml
   # push changes
   git push origin master
   git tag -a x.y.z -m 'tagging OWSLib release x.y.z'
