@@ -494,14 +494,16 @@ def http_prepare(*args, **kwargs):
         rkwargs['auth'] = auth.auth_delegate
     else:
         rkwargs.setdefault('auth', None)
-    rkwargs.setdefault('cert', rkwargs.get('cert'))
-    rkwargs.setdefault('verify', rkwargs.get('verify', True))
+
+    rkwargs.setdefault('cert', auth.cert)
+    rkwargs.setdefault('verify', auth.verify)
 
     return rkwargs
 
 
 def http_get(*args, **kwargs):
     rkwargs = http_prepare(*args, **kwargs)
+
     return requests.get(*args, **rkwargs)
 
 
