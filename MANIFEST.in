@@ -1,5 +1,2 @@
-include LICENSE
-include *.md
-include *.rst
-include *.txt
-recursive-exclude tests *
+# this file controls the contents of sdist
+prune tests

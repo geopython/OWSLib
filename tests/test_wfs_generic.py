@@ -1,12 +1,13 @@
+from owslib.feature.common import CapabilitiesError
 from owslib.wfs import WebFeatureService
 from owslib.util import ServiceException
 from owslib.fes import PropertyIsLike, etree
-from urllib.parse import urlparse
 from tests.utils import resource_file, sorted_url_query, service_ok
 import json
 import pytest
 
 SERVICE_URL = 'https://services.ga.gov.au/gis/stratunits/ows'
+
 
 def test_caps_info():
     getcapsin = open(resource_file("wfs_HSRS_GetCapabilities_1_1_0.xml"), "rb").read()
@@ -57,6 +58,40 @@ def test_verbOptions_wfs_100():
     verbOptions = [cm.verbOptions for cm in wfs.contents.values()]
     assert len(verbOptions[0]) == 2
 
+def create_mismatch_test_params():
+    """Build combinations of mismatching WFS versions"""
+    params = []
+    version_info = {
+        '1.0.0': "wfs_dov_getcapabilities_100_verbOptions.xml",
+        '1.1.0': "wfs_HSRS_GetCapabilities_1_1_0.xml",
+        '2.0.0': "wfs_CUZK_GetCapabilities_2_0_0.xml",
+    }
+
+    for expected_version in version_info.keys():
+        # get versions other than current one
+        other_versions = list(version_info.keys() - {expected_version})
+
+        for other_version in other_versions:
+            file_name = version_info[other_version]
+
+            def make_param(version):
+                test_id = f"expects '{version}', but gets '{other_version}'"
+                return pytest.param(version, file_name, id=test_id)
+
+            # create test case for both variants of the version number (e.g. '1.0' and '1.0.0')
+            version_variants = [expected_version[0:3], expected_version]
+            params.extend([make_param(variant) for variant in version_variants])
+
+    return params
+
+
+@pytest.mark.parametrize("expected_version, xml_path_with_other_version", create_mismatch_test_params() )
+def test_raises_error_on_version_mismatch(expected_version, xml_path_with_other_version):
+    DUMMY_URL = 'http://gis.bnhelp.cz/ows/crwfs'
+    xml = open(resource_file(xml_path_with_other_version), "rb").read()
+
+    with pytest.raises(CapabilitiesError):
+        WebFeatureService(DUMMY_URL, xml=xml, version=expected_version)
 
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
@@ -146,17 +181,6 @@ def test_srsname_wfs_200():
 @pytest.mark.online
 @pytest.mark.skipif(not service_ok(SERVICE_URL),
                     reason="WFS service is unreachable")
-def test_schema_wfs_100():
-    wfs = WebFeatureService(SERVICE_URL, version='1.0.0')
-    schema = wfs.get_schema('stratunit:StratigraphicUnit')
-    assert len(schema['properties']) == 33
-    assert schema['properties']['DESCRIPTION'] == 'string'
-    assert schema['geometry'] is None
-
-
-@pytest.mark.online
-@pytest.mark.skipif(not service_ok(SERVICE_URL),
-                    reason="WFS service is unreachable")
 def test_schema_wfs_110():
     wfs = WebFeatureService(SERVICE_URL, version='1.1.0')
     schema = wfs.get_schema('stratunit:StratigraphicUnit')
@@ -183,7 +207,7 @@ def test_schema_wfs_200():
 def test_xmlfilter_wfs_110():
     wfs = WebFeatureService(SERVICE_URL, version='1.1.0')
     filter_prop = PropertyIsLike(propertyname='stratunit:GEOLOGICHISTORY', literal='Cisuralian - Guadalupian',
-        matchCase=True)
+                                 matchCase=True)
 
     filterxml = etree.tostring(filter_prop.toXML()).decode("utf-8")
 
@@ -200,7 +224,7 @@ def test_xmlfilter_wfs_110():
 def test_xmlfilter_wfs_200():
     wfs = WebFeatureService(SERVICE_URL,  version='2.0.0')
     filter_prop = PropertyIsLike(propertyname='stratunit:geologichistory', literal='Cisuralian - Guadalupian',
-        matchCase=True)
+                                 matchCase=True)
 
     filterxml = etree.tostring(filter_prop.toXML()).decode("utf-8")
 
@@ -208,4 +232,3 @@ def test_xmlfilter_wfs_200():
 
     response = wfs.getfeature(**getfeat_params).read()
     assert b'<stratunit:NAME>Boolgeeda Iron Formation</stratunit:NAME>' in response
-

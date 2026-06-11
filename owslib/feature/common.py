@@ -4,6 +4,10 @@ from owslib.util import Authentication, openURL, getXMLTree
 from urllib.parse import urlencode, parse_qsl
 
 
+class CapabilitiesError(Exception):
+    pass
+
+
 class WFSCapabilitiesReader(object):
     """Read and parse capabilities document into a lxml.etree infoset
     """

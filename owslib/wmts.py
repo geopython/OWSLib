@@ -859,7 +859,7 @@ class ContentMetadata:
             dimension['default'] = default_value.text
 
             current = dim.find(_DIMENSION_CURRENT_TAG)
-            if current and current.text == 'true':
+            if current is not None and current.text == 'true':
                 dimension['current'] = True
             else:
                 dimension['current'] = False

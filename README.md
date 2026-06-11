@@ -31,7 +31,7 @@ pip3 install OWSLib
 
 ### Dependencies
 
-Dependencies are listed in [requirements.txt](requirements.txt). Dependencies
+Dependencies are listed in [pyproject.toml](pyproject.toml). Dependencies
 are automatically installed during OWSLib installation.
 
 ### Installing OWSLib
@@ -147,8 +147,8 @@ Releasing
 
 ```bash
   # update version
-  vi owslib/__init__.py
-  git commit -m 'update release version' owslib/__init__.py
+  vi pyproject.toml  # update [project]/version
+  git commit -m 'update release version' owslib/pyproject.toml
   # push changes
   git push origin master
   git tag -a x.y.z -m 'tagging OWSLib release x.y.z'

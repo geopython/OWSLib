@@ -4,13 +4,13 @@ on: [ push, pull_request ]
 
 jobs:
   main:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ["3.12"]
     steps:
     - uses: actions/checkout@master
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       name: Setup Python ${{ matrix.python-version }}
       with:
         python-version: ${{ matrix.python-version }}
@@ -19,15 +19,15 @@ jobs:
     - name: Install requirements 📦
       run: |
         pip3 install -e .
-        pip3 install -r requirements.txt
-        pip3 install -r requirements-dev.txt
-        pip3 install -r docs/requirements.txt
+        pip3 install ".[dev]"
+        pip3 install ".[docs]"
+        pip3 install ".[test]"
     - name: run tests ⚙️
-      run: python3 -m pytest
+      run: pytest tests/
     - name: run tests in offline mode
       if: matrix.python-version == '3.12'
       run: |
-          python3 -m pytest \
+          pytest tests/\
             -m "not online" \
             --disable-socket \
             --deselect="tests/doctests/wcs_thredds.txt::wcs_thredds.txt" \
@@ -45,4 +45,4 @@ jobs:
     - name: build docs 🏗️
       run: cd docs && make html
     - name: run flake8 ⚙️
-      run: flake8 owslib
+      run: flake8 owslib/

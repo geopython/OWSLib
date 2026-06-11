@@ -29,7 +29,7 @@ def patch_well_known_namespaces():
         register_namespace(k, v)
 
     etree.set_default_parser(
-        parser=etree.XMLParser(resolve_entities=False)
+        parser=etree.XMLParser(resolve_entities=False, remove_comments=True)
     )
 
 
