@@ -22,6 +22,8 @@ jobs:
         pip3 install ".[dev]"
         pip3 install ".[docs]"
         pip3 install ".[test]"
+    - name: run flake8 ⚙️
+      run: flake8 owslib/
     - name: run tests ⚙️
       run: pytest tests/
     - name: run tests in offline mode
@@ -42,7 +44,7 @@ jobs:
         COVERALLS_SERVICE_NAME: github
         COVERALLS_SERVICE_JOB_ID: "${{ github.run_id }}"
         COVERALLS_SERVICE_NUMBER: "${{ github.workflow }}-${{ github.run_number }}"
+    - name: test build
+      run: python -m build --wheel
     - name: build docs 🏗️
       run: cd docs && make html
-    - name: run flake8 ⚙️
-      run: flake8 owslib/
