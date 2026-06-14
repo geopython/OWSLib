@@ -24,3 +24,6 @@ jobs:
 
     - name: run tests ⚙️
       run: pytest tests/
+
+    - name: test build
+      run: python -m build --wheel

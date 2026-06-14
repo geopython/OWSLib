@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools<69", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,7 +8,8 @@ version = "0.37.dev0"
 description = "OGC Web Service utility library"
 readme = "README.md"
 requires-python = ">=3.12"
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 keywords = ["gis", "ogc", "ogcapi", "ows", "opensearch", "iso", "19115", "fgdc", "dif", "ows", "wfs", "wms", "sos", "csw", "wps", "wcs", "capabilities", "metadata", "wmts", "connectedsystems"]
 authors = [
     {name = "Sean Gillies", email = "sean.gillies@gmail.com"},
