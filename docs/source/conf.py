@@ -11,7 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import re, sys, os
+import re, sys, os, tomllib
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -54,18 +54,9 @@ copyright = '2006-2023, ' + author + ' ' + license
 #
 # The full version, including alpha/beta/rc tags.
 
-file_ = '../owslib/__init__.py'
-filepath = os.path.join(os.path.abspath('..'), file_)
-
-with open(filepath) as fh:
-    contents = fh.read().strip()
-
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
-                              contents, re.M)
-    if version_match:
-        version = version_match.group(1)
-    else:
-        version = 'UNKNOWN'
+toml_path = os.path.join(os.path.abspath('../../'), 'pyproject.toml')
+with open(toml_path, 'rb') as fh:
+    version = tomllib.load(fh)['project']['version']
 
 release = version
 

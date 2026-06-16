@@ -125,8 +125,8 @@ Service for the Web (CSW), Web Processing Service (WPS), and Web
 Map Tile Service (WMTS). Some of those are beta quality.
 
 
-Logging
--------
+## Logging
+
 OWSLib logs messages to module-based named Python loggers. You may
 configure your application to use the log messages like so:
 
@@ -142,8 +142,18 @@ configure your application to use the log messages like so:
     >>> LOGGER.setLevel(logging.DEBUG)
 ```
 
-Releasing
----------
+## Docs
+
+Requires Python 3.11+ and [PanDoc](https://pandoc.org/).
+
+```bash
+sudo apt-get -y install pandoc
+pip3 install -e ".[docs]"
+cd docs && make html
+python -m http.server --directory=../build/docs
+```
+
+## Releasing
 
 ```bash
   # update version
@@ -160,8 +170,7 @@ Releasing
   twine upload dist/*
 ```
 
-Support
--------
+## Support
 
 - https://lists.osgeo.org/mailman/listinfo/owslib-users
 - https://lists.osgeo.org/mailman/listinfo/owslib-devel
