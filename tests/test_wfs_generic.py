@@ -1,3 +1,6 @@
+from itertools import chain
+from operator import attrgetter
+
 from owslib.feature.common import CapabilitiesError
 from owslib.wfs import WebFeatureService
 from owslib.util import ServiceException
@@ -232,3 +235,15 @@ def test_xmlfilter_wfs_200():
 
     response = wfs.getfeature(**getfeat_params).read()
     assert b'<stratunit:NAME>Boolgeeda Iron Formation</stratunit:NAME>' in response
+
+
+def test_handles_empty_other_srs():
+    with open(resource_file("wfs_empty_other_srs_GetCapabilities_1_1_0.xml"), "rb") as fio:
+        wfs = WebFeatureService('http://gis.bnhelp.cz/ows/crwfs', xml=fio.read(), version='1.1.0')
+        crs_options = chain.from_iterable(map(attrgetter('crsOptions'), wfs.contents.values()))
+        assert {"urn:ogc:def:crs:EPSG::4326"} == set(map(attrgetter("id"), crs_options))
+
+    with open(resource_file("wfs_empty_other_srs_GetCapabilities_2_0_0.xml"), "rb") as fio:
+        wfs = WebFeatureService('http://gis.bnhelp.cz/ows/crwfs', xml=fio.read(), version='2.0.0')
+        crs_options = chain.from_iterable(map(attrgetter('crsOptions'), wfs.contents.values()))
+        assert {"urn:ogc:def:crs:EPSG::102067"} == set(map(attrgetter("id"), crs_options))

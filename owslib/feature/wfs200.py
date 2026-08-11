@@ -525,7 +525,7 @@ class ContentMetadata(AbstractContentMetadata):
                 self.boundingBoxWGS84 = None
         # crs options
         self.crsOptions = [
-            Crs(srs.text) for srs in elem.findall(nspath("OtherCRS", ns=WFS_NAMESPACE))
+            Crs(srs.text) for srs in elem.findall(nspath("OtherCRS", ns=WFS_NAMESPACE)) if srs.text
         ]
         defaultCrs = elem.findall(nspath("DefaultCRS", ns=WFS_NAMESPACE))
         if len(defaultCrs) > 0:

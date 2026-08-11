@@ -392,7 +392,7 @@ class ContentMetadata(AbstractContentMetadata):
         # crs options
         self.crsOptions = [
             Crs(srs.text)
-            for srs in elem.findall(nspath_eval("wfs:OtherSRS", namespaces))
+            for srs in elem.findall(nspath_eval("wfs:OtherSRS", namespaces)) if srs.text
         ]
         dsrs = testXMLValue(elem.find(nspath_eval("wfs:DefaultSRS", namespaces)))
         if dsrs is not None:  # first element is default srs
