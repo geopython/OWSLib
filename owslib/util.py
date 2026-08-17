@@ -405,7 +405,8 @@ def testXMLAttribute(element, attribute):
     return None
 
 
-def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, password=None, auth=None, headers=None):
+def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, password=None, auth=None, headers=None,
+              allow_redirects=True):
     """
 
     Invoke an HTTP POST request
@@ -419,6 +420,7 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     - timeout: timeout in seconds
     - auth: owslib.util.Auth instance
     - headers: HTTP headers to send with requests
+    - allow_redirects: whether to allow HTTP redirects (default is True)
 
     """
 
@@ -460,9 +462,9 @@ def http_post(url=None, request=None, lang='en-US', timeout=10, username=None, p
     rkwargs['cert'] = auth.cert
 
     if not isinstance(request, dict):
-        return requests.post(url, request, headers=headers_, **rkwargs)
+        return requests.post(url, request, headers=headers_, allow_redirects=allow_redirects, **rkwargs)
     else:
-        return requests.post(url, json=request, headers=headers_, **rkwargs)
+        return requests.post(url, json=request, headers=headers_, allow_redirects=allow_redirects, **rkwargs)
 
 
 def http_prepare(*args, **kwargs):
