@@ -167,7 +167,7 @@ class Description:
         self.outputencoding = testXMLValue(val)
 
         val = md.find(nspath_eval('os:Tags', namespaces))
-        self.tags = testXMLValue(val).split()
+        self.tags = (testXMLValue(val) or '').split()
 
         val = md.find(nspath_eval('os:Contact', namespaces))
         self.contact = testXMLValue(val)
