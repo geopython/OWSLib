@@ -7,6 +7,12 @@ The OWSLib source code is available at https://github.com/geopython/OWSLib
 
 You can find out about software metrics at the OWSLib OpenHub page at https://www.openhub.net/p/OWSLib.
 
+Contributing
+------------
+
+Please see the `Contributing page <https://github.com/geopython/OWSLib/blob/master/CONTRIBUTING.md>`_
+for information on contributing to the project.
+
 Testing
 -------
 
