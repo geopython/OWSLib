@@ -22,7 +22,7 @@ This project is made [by humans, for humans](https://geoamish.org/by-humans-for-
 
 Contributions assisted by AI must be put forth with a human in the driver's seat, who cares about and understands this project.
 
-If this is not the case, we recommended not submitting contributions of this nature (Pull Requests, Merge Requests, etc.), as they will not be accepted.
+If this is not the case, we recommend not submitting contributions of this nature (Pull Requests, Merge Requests, etc.), as they will not be accepted.
 
 For more information about our views on AI, please see the [Responsible AI Guide](https://responsibleai.guide).
 
