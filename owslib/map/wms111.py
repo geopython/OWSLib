@@ -237,7 +237,11 @@ class WebMapService_1_1_1(object):
             out.close()
 
         """
-        base_url = self._operation_url('GetMap', method)
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods
+                            if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
         request = {'version': self.version, 'request': 'GetMap'}
 
         request = self.__build_getmap_request(
@@ -267,47 +271,19 @@ class WebMapService_1_1_1(object):
             raise ServiceException(err_message)
         return u
 
-    def buildGetMapURL(self, layers=None, styles=None, srs=None, bbox=None,
-                       format=None, size=None, time=None, transparent=False,
-                       bgcolor='#FFFFFF',
-                       exceptions='application/vnd.ogc.se_xml',
-                       **kwargs
-                       ):
-        """Return the URL of a GetMap request without sending it.
+    def buildGetMapURL(self, **kwargs):
+        """Return the URL that getmap(method='Get') would request, without sending it.
 
-        Takes the same parameters as getmap() and returns the URL that
-        getmap(method='Get') would request. Useful for fetching the image
-        with another HTTP client, such as an asynchronous one.
+        Takes the same parameters as getmap(), except method and timeout.
         """
-        request = self.__build_getmap_request(
-            layers=layers,
-            styles=styles,
-            srs=srs,
-            bbox=bbox,
-            format=format,
-            size=size,
-            time=time,
-            transparent=transparent,
-            bgcolor=bgcolor,
-            exceptions=exceptions,
-            **kwargs)
-
-        return bind_url(self._operation_url('GetMap', 'Get')) + urlencode(request)
-
-    def __build_getfeatureinfo_request(self, query_layers=None, xy=None, info_format=None,
-                                       feature_count=20, **kwargs):
-
-        # GetMap-Request
-        request = self.__build_getmap_request(**kwargs)
-
-        # extend to GetFeatureInfo-Request
-        request['request'] = 'GetFeatureInfo'
-        request['query_layers'] = ','.join(query_layers or kwargs['layers'])
-        request['x'] = str(xy[0])
-        request['y'] = str(xy[1])
-        request['info_format'] = info_format
-        request['feature_count'] = str(feature_count)
-        return request
+        kwargs.setdefault('bgcolor', '#FFFFFF')
+        kwargs.setdefault('exceptions', 'application/vnd.ogc.se_xml')
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods
+                            if m.get('type').lower() == 'get'))
+        except StopIteration:
+            base_url = self.url
+        return bind_url(base_url) + urlencode(self.__build_getmap_request(**kwargs))
 
     def getfeatureinfo(self,
                        layers=None,
@@ -328,9 +304,14 @@ class WebMapService_1_1_1(object):
                        timeout=None,
                        **kwargs
                        ):
-        base_url = self._operation_url('GetFeatureInfo', method)
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetFeatureInfo').methods
+                            if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
 
-        request = self.__build_getfeatureinfo_request(
+        # GetMap-Request
+        request = self.__build_getmap_request(
             layers=layers,
             styles=styles,
             srs=srs,
@@ -341,11 +322,21 @@ class WebMapService_1_1_1(object):
             transparent=transparent,
             bgcolor=bgcolor,
             exceptions=exceptions,
-            query_layers=query_layers,
-            xy=xy,
-            info_format=info_format,
-            feature_count=feature_count,
             **kwargs)
+
+        # extend to GetFeatureInfo-Request
+        request['request'] = 'GetFeatureInfo'
+
+        if not query_layers:
+            __str_query_layers = ','.join(layers)
+        else:
+            __str_query_layers = ','.join(query_layers)
+
+        request['query_layers'] = __str_query_layers
+        request['x'] = str(xy[0])
+        request['y'] = str(xy[1])
+        request['info_format'] = info_format
+        request['feature_count'] = str(feature_count)
 
         data = urlencode(request)
 
@@ -361,47 +352,6 @@ class WebMapService_1_1_1(object):
             raise ServiceException(err_message)
         return u
 
-    def buildGetFeatureInfoURL(self,
-                               layers=None,
-                               styles=None,
-                               srs=None,
-                               bbox=None,
-                               format=None,
-                               size=None,
-                               time=None,
-                               transparent=False,
-                               bgcolor='#FFFFFF',
-                               exceptions='application/vnd.ogc.se_xml',
-                               query_layers=None,
-                               xy=None,
-                               info_format=None,
-                               feature_count=20,
-                               **kwargs
-                               ):
-        """Return the URL of a GetFeatureInfo request without sending it.
-
-        Takes the same parameters as getfeatureinfo() and returns the URL
-        that getfeatureinfo(method='Get') would request.
-        """
-        request = self.__build_getfeatureinfo_request(
-            layers=layers,
-            styles=styles,
-            srs=srs,
-            bbox=bbox,
-            format=format,
-            size=size,
-            time=time,
-            transparent=transparent,
-            bgcolor=bgcolor,
-            exceptions=exceptions,
-            query_layers=query_layers,
-            xy=xy,
-            info_format=info_format,
-            feature_count=feature_count,
-            **kwargs)
-
-        return bind_url(self._operation_url('GetFeatureInfo', 'Get')) + urlencode(request)
-
     def getServiceXML(self):
         xml = None
         if self._capabilities is not None:
@@ -414,15 +364,6 @@ class WebMapService_1_1_1(object):
             if item.name == name:
                 return item
         raise KeyError("No operation named %s" % name)
-
-    def _operation_url(self, name, method):
-        """Return the URL advertised for an operation and HTTP DCP method,
-        or the service URL if none is advertised."""
-        try:
-            return next((m.get('url') for m in self.getOperationByName(name).methods
-                         if m.get('type').lower() == method.lower()))
-        except StopIteration:
-            return self.url
 
 
 class ServiceIdentification(object):

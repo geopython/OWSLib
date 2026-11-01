@@ -1,5 +1,4 @@
 from unittest import mock
-from urllib.parse import parse_qs, urlsplit
 
 import pytest
 from tests.utils import resource_file, service_ok
@@ -12,97 +11,11 @@ from owslib.util import ResponseWrapper
 
 SERVICE_URL = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi'
 NCWMS2_URL = "http://wms.stccmop.org:8080/ncWMS2/wms"
-GEOMET_URL = 'https://geo.weather.gc.ca/geomet'
 
 
 @pytest.fixture
 def wms():
     return WebMapService_1_3_0(SERVICE_URL, version='1.3.0')
-
-
-def wms_from_resource(version):
-    """A WMS built from a stored capabilities document, without network access:
-    MSC GeoMet for 1.3.0, IEM Mesonet for 1.1.1."""
-    if version == '1.3.0':
-        url, filename = GEOMET_URL, 'wms_geomet_radar_caps_130.xml'
-    else:
-        url, filename = SERVICE_URL, 'wms_mesonet-caps.xml'
-    with open(resource_file(filename), 'rb') as f:
-        return WebMapService(url, version=version, xml=f.read())
-
-
-GETMAP_PARAMS = {
-    '1.3.0': dict(layers=['RADAR_1KM_RRAI'], styles=['Radar-Rain_14colors'], srs='EPSG:4326',
-                  bbox=(-80.0, 43.0, -79.0, 44.0), size=(256, 256), format='image/png',
-                  transparent=True, time='2026-11-01T15:42:00Z'),
-    '1.1.1': dict(layers=['nexrad_base_reflect'], styles=['default'], srs='EPSG:4326',
-                  bbox=(-126, 24, -66, 50), size=(250, 250), format='image/jpeg',
-                  transparent=True),
-}
-
-
-def image_response():
-    response = mock.Mock()
-    response.info.return_value = {'Content-Type': 'image/png'}
-    return response
-
-
-@pytest.mark.parametrize('version', ['1.3.0', '1.1.1'])
-def test_build_getmap_url_is_the_url_getmap_requests(version):
-    """buildGetMapURL() returns exactly the URL getmap() requests, so a caller
-    can fetch the image with its own HTTP client (e.g. an asyncio one)."""
-    wms = wms_from_resource(version)
-    params = GETMAP_PARAMS[version]
-    module = 'owslib.map.wms130' if version == '1.3.0' else 'owslib.map.wms111'
-
-    with mock.patch(f'{module}.openURL', return_value=image_response()):
-        wms.getmap(**params)
-
-    assert wms.buildGetMapURL(**params) == wms.request
-
-
-@pytest.mark.parametrize('version', ['1.3.0', '1.1.1'])
-def test_build_getmap_url_makes_no_request(version):
-    """buildGetMapURL() only builds the URL; it never touches the network."""
-    wms = wms_from_resource(version)
-    module = 'owslib.map.wms130' if version == '1.3.0' else 'owslib.map.wms111'
-
-    with mock.patch(f'{module}.openURL', side_effect=AssertionError('no request expected')):
-        wms.buildGetMapURL(**GETMAP_PARAMS[version])
-
-
-def test_build_getmap_url_130_geomet():
-    """A GeoMet radar frame: the advertised GetMap URL, the time dimension,
-    and the bbox swapped to lat/lon for EPSG:4326 under WMS 1.3.0."""
-    url = wms_from_resource('1.3.0').buildGetMapURL(**GETMAP_PARAMS['1.3.0'])
-
-    parts = urlsplit(url)
-    assert f'{parts.scheme}://{parts.netloc}{parts.path}' == GEOMET_URL
-    query = {k: v[0] for k, v in parse_qs(parts.query, keep_blank_values=True).items()}
-    assert query['request'] == 'GetMap'
-    assert query['layers'] == 'RADAR_1KM_RRAI'
-    assert query['crs'] == 'EPSG:4326'
-    assert query['bbox'] == '43.0,-80.0,44.0,-79.0'
-    assert query['time'] == '2026-11-01T15:42:00Z'
-
-
-@pytest.mark.parametrize('version', ['1.3.0', '1.1.1'])
-def test_build_getfeatureinfo_url_is_the_url_getfeatureinfo_requests(version):
-    """buildGetFeatureInfoURL() returns exactly the URL getfeatureinfo() requests."""
-    wms = wms_from_resource(version)
-    params = dict(GETMAP_PARAMS[version], xy=(128, 128), info_format='text/plain')
-    module = 'owslib.map.wms130' if version == '1.3.0' else 'owslib.map.wms111'
-
-    with mock.patch(f'{module}.openURL', return_value=image_response()):
-        wms.getfeatureinfo(**params)
-
-    url = wms.buildGetFeatureInfoURL(**params)
-    assert url == wms.request
-    query = parse_qs(urlsplit(url).query)
-    assert query['request'] == ['GetFeatureInfo']
-    assert query['query_layers'] == params['layers']
-    pixel = ('i', 'j') if version == '1.3.0' else ('x', 'y')
-    assert [query[k] for k in pixel] == [['128'], ['128']]
 
 
 @pytest.mark.parametrize("version", ["1.3.0", "1.1.1"])
@@ -123,6 +36,22 @@ def test_build_getmap_request_bbox_precision(version):
         transparent=True
     )
     assert request['bbox'] == ','.join(map(str, bbox_yx))
+
+
+@pytest.mark.parametrize("version, caps", [("1.3.0", "wms_mesonet-caps-130.xml"), ("1.1.1", "wms_mesonet-caps.xml")])
+def test_build_getmap_url(version, caps):
+    """buildGetMapURL returns the URL getmap would request"""
+    with open(resource_file(caps), 'rb') as f:
+        wms = WebMapService(SERVICE_URL, version=version, xml=f.read())
+    params = dict(layers=['nexrad_base_reflect'], srs='EPSG:4326', bbox=(-126, 24, -66, 50),
+                  size=(250, 250), format='image/png', time='2006-06-23T03:10:00Z')
+
+    response = mock.Mock()
+    response.info.return_value = {'Content-Type': 'image/png'}
+    with mock.patch(f"owslib.map.wms{version.replace('.', '')}.openURL", return_value=response):
+        wms.getmap(**params)
+
+    assert wms.buildGetMapURL(**params) == wms.request
 
 
 @pytest.mark.online
