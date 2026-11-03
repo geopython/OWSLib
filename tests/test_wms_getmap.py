@@ -1,7 +1,7 @@
 from unittest import mock
 
 import pytest
-from tests.utils import service_ok
+from tests.utils import resource_file, service_ok
 
 from owslib.wms import WebMapService
 from owslib.map.wms130 import WebMapService_1_3_0
@@ -36,6 +36,22 @@ def test_build_getmap_request_bbox_precision(version):
         transparent=True
     )
     assert request['bbox'] == ','.join(map(str, bbox_yx))
+
+
+@pytest.mark.parametrize("version, caps", [("1.3.0", "wms_mesonet-caps-130.xml"), ("1.1.1", "wms_mesonet-caps.xml")])
+def test_build_getmap_url(version, caps):
+    """buildGetMapURL returns the URL getmap would request"""
+    with open(resource_file(caps), 'rb') as f:
+        wms = WebMapService(SERVICE_URL, version=version, xml=f.read())
+    params = dict(layers=['nexrad_base_reflect'], srs='EPSG:4326', bbox=(-126, 24, -66, 50),
+                  size=(250, 250), format='image/png', time='2006-06-23T03:10:00Z')
+
+    response = mock.Mock()
+    response.info.return_value = {'Content-Type': 'image/png'}
+    with mock.patch(f"owslib.map.wms{version.replace('.', '')}.openURL", return_value=response):
+        wms.getmap(**params)
+
+    assert wms.buildGetMapURL(**params) == wms.request
 
 
 @pytest.mark.online

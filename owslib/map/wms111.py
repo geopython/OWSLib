@@ -188,6 +188,14 @@ class WebMapService_1_1_1(object):
                 request[kw] = kwargs[kw]
         return request
 
+    def __build_getmap_url(self, method, **kwargs):
+        try:
+            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods
+                            if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.url
+        return base_url, urlencode(self.__build_getmap_request(**kwargs))
+
     def getmap(self, layers=None, styles=None, srs=None, bbox=None,
                format=None, size=None, time=None, transparent=False,
                bgcolor='#FFFFFF',
@@ -237,14 +245,8 @@ class WebMapService_1_1_1(object):
             out.close()
 
         """
-        try:
-            base_url = next((m.get('url') for m in self.getOperationByName('GetMap').methods
-                            if m.get('type').lower() == method.lower()))
-        except StopIteration:
-            base_url = self.url
-        request = {'version': self.version, 'request': 'GetMap'}
-
-        request = self.__build_getmap_request(
+        base_url, data = self.__build_getmap_url(
+            method,
             layers=layers,
             styles=styles,
             srs=srs,
@@ -257,8 +259,6 @@ class WebMapService_1_1_1(object):
             exceptions=exceptions,
             **kwargs)
 
-        data = urlencode(request)
-
         self.request = bind_url(base_url) + data
 
         u = openURL(base_url, data, method, timeout=timeout or self.timeout, auth=self.auth, headers=self.headers)
@@ -270,6 +270,31 @@ class WebMapService_1_1_1(object):
             err_message = str(se_tree.find('ServiceException').text).strip()
             raise ServiceException(err_message)
         return u
+
+    def buildGetMapURL(self, layers=None, styles=None, srs=None, bbox=None,
+                       format=None, size=None, time=None, transparent=False,
+                       bgcolor='#FFFFFF',
+                       exceptions='application/vnd.ogc.se_xml',
+                       **kwargs
+                       ):
+        """Return the URL that getmap(method='Get') would request, without sending it.
+
+        Takes the same parameters as getmap(), except method and timeout.
+        """
+        base_url, data = self.__build_getmap_url(
+            'Get',
+            layers=layers,
+            styles=styles,
+            srs=srs,
+            bbox=bbox,
+            format=format,
+            size=size,
+            time=time,
+            transparent=transparent,
+            bgcolor=bgcolor,
+            exceptions=exceptions,
+            **kwargs)
+        return bind_url(base_url) + data
 
     def getfeatureinfo(self,
                        layers=None,
