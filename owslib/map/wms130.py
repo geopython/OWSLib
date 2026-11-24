@@ -340,8 +340,11 @@ class WebMapService_1_3_0(object):
                        ):
         """Return the URL that getmap(method='Get') would request, without sending it.
 
-        Takes the same parameters as getmap(), except method and timeout.
+        Takes the same parameters as getmap(). method and timeout are accepted
+        so a shared parameter dict can be passed to both, but are ignored.
         """
+        kwargs.pop('method', None)
+        kwargs.pop('timeout', None)
         base_url, data = self.__build_getmap_url(
             'Get',
             layers=layers,

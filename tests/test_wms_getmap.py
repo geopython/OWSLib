@@ -52,6 +52,8 @@ def test_build_getmap_url(version, caps):
         wms.getmap(**params)
 
     assert wms.buildGetMapURL(**params) == wms.request
+    # method and timeout are ignored, and not sent as vendor params
+    assert wms.buildGetMapURL(**params, method='Get', timeout=30) == wms.request
 
 
 @pytest.mark.online
